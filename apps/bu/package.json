@@ -2,19 +2,6 @@
   "name": "bu",
   "version": "0.0.1",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-native": "*",
-    "@testing-library/react-native": "*",
-    "expo": "*",
-    "react-native": "*",
-    "react-native-svg": "*",
-    "react-native-web": "*",
-    "@nrwl/expo": "*",
-    "@expo/metro-config": "*",
-    "prop-types": "*",
-    "react": "*",
-    "react-dom": "*"
-  },
   "scripts": {
     "start": "nx exec -- expo start",
     "eas-build-pre-install": "cd ../../ && cp package-lock.json ./apps/bu/",
@@ -22,20 +9,5 @@
     "storybook": "nx exec -- storybook dev -p 6006",
     "sb": "sb-rn-get-stories && expo start",
     "build-storybook": "storybook build"
-  },
-  "devDependencies": {
-    "@storybook/addon-essentials": "^7.0.8",
-    "@storybook/addon-interactions": "^7.0.8",
-    "@storybook/addon-ondevice-actions": "^6.5.1",
-    "@storybook/addon-ondevice-controls": "^6.5.1",
-    "@storybook/addon-links": "^7.0.8",
-    "@storybook/blocks": "^7.0.8",
-    "@storybook/react": "^7.0.8",
-    "@storybook/react-webpack5": "^7.0.8",
-    "@storybook/testing-library": "^0.0.14-next.2",
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "storybook": "^7.0.8"
   }
 }

@@ -32,7 +32,6 @@
     "@nrwl/linter": "15.9.2",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "15.9.2",
-    "@nx/storybook": "^16.1.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/jest-native": "5.4.2",
     "@testing-library/react-native": "11.5.2",

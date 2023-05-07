@@ -2,6 +2,8 @@
 import React from 'react';
 import RootNavigation from './navigation';
 
+import './i18n';
+
 export const App = () => {
   return <RootNavigation />;
 };

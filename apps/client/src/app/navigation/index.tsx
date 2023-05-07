@@ -3,11 +3,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screen/HomeScreen';
-import LoginScreen from '../screen/LoginScreen';
+import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
 
 export type RootStackParamList = {
-  Login: undefined;
+  Intro: undefined;
   Home: undefined;
   Inner: undefined;
 };
@@ -19,8 +19,8 @@ export const RootNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Login"
-          component={LoginScreen}
+          name="Intro"
+          component={IntroScreen}
           options={{
             headerShown: false,
           }}

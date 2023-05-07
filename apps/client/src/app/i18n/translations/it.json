@@ -1,4 +1,7 @@
 {
+  "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
+  "login_screen.description": "Crea e sostieni sfide personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Registrati gratis",
-  "login": "Log in"
+  "login_screen.login": "Accedi",
+  "login_screen.explore_no_account": "Esplora senza account"
 }

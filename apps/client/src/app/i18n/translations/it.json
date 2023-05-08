@@ -3,5 +3,13 @@
   "login_screen.description": "Crea e sostieni sfide personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Registrati gratis",
   "login_screen.login": "Accedi",
-  "login_screen.explore_no_account": "Esplora senza account"
+  "login_screen.explore_no_account": "Esplora senza account",
+  "challenge_detail_screen.title": "Sfida",
+  "challenge_detail_screen.builder": "Builder",
+  "challenge_detail_screen.chrono_step": "Crono-step",
+  "challenge_detail_screen.description": "Descrizione",
+  "challenge_detail_screen.skills": "Skills",
+  "challenge_detail_screen.coach": "Coach",
+  "challenge_detail_screen.participants": "Partecipanti",
+  "challenge_detail_screen.upload_new_update": "Carica nuovo aggiornamento"
 }

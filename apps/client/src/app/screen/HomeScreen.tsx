@@ -11,8 +11,8 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../navigation/navigation.type';
 
-import { RootStackParamList } from '../navigation';
 
 export const HomeScreen = () => {
   const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0);

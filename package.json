@@ -73,6 +73,7 @@
     "metro-resolver": "0.74.1",
     "nx": "15.9.2",
     "prettier": "^2.6.2",
+    "prettier-plugin-tailwindcss": "^0.2.8",
     "react-test-renderer": "18.2.0",
     "tailwindcss": "^3.3.2",
     "ts-jest": "^29.1.0",

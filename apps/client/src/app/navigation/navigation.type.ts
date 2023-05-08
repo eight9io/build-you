@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Intro: undefined;
   Home: undefined;
   Inner: undefined;
+  ChallengeDetail: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

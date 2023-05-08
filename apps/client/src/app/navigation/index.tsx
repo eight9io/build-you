@@ -6,10 +6,14 @@ import HomeScreen from '../screen/HomeScreen';
 import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
 import { RootStackParamList } from './navigation.type';
+import ChallengeDetailScreen from '../screen/ChallengeDetailScreen';
+import AppTitle from '../component/common/AppTitle';
+import { useTranslation } from 'react-i18next';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = () => {
+  const { t } = useTranslation();
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -28,6 +32,15 @@ export const RootNavigation = () => {
           }}
         />
         <Stack.Screen name="Inner" component={InnerScreen} />
+        <Stack.Screen
+          name="ChallengeDetail"
+          component={ChallengeDetailScreen}
+          options={{
+            headerTitle: () => (
+              <AppTitle title={t('challenge_detail_screen.title')} />
+            ),
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

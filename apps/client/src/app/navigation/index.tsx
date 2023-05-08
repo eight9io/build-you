@@ -5,12 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screen/HomeScreen';
 import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
-
-export type RootStackParamList = {
-  Intro: undefined;
-  Home: undefined;
-  Inner: undefined;
-};
+import { RootStackParamList } from './navigation.type';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Swiper from 'react-native-swiper';
+import Button from '../../component/common/Button';
 
 // import { useNavigation } from '@react-navigation/native';
 // import type { NavigationProp } from '@react-navigation/native';
@@ -47,16 +48,16 @@ export const LoginScreen = () => {
         </View>
 
         <View className="flex-row">
-          <TouchableOpacity className="flex-1 bg-primary h-[48px] justify-center rounded-[24px] mr-1">
-            <Text className="line-[30px] text-center text-white">
-              {t('login_screen.register')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="flex-1 border-primary border-[1px] h-[48px] justify-center rounded-[24px] ml-1">
-            <Text className="line-[30px] text-center text-primary">
-              {t('login_screen.login')}
-            </Text>
-          </TouchableOpacity>
+          <Button
+            title={t('login_screen.register')}
+            containerClassName="bg-primary"
+            textClassName="text-white"
+          />
+          <Button
+            title={t('login_screen.login')}
+            containerClassName="border-primary border-[1px] ml-1"
+            textClassName="text-primary"
+          />
         </View>
 
         <TouchableOpacity>

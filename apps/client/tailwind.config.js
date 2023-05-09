@@ -37,6 +37,7 @@ module.exports = {
           medium: '#C5C8D2',
           light: '#E7E9F1',
           veryLight: '#FAFBFF',
+          bottomBar: '#F7F8FA',
         },
         success: {
           default: '#20D231',
@@ -58,6 +59,19 @@ module.exports = {
           white: '#FFFFFF',
           transparent: 'rgba(255, 255, 255, 0.005)',
         },
+      },
+      fontSize: {
+        'xs': '10px',
+        'sm': '12px',
+        'md': '14px',
+        'h6': '16px',
+        'h5': '18px',
+        'h4': '21px',
+        'h3': '24px',
+        'h2': '36px',
+        'h1': '48px',
+        'hero': '64px',
+        'mega': '120px'
       },
     },
   },

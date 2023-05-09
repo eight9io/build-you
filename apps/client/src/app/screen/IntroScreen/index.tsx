@@ -50,7 +50,7 @@ export const LoginScreen = () => {
         <View className="flex-row">
           <Button
             title={t('login_screen.register')}
-            containerClassName="bg-primary"
+            containerClassName="bg-primary-default"
             textClassName="text-white"
           />
           <Button

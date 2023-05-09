@@ -47,16 +47,16 @@ export const LoginScreen = () => {
           </Swiper>
         </View>
 
-        <View className="flex-row">
+        <View className="flex-row w-full">
           <Button
             title={t('login_screen.register')}
-            containerClassName="bg-primary"
+            containerClassName="bg-primary-default"
             textClassName="text-white"
           />
           <Button
             title={t('login_screen.login')}
-            containerClassName="border-primary border-[1px] ml-1"
-            textClassName="text-primary"
+            containerClassName="border-primary-default border-[1px] ml-1"
+            textClassName="text-primary-default"
           />
         </View>
 

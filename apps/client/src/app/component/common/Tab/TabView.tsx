@@ -34,7 +34,7 @@ export const TabView: FC<ITabViewProps> = ({ titles, children }) => {
         <View className="flex flex-row">
           {titles.map((title, index) => {
             return (
-              <TouchableOpacity onPress={() => setActiveTabIndex(index)}>
+              <TouchableOpacity key={index} onPress={() => setActiveTabIndex(index)}>
                 <TabTitle title={title} isActive={index === activeTabIndex} />
               </TouchableOpacity>
             );

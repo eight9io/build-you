@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
 import clsx from 'clsx';
 
 interface IAppTitleProps {
@@ -9,9 +9,11 @@ interface IAppTitleProps {
 
 export const AppTitle: FC<IAppTitleProps> = ({ title, textClassName }) => {
   return (
-    <Text className={clsx('text-lg font-semibold', textClassName)}>
-      {title}
-    </Text>
+    <View className="flex items-center justify-center w-full">
+      <Text className={clsx('text-lg font-semibold', textClassName)}>
+        {title}
+      </Text>
+    </View>
   );
 };
 

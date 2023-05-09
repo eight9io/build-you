@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Intro: undefined;
   Home: undefined;
   Inner: undefined;
+  TabAvvisi: undefined;
   ChallengeDetail: undefined;
 };
 

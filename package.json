@@ -3,14 +3,15 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run bu:start",
-    "build": "nx run bu:build",
-    "test": "nx run bu:test",
-    "lint": "nx run bu:lint"
+    "start": "nx run client:start",
+    "build": "nx run client:build",
+    "test": "nx run client:test",
+    "lint": "nx run client:lint"
   },
   "private": true,
   "dependencies": {
     "@expo/metro-config": "0.7.1",
+    "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "clsx": "^1.2.1",

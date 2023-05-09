@@ -2,13 +2,19 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useTranslation } from 'react-i18next';
+
+import { RootStackParamList } from './navigation.type';
+import AppTitle from '../component/common/AppTitle';
+
+import BottomNavBar from '../component/common/BottomNavBar';
+
 import HomeScreen from '../screen/HomeScreen';
 import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
-import { RootStackParamList } from './navigation.type';
 import ChallengeDetailScreen from '../screen/ChallengeDetailScreen';
-import AppTitle from '../component/common/AppTitle';
-import { useTranslation } from 'react-i18next';
+import TabAvvisi from '../screen/TabAvvisi';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -42,6 +48,7 @@ export const RootNavigation = () => {
           }}
         />
       </Stack.Navigator>
+      {/* <BottomNavBar /> */}
     </NavigationContainer>
   );
 };

@@ -8,13 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from './navigation.type';
 import Header from '../component/common/Header';
 
-import BottomNavBar from '../component/common/BottomNavBar';
+import BottomNavBar from '../component/BottomNavBar';
 
 import HomeScreen from '../screen/HomeScreen';
 import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengeDetailScreen';
 import TabAvvisi from '../screen/TabAvvisi';
+import LoginModal from '../component/LoginModal';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,7 +23,7 @@ export const RootNavigation = () => {
   const { t } = useTranslation();
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      {/* <Stack.Navigator>
         <Stack.Screen
           name="Intro"
           component={IntroScreen}
@@ -30,19 +31,20 @@ export const RootNavigation = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{
             headerShown: false,
           }}
-        />
-        <Stack.Screen name="Inner" component={InnerScreen} />
-        <Stack.Screen
+        /> */}
+      {/* <Stack.Screen name="Inner" component={InnerScreen} /> */}
+      {/* <Stack.Screen
           name="ChallengeDetail"
           component={ChallengeDetailScreen}
         />
-      </Stack.Navigator>
+      </Stack.Navigator> */}
+      <BottomNavBar />
     </NavigationContainer>
   );
 };

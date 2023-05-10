@@ -12,7 +12,6 @@ i18n
     // debug: true,
     fallbackLng: false,
     initImmediate: false,
-    // keySeparator: false,
     nsSeparator: false,
     resources: {
       it: { translation: require('./translations/it.json') },

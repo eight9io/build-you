@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '../../component/common/Button';
+import Button from '../../component/common/Buttons/Button';
 
 interface IChronoStepTabProps {}
 export const ChronoStepTab: FC<IChronoStepTabProps> = () => {

@@ -7,6 +7,7 @@ interface IButtonProps {
   containerClassName?: string;
   textClassName?: string;
   onPress?: () => void;
+  Icon?: React.ReactNode;
 }
 
 const Button: FC<IButtonProps> = ({
@@ -14,18 +15,20 @@ const Button: FC<IButtonProps> = ({
   containerClassName,
   textClassName,
   onPress,
+  Icon,
 }) => {
   return (
     <TouchableOpacity
       className={clsx(
-        'flex-1 h-[48px] justify-center rounded-[24px] mr-1',
+        'mr-1 h-[48px] flex-1 justify-center rounded-[24px] ',
         containerClassName
       )}
       onPress={onPress}
     >
+      {Icon && Icon}
       <Text
         className={clsx(
-          'line-[30px] text-center font-medium text-sm',
+          'line-[30px] text-center text-sm font-medium',
           textClassName
         )}
       >

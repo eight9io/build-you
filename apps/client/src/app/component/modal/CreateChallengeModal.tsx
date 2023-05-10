@@ -2,7 +2,7 @@ import { View, Text, Modal, SafeAreaView, TextInput } from 'react-native';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-import { FillButton, OutlineButton } from '../../component/common/Button';
+import { FillButton, OutlineButton } from '../../component/common/Buttons/Button';
 import Header from '../common/Header';
 import ImagePicker from '../ImagePicker';
 

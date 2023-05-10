@@ -2,7 +2,7 @@
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
   "login_screen.description": "Crea e sostieni sfide personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Registrati gratis",
-  "login_screen.login": "Accedi",
+  "login_screen.login": "Log in",
   "login_screen.explore_no_account": "Esplora senza account",
   "challenge_detail_screen": {
     "title": "Sfida",
@@ -13,5 +13,21 @@
     "coach": "Coach",
     "participants": "Partecipanti",
     "upload_new_update": "Carica nuovo aggiornamento"
-  }
+  },
+  "bottom_nav": {
+    "feed": "Feed",
+    "sfide": "Sfide",
+    "crea": "Crea",
+    "avvisi": "Avvisi",
+    "profilo": "Profilo"
+  },
+
+  "top_nav.alerts": "Alerts",
+
+  "modal_login.title": "Register for free",
+  "modal_login.description": "Create your free account, get maximum motivation and support from the community and coaches.",
+  "modal_login.apple": "Sign in with Apple",
+  "modal_login.google": "Sign in with Google",
+  "modal_login.linked": "Sign in with Linkedin",
+  "modal_login.register": "Register with email and password"
 }

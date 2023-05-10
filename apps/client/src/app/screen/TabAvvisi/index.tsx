@@ -1,20 +1,55 @@
 import React from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Swiper from 'react-native-swiper';
-import Button from '../../component/common/Button';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { BottomTabBar } from '@react-navigation/bottom-tabs';
-import BottomNavBar from '../../component/common/BottomNavBar';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 
-const TabAvvisi = () => {
+import SettingsScreen from '../SettingsScreen';
+
+import MainNavBar from '../../component/NavBar/MainNavBar';
+import Notificaiton from '../../component/Notification';
+import { RootStackParamList } from '../../navigation/navigation.type';
+
+const AvvisiStack = createNativeStackNavigator<RootStackParamList>();
+
+type AvvisiScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Avvisi'
+>;
+
+const Avvisi = ({ navigation }: { navigation: AvvisiScreenNavigationProp }) => {
   const { t } = useTranslation();
 
   return (
-    <View className="flex-1 justify-content: space-between">
-      <Text> ADFSf safds</Text>
-    </View>
+    <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
+      <MainNavBar title={t('top_nav.alerts')} navigation={navigation} />
+      <View className="pt-6">
+        <Notificaiton title="New" />
+        <Notificaiton title="Previous" isPrevious={true} />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const TabAvvisi = () => {
+  return (
+    <AvvisiStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <AvvisiStack.Screen name="Avvisi" component={Avvisi} />
+      <AvvisiStack.Screen name="Settings" component={SettingsScreen} />
+    </AvvisiStack.Navigator>
   );
 };
 

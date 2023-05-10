@@ -29,19 +29,24 @@ export const TabView: FC<ITabViewProps> = ({ titles, children }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   return (
-    <View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View className="flex flex-row">
-          {titles.map((title, index) => {
-            return (
-              <TouchableOpacity onPress={() => setActiveTabIndex(index)}>
-                <TabTitle title={title} isActive={index === activeTabIndex} />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </ScrollView>
-      <View className="mt-4">{children[activeTabIndex]}</View>
+    <View className='flex-1'>
+      <View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View className="flex flex-row">
+            {titles.map((title, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => setActiveTabIndex(index)}
+                >
+                  <TabTitle title={title} isActive={index === activeTabIndex} />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
+      <View className="mt-4 flex-1 px-2">{children[activeTabIndex]}</View>
     </View>
   );
 };

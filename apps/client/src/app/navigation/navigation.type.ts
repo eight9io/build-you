@@ -9,6 +9,7 @@ export type RootStackParamList = {
   ChallengeDetail: undefined;
   Settings: undefined;
   Profile: undefined;
+  Modal: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

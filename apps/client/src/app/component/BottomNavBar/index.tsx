@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 
 import HomeScreen from '../../screen/HomeScreen';
-import TabAvvisi from '../../screen/Avvisi';
+import TabAvvisi from '../../screen/TabAvvisi';
 import ProfileScreen from '../../screen/ProfileScreen';
 
 import clsx from 'clsx';

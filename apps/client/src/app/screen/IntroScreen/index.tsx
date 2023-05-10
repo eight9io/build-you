@@ -1,17 +1,24 @@
-import React from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Swiper from 'react-native-swiper';
 import Button from '../../component/common/Buttons/Button';
 
-// import { useNavigation } from '@react-navigation/native';
-// import type { NavigationProp } from '@react-navigation/native';
-
-// import { RootStackParamList } from '../navigation';
+import LoginModal from '../../component/LoginModal';
+import BackButton from '../../component/common/BackButton';
 
 export const LoginScreen = () => {
   const { t } = useTranslation();
-
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View className="justify-content: space-between flex-1">
       <View className="flex-1">
@@ -55,8 +62,9 @@ export const LoginScreen = () => {
           />
           <Button
             title={t('login_screen.login')}
-            containerClassName="border-primary border-[1px] ml-1"
-            textClassName="text-primary"
+            containerClassName="border-primary-default border-[1px] ml-1"
+            textClassName="text-primary-default"
+            onPress={() => setModalVisible(true)}
           />
         </View>
 
@@ -65,6 +73,11 @@ export const LoginScreen = () => {
             {t('login_screen.explore_no_account')}
           </Text>
         </TouchableOpacity>
+
+        <LoginModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
     </View>
   );

@@ -14,7 +14,8 @@ import HomeScreen from '../screen/HomeScreen';
 import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengeDetailScreen';
-import TabAvvisi from '../screen/Avvisi';
+import TabAvvisi from '../screen/TabAvvisi';
+import LoginModal from '../component/LoginModal';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,15 +31,15 @@ export const RootNavigation = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{
             headerShown: false,
           }}
-        />
-        <Stack.Screen name="Inner" component={InnerScreen} />
-        <Stack.Screen
+        /> */}
+      {/* <Stack.Screen name="Inner" component={InnerScreen} /> */}
+      {/* <Stack.Screen
           name="ChallengeDetail"
           component={ChallengeDetailScreen}
         />

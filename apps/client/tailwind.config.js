@@ -8,6 +8,7 @@ module.exports = {
           default: '#FF7B1C',
           light: '#FF9C54',
           dark: '#DE6914',
+          100: '#F8ECE5',
           50: 'rgba(255, 123, 28, 0.5)',
           20: 'rgba(255, 123, 28, 0.2)',
           10: 'rgba(255, 123, 28, 0.1)',
@@ -37,7 +38,8 @@ module.exports = {
           medium: '#C5C8D2',
           light: '#E7E9F1',
           veryLight: '#FAFBFF',
-          bottomBar: '#F7F8FA',
+          bottomBar: '#808080',
+          50: '#F8F9FB',
         },
         success: {
           default: '#20D231',

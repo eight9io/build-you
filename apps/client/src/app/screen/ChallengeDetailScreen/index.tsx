@@ -2,7 +2,7 @@ import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 import TabView from '../../component/common/Tab/TabView';
-import Button from '../../component/common/Button';
+import Button from '../../component/common/Buttons/Button';
 
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.chrono_step'),

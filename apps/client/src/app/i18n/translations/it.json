@@ -11,5 +11,17 @@
   "challenge_detail_screen.skills": "Skills",
   "challenge_detail_screen.coach": "Coach",
   "challenge_detail_screen.participants": "Partecipanti",
-  "challenge_detail_screen.upload_new_update": "Carica nuovo aggiornamento"
+  "challenge_detail_screen.upload_new_update": "Carica nuovo aggiornamento",
+
+
+  "bottom_nav": {
+    "feed": "Feed",
+    "sfide": "Sfide",
+    "crea": "Crea",
+    "avvisi": "Avvisi",
+    "profilo": "Profilo"
+  },
+
+  "top_nav.alerts": "Alerts"
+
 }

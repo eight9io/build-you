@@ -9,7 +9,7 @@ interface IButtonProps {
   onPress?: () => void;
 }
 
-export const Button: FC<IButtonProps> = ({
+const Button: FC<IButtonProps> = ({
   title,
   containerClassName,
   textClassName,
@@ -35,4 +35,31 @@ export const Button: FC<IButtonProps> = ({
   );
 };
 
+export const OutlineButton: FC<IButtonProps> = ({
+  title,
+  onPress,
+}) => {
+  return (
+    <Button
+      title={title}
+      containerClassName="bg-white border-primary-default border-[1px]"
+      textClassName="text-primary-default"
+      onPress={onPress}
+    />
+  );
+};
+
+export const FillButton: FC<IButtonProps> = ({
+  title,
+  onPress,
+}) => {
+  return (
+    <Button
+      title={title}
+      containerClassName="bg-primary-default border-primary-default border-[1px]"
+      textClassName="text-basic-white"
+      onPress={onPress}
+    />
+  );
+};
 export default Button;

@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 
 import { RootStackParamList } from './navigation.type';
-import AppTitle from '../component/common/AppTitle';
+import Header from '../component/common/Header';
 
 import BottomNavBar from '../component/common/BottomNavBar';
 
@@ -41,14 +41,8 @@ export const RootNavigation = () => {
         <Stack.Screen
           name="ChallengeDetail"
           component={ChallengeDetailScreen}
-          options={{
-            headerTitle: () => (
-              <AppTitle title={t('challenge_detail_screen.title')} />
-            ),
-          }}
         />
       </Stack.Navigator>
-      {/* <BottomNavBar /> */}
     </NavigationContainer>
   );
 };

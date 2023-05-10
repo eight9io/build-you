@@ -15,9 +15,14 @@ import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
 import AlertsScreen from '../screen/AlertsScreen';
+
 import LoginModal from '../component/LoginModal';
 import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
 import { View } from 'react-native';
+import AppTitle from '../component/common/AppTitle';
+import BackButton from '../component/common/BackButton';
+import IconSearch from '../component/common/IconSearch/IconSearch';
+import IconSetting from '../component/common/IconSetting/IconSetting';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -39,7 +44,13 @@ export const RootNavigation = () => {
           name='Home'
           component={HomeScreen}
           options={{
-            headerShown: false,
+            headerTitle: () => <AppTitle title={t('your_feed.header')} />,
+            headerLeft: (props) => (
+              <IconSearch onPress={() => console.log('search')} />
+            ),
+            headerRight: (props) => (
+              <IconSetting onPress={() => console.log('setting')} />
+            ),
           }}
         /> */}
       {/* <Stack.Screen name='Inner' component={InnerScreen} /> */}
@@ -59,6 +70,12 @@ export const RootNavigation = () => {
           component={BottomNavBar}
           options={{
             headerShown: false,
+            headerTitle: () => (
+              <AppTitle title={t('challenge_detail_screen.title')} />
+            ),
+            headerLeft: (props) => {
+              return <BackButton />;
+            },
           }}
         />
         <RootStack.Screen

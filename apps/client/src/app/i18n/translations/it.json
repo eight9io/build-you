@@ -38,5 +38,8 @@
   "profile_screen_tabs.biography": "biography",
   "profile_screen_tabs.skills": "skills",
   "profile_screen_tabs.followers": "followers",
-  "profile_screen_tabs.following": "following"
+  "profile_screen_tabs.following": "following",
+
+  "your_feed.header": "Your feed",
+  "card.builder": "Builder"
 }

@@ -1,4 +1,12 @@
-import { View, Text, Image, Modal, StyleSheet, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Modal,
+  StyleSheet,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import React, { useState } from 'react';
 import BackButton from '../common/BackButton';
 import Button from '../common/Buttons/Button';
@@ -60,7 +68,7 @@ const index = ({ modalVisible, setModalVisible }: Props) => {
       visible={modalVisible}
       presentationStyle="pageSheet"
     >
-      <View style={styles.centeredView}>
+      <SafeAreaView style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={{ flex: 1 }}>
             <BackButton onPress={() => setModalVisible(false)} />
@@ -97,7 +105,7 @@ const index = ({ modalVisible, setModalVisible }: Props) => {
             />
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

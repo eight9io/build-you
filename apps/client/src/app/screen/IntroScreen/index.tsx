@@ -59,12 +59,12 @@ export const LoginScreen = () => {
             title={t('login_screen.register')}
             containerClassName="bg-primary-default"
             textClassName="text-white"
+            onPress={() => setModalVisible(true)}
           />
           <Button
             title={t('login_screen.login')}
             containerClassName="border-primary-default border-[1px] ml-1"
             textClassName="text-primary-default"
-            onPress={() => setModalVisible(true)}
           />
         </View>
 

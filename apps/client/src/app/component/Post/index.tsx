@@ -4,6 +4,7 @@ import Card from '../common/Card';
 import IconLike from './asset/like.svg';
 import IconComment from './asset/comment.svg';
 interface IPostProps {
+  isPost?: boolean;
   itemPost: {
     id: number;
     name: string;
@@ -20,6 +21,7 @@ interface IPostProps {
   };
 }
 export default function Index({
+  isPost,
   itemPost: { name, time, stt, card, like, comment, avatar },
 }: IPostProps) {
   return (
@@ -32,17 +34,18 @@ export default function Index({
             <Text className="text-gray-dark text-xs font-light ">{time}</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={() => console.log('press')}>
-          <Text className="text-h6 font-medium ">...</Text>
-        </TouchableOpacity>
+        {isPost && (
+          <TouchableOpacity onPress={() => console.log('press')}>
+            <Text className="text-h6 font-medium ">...</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
-      <Card itemCard={card} />
+      <Card itemCard={card} isPost={isPost} />
       <View className="mt-4  flex-row ">
         <View className="flex-row items-center gap-2">
           <IconLike />
           <Text className="text-gray-dark text-md font-normal ">
-            {' '}
             {like} likes
           </Text>
         </View>

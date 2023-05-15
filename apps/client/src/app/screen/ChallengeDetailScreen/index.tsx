@@ -108,12 +108,6 @@ export const ChallengeDetailScreen = () => {
           <View></View>
         </TabView>
       </View>
-      {/* <CreateChallengeModal
-        isVisible={isCreateChallengeModalVisible}
-        onClose={() => {
-          setIsCreateChallengeModalVisible(false);
-        }}
-      /> */}
     </View>
   );
 };

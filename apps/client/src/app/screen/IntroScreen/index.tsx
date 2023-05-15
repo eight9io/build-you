@@ -54,7 +54,7 @@ export const LoginScreen = () => {
           </Swiper>
         </View>
 
-        <View className="flex-row">
+        <View className="flex-row w-full">
           <Button
             title={t('login_screen.register')}
             containerClassName="bg-primary-default"

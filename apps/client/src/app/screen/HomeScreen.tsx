@@ -58,7 +58,7 @@ export const HomeScreen = () => {
           <TouchableOpacity
             style={styles.whatsNextButton}
             onPress={() => {
-              navigation.navigate('Inner');
+              navigation.navigate('InnerScreen');
               // scrollViewRef.current?.scrollTo({
               //   x: 0,
               //   y: whatsNextYCoord,

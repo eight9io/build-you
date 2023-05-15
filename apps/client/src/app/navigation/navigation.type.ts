@@ -2,14 +2,17 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  Intro: undefined;
-  Home: undefined;
-  Inner: undefined;
-  Avvisi: undefined;
-  ChallengeDetail: undefined;
-  Settings: undefined;
-  Profile: undefined;
-  Modal: undefined;
+  IntroScreen: undefined;
+  HomeScreen: undefined;
+  InnerScreen: undefined;
+  AlertsScreen: undefined;
+  ChallengeDetailScreen: undefined;
+  SettingsScreen: undefined;
+  ProfileScreen: undefined;
+  ModalScreen: undefined;
+  CreateChallengeScreen: undefined;
+  PersonalChallengesScreen: undefined;
+  PersonalChallengeDetailScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

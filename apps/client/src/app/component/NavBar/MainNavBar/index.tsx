@@ -12,12 +12,12 @@ interface IMainNavBarProps {
 
 const MainNavBar: FC<IMainNavBarProps> = ({ title, navigation }) => {
   return (
-    <View className={clsx('mx-6 flex flex-row justify-between')}>
+    <View className={clsx('mx-6 flex flex-row justify-between mb-2')}>
       <ButtonsWithIcon icon="search" />
       <Text className="text-lg font-semibold">{title}</Text>
       <ButtonsWithIcon
         icon="setting"
-        onPress={() => navigation.push('Settings')}
+        onPress={() => navigation.push('SettingsScreen')}
       />
     </View>
   );

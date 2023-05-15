@@ -13,11 +13,15 @@ import BottomNavBar from '../component/BottomNavBar';
 import HomeScreen from '../screen/HomeScreen';
 import IntroScreen from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
-import ChallengeDetailScreen from '../screen/ChallengeDetailScreen';
-import TabAvvisi from '../screen/TabAvvisi';
+import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
+import AlertsScreen from '../screen/AlertsScreen';
 import LoginModal from '../component/LoginModal';
+import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
+import { View } from 'react-native';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+
+const placeholder = () => <View />;
 
 export const RootNavigation = () => {
   const { t } = useTranslation();
@@ -25,26 +29,46 @@ export const RootNavigation = () => {
     <NavigationContainer>
       {/* <Stack.Navigator>
         <Stack.Screen
-          name="Intro"
+          name='Intro'
           component={IntroScreen}
           options={{
             headerShown: false,
           }}
         />
         {/* <Stack.Screen
-          name="Home"
+          name='Home'
           component={HomeScreen}
           options={{
             headerShown: false,
           }}
         /> */}
-      {/* <Stack.Screen name="Inner" component={InnerScreen} /> */}
+      {/* <Stack.Screen name='Inner' component={InnerScreen} /> */}
       {/* <Stack.Screen
-          name="ChallengeDetail"
-          component={ChallengeDetailScreen}
+          name='CreateChallengeScreen'
+          component={CreateChallengeScreen}
         />
       </Stack.Navigator> */}
-      <BottomNavBar />
+
+      <RootStack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <RootStack.Screen
+          name="HomeScreen"
+          component={BottomNavBar}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <RootStack.Screen
+          name="CreateChallengeScreen"
+          component={CreateChallengeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 };

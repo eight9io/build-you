@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import clsx from 'clsx';
 
 interface IButtonProps {
@@ -19,29 +19,29 @@ const Button: FC<IButtonProps> = ({
 }) => {
   return (
     <TouchableOpacity
+      activeOpacity={0.8}
       className={clsx(
-        'mr-1 h-[48px] flex-1 justify-center rounded-[24px] ',
+        'mr-1 h-[48px] flex-1 rounded-[24px] ',
         containerClassName
       )}
       onPress={onPress}
     >
-      {Icon && Icon}
-      <Text
-        className={clsx(
-          'line-[30px] text-center text-sm font-medium',
-          textClassName
-        )}
-      >
-        {title}
-      </Text>
+      <View className="flex flex-row items-center justify-center">
+        {Icon && Icon}
+        <Text
+          className={clsx(
+            'line-[30px] text-center text-sm font-medium',
+            textClassName
+          )}
+        >
+          {title}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
-export const OutlineButton: FC<IButtonProps> = ({
-  title,
-  onPress,
-}) => {
+export const OutlineButton: FC<IButtonProps> = ({ title, onPress }) => {
   return (
     <Button
       title={title}
@@ -52,10 +52,7 @@ export const OutlineButton: FC<IButtonProps> = ({
   );
 };
 
-export const FillButton: FC<IButtonProps> = ({
-  title,
-  onPress,
-}) => {
+export const FillButton: FC<IButtonProps> = ({ title, onPress }) => {
   return (
     <Button
       title={title}

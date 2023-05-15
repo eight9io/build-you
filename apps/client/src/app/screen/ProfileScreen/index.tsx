@@ -24,7 +24,7 @@ const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Profile'
+  'ProfileScreen'
 >;
 
 interface IProfileProps {
@@ -50,7 +50,7 @@ const ProfileScreen = () => {
         headerShown: false,
       }}
     >
-      <ProfileStack.Screen name='Profile' component={Profile} />
+      <ProfileStack.Screen name='ProfileScreen' component={Profile} />
     </ProfileStack.Navigator>
   );
 };

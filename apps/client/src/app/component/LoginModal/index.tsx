@@ -1,7 +1,7 @@
 import { View, Text, Image, Modal, StyleSheet, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import BackButton from '../common/BackButton';
-import Button from '../common/Button';
+import Button from '../common/Buttons/Button';
 import { useTranslation } from 'react-i18next';
 
 import IconApple from './asset/Apple.svg';

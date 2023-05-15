@@ -19,7 +19,6 @@ import AlertsScreen from '../screen/AlertsScreen';
 import LoginModal from '../component/LoginModal';
 import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
 import { View } from 'react-native';
-import AppTitle from '../component/common/AppTitle';
 import BackButton from '../component/common/BackButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 import IconSetting from '../component/common/IconSetting/IconSetting';
@@ -71,7 +70,7 @@ export const RootNavigation = () => {
           options={{
             headerShown: false,
             headerTitle: () => (
-              <AppTitle title={t('challenge_detail_screen.title')} />
+              <Header title={t('challenge_detail_screen.title') || undefined} />
             ),
             headerLeft: (props) => {
               return <BackButton />;

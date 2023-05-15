@@ -1,7 +1,45 @@
 {
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
-  "login_screen.description": "Crea e sostieni sfide personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
+  "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Registrati gratis",
-  "login_screen.login": "Accedi",
-  "login_screen.explore_no_account": "Esplora senza account"
+  "login_screen.login": "Log in",
+  "login_screen.explore_no_account": "Esplora senza account",
+  "challenge_detail_screen.title": "Challenge",
+  "challenge_detail_screen.builder": "Builder",
+
+  "challenge_detail_screen.progress": "Progress",
+  "challenge_detail_screen.description": "Description",
+
+  "challenge_detail_screen.skills": "Skills",
+  "challenge_detail_screen.coach": "Coach",
+  "challenge_detail_screen.participants": "Partecipanti",
+  "challenge_detail_screen.upload_new_update": "Add new progress",
+
+  "bottom_nav": {
+    "feed": "Feed",
+    "challenges": "Challenges",
+    "create": "Create",
+    "alerts": "Alerts",
+    "profile": "Profile"
+  },
+
+  "top_nav.alerts": "Alerts",
+  "top_nav.challenges": "Challenges",
+
+  "modal_login.title": "Register for free",
+  "modal_login.description": "Create your free account, get maximum motivation and support from the community and coaches.",
+  "modal_login.apple": "Sign in with Apple",
+  "modal_login.google": "Sign in with Google",
+  "modal_login.linked": "Sign in with Linkedin",
+  "modal_login.register": "Register with email and password",
+
+  "button.edit_profile": "Edit profile",
+
+  "profile_screen_tabs.biography": "biography",
+  "profile_screen_tabs.skills": "skills",
+  "profile_screen_tabs.followers": "followers",
+  "profile_screen_tabs.following": "following",
+
+  "your_feed.header": "Your feed",
+  "card.builder": "Builder"
 }

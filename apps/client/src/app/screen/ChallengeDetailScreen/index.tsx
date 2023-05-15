@@ -11,13 +11,10 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 ];
 export const ChallengeDetailScreen = () => {
   const { t } = useTranslation();
-  // const [isCreateChallengeModalVisible, setIsCreateChallengeModalVisible] =
-  //   useState(true);
-
   return (
     <View className="flex-1 bg-white py-2">
       <View className="px-4">
-        <View className="flex w-full flex-row justify-between">
+        <View className="w- full flex flex-row justify-between">
           <Text className="text-primary-default text-xs font-normal">
             {t('challenge_detail_screen.title')}
           </Text>
@@ -66,12 +63,6 @@ export const ChallengeDetailScreen = () => {
           />
         </TabView>
       </View>
-      {/* <CreateChallengeModal
-        isVisible={isCreateChallengeModalVisible}
-        onClose={() => {
-          setIsCreateChallengeModalVisible(false);
-        }}
-      /> */}
     </View>
   );
 };

@@ -1,16 +1,13 @@
-import React, { useState, useEffect, FC } from 'react';
-import {
-  Button,
-  Image,
-  View,
-  Platform,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import { useState, FC } from 'react';
+import { Image, View, TouchableOpacity, Text } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
+import CameraIcon from './asset/camera-icon.svg';
+import VideoIcon from './asset/video-icon.svg';
 
-interface IImagePickerProps {}
-const ImagePicker: FC<IImagePickerProps> = () => {
+interface IImagePickerProps {
+  isVideoPicker?: boolean;
+}
+const ImagePicker: FC<IImagePickerProps> = ({ isVideoPicker }) => {
   const [images, setImages] = useState<string[]>([]);
 
   const pickImage = async () => {
@@ -38,7 +35,7 @@ const ImagePicker: FC<IImagePickerProps> = () => {
               className="flex h-full w-full flex-col items-center justify-center"
             >
               <Image
-                source={require('./asset/camera-icon.png')}
+                source={require('./asset/camera-icon.svg')}
                 className="h-11 w-11"
               />
             </TouchableOpacity>
@@ -49,12 +46,13 @@ const ImagePicker: FC<IImagePickerProps> = () => {
           onPress={pickImage}
           className="flex h-full flex-col items-center justify-center"
         >
-          <Image
-            source={require('./asset/camera-icon.png')}
-            className="h-11 w-11"
-          />
+          {isVideoPicker ? (
+            <VideoIcon width={44} height={44} />
+          ) : (
+            <CameraIcon width={44} height={44} />
+          )}
           <Text className="text-primary-default mt-2 text-sm font-medium">
-            Upload one or more photos
+            {isVideoPicker ? 'Upload a video' : 'Upload one or more photos'}
           </Text>
         </TouchableOpacity>
       )}

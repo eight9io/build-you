@@ -19,20 +19,24 @@ import MainNavBar from '../../component/NavBar/MainNavBar';
 import Notificaiton from '../../component/Notification';
 import { RootStackParamList } from '../../navigation/navigation.type';
 
-const AvvisiStack = createNativeStackNavigator<RootStackParamList>();
+const AlertsStack = createNativeStackNavigator<RootStackParamList>();
 
-type AvvisiScreenNavigationProp = NativeStackNavigationProp<
+type AlertsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Avvisi'
+  'AlertsScreen'
 >;
 
-const Avvisi = ({ navigation }: { navigation: AvvisiScreenNavigationProp }) => {
+const Alerts = ({
+  navigation,
+}: {
+  navigation: AlertsScreenNavigationProp;
+}) => {
   const { t } = useTranslation();
 
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
       <MainNavBar title={t('top_nav.alerts')} navigation={navigation} />
-      <View className="pt-6">
+      <View>
         <Notificaiton title="New" />
         <Notificaiton title="Previous" isPrevious={true} />
       </View>
@@ -40,17 +44,17 @@ const Avvisi = ({ navigation }: { navigation: AvvisiScreenNavigationProp }) => {
   );
 };
 
-const TabAvvisi = () => {
+const AlertsScreen = () => {
   return (
-    <AvvisiStack.Navigator
+    <AlertsStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <AvvisiStack.Screen name="Avvisi" component={Avvisi} />
-      <AvvisiStack.Screen name="Settings" component={SettingsScreen} />
-    </AvvisiStack.Navigator>
+      <AlertsStack.Screen name="AlertsScreen" component={Alerts} />
+      <AlertsStack.Screen name="SettingsScreen" component={SettingsScreen} />
+    </AlertsStack.Navigator>
   );
 };
 
-export default TabAvvisi;
+export default AlertsScreen;

@@ -3,10 +3,10 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import clsx from 'clsx';
 
 interface IHeaderProps {
-  title: string;
+  title?: string;
   textClassName?: string;
-  leftBtnText?: string;
-  rightBtnText?: string;
+  leftBtnText?: any;
+  rightBtnText?: any;
   onLeftBtnPress?: () => void;
   onRightBtnPress?: () => void;
 }
@@ -20,29 +20,37 @@ export const Header: FC<IHeaderProps> = ({
   onRightBtnPress,
 }) => {
   return (
-    <View className="relative flex w-full items-center justify-center ">
+    <View className="relative flex h-9 w-full items-center justify-center">
       {leftBtnText ? (
         <TouchableOpacity
           className="absolute left-5 top-0"
           onPress={onLeftBtnPress}
         >
-          <Text className="text-h5 text-primary-default font-normal">
-            {leftBtnText}
-          </Text>
+          {typeof leftBtnText === 'string' && (
+            <Text className="text-h5 text-primary-default font-normal">
+              {leftBtnText}
+            </Text>
+          )}
+          {typeof leftBtnText === 'object' && leftBtnText}
         </TouchableOpacity>
       ) : null}
 
-      <Text className={clsx('text-h5 font-semibold', textClassName)}>
-        {title}
-      </Text>
+      {title && (
+        <Text className={clsx('text-h5 font-semibold', textClassName)}>
+          {title}
+        </Text>
+      )}
       {rightBtnText ? (
         <TouchableOpacity
           className="absolute right-5 top-0"
           onPress={onRightBtnPress}
         >
-          <Text className="text-h5 text-primary-default font-normal">
-            {rightBtnText}
-          </Text>
+          {typeof rightBtnText && (
+            <Text className="text-h5 text-primary-default font-normal">
+              {rightBtnText}
+            </Text>
+          )}
+          {typeof rightBtnText === 'object' && rightBtnText}
         </TouchableOpacity>
       ) : null}
     </View>

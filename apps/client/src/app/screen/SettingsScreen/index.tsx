@@ -13,7 +13,7 @@ interface INavBarInnerScreenProps {
 
 export type SetingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Settings'
+  'SettingsScreen'
 >;
 
 const SettingsScreen: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {

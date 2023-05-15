@@ -40,6 +40,8 @@ module.exports = {
           light: '#E7E9F1',
           veryLight: '#FAFBFF',
           bottomBar: '#808080',
+          80: '#D6D9E2',
+          70: '#E8E9F1',
           50: '#F8F9FB',
         },
         success: {

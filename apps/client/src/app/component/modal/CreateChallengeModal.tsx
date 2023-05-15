@@ -2,9 +2,13 @@ import { View, Text, Modal, SafeAreaView, TextInput } from 'react-native';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-import { FillButton, OutlineButton } from '../../component/common/Buttons/Button';
+import {
+  FillButton,
+  OutlineButton,
+} from '../../component/common/Buttons/Button';
 import Header from '../common/Header';
-import ImagePicker from '../ImagePicker';
+import ImagePicker from '../common/ImagePicker';
+import CustomTextInput from '../common/CustomTextInput';
 
 interface ICreateChallengeModalProps {
   isVisible: boolean;
@@ -28,103 +32,59 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     },
   });
   const onSubmit = (data: any) => console.log(data);
+  // TODO: handle change CREATE text color when input is entered
   return (
-    <Modal animationType="slide" transparent={true} visible={isVisible}>
-      <SafeAreaView className="bg-[#D8D8D8]">
+    <Modal animationType="slide" presentationStyle="pageSheet">
+      <SafeAreaView className="bg-white">
         <View className="mt-4 flex h-full  rounded-t-xl bg-white">
           <View className="mt-6">
             <Header
               title="New challenge"
-              rightBtnText="Annulla"
-              onRightBtnPress={onClose}
+              rightBtnText="CREATE"
+              leftBtnText="Cancel"
+              onLeftBtnPress={onClose}
             />
           </View>
 
-          <View className="mt-7 px-5 py-5">
-            <View>
-              <Controller
+          <View className="mt-7 flex flex-col px-5 py-5">
+            <Text className="text-gray-dark text-md font-normal leading-5">
+              Create a new challenge for yourself with a concrete goal and time
+              to reach it.{' '}
+            </Text>
+            <View className="pt-5">
+              <CustomTextInput
+                title="Your goal"
+                placeholder="Set a concrete goal"
                 control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col gap-1">
-                    <Text className="text-primary-dark text-sm font-semibold">
-                      Set a concrete goal
-                    </Text>
-                    <TextInput
-                      placeholder={'Enter a concrete goal'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      className="border-gray-medium bg-gray-veryLight flex h-12 w-full rounded-sm border-[1px] px-3 py-2 text-base font-normal"
-                      multiline
-                    />
-                  </View>
-                )}
-                name="concreteGoal"
               />
             </View>
-            <View className="mt-5">
-              <Controller
+            <View className="pt-5">
+              <CustomTextInput
+                title="The benefits"
+                placeholder="List the benefits you will get upon achievement"
+                placeholderClassName="h-24"
                 control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col gap-1">
-                    <Text className="text-primary-dark text-sm font-semibold">
-                      List the benefits you will get upon achievement
-                    </Text>
-                    <TextInput
-                      placeholder={'List the benefits'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      className="border-gray-medium bg-gray-veryLight flex h-24 w-full rounded-sm border-[1px] px-3 py-3 text-base font-normal"
-                      multiline
-                    />
-                  </View>
-                )}
-                name="listOfBenefits"
               />
             </View>
-            <View className="mt-5">
-              <Controller
+
+            <View className="pt-5">
+              <CustomTextInput
+                title="The reasons"
+                placeholder="Indicate the reasons that push you to achieve it"
+                placeholderClassName="h-24"
                 control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col gap-1">
-                    <Text className="text-primary-dark text-sm font-semibold">
-                      Indicate the reasons that push you to achieve it
-                    </Text>
-                    <TextInput
-                      placeholder={'Indicate the reasons'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      className="border-gray-medium bg-gray-veryLight flex h-24 w-full rounded-sm border-[1px] px-3 py-3 text-base font-normal"
-                      multiline
-                    />
-                  </View>
-                )}
-                name="reason"
               />
             </View>
-            {/* <View className="mt-5">
+
+            {/* <View className='mt-5'>
               <Controller
                 control={control}
                 rules={{
                   required: true,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col gap-1">
-                    <Text className="text-primary-dark text-sm font-semibold">
+                  <View className='flex flex-col gap-1'>
+                    <Text className='text-primary-dark text-sm font-semibold'>
                       Indicate the time to reach your goal
                     </Text>
                     <TextInput
@@ -133,22 +93,17 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
-                      className="border-gray-medium bg-gray-veryLight flex h-24 w-full rounded-sm border-[1px] px-3 py-3 text-base font-normal"
+                      className='border-gray-medium bg-gray-veryLight flex h-24 w-full rounded-sm border-[1px] px-3 py-3 text-base font-normal'
                       multiline
                         />
                         
                   </View>
                 )}
-                name="timeToReachGoal"
+                name='timeToReachGoal'
               />
             </View> */}
-            <View className="bg-gray-veryLight mt-5 h-28 rounded-xl">
+            <View className="mt-5">
               <ImagePicker />
-            </View>
-
-            <View className="mt-8 flex h-full w-full flex-row" style={{gap: 16}}>
-              <OutlineButton title="Back" onPress={onClose}/>
-              <FillButton title="Next" onPress={handleSubmit(onSubmit)}/>
             </View>
           </View>
         </View>

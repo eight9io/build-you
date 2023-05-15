@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
+import CameraSvg from './asset/camera.svg';
 
 interface ICoverImageProps {
   src: string;
@@ -29,11 +30,14 @@ const CoverImage: React.FC<ICoverImageProps> = ({ src }) => {
   }, [src]);
 
   return (
-    <View className={clsx('overflow-hidden')}>
+    <View className={clsx('relative overflow-hidden')}>
       <Image
         className={clsx('h-[115px]')}
         source={imageSource}
       />
+      <View className={clsx('absolute top-3 right-4')}>
+        <CameraSvg />
+      </View>
     </View>
   );
 };

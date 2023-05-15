@@ -9,6 +9,7 @@ import Biography from './Biography';
 import Skills from './Skills';
 import Followers from './Followers';
 import Following from './Following';
+import { MOCK_FOLLOW_USERS } from '../../../mock-data/follow';
 
 const ProfileTabs = () => {
   const { t } = useTranslation();
@@ -21,17 +22,17 @@ const ProfileTabs = () => {
   ];
 
   return (
-    <View className={clsx('h-full pl-4 bg-gray-50')}>
-      <TabViewFlatlist 
+    <View className={clsx('flex-1  bg-gray-50')}>
+      <TabViewFlatlist
         titles={titles}
         children={[
           <Biography />,
           <Skills />,
-          <Followers />,
-          <Following />,
+          <Followers followers={MOCK_FOLLOW_USERS} />,
+          <Following following={MOCK_FOLLOW_USERS} />,
         ]}
-        activeTabClassName=''
-        defaultTabClassName='text-gray-dark'
+        activeTabClassName=""
+        defaultTabClassName="text-gray-dark"
       />
     </View>
   );

@@ -35,9 +35,9 @@ const TopSectionProfile = () => {
 const ProfileComponent = () => {
   const { t } = useTranslation();
   return (
-    <View className={clsx('flex flex-col pt-2')}>
+    <View className={clsx('flex-1 flex-col pt-2')}>
       <TopSectionProfile />
-      <View className={clsx('px-4 pt-12')}>
+      <View className={clsx('px-4 pt-12 mb-3')}>
         <Text className={clsx('text-[26px] font-medium')}>Marco Rossi</Text>
       </View>
       <ProfileTabs />

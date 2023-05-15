@@ -5,8 +5,8 @@ import clsx from 'clsx';
 interface IHeaderProps {
   title?: string;
   textClassName?: string;
-  leftBtnText?: any;
-  rightBtnText?: any;
+  leftBtn?: any;
+  rightBtn?: any;
   onLeftBtnPress?: () => void;
   onRightBtnPress?: () => void;
 }
@@ -14,24 +14,24 @@ interface IHeaderProps {
 export const Header: FC<IHeaderProps> = ({
   title,
   textClassName,
-  leftBtnText,
-  rightBtnText,
+  leftBtn,
+  rightBtn,
   onLeftBtnPress,
   onRightBtnPress,
 }) => {
   return (
-    <View className="relative flex h-9 w-full items-center justify-center">
-      {leftBtnText ? (
+    <View className="relative flex h-9 w-full items-center justify-start">
+      {leftBtn ? (
         <TouchableOpacity
           className="absolute left-5 top-0"
           onPress={onLeftBtnPress}
         >
-          {typeof leftBtnText === 'string' && (
+          {typeof leftBtn === 'string' && (
             <Text className="text-h5 text-primary-default font-normal">
-              {leftBtnText}
+              {leftBtn}
             </Text>
           )}
-          {typeof leftBtnText === 'object' && leftBtnText}
+          {typeof leftBtn === 'object' && leftBtn}
         </TouchableOpacity>
       ) : null}
 
@@ -40,17 +40,17 @@ export const Header: FC<IHeaderProps> = ({
           {title}
         </Text>
       )}
-      {rightBtnText ? (
+      {rightBtn ? (
         <TouchableOpacity
           className="absolute right-5 top-0"
           onPress={onRightBtnPress}
         >
-          {typeof rightBtnText && (
+          {typeof rightBtn === 'string' && (
             <Text className="text-h5 text-primary-default font-normal">
-              {rightBtnText}
+              {rightBtn}
             </Text>
           )}
-          {typeof rightBtnText === 'object' && rightBtnText}
+          {typeof rightBtn === 'object' && rightBtn}
         </TouchableOpacity>
       ) : null}
     </View>

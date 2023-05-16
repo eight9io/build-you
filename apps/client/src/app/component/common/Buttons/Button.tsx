@@ -26,7 +26,7 @@ const Button: FC<IButtonProps> = ({
       )}
       onPress={onPress}
     >
-      <View className="flex flex-row items-center justify-center">
+      <View className="flex-1 flex-row items-center justify-center">
         {Icon && Icon}
         <Text
           className={clsx(
@@ -41,24 +41,44 @@ const Button: FC<IButtonProps> = ({
   );
 };
 
-export const OutlineButton: FC<IButtonProps> = ({ title, onPress }) => {
+export const OutlineButton: FC<IButtonProps> = ({
+  title,
+  containerClassName,
+  textClassName,
+  onPress,
+  Icon,
+}) => {
   return (
     <Button
       title={title}
-      containerClassName="bg-white border-primary-default border-[1px]"
-      textClassName="text-primary-default"
+      containerClassName={clsx(
+        'bg-white border-primary-default border-[1px]',
+        containerClassName
+      )}
+      textClassName={clsx('text-primary-default', textClassName)}
       onPress={onPress}
+      Icon={Icon}
     />
   );
 };
 
-export const FillButton: FC<IButtonProps> = ({ title, onPress }) => {
+export const FillButton: FC<IButtonProps> = ({
+  title,
+  containerClassName,
+  textClassName,
+  onPress,
+  Icon,
+}) => {
   return (
     <Button
       title={title}
-      containerClassName="bg-primary-default border-primary-default border-[1px]"
-      textClassName="text-basic-white"
+      containerClassName={clsx(
+        'bg-primary-default border-primary-default border-[1px]',
+        containerClassName
+      )}
+      textClassName={clsx('text-basic-white', textClassName)}
       onPress={onPress}
+      Icon={Icon}
     />
   );
 };

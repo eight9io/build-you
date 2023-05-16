@@ -23,8 +23,8 @@ const PersonalChallengeDetailScreen = ({
   return (
     <SafeAreaView className='bg-white'>
       <Header
-        leftBtnText={<BackButton onPress={() => navigation.goBack()} />}
-        rightBtnText={'Share'}
+        leftBtn={<BackButton onPress={() => navigation.goBack()} />}
+        rightBtn={'Share'}
         onRightBtnPress={() => {}}
       />
       <ChallengeDetailScreen />

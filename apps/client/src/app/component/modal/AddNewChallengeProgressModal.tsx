@@ -44,8 +44,8 @@ export const AddNewChallengeProgressModal: FC<
           <View className="mt-6">
             <Header
               title="New challenge"
-              rightBtnText="CREATE"
-              leftBtnText="Cancel"
+              rightBtn="CREATE"
+              leftBtn="Cancel"
               onLeftBtnPress={onClose}
             />
           </View>

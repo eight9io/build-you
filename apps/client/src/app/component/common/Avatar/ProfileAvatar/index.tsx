@@ -11,12 +11,12 @@ import {
 import clsx from 'clsx';
 import { getImageFromUrl } from 'apps/client/src/app/hooks/getImageFromUrl';
 
-interface IProfileAvartarProps {
+interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
 }
 
-const ProfileAvartar: React.FC<IProfileAvartarProps> = ({ src, onPress }) => {
+const ProfileAvatar: React.FC<IProfileAvatarProps> = ({ src, onPress }) => {
   const [imageSource, loading, error] = getImageFromUrl(src);
 
   return (
@@ -42,4 +42,4 @@ const ProfileAvartar: React.FC<IProfileAvartarProps> = ({ src, onPress }) => {
   );
 };
 
-export default ProfileAvartar;
+export default ProfileAvatar;

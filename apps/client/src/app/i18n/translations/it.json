@@ -41,5 +41,9 @@
   "profile_screen_tabs.following": "following",
 
   "your_feed.header": "Your feed",
-  "card.builder": "Builder"
+  "card.builder": "Builder",
+
+  "new_challenge_screen.title": "Create a new challenge",
+  "new_challenge_screen.location": "Location",
+  "new_challenge_screen.enter_your_location": "Enter your location"
 }

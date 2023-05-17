@@ -4,29 +4,33 @@ import * as ExpoImagePicker from 'expo-image-picker';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
 import CameraIcon from './asset/camera-icon.svg';
+import { getRandomId } from '../../../utils/common';
+import clsx from 'clsx';
 
-interface IVideoPickerProps {}
+interface IVideoPickerProps {
+  isSelectedImage?: boolean | null;
+  setExternalVideo?: (video: any) => void;
+  setIsSelectedImage?: (isSelected: boolean) => void;
+}
 
-const renderPickedVideo = (pickedVideo: any) => {
-  return (
-    <View className="h-36 w-full">
-      <Image
-        source={{ uri: pickedVideo[0] }}
-        className="h-full w-full rounded-xl"
-      />
-    </View>
-  );
-};
-
-const VideoPicker: FC<IVideoPickerProps> = () => {
+const VideoPicker: FC<IVideoPickerProps> = ({
+  isSelectedImage = false,
+  setExternalVideo,
+  setIsSelectedImage,
+}) => {
   const [pickedVideo, setPickedVideo] = useState<string[]>([]);
   const [thumbnailImage, setThumbnailImage] = useState<string>();
 
-  const generateThumbnail = async ( video: string ) => {
+  const generateThumbnail = async (video: string) => {
     try {
-      console.log(video)
       const { uri } = await VideoThumbnails.getThumbnailAsync(video);
-      setThumbnailImage(uri);
+      if (setExternalVideo && setIsSelectedImage) {
+        const id = getRandomId();
+        setExternalVideo([{ id, uri }]);
+        setIsSelectedImage(false);
+      } else {
+        setThumbnailImage(uri);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -52,7 +56,7 @@ const VideoPicker: FC<IVideoPickerProps> = () => {
 
   return (
     <View className="flex flex-col">
-      {pickedVideo.length > 0 && (
+      {pickedVideo.length > 0 && !setExternalVideo && (
         <View className="h-[108px] w-[108px]">
           <Image
             source={{ uri: thumbnailImage as any }}
@@ -61,13 +65,19 @@ const VideoPicker: FC<IVideoPickerProps> = () => {
         </View>
       )}
       <TouchableOpacity
-          onPress={pickVideo} className="bg-gray-light mt-5 h-16 rounded-xl">
-        <View
-          className=" mt-5 flex flex-row items-center justify-center rounded-xl"
-        >
-          <CameraIcon />
-          <Text className="text-black-light ml-1.5 mt-1 text-sm font-semibold">
-            Upload image
+        onPress={pickVideo}
+        className="bg-gray-light mt-5 h-16 rounded-xl"
+        disabled={!!isSelectedImage}
+      >
+        <View className="mt-5 flex flex-row items-center justify-center rounded-xl">
+          <CameraIcon fill={(!isSelectedImage) ? '#1C1B1F' : '#C5C8D2'} />
+          <Text
+            className={clsx(
+              'text-black-light ml-1.5 mt-1 text-sm font-semibold',
+              (isSelectedImage) && 'text-gray-medium'
+            )}
+          >
+            Upload video
           </Text>
         </View>
       </TouchableOpacity>

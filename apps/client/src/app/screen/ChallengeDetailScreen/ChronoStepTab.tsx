@@ -13,7 +13,7 @@ export const ChronoStepTab: FC<IChronoStepTabProps> = ({ arrProgress }) => {
     <ScrollView className="bg-gray-50 ">
       <FlatList
         data={arrProgress}
-        renderItem={({ item }) => <Post itemPost={item} />}
+        renderItem={({ item }) => <Post itemProgressCard={item} />}
         keyExtractor={(item) => item.id as unknown as string}
       />
       <Button

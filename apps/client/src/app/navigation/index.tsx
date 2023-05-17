@@ -16,7 +16,7 @@ import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
 import AlertsScreen from '../screen/AlertsScreen';
 
-import LoginModal from '../component/LoginModal';
+import LoginModal from '../component/modal/LoginModal';
 import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
 import { View } from 'react-native';
 import BackButton from '../component/common/BackButton';

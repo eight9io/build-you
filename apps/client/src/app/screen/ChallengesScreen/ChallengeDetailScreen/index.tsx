@@ -64,12 +64,3 @@ export const ChallengeDetailScreen = () => {
 };
 
 export default ChallengeDetailScreen;
-
-const styles = StyleSheet.create({
-  outer: {
-    flex: 1,
-  },
-  inner: {
-    flex: 1,
-  },
-});

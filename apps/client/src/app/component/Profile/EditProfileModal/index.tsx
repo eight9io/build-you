@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  Modal,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Modal, SafeAreaView } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
@@ -13,24 +7,32 @@ import Header from '../../common/Header';
 import TextInput from '../../common/Input/TextInput';
 import CloseIcon from './asset/close-icon.svg';
 import CalendarIcon from './asset/calendar-icon.svg';
-import DateTimePicker from '../../DateTimePicker';
+import DateTimePicker from '../../common/Pickers/DateTimePicker';
 import dayjs from '../../../util/date.util';
+import SelectPicker from '../../common/Pickers/SelectPicker';
+import { MOCK_OCCUPATION_SELECT } from '../../../mock-data/occupation';
 interface IEditProfileModalProps {
   isVisible: boolean;
   onClose: () => void;
 }
+
 export const EditProfileModal: FC<IEditProfileModalProps> = ({
   isVisible,
   onClose,
 }) => {
   const { t } = useTranslation();
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+  const [showOccupationPicker, setShowOccupationPicker] = useState(false);
+  const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
+    number | undefined
+  >();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<{
     firstName: string;
     lastName: string;
@@ -49,14 +51,22 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   const onSubmit = (data: any) => console.log(data);
   // TODO: handle change CREATE text color when input is entered
 
-  const handleDatePicked = (date: Date) => {
-    setValue('birthday', date);
+  const handleDatePicked = (date?: Date) => {
+    if (date) setValue('birthday', date);
     setShowDateTimePicker(false);
+  };
+
+  const handleOccupationPicked = (index?: number) => {
+    if (index) {
+      setSelectedOccupationIndex(index);
+      setValue('occupation', MOCK_OCCUPATION_SELECT[index].label);
+    }
+    setShowOccupationPicker(false);
   };
   return (
     <Modal
       animationType="slide"
-      presentationStyle="fullScreen"
+      presentationStyle="pageSheet"
       visible={isVisible}
     >
       <SafeAreaView className="bg-white">
@@ -164,6 +174,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                       placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                       onBlur={onBlur}
                       onChangeText={onChange}
+                      onPress={() => setShowOccupationPicker(true)}
                       value={value}
                       className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                     />
@@ -197,11 +208,21 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             </View>
           </View>
           <DateTimePicker
+            date={getValues('birthday')}
             mode={'date'}
             show={showDateTimePicker}
             onDatePicked={handleDatePicked}
             onCancel={() => {
               setShowDateTimePicker(false);
+            }}
+          />
+          <SelectPicker
+            show={showOccupationPicker}
+            data={MOCK_OCCUPATION_SELECT}
+            selectedIndex={selectedOccupationIndex}
+            onSelect={handleOccupationPicked}
+            onCancel={() => {
+              setShowOccupationPicker(false);
             }}
           />
         </View>

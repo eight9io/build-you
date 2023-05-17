@@ -7,9 +7,11 @@ import { View, Text } from 'react-native';
 
 import ProfileTabs from './ProfileTabs';
 import CoverImage from './CoverImage';
+
 import { OutlineButton } from '../common/Buttons/Button';
-import ProfileAvartar from '../common/Avatar/ProfileAvartar';
 import EditProfileModal from './EditProfileModal';
+import Button from '../common/Buttons/Button';
+import ProfileAvartar from '../common/Avatar/ProfileAvatar';
 
 interface ITopSectionProfileProps {
   onEditBtnClicked: () => void;

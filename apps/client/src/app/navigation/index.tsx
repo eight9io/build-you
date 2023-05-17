@@ -25,8 +25,6 @@ import IconSetting from '../component/common/IconSetting/IconSetting';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-const placeholder = () => <View />;
-
 export const RootNavigation = () => {
   const { t } = useTranslation();
   return (

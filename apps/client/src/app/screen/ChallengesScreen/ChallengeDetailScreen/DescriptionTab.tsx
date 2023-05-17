@@ -16,27 +16,31 @@ const SingleDescription: FC<ISingleDescriptionProps> = ({
   description,
 }) => {
   return (
-    <View className={clsx('flex flex-col border-b border-gray-70 pb-4 mb-4')}>
-      <Text className='text-h6 leading-6 text-black-light font-semibold'>{title}</Text>
-      <Text className='text-h6 leading-6 font-normal text-gray-dark'>{description}</Text>
+    <View className={clsx('border-gray-70 mb-4 flex flex-col border-b pb-4')}>
+      <Text className="text-h6 text-black-light font-semibold leading-6">
+        {title}
+      </Text>
+      <Text className="text-h6 text-gray-dark font-normal leading-6">
+        {description}
+      </Text>
     </View>
   );
 };
 
 export const DescriptionTab: FC<IDescriptionTabProps> = () => {
   return (
-    <ScrollView>
+    <ScrollView className='px-4 pt-4'>
       <SingleDescription
-        title='The benefits'
-        description='Improved weight control, increased hand-eye coordination and balance'
+        title="The benefits"
+        description="Improved weight control, increased hand-eye coordination and balance"
       />
       <SingleDescription
-        title='The benefits'
-        description='Improved weight control, increased hand-eye coordination and balance'
+        title="The benefits"
+        description="Improved weight control, increased hand-eye coordination and balance"
       />
       <SingleDescription
-        title='The benefits'
-        description='Improved weight control, increased hand-eye coordination and balance'
+        title="The benefits"
+        description="Improved weight control, increased hand-eye coordination and balance"
       />
     </ScrollView>
   );

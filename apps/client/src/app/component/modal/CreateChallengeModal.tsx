@@ -8,14 +8,12 @@ import {
 } from '../../component/common/Buttons/Button';
 import Header from '../common/Header';
 import ImagePicker from '../common/ImagePicker';
-import CustomTextInput from '../common/CustomTextInput';
+import CustomTextInput from '../common/Inputs/CustomTextInput';
 
 interface ICreateChallengeModalProps {
-  isVisible: boolean;
   onClose: () => void;
 }
 export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
-  isVisible,
   onClose,
 }) => {
   const { t } = useTranslation();

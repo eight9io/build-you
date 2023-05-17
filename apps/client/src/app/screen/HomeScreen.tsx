@@ -76,7 +76,7 @@ export const HomeScreen = () => {
     >
       <FlatList
         data={arrayPost}
-        renderItem={({ item }) => <Post itemPost={item} isPost />}
+        renderItem={({ item }) => <Post itemProgressCard={item}/>}
         keyExtractor={(item) => item.id as unknown as string}
       />
     </ScrollView>

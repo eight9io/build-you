@@ -1,7 +1,7 @@
 {
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
   "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
-  "login_screen.register": "Registrati gratis",
+  "login_screen.register": "Register for free ",
   "login_screen.login": "Log in",
   "login_screen.explore_no_account": "Esplora senza account",
   "challenge_detail_screen.title": "Challenge",
@@ -41,5 +41,9 @@
   "profile_screen_tabs.following": "following",
 
   "your_feed.header": "Your feed",
-  "card.builder": "Builder"
+  "card.builder": "Builder",
+
+  "register_screen.title": "Register",
+  "register_screen.sub_title": "Register for free with your email and password.",
+  "register_screen.policy": "I've read and agreed with Privacy policy and Terms and Conditions."
 }

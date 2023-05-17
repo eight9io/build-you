@@ -13,6 +13,7 @@ export type RootStackParamList = {
   CreateChallengeScreen: undefined;
   PersonalChallengesScreen: undefined;
   PersonalChallengeDetailScreen: undefined;
+  RegisterScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

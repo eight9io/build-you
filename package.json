@@ -25,6 +25,7 @@
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "expo-video-thumbnails": "~7.2.1",
+    "formik": "^2.2.9",
     "i18next": "^22.4.15",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
@@ -42,7 +43,8 @@
     "react-native-svg-transformer": "1.0.0",
     "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.18.12",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@expo/cli": "~0.7.1",

@@ -26,11 +26,7 @@ type AlertsScreenNavigationProp = NativeStackNavigationProp<
   'AlertsScreen'
 >;
 
-const Alerts = ({
-  navigation,
-}: {
-  navigation: AlertsScreenNavigationProp;
-}) => {
+const Alerts = ({ navigation }: { navigation: AlertsScreenNavigationProp }) => {
   const { t } = useTranslation();
 
   return (

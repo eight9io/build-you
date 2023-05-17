@@ -67,19 +67,12 @@ export const HomeScreen = () => {
   ];
 
   return (
-    <ScrollView
-      ref={(ref) => {
-        scrollViewRef.current = ref;
-      }}
-      contentInsetAdjustmentBehavior="automatic"
-      className="bg-gray-light"
-    >
-      <FlatList
-        data={arrayPost}
-        renderItem={({ item }) => <Post itemPost={item} isPost />}
-        keyExtractor={(item) => item.id as unknown as string}
-      />
-    </ScrollView>
+    <FlatList
+      data={arrayPost}
+      renderItem={({ item }) => <Post itemPost={item} isPost />}
+      keyExtractor={(item) => item.id as unknown as string}
+      style={{ marginBottom: 100 }}
+    />
   );
 };
 

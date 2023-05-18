@@ -7,9 +7,17 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native';
+<<<<<<< Updated upstream:apps/client/src/app/component/modal/LoginModal/index.tsx
 import React, { useState } from 'react';
+import BackButton from '../../common/BackButton';
+import Button from '../../common/Buttons/Button';
+=======
+import { useEffect } from 'react';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 import BackButton from '../common/BackButton';
 import Button from '../common/Buttons/Button';
+>>>>>>> Stashed changes:apps/client/src/app/component/LoginModal/index.tsx
 import { useTranslation } from 'react-i18next';
 
 import IconApple from './asset/Apple.svg';
@@ -23,6 +31,47 @@ interface Props {
 }
 const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   const { t } = useTranslation();
+
+  // Use this to ensure closing the popup after finishing login process
+  WebBrowser.maybeCompleteAuthSession();
+
+  // Using access token to authenticate with backend
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   iosClientId: process.env.NX_IOS_CLIENT_ID,
+  //   expoClientId: process.env.NX_EXPO_CLIENT_ID,
+  //   selectAccount: true,
+  //   scopes: ['profile', 'email'],
+  // });
+
+  // useEffect(() => {
+  //   if (response?.type === 'success') {
+  //     const { authentication } = response;
+  //     console.log(authentication?.accessToken);
+  //   }
+  // }, [response]);
+
+  // const handleGoogleLogin = () => {
+  //   promptAsync();
+  // };
+
+  // Use id token to authenticate with backend
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    iosClientId: process.env.NX_IOS_CLIENT_ID,
+    expoClientId: process.env.NX_EXPO_CLIENT_ID,
+    selectAccount: true,
+    scopes: ['profile', 'email'],
+    responseType: 'id_token',
+  });
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { params } = response;
+      console.log('idToken: ', params.id_token);
+    }
+  }, [response]);
+
+  const handleGoogleLogin = () => {
+    promptAsync();
+  };
   const arrayButton = [
     {
       title: t('modal_login.apple'),
@@ -50,7 +99,7 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
 
       Icon: <IconGoogle />,
       onPress: () => {
-        console.log('google');
+        handleGoogleLogin();
       },
     },
 
@@ -108,6 +157,12 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
             />
           </View>
         </View>
+        {/* <LinkedInModal
+          clientID="86bd2r3oeeeqwj"
+          clientSecret="MfPE717c0ygsZN1v"
+          redirectUri="http://localhost:8081"
+          onSuccess={(token) => console.log(token)}
+        /> */}
       </SafeAreaView>
     </Modal>
   );

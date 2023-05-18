@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import clsx from 'clsx';
 
 interface IButtonProps {
-  title: string;
+  title?: string | null;
   containerClassName?: string;
   textClassName?: string;
   onPress?: () => void;

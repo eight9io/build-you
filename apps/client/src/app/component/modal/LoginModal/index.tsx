@@ -7,17 +7,12 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native';
-<<<<<<< Updated upstream:apps/client/src/app/component/modal/LoginModal/index.tsx
 import React, { useState } from 'react';
 import BackButton from '../../common/BackButton';
 import Button from '../../common/Buttons/Button';
-=======
 import { useEffect } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import BackButton from '../common/BackButton';
-import Button from '../common/Buttons/Button';
->>>>>>> Stashed changes:apps/client/src/app/component/LoginModal/index.tsx
 import { useTranslation } from 'react-i18next';
 
 import IconApple from './asset/Apple.svg';

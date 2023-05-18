@@ -36,7 +36,7 @@ function BottomNavBar() {
       }}
     >
       <Tab.Screen
-        name='Feed'
+        name="Feed"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -55,7 +55,7 @@ function BottomNavBar() {
         }}
       />
       <Tab.Screen
-        name='Challenges'
+        name="Challenges"
         component={PersonalChallengesScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -74,7 +74,7 @@ function BottomNavBar() {
         }}
       />
       <Tab.Screen
-        name='Create Challenge'
+        name="Create Challenge"
         component={EmptyPage}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
@@ -99,7 +99,7 @@ function BottomNavBar() {
         }}
       />
       <Tab.Screen
-        name='Alerts'
+        name="Alerts"
         component={AlertsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -118,7 +118,7 @@ function BottomNavBar() {
         }}
       />
       <Tab.Screen
-        name='Profilo'
+        name="Profilo"
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (

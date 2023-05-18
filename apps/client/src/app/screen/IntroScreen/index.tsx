@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -16,9 +16,16 @@ import Button from '../../component/common/Buttons/Button';
 import LoginModal from '../../component/modal/LoginModal';
 import BackButton from '../../component/common/BackButton';
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation, route }: any) => {
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
+  useEffect(() => {
+    if (route?.params?.setModal) {
+      setModalVisible(route?.params?.setModal);
+    }
+  }, [route?.params?.setModal]);
+  console.log(route?.params?.setModal);
+
   return (
     <View className="justify-content: space-between flex-1">
       <View className="flex-1">
@@ -54,7 +61,7 @@ export const LoginScreen = () => {
           </Swiper>
         </View>
 
-        <View className="flex-row w-full">
+        <View className="w-full flex-row">
           <Button
             title={t('login_screen.register')}
             containerClassName="bg-primary-default"
@@ -75,6 +82,7 @@ export const LoginScreen = () => {
         </TouchableOpacity>
 
         <LoginModal
+          navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
         />

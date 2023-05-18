@@ -52,7 +52,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           </Text>
           <Text className={clsx('text-gray-dark text-sm')}>{description}</Text>
         </View>
-
         <BackSvg />
       </View>
     </TouchableOpacity>

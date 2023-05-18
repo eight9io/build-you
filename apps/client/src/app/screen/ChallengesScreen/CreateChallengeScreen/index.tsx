@@ -12,7 +12,6 @@ const CreateChallengeScreen = ({
   return (
     <SafeAreaView>
       <CreateChallengeModal
-        isVisible={true}
         onClose={() => {
           navigation.goBack();
         }}

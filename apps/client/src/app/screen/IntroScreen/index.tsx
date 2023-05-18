@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import Swiper from 'react-native-swiper';
 import Button from '../../component/common/Buttons/Button';
 
-import LoginModal from '../../component/LoginModal';
+import LoginModal from '../../component/modal/LoginModal';
 import BackButton from '../../component/common/BackButton';
 
 export const LoginScreen = ({ navigation, route }: any) => {

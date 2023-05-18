@@ -36,23 +36,26 @@ export const Header: FC<IHeaderProps> = ({
       ) : null}
 
       {title && (
-        <Text className={clsx('text-h5 font-semibold', textClassName)}>
-          {title}
-        </Text>
+        <View className={clsx('absolute top-0')}>
+          <Text className={clsx('text-h5 font-semibold', textClassName)}>
+            {title}
+          </Text>
+        </View>
       )}
-      {rightBtn ? (
+      {rightBtn && typeof rightBtn == 'string' && (
         <TouchableOpacity
           className="absolute right-5 top-0"
           onPress={onRightBtnPress}
         >
-          {typeof rightBtn === 'string' && (
-            <Text className="text-h5 text-primary-default font-normal">
-              {rightBtn}
-            </Text>
-          )}
-          {typeof rightBtn === 'object' && rightBtn}
+          <Text className="text-h5 text-primary-default font-normal">
+            {rightBtn}
+          </Text>
         </TouchableOpacity>
-      ) : null}
+      )}
+
+      {rightBtn && typeof rightBtn === 'object' && (
+        <View className="absolute right-5 top-0">{rightBtn}</View>
+      )}
     </View>
   );
 };

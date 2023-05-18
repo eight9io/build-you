@@ -16,7 +16,7 @@ import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
 import AlertsScreen from '../screen/AlertsScreen';
 
-import LoginModal from '../component/LoginModal';
+import LoginModal from '../component/modal/LoginModal';
 import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
 import { View } from 'react-native';
 import BackButton from '../component/common/BackButton';
@@ -28,8 +28,6 @@ import AppTitle from '../component/common/AppTitle';
 import HardSkillsStep3 from '../screen/HardSkills/HardSkillsStep3';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
-
-const placeholder = () => <View />;
 
 export const RootNavigation = () => {
   const { t } = useTranslation();

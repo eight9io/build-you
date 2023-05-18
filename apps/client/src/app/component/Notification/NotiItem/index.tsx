@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { View, Text } from 'react-native';
 
-import NotiAvartar from '../../common/Avatar/NotiAvartar';
+import NotiAvartar from '../../common/Avatar/NotiAvatar';
 
 interface INotiItemProps {
   username?: string;

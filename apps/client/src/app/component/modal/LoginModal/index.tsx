@@ -18,11 +18,13 @@ import { useTranslation } from 'react-i18next';
 import IconApple from './asset/Apple.svg';
 import IconGoogle from './asset/Google.svg';
 import IconLinkedIn from './asset/LinkedIn.svg';
+import { useNavigation } from '@react-navigation/native';
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
+  navigation?: any;
 }
-const index = ({ modalVisible, setModalVisible }: Props) => {
+const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   const { t } = useTranslation();
 
   // Use this to ensure closing the popup after finishing login process
@@ -101,7 +103,8 @@ const index = ({ modalVisible, setModalVisible }: Props) => {
       containerClassName: ' border-primary-default border-[1px] m-2',
       textClassName: 'text-primary-default ml-2 text-md ',
       onPress: () => {
-        console.log('register');
+        setModalVisible(false);
+        navigation.navigate('RegisterScreen');
       },
     },
   ];

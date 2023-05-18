@@ -23,6 +23,10 @@ import BackButton from '../component/common/BackButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 import IconSetting from '../component/common/IconSetting/IconSetting';
 
+import Register from '../screen/Register/RegisterScreen';
+import AppTitle from '../component/common/AppTitle';
+import HardSkillsStep3 from '../screen/HardSkills/HardSkillsStep3';
+
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = () => {
@@ -62,11 +66,61 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        <RootStack.Screen
-          name="HomeScreen"
-          component={BottomNavBar}
+        <RootStack.Group>
+          {/* <RootStack.Screen
+            name="IntroScreen"
+            component={IntroScreen}
+            options={{
+              headerShown: false,
+            }}
+          /> */}
+          <RootStack.Screen
+            name="RegisterScreen"
+            component={Register}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t('register_screen.title')} />
+              ),
+
+              headerLeft: (props) => (
+                <BackButton
+                  onPress={() =>
+                    navigation.navigate('IntroScreen', { setModal: true })
+                  }
+                />
+              ),
+            })}
+          />
+        </RootStack.Group>
+        <RootStack.Group>
+          <RootStack.Screen
+            name="SkillStepThreeScreen"
+            component={HardSkillsStep3}
+            options={{
+              headerShown: true,
+              headerTitle: () => <AppTitle title={t('modal_skill.title')} />,
+              headerLeft: (props) => (
+                <BackButton onPress={() => console.log('back')} />
+              ),
+            }}
+          />
+        </RootStack.Group>
+
+        {/* <RootStack.Screen name="HomeScreen" component={BottomNavBar} /> */}
+        {/* <RootStack.Screen
+          name="CreateChallengeScreen"
+          component={CreateChallengeScreen}
           options={{
-            headerShown: false,
+            headerShown: false,  
+          }}
+        /> */}
+
+        {/* <RootStack.Screen
+          name="RegisterScreen"
+          component={Register}
+          options={{
+            headerShown: true,
             headerTitle: () => (
               <Header title={t('challenge_detail_screen.title') || undefined} />
             ),
@@ -74,14 +128,7 @@ export const RootNavigation = () => {
               return <BackButton />;
             },
           }}
-        />
-        <RootStack.Screen
-          name="CreateChallengeScreen"
-          component={CreateChallengeScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+        /> */}
       </RootStack.Navigator>
     </NavigationContainer>
   );

@@ -45,5 +45,83 @@
 
   "register_screen.title": "Register",
   "register_screen.sub_title": "Register for free with your email and password.",
-  "register_screen.policy": "I've read and agreed with Privacy policy and Terms and Conditions."
+  "register_screen.policy": "I've read and agreed with ",
+  "register_screen.policy_link": "Privacy Policy",
+  "register_screen.terms_link": "Terms",
+  "register_screen.conditions_link": "Conditions",
+  "and": "and",
+  "policy": [
+    {
+      "stt": 1,
+      "title": "Privacy Policy",
+      "detail": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus."
+    },
+    {
+      "stt": 2,
+      "title": "Privacy Policy",
+      "detail": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus."
+    },
+    {
+      "stt": 3,
+      "title": "Privacy Policy",
+      "detail": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus."
+    }
+  ],
+  "register_screen.error_icy": "Please agree with our privacy policy",
+
+  "modal_skill.title": "Complete profile",
+  "modal_skill.step": "Steps",
+  "modal_skill.of": "of",
+  "modal_skill.skip": "Skip",
+  "modal_skill.question": "How do you define yourself as competent?",
+  "modal_skill.sub_question": "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself",
+  "register_screen.form": [
+    {
+      "label": "Email",
+      "name": "email",
+      "error": "Email is invalid. ",
+      "required": "Please fill in your email.",
+      "type": "email",
+      "placeholder": "Enter your email "
+    },
+    {
+      "label": "Password",
+      "name": "password",
+      "required": "Please fill in your password.",
+      "error": "Your password must contain 8 or more characters, at least 1 uppercase letter and 1 number.",
+      "type": "password",
+      "placeholder": "Enter your password "
+    },
+    {
+      "label": "Repeat password",
+      "name": "repeat_password",
+      "error": "Passwords do not match.",
+      "required": "Please fill in your  password.",
+      "type": "password",
+      "placeholder": "Repeat your password"
+    }
+  ],
+  "register_screen.err_policy": "Please agree with our privacy policy",
+  "modal_skill.arraySkill": {
+    "development": "💻 Development",
+    "art": "🎨  Art",
+    "culture": "🏛️  Culture",
+    "marketing": "📣 Marketing",
+
+    "kitchen": "🍳  Kitchen",
+    "training": "🎓  Training",
+    "design": "✏️  Design",
+
+    "tourism": "✈️  Tourism",
+    "mentorships": "🗣️ Mentorships",
+
+    "languages": "🌍  Foreign languages",
+    "events": "🎉  Events",
+    "reception": "👰  Reception",
+    "dance": "💃  Dance",
+    "architecture": "🏗️  Architecture",
+    "photography": "📷  Photography"
+  },
+  "modal_skill.manually": "Add manually",
+  "button.next": "Next"
 }

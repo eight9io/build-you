@@ -25,6 +25,7 @@ import IconSetting from '../component/common/IconSetting/IconSetting';
 
 import Register from '../screen/Register/RegisterScreen';
 import AppTitle from '../component/common/AppTitle';
+import HardSkillsStep3 from '../screen/HardSkills/HardSkillsStep3';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -92,6 +93,19 @@ export const RootNavigation = () => {
                 />
               ),
             })}
+          />
+        </RootStack.Group>
+        <RootStack.Group>
+          <RootStack.Screen
+            name="SkillStepThreeScreen"
+            component={HardSkillsStep3}
+            options={{
+              headerShown: true,
+              headerTitle: () => <AppTitle title={t('modal_skill.title')} />,
+              headerLeft: (props) => (
+                <BackButton onPress={() => console.log('back')} />
+              ),
+            }}
           />
         </RootStack.Group>
 

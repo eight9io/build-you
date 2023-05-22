@@ -59,7 +59,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({
                 <CloseIcon />
               </TouchableOpacity>
             </View>
-            <View className="mt-10 flex-1">{children}</View>
+            <View className=" flex-1">{children}</View>
           </BottomSheetView>
         </RNBottomSheet>
       )}

@@ -53,8 +53,8 @@ export const EditChallengeProgressModal: FC<
         <View className='mt-6 flex h-full flex-col rounded-t-xl bg-white'>
           <Header
             title='New challenge'
-            rightBtnText='SAVE'
-            leftBtnText='Cancel'
+            rightBtn='SAVE'
+            leftBtn='Cancel'
             onLeftBtnPress={onClose}
           />
 

@@ -17,7 +17,7 @@ export const ChronoStepTab: FC<IChronoStepTabProps> = ({ arrProgress }) => {
         keyExtractor={(item) => item.id as unknown as string}
       />
       <Button
-        title={t('challenge_detail_screen.upload_new_update')}
+        title={t('challenge_detail_screen.upload_new_progress')}
         containerClassName="bg-primary-default h-[34px]"
         textClassName="text-white"
       />

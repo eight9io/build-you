@@ -19,7 +19,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
       <View className="relative">
         <TouchableOpacity onPress={onPress}>
           <View pointerEvents={onPress ? 'none' : 'auto'}>
-            <Base {...inputProps} />
+            <Base className={inputProps?.className}  {...inputProps} />
           </View>
         </TouchableOpacity>
         {rightIcon ? (

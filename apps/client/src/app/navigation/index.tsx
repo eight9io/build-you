@@ -22,6 +22,7 @@ import NavButton from '../component/common/Buttons/NavButton';
 import Register from '../screen/RegisterScreen/RegisterScreen';
 import Login from '../screen/LoginScreen/Login';
 import ForgotPassword from '../screen/ForgotPassword';
+import AppTitle from '../component/common/AppTitle';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -92,23 +93,57 @@ export const RootNavigation = () => {
             <RootStack.Screen
               name="LoginScreen"
               component={Login}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => <AppTitle title={t('login')} />,
+
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() =>
+                      navigation.navigate('IntroScreen', { setModal: true })
+                    }
+                  />
+                ),
+              })}
             />
+
             <RootStack.Screen
               name="RegisterScreen"
               component={Register}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => (
+                  <AppTitle title={t('register_screen.title')} />
+                ),
+
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() =>
+                      navigation.navigate('IntroScreen', { setModal: true })
+                    }
+                  />
+                ),
+              })}
             />
+
             <RootStack.Screen
               name="ForgotPasswordScreen"
               component={ForgotPassword}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => (
+                  <AppTitle title={t('forgot_password.title')} />
+                ),
+
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.navigate('LoginScreen')}
+                  />
+                ),
+              })}
             />
           </>
         )}

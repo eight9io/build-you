@@ -33,7 +33,12 @@ export default function PolicyModal({
           <View style={styles.modalView}>
             <Header
               title="Privacy policy..."
-              leftBtn={<NavButton onPress={() => setModalVisible(false)} />}
+              leftBtn={
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => setModalVisible(false)}
+                />
+              }
             />
             <View>
               {(

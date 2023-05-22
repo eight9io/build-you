@@ -67,13 +67,11 @@ export const HomeScreen = () => {
   ];
 
   return (
-  
-      <FlatList
-        data={arrayPost}
-        renderItem={({ item }) => <Post itemProgressCard={item}/>}
-        keyExtractor={(item) => item.id as unknown as string}
-      />
-   
+    <FlatList
+      data={arrayPost}
+      renderItem={({ item }) => <Post itemProgressCard={item} />}
+      keyExtractor={(item) => item.id as unknown as string}
+    />
   );
 };
 

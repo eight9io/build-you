@@ -10,24 +10,16 @@ import Header from '../component/common/Header';
 
 import BottomNavBar from '../component/BottomNavBar';
 
-import HomeScreen from '../screen/HomeScreen';
 import IntroScreen, { LoginScreen } from '../screen/IntroScreen';
-import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
 import AlertsScreen from '../screen/AlertsScreen';
 
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile';
 
-import LoginModal from '../component/modal/LoginModal';
 import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
-import { View } from 'react-native';
 import NavButton from '../component/common/Buttons/NavButton';
-import IconSearch from '../component/common/IconSearch/IconSearch';
-import IconSetting from '../component/common/IconSetting/IconSetting';
 
 import Register from '../screen/RegisterScreen/RegisterScreen';
-import AppTitle from '../component/common/AppTitle';
-import HardSkillsStep3 from '../screen/HardSkills/HardSkillsStep3';
 import Login from '../screen/LoginScreen/Login';
 import ForgotPassword from '../screen/ForgotPassword';
 
@@ -35,66 +27,91 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = () => {
   const { t } = useTranslation();
+
+  const accessToken = false;
+
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator>
-        <Stack.Screen
-          name='Intro'
-          component={IntroScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        {/* <Stack.Screen
-          name='Home'
-          component={HomeScreen}
-          options={{
-            headerTitle: () => <AppTitle title={t('your_feed.header')} />,
-            headerLeft: (props) => (
-              <IconSearch onPress={() => console.log('search')} />
-            ),
-            headerRight: (props) => (
-              <IconSetting onPress={() => console.log('setting')} />
-            ),
-          }}
-        /> */}
-      {/* <Stack.Screen name='Inner' component={InnerScreen} /> */}
-      {/* <Stack.Screen
-          name='CreateChallengeScreen'
-          component={CreateChallengeScreen}
-        />
-      </Stack.Navigator> */}
-
       <RootStack.Navigator
         screenOptions={{
           headerShown: false,
         }}
       >
-        {/* <RootStack.Screen
-          name='HomeScreen'
-          component={BottomNavBar}
-          options={{
-            headerShown: false,
-            headerTitle: () => (
-              <Header title={t('challenge_detail_screen.title') || undefined} />
-            ),
-            headerLeft: (props) => {
-              return <NavButton />;
-            },
-          }}
-        />
-        <RootStack.Screen
-          name='CreateChallengeScreen'
-          component={CreateChallengeScreen}
-          options={{
-            headerShown: false,
-          }}
-        /> */}
-
-        <RootStack.Screen
-          name="CompleteProfileScreen"
-          component={CompleteProfileScreen}
-        />
+        {accessToken ? (
+          <>
+            <RootStack.Screen
+              name="HomeScreen"
+              component={BottomNavBar}
+              options={{
+                headerShown: false,
+                headerTitle: () => (
+                  <Header
+                    title={t('challenge_detail_screen.title') || undefined}
+                  />
+                ),
+                headerLeft: (props) => {
+                  return <NavButton />;
+                },
+              }}
+            />
+            <RootStack.Screen
+              name="CreateChallengeScreen"
+              component={CreateChallengeScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="CompleteProfileScreen"
+              component={CompleteProfileScreen}
+            />
+            <RootStack.Screen
+              name="ChallengeDetailScreen"
+              component={ChallengeDetailScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="AlertsScreen"
+              component={AlertsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <RootStack.Screen
+              name="IntroScreen"
+              component={IntroScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="LoginScreen"
+              component={Login}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="RegisterScreen"
+              component={Register}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="ForgotPasswordScreen"
+              component={ForgotPassword}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );

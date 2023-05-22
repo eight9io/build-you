@@ -6,15 +6,12 @@
   "login_screen.explore_no_account": "Esplora senza account",
   "challenge_detail_screen.title": "Challenge",
   "challenge_detail_screen.builder": "Builder",
-
   "challenge_detail_screen.progress": "Progress",
   "challenge_detail_screen.description": "Description",
-
   "challenge_detail_screen.skills": "Skills",
   "challenge_detail_screen.coach": "Coach",
   "challenge_detail_screen.participants": "Partecipanti",
-  "challenge_detail_screen.upload_new_update": "Add new progress",
-
+  "challenge_detail_screen.upload_new_progress": "Add new progress",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
@@ -22,27 +19,21 @@
     "alerts": "Alerts",
     "profile": "Profile"
   },
-
   "top_nav.alerts": "Alerts",
   "top_nav.challenges": "Challenges",
-
   "modal_login.title": "Register for free",
   "modal_login.description": "Create your free account, get maximum motivation and support from the community and coaches.",
   "modal_login.apple": "Sign in with Apple",
   "modal_login.google": "Sign in with Google",
   "modal_login.linked": "Sign in with Linkedin",
   "modal_login.register": "Register with email and password",
-
   "button.edit_profile": "Edit profile",
-
   "profile_screen_tabs.biography": "biography",
   "profile_screen_tabs.skills": "skills",
   "profile_screen_tabs.followers": "followers",
   "profile_screen_tabs.following": "following",
-
   "your_feed.header": "Your feed",
   "card.builder": "Builder",
-
   "register_screen.title": "Register",
   "register_screen.sub_title": "Register for free with your email and password.",
   "register_screen.policy": "I've read and agreed with ",
@@ -68,7 +59,6 @@
     }
   ],
   "register_screen.error_icy": "Please agree with our privacy policy",
-
   "modal_skill.title": "Complete profile",
   "modal_skill.step": "Steps",
   "modal_skill.of": "of",
@@ -107,14 +97,11 @@
     "art": "🎨  Art",
     "culture": "🏛️  Culture",
     "marketing": "📣 Marketing",
-
     "kitchen": "🍳  Kitchen",
     "training": "🎓  Training",
     "design": "✏️  Design",
-
     "tourism": "✈️  Tourism",
     "mentorships": "🗣️ Mentorships",
-
     "languages": "🌍  Foreign languages",
     "events": "🎉  Events",
     "reception": "👰  Reception",

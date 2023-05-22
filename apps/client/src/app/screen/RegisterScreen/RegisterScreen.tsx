@@ -11,6 +11,13 @@ import { useNavigation } from '@react-navigation/native';
 import PolicyModal from '../../component/modal/PolicyModal';
 import RegisterCreating from '../../component/modal/RegisterCreating';
 
+import ErrorText from '../../component/common/ErrorText';
+type FormData = {
+  email: string;
+  password: string;
+  repeat_password: string;
+  check_policy: boolean;
+};
 export default function RegisterScreen({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
   const [ruleBtnChecked, setRuleBtnChecked] = useState(false);
@@ -18,24 +25,23 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{
-    email: string;
-    password: string;
-    re_password: string;
-    check_policy: boolean;
-  }>({
+    setValue,
+  } = useForm<FormData>({
     defaultValues: {
       email: '',
       password: '',
-      re_password: '',
+      repeat_password: '',
       check_policy: false,
     },
     resolver: yupResolver(RegisterValidationSchema()),
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalRegisterCreating, setModalRegisterCreating] = useState(true);
+  const [modalRegisterCreating, setModalRegisterCreating] = useState(false);
 
   return (
     <SafeAreaView>
@@ -53,35 +59,45 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
           </View>
           <View className="mt-4 flex flex-col ">
             {(
-              t('register_screen.form', {
+              t('form', {
                 returnObjects: true,
               }) as Array<any>
             ).map((item, index) => {
-              return (
-                <View className="pt-5" key={index}>
-                  <Controller
-                    control={control}
-                    name={item.name}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <View className="flex flex-col gap-1">
-                        <TextInput
-                          label={item.label}
-                          placeholder={item.placeholder}
-                          placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          value={value}
-                          className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
-                        />
-                      </View>
+              if (item.name === 'code') {
+                return;
+              } else {
+                return (
+                  <View className="pt-5" key={index}>
+                    <Controller
+                      control={control}
+                      name={item.name}
+                      rules={{
+                        required: true,
+                      }}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <View className="flex flex-col gap-1">
+                          <TextInput
+                            label={item.label}
+                            placeholder={item.placeholder}
+                            placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                            onBlur={onBlur}
+                            onChangeText={(text) => onChange(text)}
+                            value={value}
+                            className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                          />
+                        </View>
+                      )}
+                    />
+                    {errors[item.name as keyof FormData] && (
+                      <ErrorText
+                        message={errors[item.name as keyof FormData]?.message}
+                      />
                     )}
-                  />
-                </View>
-              );
+                  </View>
+                );
+              }
             })}
+
             <Controller
               control={control}
               name="check_policy"
@@ -118,17 +134,23 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                     }
                     containerStyle={{
                       backgroundColor: 'transparent',
-
+                      paddingBottom: 0,
                       paddingLeft: 0,
                       marginTop: 10,
                     }}
                     checked={ruleBtnChecked}
-                    onPress={() => setRuleBtnChecked(!ruleBtnChecked)}
+                    onPress={() => {
+                      setRuleBtnChecked(!ruleBtnChecked);
+                      setValue('check_policy', !ruleBtnChecked);
+                    }}
                     iconType="material-community"
                     checkedIcon="checkbox-marked"
                     uncheckedIcon="checkbox-blank-outline"
                     checkedColor="blue"
                   />
+                  {errors.check_policy && (
+                    <ErrorText message={errors.check_policy?.message} />
+                  )}
                 </View>
               )}
             />
@@ -138,7 +160,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
           containerClassName="  bg-primary-default flex-none px-1 "
           textClassName="line-[30px] text-center text-md font-medium text-white"
           title={t('button.next')}
-          onPress={() => {}}
+          onPress={handleSubmit(onSubmit)}
         />
         <PolicyModal
           navigation={navigation}

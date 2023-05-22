@@ -32,7 +32,7 @@ export default function RegisterCreating({
     >
       <View className=" bg-white ">
         <View className="h-full pt-5">
-          <Header title="Register" />
+          <Header title={t('register_screen.title') as string} />
           <View className="flex-column relative items-center">
             <View className="absolute top-2">
               <Image
@@ -45,7 +45,7 @@ export default function RegisterCreating({
           <View className="  flex-1 items-center justify-center ">
             <IconLoading />
             <Text className="text-h6 text-gray-dark px-24 text-center leading-6 ">
-              Creating your account...
+              {t('register_screen.loading') as string}
             </Text>
           </View>
         </View>

@@ -16,6 +16,9 @@ import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
 import AlertSvg from './asset/alerts.svg';
 import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen';
+import AppTitle from '../common/AppTitle';
+import IconSearch from '../common/IconSearch/IconSearch';
+import IconSetting from '../common/IconSetting/IconSetting';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
@@ -39,6 +42,13 @@ function BottomNavBar() {
         name="Feed"
         component={HomeScreen}
         options={{
+          headerTitle: () => <AppTitle title={t('your_feed.header')} />,
+          headerLeft: (props) => (
+            <IconSearch onPress={() => console.log('search')} />
+          ),
+          headerRight: (props) => (
+            <IconSetting onPress={() => console.log('setting')} />
+          ),
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
               <FeedSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />

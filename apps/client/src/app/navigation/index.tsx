@@ -11,7 +11,7 @@ import Header from '../component/common/Header';
 import BottomNavBar from '../component/BottomNavBar';
 
 import HomeScreen from '../screen/HomeScreen';
-import IntroScreen from '../screen/IntroScreen';
+import IntroScreen, { LoginScreen } from '../screen/IntroScreen';
 import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
 import AlertsScreen from '../screen/AlertsScreen';
@@ -24,6 +24,12 @@ import { View } from 'react-native';
 import NavButton from '../component/common/Buttons/NavButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 import IconSetting from '../component/common/IconSetting/IconSetting';
+
+import Register from '../screen/RegisterScreen/RegisterScreen';
+import AppTitle from '../component/common/AppTitle';
+import HardSkillsStep3 from '../screen/HardSkills/HardSkillsStep3';
+import Login from '../screen/LoginScreen/Login';
+import ForgotPassword from '../screen/ForgotPassword';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

@@ -72,6 +72,7 @@ export const LoginScreen = ({ navigation, route }: any) => {
             title={t('login_screen.login')}
             containerClassName="border-primary-default border-[1px] ml-1"
             textClassName="text-primary-default"
+            onPress={() => navigation.navigate('LoginScreen')}
           />
         </View>
 

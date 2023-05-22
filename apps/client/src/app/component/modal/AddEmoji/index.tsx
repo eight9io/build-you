@@ -12,12 +12,14 @@ interface IAddEmojiModallProps {
   isVisible: boolean;
   onClose: () => void;
   setExternalSelectedEmoji: (emoji: string | null) => void;
+  setSelectEmojiError: (error: boolean) => void;
 }
 
 export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
   isVisible,
   onClose,
   setExternalSelectedEmoji,
+  setSelectEmojiError,
 }) => {
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
 
@@ -25,6 +27,7 @@ export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
 
   const handleSelectEmoji = () => {
     setExternalSelectedEmoji(selectedEmoji);
+    setSelectEmojiError(false);
     onClose();
   };
 

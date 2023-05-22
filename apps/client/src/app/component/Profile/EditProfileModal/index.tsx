@@ -8,7 +8,7 @@ import TextInput from '../../common/Inputs/TextInput';
 import CloseIcon from './asset/close-icon.svg';
 import CalendarIcon from './asset/calendar-icon.svg';
 import DateTimePicker from '../../common/Pickers/DateTimePicker';
-import dayjs from '../../../util/date.util';
+import dayjs from '../../../utils/date.util';
 import SelectPicker from '../../common/Pickers/SelectPicker';
 import { MOCK_OCCUPATION_SELECT } from '../../../mock-data/occupation';
 interface IEditProfileModalProps {

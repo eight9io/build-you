@@ -129,5 +129,6 @@
   "forgot_password.title": "Forgot password",
   "register_screen.or": "Or",
   "send_code": "Send code",
-  "reset_password": "Reset Password"
+  "reset_password": "Reset Password",
+  "button.back": "Back"
 }

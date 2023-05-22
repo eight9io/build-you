@@ -44,7 +44,7 @@ export default function index({ navigation }: { navigation: any }) {
   const onSubmit = (data: FormData) => {
     console.log(data);
   };
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <SafeAreaView>
@@ -89,7 +89,7 @@ export default function index({ navigation }: { navigation: any }) {
                             onBlur={onBlur}
                             onChangeText={(text) => onChange(text)}
                             value={value}
-                            className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                            className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
                           />
                         </View>
                       )}

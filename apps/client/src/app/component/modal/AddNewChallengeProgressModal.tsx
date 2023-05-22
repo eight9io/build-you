@@ -21,7 +21,7 @@ import CustomTextInput from '../common/Inputs/CustomTextInput';
 
 import { IUploadMediaWithId } from '../../types/media';
 
-import Close from './assets/close.svg';
+import Close from './asset/close.svg';
 
 interface IAddNewChallengeProgressModalProps {
   isVisible: boolean;

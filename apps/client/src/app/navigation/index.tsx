@@ -16,16 +16,14 @@ import InnerScreen from '../screen/TestScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
 import AlertsScreen from '../screen/AlertsScreen';
 
+import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile';
+
 import LoginModal from '../component/modal/LoginModal';
 import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
 import { View } from 'react-native';
-import BackButton from '../component/common/BackButton';
+import NavButton from '../component/common/Buttons/NavButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 import IconSetting from '../component/common/IconSetting/IconSetting';
-
-import Register from '../screen/Register/RegisterScreen';
-import AppTitle from '../component/common/AppTitle';
-import HardSkillsStep3 from '../screen/HardSkills/HardSkillsStep3';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -66,69 +64,31 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        <RootStack.Group>
-          {/* <RootStack.Screen
-            name="IntroScreen"
-            component={IntroScreen}
-            options={{
-              headerShown: false,
-            }}
-          /> */}
-          <RootStack.Screen
-            name="RegisterScreen"
-            component={Register}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t('register_screen.title')} />
-              ),
-
-              headerLeft: (props) => (
-                <BackButton
-                  onPress={() =>
-                    navigation.navigate('IntroScreen', { setModal: true })
-                  }
-                />
-              ),
-            })}
-          />
-        </RootStack.Group>
-        <RootStack.Group>
-          <RootStack.Screen
-            name="SkillStepThreeScreen"
-            component={HardSkillsStep3}
-            options={{
-              headerShown: true,
-              headerTitle: () => <AppTitle title={t('modal_skill.title')} />,
-              headerLeft: (props) => (
-                <BackButton onPress={() => console.log('back')} />
-              ),
-            }}
-          />
-        </RootStack.Group>
-
-        {/* <RootStack.Screen name="HomeScreen" component={BottomNavBar} /> */}
         {/* <RootStack.Screen
-          name="CreateChallengeScreen"
-          component={CreateChallengeScreen}
+          name='HomeScreen'
+          component={BottomNavBar}
           options={{
-            headerShown: false,  
-          }}
-        /> */}
-
-        {/* <RootStack.Screen
-          name="RegisterScreen"
-          component={Register}
-          options={{
-            headerShown: true,
+            headerShown: false,
             headerTitle: () => (
               <Header title={t('challenge_detail_screen.title') || undefined} />
             ),
             headerLeft: (props) => {
-              return <BackButton />;
+              return <NavButton />;
             },
           }}
+        />
+        <RootStack.Screen
+          name='CreateChallengeScreen'
+          component={CreateChallengeScreen}
+          options={{
+            headerShown: false,
+          }}
         /> */}
+
+        <RootStack.Screen
+          name="CompleteProfileScreen"
+          component={CompleteProfileScreen}
+        />
       </RootStack.Navigator>
     </NavigationContainer>
   );

@@ -78,7 +78,7 @@ export const ProgressTab: FC<IProgressTabProps> = () => {
       <View className="pt-4">
         <View className="mx-4 h-12">
           <Button
-            title={t('challenge_detail_screen.upload_new_update') as string}
+            title={t('challenge_detail_screen.upload_new_progress') as string}
             containerClassName="bg-primary-default"
             textClassName="text-white text-md font-semibold py-4 ml-2"
             Icon={<AddIcon fill={'white'} />}

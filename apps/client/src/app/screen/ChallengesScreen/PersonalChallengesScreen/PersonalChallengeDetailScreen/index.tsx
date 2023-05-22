@@ -11,7 +11,7 @@ import Header from 'apps/client/src/app/component/common/Header';
 import PopUpMenu from 'apps/client/src/app/component/common/PopUpMenu';
 import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
 
-import BackButton from '../../../../component/common/BackButton';
+import NavButton from '../../../../component/common/Buttons/NavButton';
 import ChallengeDetailScreen from '../../ChallengeDetailScreen';
 import Button from 'apps/client/src/app/component/common/Buttons/Button';
 
@@ -47,9 +47,9 @@ const RightPersonalChallengeDetailOptions = () => {
     <View className="-mt-1 flex flex-row items-center">
       <TaskAltIcon />
       <View className="pl-4 pr-2">
-        <Button Icon={<ShareIcon/>} onPress={onShare} />
+        <Button Icon={<ShareIcon />} onPress={onShare} />
       </View>
-      
+
       <PopUpMenu iconColor="#FF7B1D" />
     </View>
   );
@@ -64,7 +64,7 @@ const PersonalChallengeDetailScreen = ({
     <SafeAreaView className="bg-white">
       <Header
         leftBtn={
-          <BackButton title="Challenges" onPress={() => navigation.goBack()} />
+          <NavButton text="Challenges" onPress={() => navigation.goBack()} />
         }
         rightBtn={<RightPersonalChallengeDetailOptions />}
         onRightBtnPress={() => {}}

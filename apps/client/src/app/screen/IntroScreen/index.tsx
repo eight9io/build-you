@@ -14,7 +14,7 @@ import Swiper from 'react-native-swiper';
 import Button from '../../component/common/Buttons/Button';
 
 import LoginModal from '../../component/modal/LoginModal';
-import BackButton from '../../component/common/BackButton';
+import NavButton from '../../component/common/Buttons/NavButton';
 
 export const LoginScreen = ({ navigation, route }: any) => {
   const { t } = useTranslation();

@@ -2,7 +2,7 @@ import { View, Text, Image, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
-import TextInput from '../../component/common/Input/TextInput';
+import TextInput from '../../component/common/Inputs/TextInput';
 import { CheckBox, Icon } from '@rneui/themed';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterValidationSchema } from '../../Validators/Register.validate';
@@ -10,7 +10,8 @@ import Button from '../../component/common/Buttons/Button';
 import { useNavigation } from '@react-navigation/native';
 import PolicyModal from '../../component/modal/PolicyModal';
 import RegisterCreating from '../../component/modal/RegisterCreating';
-export default function index({ navigation }: { navigation: any }) {
+
+export default function RegisterScreen({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
   const [ruleBtnChecked, setRuleBtnChecked] = useState(false);
   const {

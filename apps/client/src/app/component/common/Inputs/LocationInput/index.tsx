@@ -49,7 +49,7 @@ const LocationInput: React.FC<ILocationInputProps> = ({ control }) => {
             </View>
           </View>
         )}
-        name='concreteGoal'
+        name='location'
       />
     </View>
   );

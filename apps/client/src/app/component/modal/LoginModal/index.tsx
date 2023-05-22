@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, { useState } from 'react';
-import BackButton from '../../common/BackButton';
+import NavButton from '../../common/Buttons/NavButton';
 import Button from '../../common/Buttons/Button';
 import { useEffect } from 'react';
 import * as WebBrowser from 'expo-web-browser';
@@ -118,7 +118,7 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
       <SafeAreaView style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={{ flex: 1 }}>
-            <BackButton onPress={() => setModalVisible(false)} />
+            <NavButton onPress={() => setModalVisible(false)} />
 
             <Image
               source={require('./asset/img-login.png')}

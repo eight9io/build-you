@@ -56,3 +56,7 @@ cache/
 
 apps/bu-e2e/artifacts
 apps/client-e2e/artifacts
+
+# Build output
+apps/client/ios
+apps/client/android

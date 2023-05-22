@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
+import { useCompleteProfileStore } from '../../../store/complete-profile';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import SignupAvatar from '../../../component/common/Avatar/SignupAvatar';
@@ -26,6 +27,8 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   const [pickedVideo, setPickedVideo] = useState<string[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean>(false);
 
+  const { setBiography } = useCompleteProfileStore();
+
   const {
     control,
     handleSubmit,
@@ -34,15 +37,17 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
     getValues,
   } = useForm<{
     biography: string;
+    video: string;
   }>({
     defaultValues: {
       biography: '',
+      video: '',
     },
   });
 
   const handleSubmitForm = (data: any) => {
-    // TODO: Handle validate form with yup and remove required in form
-    console.log(data);
+    // keep data to store, add biography
+    setBiography(data.biography, data.video);
     navigation.navigate('CompleteProfileStep3Screen');
   };
 

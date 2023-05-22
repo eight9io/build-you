@@ -28,7 +28,8 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 export const RootNavigation = () => {
   const { t } = useTranslation();
 
-  const accessToken = false;
+  const accessToken = true;
+  const isFirstTimeSignIn = true;
 
   return (
     <NavigationContainer>
@@ -37,7 +38,13 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        {accessToken ? (
+        {accessToken && isFirstTimeSignIn && (
+          <RootStack.Screen
+            name="CompleteProfileScreen"
+            component={CompleteProfileScreen}
+          />
+        )}
+        {accessToken && !isFirstTimeSignIn && (
           <>
             <RootStack.Screen
               name="HomeScreen"
@@ -61,10 +68,7 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-            <RootStack.Screen
-              name="CompleteProfileScreen"
-              component={CompleteProfileScreen}
-            />
+
             <RootStack.Screen
               name="ChallengeDetailScreen"
               component={ChallengeDetailScreen}
@@ -80,7 +84,8 @@ export const RootNavigation = () => {
               }}
             />
           </>
-        ) : (
+        )}
+        {!accessToken && (
           <>
             <RootStack.Screen
               name="IntroScreen"

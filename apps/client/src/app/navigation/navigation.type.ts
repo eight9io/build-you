@@ -1,3 +1,4 @@
+import { LoginScreen } from './../screen/IntroScreen/index';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -23,6 +24,8 @@ export type RootStackParamList = {
   CompleteProfileStep4Screen: undefined;
   CompleteProfileFinishScreen: undefined;
 
+  LoginScreen: undefined;
+  ForgotPasswordScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

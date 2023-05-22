@@ -20,6 +20,7 @@ import Step from '../../component/common/Step';
 interface MyObject {
   [key: string]: any;
 }
+
 const HardSkillsStep3 = () => {
   const { t } = useTranslation();
 

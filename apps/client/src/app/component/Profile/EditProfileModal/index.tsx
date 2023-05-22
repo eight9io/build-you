@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 
 import Header from '../../common/Header';
-import TextInput from '../../common/Input/TextInput';
+import TextInput from '../../common/Inputs/TextInput';
 import CloseIcon from './asset/close-icon.svg';
 import CalendarIcon from './asset/calendar-icon.svg';
 import DateTimePicker from '../../common/Pickers/DateTimePicker';

@@ -3,7 +3,6 @@ import { View, Image, Text, TouchableOpacity } from 'react-native';
 
 import IntroScreen from '../../../screen/IntroScreen';
 import HomeScreen from '../../../screen/HomeScreen';
-import TabAvvisi from '../../../screen/TabAvvisi';
 
 import clsx from 'clsx';
 
@@ -36,7 +35,6 @@ function BottomNavBar() {
         }}
       />
       <Tab.Screen name="Intro" component={IntroScreen} />
-      <Tab.Screen name="Avvisi" component={TabAvvisi} />
     </Tab.Navigator>
   );
 }

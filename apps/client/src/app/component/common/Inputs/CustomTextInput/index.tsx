@@ -40,7 +40,7 @@ const CustomTextInput:React.FC<ICustomTextInputProps> = ({
           />
         </View>
       )}
-      name='concreteGoal'
+      name={title}
     />
   </View>
   )

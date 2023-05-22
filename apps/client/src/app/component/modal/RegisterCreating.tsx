@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../common/Header';
-import BackButton from '../common/Buttons/BackButton';
+import NavButton from '../common/Buttons/NavButton';
 import { useTranslation } from 'react-i18next';
 import IconLoading from './asset/loading.svg';
 interface Props {

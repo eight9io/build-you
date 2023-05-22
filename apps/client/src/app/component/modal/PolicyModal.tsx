@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../common/Header';
-import BackButton from '../common/Buttons/BackButton';
+import NavButton from '../common/Buttons/NavButton';
 import { useTranslation } from 'react-i18next';
 interface Props {
   modalVisible: boolean;
@@ -33,7 +33,7 @@ export default function PolicyModal({
           <View style={styles.modalView}>
             <Header
               title="Privacy policy..."
-              leftBtn={<BackButton onPress={() => setModalVisible(false)} />}
+              leftBtn={<NavButton onPress={() => setModalVisible(false)} />}
             />
             <View>
               {(

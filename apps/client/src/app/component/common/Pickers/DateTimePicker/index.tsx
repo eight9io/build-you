@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import dayjs from '../../../../util/date.util';
+import dayjs from '../../../../utils/date.util';
 import BottomSheet from '../BottomSheet';
 
 interface IDateTimePickerProps {

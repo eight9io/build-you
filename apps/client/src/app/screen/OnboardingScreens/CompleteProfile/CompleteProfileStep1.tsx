@@ -2,10 +2,12 @@ import React, { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useCompleteProfile } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { OnboardingScreen1Validators } from '../../../Validators/Onboarding.validate';
 
-import dayjs from '../../../util/date.util';
+import dayjs from '../../../utils/date.util';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import SignupAvatar from '../../../component/common/Avatar/SignupAvatar';
@@ -20,6 +22,8 @@ import Button from '../../../component/common/Buttons/Button';
 import { CompleteProfileScreenNavigationProp } from './index';
 import Header from '../../../component/common/Header';
 
+import Warning from './asset/warning.svg';
+
 interface CompleteProfileStep1Props {
   navigation: CompleteProfileScreenNavigationProp;
 }
@@ -32,6 +36,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
     number | undefined
   >();
+
+  const { setProfile } = useCompleteProfileStore();
 
   const {
     control,
@@ -51,6 +57,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       birthday: new Date(),
       occupation: '',
     },
+    resolver: yupResolver(OnboardingScreen1Validators()),
+    reValidateMode: 'onChange',
   });
 
   const handleDatePicked = (date?: Date) => {
@@ -68,7 +76,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const handleSubmitForm = (data: any) => {
     // TODO: Handle validate form with yup and remove required in form
-    console.log(data);
+    setProfile(data);
     navigation.navigate('CompleteProfileStep2Screen');
   };
 
@@ -85,7 +93,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       </View>
 
       <View className="">
-        <SignupAvatar />
+        <SignupAvatar control={control} />
       </View>
 
       {/* Form */}
@@ -106,6 +114,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     value={value}
                     className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                   />
+                  {errors.firstName && (
+                    <View className="flex flex-row pt-2">
+                      <Warning />
+                      <Text className="pl-1 text-sm font-normal text-red-500">
+                        {errors.firstName.message}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
             />
@@ -125,6 +141,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     value={value}
                     className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                   />
+                  {errors.lastName && (
+                    <View className="flex flex-row pt-2">
+                      <Warning />
+                      <Text className="pl-1 text-sm font-normal text-red-500">
+                        {errors.lastName.message}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
             />
@@ -148,6 +172,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     onPress={() => setShowDateTimePicker(true)}
                     className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                   />
+                  {errors.birthday && (
+                    <View className="flex flex-row pt-2">
+                      <Warning />
+                      <Text className="pl-1 text-sm font-normal text-red-500">
+                        {errors.birthday.message}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
             />
@@ -172,6 +204,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     value={value}
                     className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                   />
+                  {errors.occupation && (
+                    <View className="flex flex-row pt-2">
+                      <Warning />
+                      <Text className="pl-1 text-sm font-normal text-red-500">
+                        {errors.occupation.message}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
             />

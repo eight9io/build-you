@@ -118,7 +118,10 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
       <SafeAreaView style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={{ flex: 1 }}>
-            <NavButton onPress={() => setModalVisible(false)} />
+            <NavButton
+              onPress={() => setModalVisible(false)}
+              text={t('button.back') as string}
+            />
 
             <Image
               source={require('./asset/img-login.png')}

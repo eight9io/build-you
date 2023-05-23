@@ -1,4 +1,10 @@
-import { View, Text, Image, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,7 +16,8 @@ import Button from '../../component/common/Buttons/Button';
 import { useNavigation } from '@react-navigation/native';
 import PolicyModal from '../../component/modal/PolicyModal';
 import RegisterCreating from '../../component/modal/RegisterCreating';
-
+import IconEyeOn from './asset/icon-eye.svg';
+import IconEyeOff from './asset/eye-off.svg';
 import ErrorText from '../../component/common/ErrorText';
 type FormData = {
   email: string;
@@ -42,7 +49,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [modalRegisterCreating, setModalRegisterCreating] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <SafeAreaView>
       <View className="flex-column h-full justify-between bg-white px-6  pb-14">
@@ -77,13 +84,32 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                       render={({ field: { onChange, onBlur, value } }) => (
                         <View className="flex flex-col gap-1">
                           <TextInput
+                            rightIcon={
+                              (item.name === 'repeat_password' ||
+                                item.name === 'password') &&
+                              (!showPassword ? (
+                                <TouchableOpacity
+                                  onPress={() => setShowPassword(!showPassword)}
+                                  className=" mt-[2px]"
+                                >
+                                  <IconEyeOn />
+                                </TouchableOpacity>
+                              ) : (
+                                <TouchableOpacity
+                                  onPress={() => setShowPassword(!showPassword)}
+                                  className=" mt-[2px]"
+                                >
+                                  <IconEyeOff />
+                                </TouchableOpacity>
+                              ))
+                            }
                             label={item.label}
                             placeholder={item.placeholder}
                             placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                             onBlur={onBlur}
                             onChangeText={(text) => onChange(text)}
                             value={value}
-                            className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                            className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
                           />
                         </View>
                       )}

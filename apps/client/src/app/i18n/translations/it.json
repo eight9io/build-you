@@ -127,6 +127,8 @@
   "register_screen.or": "Or",
   "send_code": "Send code",
   "reset_password": "Reset Password",
+  "button.back": "Back",
+
   "form_onboarding": {
     "screen_1": {
       "title": "Tell us about yourself",

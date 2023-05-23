@@ -22,7 +22,7 @@ export const NavButton: FC<INavButtonProps> = ({
       className={clsx('flex flex-row items-center')}
       onPress={onPress}
     >
-      {withIcon && !icon && <BackIcon />}
+      {!withIcon && !icon && <BackIcon />}
       {withIcon && icon && icon}
       <Text
         className={clsx(

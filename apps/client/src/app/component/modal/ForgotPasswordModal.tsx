@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../common/Header';
@@ -18,6 +19,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '../common/Buttons/Button';
 import ErrorText from '../common/ErrorText';
 import TextInput from '../common/Inputs/TextInput';
+import IconEyeOn from './asset/icon-eye.svg';
+import IconEyeOff from './asset/eye-off.svg';
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -51,6 +54,7 @@ export default function ForgotPasswordModal({
   const onSubmit = (data: FormData) => {
     console.log(data);
   };
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <Modal
       animationType="slide"
@@ -98,13 +102,36 @@ export default function ForgotPasswordModal({
                             }) => (
                               <View className="flex flex-col gap-1">
                                 <TextInput
+                                  rightIcon={
+                                    (item.name === 'repeat_password' ||
+                                      item.name === 'password') &&
+                                    (!showPassword ? (
+                                      <TouchableOpacity
+                                        onPress={() =>
+                                          setShowPassword(!showPassword)
+                                        }
+                                        className=" mt-[2px]"
+                                      >
+                                        <IconEyeOn />
+                                      </TouchableOpacity>
+                                    ) : (
+                                      <TouchableOpacity
+                                        onPress={() =>
+                                          setShowPassword(!showPassword)
+                                        }
+                                        className=" mt-[2px]"
+                                      >
+                                        <IconEyeOff />
+                                      </TouchableOpacity>
+                                    ))
+                                  }
                                   label={item.label}
                                   placeholder={item.placeholder}
                                   placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                                   onBlur={onBlur}
                                   onChangeText={(text) => onChange(text)}
                                   value={value}
-                                  className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                                  className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
                                 />
                               </View>
                             )}

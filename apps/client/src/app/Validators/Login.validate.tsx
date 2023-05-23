@@ -11,10 +11,11 @@ export const LoginValidationSchema = () => {
 
     password: yup
       .string()
+
+      .required(t('form.2.required') as string)
       .matches(
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-        t('form.1.error') as string
-      )
-      .required(t('form.2.required') as string),
+        t('form.2.error') as string
+      ),
   });
 };

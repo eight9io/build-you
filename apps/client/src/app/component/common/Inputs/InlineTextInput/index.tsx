@@ -4,11 +4,14 @@ import { View, Text } from 'react-native';
 
 import clsx from 'clsx';
 import TextInput from '../TextInput';
+import WarningSvg from './asset/warning.svg';
 
 interface IInlineTextInputProps {
   title: string;
   placeholder: string;
   control?: any;
+  errors?: any;
+  showError?: boolean;
   containerClassName?: string;
   textInputClassName?: string;
 }
@@ -16,6 +19,8 @@ interface IInlineTextInputProps {
 const InlineTextInput: React.FC<IInlineTextInputProps> = ({
   title,
   control,
+  errors,
+  showError,
   placeholder,
   containerClassName,
   textInputClassName,
@@ -46,6 +51,14 @@ const InlineTextInput: React.FC<IInlineTextInputProps> = ({
                   textInputClassName
                 )}
               />
+              {errors && showError && (
+                <View className="absolute bottom-[-20px] left-6 flex flex-row items-center justify-center">
+                  <WarningSvg />
+                  <Text className="pl-1 text-sm text-red-500">
+                    Please fill in the skill name.
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         )}

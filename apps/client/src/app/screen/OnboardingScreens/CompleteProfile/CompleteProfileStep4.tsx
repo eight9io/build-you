@@ -7,14 +7,17 @@ import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
 
+import { useCompleteProfileStore } from '../../../store/complete-profile';
+
 import StepOfSteps from '../../../component/common/StepofSteps';
 import { CompleteProfileScreenNavigationProp } from './index';
+import Button from '../../../component/common/Buttons/Button';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import Header from '../../../component/common/Header';
 
 import CheckedSvg from './asset/checked.svg';
 import UncheckedSvg from './asset/uncheck.svg';
-import Button from '../../../component/common/Buttons/Button';
+import WarningSvg from './asset/warning.svg';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -91,6 +94,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   >([]);
   const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
 
+  const { setSoftSkills, getProfile } = useCompleteProfileStore();
+
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string[]>([]);
   const [items, setItems] = useState<any[]>([
@@ -135,9 +140,12 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   };
 
   const handleSubmitForm = () => {
+    setOpen(false);
+    setSoftSkills(selectedCompetencedSkill);
+    const profile = getProfile();
     if (!checkSoftSkillRequired()) return;
     navigation.navigate('CompleteProfileFinishScreen');
-  }
+  };
 
   const addCompetencedSkill = (skill: string | undefined) => {
     if (!skill) return;
@@ -258,6 +266,16 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               );
             }}
           />
+          <View>
+            {numberOfSkillError && (
+              <View className="flex flex-row items-center justify-start pt-2">
+                <WarningSvg />
+                <Text className="text-sm font-normal leading-5 text-red-500 pl-1">
+                  Please select at least 3 different soft skills
+                </Text>
+              </View>
+            )}
+          </View>
           <View className="w-full flex-col justify-between pt-5">
             {renderSelectedSoftSkill(
               selectedCompetencedSkill,

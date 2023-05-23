@@ -15,11 +15,12 @@ import DefaultAvatar from './asset/default-avatar.svg';
 import CameraSvg from './asset/camera.svg';
 
 interface ISignupAvatarProps {
+  control: any;
   src?: string;
   onPress?: () => void;
 }
 
-const SignupAvatar: React.FC<ISignupAvatarProps> = ({ src, onPress }) => {
+const SignupAvatar: React.FC<ISignupAvatarProps> = ({ control, src, onPress }) => {
   let imageSrc;
   if (src) {
     const [imageSource, loading, error] = getImageFromUrl(src);

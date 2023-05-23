@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { useForm, Controller, set } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useCompleteProfile } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-profile';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import Button from '../../../component/common/Buttons/Button';
@@ -36,6 +36,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   const [arraySkills, setArraySkills] = useState<string[]>([]);
 
   const { t } = useTranslation();
+  const { setSkills } = useCompleteProfileStore();
 
   useEffect(() => {
     const arraySkill = () => {
@@ -99,6 +100,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
       return false;
     }
     setNumberOfSkillError(false);
+    setSkills(selectedCompetencedSkill);
     return selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED;
   };
 

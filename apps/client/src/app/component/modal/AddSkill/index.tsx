@@ -1,5 +1,5 @@
 import { View, Text, Modal } from 'react-native';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import EmojiSelector from 'react-native-emoji-selector';
@@ -11,6 +11,7 @@ import AddEmojiModal from '../AddEmoji';
 
 import Close from '../asset/close.svg';
 import Button from '../../common/Buttons/Button';
+import WarningSvg from '../asset/warning.svg';
 
 interface IAddSkillModallProps {
   setUserAddSkill: (skills: any) => void;
@@ -25,6 +26,9 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
 }) => {
   const [showEmojiModal, setShowEmojiModal] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
+
+  const [selectEmojiError, setSelectEmojiError] = useState<boolean>(false);
+  const [skillNameError, setSkillNameError] = useState<boolean>(false);
 
   const { t } = useTranslation();
   const {
@@ -45,8 +49,18 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
 
   const skillName = watch('Skill');
 
+  useEffect(() => {
+    if (skillName) {
+      setSkillNameError(false);
+    }
+  }, [skillName]);
+
   const handleSave = () => {
     if (!selectedEmoji) {
+      setSelectEmojiError(true);
+      if (!skillName) {
+        setSkillNameError(true);
+      }
       return;
     }
     const skill = `${selectedEmoji} ${skillName}`;
@@ -54,6 +68,12 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
     selectedEmoji && setSelectedEmoji(null);
     reset();
     onClose();
+  };
+
+  const onCloseAddSkillModal = () => {
+    onClose();
+    setSelectedEmoji(null);
+    reset();
   };
 
   return (
@@ -67,29 +87,35 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
           isVisible={showEmojiModal}
           onClose={onCloseEmojiModal}
           setExternalSelectedEmoji={setSelectedEmoji}
+          setSelectEmojiError={setSelectEmojiError}
         />
         <Header
           title="Add skill"
           leftBtn={<Close fill={'black'} />}
-          onLeftBtnPress={onClose}
+          onLeftBtnPress={onCloseAddSkillModal}
         />
         <View className="px-4">
           <View className="py-4">
-            <Text>Select the emoji and enter the skill name</Text>
+            <Text className="text-gray-dark text-md">
+              Select the emoji and enter the skill name
+            </Text>
           </View>
 
-          <View className="py-4">
+          <View className="py-2">
             <AddEmojiButton
               selectedEmoji={selectedEmoji}
               triggerFunction={() => setShowEmojiModal(true)}
+              selectEmojiError={selectEmojiError}
             />
           </View>
-          <View className="py-4">
+          <View className="py-8">
             <InlineTextInput
               title="Skill"
               containerClassName="pl-6"
               placeholder="Enter your skill name"
               control={control}
+              errors={errors}
+              showError={skillNameError}
             />
           </View>
         </View>

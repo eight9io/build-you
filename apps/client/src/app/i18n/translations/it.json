@@ -60,7 +60,6 @@
   ],
   "register_screen.error_icy": "Please agree with our privacy policy",
   "register_screen.loading": "  Creating your account... ",
-
   "modal_skill.title": "Complete profile",
   "modal_skill.step": "Steps",
   "modal_skill.of": "of",
@@ -79,9 +78,7 @@
     {
       "label": "Code",
       "name": "code",
-
       "required": "Please enter the code.",
-
       "placeholder": "Please enter the code."
     },
     {
@@ -130,5 +127,48 @@
   "register_screen.or": "Or",
   "send_code": "Send code",
   "reset_password": "Reset Password",
-  "button.back": "Back"
+  "button.back": "Back",
+
+  "form_onboarding": {
+    "screen_1": {
+      "title": "Tell us about yourself",
+      "avatar_error": "Please select an image",
+      "first_name": "First name",
+      "enter_first_name": "Enter your first name",
+      "first_name_error": "Please fill in your first name.",
+      "last_name": "Last name",
+      "enter_last_name": "Enter your last name",
+      "last_name_error": "Please fill in your last name.",
+      "birthday": "Birthday",
+      "select_your_birthday": "Select your birthday",
+      "birthday_error": "Please select your birthday.",
+      "occupation": "Occupation",
+      "occupation_error": "Please select your occupation."
+    },
+    "screen_2": {
+      "title": "Tell the others something about you",
+      "biography": "Biography",
+      "your_biography": "Your biography",
+      "upload_video": "Upload a video"
+    },
+    "screen_3": {
+      "title": "How do you define yourself as competent?",
+      "sub_title": "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself",
+      "add_manually": "Add manually",
+      "error": "Please select at least 3 hard skills."
+    },
+    "screen_4": {
+      "title": "Select the soft skills you are already competent on",
+      "sub_title": "Please select at least 3 different soft skills and rate it from 1 to 5.",
+      "soft_skills": "Soft skills",
+      "error": "Please select at least 3 soft skills."
+    },
+    "add_skill_screen": {
+      "add_skill": "Add skill",
+      "add_skill_title": "Select the emoji and enter the skill name"
+    },
+    "finished_screen": {
+      "title": "Thank you for your information. We're personalizing your experience..."
+    }
+  }
 }

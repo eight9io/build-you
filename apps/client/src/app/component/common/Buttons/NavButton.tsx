@@ -6,6 +6,7 @@ import BackIcon from './asset/backIcon.svg';
 interface INavButtonProps {
   icon?: any;
   withIcon?: boolean;
+  withBackIcon?: boolean;
   text?: string;
   onPress?: () => void;
 }
@@ -13,6 +14,7 @@ interface INavButtonProps {
 export const NavButton: FC<INavButtonProps> = ({
   icon,
   withIcon,
+  withBackIcon,
   text,
   onPress,
 }) => {
@@ -22,11 +24,11 @@ export const NavButton: FC<INavButtonProps> = ({
       className={clsx('flex flex-row items-center')}
       onPress={onPress}
     >
-      {!withIcon && !icon && <BackIcon />}
+      {withBackIcon && <BackIcon />}
       {withIcon && icon && icon}
       <Text
         className={clsx(
-          'text-primary-default text-h5 pl-[5px] text-center font-normal'
+          'text-primary-default text-h6 pl-[5px] text-center font-normal'
         )}
       >
         {text}

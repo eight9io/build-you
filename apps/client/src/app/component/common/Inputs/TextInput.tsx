@@ -12,9 +12,9 @@ interface ITextInputProps extends TextInputProps {
   rightIcon?: ReactNode;
   onPress?: () => void;
 }
+
 export const TextInput: FC<ITextInputProps> = (props) => {
   const { label, rightIcon, onPress, ...inputProps } = props;
-
   return (
     <View className="flex flex-col gap-1">
       {label ? (

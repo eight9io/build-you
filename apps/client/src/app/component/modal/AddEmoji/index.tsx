@@ -5,7 +5,7 @@ import EmojiSelector, { Categories } from 'react-native-emoji-selector';
 
 import Header from '../../common/Header';
 
-import Close from '../asset/close.svg';
+import Close from '../../../component/asset/close.svg';
 import AddReactionEmoji from '../asset/add-reaction.svg';
 
 interface IAddEmojiModallProps {

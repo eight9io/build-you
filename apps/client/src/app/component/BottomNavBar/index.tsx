@@ -2,8 +2,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 
 import HomeScreen from '../../screen/HomeScreen';
-import AlertsScreen from '../../screen/AlertsScreen';
-import ProfileScreen from '../../screen/ProfileScreen';
+import NotificationsScreen from '../../screen/NotificationsScreen';
+import ProfileScreen from '../../screen/ProfileScreen/Personal';
+import CompanyProfileScreen from '../../screen/ProfileScreen/Company';
+import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen';
+import CompanyChallengesScreen from '../../screen/ChallengesScreen/CompanyChallengesScreen';
 
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -14,16 +17,20 @@ import FeedSvg from './asset/feed.svg';
 import CreateSvg from './asset/create.svg';
 import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
-import AlertSvg from './asset/alerts.svg';
-import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen';
+import AlertSvg from './asset/noti.svg';
 import AppTitle from '../common/AppTitle';
 import IconSearch from '../common/IconSearch/IconSearch';
 import IconSetting from '../common/IconSetting/IconSetting';
+import { FC } from 'react';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
 
-function BottomNavBar() {
+interface IBottomNavBarProps {
+  isCompany?: boolean;
+}
+
+const BottomNavBar: FC<IBottomNavBarProps> = ({ isCompany = true }) => {
   const { t } = useTranslation();
 
   return (
@@ -66,7 +73,9 @@ function BottomNavBar() {
       />
       <Tab.Screen
         name="Challenges"
-        component={PersonalChallengesScreen}
+        component={
+          isCompany ? CompanyChallengesScreen : PersonalChallengesScreen
+        }
         options={{
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
@@ -89,7 +98,8 @@ function BottomNavBar() {
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate('CreateChallengeScreen');
+            if (isCompany ) navigation.navigate('CreateCompanyChallengeScreen');
+            else navigation.navigate('CreateChallengeScreen');
           },
         })}
         options={{
@@ -109,8 +119,8 @@ function BottomNavBar() {
         }}
       />
       <Tab.Screen
-        name="Alerts"
-        component={AlertsScreen}
+        name="Notifications"
+        component={NotificationsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
@@ -121,15 +131,34 @@ function BottomNavBar() {
                   focused && 'text-primary-default'
                 )}
               >
-                {t('bottom_nav.alerts')}
+                {t('bottom_nav.noti')}
               </Text>
             </View>
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profilo"
         component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View className={clsx('flex flex-col items-center justify-center')}>
+              <ProfileSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
+              <Text
+                className={clsx(
+                  'text-gray-bottomBar text-md pt-1.5',
+                  focused && 'text-primary-default'
+                )}
+              >
+                {t('bottom_nav.profile')}
+              </Text>
+            </View>
+          ),
+        }}
+      /> */}
+      <Tab.Screen
+        name="Company Profule"
+        component={CompanyProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
@@ -148,6 +177,6 @@ function BottomNavBar() {
       />
     </Tab.Navigator>
   );
-}
+};
 
 export default BottomNavBar;

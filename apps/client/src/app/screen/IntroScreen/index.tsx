@@ -15,8 +15,14 @@ import Button from '../../component/common/Buttons/Button';
 
 import LoginModal from '../../component/modal/LoginModal';
 import NavButton from '../../component/common/Buttons/NavButton';
+import { useCompleteProfileStore } from '../../store/complete-profile';
 
 export const LoginScreen = ({ navigation, route }: any) => {
+  const { getProfile } = useCompleteProfileStore();
+  console.log(
+    '🚀 ~ file: index.tsx:22 ~ LoginScreen ~ getProfile:',
+    getProfile()
+  );
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {

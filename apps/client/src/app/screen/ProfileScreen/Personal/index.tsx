@@ -13,12 +13,12 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 
-import SettingsScreen from '../SettingsScreen';
-import { RootStackParamList } from '../../navigation/navigation.type';
+import SettingsScreen from '../../SettingsScreen';
+import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import MainNavBar from '../../component/NavBar/MainNavBar';
-import Notificaiton from '../../component/Notification';
-import ProfileComponent from '../../component/Profile';
+import MainNavBar from '../../../component/NavBar/MainNavBar';
+import Notificaiton from '../../../component/Notification';
+import ProfileComponent from '../../../component/Profile';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,11 +32,11 @@ interface IProfileProps {
   navigation: ProfileScreenNavigationProp;
 }
 
-const Profile:React.FC<IProfileProps> = ({ userName, navigation }) => {
+const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
   const { t } = useTranslation();
 
   return (
-    <SafeAreaView className='justify-content: space-between flex-1 bg-white pt-6'>
+    <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
       <MainNavBar title={'Mario Rossi'} navigation={navigation} />
       <ProfileComponent />
     </SafeAreaView>
@@ -50,7 +50,7 @@ const ProfileScreen = () => {
         headerShown: false,
       }}
     >
-      <ProfileStack.Screen name='ProfileScreen' component={Profile} />
+      <ProfileStack.Screen name="ProfileScreen" component={Profile} />
     </ProfileStack.Navigator>
   );
 };

@@ -15,10 +15,10 @@ interface IImagePickerProps {
 }
 
 const ImagePicker: FC<IImagePickerProps> = ({
-  allowsMultipleSelection = false,
-  isSelectedImage = false,
   setExternalImages,
   setIsSelectedImage,
+  isSelectedImage = false,
+  allowsMultipleSelection = false,
 }) => {
   const [images, setImages] = useState<string[]>([]);
 
@@ -57,6 +57,29 @@ const ImagePicker: FC<IImagePickerProps> = ({
           />
         </View>
       )}
+      {images.length > 0 && setExternalImages && (
+        <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
+          {images.map((image: any) => (
+            <View className="relative aspect-square" style={{ width: 100 }}>
+              <View className="absolute right-1 top-2 z-10">
+                <TouchableOpacity onPress={() => setImages([])}>
+                  {/* <CloseButton fill={'white'} />
+
+                  <Button
+                    onPress={() => handleRemoveItem(media.id)}
+                    Icon={<Close fill={'white'} />}
+                  /> */}
+                </TouchableOpacity>
+              </View>
+              <Image
+                source={{ uri: image as any }}
+                className="h-full w-full rounded-xl"
+              />
+            </View>
+          ))}
+        </View>
+      )}
+
       <TouchableOpacity
         onPress={pickImage}
         disabled={isSelectedImage === false}
@@ -64,7 +87,9 @@ const ImagePicker: FC<IImagePickerProps> = ({
       >
         <View className=" mt-5 flex flex-row items-center justify-center rounded-xl">
           <CameraIcon
-            fill={isSelectedImage || isSelectedImage == null ? '#1C1B1F' : '#C5C8D2'}
+            fill={
+              isSelectedImage || isSelectedImage == null ? '#1C1B1F' : '#C5C8D2'
+            }
           />
           <Text
             className={clsx(

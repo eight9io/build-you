@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Build you",
+    "slug": "build-you",
+    "version": "0.0.1",
+    "sdkVersion": "48.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.buildyou.app"
+    },
+    "android": {
+      "package": "com.buildyou.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "783e060c-e143-450b-9321-2b54ae91b3d5"
+      }
+    }
+  }
+}

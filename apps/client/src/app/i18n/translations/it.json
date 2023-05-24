@@ -10,16 +10,17 @@
   "challenge_detail_screen.description": "Description",
   "challenge_detail_screen.skills": "Skills",
   "challenge_detail_screen.coach": "Coach",
-  "challenge_detail_screen.participants": "Partecipanti",
+  "challenge_detail_screen.participants": "Participants",
   "challenge_detail_screen.upload_new_progress": "Add new progress",
+  "challenge_detail_screen.add_new_employees": "Add new employees",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
     "create": "Create",
-    "alerts": "Alerts",
+    "noti": "Noti",
     "profile": "Profile"
   },
-  "top_nav.alerts": "Alerts",
+  "top_nav.noti": "Notifications",
   "top_nav.challenges": "Challenges",
   "modal_login.title": "Register for free",
   "modal_login.description": "Create your free account, get maximum motivation and support from the community and coaches.",
@@ -32,6 +33,8 @@
   "profile_screen_tabs.skills": "skills",
   "profile_screen_tabs.followers": "followers",
   "profile_screen_tabs.following": "following",
+  "profile_screen_tabs.employees": "employees",
+  "profile_screen_tabs.challenges": "challenges",
   "your_feed.header": "Your feed",
   "card.builder": "Builder",
   "register_screen.title": "Register",
@@ -118,6 +121,8 @@
   },
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
+  "button.back": "Back",
+  "button.edit_companyProfile": "Edit profile",
   "new_challenge_screen.title": "Create a new challenge",
   "new_challenge_screen.location": "Location",
   "new_challenge_screen.enter_your_location": "Enter your location",
@@ -127,8 +132,6 @@
   "register_screen.or": "Or",
   "send_code": "Send code",
   "reset_password": "Reset Password",
-  "button.back": "Back",
-
   "form_onboarding": {
     "screen_1": {
       "title": "Tell us about yourself",

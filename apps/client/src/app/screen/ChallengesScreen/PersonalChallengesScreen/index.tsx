@@ -47,37 +47,37 @@ const PersonalChallenges = ({
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <MainNavBar title={t('top_nav.challenges')} navigation={navigation} />
+      <MainNavBar
+        title={t('top_nav.challenges')}
+        navigation={navigation}
+        withSearch
+      />
       <View className={clsx('h-full w-full bg-gray-50')}>
         {/* <EmptyChallenges /> */}
 
-        <ScrollView className='px-4 pt-4'>
+        <ScrollView className="px-4 pt-4">
           <ChallengeCard
-            name='Challenge Name'
-            description='Challenge Description'
-            imageSrc='https://picsum.photos/200/300'
-            authorName='Author Name'
+            name="Challenge Name"
+            imageSrc="https://picsum.photos/200/300"
+            authorName="Author Name"
             navigation={navigation}
           />
           <ChallengeCard
-            name='Challenge Name'
-            description='Challenge Description'
-            imageSrc='https://picsum.photos/200/300'
-            authorName='Author Name'
+            name="Challenge Name"
+            imageSrc="https://picsum.photos/200/300"
+            authorName="Author Name"
             navigation={navigation}
           />
           <ChallengeCard
-            name='Challenge Name'
-            description='Challenge Description'
-            imageSrc='https://picsum.photos/200/300'
-            authorName='Author Name'
+            name="Challenge Name"
+            imageSrc="https://picsum.photos/200/300"
+            authorName="Author Name"
             navigation={navigation}
           />
           <ChallengeCard
-            name='Challenge Name'
-            description='Challenge Description'
-            imageSrc='https://picsum.photos/200/300'
-            authorName='Author Name'
+            name="Challenge Name"
+            imageSrc="https://picsum.photos/200/300"
+            authorName="Author Name"
             navigation={navigation}
           />
         </ScrollView>
@@ -94,15 +94,15 @@ const PersonalChallengesScreen = () => {
       }}
     >
       <PersonalChallengesStack.Screen
-        name='PersonalChallengesScreen'
+        name="PersonalChallengesScreen"
         component={PersonalChallenges}
       />
       <PersonalChallengesStack.Screen
-        name='SettingsScreen'
+        name="SettingsScreen"
         component={SettingsScreen}
       />
       <PersonalChallengesStack.Screen
-        name='PersonalChallengeDetailScreen'
+        name="PersonalChallengeDetailScreen"
         component={PersonalChallengeDetailScreen}
       />
     </PersonalChallengesStack.Navigator>

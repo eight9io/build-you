@@ -9,7 +9,7 @@ import InlineTextInput from '../../common/Inputs/InlineTextInput';
 import AddEmojiButton from '../../../component/common/Buttons/AddEmojiButton';
 import AddEmojiModal from '../AddEmoji';
 
-import Close from '../asset/close.svg';
+import Close from '../../../component/asset/close.svg';
 import Button from '../../common/Buttons/Button';
 import WarningSvg from '../asset/warning.svg';
 

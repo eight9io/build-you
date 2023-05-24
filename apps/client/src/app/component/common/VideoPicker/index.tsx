@@ -103,14 +103,14 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
       <TouchableOpacity
         onPress={pickVideo}
-        className="bg-gray-light mt-5 h-16 rounded-xl"
+        className="bg-gray-light mt-5 h-14 rounded-xl flex flex-row items-center justify-center "
         disabled={!!isSelectedImage}
       >
-        <View className="mt-5 flex flex-row items-center justify-center rounded-xl">
+        <View className="rounded-xl flex flex-row items-center justify-center">
           <CameraIcon fill={!isSelectedImage ? '#1C1B1F' : '#C5C8D2'} />
           <Text
             className={clsx(
-              'text-black-light ml-1.5 mt-1 text-sm font-semibold',
+              'text-black-light ml-1.5 text-sm font-semibold',
               isSelectedImage && 'text-gray-medium'
             )}
           >

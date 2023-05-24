@@ -9,7 +9,7 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import clsx from 'clsx';
-import { getImageFromUrl } from 'apps/client/src/app/hooks/getImageFromUrl';
+import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 
 import DefaultAvatar from './asset/default-avatar.svg';
 import CameraSvg from './asset/camera.svg';
@@ -20,7 +20,11 @@ interface ISignupAvatarProps {
   onPress?: () => void;
 }
 
-const SignupAvatar: React.FC<ISignupAvatarProps> = ({ control, src, onPress }) => {
+const SignupAvatar: React.FC<ISignupAvatarProps> = ({
+  control,
+  src,
+  onPress,
+}) => {
   let imageSrc;
   if (src) {
     const [imageSource, loading, error] = getImageFromUrl(src);

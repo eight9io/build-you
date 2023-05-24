@@ -43,32 +43,32 @@ export const EditChallengeProgressModal: FC<
 
   return (
     <Modal
-      animationType='slide'
-      presentationStyle='pageSheet'
+      animationType="slide"
+      presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <SafeAreaView className='bg-white mx-4'>
-        <View className='mt-6 flex h-full flex-col rounded-t-xl bg-white'>
+      <SafeAreaView className="mx-4 bg-white">
+        <View className="mt-6 flex h-full flex-col rounded-t-xl bg-white">
           <Header
-            title='New challenge'
-            rightBtn='SAVE'
-            leftBtn='Cancel'
+            title="New challenge"
+            rightBtn="SAVE"
+            leftBtn="Cancel"
             onLeftBtnPress={onClose}
           />
 
-          <View className='flex flex-col justify-between pt-4'>
+          <View className="flex flex-col justify-between pt-4">
             <CustomTextInput
-              title='Caption'
-              placeholderClassName='h-32'
-              placeholder='What do you achieve?'
+              title="Caption"
+              placeholderClassName="h-32"
+              placeholder="What do you achieve?"
               control={control}
             />
           </View>
           {imageSrc && (
-              <View className='pt-5 w-full h-[430px]'>
-                <ImageSwiper imageSrc={imageSrc} />
-              </View>
-            )}
+            <View className="h-[430px] w-full pt-5">
+              <ImageSwiper imageSrc={imageSrc} />
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </Modal>

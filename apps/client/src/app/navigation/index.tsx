@@ -39,13 +39,13 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        {accessToken && isFirstTimeSignIn && (
+        {!accessToken && isFirstTimeSignIn && (
           <RootStack.Screen
             name="CompleteProfileScreen"
             component={CompleteProfileScreen}
           />
         )}
-        {accessToken && !isFirstTimeSignIn && (
+        {!accessToken && !isFirstTimeSignIn && (
           <>
             <RootStack.Screen
               name="HomeScreen"
@@ -86,7 +86,7 @@ export const RootNavigation = () => {
             />
           </>
         )}
-        {!accessToken && (
+        {accessToken && (
           <>
             <RootStack.Screen
               name="IntroScreen"

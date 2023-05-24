@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -87,7 +87,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         <StepOfSteps step={1} totalSteps={4} />
       </View>
       <View className="flex flex-col items-center justify-center py-6">
-        <Text className="text-black-default text-h4 font-semibold leading-6">
+        <Text className="text-black-default font-medium text-h4 leading-6">
           Tell us about yourself
         </Text>
       </View>
@@ -97,9 +97,9 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       </View>
 
       {/* Form */}
-      <View className="mt-4 flex h-full w-full  rounded-t-xl ">
+      <View className=" flex h-full w-full rounded-t-xl">
         <View className="mt-4 flex flex-col px-5 ">
-          <View className="pt-5">
+          <View className="pt-3">
             <Controller
               control={control}
               name="firstName"
@@ -112,7 +112,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
-                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                    className="border-gray-medium bg-gray-veryLight flex w-full flex-row rounded-[10px] border-[1px] px-3 py-2 text-base font-normal"
                   />
                   {errors.firstName && (
                     <View className="flex flex-row pt-2">
@@ -126,7 +126,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
               )}
             />
           </View>
-          <View className="pt-5">
+          <View className="pt-3">
             <Controller
               control={control}
               name="lastName"
@@ -139,7 +139,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
-                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-2 text-base font-normal"
                   />
                   {errors.lastName && (
                     <View className="flex flex-row pt-2">
@@ -153,7 +153,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
               )}
             />
           </View>
-          <View className="pt-5">
+          <View className="pt-3">
             <Controller
               control={control}
               name="birthday"
@@ -170,7 +170,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     textAlignVertical="top"
                     editable={false}
                     onPress={() => setShowDateTimePicker(true)}
-                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-2 text-base font-normal"
                   />
                   {errors.birthday && (
                     <View className="flex flex-row pt-2">
@@ -185,7 +185,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
             />
           </View>
           {/* TODO: Implement a slide modal picker */}
-          <View className="pt-5">
+          <View className="pt-3">
             <Controller
               name="occupation"
               control={control}
@@ -202,7 +202,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     onChangeText={onChange}
                     onPress={() => setShowOccupationPicker(true)}
                     value={value}
-                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
+                    className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-2 text-base font-normal"
                   />
                   {errors.occupation && (
                     <View className="flex flex-row pt-2">
@@ -236,13 +236,16 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
           }}
         />
       </View>
-      <View className="absolute bottom-6 left-0 h-12 w-full px-4">
-        <Button
-          title="Next"
-          containerClassName="bg-primary-default flex-1"
-          textClassName="text-white"
-          onPress={handleSubmit(handleSubmitForm)}
-        />
+
+      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
+        <View className="h-12">
+          <Button
+            title="Next"
+            containerClassName="bg-primary-default flex-1"
+            textClassName="text-white text-md leading-6"
+            onPress={handleSubmit(handleSubmitForm)}
+          />
+        </View>
       </View>
     </View>
   );

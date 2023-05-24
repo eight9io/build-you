@@ -9,7 +9,8 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import clsx from 'clsx';
-import { getImageFromUrl } from 'apps/client/src/app/hooks/getImageFromUrl';
+
+import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 
 interface IProfileAvatarProps {
   src: string;

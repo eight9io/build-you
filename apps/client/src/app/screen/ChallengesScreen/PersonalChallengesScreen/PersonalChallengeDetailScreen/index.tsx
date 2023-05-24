@@ -7,13 +7,13 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Header from 'apps/client/src/app/component/common/Header';
-import PopUpMenu from 'apps/client/src/app/component/common/PopUpMenu';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import Header from '../../../../component/common/Header';
+import PopUpMenu from '../../../..//component/common/PopUpMenu';
+import { RootStackParamList } from '../../../..//navigation/navigation.type';
 
 import NavButton from '../../../../component/common/Buttons/NavButton';
-import ChallengeDetailScreen from '../../ChallengeDetailScreen';
-import Button from 'apps/client/src/app/component/common/Buttons/Button';
+import ChallengeDetailScreen from '../ChallengeDetailScreen';
+import Button from '../../../..//component/common/Buttons/Button';
 
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
@@ -64,7 +64,11 @@ const PersonalChallengeDetailScreen = ({
     <SafeAreaView className="bg-white">
       <Header
         leftBtn={
-          <NavButton text="Challenges" onPress={() => navigation.goBack()} />
+          <NavButton
+            text="Challenges"
+            onPress={() => navigation.goBack()}
+            withBackIcon
+          />
         }
         rightBtn={<RightPersonalChallengeDetailOptions />}
         onRightBtnPress={() => {}}

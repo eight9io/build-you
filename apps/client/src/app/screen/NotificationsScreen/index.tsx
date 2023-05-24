@@ -19,19 +19,23 @@ import MainNavBar from '../../component/NavBar/MainNavBar';
 import Notificaiton from '../../component/Notification';
 import { RootStackParamList } from '../../navigation/navigation.type';
 
-const AlertsStack = createNativeStackNavigator<RootStackParamList>();
+const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
-type AlertsScreenNavigationProp = NativeStackNavigationProp<
+type NotificationsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'AlertsScreen'
+  'NotificationsScreen'
 >;
 
-const Alerts = ({ navigation }: { navigation: AlertsScreenNavigationProp }) => {
+const Notifications = ({
+  navigation,
+}: {
+  navigation: NotificationsScreenNavigationProp;
+}) => {
   const { t } = useTranslation();
 
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
-      <MainNavBar title={t('top_nav.alerts')} navigation={navigation} />
+      <MainNavBar title={t('top_nav.noti')} navigation={navigation} withSearch/>
       <View>
         <Notificaiton title="New" />
         <Notificaiton title="Previous" isPrevious={true} />
@@ -40,17 +44,19 @@ const Alerts = ({ navigation }: { navigation: AlertsScreenNavigationProp }) => {
   );
 };
 
-const AlertsScreen = () => {
+const NotificationsScreen = () => {
   return (
-    <AlertsStack.Navigator
+    <NotificationsStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <AlertsStack.Screen name="AlertsScreen" component={Alerts} />
-      <AlertsStack.Screen name="SettingsScreen" component={SettingsScreen} />
-    </AlertsStack.Navigator>
+      <NotificationsStack.Screen
+        name="NotificationsScreen"
+        component={Notifications}
+      />
+    </NotificationsStack.Navigator>
   );
 };
 
-export default AlertsScreen;
+export default NotificationsScreen;

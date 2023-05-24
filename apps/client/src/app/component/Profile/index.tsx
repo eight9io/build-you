@@ -1,15 +1,14 @@
 import clsx from 'clsx';
 
-
 import { useTranslation } from 'react-i18next';
 import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
-import ProfileTabs from './ProfileTabs';
+import ProfileTabs from './ProfileTabs/Users';
 import CoverImage from './CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
-import EditProfileModal from './EditProfileModal';
+import EditProfileModal from '../modal/EditProfileModal';
 import Button from '../common/Buttons/Button';
 import ProfileAvartar from '../common/Avatar/ProfileAvatar';
 

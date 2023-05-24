@@ -26,10 +26,8 @@ import IconEyeOff from './asset/eye-off.svg';
 import IconGoogle from './asset/Google.svg';
 import IconLinkedIn from './asset/LinkedIn.svg';
 import { LoginValidationSchema } from '../../Validators/Login.validate';
-type FormData = {
-  email: string;
-  password: string;
-};
+import { LoginForm } from '../../types/auth';
+
 export default function Login({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
   const arrayButton = [
@@ -66,7 +64,7 @@ export default function Login({ navigation }: { navigation: any }) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormData>({
+  } = useForm<LoginForm>({
     defaultValues: {
       email: '',
       password: '',
@@ -75,7 +73,7 @@ export default function Login({ navigation }: { navigation: any }) {
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: LoginForm) => {
     console.log(data);
   };
   const [modalVisible, setModalVisible] = useState(false);
@@ -177,9 +175,9 @@ export default function Login({ navigation }: { navigation: any }) {
                         </View>
                       )}
                     />
-                    {errors[item.name as keyof FormData] && (
+                    {errors[item.name as keyof LoginForm] && (
                       <ErrorText
-                        message={errors[item.name as keyof FormData]?.message}
+                        message={errors[item.name as keyof LoginForm]?.message}
                       />
                     )}
                   </View>

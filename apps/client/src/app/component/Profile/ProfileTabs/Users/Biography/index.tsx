@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 
-import Button from '../../../common/Buttons/Button';
+import Button from '../../../../common/Buttons/Button';
 import PlayButton from './asset/play-button.svg';
 
 const ButtonContent: string[] = [
@@ -81,7 +81,7 @@ const Biography = () => {
         })}
       </ScrollView>
       <View className={clsx('mt-4 flex flex-col pr-4')}>
-        <Text className={clsx('text-h6 text-black')}>
+        <Text className={clsx('text-h6 text-gray-dark')}>
           I'm a 34 year old female, and I work as a digital entrepreneur. I
           started using Buildyou to motivate myself more in personal challenges
           that I would like to complete, such as graduating and starting

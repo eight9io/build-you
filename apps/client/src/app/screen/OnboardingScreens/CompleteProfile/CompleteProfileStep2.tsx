@@ -63,7 +63,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
         leftBtn={
           <NavButton
             text="Back"
-            withIcon={true}
+            withBackIcon={true}
             onPress={() => navigation.navigate('CompleteProfileStep1Screen')}
           />
         }
@@ -87,43 +87,42 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
       {/* Form */}
       <View className="mt-4 flex h-full w-full  rounded-t-xl ">
         <View className="mt-4 flex flex-col px-5 ">
-          <View className="pt-5">
-            <Controller
-              control={control}
-              name="biography"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <View className="flex flex-col">
-                  <TextInput
-                    label="Biography"
-                    placeholder={'Enter your last name'}
-                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    multiline={true}
-                    numberOfLines={4}
-                    className="border-gray-medium bg-gray-veryLight ml-0 mt-0 flex h-36 w-full rounded-[10px] border px-3 py-3 text-base font-normal"
-                  />
-                </View>
-              )}
-            />
-          </View>
-          <View className="pt-5">
-            <VideoPicker
-              setExternalVideo={setPickedVideo}
-              useBigImage={true}
-              removeVideo={removeVideo}
-            />
-          </View>
+          <Controller
+            control={control}
+            name="biography"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <View className="flex flex-col">
+                <TextInput
+                  label="Biography"
+                  placeholder={'Enter your last name'}
+                  placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  multiline={true}
+                  numberOfLines={4}
+                  className="border-gray-medium bg-gray-veryLight ml-0 mt-0 flex h-36 w-full rounded-[10px] border px-3 py-3 text-base font-normal"
+                />
+              </View>
+            )}
+          />
+          <VideoPicker
+            setExternalVideo={setPickedVideo}
+            useBigImage={true}
+            removeVideo={removeVideo}
+          />
         </View>
       </View>
-      <View className="absolute bottom-6 left-0 h-12 w-full px-4">
-        <Button
-          title="Next"
-          containerClassName="bg-primary-default flex-1"
-          textClassName="text-white"
-          onPress={handleSubmit(handleSubmitForm)}
-        />
+
+      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
+        <View className="h-12">
+          <Button
+            title="Next"
+            containerClassName="bg-primary-default flex-1"
+            textClassName="text-white"
+            onPress={handleSubmit(handleSubmitForm)}
+          />
+        </View>
       </View>
     </View>
   );

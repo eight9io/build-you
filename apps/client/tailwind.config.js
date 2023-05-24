@@ -80,7 +80,15 @@ module.exports = {
         h2: '36px',
         h1: '48px',
         hero: '64px',
-        mega: '120px',
+        mega: '120px'
+      },
+      fontFamily: {
+        light: 'OpenSans_300Light',
+        regular: 'OpenSans_400Regular',
+        normal: 'OpenSans_400Regular',
+        medium: 'OpenSans_500Medium',
+        semibold: 'OpenSans_600SemiBold',
+        bold: 'OpenSans_700Bold',
       },
     },
   },

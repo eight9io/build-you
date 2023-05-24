@@ -21,7 +21,7 @@ import CustomTextInput from '../common/Inputs/CustomTextInput';
 
 import { IUploadMediaWithId } from '../../types/media';
 
-import Close from './asset/close.svg';
+import Close from '../../component/asset/close.svg';
 
 interface IAddNewChallengeProgressModalProps {
   isVisible: boolean;
@@ -48,15 +48,15 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
   const singleImageWidth = (screen.width - 56) / 3;
 
   return (
-    <View className='flex flex-row flex-wrap justify-start gap-2 pt-5'>
+    <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
       {selectedMedia?.length > 0 &&
         selectedMedia.map((media: any) => (
           <View
-            className='relative aspect-square'
+            className="relative aspect-square"
             style={{ width: singleImageWidth }}
             key={media.id}
           >
-            <View className='absolute right-1 top-2 z-10'>
+            <View className="absolute right-1 top-2 z-10">
               <Button
                 onPress={() => handleRemoveItem(media.id)}
                 Icon={<Close fill={'white'} />}
@@ -64,7 +64,7 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
             </View>
             <Image
               source={{ uri: media.uri as any }}
-              className='h-full w-full rounded-xl'
+              className="h-full w-full rounded-xl"
             />
           </View>
         ))}
@@ -105,8 +105,8 @@ export const AddNewChallengeProgressModal: FC<
 
   return (
     <Modal
-      animationType='slide'
-      presentationStyle='pageSheet'
+      animationType="slide"
+      presentationStyle="pageSheet"
       visible={isVisible}
     >
       <SafeAreaView className="bg-white">
@@ -120,11 +120,11 @@ export const AddNewChallengeProgressModal: FC<
             />
           </View>
 
-          <View className='flex flex-col justify-between px-5 pt-4'>
+          <View className="flex flex-col justify-between px-5 pt-4">
             <CustomTextInput
-              title='Caption'
-              placeholderClassName='h-32'
-              placeholder='What do you achieve?'
+              title="Caption"
+              placeholderClassName="h-32"
+              placeholder="What do you achieve?"
               control={control}
             />
 
@@ -136,7 +136,7 @@ export const AddNewChallengeProgressModal: FC<
               />
             )}
 
-            <View className=''>
+            <View className="">
               <ImagePicker
                 setExternalImages={setSelectedMedia}
                 allowsMultipleSelection
@@ -145,7 +145,7 @@ export const AddNewChallengeProgressModal: FC<
               />
             </View>
 
-            <View className=''>
+            <View className="">
               <VideoPicker
                 setExternalVideo={setSelectedMedia}
                 isSelectedImage={isSelectedImage}
@@ -153,7 +153,7 @@ export const AddNewChallengeProgressModal: FC<
               />
             </View>
 
-            <View className='pt-4'>
+            <View className="pt-4">
               <LocationInput control={control} />
             </View>
           </View>

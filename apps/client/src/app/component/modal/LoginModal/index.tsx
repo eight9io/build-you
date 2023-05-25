@@ -7,7 +7,7 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NavButton from '../../common/Buttons/NavButton';
 import Button from '../../common/Buttons/Button';
 import { useEffect } from 'react';
@@ -18,7 +18,9 @@ import { useTranslation } from 'react-i18next';
 import IconApple from './asset/Apple.svg';
 import IconGoogle from './asset/Google.svg';
 import IconLinkedIn from './asset/LinkedIn.svg';
-import { useNavigation } from '@react-navigation/native';
+import LinkedInModal from '@gcou/react-native-linkedin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -26,6 +28,7 @@ interface Props {
 }
 const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   const { t } = useTranslation();
+  const [webViewVisible, setWebViewVisible] = useState(false);
 
   // Use this to ensure closing the popup after finishing login process
   WebBrowser.maybeCompleteAuthSession();
@@ -50,13 +53,16 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   // };
 
   // Use id token to authenticate with backend
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    iosClientId: process.env.NX_IOS_CLIENT_ID,
-    expoClientId: process.env.NX_EXPO_CLIENT_ID,
-    selectAccount: true,
-    scopes: ['profile', 'email'],
-    responseType: 'id_token',
-  });
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
+    {
+      iosClientId: process.env.NX_IOS_CLIENT_ID,
+      expoClientId: process.env.NX_EXPO_CLIENT_ID,
+      selectAccount: true,
+      scopes: ['profile', 'email'],
+      responseType: 'id_token',
+    }
+  );
+
   useEffect(() => {
     if (response?.type === 'success') {
       const { params } = response;
@@ -64,9 +70,10 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
     }
   }, [response]);
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     promptAsync();
   };
+
   const arrayButton = [
     {
       title: t('modal_login.apple'),
@@ -83,8 +90,9 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
       containerClassName: 'bg-sky-20 flex-row  items-center justify-center m-2',
 
       Icon: <IconLinkedIn />,
-      onPress: () => {
+      onPress: async () => {
         console.log('linked');
+        setWebViewVisible(true);
       },
     },
     {
@@ -155,12 +163,39 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
             />
           </View>
         </View>
-        {/* <LinkedInModal
-          clientID="86bd2r3oeeeqwj"
-          clientSecret="MfPE717c0ygsZN1v"
-          redirectUri="http://localhost:8081"
-          onSuccess={(token) => console.log(token)}
-        /> */}
+        <Modal
+          animationType="slide"
+          visible={webViewVisible}
+          presentationStyle="pageSheet"
+          style={{
+            width: 500,
+          }}
+        >
+          <SafeAreaView style={styles.centeredView}>
+            {/* <WebView
+              source={{
+                uri: 'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86bd2r3oeeeqwj&redirect_uri=https://buildyou-back.stg.startegois.com/auth/linkedin/callback&scope=r_liteprofile%20r_emailaddress',
+              }}
+              incognito
+              javaScriptEnabled
+              onNavigationStateChange={handleRedirect}
+              thirdPartyCookiesEnabled={true}
+              containerStyle={{ flex: 1, width: '100%' }}
+            /> */}
+            <LinkedInModal
+              clientID={process.env.NX_LINKEDIN_CLIENT_ID || ''}
+              clientSecret={process.env.NX_LINKEDIN_CLIENT_SECRET || ''}
+              redirectUri="https://localhost:8081"
+              onSuccess={(token) => console.log(token)}
+              permissions={['r_liteprofile', 'r_emailaddress']}
+              shouldGetAccessToken={true}
+              ref={null}
+              areaTouchText={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              onError={(error) => console.log(error)}
+              onSignIn={() => console.log('onSignIn')}
+            />
+          </SafeAreaView>
+        </Modal>
       </SafeAreaView>
     </Modal>
   );

@@ -30,7 +30,9 @@
     },
     "build": {
       "executor": "@nx/expo:build",
-      "options": {}
+      "options": {
+        "profile": "development"
+      }
     },
     "build-list": {
       "executor": "@nx/expo:build-list",

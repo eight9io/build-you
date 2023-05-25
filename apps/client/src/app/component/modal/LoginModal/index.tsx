@@ -19,7 +19,6 @@ import IconApple from './asset/Apple.svg';
 import IconGoogle from './asset/Google.svg';
 import IconLinkedIn from './asset/LinkedIn.svg';
 import LinkedInModal from '@gcou/react-native-linkedin';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 interface Props {
   modalVisible: boolean;
@@ -56,7 +55,7 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
     {
       iosClientId: process.env.NX_IOS_CLIENT_ID,
-      expoClientId: process.env.NX_EXPO_CLIENT_ID,
+      expoClientId: process.env.NX_EXPO_CLIENT_ID, // Used to run on Expo Go, not needed in production
       selectAccount: true,
       scopes: ['profile', 'email'],
       responseType: 'id_token',
@@ -193,6 +192,7 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
               areaTouchText={{ top: 10, bottom: 10, left: 10, right: 10 }}
               onError={(error) => console.log(error)}
               onSignIn={() => console.log('onSignIn')}
+              
             />
           </SafeAreaView>
         </Modal>

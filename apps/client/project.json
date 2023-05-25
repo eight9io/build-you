@@ -19,7 +19,8 @@
     "run-ios": {
       "executor": "@nx/expo:run",
       "options": {
-        "platform": "ios"
+        "platform": "ios",
+        "clean": true
       }
     },
     "run-android": {
@@ -54,7 +55,9 @@
     },
     "prebuild": {
       "executor": "@nx/expo:prebuild",
-      "options": {}
+      "options": {
+        "clean": true
+      }
     },
     "install": {
       "executor": "@nx/expo:install",

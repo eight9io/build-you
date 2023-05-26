@@ -13,7 +13,7 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 
-import SettingsScreen from '../SettingsScreen';
+import SettingsScreen from '../SettingsScreen/SettingsScreen';
 
 import MainNavBar from '../../component/NavBar/MainNavBar';
 import Notificaiton from '../../component/Notification';
@@ -35,7 +35,11 @@ const Notifications = ({
 
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
-      <MainNavBar title={t('top_nav.noti')} navigation={navigation} withSearch/>
+      <MainNavBar
+        title={t('top_nav.noti')}
+        navigation={navigation}
+        withSearch
+      />
       <View>
         <Notificaiton title="New" />
         <Notificaiton title="Previous" isPrevious={true} />

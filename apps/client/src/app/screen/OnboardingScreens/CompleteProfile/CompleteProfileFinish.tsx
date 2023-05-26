@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { View, Text } from 'react-native';
 import clsx from 'clsx';
 
-import { CompleteProfileScreenNavigationProp } from './index';
+import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 
 import BuildYouLogo from './asset/buildYou_logo.svg';
 import StarLogo from './asset/auto_awesome.svg';
@@ -14,7 +14,6 @@ interface CompleteProfileFinishProps {
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
   navigation,
 }) => {
-
   setTimeout(() => {
     navigation.navigate('HomeScreen');
   }, 2000);
@@ -28,7 +27,7 @@ const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
         <StarLogo />
 
         <View>
-          <Text className="text-gray-dark text-center font-normal text-md pt-4 mx-12">
+          <Text className="text-gray-dark text-md mx-12 pt-4 text-center font-normal">
             Thank you for your information. We're personalizing your
             experience...
           </Text>

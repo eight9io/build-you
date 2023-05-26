@@ -10,5 +10,11 @@
     "**/*.spec.tsx",
     "test-setup.ts"
   ],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "src/app/component/common/BottomSheet/DateTimePicker2.tsx"
+  ]
 }

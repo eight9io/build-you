@@ -6,7 +6,7 @@ import EmojiSelector from 'react-native-emoji-selector';
 
 import Header from '../../common/Header';
 import InlineTextInput from '../../common/Inputs/InlineTextInput';
-import AddEmojiButton from '../../../component/common/Buttons/AddEmojiButton';
+import AddEmojiButton from '../../common/Buttons/AddEmojiButton';
 import AddEmojiModal from '../AddEmoji';
 
 import Close from '../../../component/asset/close.svg';

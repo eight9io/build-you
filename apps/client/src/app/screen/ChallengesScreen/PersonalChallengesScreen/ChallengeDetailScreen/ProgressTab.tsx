@@ -6,7 +6,7 @@ import Button from '../../../../component/common/Buttons/Button';
 import AddIcon from '../../../../component/asset/add.svg';
 
 import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
-import ProgressCard from '../../../../component/Card/ProgressCard';
+import ProgressCard from '../../../../component/Card/ProgressCard/ProgressCard';
 
 const arrayPost = [
   {

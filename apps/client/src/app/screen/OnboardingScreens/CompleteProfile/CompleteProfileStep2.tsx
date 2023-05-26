@@ -10,7 +10,7 @@ import TextInput from '../../../component/common/Inputs/TextInput';
 
 import Button from '../../../component/common/Buttons/Button';
 
-import { CompleteProfileScreenNavigationProp } from './index';
+import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 import CustomTextInput from '../../../component/common/Inputs/CustomTextInput';
 import Header from '../../../component/common/Header';
 

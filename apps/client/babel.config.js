@@ -4,13 +4,8 @@ module.exports = function (api) {
     presets: ['babel-preset-expo'],
     plugins: [
       'nativewind/babel',
-      [
-        'react-native-reanimated/plugin',
-        {
-          relativeSourceLocation: true,
-        },
-      ],
       'transform-inline-environment-variables',
+      ['react-native-reanimated/plugin'],
     ],
   };
 };

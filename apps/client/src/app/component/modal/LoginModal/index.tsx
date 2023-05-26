@@ -52,15 +52,14 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   // };
 
   // Use id token to authenticate with backend
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
-    {
-      iosClientId: process.env.NX_IOS_CLIENT_ID,
-      expoClientId: process.env.NX_EXPO_CLIENT_ID, // Used to run on Expo Go, not needed in production
-      selectAccount: true,
-      scopes: ['profile', 'email'],
-      responseType: 'id_token',
-    }
-  );
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    iosClientId: process.env.NX_IOS_CLIENT_ID,
+    androidClientId: process.env.NX_ANDROID_CLIENT_ID,
+    expoClientId: process.env.NX_EXPO_CLIENT_ID, // Used to run on Expo Go, not needed in production
+    selectAccount: true,
+    scopes: ['profile', 'email'],
+    responseType: 'id_token',
+  });
 
   useEffect(() => {
     if (response?.type === 'success') {

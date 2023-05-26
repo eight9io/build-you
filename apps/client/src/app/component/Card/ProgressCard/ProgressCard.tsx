@@ -50,7 +50,7 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
   ];
 
   return (
-    <View className='mb-1 flex-1 bg-gray-50 p-5 '>
+    <View className="mb-1 flex-1 bg-gray-50 p-5 ">
       <EditChallengeProgressModal
         imageSrc={card.image}
         isVisible={isShowEditModal}
@@ -61,18 +61,18 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
         isVisible={isShowDeleteModal}
         onClosed={() => setIsShowDeleteModal(false)}
       />
-      <View className='mb-3 flex flex-row items-center justify-between '>
-        <View className='flex flex-row'>
-          <ProgressCardAvatar src='https://picsum.photos/200/300' />
-          <View className='ml-2'>
-            <Text className='text-h6 font-bold'>{name}</Text>
-            <View className='flex flex-row items-center'>
-              <Text className='text-gray-dark text-xs font-light '>
+      <View className="mb-3 flex flex-row items-center justify-between ">
+        <View className="flex flex-row">
+          <ProgressCardAvatar src="https://picsum.photos/200/300" />
+          <View className="ml-2">
+            <Text className="text-h6 font-bold">{name}</Text>
+            <View className="flex flex-row items-center">
+              <Text className="text-gray-dark text-xs font-light ">
                 {time}
                 {'  '}
               </Text>
               <IconDot fill={'#7D7E80'} />
-              <Text className='text-gray-dark text-xs font-light '>
+              <Text className="text-gray-dark text-xs font-light ">
                 {'  '}123 Amanda Street
               </Text>
             </View>
@@ -80,22 +80,22 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
         </View>
         <PopUpMenu options={progressOptions} />
       </View>
-      <Text className=' text-md mb-3 font-normal leading-5'>{stt}</Text>
+      <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
 
-      <View className=''>
+      <View className="">
         <ImageSwiper imageSrc={card.image} />
       </View>
 
-      <View className='mt-4 flex-row '>
-        <View className='flex-row items-center gap-2'>
+      <View className="mt-4 flex-row ">
+        <View className="flex-row items-center gap-2">
           <IconLike />
-          <Text className='text-gray-dark text-md font-normal '>
+          <Text className="text-gray-dark text-md font-normal ">
             {like} likes
           </Text>
         </View>
-        <View className='ml-8 flex-row items-center '>
+        <View className="ml-8 flex-row items-center ">
           <IconComment />
-          <Text className='text-gray-dark text-md ml-2 font-normal '>
+          <Text className="text-gray-dark text-md ml-2 font-normal ">
             {comment} comments
           </Text>
         </View>

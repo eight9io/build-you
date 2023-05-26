@@ -9,18 +9,17 @@ import {
 } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import SettingsScreen from '../../SettingsScreen';
-import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen';
+import SettingsScreen from '../../SettingsScreen/SettingsScreen';
+import CompanyChallengeDetailScreen from './CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
 
 import MainNavBar from '../../../component/NavBar/MainNavBar';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 
-const PersonalChallengesStack =
-  createNativeStackNavigator<RootStackParamList>();
+const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
-type PersonalChallengesScreenNavigationProp = NativeStackNavigationProp<
+type CompanyChallengesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'PersonalChallengesScreen'
+  'CompanyChallengesScreen'
 >;
 
 const EmptyChallenges = () => {
@@ -38,10 +37,10 @@ const EmptyChallenges = () => {
   );
 };
 
-const PersonalChallenges = ({
+const CompanyChallenges = ({
   navigation,
 }: {
-  navigation: PersonalChallengesScreenNavigationProp;
+  navigation: CompanyChallengesScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
 
@@ -86,27 +85,27 @@ const PersonalChallenges = ({
   );
 };
 
-const PersonalChallengesScreen = () => {
+const CompanyChallengesScreen = () => {
   return (
-    <PersonalChallengesStack.Navigator
+    <CompanyChallengesStack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <PersonalChallengesStack.Screen
-        name="PersonalChallengesScreen"
-        component={PersonalChallenges}
+      <CompanyChallengesStack.Screen
+        name="CompanyChallengesScreen"
+        component={CompanyChallenges}
       />
-      <PersonalChallengesStack.Screen
+      <CompanyChallengesStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
       />
-      <PersonalChallengesStack.Screen
-        name="PersonalChallengeDetailScreen"
-        component={PersonalChallengeDetailScreen}
+      <CompanyChallengesStack.Screen
+        name="CompanyChallengeDetailScreen"
+        component={CompanyChallengeDetailScreen}
       />
-    </PersonalChallengesStack.Navigator>
+    </CompanyChallengesStack.Navigator>
   );
 };
 
-export default PersonalChallengesScreen;
+export default CompanyChallengesScreen;

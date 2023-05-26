@@ -7,6 +7,8 @@
     "@gorhom/bottom-sheet": "*",
     "@hookform/resolvers": "*",
     "@nx/expo": "*",
+    "@react-native-community/datetimepicker": "6.7.3",
+    "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "*",
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "*",
@@ -17,6 +19,7 @@
     "expo": "~48.0.15",
     "expo-asset": "*",
     "expo-auth-session": "*",
+    "expo-av": "~13.2.1",
     "expo-checkbox": "*",
     "expo-dev-client": "~2.2.1",
     "expo-file-system": "*",
@@ -42,8 +45,6 @@
     "@babel/core": "*",
     "react-native-popup-menu": "*",
     "react-native-dialog": "*",
-    "@react-native-community/datetimepicker": "*",
-    "expo-av": "*",
     "dayjs": "*"
   },
   "scripts": {

@@ -16,7 +16,9 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.buildyoutest.client"
+      "bundleIdentifier": "com.buildyoutest.client",
+      "associatedDomains": ["applinks:com.buildyoutest.client"],
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,10 +32,27 @@
       "bundler": "metro"
     },
     "userInterfaceStyle": "automatic",
+    "scheme": "com.buildyoutest.client",
     "extra": {
       "eas": {
-        "projectId": "6749901d-9157-445d-9aed-bf1c2f337aec"
+        "projectId": "fbbb7954-7ea7-4351-951c-fb3150b55b3d"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "13.0"
+          }
+        }
+      ]
+    ]
   }
 }

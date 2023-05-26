@@ -12,7 +12,7 @@ import PopUpMenu from '../../../../component/common/PopUpMenu';
 import { RootStackParamList } from '../../../../navigation/navigation.type';
 
 import NavButton from '../../../../component/common/Buttons/NavButton';
-import ChallengeDetailScreen from '../ChallengeDetailScreen';
+import ChallengeDetailScreen from '../ChallengeDetailScreen/ChallengeDetailScreen';
 import Button from '../../../../component/common/Buttons/Button';
 
 import ShareIcon from './assets/share.svg';

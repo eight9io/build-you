@@ -10,6 +10,9 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
       }
     },
     "preview": {
@@ -24,8 +27,5 @@
   },
   "submit": {
     "production": {}
-  },
-  "cli": {
-    "version": "~3.13.0"
   }
 }

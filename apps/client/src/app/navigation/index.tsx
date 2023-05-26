@@ -10,19 +10,19 @@ import Header from '../component/common/Header';
 
 import BottomNavBar from '../component/BottomNavBar';
 
-import IntroScreen, { LoginScreen } from '../screen/IntroScreen';
-import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen';
-import NotificationsScreen from '../screen/NotificationsScreen';
+import IntroScreen, { LoginScreen } from '../screen/IntroScreen/IntroScreen';
+import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
+import NotificationsScreen from '../screen/NotificationsScreen/NotificationsScreen';
 
-import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile';
+import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/CompleteProfile';
 
-import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen';
-import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen';
+import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen';
+import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateCompanyChallengeScreen';
 import NavButton from '../component/common/Buttons/NavButton';
 
 import Register from '../screen/RegisterScreen/RegisterScreen';
-import Login from '../screen/LoginScreen/Login';
-import ForgotPassword from '../screen/ForgotPassword';
+import Login from '../screen/LoginScreen/LoginScreen';
+import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 import AppTitle from '../component/common/AppTitle';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -31,7 +31,7 @@ export const RootNavigation = () => {
   const { t } = useTranslation();
 
   const accessToken = true;
-  const isFirstTimeSignIn = false;
+  const isFirstTimeSignIn = true;
 
   return (
     <NavigationContainer>
@@ -63,7 +63,7 @@ export const RootNavigation = () => {
             />
           </>
         )}
-        {!accessToken && !isFirstTimeSignIn && (
+        {accessToken && !isFirstTimeSignIn && (
           <>
             <RootStack.Screen
               name="HomeScreen"
@@ -111,7 +111,7 @@ export const RootNavigation = () => {
             />
           </>
         )}
-        {accessToken && (
+        {!accessToken && (
           <>
             <RootStack.Screen
               name="IntroScreen"

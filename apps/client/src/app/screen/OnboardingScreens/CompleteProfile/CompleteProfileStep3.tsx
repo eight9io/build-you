@@ -5,11 +5,13 @@ import clsx from 'clsx';
 import { useForm, Controller, set } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import httpInstance from '../../../utils/http';
+
 import { useCompleteProfileStore } from '../../../store/complete-profile';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import Button from '../../../component/common/Buttons/Button';
-import { CompleteProfileScreenNavigationProp } from './index';
+import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import Header from '../../../component/common/Header';
 import AddSkillModal from '../../../component/modal/AddSkill';
@@ -26,6 +28,20 @@ const NUMBER_OF_SKILL_REQUIRED = 3;
 const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   navigation,
 }) => {
+  const [fetchedHardSkills, setFetchedHardSkills] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await httpInstance.get('/skill/hard/list');
+        setFetchedHardSkills(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSkills();
+  }, []);
+
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
     string[]
   >([]);
@@ -141,7 +157,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         </Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator style={{ marginVertical: 40}}>
+      <ScrollView showsVerticalScrollIndicator style={{ marginVertical: 40 }}>
         <View className="h-full w-full flex-col justify-between">
           <View className="align-center w-full flex-row flex-wrap justify-center">
             {arraySkills.map((item, index) => (
@@ -168,7 +184,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             onPress={() => setIsShowAddSkillModal(true)}
           />
           {numberOfSkillError && (
-            <Text className="text-center text-sm font-normal leading-5 text-red-500 pt-3">
+            <Text className="pt-3 text-center text-sm font-normal leading-5 text-red-500">
               Please select at least 3 skills
             </Text>
           )}

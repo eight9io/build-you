@@ -4,7 +4,7 @@ import { View, Image, Text, TouchableOpacity } from 'react-native';
 import clsx from 'clsx';
 
 import NavButton from '../../common/Buttons/NavButton';
-import { SetingsScreenNavigationProp } from '../../../screen/SettingsScreen';
+import { SetingsScreenNavigationProp } from '../../../screen/SettingsScreen/SettingsScreen';
 
 interface INavBarInnerScreenProps {
   title: string;

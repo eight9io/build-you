@@ -1,10 +1,10 @@
 import { FC, ReactNode, useMemo } from 'react';
 import { FillButton } from '../../Buttons/Button';
 import { Text, TouchableOpacity, View } from 'react-native';
-import RNBottomSheet, {
-  BottomSheetFooter,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
+// import RNBottomSheet, {
+//   BottomSheetFooter,
+//   BottomSheetView,
+// } from '@gorhom/bottom-sheet';
 import CloseIcon from '../asset/close-icon.svg';
 
 interface IBottomSheetProps {
@@ -24,7 +24,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({
   const snapPoints = useMemo(() => ['70%'], []);
   return (
     <>
-      {show && (
+      {/* {show && (
         <RNBottomSheet
           index={0}
           snapPoints={snapPoints}
@@ -62,7 +62,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({
             <View className=" flex-1">{children}</View>
           </BottomSheetView>
         </RNBottomSheet>
-      )}
+      )} */}
     </>
   );
 };

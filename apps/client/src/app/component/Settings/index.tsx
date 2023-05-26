@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 
 import clsx from 'clsx';
 
-import Accordition from '../common/Accordition';
+import Accordition from '../common/Accordition/Accordition';
 
 const Settings = () => {
   return (

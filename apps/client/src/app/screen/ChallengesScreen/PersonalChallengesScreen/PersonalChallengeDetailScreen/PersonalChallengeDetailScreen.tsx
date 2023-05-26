@@ -8,12 +8,12 @@ import * as Sharing from 'expo-sharing';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Header from '../../../../component/common/Header';
-import PopUpMenu from '../../../..//component/common/PopUpMenu';
-import { RootStackParamList } from '../../../..//navigation/navigation.type';
+import PopUpMenu from '../../../../component/common/PopUpMenu';
+import { RootStackParamList } from '../../../../navigation/navigation.type';
 
 import NavButton from '../../../../component/common/Buttons/NavButton';
-import ChallengeDetailScreen from '../ChallengeDetailScreen';
-import Button from '../../../..//component/common/Buttons/Button';
+import ChallengeDetailScreen from '../ChallengeDetailScreen/ChallengeDetailScreen';
+import Button from '../../../../component/common/Buttons/Button';
 
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';

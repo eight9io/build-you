@@ -13,7 +13,7 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 
-import SettingsScreen from '../../SettingsScreen';
+import SettingsScreen from '../../SettingsScreen/SettingsScreen';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import MainNavBar from '../../../component/NavBar/MainNavBar';

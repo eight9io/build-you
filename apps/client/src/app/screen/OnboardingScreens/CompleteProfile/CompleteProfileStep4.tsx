@@ -171,7 +171,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         leftBtn={
           <NavButton
             text="Back"
-            withIcon={true}
+            withBackIcon={true}
             onPress={() => navigation.goBack()}
           />
         }

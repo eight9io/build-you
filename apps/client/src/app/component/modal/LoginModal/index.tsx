@@ -120,7 +120,7 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
       animationType="slide"
       transparent={true}
       visible={modalVisible}
-      presentationStyle="pageSheet"
+      presentationStyle="overFullScreen"
     >
       <SafeAreaView style={styles.centeredView}>
         <View style={styles.modalView}>

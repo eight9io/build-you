@@ -14,6 +14,11 @@ interface CompleteProfileFinishProps {
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
   navigation,
 }) => {
+
+  setTimeout(() => {
+    navigation.navigate('HomeScreen');
+  }, 2000);
+
   return (
     <View className="mt-28 flex h-full flex-col items-center">
       <View className="">
@@ -23,7 +28,7 @@ const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
         <StarLogo />
 
         <View>
-          <Text className="text-gray-dark text-center text-lg pt-4 mx-12">
+          <Text className="text-gray-dark text-center font-normal text-md pt-4 mx-12">
             Thank you for your information. We're personalizing your
             experience...
           </Text>

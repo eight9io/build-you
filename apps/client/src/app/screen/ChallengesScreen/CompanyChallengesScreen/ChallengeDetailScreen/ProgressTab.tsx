@@ -1,12 +1,12 @@
 import { View, Text, ScrollView, FlatList } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '../../../component/common/Buttons/Button';
+import Button from '../../../../component/common/Buttons/Button';
 
-import AddIcon from './assets/add.svg';
+import AddIcon from '../../../../component/asset/add.svg';
 
-import AddNewChallengeProgressModal from '../../../component/modal/AddNewChallengeProgressModal';
-import ProgressCard from '../../../component/Card/ProgressCard';
+import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
+import ProgressCard from '../../../../component/Card/ProgressCard';
 
 const arrayPost = [
   {

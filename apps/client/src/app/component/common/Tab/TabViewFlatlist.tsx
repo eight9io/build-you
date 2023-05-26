@@ -64,7 +64,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index.toString()}
-          className='pl-4'
+          contentContainerStyle={{ paddingHorizontal: 10, backgroundColor: 'white' }}
         />
       </View>
       <View className="mt-4 flex-1 px-4">{children[activeTabIndex]}</View>

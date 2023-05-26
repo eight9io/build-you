@@ -8,17 +8,32 @@ import ButtonsWithIcon from '../../common/Buttons/ButtonWithIcon';
 interface IMainNavBarProps {
   title: string;
   navigation: any;
+  withSearch?: boolean;
+  withSetting?: boolean;
 }
 
-const MainNavBar: FC<IMainNavBarProps> = ({ title, navigation }) => {
+const MainNavBar: FC<IMainNavBarProps> = ({
+  title,
+  navigation,
+  withSearch,
+  withSetting,
+}) => {
   return (
-    <View className={clsx('mx-6 flex flex-row justify-between mb-2')}>
-      <ButtonsWithIcon icon="search" />
+    <View
+      className={clsx(
+        'relative mx-6 mb-2 flex flex-row items-center justify-center'
+      )}
+    >
       <Text className="text-lg font-semibold">{title}</Text>
-      <ButtonsWithIcon
-        icon="setting"
-        onPress={() => navigation.push('SettingsScreen')}
-      />
+      <View className="absolute right-0 top-1 flex items-center">
+        {withSearch && <ButtonsWithIcon icon="search" />}
+        {withSetting && (
+          <ButtonsWithIcon
+            icon="setting"
+            onPress={() => navigation.push('SettingsScreen')}
+          />
+        )}
+      </View>
     </View>
   );
 };

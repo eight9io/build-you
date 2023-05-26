@@ -71,22 +71,12 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
     >
       <SafeAreaView className="bg-white">
         <View className="mt-4 flex h-full  rounded-t-xl bg-white">
-          <View className="mt-6">
-            <Header
-              title="Edit profile"
-              leftBtn={
-                <View className="top-1/2">
-                  <CloseIcon />
-                </View>
-              }
-              rightBtn={
-                <Text className="text-gray-dark text-base font-normal">
-                  SAVE
-                </Text>
-              }
-              onLeftBtnPress={onClose}
-            />
-          </View>
+          <Header
+            title="Edit profile"
+            rightBtn="SAVE"
+            leftBtn={<CloseIcon />}
+            onLeftBtnPress={onClose}
+          />
 
           <View className="mt-4 flex flex-col px-5 ">
             <View className="pt-5">

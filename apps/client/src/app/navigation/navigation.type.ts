@@ -6,7 +6,7 @@ export type RootStackParamList = {
   IntroScreen: undefined;
   HomeScreen: undefined;
   InnerScreen: undefined;
-  AlertsScreen: undefined;
+  NotificationsScreen: undefined;
   ChallengeDetailScreen: undefined;
   SettingsScreen: undefined;
   ProfileScreen: undefined;
@@ -26,6 +26,11 @@ export type RootStackParamList = {
 
   LoginScreen: undefined;
   ForgotPasswordScreen: undefined;
+
+  CompanyProfileScreen: undefined;
+  CompanyChallengesScreen: undefined;
+  CompanyChallengeDetailScreen: undefined;
+  CreateCompanyChallengeScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

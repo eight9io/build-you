@@ -11,12 +11,13 @@ import Header from '../component/common/Header';
 import BottomNavBar from '../component/BottomNavBar';
 
 import IntroScreen, { LoginScreen } from '../screen/IntroScreen';
-import ChallengeDetailScreen from '../screen/ChallengesScreen/ChallengeDetailScreen';
-import AlertsScreen from '../screen/AlertsScreen';
+import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen';
+import NotificationsScreen from '../screen/NotificationsScreen';
 
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile';
 
-import CreateChallengeScreen from '../screen/ChallengesScreen/CreateChallengeScreen';
+import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen';
+import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen';
 import NavButton from '../component/common/Buttons/NavButton';
 
 import Register from '../screen/RegisterScreen/RegisterScreen';
@@ -30,7 +31,7 @@ export const RootNavigation = () => {
   const { t } = useTranslation();
 
   const accessToken = true;
-  const isFirstTimeSignIn = true;
+  const isFirstTimeSignIn = false;
 
   return (
     <NavigationContainer>
@@ -40,12 +41,29 @@ export const RootNavigation = () => {
         }}
       >
         {accessToken && isFirstTimeSignIn && (
-          <RootStack.Screen
-            name="CompleteProfileScreen"
-            component={CompleteProfileScreen}
-          />
+          <>
+            <RootStack.Screen
+              name="CompleteProfileScreen"
+              component={CompleteProfileScreen}
+            />
+            <RootStack.Screen
+              name="HomeScreen"
+              component={BottomNavBar}
+              options={{
+                headerShown: false,
+                headerTitle: () => (
+                  <Header
+                    title={t('challenge_detail_screen.title') || undefined}
+                  />
+                ),
+                headerLeft: (props) => {
+                  return <NavButton />;
+                },
+              }}
+            />
+          </>
         )}
-        {accessToken && !isFirstTimeSignIn && (
+        {!accessToken && !isFirstTimeSignIn && (
           <>
             <RootStack.Screen
               name="HomeScreen"
@@ -69,6 +87,13 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
+            <RootStack.Screen
+              name="CreateCompanyChallengeScreen"
+              component={CreateCompanyChallengeScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
 
             <RootStack.Screen
               name="ChallengeDetailScreen"
@@ -78,15 +103,15 @@ export const RootNavigation = () => {
               }}
             />
             <RootStack.Screen
-              name="AlertsScreen"
-              component={AlertsScreen}
+              name="NotificationsScreen"
+              component={NotificationsScreen}
               options={{
                 headerShown: false,
               }}
             />
           </>
         )}
-        {!accessToken && (
+        {accessToken && (
           <>
             <RootStack.Screen
               name="IntroScreen"

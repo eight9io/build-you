@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, FlatList } from 'react-native';
 
 import clsx from 'clsx';
 import { useForm, Controller, set } from 'react-hook-form';
@@ -123,7 +123,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         leftBtn={
           <NavButton
             text="Back"
-            withIcon={true}
+            withBackIcon={true}
             onPress={() => navigation.goBack()}
           />
         }
@@ -141,9 +141,9 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         </Text>
       </View>
 
-      <View className="flex-column h-full w-full justify-between pb-14">
-        <View>
-          <View className="align-center mt-6 w-full flex-row flex-wrap justify-center">
+      <ScrollView showsVerticalScrollIndicator style={{ marginVertical: 40}}>
+        <View className="h-full w-full flex-col justify-between">
+          <View className="align-center w-full flex-row flex-wrap justify-center">
             {arraySkills.map((item, index) => (
               <Button
                 key={index}
@@ -151,7 +151,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
                 onPress={() => addCompetenceSkill(item)}
                 textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
                 containerClassName={clsx(
-                  'border-gray-light ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-3',
+                  'border-gray-light ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-2',
                   {
                     'bg-primary-10': selectedCompetencedSkill.includes(item),
                     'border-primary-default':
@@ -167,25 +167,26 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             title={t('modal_skill.manually')}
             onPress={() => setIsShowAddSkillModal(true)}
           />
-
           {numberOfSkillError && (
-            <Text className="text-center text-sm font-normal leading-5 text-red-500">
+            <Text className="text-center text-sm font-normal leading-5 text-red-500 pt-3">
               Please select at least 3 skills
             </Text>
           )}
         </View>
-      </View>
+      </ScrollView>
 
-      <View className="absolute bottom-6 left-0 h-12 w-full px-4">
-        <Button
-          title="Next"
-          containerClassName="bg-primary-default flex-1"
-          textClassName="text-white"
-          onPress={() =>
-            checkNumberOfSkills() &&
-            navigation.navigate('CompleteProfileStep4Screen')
-          }
-        />
+      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
+        <View className="h-12">
+          <Button
+            title="Next"
+            containerClassName="bg-primary-default flex-1"
+            textClassName="text-white"
+            onPress={() =>
+              checkNumberOfSkills() &&
+              navigation.navigate('CompleteProfileStep4Screen')
+            }
+          />
+        </View>
       </View>
     </View>
   );

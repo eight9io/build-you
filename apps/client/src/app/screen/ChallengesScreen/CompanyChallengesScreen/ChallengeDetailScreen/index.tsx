@@ -1,35 +1,23 @@
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import i18n from '../../../i18n';
-import TabView from '../../../component/common/Tab/TabView';
+import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+
+import i18n from '../../../../i18n';
+import TabView from '../../../../component/common/Tab/TabView';
 import DescriptionTab from './DescriptionTab';
 import ProgressTab from './ProgressTab';
-import { FC } from 'react';
 
-import PopUpMenu from '../../../component/common/PopUpMenu';
+import ParticipantsTab from './ParticipantsTab';
+import { MOCK_FOLLOW_USERS } from 'apps/client/src/app/mock-data/follow';
 
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.progress'),
   i18n.t('challenge_detail_screen.description'),
+  i18n.t('challenge_detail_screen.participants'),
 ];
 
 export const ChallengeDetailScreen = () => {
   const { t } = useTranslation();
-
-  const CoverImage: FC<any> = () => {
-    return (
-      <Image
-        className="mt-2 h-[150px] w-full"
-        source={{ uri: 'https://picsum.photos/200/300' }}
-      />
-    );
-  };
 
   return (
     <View className="flex h-full flex-col bg-white py-2">
@@ -47,7 +35,6 @@ export const ChallengeDetailScreen = () => {
       </View>
 
       <FlatList
-        ListHeaderComponent={<CoverImage />}
         data={null}
         renderItem={({ item }) => null}
         ListFooterComponent={
@@ -55,6 +42,7 @@ export const ChallengeDetailScreen = () => {
             <TabView titles={CHALLENGE_TABS_TITLE_TRANSLATION}>
               <ProgressTab />
               <DescriptionTab />
+              <ParticipantsTab paticipant={MOCK_FOLLOW_USERS} />
             </TabView>
           </View>
         }

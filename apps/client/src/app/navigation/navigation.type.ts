@@ -1,4 +1,3 @@
-import { LoginScreen } from '../screen/IntroScreen/IntroScreen';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 

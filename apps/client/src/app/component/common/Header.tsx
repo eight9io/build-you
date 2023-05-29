@@ -23,7 +23,7 @@ export const Header: FC<IHeaderProps> = ({
     <View className="relative flex h-9 w-full items-center justify-start">
       {leftBtn ? (
         <TouchableOpacity
-          className="absolute left-5 top-0"
+          className="absolute left-5 top-2"
           onPress={onLeftBtnPress}
         >
           {typeof leftBtn === 'string' && (
@@ -36,7 +36,7 @@ export const Header: FC<IHeaderProps> = ({
       ) : null}
 
       {title && (
-        <View className={clsx('absolute top-0')}>
+        <View className={clsx('absolute top-2')}>
           <Text className={clsx('text-h5 font-semibold', textClassName)}>
             {title}
           </Text>
@@ -44,7 +44,7 @@ export const Header: FC<IHeaderProps> = ({
       )}
       {rightBtn && typeof rightBtn == 'string' && (
         <TouchableOpacity
-          className="absolute right-5 top-0"
+          className="absolute right-5 top-2"
           onPress={onRightBtnPress}
         >
           <Text className="text-h5 text-primary-default font-normal">
@@ -54,7 +54,7 @@ export const Header: FC<IHeaderProps> = ({
       )}
 
       {rightBtn && typeof rightBtn === 'object' && (
-        <View className="absolute right-5 top-0">{rightBtn}</View>
+        <View className="absolute right-5 top-2">{rightBtn}</View>
       )}
     </View>
   );

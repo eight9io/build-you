@@ -30,6 +30,13 @@ export type RootStackParamList = {
   CompanyChallengesScreen: undefined;
   CompanyChallengeDetailScreen: undefined;
   CreateCompanyChallengeScreen: undefined;
+
+  ChallengeDetailScreenViewOnly: {
+    challengeId: string;
+  };
+  ChallengeDetailComment: {
+    challengeId: string;
+  }
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

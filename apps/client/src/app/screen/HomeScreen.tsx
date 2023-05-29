@@ -9,17 +9,25 @@ import {
   Linking,
   Image,
   FlatList,
+  SafeAreaView,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/navigation.type';
 
-import Post from '../component/Post';
+import FeedPostCard from '../component/Post/FeedPostCard';
+import clsx from 'clsx';
+import MainNavBar from '../component/NavBar/MainNavBar';
+import { useTranslation } from 'react-i18next';
 
 export const HomeScreen = () => {
   const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0);
   const scrollViewRef = useRef<null | ScrollView>(null);
+
+  const t = useTranslation().t;
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const arrayPost = [
     {
@@ -67,11 +75,22 @@ export const HomeScreen = () => {
   ];
 
   return (
-    <FlatList
-      data={arrayPost}
-      renderItem={({ item }) => <Post itemProgressCard={item} />}
-      keyExtractor={(item) => item.id as unknown as string}
-    />
+    <SafeAreaView className={clsx('bg-white')}>
+      <MainNavBar
+        title={t('top_nav.your_feed')}
+        navigation={navigation}
+        withSearch
+      />
+      <View className={clsx('h-full w-full bg-gray-50 pb-32')}>
+        <FlatList
+          data={arrayPost}
+          renderItem={({ item }) => (
+            <FeedPostCard itemFeedPostCard={item} />
+          )}
+          keyExtractor={(item) => item.id as unknown as string}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -8,16 +8,20 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from './navigation.type';
 import Header from '../component/common/Header';
 
-import BottomNavBar from '../component/BottomNavBar';
+import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
+import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
+import ChallengeDetailComment from '../screen/ChallengeDetailScreen/ChallengeDetailComment/ChallengeDetailComment';
 import NotificationsScreen from '../screen/NotificationsScreen/NotificationsScreen';
+import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
 
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/CompleteProfile';
 
 import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen';
 import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateCompanyChallengeScreen';
+import CompanyChallengeDetailScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
 import NavButton from '../component/common/Buttons/NavButton';
 
 import Register from '../screen/RegisterScreen/RegisterScreen';
@@ -97,7 +101,34 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-
+            <RootStack.Screen
+              name="CompanyChallengeDetailScreen"
+              component={CompanyChallengeDetailScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="ChallengeDetailScreenViewOnly"
+              component={ChallengeDetailScreenViewOnly}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="ChallengeDetailComment"
+              component={ChallengeDetailComment}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <RootStack.Screen
+              name="SettingsScreen"
+              component={SettingsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
             <RootStack.Screen
               name="ChallengeDetailScreen"
               component={ChallengeDetailScreen}

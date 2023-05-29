@@ -4,7 +4,7 @@ import i18n from '../../../../i18n/i18n';
 import TabView from '../../../../component/common/Tab/TabView';
 import DescriptionTab from './DescriptionTab';
 import ProgressTab from './ProgressTab';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import PopUpMenu from '../../../../component/common/PopUpMenu';
 
@@ -15,6 +15,7 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 
 export const ChallengeDetailScreen = () => {
   const { t } = useTranslation();
+  const [index, setIndex] = useState(0);
 
   return (
     <View className="flex h-full flex-col bg-white py-2">
@@ -36,7 +37,11 @@ export const ChallengeDetailScreen = () => {
         renderItem={({ item }) => null}
         ListFooterComponent={
           <View className="mt-2">
-            <TabView titles={CHALLENGE_TABS_TITLE_TRANSLATION}>
+            <TabView
+              titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+              activeTabIndex={index}
+              setActiveTabIndex={setIndex}
+            >
               <ProgressTab />
               <DescriptionTab />
             </TabView>

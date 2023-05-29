@@ -4,7 +4,7 @@ import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 import HomeScreen from '../../screen/HomeScreen';
 import NotificationsScreen from '../../screen/NotificationsScreen/NotificationsScreen';
 import ProfileScreen from '../../screen/ProfileScreen/Personal/Personal';
-import CompanyProfileScreen from '../../screen/ProfileScreen/Company/Company';
+import CompanyProfileScreen from '../../screen/ProfileScreen/Company/CompanyProfileScreen';
 import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen';
 import CompanyChallengesScreen from '../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen';
 
@@ -55,8 +55,8 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           ),
           headerRight: (props) => (
             <IconSetting onPress={() => console.log('setting')} />
-          ),
-          tabBarIcon: ({ focused }) => (
+        ),
+        tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
               <FeedSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text

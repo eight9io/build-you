@@ -1,5 +1,7 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Tab } from '@rneui/themed';
+
 import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
 
 import i18n from '../../../../i18n/i18n';
@@ -18,6 +20,7 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 
 export const ChallengeDetailScreen = () => {
   const { t } = useTranslation();
+  const [index, setIndex] = useState(0);
 
   return (
     <View className="flex h-full flex-col bg-white py-2">
@@ -34,19 +37,15 @@ export const ChallengeDetailScreen = () => {
         </View>
       </View>
 
-      <FlatList
-        data={null}
-        renderItem={({ item }) => null}
-        ListFooterComponent={
-          <View className="mt-2">
-            <TabView titles={CHALLENGE_TABS_TITLE_TRANSLATION}>
-              <ProgressTab />
-              <DescriptionTab />
-              <ParticipantsTab paticipant={MOCK_FOLLOW_USERS} />
-            </TabView>
-          </View>
-        }
-      />
+      <TabView
+        titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+        activeTabIndex={index}
+        setActiveTabIndex={setIndex}
+      >
+        <ProgressTab />
+        <DescriptionTab />
+        <ParticipantsTab paticipant={MOCK_FOLLOW_USERS} />
+      </TabView>
     </View>
   );
 };

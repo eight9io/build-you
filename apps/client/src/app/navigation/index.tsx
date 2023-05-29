@@ -30,8 +30,8 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 export const RootNavigation = () => {
   const { t } = useTranslation();
 
-  const accessToken = true;
-  const isFirstTimeSignIn = true;
+  const accessToken = false;
+  const isFirstTimeSignIn = false;
 
   return (
     <NavigationContainer>

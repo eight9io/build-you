@@ -24,7 +24,7 @@ export default function PolicyModal({
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      // transparent={true}
       visible={modalVisible}
       presentationStyle="pageSheet"
     >
@@ -74,15 +74,9 @@ const styles = StyleSheet.create({
   modalView: {
     width: '100%',
     backgroundColor: 'white',
-    borderRadius: 20,
+
     paddingTop: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+
     elevation: 5,
     flex: 1,
     flexDirection: 'column',

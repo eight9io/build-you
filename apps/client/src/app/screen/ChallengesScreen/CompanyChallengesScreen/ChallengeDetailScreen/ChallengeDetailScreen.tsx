@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
 
-import i18n from '../../../../i18n';
+import i18n from '../../../../i18n/i18n';
 import TabView from '../../../../component/common/Tab/TabView';
 import DescriptionTab from './DescriptionTab';
 import ProgressTab from './ProgressTab';

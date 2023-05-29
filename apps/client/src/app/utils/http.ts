@@ -17,35 +17,35 @@ export const setAuthToken = (token: string) => {
   }
 };
 
-export function setupInterceptor() {
-  httpInstance.interceptors.request.use(
-    function (config) {
-      return config;
-    },
-    function (error) {
-      handleError(error);
-      return Promise.reject(error);
-    }
-  );
+// export function setupInterceptor() {
+//   httpInstance.interceptors.request.use(
+//     function (config) {
+//       return config;
+//     },
+//     function (error) {
+//       handleError(error);
+//       return Promise.reject(error);
+//     }
+//   );
 
-  httpInstance.interceptors.response.use(
-    function (res) {
-      const data = res.data;
+//   httpInstance.interceptors.response.use(
+//     function (res) {
+//       if (res.status === 201) {
+//         return res.data;
+//       } else if ([400].includes(res.status)) {
+//         const result = res.data;
+//         console.log(11111, result);
+//         handleError(result);
+//         return result;
+//       }
 
-      if (data.statusCode === 200) {
-        return data;
-      } else if ([400].includes(data.statusCode)) {
-        const result = data?.message || 'Something went wrong';
-        return result;
-      }
-
-      return;
-    },
-    function (error) {
-      handleError(error);
-      return Promise.reject(error);
-    }
-  );
-}
+//       return;
+//     },
+//     function (error) {
+//       handleError(error);
+//       return Promise.reject(error);
+//     }
+//   );
+// }
 
 export default httpInstance;

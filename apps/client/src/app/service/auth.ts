@@ -1,12 +1,15 @@
+import { LoginForm, RegisterForm } from '../types/auth';
 import axios from 'axios';
 
-import { LoginForm } from '../types/auth';
 import http from '../utils/http';
 import { LINKEDIN_LOGIN } from '../common/constants';
 
-export function Login(data: LoginForm) {
+export const serviceLogin = (data: LoginForm) => {
   return http.post('/auth/login', data);
-}
+};
+export const serviceRegister = (data: RegisterForm) => {
+  return http.post('/user/create', data);
+};
 
 export const getLinkedInAccessToken = (code: string) => {
   return http.post(

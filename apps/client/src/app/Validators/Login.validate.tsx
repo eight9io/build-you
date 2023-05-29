@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 export const LoginValidationSchema = () => {
   const { t } = useTranslation();
   return yup.object().shape({
-    email: yup
+    user: yup
       .string()
       .email(t('form.0.error') as string)
       .required(t('form.0.required') as string),
@@ -12,10 +12,10 @@ export const LoginValidationSchema = () => {
     password: yup
       .string()
 
-      .required(t('form.2.required') as string)
+      .required(t('form.3.required') as string)
       .matches(
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-        t('form.2.error') as string
+        t('form.3.error') as string
       ),
   });
 };

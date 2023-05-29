@@ -25,7 +25,7 @@ import { ForgotPasswordValidationSchema } from '../../Validators/ForgotPassword.
 type FormData = {
   email: string;
 };
-export default function index({ navigation }: { navigation: any }) {
+export default function ForgotPassword({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
 
   const {

@@ -12,7 +12,7 @@ import {
   OpenSans_700Bold,
 } from '@expo-google-fonts/open-sans';
 
-import './i18n';
+import './i18n/i18n';
 
 export const App = () => {
   const [fontLoaded] = useFonts({

@@ -137,9 +137,8 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   return (
     <Modal
       animationType="slide"
-      transparent={true}
       visible={modalVisible}
-      presentationStyle="overFullScreen"
+      presentationStyle="pageSheet"
     >
       <SafeAreaView style={styles.centeredView}>
         <View style={styles.modalView}>
@@ -147,6 +146,7 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
             <NavButton
               onPress={() => setModalVisible(false)}
               text={t('button.back') as string}
+              withBackIcon
             />
 
             <Image
@@ -200,15 +200,15 @@ const styles = StyleSheet.create({
   modalView: {
     width: '100%',
     backgroundColor: 'white',
-    borderRadius: 20,
+    // borderRadius: 20,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
     elevation: 5,
     flex: 1,
     flexDirection: 'column',

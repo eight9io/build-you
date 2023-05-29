@@ -9,16 +9,19 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import TextInput from '../../component/common/Inputs/TextInput';
-import { CheckBox, Icon } from '@rneui/themed';
+import { CheckBox } from '@rneui/themed';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterValidationSchema } from '../../Validators/Register.validate';
 import Button from '../../component/common/Buttons/Button';
-import { useNavigation } from '@react-navigation/native';
+
 import PolicyModal from '../../component/modal/PolicyModal';
-import RegisterCreating from '../../component/modal/RegisterCreating';
+
 import IconEyeOn from './asset/icon-eye.svg';
 import IconEyeOff from './asset/eye-off.svg';
 import ErrorText from '../../component/common/ErrorText';
+
+import { serviceRegister } from '../../service/auth';
+import Loading from '../../component/common/Loading';
 type FormData = {
   email: string;
   password: string;
@@ -44,17 +47,43 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [errMessage, setErrMessage] = useState('');
+
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    setIsLoading(true);
+
+    serviceRegister({ email: data.email, password: data.password })
+      .then((res) => {
+        if (res.status == 201) {
+          setTimeout(() => {
+            navigation.navigate('LoginScreen');
+          }, 1500);
+
+          setErrMessage('');
+        } else {
+          setErrMessage(t('errorMessage:internal_error') as string);
+        }
+      })
+      .catch((error) => {
+        setErrMessage(t('errorMessage:internal_error') as string);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      });
   };
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalRegisterCreating, setModalRegisterCreating] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   return (
     <SafeAreaView>
       <View className="flex-column h-full justify-between bg-white px-6  pb-14">
         <View>
-          <View className="flex-column items-center ">
+          <View className="flex-column mb-1 items-center ">
             <Image
               className=" mb-7 mt-10 h-[91px] w-[185px]"
               source={require('./asset/buildYou.png')}
@@ -64,13 +93,19 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
               {t('register_screen.sub_title')}
             </Text>
           </View>
+          {errMessage && (
+            <ErrorText
+              containerClassName="justify-center "
+              message={errMessage}
+            />
+          )}
           <View className="mt-4 flex flex-col ">
             {(
               t('form', {
                 returnObjects: true,
               }) as Array<any>
             ).map((item, index) => {
-              if (item.name === 'code') {
+              if (item.name === 'code' || item.name === 'user') {
                 return;
               } else {
                 return (
@@ -166,15 +201,15 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                     }}
                     checked={ruleBtnChecked}
                     onPress={() => {
-                      setRuleBtnChecked(!ruleBtnChecked);
                       setValue('check_policy', !ruleBtnChecked);
+                      setRuleBtnChecked(!ruleBtnChecked);
                     }}
                     iconType="material-community"
                     checkedIcon="checkbox-marked"
                     uncheckedIcon="checkbox-blank-outline"
                     checkedColor="blue"
                   />
-                  {errors.check_policy && (
+                  {errors.check_policy && !ruleBtnChecked && (
                     <ErrorText message={errors.check_policy?.message} />
                   )}
                 </View>
@@ -188,17 +223,19 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
           title={t('button.next')}
           onPress={handleSubmit(onSubmit)}
         />
+
         <PolicyModal
           navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
         />
-        <RegisterCreating
-          navigation={navigation}
-          modalVisible={modalRegisterCreating}
-          setModalVisible={setModalRegisterCreating}
-        />
       </View>
+      {isLoading && (
+        <Loading
+          containerClassName="absolute top-0 left-0"
+          text={t('register_screen.creating') as string}
+        />
+      )}
     </SafeAreaView>
   );
 }

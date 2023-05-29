@@ -10,7 +10,7 @@ import Header from '../component/common/Header';
 
 import BottomNavBar from '../component/BottomNavBar';
 
-import IntroScreen, { LoginScreen } from '../screen/IntroScreen/IntroScreen';
+import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import NotificationsScreen from '../screen/NotificationsScreen/NotificationsScreen';
 
@@ -24,14 +24,17 @@ import Register from '../screen/RegisterScreen/RegisterScreen';
 import Login from '../screen/LoginScreen/LoginScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 import AppTitle from '../component/common/AppTitle';
+import { useLoginStore } from '../store/auth-store';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = () => {
+  const { setAccessToken, getAccessToken } = useLoginStore();
   const { t } = useTranslation();
 
-  const accessToken = false;
-  const isFirstTimeSignIn = false;
+  const accessToken = getAccessToken();
+
+  const isFirstTimeSignIn = true;
 
   return (
     <NavigationContainer>
@@ -130,9 +133,7 @@ export const RootNavigation = () => {
                 headerLeft: (props) => (
                   <NavButton
                     text={t('button.back') as string}
-                    onPress={() =>
-                      navigation.navigate('IntroScreen', { setModal: true })
-                    }
+                    onPress={() => navigation.navigate('IntroScreen')}
                   />
                 ),
               })}

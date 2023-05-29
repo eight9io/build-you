@@ -101,7 +101,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
               />
             </View> */}
             <View className="mt-5">
-              <ImagePicker />
+              <ImagePicker isSelectedImage={true} />
             </View>
           </View>
         </View>

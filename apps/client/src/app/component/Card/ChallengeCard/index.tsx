@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { getImageFromUrl } from '../../../hooks/getImageFromUrl';
 
 import CheckCircle from '../../asset/check_circle.svg';
-import BackSvg from './asset/back.svg';
+import BackSvg from '../../asset/back.svg';
 import Button from '../../common/Buttons/Button';
 
 interface IChallengeCardProps {

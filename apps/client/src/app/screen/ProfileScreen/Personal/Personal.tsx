@@ -37,7 +37,11 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
 
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
-      <MainNavBar title={'Mario Rossi'} navigation={navigation} />
+      <MainNavBar 
+        title={'Mario Rossi'} 
+        navigation={navigation}
+        withSetting
+      />
       <ProfileComponent />
     </SafeAreaView>
   );

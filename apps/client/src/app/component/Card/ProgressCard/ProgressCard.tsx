@@ -82,7 +82,7 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
       </View>
       <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
 
-      <View className="">
+      <View className="w-full aspect-square">
         <ImageSwiper imageSrc={card.image} />
       </View>
 

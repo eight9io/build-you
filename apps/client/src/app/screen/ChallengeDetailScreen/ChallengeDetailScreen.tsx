@@ -4,6 +4,7 @@ import i18n from '../../i18n/i18n';
 import TabView from '../../component/common/Tab/TabView';
 // import DescriptionTab from './DescriptionTab';
 import ChronoStepTab from './ChronoStepTab';
+import { useState } from 'react';
 
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.chrono_step'),
@@ -13,6 +14,7 @@ export const ChallengeDetailScreen = () => {
   const { t } = useTranslation();
   // const [isCreateChallengeModalVisible, setIsCreateChallengeModalVisible] =
   //   useState(true);
+  const [index, setIndex] = useState(0);
 
   const arrayProgress = [
     {
@@ -98,7 +100,11 @@ export const ChallengeDetailScreen = () => {
       </View>
 
       <View className="flex-1 bg-gray-50  pt-2 ">
-        <TabView titles={CHALLENGE_TABS_TITLE_TRANSLATION}>
+        <TabView
+          titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+          activeTabIndex={index}
+          setActiveTabIndex={setIndex}
+        >
           <ChronoStepTab arrProgress={arrayProgress} />
           {/* <DescriptionTab
             description={

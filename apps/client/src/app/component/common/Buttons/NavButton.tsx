@@ -8,6 +8,7 @@ interface INavButtonProps {
   withIcon?: boolean;
   withBackIcon?: boolean;
   text?: string;
+  textClassName?: string;
   onPress?: () => void;
 }
 
@@ -16,6 +17,7 @@ export const NavButton: FC<INavButtonProps> = ({
   withIcon,
   withBackIcon,
   text,
+  textClassName,
   onPress,
 }) => {
   return (
@@ -28,7 +30,8 @@ export const NavButton: FC<INavButtonProps> = ({
       {withIcon && icon && icon}
       <Text
         className={clsx(
-          'text-primary-default text-h6 pl-[5px] text-center font-normal'
+          'text-primary-default text-h6 pl-[5px] text-center font-normal',
+          textClassName
         )}
       >
         {text}

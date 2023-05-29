@@ -7,8 +7,7 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native';
-import { useRef } from 'react';
-import LinkedInModal from '@gcou/react-native-linkedin';
+import { useState } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,8 @@ import { useEffect } from 'react';
 import IconApple from './asset/Apple.svg';
 import IconGoogle from './asset/Google.svg';
 import IconLinkedIn from './asset/LinkedIn.svg';
+import LinkedInLoginModal from './LinkedInLoginModal';
+import { getLinkedInAccessToken } from '../../../service/auth';
 
 interface Props {
   modalVisible: boolean;
@@ -27,7 +28,7 @@ interface Props {
 }
 const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   const { t } = useTranslation();
-  const linkedInModalRef = useRef<LinkedInModal>(null);
+  const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
   // Use this to ensure closing the popup after finishing login process
   WebBrowser.maybeCompleteAuthSession();
 
@@ -51,14 +52,15 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   // };
 
   // Use id token to authenticate with backend
-  const [googleRequest, googleResponse, googlePromptAsync] = Google.useIdTokenAuthRequest({
-    iosClientId: process.env.NX_IOS_CLIENT_ID,
-    androidClientId: process.env.NX_ANDROID_CLIENT_ID,
-    expoClientId: process.env.NX_EXPO_CLIENT_ID, // Used to run on Expo Go, no needed in development build and production
-    selectAccount: true,
-    scopes: ['profile', 'email'],
-    responseType: 'id_token',
-  });
+  const [googleRequest, googleResponse, googlePromptAsync] =
+    Google.useIdTokenAuthRequest({
+      iosClientId: process.env.NX_IOS_CLIENT_ID,
+      androidClientId: process.env.NX_ANDROID_CLIENT_ID,
+      expoClientId: process.env.NX_EXPO_CLIENT_ID, // Used to run on Expo Go, no needed in development build and production
+      selectAccount: true,
+      scopes: ['profile', 'email'],
+      responseType: 'id_token',
+    });
 
   useEffect(() => {
     if (googleResponse?.type === 'success') {
@@ -76,14 +78,18 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
   };
 
   const handleLinkedInBtnClicked = async () => {
-    linkedInModalRef.current?.open();
+    setLinkedInModalVisible(true);
   };
 
-  const handleLinkedInModalClose = () => {
-    linkedInModalRef.current?.close();
+  const handleLinkedInLoginCancel = () => {
+    setLinkedInModalVisible(false);
   };
 
-  const handleLinkedInLoginSuccess = (token?: string) => {
+  const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
+    setLinkedInModalVisible(false);
+    const result = await getLinkedInAccessToken(authrozationCode);
+    const token = result.data?.access_token;
+    if (!token) throw new Error('Cannot get access token from linkedin');
     console.log('linkedin token: ', token);
   };
 
@@ -174,50 +180,10 @@ const index = ({ navigation, modalVisible, setModalVisible }: Props) => {
               keyExtractor={(item) => item.title}
             />
           </View>
-
-          <LinkedInModal
-            clientID={process.env.NX_LINKEDIN_CLIENT_ID || ''}
-            clientSecret={process.env.NX_LINKEDIN_CLIENT_SECRET || ''}
-            redirectUri={process.env.NX_LINKEDIN_REDIRECT_URI || ''}
-            onSuccess={(token) =>
-              handleLinkedInLoginSuccess(token.access_token)
-            }
-            permissions={['r_liteprofile', 'r_emailaddress']}
-            shouldGetAccessToken={true}
-            ref={linkedInModalRef}
-            areaTouchText={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            onError={(error) => console.log('Linkedin login error: ', error)}
-            renderClose={() => (
-              <View className="absolute left-0 top-0">
-                <NavButton
-                  text="Cancel"
-                  textClassName="text-blue-700 text-xl"
-                  onPress={handleLinkedInModalClose}
-                />
-              </View>
-            )}
-            renderButton={() => null} // Hide default button
-            containerStyle={{
-              width: '100%',
-              height: '100%',
-              justifyContent: 'flex-end',
-              flex: 0,
-              paddingVertical: 0,
-              paddingHorizontal: 0,
-            }}
-            wrapperStyle={{
-              backgroundColor: 'blue',
-              height: '90%',
-              flex: 0,
-              borderWidth: 1,
-              borderColor: 'white',
-            }}
-            closeStyle={{
-              top: '12%',
-              left: 15,
-              width: '100%',
-              backgroundColor: 'transparent',
-            }}
+          <LinkedInLoginModal
+            isVisible={linkedInModalVisible}
+            onLoginCancel={handleLinkedInLoginCancel}
+            onLoginSuccess={handleLinkedInLoginSuccess}
           />
         </View>
       </SafeAreaView>

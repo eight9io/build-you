@@ -26,7 +26,7 @@ import { LoginValidationSchema } from '../../Validators/Login.validate';
 import { LoginForm } from '../../types/auth';
 import { serviceLogin } from '../../service/auth';
 import Loading from '../../component/common/Loading';
-import { useLoginStore } from '../../store/auth-store';
+import { useAuthStore } from '../../store/auth-store';
 
 export default function Login({ navigation }: { navigation: any }) {
   const { t } = useTranslation(['index', 'errorMessage']);
@@ -73,7 +73,7 @@ export default function Login({ navigation }: { navigation: any }) {
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
-  const { setAccessToken, getAccessToken } = useLoginStore();
+  const { setAccessToken, getAccessToken } = useAuthStore();
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);

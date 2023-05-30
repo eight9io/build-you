@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 
 import { RootStackParamList } from './navigation.type';
-import Header from '../component/common/Header';
 
+import Header from '../component/common/Header';
+import AppTitle from '../component/common/AppTitle';
+import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
@@ -18,27 +20,36 @@ import NotificationsScreen from '../screen/NotificationsScreen/NotificationsScre
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
 
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/CompleteProfile';
-
 import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen';
 import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateCompanyChallengeScreen';
 import CompanyChallengeDetailScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
-import NavButton from '../component/common/Buttons/NavButton';
 
-import Register from '../screen/RegisterScreen/RegisterScreen';
 import Login from '../screen/LoginScreen/LoginScreen';
+import Register from '../screen/RegisterScreen/RegisterScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
-import AppTitle from '../component/common/AppTitle';
-import { useLoginStore } from '../store/auth-store';
+
+import { useAuthStore } from '../store/auth-store';
+import { useGetUserData } from '../hooks/useGetUser';
+
+import { checkAuthTokenValidation } from '../utils/checkAuth';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = () => {
-  const { setAccessToken, getAccessToken } = useLoginStore();
+  const { getAccessToken } = useAuthStore();
   const { t } = useTranslation();
-
   const accessToken = getAccessToken();
+  const { isCompleteProfile, loading } = useGetUserData();
 
-  const isFirstTimeSignIn = true;
+  useEffect(() => {
+    const checkToken = async () => {
+      const isValid = await checkAuthTokenValidation();
+      if (!isValid) {
+        // TODO: handle logout
+      }
+    };
+    checkToken();
+  }, []);
 
   return (
     <NavigationContainer>
@@ -47,7 +58,7 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        {accessToken && isFirstTimeSignIn && (
+        {accessToken && !isCompleteProfile && (
           <>
             <RootStack.Screen
               name="CompleteProfileScreen"
@@ -70,7 +81,7 @@ export const RootNavigation = () => {
             />
           </>
         )}
-        {accessToken && !isFirstTimeSignIn && (
+        {accessToken && isCompleteProfile && (
           <>
             <RootStack.Screen
               name="HomeScreen"

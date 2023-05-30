@@ -12,7 +12,7 @@ import Modal from 'react-native-modal';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
 import { OnboardingScreen1Validators } from '../../../Validators/Onboarding.validate';
 
 import dayjs from '../../../utils/date.util';
@@ -56,15 +56,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     setValue,
     getValues,
   } = useForm<{
-    firstName: string;
-    lastName: string;
-    birthday: Date;
+    name: string;
+    surname: string;
+    birth: Date;
     occupation: string;
   }>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      birthday: new Date(),
+      name: '',
+      surname: '',
+      birth: new Date(),
       occupation: '',
     },
     resolver: yupResolver(OnboardingScreen1Validators()),
@@ -73,7 +73,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const handleDatePicked = (date?: Date) => {
     if (date) {
-      setValue('birthday', date);
+      setValue('birth', date);
       setSelectedDate(date);
     }
 
@@ -127,7 +127,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
             <View className="pt-3">
               <Controller
                 control={control}
-                name="firstName"
+                name="name"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col">
                     <TextInput
@@ -139,11 +139,11 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                       value={value}
                       className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-1 text-base font-normal"
                     />
-                    {errors.firstName && (
+                    {errors.name && (
                       <View className="flex flex-row pt-2">
                         <Warning />
                         <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.firstName.message}
+                          {errors.name.message}
                         </Text>
                       </View>
                     )}
@@ -154,7 +154,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
             <View className="pt-3">
               <Controller
                 control={control}
-                name="lastName"
+                name="surname"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col">
                     <TextInput
@@ -166,11 +166,11 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                       value={value}
                       className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-1 text-base font-normal"
                     />
-                    {errors.lastName && (
+                    {errors.surname && (
                       <View className="flex flex-row pt-2">
                         <Warning />
                         <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.lastName.message}
+                          {errors.surname.message}
                         </Text>
                       </View>
                     )}
@@ -181,12 +181,12 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
             <View className="pt-3">
               <Controller
                 control={control}
-                name="birthday"
+                name="birth"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col">
                     <TextInput
                       label="Birthday"
-                      placeholder={'Enter your birthday'}
+                      placeholder={'Enter your birth'}
                       placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                       rightIcon={
                         <TouchableOpacity
@@ -203,11 +203,11 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                       onPress={() => setShowDateTimePicker(true)}
                       className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-2 text-base font-normal"
                     />
-                    {errors.birthday && (
+                    {errors.birth && (
                       <View className="flex flex-row pt-2">
                         <Warning />
                         <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.birthday.message}
+                          {errors.birth.message}
                         </Text>
                       </View>
                     )}

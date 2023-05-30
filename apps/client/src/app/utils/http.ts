@@ -9,7 +9,8 @@ const httpInstance = axios.create({
 });
 
 const handleError = (error: any) => console.log(error);
-export const setAuthToken = (token: string) => {
+
+export const setAuthToken = (token: string | null) => {
   if (token) {
     httpInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {

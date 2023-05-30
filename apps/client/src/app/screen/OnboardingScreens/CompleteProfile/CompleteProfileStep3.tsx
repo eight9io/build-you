@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import httpInstance from '../../../utils/http';
 
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import Button from '../../../component/common/Buttons/Button';
@@ -82,15 +82,15 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
     setValue,
     getValues,
   } = useForm<{
-    firstName: string;
-    lastName: string;
-    birthday: Date;
+    name: string;
+    surname: string;
+    birth: Date;
     occupation: string;
   }>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      birthday: new Date(),
+      name: '',
+      surname: '',
+      birth: new Date(),
       occupation: '',
     },
   });

@@ -6,15 +6,15 @@ export const OnboardingScreen1Validators = () => {
   const { t } = useTranslation();
 
   return yup.object().shape({
-    firstName: yup
+    name: yup
       .string()
       .required(t('form_onboarding.screen_1.first_name_error') as string),
 
-    lastName: yup
+    surname: yup
       .string()
       .required(t('form_onboarding.screen_1.last_name_error') as string),
 
-    birthday: yup
+    birth: yup
       .string()
       .required(t('form_onboarding.screen_1.birthday_error') as string),
 

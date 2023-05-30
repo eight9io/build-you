@@ -12,7 +12,10 @@ import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
 
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
+import { useUserProfileStore } from '../../../store/user-data';
+
+import { useGetUserData } from '../../../hooks/useGetUser';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
@@ -155,6 +158,12 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     []
   );
 
+  const { getUserProfile } = useUserProfileStore();
+  const { setIsCompleteProfile } = useGetUserData();
+
+  const userData = getUserProfile();
+  console.log(userData.id);
+
   useEffect(() => {
     const fetchSkills = async () => {
       try {
@@ -207,23 +216,25 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     const profile = getProfile();
     if (!checkSoftSkillRequired() || !checkAllSkillValueGreaterThanZero())
       return;
-    // setAuthToken( );
     const softSkills = convertSelectedToSoftSkillProps(
       selectedCompetencedSkill
     );
+    console.log(userData);
     httpInstance
-      .put('/user/update/ffe72529-b651-467d-85f0-ef4a28628bf8', {
+      .put(`/user/update/${userData.id}`, {
         ...profile,
         softSkills: softSkills,
       })
-      .then(() => {
-        console.log('success');
+      .then((res) => {
+        if (res.status === 200) {
+          setIsCompleteProfile(true);
+          navigation.navigate('CompleteProfileFinishScreen');
+        }
       })
       .catch((err) => {
         console.log(err);
+        navigation.navigate('LoginScreen');
       });
-
-    navigation.navigate('CompleteProfileFinishScreen');
   };
 
   const addCompetencedSkill = (skill: IFormValueInput | undefined) => {

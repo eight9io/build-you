@@ -34,16 +34,16 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
     setValue,
     getValues,
   } = useForm<{
-    firstName: string;
-    lastName: string;
-    birthday: Date;
+    name: string;
+    surname: string;
+    birth: Date;
     occupation: string;
     biography: string;
   }>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      birthday: new Date(),
+      name: '',
+      surname: '',
+      birth: new Date(),
       occupation: '',
       biography: '',
     },
@@ -52,7 +52,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
   // TODO: handle change CREATE text color when input is entered
 
   const handleDatePicked = (date?: Date) => {
-    if (date) setValue('birthday', date);
+    if (date) setValue('birth', date);
     setShowDateTimePicker(false);
   };
 
@@ -98,7 +98,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                     />
                   </View>
                 )}
-                name="firstName"
+                name="name"
               />
             </View>
             <View className="pt-5">
@@ -120,7 +120,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                     />
                   </View>
                 )}
-                name="lastName"
+                name="surname"
               />
             </View>
             <View className="pt-5">
@@ -133,7 +133,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                   <View className="flex flex-col gap-1">
                     <TextInput
                       label="Birthday"
-                      placeholder={'Enter your birthday'}
+                      placeholder={'Enter your birth'}
                       placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                       rightIcon={<CalendarIcon />}
                       onBlur={onBlur}
@@ -146,7 +146,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                     />
                   </View>
                 )}
-                name="birthday"
+                name="birth"
               />
             </View>
             {/* TODO: Implement a slide modal picker */}
@@ -198,7 +198,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             </View>
           </View>
           <DateTimePicker
-            date={getValues('birthday')}
+            date={getValues('birth')}
             mode={'date'}
             show={showDateTimePicker}
             onDatePicked={handleDatePicked}

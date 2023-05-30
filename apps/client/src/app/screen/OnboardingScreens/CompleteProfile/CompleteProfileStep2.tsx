@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import SignupAvatar from '../../../component/common/Avatar/SignupAvatar';

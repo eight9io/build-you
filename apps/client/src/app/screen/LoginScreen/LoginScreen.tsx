@@ -5,6 +5,8 @@ import {
   SafeAreaView,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
+  Platform,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,38 +28,14 @@ import { LoginValidationSchema } from '../../Validators/Login.validate';
 import { LoginForm } from '../../types/auth';
 import { serviceLogin } from '../../service/auth';
 import Loading from '../../component/common/Loading';
+
 import { useAuthStore } from '../../store/auth-store';
+import AppleLoginButton from '../../component/common/Buttons/AppleLoginButton';
+import LinkedInLoginButton from '../../component/common/Buttons/LinkedInLoginButton';
+import GoogleLoginButton from '../../component/common/Buttons/GoogleLoginButton';
 
 export default function Login({ navigation }: { navigation: any }) {
   const { t } = useTranslation(['index', 'errorMessage']);
-  const arrayButton = [
-    {
-      containerClassName:
-        'bg-black-default flex-row  items-center justify-center m-2',
-
-      Icon: <IconApple />,
-      onPress: () => {
-        console.log('apple');
-      },
-    },
-    {
-      containerClassName: 'bg-sky-20 flex-row  items-center justify-center m-2',
-
-      Icon: <IconLinkedIn />,
-      onPress: () => {
-        console.log('linked');
-      },
-    },
-    {
-      containerClassName:
-        'bg-sky-default  flex-row  items-center justify-center m-2',
-
-      Icon: <IconGoogle />,
-      onPress: () => {
-        console.log('google');
-      },
-    },
-  ];
   const [errMessage, setErrMessage] = useState('');
   const {
     control,
@@ -113,28 +91,11 @@ export default function Login({ navigation }: { navigation: any }) {
                 resizeMode="cover"
               />
             </View>
-            <FlatList
-              numColumns={3}
-              className="mt-3"
-              data={arrayButton}
-              renderItem={({ item, index }) => (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    margin: 1,
-                  }}
-                >
-                  <Button
-                    key={index}
-                    containerClassName={item.containerClassName}
-                    Icon={item.Icon}
-                    onPress={item.onPress}
-                  />
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
+            <View className="flex-row">
+              {Platform.OS === 'ios' ? <AppleLoginButton /> : null}
+              <LinkedInLoginButton />
+              <GoogleLoginButton />
+            </View>
             <View className="mt-5 flex-row items-center justify-center px-6">
               <View className="bg-black-default h-[0.5px] w-[50%]"></View>
               <Text className="text-gray-dark mx-3 text-base font-normal">

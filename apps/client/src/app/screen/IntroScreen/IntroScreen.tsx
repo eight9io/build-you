@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Swiper from 'react-native-swiper';
 import Button from '../../component/common/Buttons/Button';
 
-import LoginModal from '../../component/modal/LoginModal';
+import RegisterModal from '../../component/modal/RegisterModal/RegisterModal';
 
 export const IntroScreen = ({ navigation, route }: any) => {
   const { t } = useTranslation();
@@ -72,7 +72,7 @@ export const IntroScreen = ({ navigation, route }: any) => {
           </Text>
         </TouchableOpacity>
 
-        <LoginModal
+        <RegisterModal
           navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}

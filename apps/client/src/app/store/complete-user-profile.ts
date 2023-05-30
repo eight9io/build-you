@@ -1,51 +1,36 @@
 import { create } from 'zustand';
+import { IUserData } from '../types/user';
+
+interface IUserDataUpload {
+  id: string;
+  avatar?: string;
+  name: string;
+  surname: string;
+  birth: string;
+  occupation?: any;
+  biography?: string;
+  video?: string;
+  skills?: any[];
+  softSkills?: any[];
+}
 
 export interface CompleteProfileStore {
-  profile: {
-    avatar?: string;
-    firstName: string;
-    lastName: string;
-    birthDay: string;
-    occupation: string;
-    biography?: string;
-    video?: string;
-    skills?: string[];
-    softSkills?: any[];
-  };
-  setProfile: (profile: {
-    avatar: string;
-    firstName: string;
-    lastName: string;
-    birthDay: string;
-    occupation: string;
-    biography?: string;
-    video?: string;
-    skills?: string[];
-    softSkills?: any[];
-  }) => void;
+  profile: IUserDataUpload;
+  setProfile: (profile: IUserDataUpload) => void;
   setBiography: (bio: string, video: string) => void;
   setSkills: (skills: string[]) => void;
   setSoftSkills: (softSkills: any[]) => void;
-  getProfile: () => {
-    avatar?: string;
-    firstName: string;
-    lastName: string;
-    birthDay: string;
-    occupation: string;
-    biography?: string;
-    video?: string;
-    skills?: string[];
-    softSkills?: any[];
-  };
+  getProfile: () => IUserDataUpload;
 }
 
 export const useCompleteProfileStore = create<CompleteProfileStore>(
   (set, get) => ({
     profile: {
+      id: '',
       avatar: '',
-      firstName: '',
-      lastName: '',
-      birthDay: '',
+      name: '',
+      surname: '',
+      birth: '',
       occupation: '',
       biography: '',
       video: '',

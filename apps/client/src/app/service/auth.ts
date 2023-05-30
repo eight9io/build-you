@@ -29,3 +29,7 @@ export const getLinkedInAccessToken = (code: string) => {
     }
   );
 };
+
+export const validateInAppToken = (token: string) => {
+  return http.post('/auth/validate', { token });
+}

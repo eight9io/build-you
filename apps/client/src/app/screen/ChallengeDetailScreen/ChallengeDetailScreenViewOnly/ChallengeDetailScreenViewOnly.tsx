@@ -5,7 +5,7 @@ import { FC, useState } from 'react';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import i18n from '../../../i18n';
+import i18n from '../../../i18n/i18n';
 import TabView from '../../../component/common/Tab/TabView';
 import Header from '../../../component/common/Header';
 import NavButton from '../../../component/common/Buttons/NavButton';

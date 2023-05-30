@@ -1,17 +1,17 @@
 import { Modal, View } from 'react-native';
 import { FC, useState } from 'react';
 import WebView from 'react-native-webview';
-import { LINKEDIN_LOGIN } from '../../../common/constants';
-import { getUrlParam } from '../../../utils/common';
-import NavButton from '../../common/Buttons/NavButton';
+import { LINKEDIN_LOGIN } from '../../common/constants';
+import { getUrlParam } from '../../utils/common';
+import NavButton from '../common/Buttons/NavButton';
 
-interface ILinkedInLoginModalProps {
+interface ILinkedInModalProps {
   isVisible: boolean;
   onLoginCancel: () => void;
   onLoginSuccess: (authrozationCode: string) => void;
 }
 
-const LinkedInLoginModal: FC<ILinkedInLoginModalProps> = ({
+const LinkedInModal: FC<ILinkedInModalProps> = ({
   isVisible,
   onLoginSuccess,
   onLoginCancel,
@@ -67,4 +67,4 @@ const LinkedInLoginModal: FC<ILinkedInLoginModalProps> = ({
   );
 };
 
-export default LinkedInLoginModal;
+export default LinkedInModal;

@@ -36,6 +36,7 @@
     "dayjs": "^1.11.7",
     "eas-cli": "^3.13.0",
     "expo": "48.0.15",
+    "expo-apple-authentication": "~6.0.1",
     "expo-asset": "~8.9.1",
     "expo-auth-session": "~4.0.3",
     "expo-av": "~13.2.1",

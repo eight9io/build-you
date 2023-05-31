@@ -47,7 +47,13 @@
     },
     "sync-deps": {
       "executor": "@nx/expo:sync-deps",
-      "options": {}
+      "options": {
+        "include": [
+          "react-native-reanimated",
+          "react-native-screens",
+          "@react-native-async-storage/async-storage"
+        ]
+      }
     },
     "ensure-symlink": {
       "executor": "@nx/expo:ensure-symlink",

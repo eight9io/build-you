@@ -176,6 +176,7 @@ export const RootNavigation = () => {
                   <NavButton
                     text={t('button.back') as string}
                     onPress={() => navigation.navigate('IntroScreen')}
+                    withBackIcon
                   />
                 ),
               })}
@@ -215,6 +216,7 @@ export const RootNavigation = () => {
                   <NavButton
                     text={t('button.back') as string}
                     onPress={() => navigation.navigate('LoginScreen')}
+                    withBackIcon
                   />
                 ),
               })}

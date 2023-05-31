@@ -81,7 +81,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView>
+    <SafeAreaView className=" h-full bg-white ">
       <View className="flex-column h-full justify-between bg-white px-6  pb-14">
         <View>
           <View className="flex-column mb-1 items-center ">

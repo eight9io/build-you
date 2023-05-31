@@ -77,8 +77,8 @@ export default function Login({ navigation }: { navigation: any }) {
   const [isLoading, setIsLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView>
-      <View className="relative">
+    <SafeAreaView className=" h-full bg-white ">
+      <View className="relative h-full bg-white ">
         <View className="flex-column h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center  ">

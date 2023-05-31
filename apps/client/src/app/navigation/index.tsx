@@ -196,6 +196,7 @@ export const RootNavigation = () => {
                     onPress={() =>
                       navigation.navigate('IntroScreen', { setModal: true })
                     }
+                    withBackIcon
                   />
                 ),
               })}

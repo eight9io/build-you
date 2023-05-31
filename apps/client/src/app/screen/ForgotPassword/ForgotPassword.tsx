@@ -47,7 +47,11 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
         }
       })
       .catch((error) => {
-        setErrMessage(errorMessage(error, 'err_forgot_password') as string);
+        if (error.response?.data.statusCode === 400) {
+          setModalVisible(true);
+        } else {
+          setErrMessage(errorMessage(error, 'err_forgot_password') as string);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -57,7 +61,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className=" h-full bg-white ">
       <View className="flex-column h-full justify-between bg-white px-6  pb-14">
         <View>
           <View className="flex-column items-center  ">

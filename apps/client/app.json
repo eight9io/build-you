@@ -6,18 +6,22 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.jpg",
+      "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.buildyoutest.client",
-      "associatedDomains": ["applinks:com.buildyoutest.client"],
+      "associatedDomains": [
+        "applinks:com.buildyoutest.client"
+      ],
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
@@ -25,7 +29,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.buildyoutest.client"
+      "package": "com.buildyoutest.client",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -33,11 +41,6 @@
     },
     "userInterfaceStyle": "automatic",
     "scheme": "com.buildyoutest.client",
-    "extra": {
-      "eas": {
-        "projectId": "fbbb7954-7ea7-4351-951c-fb3150b55b3d"
-      }
-    },
     "plugins": [
       [
         "expo-av",
@@ -54,6 +57,11 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "739022da-a6a1-403c-bb0a-0d9371925e8d"
+      }
+    }
   }
 }

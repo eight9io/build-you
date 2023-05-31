@@ -1,4 +1,9 @@
-import { LoginForm, RegisterForm } from '../types/auth';
+import {
+  ChangePasswordForm,
+  ForgotPasswordForm,
+  LoginForm,
+  RegisterForm,
+} from '../types/auth';
 import axios from 'axios';
 
 import http from '../utils/http';
@@ -9,6 +14,9 @@ export const serviceLogin = (data: LoginForm) => {
 };
 export const serviceRegister = (data: RegisterForm) => {
   return http.post('/user/create', data);
+};
+export const serviceChangePassword = (data: ChangePasswordForm) => {
+  return http.post('/auth/changePassword', data);
 };
 
 export const getLinkedInAccessToken = (code: string) => {
@@ -29,7 +37,10 @@ export const getLinkedInAccessToken = (code: string) => {
     }
   );
 };
+export const serviceForgotPassword = (email: string) => {
+  return http.get(`/auth/forgot/${email}`);
+};
 
 export const validateInAppToken = (token: string) => {
   return http.post('/auth/validate', { token });
-}
+};

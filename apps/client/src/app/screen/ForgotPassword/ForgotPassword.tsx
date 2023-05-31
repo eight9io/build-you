@@ -1,39 +1,32 @@
-import {
-  View,
-  Text,
-  Image,
-  SafeAreaView,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import TextInput from '../../component/common/Inputs/TextInput';
-import { CheckBox, Icon } from '@rneui/themed';
+
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RegisterValidationSchema } from '../../Validators/Register.validate';
+
 import Button from '../../component/common/Buttons/Button';
 
-import PolicyModal from '../../component/modal/PolicyModal';
-import RegisterCreating from '../../component/modal/RegisterCreating';
 import ErrorText from '../../component/common/ErrorText';
 
-import { LoginValidationSchema } from '../../Validators/Login.validate';
 import ForgotPasswordModal from '../../component/modal/ForgotPasswordModal';
 import { ForgotPasswordValidationSchema } from '../../Validators/ForgotPassword.validate';
-type FormData = {
-  email: string;
-};
+import { ForgotPasswordForm } from '../../types/auth';
+import Loading from '../../component/common/Loading';
+import { serviceForgotPassword } from '../../service/auth';
+import { err_server, errorMessage } from '../../utils/statusCode';
+
 export default function ForgotPassword({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [errMessage, setErrMessage] = useState('');
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
-  } = useForm<FormData>({
+    watch,
+  } = useForm<ForgotPasswordForm>({
     defaultValues: {
       email: '',
     },
@@ -41,9 +34,26 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = (data: ForgotPasswordForm) => {
+    setIsLoading(true);
+
+    serviceForgotPassword(data?.email as string)
+      .then((res) => {
+        if (res.status == 200) {
+          setModalVisible(true);
+          setErrMessage('');
+        } else {
+          setErrMessage(err_server);
+        }
+      })
+      .catch((error) => {
+        setErrMessage(errorMessage(error, 'err_forgot_password') as string);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
+
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -57,21 +67,19 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
               resizeMode="cover"
             />
           </View>
-
+          {errMessage && (
+            <ErrorText
+              containerClassName="justify-center "
+              message={errMessage}
+            />
+          )}
           <View className="mt-4 flex flex-col ">
             {(
               t('form', {
                 returnObjects: true,
               }) as Array<any>
             ).map((item, index) => {
-              if (
-                item.name === 'check_policy' ||
-                item.name === 'repeat_password' ||
-                item.name === 'password' ||
-                item.name === 'code'
-              ) {
-                return;
-              } else {
+              if (item.name === 'email') {
                 return (
                   <View className="pt-5" key={index}>
                     <Controller
@@ -94,9 +102,11 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                         </View>
                       )}
                     />
-                    {errors[item.name as keyof FormData] && (
+                    {errors[item.name as keyof ForgotPasswordForm] && (
                       <ErrorText
-                        message={errors[item.name as keyof FormData]?.message}
+                        message={
+                          errors[item.name as keyof ForgotPasswordForm]?.message
+                        }
                       />
                     )}
                   </View>
@@ -113,12 +123,21 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
             onPress={handleSubmit(onSubmit)}
           />
         </View>
-        <ForgotPasswordModal
-          navigation={navigation}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
+        {watch('email') && (
+          <ForgotPasswordModal
+            navigation={navigation}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            email={watch('email')}
+          />
+        )}
       </View>
+      {isLoading && (
+        <Loading
+          containerClassName="absolute top-0 left-0"
+          text={t('forgot_password.sub_title') as string}
+        />
+      )}
     </SafeAreaView>
   );
 }

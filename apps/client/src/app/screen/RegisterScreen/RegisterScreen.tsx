@@ -22,6 +22,7 @@ import ErrorText from '../../component/common/ErrorText';
 
 import { serviceRegister } from '../../service/auth';
 import Loading from '../../component/common/Loading';
+import { err_server, errorMessage } from '../../utils/statusCode';
 type FormData = {
   email: string;
   password: string;
@@ -64,11 +65,11 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
           setErrMessage('');
         } else {
-          setErrMessage(t('errorMessage:internal_error') as string);
+          setErrMessage(err_server);
         }
       })
       .catch((error) => {
-        setErrMessage(t('errorMessage:internal_error') as string);
+        setErrMessage(errorMessage(error, 'err_register') as string);
       })
       .finally(() => {
         setTimeout(() => {
@@ -78,7 +79,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   };
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
   return (
     <SafeAreaView>
       <View className="flex-column h-full justify-between bg-white px-6  pb-14">
@@ -122,21 +123,28 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                             rightIcon={
                               (item.name === 'repeat_password' ||
                                 item.name === 'password') &&
-                              (!showPassword ? (
+                              (!hidePassword ? (
                                 <TouchableOpacity
-                                  onPress={() => setShowPassword(!showPassword)}
+                                  onPress={() => setHidePassword(!hidePassword)}
                                   className=" mt-[2px]"
                                 >
                                   <IconEyeOn />
                                 </TouchableOpacity>
                               ) : (
                                 <TouchableOpacity
-                                  onPress={() => setShowPassword(!showPassword)}
+                                  onPress={() => setHidePassword(!hidePassword)}
                                   className=" mt-[2px]"
                                 >
                                   <IconEyeOff />
                                 </TouchableOpacity>
                               ))
+                            }
+                            secureTextEntry={
+                              (item.name === 'password' ||
+                                item.name === 'repeat_password') &&
+                              hidePassword
+                                ? true
+                                : false
                             }
                             label={item.label}
                             placeholder={item.placeholder}

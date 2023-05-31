@@ -21,20 +21,26 @@ import ErrorText from '../common/ErrorText';
 import TextInput from '../common/Inputs/TextInput';
 import IconEyeOn from './asset/icon-eye.svg';
 import IconEyeOff from './asset/eye-off.svg';
+import Loading from '../common/Loading';
+import { serviceChangePassword } from '../../service/auth';
+import { err_server, errorMessage } from '../../utils/statusCode';
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
   navigation?: any;
+  email?: string;
 }
 type FormData = {
   code: any;
   password: string;
   repeat_password: string;
+  email: string;
 };
 export default function ForgotPasswordModal({
   navigation,
   modalVisible,
   setModalVisible,
+  email,
 }: Props) {
   const { t } = useTranslation();
   const {
@@ -44,21 +50,50 @@ export default function ForgotPasswordModal({
     setValue,
   } = useForm<FormData>({
     defaultValues: {
+      code: '',
       password: '',
       repeat_password: '',
+      email: email || '',
     },
     resolver: yupResolver(ResetPasswordValidationSchema()),
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [errMessage, setErrMessage] = useState('');
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    setIsLoading(true);
+
+    serviceChangePassword({
+      code: data.code,
+      email: data.email,
+      password: data.password,
+    })
+      .then((res) => {
+        if (res.status == 201) {
+          setTimeout(() => {
+            navigation.navigate('LoginScreen');
+          }, 1500);
+
+          setErrMessage('');
+        } else {
+          setErrMessage(err_server);
+        }
+      })
+      .catch((error) => {
+        setErrMessage(errorMessage(error, 'err_register') as string);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      });
   };
-  const [showPassword, setShowPassword] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
   return (
     <Modal
       animationType="slide"
-      transparent={true}
       visible={modalVisible}
       presentationStyle="pageSheet"
     >
@@ -66,7 +101,13 @@ export default function ForgotPasswordModal({
         <View className="h-full pt-5">
           <Header
             title={t('forgot_password.title') as string}
-            leftBtn={<NavButton onPress={() => setModalVisible(false)} />}
+            leftBtn={
+              <NavButton
+                text={t('button.back') as string}
+                onPress={() => setModalVisible(false)}
+                withBackIcon
+              />
+            }
           />
 
           <SafeAreaView>
@@ -78,15 +119,23 @@ export default function ForgotPasswordModal({
                     source={require('./asset/buildYou1.png')}
                     resizeMode="cover"
                   />
+                  <Text className="text-h6 text-gray-dark px-2 text-center leading-6 ">
+                    {t('forgot_password.sub_title')}
+                  </Text>
                 </View>
-
+                {errMessage && (
+                  <ErrorText
+                    containerClassName="justify-center mt-4"
+                    message={errMessage}
+                  />
+                )}
                 <View className="mt-4 flex flex-col ">
                   {(
                     t('form', {
                       returnObjects: true,
                     }) as Array<any>
                   ).map((item, index) => {
-                    if (item.name === 'email') {
+                    if (item.name === 'email' || item.name === 'user') {
                       return;
                     } else {
                       return (
@@ -105,10 +154,10 @@ export default function ForgotPasswordModal({
                                   rightIcon={
                                     (item.name === 'repeat_password' ||
                                       item.name === 'password') &&
-                                    (!showPassword ? (
+                                    (!hidePassword ? (
                                       <TouchableOpacity
                                         onPress={() =>
-                                          setShowPassword(!showPassword)
+                                          setHidePassword(!hidePassword)
                                         }
                                         className=" mt-[2px]"
                                       >
@@ -117,13 +166,20 @@ export default function ForgotPasswordModal({
                                     ) : (
                                       <TouchableOpacity
                                         onPress={() =>
-                                          setShowPassword(!showPassword)
+                                          setHidePassword(!hidePassword)
                                         }
                                         className=" mt-[2px]"
                                       >
                                         <IconEyeOff />
                                       </TouchableOpacity>
                                     ))
+                                  }
+                                  secureTextEntry={
+                                    (item.name === 'password' ||
+                                      item.name === 'repeat_password') &&
+                                    hidePassword
+                                      ? true
+                                      : false
                                   }
                                   label={item.label}
                                   placeholder={item.placeholder}
@@ -158,6 +214,12 @@ export default function ForgotPasswordModal({
                 />
               </View>
             </View>
+            {isLoading && (
+              <Loading
+                containerClassName="absolute top-0 left-0"
+                text={t('change_password.changing') as string}
+              />
+            )}
           </SafeAreaView>
         </View>
       </View>

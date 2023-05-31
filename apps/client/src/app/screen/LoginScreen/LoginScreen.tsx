@@ -29,6 +29,8 @@ import { LoginForm } from '../../types/auth';
 import { serviceLogin } from '../../service/auth';
 import Loading from '../../component/common/Loading';
 
+import { err_server, errorMessage } from '../../utils/statusCode';
+
 import { useAuthStore } from '../../store/auth-store';
 import AppleLoginButton from '../../component/common/Buttons/AppleLoginButton';
 import LinkedInLoginButton from '../../component/common/Buttons/LinkedInLoginButton';
@@ -61,16 +63,11 @@ export default function Login({ navigation }: { navigation: any }) {
           setAccessToken(res?.data.authorization || null);
           setErrMessage('');
         } else {
-          setErrMessage(t('errorMessage:internal_error') as string);
+          setErrMessage(err_server);
         }
       })
       .catch((error) => {
-        const responseBody = error.response?.data;
-        if (responseBody?.statusCode == 400) {
-          setErrMessage(t('errorMessage:incorrect_email') as string);
-        } else {
-          setErrMessage(t('errorMessage:internal_error') as string);
-        }
+        setErrMessage(errorMessage(error, 'err_login') as string);
       })
       .finally(() => {
         setIsLoading(false);

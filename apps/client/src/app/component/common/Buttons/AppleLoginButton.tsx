@@ -12,6 +12,9 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({ title }) => {
 
   const handleAppleLogin = async () => {
     try {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      if (!isAvailable) throw new Error('Apple login is not available');
+      
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import httpInstance, { setAuthToken } from '../utils/http';
+import httpInstance, { setAuthTokenToHttpHeader } from '../utils/http';
 import { useUserProfileStore } from '../store/user-data';
 import { useAuthStore } from '../store/auth-store';
 
@@ -7,18 +7,18 @@ import { IUserData } from '../types/user';
 
 export const useGetUserData = () => {
   const [isCompleteProfile, setIsCompleteProfile] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const { getAccessToken } = useAuthStore();
   const { setUserProfile } = useUserProfileStore();
 
   const accessToken = getAccessToken();
 
-  useEffect(() => {
+  const fetchingUserData = async () => {
+    console.log('runned');
+    setLoading(true);
     if (accessToken !== null) {
-      setLoading(true);
-      setAuthToken(accessToken);
-
-      httpInstance
+      setAuthTokenToHttpHeader(accessToken);
+      await httpInstance
         .get('/user/me')
         .then((res) => {
           setUserProfile(res.data);
@@ -27,11 +27,20 @@ export const useGetUserData = () => {
           }
         })
         .catch((err) => {
-          console.log('err', err);
+          console.error('err', err);
         });
-      setLoading(false);
+    } else {
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchingUserData();
   }, [accessToken]);
 
-  return { isCompleteProfile, setIsCompleteProfile, loading };
+  return {
+    isCompleteProfile,
+    setIsCompleteProfile,
+    fetchingUserDataLoading: loading,
+  };
 };

@@ -45,7 +45,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       }
       setThumbnailImage(uri);
     } catch (e) {
-      console.log(e);
+      console.error('generateThumbnail', e);
     }
   };
   useEffect(() => {
@@ -103,10 +103,10 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
       <TouchableOpacity
         onPress={pickVideo}
-        className="bg-gray-light mt-5 h-14 rounded-xl flex flex-row items-center justify-center "
+        className="bg-gray-light mt-5 flex h-14 flex-row items-center justify-center rounded-xl "
         disabled={!!isSelectedImage}
       >
-        <View className="rounded-xl flex flex-row items-center justify-center">
+        <View className="flex flex-row items-center justify-center rounded-xl">
           <CameraIcon fill={!isSelectedImage ? '#1C1B1F' : '#C5C8D2'} />
           <Text
             className={clsx(

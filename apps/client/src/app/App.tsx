@@ -2,7 +2,6 @@
 import React, { useCallback, useState } from 'react';
 import RootNavigation from './navigation';
 import { MenuProvider } from 'react-native-popup-menu';
-import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
   OpenSans_300Light,

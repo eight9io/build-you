@@ -54,7 +54,6 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   const removeVideo = () => {
     setPickedVideo([]);
   };
-  console.log(pickedVideo);
 
   return (
     <View className="relative flex h-full w-full flex-col items-center justify-start">

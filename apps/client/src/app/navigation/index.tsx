@@ -55,7 +55,8 @@ export const RootNavigation = () => {
     <NavigationContainer>
       <RootStack.Navigator
         screenOptions={{
-          headerShown: false,
+          headerBackVisible: false,
+          headerTitleAlign: 'center',
         }}
       >
         {accessToken && !isCompleteProfile && (
@@ -170,7 +171,7 @@ export const RootNavigation = () => {
               component={Login}
               options={({ navigation }) => ({
                 headerShown: true,
-                headerTitle: () => <AppTitle title={t('login')} />,
+                headerTitle: () => <AppTitle title={t('login_screen.login')} />,
 
                 headerLeft: (props) => (
                   <NavButton

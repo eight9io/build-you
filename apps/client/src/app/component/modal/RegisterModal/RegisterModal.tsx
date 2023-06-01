@@ -14,6 +14,7 @@ import Button from '../../common/Buttons/Button';
 import AppleLoginButton from '../../common/Buttons/AppleLoginButton';
 import LinkedInLoginButton from '../../common/Buttons/LinkedInLoginButton';
 import GoogleLoginButton from '../../common/Buttons/GoogleLoginButton';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
   modalVisible: boolean;
@@ -30,18 +31,19 @@ const RegisterModal = ({
   return (
     <Modal
       animationType="slide"
-      transparent={true}
       visible={modalVisible}
-      presentationStyle="overFullScreen"
+      presentationStyle="pageSheet"
+      style={{ borderRadius: 10 }}
     >
-      <SafeAreaView style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <View className="absolute z-10 my-4 ml-6">
-            <NavButton
-              onPress={() => setModalVisible(false)}
-              text={t('button.back') as string}
-            />
-          </View>
+      <View className=" bg-white " style={{ borderRadius: 10 }}>
+        <View className="absolute z-10 my-4 ml-6 ">
+          <NavButton
+            onPress={() => setModalVisible(false)}
+            text={t('button.back') as string}
+            withBackIcon
+          />
+        </View>
+        <SafeAreaView>
           <View className="h-full p-5">
             <View className="flex h-[65%] pt-4">
               <View className="h-[70%]">
@@ -83,54 +85,10 @@ const RegisterModal = ({
               />
             </View>
           </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </View>
     </Modal>
   );
 };
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    flex: 1,
-    flexDirection: 'column',
-    position: 'relative',
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});
 
 export default RegisterModal;

@@ -188,10 +188,10 @@
   },
   "register_screen.creating": "Creating your account. Please log in with your email and password after redirecting...",
 
+  "user_settings_screen.title": "Settings",
+  "user_settings_screen.logout": "Log out",
+  "user_settings_screen.general_settings": "General settings",
   "user_settings_screen": {
-    "title": "Settings",
-    "log_out": "Log out",
-    "general_settings": "General settings",
     "general_settings_description": "Manage settings related to permissions, ads and other account information.",
     "general_settings_sections": {
       "cookie_regulation": "Cookie regulations",
@@ -199,8 +199,8 @@
       "community_standards": "Community standards",
       "notifications": "Notifications"
     },
-    "account_settings": "Account settings",
-    "account_settings_description": "Manage settings related to your account.",
+    "account": "Account",
+    "account_settings_description": "Manage settings related to permissions, ads and other account information.",
     "account_settings_sections": {
       "personal_information": "Personal information",
       "security_and_access": "Security and access",

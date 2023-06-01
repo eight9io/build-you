@@ -11,6 +11,7 @@ export const ResetPasswordValidationSchema = () => {
     password: yup
       .string()
       .required(t('form.3.required') as string)
+      .notOneOf([''], t('form.3.required') as string)
       .matches(
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
         t('form.3.error') as string
@@ -19,6 +20,7 @@ export const ResetPasswordValidationSchema = () => {
     repeat_password: yup
       .string()
       .required(t('form.4.required') as string)
+      .notOneOf([''], t('form.4.required') as string)
       .oneOf([yup.ref('password')], t('form.4.error') as string),
   });
 };

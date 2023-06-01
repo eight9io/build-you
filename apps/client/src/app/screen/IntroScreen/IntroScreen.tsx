@@ -39,13 +39,13 @@ export const IntroScreen = ({ navigation, route }: any) => {
 
         <View className="h-[120px]">
           <Swiper className="justify-center">
-            <Text className="line-[22.4px] text-center text-[16px] font-normal">
+            <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t('login_screen.description')}
             </Text>
-            <Text className="line-[22.4px] text-center text-[16px] font-normal">
+            <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t('login_screen.description')}
             </Text>
-            <Text className="line-[22.4px] text-center text-[16px] font-normal">
+            <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t('login_screen.description')}
             </Text>
           </Swiper>

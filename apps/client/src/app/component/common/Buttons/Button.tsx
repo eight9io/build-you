@@ -20,22 +20,21 @@ const Button: FC<IButtonProps> = ({
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className={clsx(
-        'mr-1 h-12 flex-1 rounded-full',
-        containerClassName
-      )}
+      className={clsx('mr-1 h-12 flex-1 rounded-full', containerClassName)}
       onPress={onPress}
     >
       <View className="flex-1 flex-row items-center justify-center">
         {Icon && Icon}
-        <Text
-          className={clsx(
-            'line-[30px] text-center text-sm font-medium',
-            textClassName
-          )}
-        >
-          {title}
-        </Text>
+        {title && (
+          <Text
+            className={clsx(
+              'line-[30px] text-center text-sm font-medium',
+              textClassName
+            )}
+          >
+            {title}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );

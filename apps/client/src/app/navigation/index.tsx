@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Animated } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { RootStackParamList } from './navigation.type';
 
@@ -28,28 +29,57 @@ import Login from '../screen/LoginScreen/LoginScreen';
 import Register from '../screen/RegisterScreen/RegisterScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 
-import { useAuthStore } from '../store/auth-store';
-import { useGetUserData } from '../hooks/useGetUser';
+import { checkUserCompleProfile } from '../utils/checkUserCompleProfile';
 
-import { checkAuthTokenValidation } from '../utils/checkAuth';
+import { checkAccessTokenLocal } from '../utils/checkAuth';
+import { useAuthStore } from '../store/auth-store';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
 export const RootNavigation = () => {
-  const { getAccessToken } = useAuthStore();
+  const [isMainAppLoading, setIsMainAppLoading] = useState<boolean>(true);
+  const [isCompleteProfile, setIsCompleteProfile] = useState<boolean | null>(
+    null
+  );
+  const [isCheckedLocal, setIsCheckedLocal] = useState<boolean>(false);
+  const { setAccessToken, getAccessToken } = useAuthStore();
+  
+  const logined = getAccessToken();
+
   const { t } = useTranslation();
-  const accessToken = getAccessToken();
-  const { isCompleteProfile, loading } = useGetUserData();
 
   useEffect(() => {
-    const checkToken = async () => {
-      const isValid = await checkAuthTokenValidation();
-      if (!isValid) {
-        // TODO: handle logout
-      }
-    };
-    checkToken();
+    checkAccessTokenLocal(setAccessToken);
+    setIsCheckedLocal(true);
   }, []);
+
+  useEffect(() => {
+    if (!logined && isCheckedLocal == true) {
+
+    }
+  }, [logined, isCheckedLocal]);
+
+  useEffect(() => {
+    if (logined) {
+      checkUserCompleProfile(setIsCompleteProfile, setIsMainAppLoading);
+    } else {
+      setIsMainAppLoading(false);
+    }
+  }, [logined]);
+
+  useEffect(() => {
+    if (!isMainAppLoading && (isCompleteProfile !== null || !logined)) {
+      const hideSplashScreen = async () => {
+        await SplashScreen.hideAsync();
+      };
+      setTimeout(() => {
+        hideSplashScreen();
+      }, 500);
+    }
+  }, [isMainAppLoading]);
 
   return (
     <NavigationContainer>
@@ -58,30 +88,7 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        {accessToken && !isCompleteProfile && (
-          <>
-            <RootStack.Screen
-              name="CompleteProfileScreen"
-              component={CompleteProfileScreen}
-            />
-            <RootStack.Screen
-              name="HomeScreen"
-              component={BottomNavBar}
-              options={{
-                headerShown: false,
-                headerTitle: () => (
-                  <Header
-                    title={t('challenge_detail_screen.title') || undefined}
-                  />
-                ),
-                headerLeft: (props) => {
-                  return <NavButton />;
-                },
-              }}
-            />
-          </>
-        )}
-        {accessToken && isCompleteProfile && (
+        {logined && isCompleteProfile && (
           <>
             <RootStack.Screen
               name="HomeScreen"
@@ -156,7 +163,16 @@ export const RootNavigation = () => {
             />
           </>
         )}
-        {!accessToken && (
+        {logined && !isCompleteProfile && (
+          <>
+            <RootStack.Screen
+              name="CompleteProfileScreen"
+              component={CompleteProfileScreen}
+            />
+          </>
+        )}
+
+        {!logined && (
           <>
             <RootStack.Screen
               name="IntroScreen"

@@ -11,30 +11,30 @@ import {
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
-import TextInput from '../../component/common/Inputs/TextInput';
-
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Button from '../../component/common/Buttons/Button';
-
-import ErrorText from '../../component/common/ErrorText';
-
-import IconApple from './asset/Apple.svg';
-import IconEyeOn from './asset/icon-eye.svg';
-import IconEyeOff from './asset/eye-off.svg';
-import IconGoogle from './asset/Google.svg';
-import IconLinkedIn from './asset/LinkedIn.svg';
-import { LoginValidationSchema } from '../../Validators/Login.validate';
-import { LoginForm } from '../../types/auth';
-import { serviceLogin } from '../../service/auth';
 import Loading from '../../component/common/Loading';
-
-import { err_server, errorMessage } from '../../utils/statusCode';
-
-import { useAuthStore } from '../../store/auth-store';
+import ErrorText from '../../component/common/ErrorText';
+import Button from '../../component/common/Buttons/Button';
+import TextInput from '../../component/common/Inputs/TextInput';
 import AppleLoginButton from '../../component/common/Buttons/AppleLoginButton';
 import LinkedInLoginButton from '../../component/common/Buttons/LinkedInLoginButton';
 import GoogleLoginButton from '../../component/common/Buttons/GoogleLoginButton';
+
+import { LoginForm } from '../../types/auth';
+
+import { LoginValidationSchema } from '../../Validators/Login.validate';
+import { serviceLogin } from '../../service/auth';
+import { err_server, errorMessage } from '../../utils/statusCode';
+
+import { useAuthStore } from '../../store/auth-store';
+import { addAuthTokensLocalOnLogin } from '../../utils/checkAuth';
+
+import IconApple from './asset/Apple.svg';
+import IconEyeOff from './asset/eye-off.svg';
+import IconGoogle from './asset/Google.svg';
+import IconEyeOn from './asset/icon-eye.svg';
+import IconLinkedIn from './asset/LinkedIn.svg';
 
 export default function Login({ navigation }: { navigation: any }) {
   const { t } = useTranslation(['index', 'errorMessage']);
@@ -61,6 +61,10 @@ export default function Login({ navigation }: { navigation: any }) {
       .then((res) => {
         if (res.status == 201) {
           setAccessToken(res?.data.authorization || null);
+          addAuthTokensLocalOnLogin(
+            res?.data.authorization || null,
+            res?.data.refresh || null
+          );
           setErrMessage('');
         } else {
           setErrMessage(err_server);

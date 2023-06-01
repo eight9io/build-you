@@ -27,7 +27,7 @@ import CheckedSvg from './asset/checked.svg';
 import UncheckedSvg from './asset/uncheck.svg';
 import WarningSvg from './asset/warning.svg';
 
-import httpInstance, { setAuthToken } from '../../../utils/http';
+import httpInstance, { setAuthTokenToHttpHeader } from '../../../utils/http';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -162,7 +162,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   const { setIsCompleteProfile } = useGetUserData();
 
   const userData = getUserProfile();
-  console.log(userData.id);
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -219,7 +218,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     const softSkills = convertSelectedToSoftSkillProps(
       selectedCompetencedSkill
     );
-    console.log(userData);
     httpInstance
       .put(`/user/update/${userData.id}`, {
         ...profile,
@@ -232,7 +230,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error('upload err', err);
         navigation.navigate('LoginScreen');
       });
   };

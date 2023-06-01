@@ -4,18 +4,22 @@ import { useUserProfileStore } from '../store/user-data';
 import { useAuthStore } from '../store/auth-store';
 
 import { IUserData } from '../types/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const useGetUserData = () => {
+interface IUseGetUserReturn {
+  isCompleteProfile: boolean;
+  setIsCompleteProfile: (value: boolean) => void;
+  fetchingUserDataLoading: boolean;
+}
+
+export const useGetUserData: () => IUseGetUserReturn = () => {
   const [isCompleteProfile, setIsCompleteProfile] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const { getAccessToken } = useAuthStore();
   const { setUserProfile } = useUserProfileStore();
 
-  const accessToken = getAccessToken();
-
   const fetchingUserData = async () => {
-    console.log('runned');
     setLoading(true);
+    const accessToken = await AsyncStorage.getItem('@auth_token');
     if (accessToken !== null) {
       setAuthTokenToHttpHeader(accessToken);
       await httpInstance
@@ -36,7 +40,7 @@ export const useGetUserData = () => {
 
   useEffect(() => {
     fetchingUserData();
-  }, [accessToken]);
+  }, []);
 
   return {
     isCompleteProfile,

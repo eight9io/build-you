@@ -18,7 +18,6 @@ export const useAuthStore = create<LoginStore>((set, get) => ({
   setAccessToken: (accessToken) => {
     set({ accessToken });
     setAuthTokenToHttpHeader(accessToken);
-
   },
 
   getAccessToken: () => get().accessToken as any,

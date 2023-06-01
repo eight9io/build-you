@@ -30,9 +30,10 @@ import Register from '../screen/RegisterScreen/RegisterScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 
 import { checkUserCompleProfile } from '../utils/checkUserCompleProfile';
-
 import { checkAccessTokenLocal } from '../utils/checkAuth';
+
 import { useAuthStore } from '../store/auth-store';
+import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -41,44 +42,36 @@ SplashScreen.preventAutoHideAsync();
 
 export const RootNavigation = () => {
   const [isMainAppLoading, setIsMainAppLoading] = useState<boolean>(true);
-  const [isCompleteProfile, setIsCompleteProfile] = useState<boolean | null>(
-    null
-  );
-  const [isCheckedLocal, setIsCheckedLocal] = useState<boolean>(false);
+
   const { setAccessToken, getAccessToken } = useAuthStore();
+  const { setIsCompleteProfileStore, getIsCompleteProfileStore } = useIsCompleteProfileStore();
   
   const logined = getAccessToken();
+  const isCompleteProfile = getIsCompleteProfileStore();
 
   const { t } = useTranslation();
 
   useEffect(() => {
     checkAccessTokenLocal(setAccessToken);
-    setIsCheckedLocal(true);
   }, []);
 
   useEffect(() => {
-    if (!logined && isCheckedLocal == true) {
-
-    }
-  }, [logined, isCheckedLocal]);
-
-  useEffect(() => {
     if (logined) {
-      checkUserCompleProfile(setIsCompleteProfile, setIsMainAppLoading);
+      checkUserCompleProfile(setIsCompleteProfileStore, setIsMainAppLoading);
     } else {
       setIsMainAppLoading(false);
     }
   }, [logined]);
 
   useEffect(() => {
-    if (!isMainAppLoading && (isCompleteProfile !== null || !logined)) {
+    if (!isMainAppLoading && isCompleteProfile !== null) {
       const hideSplashScreen = async () => {
         await SplashScreen.hideAsync();
       };
       setTimeout(() => {
         hideSplashScreen();
       }, 500);
-    }
+    } 
   }, [isMainAppLoading]);
 
   return (

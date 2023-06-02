@@ -39,7 +39,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      Skill: '',
+      Skill: null,
     },
   });
 
@@ -58,11 +58,11 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
   const handleSave = () => {
     if (!selectedEmoji) {
       setSelectEmojiError(true);
-      if (!skillName) {
-        setSkillNameError(true);
-      }
-      return;
     }
+    if (!skillName) {
+      setSkillNameError(true);
+    }
+    if (!selectedEmoji || !skillName) return;
     const skill = `${selectedEmoji} ${skillName}`;
     setUserAddSkill((prev: string[]) => [...prev, skill]);
     selectedEmoji && setSelectedEmoji(null);
@@ -73,6 +73,8 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
   const onCloseAddSkillModal = () => {
     onClose();
     setSelectedEmoji(null);
+    selectEmojiError && setSelectEmojiError(false);
+    skillNameError && setSkillNameError(false);
     reset();
   };
 

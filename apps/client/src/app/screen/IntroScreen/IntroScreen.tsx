@@ -14,7 +14,6 @@ export const IntroScreen = ({ navigation, route }: any) => {
       setModalVisible(route?.params?.setModal);
     }
   }, [route?.params?.setModal]);
-  console.log(route?.params?.setModal);
 
   return (
     <View className="justify-content: space-between flex-1">

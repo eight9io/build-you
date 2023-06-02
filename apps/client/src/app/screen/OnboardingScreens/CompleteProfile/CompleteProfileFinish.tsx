@@ -6,6 +6,7 @@ import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 
 import BuildYouLogo from './asset/buildYou_logo.svg';
 import StarLogo from './asset/auto_awesome.svg';
+import { useIsCompleteProfileStore } from '../../../store/is-complete-profile';
 
 interface CompleteProfileFinishProps {
   navigation: CompleteProfileScreenNavigationProp;
@@ -14,8 +15,11 @@ interface CompleteProfileFinishProps {
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
   navigation,
 }) => {
+
+  const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+
   setTimeout(() => {
-    navigation.navigate('HomeScreen');
+    setIsCompleteProfileStore(true);
   }, 2000);
 
   return (

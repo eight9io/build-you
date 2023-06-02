@@ -6,12 +6,15 @@ export const OnboardingScreen1Validators = () => {
   const { t } = useTranslation();
 
   return yup.object().shape({
+    // no space in text
     name: yup
       .string()
+      .trim()
       .required(t('form_onboarding.screen_1.first_name_error') as string),
 
     surname: yup
       .string()
+      .trim()
       .required(t('form_onboarding.screen_1.last_name_error') as string),
 
     birth: yup
@@ -38,6 +41,7 @@ export const OnboardingScreen3Validators = () => {
 
     adding_skills: yup
       .string()
+      .trim()
       .required(t('form_onboarding.screen_3.adding_skills_error') as string),
   });
 };

@@ -23,6 +23,7 @@ import ErrorText from '../../component/common/ErrorText';
 import { serviceRegister } from '../../service/auth';
 import Loading from '../../component/common/Loading';
 import { err_server, errorMessage } from '../../utils/statusCode';
+import { ScrollView } from 'react-native-gesture-handler';
 type FormData = {
   email: string;
   password: string;
@@ -82,168 +83,175 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   const [hidePassword, setHidePassword] = useState(true);
   return (
     <SafeAreaView className=" h-full bg-white ">
-      <View className="flex-column h-full justify-between bg-white px-6  pb-14">
-        <View>
-          <View className="flex-column mb-1 items-center ">
-            <Image
-              className=" mb-7 mt-10 h-[91px] w-[185px]"
-              source={require('./asset/buildYou.png')}
-              resizeMode="cover"
-            />
-            <Text className="text-h6 text-gray-dark px-24 text-center leading-6 ">
-              {t('register_screen.sub_title')}
-            </Text>
-          </View>
-          {errMessage && (
-            <ErrorText
-              containerClassName="justify-center "
-              message={errMessage}
-            />
-          )}
-          <View className="mt-4 flex flex-col ">
-            {(
-              t('form', {
-                returnObjects: true,
-              }) as Array<any>
-            ).map((item, index) => {
-              if (item.name === 'code' || item.name === 'user') {
-                return;
-              } else {
-                return (
-                  <View className="pt-5" key={index}>
-                    <Controller
-                      control={control}
-                      name={item.name}
-                      rules={{
-                        required: true,
-                      }}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <View className="flex flex-col gap-1">
-                          <TextInput
-                            rightIcon={
-                              (item.name === 'repeat_password' ||
-                                item.name === 'password') &&
-                              (!hidePassword ? (
-                                <TouchableOpacity
-                                  onPress={() => setHidePassword(!hidePassword)}
-                                  className=" mt-[2px]"
-                                >
-                                  <IconEyeOn />
-                                </TouchableOpacity>
-                              ) : (
-                                <TouchableOpacity
-                                  onPress={() => setHidePassword(!hidePassword)}
-                                  className=" mt-[2px]"
-                                >
-                                  <IconEyeOff />
-                                </TouchableOpacity>
-                              ))
-                            }
-                            secureTextEntry={
-                              (item.name === 'password' ||
-                                item.name === 'repeat_password') &&
-                              hidePassword
-                                ? true
-                                : false
-                            }
-                            label={item.label}
-                            placeholder={item.placeholder}
-                            placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                            onBlur={onBlur}
-                            onChangeText={(text) => onChange(text)}
-                            value={value}
-                            className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
-                          />
-                        </View>
-                      )}
-                    />
-                    {errors[item.name as keyof FormData] && (
-                      <ErrorText
-                        message={errors[item.name as keyof FormData]?.message}
+      <ScrollView>
+        <View className="flex-column h-full justify-between bg-white px-6  pb-14">
+          <View>
+            <View className="flex-column items-center ">
+              <Image
+                className=" mb-7 mt-10 h-[91px] w-[185px]"
+                source={require('./asset/buildYou.png')}
+                resizeMode="cover"
+              />
+              <Text className="text-h6 text-gray-dark px-6 text-center leading-6 ">
+                {t('register_screen.sub_title')}
+              </Text>
+            </View>
+            {errMessage && (
+              <ErrorText
+                containerClassName="justify-center "
+                message={errMessage}
+              />
+            )}
+            <View className="mb-1 mt-4 flex  flex-col ">
+              {(
+                t('form', {
+                  returnObjects: true,
+                }) as Array<any>
+              ).map((item, index) => {
+                if (item.name === 'code' || item.name === 'user') {
+                  return;
+                } else {
+                  return (
+                    <View className="pt-5" key={index}>
+                      <Controller
+                        control={control}
+                        name={item.name}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <View className="flex flex-col gap-1">
+                            <TextInput
+                              rightIcon={
+                                (item.name === 'repeat_password' ||
+                                  item.name === 'password') &&
+                                (!hidePassword ? (
+                                  <TouchableOpacity
+                                    onPress={() =>
+                                      setHidePassword(!hidePassword)
+                                    }
+                                    className=" mt-[2px]"
+                                  >
+                                    <IconEyeOn />
+                                  </TouchableOpacity>
+                                ) : (
+                                  <TouchableOpacity
+                                    onPress={() =>
+                                      setHidePassword(!hidePassword)
+                                    }
+                                    className=" mt-[2px]"
+                                  >
+                                    <IconEyeOff />
+                                  </TouchableOpacity>
+                                ))
+                              }
+                              secureTextEntry={
+                                (item.name === 'password' ||
+                                  item.name === 'repeat_password') &&
+                                hidePassword
+                                  ? true
+                                  : false
+                              }
+                              label={item.label}
+                              placeholder={item.placeholder}
+                              placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                              onBlur={onBlur}
+                              onChangeText={(text) => onChange(text)}
+                              value={value}
+                            />
+                          </View>
+                        )}
                       />
+                      {errors[item.name as keyof FormData] && (
+                        <ErrorText
+                          message={errors[item.name as keyof FormData]?.message}
+                        />
+                      )}
+                    </View>
+                  );
+                }
+              })}
+
+              <Controller
+                control={control}
+                name="check_policy"
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View className="">
+                    <CheckBox
+                      title={
+                        <View className="gray-black-light ml-3 flex-row flex-wrap  text-sm leading-6 ">
+                          <Text className="">
+                            {t('register_screen.policy')}
+                          </Text>
+                          <Text
+                            className="cursor-pointer font-medium  underline underline-offset-1"
+                            onPress={() => setModalVisible(true)}
+                          >
+                            {t('register_screen.policy_link')}
+                          </Text>
+                          <Text className=""> {t('and')} </Text>
+                          <Text
+                            className="cursor-pointer font-medium underline underline-offset-auto"
+                            onPress={() => setModalVisible(true)}
+                          >
+                            {t('register_screen.terms_link')}
+                          </Text>
+                          <Text className=""> {t('and')} </Text>
+                          <Text
+                            className="cursor-pointer  font-medium underline underline-offset-1"
+                            onPress={() => setModalVisible(true)}
+                          >
+                            {t('register_screen.conditions_link')}
+                          </Text>
+                        </View>
+                      }
+                      containerStyle={{
+                        backgroundColor: 'transparent',
+                        paddingBottom: 0,
+                        paddingLeft: 0,
+                        marginTop: 10,
+                      }}
+                      checked={ruleBtnChecked}
+                      onPress={() => {
+                        setValue('check_policy', !ruleBtnChecked);
+                        setRuleBtnChecked(!ruleBtnChecked);
+                      }}
+                      iconType="material-community"
+                      checkedIcon="checkbox-marked"
+                      uncheckedIcon="checkbox-blank-outline"
+                      checkedColor="blue"
+                    />
+                    {errors.check_policy && !ruleBtnChecked && (
+                      <ErrorText message={errors.check_policy?.message} />
                     )}
                   </View>
-                );
-              }
-            })}
-
-            <Controller
-              control={control}
-              name="check_policy"
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <View className="">
-                  <CheckBox
-                    title={
-                      <View className="gray-black-light ml-3 flex-row flex-wrap  text-sm leading-6 ">
-                        <Text className="">{t('register_screen.policy')}</Text>
-                        <Text
-                          className="cursor-pointer font-medium  underline underline-offset-1"
-                          onPress={() => setModalVisible(true)}
-                        >
-                          {t('register_screen.policy_link')}
-                        </Text>
-                        <Text className=""> {t('and')} </Text>
-                        <Text
-                          className="cursor-pointer font-medium underline underline-offset-auto"
-                          onPress={() => setModalVisible(true)}
-                        >
-                          {t('register_screen.terms_link')}
-                        </Text>
-                        <Text className=""> {t('and')} </Text>
-                        <Text
-                          className="cursor-pointer  font-medium underline underline-offset-1"
-                          onPress={() => setModalVisible(true)}
-                        >
-                          {t('register_screen.conditions_link')}
-                        </Text>
-                      </View>
-                    }
-                    containerStyle={{
-                      backgroundColor: 'transparent',
-                      paddingBottom: 0,
-                      paddingLeft: 0,
-                      marginTop: 10,
-                    }}
-                    checked={ruleBtnChecked}
-                    onPress={() => {
-                      setValue('check_policy', !ruleBtnChecked);
-                      setRuleBtnChecked(!ruleBtnChecked);
-                    }}
-                    iconType="material-community"
-                    checkedIcon="checkbox-marked"
-                    uncheckedIcon="checkbox-blank-outline"
-                    checkedColor="blue"
-                  />
-                  {errors.check_policy && !ruleBtnChecked && (
-                    <ErrorText message={errors.check_policy?.message} />
-                  )}
-                </View>
-              )}
-            />
+                )}
+              />
+            </View>
           </View>
-        </View>
-        <Button
-          containerClassName="  bg-primary-default flex-none px-1 "
-          textClassName="line-[30px] text-center text-md font-medium text-white"
-          title={t('button.next')}
-          onPress={handleSubmit(onSubmit)}
-        />
+          <Button
+            containerClassName="  bg-primary-default flex-none px-1 mt-4"
+            textClassName="line-[30px] text-center text-md font-medium text-white"
+            title={t('register_screen.title')}
+            onPress={handleSubmit(onSubmit)}
+          />
 
-        <PolicyModal
-          navigation={navigation}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-      </View>
-      {isLoading && (
-        <Loading
-          containerClassName="absolute top-0 left-0"
-          text={t('register_screen.creating') as string}
-        />
-      )}
+          <PolicyModal
+            navigation={navigation}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+          />
+        </View>
+        {isLoading && (
+          <Loading
+            containerClassName="absolute top-0 left-0"
+            text={t('register_screen.creating') as string}
+          />
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }

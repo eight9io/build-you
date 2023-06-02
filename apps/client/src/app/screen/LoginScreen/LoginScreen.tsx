@@ -3,10 +3,9 @@ import {
   Text,
   Image,
   SafeAreaView,
-  FlatList,
   TouchableOpacity,
-  StyleSheet,
   Platform,
+  ScrollView,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -83,123 +82,124 @@ export default function Login({ navigation }: { navigation: any }) {
   return (
     <SafeAreaView className=" h-full bg-white ">
       <View className="relative h-full bg-white ">
-        <View className="flex-column h-full justify-between bg-white px-6  pb-14">
-          <View>
-            <View className="flex-column items-center  ">
-              <Image
-                className=" mb-7 mt-10 h-[91px] w-[185px]"
-                source={require('./asset/buildYou.png')}
-                resizeMode="cover"
-              />
-            </View>
-            <View className="flex-row">
-              {Platform.OS === 'ios' ? <AppleLoginButton /> : null}
-              <LinkedInLoginButton />
-              <GoogleLoginButton />
-            </View>
-            <View className="mt-5 flex-row items-center justify-center px-6">
-              <View className="bg-black-default h-[0.5px] w-[50%]"></View>
-              <Text className="text-gray-dark mx-3 text-base font-normal">
-                {t('register_screen.or')}
-              </Text>
-              <View className="bg-black-default h-[0.5px] w-[50%]"></View>
-            </View>
+        <ScrollView>
+          <View className="flex-column h-full justify-between bg-white px-6  pb-14">
+            <View>
+              <View className="flex-column items-center  ">
+                <Image
+                  className=" mb-7 mt-10 h-[91px] w-[185px]"
+                  source={require('./asset/buildYou.png')}
+                  resizeMode="cover"
+                />
+              </View>
+              <View className="flex-row">
+                {Platform.OS === 'ios' ? <AppleLoginButton /> : null}
+                <LinkedInLoginButton />
+                <GoogleLoginButton />
+              </View>
+              <View className="mt-5 flex-row items-center justify-center px-6">
+                <View className="bg-black-default h-[0.5px] w-[50%]"></View>
+                <Text className="text-gray-dark mx-3 text-base font-normal">
+                  {t('register_screen.or')}
+                </Text>
+                <View className="bg-black-default h-[0.5px] w-[50%]"></View>
+              </View>
 
-            {errMessage && (
-              <ErrorText
-                containerClassName="justify-center "
-                message={errMessage}
-              />
-            )}
-            <View className="mt-4 flex flex-col ">
-              {(
-                t('form', {
-                  returnObjects: true,
-                }) as Array<any>
-              ).map((item, index) => {
-                if (item.name === 'password' || item.name === 'user') {
-                  return (
-                    <View className="pt-5" key={index}>
-                      <Controller
-                        control={control}
-                        name={item.name}
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <View className="flex flex-col gap-1">
-                            <TextInput
-                              rightIcon={
-                                item.name === 'password' &&
-                                (!hidePassword ? (
-                                  <TouchableOpacity
-                                    onPress={() =>
-                                      setHidePassword(!hidePassword)
-                                    }
-                                    className=" mt-[2px]"
-                                  >
-                                    <IconEyeOn />
-                                  </TouchableOpacity>
-                                ) : (
-                                  <TouchableOpacity
-                                    onPress={() =>
-                                      setHidePassword(!hidePassword)
-                                    }
-                                    className=" mt-[2px]"
-                                  >
-                                    <IconEyeOff />
-                                  </TouchableOpacity>
-                                ))
-                              }
-                              secureTextEntry={
-                                item.name === 'password' && hidePassword
-                                  ? true
-                                  : false
-                              }
-                              label={item.label}
-                              placeholder={item.placeholder}
-                              placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                              onBlur={onBlur}
-                              onChangeText={(text) => onChange(text)}
-                              value={value}
-                              className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
-                            />
-                          </View>
-                        )}
-                      />
-                      {errors[item.name as keyof LoginForm] && (
-                        <ErrorText
-                          message={
-                            errors[item.name as keyof LoginForm]?.message
-                          }
+              {errMessage && (
+                <ErrorText
+                  containerClassName="justify-center "
+                  message={errMessage}
+                />
+              )}
+
+              <View className="mt-4 flex flex-col ">
+                {(
+                  t('form', {
+                    returnObjects: true,
+                  }) as Array<any>
+                ).map((item, index) => {
+                  if (item.name === 'password' || item.name === 'user') {
+                    return (
+                      <View className="pt-5" key={index}>
+                        <Controller
+                          control={control}
+                          name={item.name}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                            <View className="flex flex-col gap-1">
+                              <TextInput
+                                rightIcon={
+                                  item.name === 'password' &&
+                                  (!hidePassword ? (
+                                    <TouchableOpacity
+                                      onPress={() =>
+                                        setHidePassword(!hidePassword)
+                                      }
+                                      className=" mt-[2px]"
+                                    >
+                                      <IconEyeOn />
+                                    </TouchableOpacity>
+                                  ) : (
+                                    <TouchableOpacity
+                                      onPress={() =>
+                                        setHidePassword(!hidePassword)
+                                      }
+                                      className=" mt-[2px]"
+                                    >
+                                      <IconEyeOff />
+                                    </TouchableOpacity>
+                                  ))
+                                }
+                                secureTextEntry={
+                                  item.name === 'password' && hidePassword
+                                    ? true
+                                    : false
+                                }
+                                label={item.label}
+                                placeholder={item.placeholder}
+                                placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                                onBlur={onBlur}
+                                onChangeText={(text) => onChange(text)}
+                                value={value}
+                              />
+                            </View>
+                          )}
                         />
-                      )}
-                    </View>
-                  );
-                } else {
-                  return;
-                }
-              })}
+                        {errors[item.name as keyof LoginForm] && (
+                          <ErrorText
+                            message={
+                              errors[item.name as keyof LoginForm]?.message
+                            }
+                          />
+                        )}
+                      </View>
+                    );
+                  } else {
+                    return;
+                  }
+                })}
+              </View>
+            </View>
+            <View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ForgotPasswordScreen')}
+              >
+                <Text className="text-h6 text-gray-dark my-5 px-24 text-center leading-6">
+                  {t('forgot_password')}
+                </Text>
+              </TouchableOpacity>
+
+              <Button
+                containerClassName="  bg-primary-default flex-none px-1 "
+                textClassName="line-[30px] text-center text-md font-medium text-white"
+                title={t('login_screen.login')}
+                onPress={handleSubmit(onSubmit)}
+              />
             </View>
           </View>
-          <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ForgotPasswordScreen')}
-            >
-              <Text className="text-h6 text-gray-dark my-5 px-24 text-center leading-6">
-                {t('forgot_password')}
-              </Text>
-            </TouchableOpacity>
-
-            <Button
-              containerClassName="  bg-primary-default flex-none px-1 "
-              textClassName="line-[30px] text-center text-md font-medium text-white"
-              title={t('login')}
-              onPress={handleSubmit(onSubmit)}
-            />
-          </View>
-        </View>
-
+        </ScrollView>
         {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </View>
     </SafeAreaView>

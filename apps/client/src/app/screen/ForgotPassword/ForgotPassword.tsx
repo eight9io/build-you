@@ -1,4 +1,4 @@
-import { View, Image, SafeAreaView } from 'react-native';
+import { View, Image, SafeAreaView, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
@@ -62,86 +62,90 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
 
   return (
     <SafeAreaView className=" h-full bg-white ">
-      <View className="flex-column h-full justify-between bg-white px-6  pb-14">
-        <View>
-          <View className="flex-column items-center  ">
-            <Image
-              className=" mb-7 mt-10 h-[91px] w-[185px]"
-              source={require('./asset/buildYou.png')}
-              resizeMode="cover"
-            />
-          </View>
-          {errMessage && (
-            <ErrorText
-              containerClassName="justify-center "
-              message={errMessage}
-            />
-          )}
-          <View className="mt-4 flex flex-col ">
-            {(
-              t('form', {
-                returnObjects: true,
-              }) as Array<any>
-            ).map((item, index) => {
-              if (item.name === 'email') {
-                return (
-                  <View className="pt-5" key={index}>
-                    <Controller
-                      control={control}
-                      name={item.name}
-                      rules={{
-                        required: true,
-                      }}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <View className="flex flex-col gap-1">
-                          <TextInput
-                            label={item.label}
-                            placeholder={item.placeholder}
-                            placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                            onBlur={onBlur}
-                            onChangeText={(text) => onChange(text)}
-                            value={value}
-                            className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
+      <View className=" h-full bg-white ">
+        <ScrollView>
+          <View className="flex-column h-full justify-between bg-white px-6  pb-14">
+            <View>
+              <View className="flex-column items-center  ">
+                <Image
+                  className=" mb-7 mt-10 h-[91px] w-[185px]"
+                  source={require('./asset/buildYou.png')}
+                  resizeMode="cover"
+                />
+              </View>
+              {errMessage && (
+                <ErrorText
+                  containerClassName="justify-center "
+                  message={errMessage}
+                />
+              )}
+              <View className="mt-4 flex flex-col ">
+                {(
+                  t('form', {
+                    returnObjects: true,
+                  }) as Array<any>
+                ).map((item, index) => {
+                  if (item.name === 'email') {
+                    return (
+                      <View className="pt-5" key={index}>
+                        <Controller
+                          control={control}
+                          name={item.name}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                            <View className="flex flex-col gap-1">
+                              <TextInput
+                                label={item.label}
+                                placeholder={item.placeholder}
+                                placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                                onBlur={onBlur}
+                                onChangeText={(text) => onChange(text)}
+                                value={value}
+                              />
+                            </View>
+                          )}
+                        />
+                        {errors[item.name as keyof ForgotPasswordForm] && (
+                          <ErrorText
+                            message={
+                              errors[item.name as keyof ForgotPasswordForm]
+                                ?.message
+                            }
                           />
-                        </View>
-                      )}
-                    />
-                    {errors[item.name as keyof ForgotPasswordForm] && (
-                      <ErrorText
-                        message={
-                          errors[item.name as keyof ForgotPasswordForm]?.message
-                        }
-                      />
-                    )}
-                  </View>
-                );
-              }
-            })}
+                        )}
+                      </View>
+                    );
+                  }
+                })}
+              </View>
+            </View>
+            <View className="mt-6">
+              <Button
+                containerClassName="  bg-primary-default flex-none px-1 "
+                textClassName="line-[30px] text-center text-md font-medium text-white"
+                title={t('send_code')}
+                onPress={handleSubmit(onSubmit)}
+              />
+            </View>
+            {watch('email') && (
+              <ForgotPasswordModal
+                navigation={navigation}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                email={watch('email')}
+              />
+            )}
           </View>
-        </View>
-        <View>
-          <Button
-            containerClassName="  bg-primary-default flex-none px-1 "
-            textClassName="line-[30px] text-center text-md font-medium text-white"
-            title={t('send_code')}
-            onPress={handleSubmit(onSubmit)}
-          />
-        </View>
-        {watch('email') && (
-          <ForgotPasswordModal
-            navigation={navigation}
-            modalVisible={modalVisible}
-            setModalVisible={setModalVisible}
-            email={watch('email')}
+        </ScrollView>
+        {isLoading && (
+          <Loading
+            containerClassName="absolute top-0 left-0"
+            text={t('forgot_password.sub_title') as string}
           />
         )}
       </View>
-      {isLoading && (
-        <Loading
-          containerClassName="absolute top-0 left-0"
-          text={t('forgot_password.sub_title') as string}
-        />
-      )}
     </SafeAreaView>
   );
 }

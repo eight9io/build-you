@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { FC, ReactNode } from 'react';
 import {
   Text,
@@ -5,6 +6,7 @@ import {
   View,
   TextInput as Base,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 interface ITextInputProps extends TextInputProps {
@@ -16,7 +18,7 @@ interface ITextInputProps extends TextInputProps {
 export const TextInput: FC<ITextInputProps> = (props) => {
   const { label, rightIcon, onPress, ...inputProps } = props;
   return (
-    <View className="flex flex-col gap-1">
+    <View className="flex  flex-col gap-1">
       {label ? (
         <Text className="text-primary-dark text-base font-semibold">
           {label}
@@ -25,7 +27,15 @@ export const TextInput: FC<ITextInputProps> = (props) => {
       <View className="relative">
         <TouchableOpacity onPress={onPress}>
           <View pointerEvents={onPress ? 'none' : 'auto'}>
-            <Base className={inputProps?.className} {...inputProps} />
+            <Base
+              {...inputProps}
+              className={clsx(
+                'border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px]  ',
+                inputProps?.className,
+                Platform.OS === 'ios' ? 'p-4' : 'p-2.5'
+              )}
+              autoCapitalize="none"
+            />
           </View>
         </TouchableOpacity>
         {rightIcon ? (

@@ -3,16 +3,16 @@ import {
   Text,
   Modal,
   SafeAreaView,
-  StyleSheet,
-  ScrollView,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
+
 import React, { useState } from 'react';
 import Header from '../common/Header';
 import NavButton from '../common/Buttons/NavButton';
 import { useTranslation } from 'react-i18next';
-import IconLoading from './asset/loading.svg';
+
 import { Controller, useForm } from 'react-hook-form';
 import { ResetPasswordValidationSchema } from '../../Validators/ResetPassword.validate';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -96,132 +96,134 @@ export default function ForgotPasswordModal({
       animationType="slide"
       visible={modalVisible}
       presentationStyle="pageSheet"
+      statusBarTranslucent={isLoading}
     >
-      <View className=" bg-white ">
-        <View className="h-full pt-5">
-          <Header
-            title={t('forgot_password.title') as string}
-            leftBtn={
-              <NavButton
-                text={t('button.back') as string}
-                onPress={() => setModalVisible(false)}
-                withBackIcon
-              />
-            }
-          />
-
-          <SafeAreaView>
-            <View className="flex-column h-full justify-between bg-white px-6  pb-14">
-              <View>
-                <View className="flex-column items-center  ">
-                  <Image
-                    className=" mb-7 mt-10 h-[91px] w-[185px]"
-                    source={require('./asset/buildYou1.png')}
-                    resizeMode="cover"
-                  />
-                  <Text className="text-h6 text-gray-dark px-2 text-center leading-6 ">
-                    {t('forgot_password.sub_title')}
-                  </Text>
-                </View>
-                {errMessage && (
-                  <ErrorText
-                    containerClassName="justify-center mt-4"
-                    message={errMessage}
-                  />
-                )}
-                <View className="mt-4 flex flex-col ">
-                  {(
-                    t('form', {
-                      returnObjects: true,
-                    }) as Array<any>
-                  ).map((item, index) => {
-                    if (item.name === 'email' || item.name === 'user') {
-                      return;
-                    } else {
-                      return (
-                        <View className="pt-5" key={index}>
-                          <Controller
-                            control={control}
-                            name={item.name}
-                            rules={{
-                              required: true,
-                            }}
-                            render={({
-                              field: { onChange, onBlur, value },
-                            }) => (
-                              <View className="flex flex-col gap-1">
-                                <TextInput
-                                  rightIcon={
-                                    (item.name === 'repeat_password' ||
-                                      item.name === 'password') &&
-                                    (!hidePassword ? (
-                                      <TouchableOpacity
-                                        onPress={() =>
-                                          setHidePassword(!hidePassword)
-                                        }
-                                        className=" mt-[2px]"
-                                      >
-                                        <IconEyeOn />
-                                      </TouchableOpacity>
-                                    ) : (
-                                      <TouchableOpacity
-                                        onPress={() =>
-                                          setHidePassword(!hidePassword)
-                                        }
-                                        className=" mt-[2px]"
-                                      >
-                                        <IconEyeOff />
-                                      </TouchableOpacity>
-                                    ))
-                                  }
-                                  secureTextEntry={
-                                    (item.name === 'password' ||
-                                      item.name === 'repeat_password') &&
-                                    hidePassword
-                                      ? true
-                                      : false
-                                  }
-                                  label={item.label}
-                                  placeholder={item.placeholder}
-                                  placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                                  onBlur={onBlur}
-                                  onChangeText={(text) => onChange(text)}
-                                  value={value}
-                                  className="  border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] p-4  "
-                                />
-                              </View>
-                            )}
-                          />
-                          {errors[item.name as keyof FormData] && (
-                            <ErrorText
-                              message={
-                                errors[item.name as keyof FormData]?.message
-                              }
-                            />
-                          )}
-                        </View>
-                      );
-                    }
-                  })}
-                </View>
-              </View>
-              <View>
-                <Button
-                  containerClassName="  bg-primary-default flex-none px-1 "
-                  textClassName="line-[30px] text-center text-md font-medium text-white"
-                  title={t('send_code')}
-                  onPress={handleSubmit(onSubmit)}
+      <View className="h-full bg-white">
+        <ScrollView>
+          <View className="h-full pt-5">
+            <Header
+              title={t('forgot_password.title') as string}
+              leftBtn={
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => setModalVisible(false)}
+                  withBackIcon
                 />
+              }
+            />
+
+            <SafeAreaView>
+              <View className="flex-column h-full justify-between bg-white px-6  pb-14">
+                <View>
+                  <View className="flex-column items-center  ">
+                    <Image
+                      className=" mb-7 mt-10 h-[91px] w-[185px]"
+                      source={require('./asset/buildYou1.png')}
+                      resizeMode="cover"
+                    />
+                    <Text className="text-h6 text-gray-dark px-2 text-center leading-6 ">
+                      {t('forgot_password.sub_title')}
+                    </Text>
+                  </View>
+                  {errMessage && (
+                    <ErrorText
+                      containerClassName="justify-center mt-4"
+                      message={errMessage}
+                    />
+                  )}
+                  <View className="mt-4 flex flex-col ">
+                    {(
+                      t('form', {
+                        returnObjects: true,
+                      }) as Array<any>
+                    ).map((item, index) => {
+                      if (item.name === 'email' || item.name === 'user') {
+                        return;
+                      } else {
+                        return (
+                          <View className="pt-5" key={index}>
+                            <Controller
+                              control={control}
+                              name={item.name}
+                              rules={{
+                                required: true,
+                              }}
+                              render={({
+                                field: { onChange, onBlur, value },
+                              }) => (
+                                <View className="flex flex-col gap-1">
+                                  <TextInput
+                                    rightIcon={
+                                      (item.name === 'repeat_password' ||
+                                        item.name === 'password') &&
+                                      (!hidePassword ? (
+                                        <TouchableOpacity
+                                          onPress={() =>
+                                            setHidePassword(!hidePassword)
+                                          }
+                                          className=" mt-[2px]"
+                                        >
+                                          <IconEyeOn />
+                                        </TouchableOpacity>
+                                      ) : (
+                                        <TouchableOpacity
+                                          onPress={() =>
+                                            setHidePassword(!hidePassword)
+                                          }
+                                          className=" mt-[2px]"
+                                        >
+                                          <IconEyeOff />
+                                        </TouchableOpacity>
+                                      ))
+                                    }
+                                    secureTextEntry={
+                                      (item.name === 'password' ||
+                                        item.name === 'repeat_password') &&
+                                      hidePassword
+                                        ? true
+                                        : false
+                                    }
+                                    label={item.label}
+                                    placeholder={item.placeholder}
+                                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                                    onBlur={onBlur}
+                                    onChangeText={(text) => onChange(text)}
+                                    value={value}
+                                  />
+                                </View>
+                              )}
+                            />
+                            {errors[item.name as keyof FormData] && (
+                              <ErrorText
+                                message={
+                                  errors[item.name as keyof FormData]?.message
+                                }
+                              />
+                            )}
+                          </View>
+                        );
+                      }
+                    })}
+                  </View>
+                </View>
+                <View>
+                  <Button
+                    containerClassName="  bg-primary-default flex-none px-1 "
+                    textClassName="line-[30px] text-center text-md font-medium text-white"
+                    title={t('reset_password')}
+                    onPress={handleSubmit(onSubmit)}
+                  />
+                </View>
               </View>
-            </View>
-            {isLoading && (
-              <Loading
-                containerClassName="absolute top-0 left-0"
-                text={t('change_password.changing') as string}
-              />
-            )}
-          </SafeAreaView>
-        </View>
+            </SafeAreaView>
+          </View>
+        </ScrollView>
+        {isLoading && (
+          <Loading
+            containerClassName="absolute top-0 left-0"
+            text={t('change_password.changing') as string}
+          />
+        )}
       </View>
     </Modal>
   );

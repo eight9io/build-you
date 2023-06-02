@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 
 import { RootStackParamList } from '../../navigation/navigation.type';
+import { removeAuthTokensLocalOnLogout } from '../../utils/checkAuth';
+import { useAuthStore } from '../../store/auth-store';
 
 import Settings from '../../component/Settings';
 import NavBarInnerScreen from '../../component/NavBar/NavBarInnerScreen';
@@ -18,18 +21,26 @@ export type SetingsScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const SettingsScreen: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
+  const { setAccessToken, getAccessToken } = useAuthStore();
+  const { t } = useTranslation();
+
+  const handleLogout = () => {
+    removeAuthTokensLocalOnLogout();
+    setAccessToken(null);
+  };
+
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
-      <NavBarInnerScreen title="Settings" navigation={navigation} />
-      <View className="bg-gray-veryLight flex-1 flex flex-col mt-2">
+      <NavBarInnerScreen title={t('user_settings_screen.title')} navigation={navigation} />
+      <View className="bg-gray-veryLight mt-2 flex flex-1 flex-col">
         <Settings />
-        <View className="pt-6 w-full bg-white px-4">
+        <View className="w-full bg-white px-4 pt-6">
           <View className="h-12">
             <Button
-              title="Log out"
+              title={t('user_settings_screen.logout')}
               containerClassName="bg-gray-medium flex-1"
               textClassName="text-white text-md leading-6"
-              onPress={() => console.log('logout')}
+              onPress={() => handleLogout()}
             />
           </View>
         </View>

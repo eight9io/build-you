@@ -21,6 +21,7 @@
     "profile": "Profile"
   },
   "top_nav.noti": "Notifications",
+  "top_nav.your_feed": "Your feed",
   "top_nav.challenges": "Challenges",
   "register_modal.title": "Register for free",
   "register_modal.description": "Create your free account, get maximum motivation and support from the community and coaches.",
@@ -185,5 +186,25 @@
       "title": "Thank you for your information. We're personalizing your experience..."
     }
   },
-  "register_screen.creating": "Creating your account. Please log in with your email and password after redirecting..."
+  "register_screen.creating": "Creating your account. Please log in with your email and password after redirecting...",
+
+  "user_settings_screen.title": "Settings",
+  "user_settings_screen.logout": "Log out",
+  "user_settings_screen.general_settings": "General settings",
+  "user_settings_screen": {
+    "general_settings_description": "Manage settings related to permissions, ads and other account information.",
+    "general_settings_sections": {
+      "cookie_regulation": "Cookie regulations",
+      "preferences": "Preferences",
+      "community_standards": "Community standards",
+      "notifications": "Notifications"
+    },
+    "account": "Account",
+    "account_settings_description": "Manage settings related to permissions, ads and other account information.",
+    "account_settings_sections": {
+      "personal_information": "Personal information",
+      "security_and_access": "Security and access",
+      "condition_of_use": "Condition of use"
+    }
+  }
 }

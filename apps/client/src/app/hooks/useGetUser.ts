@@ -1,24 +1,28 @@
 import { useEffect, useState } from 'react';
-import httpInstance, { setAuthToken } from '../utils/http';
+import httpInstance, { setAuthTokenToHttpHeader } from '../utils/http';
 import { useUserProfileStore } from '../store/user-data';
 import { useAuthStore } from '../store/auth-store';
 
 import { IUserData } from '../types/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const useGetUserData = () => {
+interface IUseGetUserReturn {
+  isCompleteProfile: boolean;
+  setIsCompleteProfile: (value: boolean) => void;
+  fetchingUserDataLoading: boolean;
+}
+
+export const useGetUserData: () => IUseGetUserReturn = () => {
   const [isCompleteProfile, setIsCompleteProfile] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { getAccessToken } = useAuthStore();
+  const [loading, setLoading] = useState<boolean>(true);
   const { setUserProfile } = useUserProfileStore();
 
-  const accessToken = getAccessToken();
-
-  useEffect(() => {
+  const fetchingUserData = async () => {
+    setLoading(true);
+    const accessToken = await AsyncStorage.getItem('@auth_token');
     if (accessToken !== null) {
-      setLoading(true);
-      setAuthToken(accessToken);
-
-      httpInstance
+      setAuthTokenToHttpHeader(accessToken);
+      await httpInstance
         .get('/user/me')
         .then((res) => {
           setUserProfile(res.data);
@@ -27,11 +31,20 @@ export const useGetUserData = () => {
           }
         })
         .catch((err) => {
-          console.log('err', err);
+          console.error('err', err);
         });
-      setLoading(false);
+    } else {
     }
-  }, [accessToken]);
+    setLoading(false);
+  };
 
-  return { isCompleteProfile, setIsCompleteProfile, loading };
+  useEffect(() => {
+    fetchingUserData();
+  }, []);
+
+  return {
+    isCompleteProfile,
+    setIsCompleteProfile,
+    fetchingUserDataLoading: loading,
+  };
 };

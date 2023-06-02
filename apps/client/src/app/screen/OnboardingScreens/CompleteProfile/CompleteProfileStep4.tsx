@@ -27,7 +27,8 @@ import CheckedSvg from './asset/checked.svg';
 import UncheckedSvg from './asset/uncheck.svg';
 import WarningSvg from './asset/warning.svg';
 
-import httpInstance, { setAuthToken } from '../../../utils/http';
+import httpInstance, { setAuthTokenToHttpHeader } from '../../../utils/http';
+import { useIsCompleteProfileStore } from '../../../store/is-complete-profile';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -162,7 +163,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   const { setIsCompleteProfile } = useGetUserData();
 
   const userData = getUserProfile();
-  console.log(userData.id);
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -219,7 +219,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     const softSkills = convertSelectedToSoftSkillProps(
       selectedCompetencedSkill
     );
-    console.log(userData);
     httpInstance
       .put(`/user/update/${userData.id}`, {
         ...profile,
@@ -232,8 +231,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
-        navigation.navigate('LoginScreen');
+        console.error('upload err', err);
+        navigation.navigate('CompleteProfileStep1Screen');
       });
   };
 
@@ -323,31 +322,36 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 const isSkillAlreadySelected = selectedCompetencedSkill.find(
                   (selected) => selected.label === item.label
                 );
+                const randomIndex = Math.random().toString();
                 return (
-                  <TouchableOpacity
-                    onPress={() => addCompetencedSkill(item as IFormValueInput)}
-                  >
-                    <View
-                      className={clsx(
-                        'flex-row items-center justify-start px-4 py-3',
-                        {
-                          'bg-gray-light': isSelected,
-                        }
-                      )}
+                  <View key={randomIndex}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        addCompetencedSkill(item as IFormValueInput)
+                      }
                     >
-                      <Checkbox
-                        value={!!isSkillAlreadySelected}
-                        onValueChange={onPress}
-                        color={isSelected ? '#4630EB' : undefined}
-                      />
-                      <Text
-                        key={item.label}
-                        className="text-black-default text-h6 pl-3 font-medium leading-6"
+                      <View
+                        className={clsx(
+                          'flex-row items-center justify-start px-4 py-3',
+                          {
+                            'bg-gray-light': isSelected,
+                          }
+                        )}
                       >
-                        {item.label}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+                        <Checkbox
+                          value={!!isSkillAlreadySelected}
+                          onValueChange={onPress}
+                          color={isSelected ? '#4630EB' : undefined}
+                        />
+                        <Text
+                          key={item.label}
+                          className="text-black-default text-h6 pl-3 font-medium leading-6"
+                        >
+                          {item.label}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 );
               }}
             />

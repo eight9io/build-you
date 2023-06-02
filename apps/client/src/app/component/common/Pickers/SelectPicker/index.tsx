@@ -1,14 +1,20 @@
 import { FC, useEffect, useRef } from 'react';
-import { FlatList, TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import clsx from 'clsx';
 import Modal from 'react-native-modal';
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 
 import Button from '../../Buttons/Button';
 import BottomSheet2 from '../../BottomSheet/BottomSheet';
+import {
+  FlatList,
+  ScrollView,
+  NativeViewGestureHandler,
+} from 'react-native-gesture-handler';
 
 interface ISelectPickerProps {
   show: boolean;
-  data: ArrayLike<any> | null | undefined;
+  data: Array<any> | null | undefined;
   selectedIndex?: number;
   onSelect: (index?: number) => void;
   onCancel: () => void;
@@ -20,76 +26,97 @@ const SelectPicker: FC<ISelectPickerProps> = ({
   onSelect,
   onCancel,
 }) => {
-  const flatListRef = useRef<FlatList>(null);
-  useEffect(() => {
-    if (selectedIndex) {
-      flatListRef.current?.scrollToIndex({
-        index: selectedIndex,
-        animated: true,
-      });
-    }
-  }, []);
+  // const flatListRef = useRef<FlatList>(null);
+  // useEffect(() => {
+  //   if (selectedIndex) {
+  //     flatListRef.current?.scrollToIndex({
+  //       index: selectedIndex || 0,
+  //       animated: true,
+  //     });
+  //   }
+  // }, []);
+
   return (
     <Modal
       isVisible={show}
       onBackdropPress={onCancel}
-      onSwipeComplete={onCancel}
-      swipeDirection={'down'}
+      // onSwipeComplete={onCancel}
+      // swipeDirection={'down'}
       hasBackdrop
       onBackButtonPress={onCancel}
-      backdropColor={'gray'}
-      backdropOpacity={0.2}
+      backdropColor={'#85868C'}
+      backdropOpacity={0.3}
       style={{ margin: 0, justifyContent: 'flex-end' }}
     >
       <TouchableOpacity
-        style={{ flex: 1 }}
-        activeOpacity={1}
+        style={{ height: '30%', backgroundColor: 'transperent' }}
+        activeOpacity={0}
         onPressOut={onCancel}
-      >
-        <View className="flex-1">
-          <BottomSheet2 onClose={onCancel} snapPoints={['70%']}>
-            <View className="relative flex h-full w-full flex-col">
-              <View className="pb-44">
-                <View className="flex w-full flex-row items-center justify-center pb-10">
-                  <Text className="text-base font-semibold">Occupation</Text>
-                </View>
-                <FlatList
-                  data={data}
-                  keyExtractor={(item, index) => index.toString()}
-                  initialNumToRender={30}
-                  showsVerticalScrollIndicator={true}
-                  ref={flatListRef}
-                  renderItem={({ item, index }) => {
-                    return (
-                      <View className="px-4">
-                        <Button
-                          onPress={() => onSelect(index)}
-                          title={item.label}
-                          containerClassName={clsx(
-                            index === selectedIndex && 'bg-gray-light'
-                          )}
-                          textClassName={clsx(
-                            'text-base font-normal',
-                            index === selectedIndex && 'font-semibold'
-                          )}
-                        />
-                      </View>
-                    );
-                  }}
-                />
-              </View>
-              <View className="absolute bottom-10 h-12 w-full px-4">
-                <Button
-                  title={'Save'}
-                  onPress={onSelect}
-                  containerClassName="bg-primary-default flex-1"
-                  textClassName="text-white"
-                />
-              </View>
+      ></TouchableOpacity>
+      <View className="flex-1">
+        <BottomSheet2 onClose={onCancel} snapPoints={['100%']}>
+          <View className="relative">
+            <View className="flex w-full flex-row items-center justify-center pb-8">
+              <Text className="text-base font-semibold">Occupation</Text>
             </View>
-          </BottomSheet2>
-        </View>
-      </TouchableOpacity>
+            <ScrollView className="h-4/5">
+              <View className="flex h-full w-full flex-col pb-10 ">
+                {data?.map((item, index) => {
+                  return (
+                    <View className="px-4" key={`${item?.label + index}`}>
+                      <Button
+                        onPress={() => onSelect(index)}
+                        title={item.label}
+                        containerClassName={clsx(
+                          'focus:bg-gray-light',
+                          index === selectedIndex && 'bg-gray-light'
+                        )}
+                        textClassName={clsx(
+                          'text-base font-normal',
+                          index === selectedIndex && 'font-semibold'
+                        )}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
+
+            {/* TODO: if we want to use FlatList instead of ScrollView for scrolling to the selected item, we need to fix the height of the FlatList */}
+            {/* <FlatList
+              data={data}
+              keyExtractor={(item, index) => `${item?.label + index}`}
+              renderItem={({ item, index }) => {
+                return (
+                  <View className="px-4" key={`${item?.label + index}`}>
+                    <Button
+                      onPress={() => onSelect(index)}
+                      title={item.label}
+                      containerClassName={clsx(
+                        'focus:bg-gray-light',
+                        index === selectedIndex && 'bg-gray-light'
+                      )}
+                      textClassName={clsx(
+                        'text-base font-normal',
+                        index === selectedIndex && 'font-semibold'
+                      )}
+                    />
+                  </View>
+                );
+              }
+              }
+            /> */}
+            <View className="absolute bottom-[-40px] h-12 w-full px-4">
+              <Button
+                title={'Save'}
+                onPress={onSelect}
+                containerClassName="bg-primary-default flex-1"
+                textClassName="text-white"
+              />
+            </View>
+          </View>
+        </BottomSheet2>
+      </View>
     </Modal>
   );
 };

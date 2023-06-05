@@ -11,7 +11,10 @@ import {
 import clsx from 'clsx';
 
 import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
-import { getImageFromUserDevice, uploadNewAvatar } from '../../../../utils/pickImage';
+import {
+  getImageFromUserDevice,
+  uploadNewAvatar,
+} from '../../../../utils/getUserImage';
 
 interface IProfileAvatarProps {
   src: string;

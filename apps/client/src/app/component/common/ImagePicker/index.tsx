@@ -1,11 +1,13 @@
 import React, { useState, useEffect, FC } from 'react';
 import { Image, View, TouchableOpacity, Text } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
+import clsx from 'clsx';
+
 import CameraIcon from './asset/camera-icon.svg';
 
+import { getImageFromUserDevice } from '../../../utils/pickImage';
 import { getRandomId } from '../../../utils/common';
 import { IUploadMediaWithId } from '../../../types/media';
-import clsx from 'clsx';
 
 interface IImagePickerProps {
   allowsMultipleSelection?: boolean;
@@ -22,18 +24,14 @@ const ImagePicker: FC<IImagePickerProps> = ({
 }) => {
   const [images, setImages] = useState<string[]>([]);
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ExpoImagePicker.launchImageLibraryAsync({
-      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: allowsMultipleSelection,
-    });
+  const pickImageFunction = getImageFromUserDevice({
+    allowsMultipleSelection,
+  });
 
-    if (!result.canceled) {
+  const handlePickImage = async () => {
+    const result = await pickImageFunction();
+    if (result && !result.canceled) {
       if (setExternalImages && setIsSelectedImage) {
-        // for each image in result.assets, we get the uri, generate an id and push it to the array
         result.assets.forEach((asset) => {
           const id = getRandomId();
           setExternalImages((prev: IUploadMediaWithId[]) => [
@@ -46,7 +44,6 @@ const ImagePicker: FC<IImagePickerProps> = ({
       setImages(result.assets.map((asset) => asset.uri));
     }
   };
-
   return (
     <View className="flex flex-col">
       {images.length > 0 && !setExternalImages && (
@@ -81,7 +78,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
       )}
 
       <TouchableOpacity
-        onPress={pickImage}
+        onPress={handlePickImage}
         disabled={isSelectedImage === false}
         className="bg-gray-light mt-5 h-16 rounded-xl"
       >

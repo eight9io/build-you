@@ -41,15 +41,20 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 SplashScreen.preventAutoHideAsync();
 
 export const RootNavigation = () => {
+  const { t } = useTranslation();
   const [isMainAppLoading, setIsMainAppLoading] = useState<boolean>(true);
 
   const { setAccessToken, getAccessToken } = useAuthStore();
-  const { setIsCompleteProfileStore, getIsCompleteProfileStore } = useIsCompleteProfileStore();
-  
-  const logined = getAccessToken();
-  const isCompleteProfile = getIsCompleteProfileStore();
+  const { setIsCompleteProfileStore, getIsCompleteProfileStore } =
+    useIsCompleteProfileStore();
 
-  const { t } = useTranslation();
+  const logined = getAccessToken();
+  console.log('logined', logined)
+
+  let isCompleteProfile: any = null;
+  if (logined) {
+    isCompleteProfile = getIsCompleteProfileStore();
+  }
 
   useEffect(() => {
     checkAccessTokenLocal(setAccessToken);
@@ -58,7 +63,8 @@ export const RootNavigation = () => {
   useEffect(() => {
     if (logined) {
       checkUserCompleProfile(setIsCompleteProfileStore, setIsMainAppLoading);
-    } else {
+    } else if (!logined && isMainAppLoading) {
+      setIsCompleteProfileStore(false);
       setIsMainAppLoading(false);
     }
   }, [logined]);
@@ -71,7 +77,7 @@ export const RootNavigation = () => {
       setTimeout(() => {
         hideSplashScreen();
       }, 500);
-    } 
+    }
   }, [isMainAppLoading]);
 
   return (

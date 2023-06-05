@@ -21,13 +21,13 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   const { t } = useTranslation();
 
   return (
-    <View className={clsx('relative')}>
+    <View className={clsx('relative z-10')}>
       <CoverImage src="https://images.unsplash.com/photo-1522774607452-dac2ecc66330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         <ProfileAvartar src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80" />
       </View>
-      <View className={clsx('absolute bottom-[-25px] right-4')}>
+      <View className={clsx('absolute bottom-[-25px] right-4 ')}>
         <OutlineButton
           title={t('button.edit_profile')}
           containerClassName="px-11 py-2"

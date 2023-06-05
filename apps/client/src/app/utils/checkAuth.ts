@@ -55,6 +55,7 @@ export const checkAuthTokenLocalValidation = async () => {
   try {
     const accessTokenLocal = await AsyncStorage.getItem('@auth_token');
     const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
+    if (!accessTokenLocal) return false;
     if (accessTokenLocal) {
       const deocdedToken = decodedAuthToken(accessTokenLocal);
       const currentTime = Date.now() / 1000;
@@ -65,13 +66,20 @@ export const checkAuthTokenLocalValidation = async () => {
             removeAuthTokensLocalOnLogout();
             return false;
           } else {
-            const newTokens = await httpInstance.post('/auth/refresh', {
-              token: refreshTokenLocal,
-            });
+            const newTokens = await httpInstance
+              .post('/auth/refresh', {
+                token: refreshTokenLocal,
+              })
+              .then((res) => {
+                return res;
+              });
             if (newTokens.status !== 201) {
               removeAuthTokensLocalOnLogout();
             } else {
-              addAuthTokensLocalOnLogin(newTokens.data.authorization, newTokens.data.refresh)
+              addAuthTokensLocalOnLogin(
+                newTokens.data.authorization,
+                newTokens.data.refresh
+              );
               return true;
             }
           }

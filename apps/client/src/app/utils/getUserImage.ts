@@ -34,14 +34,8 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
 export const uploadNewAvatar = async (image: string) => {
   // set multipart/form-data as content type, on swagger only accept this type, and the field name is 'file'
   const formData = new FormData();
-  console.log(image);
   formData.append('file', image);
-  const response = await httpInstance.post('/user/avatar', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      boundary: '----WebKitFormBoundary7MA4YWxkTrZu0gW',
-    },
-  });
-  console.log(response);
-  return response;
+  const { data } = await httpInstance.post('/user/avatar', formData);
+  
+  return data;
 };

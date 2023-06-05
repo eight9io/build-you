@@ -49,12 +49,8 @@ export const RootNavigation = () => {
     useIsCompleteProfileStore();
 
   const logined = getAccessToken();
-  console.log('logined', logined)
 
-  let isCompleteProfile: any = null;
-  if (logined) {
-    isCompleteProfile = getIsCompleteProfileStore();
-  }
+  const isCompleteProfile: any = getIsCompleteProfileStore();
 
   useEffect(() => {
     checkAccessTokenLocal(setAccessToken);
@@ -63,7 +59,7 @@ export const RootNavigation = () => {
   useEffect(() => {
     if (logined) {
       checkUserCompleProfile(setIsCompleteProfileStore, setIsMainAppLoading);
-    } else if (!logined && isMainAppLoading) {
+    } else if (!logined && logined !== null) {
       setIsCompleteProfileStore(false);
       setIsMainAppLoading(false);
     }
@@ -78,7 +74,7 @@ export const RootNavigation = () => {
         hideSplashScreen();
       }, 500);
     }
-  }, [isMainAppLoading]);
+  }, [isMainAppLoading, isCompleteProfile]);
 
   return (
     <NavigationContainer>

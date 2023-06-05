@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import { useCompleteProfileStore } from '../../../store/complete-user-profile';
@@ -57,7 +57,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
 
   return (
     <View className="relative flex h-full w-full flex-col items-center justify-start">
-      <Header
+      {/* <Header
         title="Complete profile"
         leftBtn={
           <NavButton
@@ -73,7 +73,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
             onPress={() => navigation.navigate('CompleteProfileStep3Screen')}
           />
         }
-      />
+      /> */}
       <View className="pt-2">
         <StepOfSteps step={2} totalSteps={4} />
       </View>
@@ -84,45 +84,41 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
       </View>
 
       {/* Form */}
-      <View className="mt-4 flex h-full w-full  rounded-t-xl ">
-        <View className="mt-4 flex flex-col px-5 ">
-          <Controller
-            control={control}
-            name="biography"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View className="flex flex-col">
-                <TextInput
-                  label="Biography"
-                  placeholder={'Enter your last name'}
-                  placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  multiline={true}
-                  numberOfLines={4}
-                  className="border-gray-medium bg-gray-veryLight ml-0 mt-0 flex h-36 w-full rounded-[10px] border px-3 py-3 text-base font-normal"
-                />
-              </View>
-            )}
-          />
-          <VideoPicker
-            setExternalVideo={setPickedVideo}
-            useBigImage={true}
-            removeVideo={removeVideo}
-          />
+      <ScrollView className="w-full">
+        <View className="mt-4 flex h-full w-full  rounded-t-xl ">
+          <View className="mt-4 flex flex-col px-5 ">
+            <Controller
+              control={control}
+              name="biography"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <View className="flex flex-col">
+                  <TextInput
+                    label="Biography"
+                    placeholder={'Enter your last name'}
+                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    multiline={true}
+                    numberOfLines={4}
+                  />
+                </View>
+              )}
+            />
+            <VideoPicker
+              setExternalVideo={setPickedVideo}
+              useBigImage={true}
+              removeVideo={removeVideo}
+            />
+            <Button
+              title="Next"
+              containerClassName="bg-primary-default flex-1 my-5"
+              textClassName="text-white"
+              onPress={handleSubmit(handleSubmitForm)}
+            />
+          </View>
         </View>
-      </View>
-
-      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
-        <View className="h-12">
-          <Button
-            title="Next"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-            onPress={handleSubmit(handleSubmitForm)}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

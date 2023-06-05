@@ -1,10 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useTransition } from 'react';
 import {
   View,
   Text,
   ScrollView,
   Dimensions,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -33,6 +32,7 @@ import Header from '../../../component/common/Header';
 import Warning from './asset/warning.svg';
 
 import DateTimePicker2 from '../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+import { useTranslation } from 'react-i18next';
 
 interface CompleteProfileStep1Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -70,7 +70,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     resolver: yupResolver(OnboardingScreen1Validators()),
     reValidateMode: 'onChange',
   });
-
+  const { t } = useTranslation();
   const handleDatePicked = (date?: Date) => {
     if (date) {
       setValue('birth', date);
@@ -117,13 +117,12 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       />
 
       <View className="relative flex h-full w-full flex-col items-center justify-start">
-        <Header title="Complete profile" />
         <View className="pt-2">
           <StepOfSteps step={1} totalSteps={4} />
         </View>
         <View className="flex flex-col items-center justify-center py-6">
           <Text className="text-black-default text-h4 font-medium leading-6">
-            Tell us about yourself
+            {t('form_onboarding.screen_1.title')}
           </Text>
         </View>
 
@@ -132,7 +131,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         </View>
 
         {/* Form */}
-        <ScrollView className='w-full'>
+        <ScrollView className="w-full">
           <View className=" flex h-full w-full rounded-t-xl">
             <View className="mt-4 flex flex-col px-5 ">
               <View className="pt-3">
@@ -148,7 +147,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
-                        className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-1 text-base font-normal"
                       />
                       {errors.name && (
                         <View className="flex flex-row pt-2">
@@ -175,7 +173,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
-                        className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-1 text-base font-normal"
                       />
                       {errors.surname && (
                         <View className="flex flex-row pt-2">
@@ -209,10 +206,10 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={dayjs(value).format('DD/MM/YYYY')}
-                        textAlignVertical="top"
+                        // textAlignVertical="top"
                         editable={false}
                         onPress={() => setShowDateTimePicker(true)}
-                        className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-2 text-base font-normal"
+                        className="text-black-default"
                       />
                       {errors.birth && (
                         <View className="flex flex-row pt-2">
@@ -244,7 +241,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onChangeText={onChange}
                         onPress={() => setShowOccupationPicker(true)}
                         value={value}
-                        className="border-gray-medium bg-gray-veryLight flex h-12 w-full flex-row rounded-[10px] border-[1px] px-3 pb-2 text-base font-normal"
                       />
                       {errors.occupation && (
                         <View className="flex flex-row pt-2">
@@ -258,20 +254,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
+              <Button
+                title="Next"
+                containerClassName="bg-primary-default flex-1 my-5"
+                textClassName="text-white text-md leading-6"
+                onPress={handleSubmit(handleSubmitForm)}
+              />
             </View>
           </View>
         </ScrollView>
-
-        <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
-          <View className="h-12">
-            <Button
-              title="Next"
-              containerClassName="bg-primary-default flex-1"
-              textClassName="text-white text-md leading-6"
-              onPress={handleSubmit(handleSubmitForm)}
-            />
-          </View>
-        </View>
       </View>
     </View>
   );

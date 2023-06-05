@@ -254,7 +254,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   return (
     <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
       <View className="relative flex h-full w-full flex-col items-center justify-start">
-        <Header
+        {/* <Header
           title="Complete profile"
           leftBtn={
             <NavButton
@@ -263,8 +263,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               onPress={() => navigation.goBack()}
             />
           }
-        />
-        <View className="pt-4">
+        /> */}
+        <View>
           <StepOfSteps step={4} totalSteps={4} />
         </View>
         <View className="flex w-[282px] flex-col items-center justify-center py-6 ">
@@ -305,6 +305,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               containerStyle={{
                 width: '100%',
                 backgroundColor: '#fafafa',
+                zIndex: 10,
               }}
               dropDownContainerStyle={{
                 backgroundColor: '#fafafa',
@@ -313,6 +314,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 borderRadius: 8,
                 maxHeight: 300,
                 overflow: 'scroll',
+                zIndex: 10,
               }}
               theme="LIGHT"
               multiple={true}

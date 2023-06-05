@@ -94,7 +94,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
-                      className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                     />
                   </View>
                 )}
@@ -116,7 +115,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
-                      className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                     />
                   </View>
                 )}
@@ -142,7 +140,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                       textAlignVertical="top"
                       editable={false}
                       onPress={() => setShowDateTimePicker(true)}
-                      className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                     />
                   </View>
                 )}
@@ -166,7 +163,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                       onChangeText={onChange}
                       onPress={() => setShowOccupationPicker(true)}
                       value={value}
-                      className="border-gray-medium bg-gray-veryLight flex w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                     />
                   </View>
                 )}
@@ -189,7 +185,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                       onChangeText={onChange}
                       value={value}
                       multiline
-                      className="border-gray-medium bg-gray-veryLight flex h-40 w-full rounded-[10px] border-[1px] px-3 py-3 text-base font-normal"
                     />
                   </View>
                 )}

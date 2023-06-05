@@ -134,7 +134,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         isVisible={isShowAddSkillModal}
         onClose={() => setIsShowAddSkillModal(false)}
       />
-      <Header
+      {/* <Header
         title="Complete profile"
         leftBtn={
           <NavButton
@@ -143,22 +143,22 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             onPress={() => navigation.goBack()}
           />
         }
-      />
-      <View className="pt-4">
+      /> */}
+      <View>
         <StepOfSteps step={3} totalSteps={4} />
       </View>
-      <View className="flex w-[282px] flex-col items-center justify-center py-6 ">
+      <View className="flex flex-col items-center justify-center px-4 py-6 ">
         <Text className="text-black-default text-h4 text-center font-semibold leading-6">
           How do you define yourself as competent?
         </Text>
-        <Text className="text-gray-dark pt-2 text-center text-lg font-normal leading-5">
+        <Text className="text-gray-dark pt-2 text-center text-lg font-normal leading-6">
           Choose at least 3 and up to a maximum of 10 hard skills to better tell
           the community about yourself
         </Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator style={{ marginVertical: 40 }}>
-        <View className="h-full w-full flex-col justify-between">
+      <ScrollView showsVerticalScrollIndicator>
+        <View className="h-full w-full flex-col justify-between ">
           <View className="align-center w-full flex-row flex-wrap justify-center">
             {arraySkills.map((item, index) => (
               <Button
@@ -184,18 +184,14 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             onPress={() => setIsShowAddSkillModal(true)}
           />
           {numberOfSkillError && (
-            <Text className="pt-3 text-center text-sm font-normal leading-5 text-red-500">
+            <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
               Please select at least 3 skills
             </Text>
           )}
-        </View>
-      </ScrollView>
 
-      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
-        <View className="h-12">
           <Button
             title="Next"
-            containerClassName="bg-primary-default flex-1"
+            containerClassName="bg-primary-default flex-1 m-5"
             textClassName="text-white"
             onPress={() =>
               checkNumberOfSkills() &&
@@ -203,7 +199,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             }
           />
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

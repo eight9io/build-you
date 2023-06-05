@@ -36,7 +36,7 @@ const StepOfSteps: FC<IStepOfStepsProps> = ({ step, totalSteps }) => {
   };
 
   return (
-    <View className="flex h-8 flex-col items-center justify-between">
+    <View className="mt-8 flex h-8 flex-col items-center justify-between">
       <Text className="text-black-default text-md font-regular font-normal leading-4">
         Steps {step} of {totalSteps}
       </Text>

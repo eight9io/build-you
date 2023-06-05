@@ -15,6 +15,9 @@ import CompleteProfileStep2 from './CompleteProfileStep2';
 import CompleteProfileStep3 from './CompleteProfileStep3';
 import CompleteProfileStep4 from './CompleteProfileStep4';
 import CompleteProfileFinish from './CompleteProfileFinish';
+import Header from '../../../component/common/Header';
+import AppTitle from '../../../component/common/AppTitle';
+import NavButton from '../../../component/common/Buttons/NavButton';
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -98,23 +101,73 @@ const CompleteProfileScreen = () => {
     <CompleteProfileStack.Navigator
       screenOptions={{
         headerShown: false,
+        headerBackVisible: false,
+        headerTitleAlign: 'center',
       }}
     >
       <CompleteProfileStack.Screen
         name="CompleteProfileStep1Screen"
         component={CompleteProfileScreen1}
+        options={{
+          headerShown: true,
+          headerTitle: () => <AppTitle title="Complete profile" />,
+        }}
       />
       <CompleteProfileStack.Screen
         name="CompleteProfileStep2Screen"
         component={CompleteProfileScreen2}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title="Complete profile" />,
+
+          headerLeft: (props) => (
+            <NavButton
+              text="Back"
+              withBackIcon={true}
+              onPress={() => navigation.navigate('CompleteProfileStep1Screen')}
+            />
+          ),
+
+          headerRight: (props) => (
+            <NavButton
+              text="Skip"
+              withIcon={false}
+              onPress={() => navigation.navigate('CompleteProfileStep3Screen')}
+            />
+          ),
+        })}
       />
       <CompleteProfileStack.Screen
         name="CompleteProfileStep3Screen"
         component={CompleteProfileScreen3}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title="Complete profile" />,
+
+          headerLeft: (props) => (
+            <NavButton
+              text="Back"
+              withBackIcon={true}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+        })}
       />
       <CompleteProfileStack.Screen
         name="CompleteProfileStep4Screen"
         component={CompleteProfileScreen4}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title="Complete profile" />,
+
+          headerLeft: (props) => (
+            <NavButton
+              text="Back"
+              withBackIcon={true}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+        })}
       />
       <CompleteProfileStack.Screen
         name="CompleteProfileFinishScreen"

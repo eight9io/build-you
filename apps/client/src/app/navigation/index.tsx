@@ -49,6 +49,7 @@ export const RootNavigation = () => {
     useIsCompleteProfileStore();
 
   const logined = getAccessToken();
+  console.log('logined', logined);
 
   const isCompleteProfile: any = getIsCompleteProfileStore();
 
@@ -82,6 +83,7 @@ export const RootNavigation = () => {
         screenOptions={{
           headerBackVisible: false,
           headerTitleAlign: 'center',
+          headerShown: false,
         }}
       >
         {logined && isCompleteProfile && (

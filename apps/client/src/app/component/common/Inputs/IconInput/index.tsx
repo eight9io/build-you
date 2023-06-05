@@ -40,9 +40,6 @@ const IconInput: React.FC<IIconInputProps> = ({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                className={clsx(
-                  'border-gray-medium bg-gray-veryLight flex h-12 rounded-[10px] border-[1px] px-3 pb-3 pt-2 text-base font-normal'
-                )}
               />
             </View>
           </View>

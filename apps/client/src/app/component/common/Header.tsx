@@ -20,7 +20,7 @@ export const Header: FC<IHeaderProps> = ({
   onRightBtnPress,
 }) => {
   return (
-    <View className="relative flex h-9 w-full items-center justify-start">
+    <View className="relative mt-5 flex h-9 w-full items-center justify-start">
       {leftBtn ? (
         <TouchableOpacity
           className="absolute left-5 top-2"

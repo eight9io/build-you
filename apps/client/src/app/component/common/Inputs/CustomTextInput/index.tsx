@@ -29,7 +29,7 @@ const CustomTextInput: React.FC<ICustomTextInputProps> = ({
         render={({ field: { onChange, onBlur, value } }) => (
           <View className={clsx('flex flex-col gap-1')}>
             <Text
-              className={clsx('text-primary-default text-sm font-semibold')}
+              className={clsx('text-primary-default text-md font-semibold')}
             >
               {title}
             </Text>

@@ -34,6 +34,7 @@ import { checkAccessTokenLocal } from '../utils/checkAuth';
 
 import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
+import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -49,9 +50,8 @@ export const RootNavigation = () => {
     useIsCompleteProfileStore();
 
   const logined = getAccessToken();
-  console.log('logined', logined);
 
-  const isCompleteProfile: any = getIsCompleteProfileStore();
+  const isCompleteProfile: boolean | null = getIsCompleteProfileStore();
 
   useEffect(() => {
     checkAccessTokenLocal(setAccessToken);
@@ -59,6 +59,7 @@ export const RootNavigation = () => {
 
   useEffect(() => {
     if (logined) {
+      setIsCompleteProfileStore(null);
       checkUserCompleProfile(setIsCompleteProfileStore, setIsMainAppLoading);
     } else if (!logined && logined !== null) {
       setIsCompleteProfileStore(false);
@@ -67,13 +68,13 @@ export const RootNavigation = () => {
   }, [logined]);
 
   useEffect(() => {
-    if (!isMainAppLoading && isCompleteProfile !== null) {
+    if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
       const hideSplashScreen = async () => {
         await SplashScreen.hideAsync();
       };
       setTimeout(() => {
         hideSplashScreen();
-      }, 500);
+      }, 1000);
     }
   }, [isMainAppLoading, isCompleteProfile]);
 
@@ -127,16 +128,32 @@ export const RootNavigation = () => {
             <RootStack.Screen
               name="ChallengeDetailScreenViewOnly"
               component={ChallengeDetailScreenViewOnly}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => '',
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
             />
             <RootStack.Screen
               name="ChallengeDetailComment"
               component={ChallengeDetailComment}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => '',
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
             />
             <RootStack.Screen
               name="SettingsScreen"
@@ -153,6 +170,21 @@ export const RootNavigation = () => {
               }}
             />
             <RootStack.Screen
+              name="EditPersonalProfileScreen"
+              component={EditPersonalProfileScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => <AppTitle title="Edit profile" />,
+                headerLeft: (props) => (
+                  <NavButton
+                    text="Back"
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
+            />
+            <RootStack.Screen
               name="NotificationsScreen"
               component={NotificationsScreen}
               options={{
@@ -166,6 +198,9 @@ export const RootNavigation = () => {
             <RootStack.Screen
               name="CompleteProfileScreen"
               component={CompleteProfileScreen}
+              options={{
+                headerShown: false,
+              }}
             />
           </>
         )}

@@ -9,6 +9,7 @@ interface IHeaderProps {
   rightBtn?: any;
   onLeftBtnPress?: () => void;
   onRightBtnPress?: () => void;
+  containerStyle?: string;
 }
 
 export const Header: FC<IHeaderProps> = ({
@@ -18,9 +19,15 @@ export const Header: FC<IHeaderProps> = ({
   rightBtn,
   onLeftBtnPress,
   onRightBtnPress,
+  containerStyle,
 }) => {
   return (
-    <View className="relative mt-5 flex h-9 w-full items-center justify-start">
+    <View
+      className={clsx(
+        'relative mt-5 flex h-9 w-full items-center justify-start',
+        containerStyle
+      )}
+    >
       {leftBtn ? (
         <TouchableOpacity
           className="absolute left-5 top-2"

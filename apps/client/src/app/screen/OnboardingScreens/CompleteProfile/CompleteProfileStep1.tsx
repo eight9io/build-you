@@ -6,7 +6,6 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import Modal from 'react-native-modal';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,15 +20,13 @@ import SignupAvatar from '../../../component/common/Avatar/SignupAvatar';
 import TextInput from '../../../component/common/Inputs/TextInput';
 
 import CalendarIcon from './asset/calendar-icon.svg';
-import DateTimePicker from '../../../component/common/Pickers/DateTimePicker';
 import SelectPicker from '../../../component/common/Pickers/SelectPicker';
 import { MOCK_OCCUPATION_SELECT } from '../../../mock-data/occupation';
 import Button from '../../../component/common/Buttons/Button';
 
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
-import Header from '../../../component/common/Header';
 
-import Warning from './asset/warning.svg';
+import Warning from '../../../component/asset/warning.svg';
 
 import DateTimePicker2 from '../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 import { useTranslation } from 'react-i18next';
@@ -94,11 +91,9 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     navigation.navigate('CompleteProfileStep2Screen');
   };
 
-  const deviceWidth = Dimensions.get('window').width;
-  const deviceHeight = Dimensions.get('window').height;
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   return (
-    <View className="">
+    <View className="relative">
       <DateTimePicker2
         selectedDate={selectedDate}
         setSelectedDate={handleDatePicked}
@@ -116,7 +111,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         }}
       />
 
-      <View className="relative flex h-full w-full flex-col items-center justify-start">
+      <View className=" flex h-full w-full flex-col items-center justify-start">
         <View className="pt-2">
           <StepOfSteps step={1} totalSteps={4} />
         </View>
@@ -228,9 +223,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                 <Controller
                   name="occupation"
                   control={control}
-                  // rules={{
-                  //   required: true,
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
@@ -254,15 +246,17 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
-              <Button
-                title="Next"
-                containerClassName="bg-primary-default flex-1 my-5"
-                textClassName="text-white text-md leading-6"
-                onPress={handleSubmit(handleSubmitForm)}
-              />
             </View>
           </View>
         </ScrollView>
+      </View>
+      <View className="absolute bottom-0 w-full px-4">
+        <Button
+          title="Next"
+          containerClassName="w-full bg-primary-default my-5 "
+          textClassName="text-white text-md leading-6"
+          onPress={handleSubmit(handleSubmitForm)}
+        />
       </View>
     </View>
   );

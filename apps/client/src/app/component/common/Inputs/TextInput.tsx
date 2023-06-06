@@ -30,7 +30,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
             <Base
               {...inputProps}
               className={clsx(
-                'border-gray-medium bg-gray-veryLight  w-full rounded-[10px] border-[1px] text-base font-normal',
+                'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
                 inputProps?.className,
                 Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
               )}
@@ -39,7 +39,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
           </View>
         </TouchableOpacity>
         {rightIcon ? (
-          <View className="0 absolute bottom-0 right-4 top-0 flex h-full justify-center">
+          <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
             {rightIcon}
           </View>
         ) : null}

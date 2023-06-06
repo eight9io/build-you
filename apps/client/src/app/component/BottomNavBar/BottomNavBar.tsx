@@ -22,6 +22,7 @@ import AppTitle from '../common/AppTitle';
 import IconSearch from '../common/IconSearch/IconSearch';
 import IconSetting from '../common/IconSetting/IconSetting';
 import { FC } from 'react';
+import NavButton from '../common/Buttons/NavButton';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
@@ -37,26 +38,37 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        headerShown: false,
+        headerShown: true,
+        headerTitleAlign: 'center',
         tabBarStyle: {
           position: 'absolute',
           backgroundColor: '#FFFFFF',
           height: 100,
+        },
+        headerRightContainerStyle: {
+          paddingRight: 10,
         },
       }}
     >
       <Tab.Screen
         name="Feed"
         component={HomeScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: () => <AppTitle title={t('your_feed.header')} />,
-          headerLeft: (props) => (
-            <IconSearch onPress={() => console.log('search')} />
-          ),
           headerRight: (props) => (
-            <IconSetting onPress={() => console.log('setting')} />
-        ),
-        tabBarIcon: ({ focused }) => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() =>
+                    navigation.navigate('CompleteProfileStep3Screen')
+                  }
+                />
+              }
+            />
+          ),
+
+          tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
               <FeedSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
@@ -69,7 +81,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               </Text>
             </View>
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name="Challenges"
@@ -77,6 +89,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           isCompany ? CompanyChallengesScreen : PersonalChallengesScreen
         }
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
               <ChallengesSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />

@@ -5,16 +5,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { useCompleteProfileStore } from '../../../store/complete-user-profile';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
-import SignupAvatar from '../../../component/common/Avatar/SignupAvatar';
 import TextInput from '../../../component/common/Inputs/TextInput';
 
 import Button from '../../../component/common/Buttons/Button';
 
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
-import CustomTextInput from '../../../component/common/Inputs/CustomTextInput';
-import Header from '../../../component/common/Header';
 
-import NavButton from '../../../component/common/Buttons/NavButton';
 import VideoPicker from '../../../component/common/VideoPicker';
 
 interface CompleteProfileStep2Props {
@@ -57,23 +53,6 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
 
   return (
     <View className="relative flex h-full w-full flex-col items-center justify-start">
-      {/* <Header
-        title="Complete profile"
-        leftBtn={
-          <NavButton
-            text="Back"
-            withBackIcon={true}
-            onPress={() => navigation.navigate('CompleteProfileStep1Screen')}
-          />
-        }
-        rightBtn={
-          <NavButton
-            text="Skip"
-            withIcon={false}
-            onPress={() => navigation.navigate('CompleteProfileStep3Screen')}
-          />
-        }
-      /> */}
       <View className="pt-2">
         <StepOfSteps step={2} totalSteps={4} />
       </View>
@@ -91,34 +70,39 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
               control={control}
               name="biography"
               render={({ field: { onChange, onBlur, value } }) => (
-                <View className="flex flex-col">
+                <View className="flex h-40 flex-col">
                   <TextInput
                     label="Biography"
-                    placeholder={'Enter your last name'}
+                    placeholder={'Your biography'}
                     placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
                     multiline={true}
                     numberOfLines={4}
+                    className="h-40"
                   />
                 </View>
               )}
             />
+          </View>
+          <View className="mt-10 px-5">
             <VideoPicker
               setExternalVideo={setPickedVideo}
               useBigImage={true}
               removeVideo={removeVideo}
             />
-            <Button
-              title="Next"
-              containerClassName="bg-primary-default flex-1 my-5"
-              textClassName="text-white"
-              onPress={handleSubmit(handleSubmitForm)}
-            />
           </View>
         </View>
       </ScrollView>
+      <View className="absolute bottom-0 w-full px-4">
+        <Button
+          title="Next"
+          containerClassName="w-full bg-primary-default my-5 "
+          textClassName="text-white text-md leading-6"
+          onPress={handleSubmit(handleSubmitForm)}
+        />
+      </View>
     </View>
   );
 };

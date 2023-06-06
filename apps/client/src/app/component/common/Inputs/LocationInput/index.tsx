@@ -5,7 +5,7 @@ import { View, Text, TextInput } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
-import LocationSvg from '../assets/location.svg'
+import LocationSvg from '../assets/location.svg';
 
 interface ILocationInputProps {
   control?: any;
@@ -43,13 +43,13 @@ const LocationInput: React.FC<ILocationInputProps> = ({ control }) => {
                 value={value}
                 multiline
               />
-              <View className='absolute top-2.5 right-2 pl-3'>
+              <View className="absolute right-3 top-3 pl-4">
                 <LocationSvg />
               </View>
             </View>
           </View>
         )}
-        name='location'
+        name="location"
       />
     </View>
   );

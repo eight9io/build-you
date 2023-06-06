@@ -10,10 +10,15 @@ import {
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import SettingsScreen from '../../SettingsScreen/SettingsScreen';
-import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
+import PersonalChallengeDetailScreen, {
+  RightPersonalChallengeDetailOptions,
+} from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 
 import MainNavBar from '../../../component/NavBar/MainNavBar';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
+import AppTitle from '../../../component/common/AppTitle';
+import NavButton from '../../../component/common/Buttons/NavButton';
+import IconSearch from '../../../component/common/IconSearch/IconSearch';
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -47,11 +52,11 @@ const PersonalChallenges = ({
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <MainNavBar
+      {/* <MainNavBar
         title={t('top_nav.challenges')}
         navigation={navigation}
         withSearch
-      />
+      /> */}
       <View className={clsx('h-full w-full bg-gray-50')}>
         {/* <EmptyChallenges /> */}
 
@@ -87,15 +92,31 @@ const PersonalChallenges = ({
 };
 
 const PersonalChallengesScreen = () => {
+  const { t } = useTranslation();
   return (
     <PersonalChallengesStack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerBackVisible: false,
+        headerTitleAlign: 'center',
+        headerShown: true,
       }}
     >
       <PersonalChallengesStack.Screen
         name="PersonalChallengesScreen"
         component={PersonalChallenges}
+        options={({ navigation }) => ({
+          headerTitle: () => <AppTitle title={t('top_nav.challenges')} />,
+          headerRight: (props) => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() => console.log('PersonalChallengesScreen Search')}
+                />
+              }
+            />
+          ),
+        })}
       />
       <PersonalChallengesStack.Screen
         name="SettingsScreen"
@@ -104,6 +125,17 @@ const PersonalChallengesScreen = () => {
       <PersonalChallengesStack.Screen
         name="PersonalChallengeDetailScreen"
         component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('top_nav.challenges') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: (props) => <RightPersonalChallengeDetailOptions />,
+        })}
       />
     </PersonalChallengesStack.Navigator>
   );

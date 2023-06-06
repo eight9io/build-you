@@ -16,6 +16,7 @@ import PersonalProfileScreenLoading from './PersonalProfileScreenLoading';
 import ProfileComponent from '../../../component/Profile';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -33,8 +34,10 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   return (
-    <SafeAreaView className="justify-content: space-between flex-1 bg-white ">
-      <ProfileComponent userData={userProfile} navigation={navigation} />
+    <SafeAreaView className="justify-content: space-between flex-1 bg-gray-50 ">
+      <ScrollView className="w-full bg-gray-50">
+        <ProfileComponent userData={userProfile} navigation={navigation} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -69,7 +72,9 @@ const ProfileScreen = () => {
   return (
     <ProfileStack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerBackVisible: false,
+        headerTitleAlign: 'center',
+        headerShown: true,
       }}
     >
       {!isProfileScreenLoading && (

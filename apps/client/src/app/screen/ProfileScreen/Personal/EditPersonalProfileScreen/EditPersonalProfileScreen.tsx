@@ -60,7 +60,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({ setOpenModal }) => {
           />
         </View>
       </View>
-      <View className="h-full w-full flex-col justify-between ">
+      <View className=" flex-col justify-between ">
         <View className="w-full flex-row flex-wrap justify-start">
           {ButtonContent.map((content) => {
             return (
@@ -106,24 +106,24 @@ const EditPersonalProfileScreen = () => {
     },
   });
   return (
-    <SafeAreaView className="bg-white">
-      <View className="relative flex h-full flex-col rounded-t-xl bg-white px-4">
+    <SafeAreaView className="h-full bg-white">
+      <View className="  h-full rounded-t-xl bg-white ">
         <AddSkillModal
           setUserAddSkill={setUserAddSkill}
           isVisible={isShowAddSkillModal}
           onClose={() => setIsShowAddSkillModal(false)}
         />
-        <View className="h-10">
+        <View className="mt-8 px-4">
           {requestError && (
-            <View className="flex flex-row pt-2">
+            <View className="mb-2 flex flex-row">
               <Text className="pl-1 text-sm font-normal text-red-500">
                 {requestError}
               </Text>
             </View>
           )}
         </View>
-        <ScrollView className="w-full">
-          <View className="pt-3">
+        <ScrollView className=" h-full w-full px-4 ">
+          <View>
             <Controller
               control={control}
               name="name"
@@ -182,7 +182,7 @@ const EditPersonalProfileScreen = () => {
               control={control}
               name="bio"
               render={({ field: { onChange, onBlur, value } }) => (
-                <View className="flex h-32 flex-col">
+                <View className="flex flex-col">
                   <TextInput
                     label="Biography"
                     placeholder={'Your biography'}
@@ -192,7 +192,7 @@ const EditPersonalProfileScreen = () => {
                     value={value}
                     multiline={true}
                     numberOfLines={4}
-                    className="h-32"
+                    // className="h-32"
                   />
                 </View>
               )}
@@ -200,16 +200,14 @@ const EditPersonalProfileScreen = () => {
           </View>
 
           <HardSkillSection setOpenModal={() => setIsShowAddSkillModal(true)} />
-        </ScrollView>
 
-        <View className="absolute bottom-0 left-4 w-full">
           <Button
             title="Update"
-            containerClassName="w-full bg-primary-default my-5"
+            containerClassName=" bg-primary-default my-10"
             textClassName="text-white text-md leading-6"
             onPress={() => console.log('submit')}
           />
-        </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

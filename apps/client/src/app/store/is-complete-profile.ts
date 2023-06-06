@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export interface IsCompleteProfileStore {
   isCompleteProfileStore: boolean | null;
-  setIsCompleteProfileStore: (isCompleteProfileStore: boolean) => void;
+  setIsCompleteProfileStore: (isCompleteProfileStore: boolean | null) => void;
   getIsCompleteProfileStore: () => boolean | null;
 }
 

@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 
 import clsx from 'clsx';
-import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
@@ -20,15 +19,12 @@ import { useGetUserData } from '../../../hooks/useGetUser';
 import StepOfSteps from '../../../component/common/StepofSteps';
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 import Button from '../../../component/common/Buttons/Button';
-import NavButton from '../../../component/common/Buttons/NavButton';
-import Header from '../../../component/common/Header';
 
 import CheckedSvg from './asset/checked.svg';
 import UncheckedSvg from './asset/uncheck.svg';
-import WarningSvg from './asset/warning.svg';
+import WarningSvg from '../../../component/asset/warning.svg';
 
-import httpInstance, { setAuthTokenToHttpHeader } from '../../../utils/http';
-import { useIsCompleteProfileStore } from '../../../store/is-complete-profile';
+import httpInstance from '../../../utils/http';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -219,6 +215,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     const softSkills = convertSelectedToSoftSkillProps(
       selectedCompetencedSkill
     );
+
+    if (!userData?.id) return;
     httpInstance
       .put(`/user/update/${userData.id}`, {
         ...profile,
@@ -254,16 +252,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   return (
     <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
       <View className="relative flex h-full w-full flex-col items-center justify-start">
-        {/* <Header
-          title="Complete profile"
-          leftBtn={
-            <NavButton
-              text="Back"
-              withBackIcon={true}
-              onPress={() => navigation.goBack()}
-            />
-          }
-        /> */}
         <View>
           <StepOfSteps step={4} totalSteps={4} />
         </View>

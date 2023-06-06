@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import Button from '../Button';
 import AddEmojiIcon from '../asset/add-emoji.svg';
-import WarningSvg from '../asset/warning.svg';
+import WarningSvg from '../../../asset/warning.svg';
 
 interface IAddEmojiButtonProps {
   selectedEmoji: string | null;

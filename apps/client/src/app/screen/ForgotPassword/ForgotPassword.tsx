@@ -21,6 +21,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState('');
+  const [email, setEmail] = useState('');
   const {
     control,
     handleSubmit,
@@ -40,6 +41,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
     serviceForgotPassword(data?.email as string)
       .then((res) => {
         if (res.status == 200) {
+          setEmail(data?.email as string);
           setModalVisible(true);
           setErrMessage('');
         } else {
@@ -129,12 +131,12 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                 onPress={handleSubmit(onSubmit)}
               />
             </View>
-            {watch('email') && (
+            {email && (
               <ForgotPasswordModal
                 navigation={navigation}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
-                email={watch('email')}
+                email={email}
               />
             )}
           </View>

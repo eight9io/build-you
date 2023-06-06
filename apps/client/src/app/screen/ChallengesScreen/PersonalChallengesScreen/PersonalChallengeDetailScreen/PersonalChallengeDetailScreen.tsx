@@ -27,7 +27,7 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   'PersonalChallengeDetailScreen'
 >;
 
-const RightPersonalChallengeDetailOptions = () => {
+export const RightPersonalChallengeDetailOptions = () => {
   const [isSharing, setIsSharing] = React.useState(false);
 
   // when sharing is available, we can share the image
@@ -61,8 +61,8 @@ const PersonalChallengeDetailScreen = ({
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   return (
-    <SafeAreaView className="bg-white">
-      <Header
+    <SafeAreaView className="bg-white pt-3">
+      {/* <Header
         leftBtn={
           <NavButton
             text="Challenges"
@@ -72,7 +72,7 @@ const PersonalChallengeDetailScreen = ({
         }
         rightBtn={<RightPersonalChallengeDetailOptions />}
         onRightBtnPress={() => {}}
-      />
+      /> */}
       <ChallengeDetailScreen />
     </SafeAreaView>
   );

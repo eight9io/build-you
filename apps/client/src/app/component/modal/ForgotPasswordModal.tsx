@@ -53,7 +53,7 @@ export default function ForgotPasswordModal({
       code: '',
       password: '',
       repeat_password: '',
-      email: email || '',
+      email: email,
     },
     resolver: yupResolver(ResetPasswordValidationSchema()),
     reValidateMode: 'onChange',
@@ -67,7 +67,7 @@ export default function ForgotPasswordModal({
 
     serviceChangePassword({
       code: data.code,
-      email: data.email,
+      email: email as string,
       password: data.password,
     })
       .then((res) => {
@@ -75,14 +75,13 @@ export default function ForgotPasswordModal({
           setTimeout(() => {
             navigation.navigate('LoginScreen');
           }, 1500);
-
           setErrMessage('');
         } else {
           setErrMessage(err_server);
         }
       })
       .catch((error) => {
-        setErrMessage(errorMessage(error, 'err_register') as string);
+        setErrMessage(errorMessage(error, 'err_change_password') as string);
       })
       .finally(() => {
         setTimeout(() => {

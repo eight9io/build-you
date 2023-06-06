@@ -82,8 +82,8 @@ export const ChallengeDetailScreenViewOnly: FC<
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <Header
+    <View className=" h-full bg-white ">
+      {/* <Header
         leftBtn={
           <NavButton
             text="Back"
@@ -91,13 +91,11 @@ export const ChallengeDetailScreenViewOnly: FC<
             onPress={() => navigation.goBack()}
           />
         }
-      />
-      <View className="flex-1 bg-white py-2">
-        <View className="flex flex-row items-center justify-between px-4">
-          <Text className="text-basic text-xl font-medium leading-8">
-            Climbing Mont Blanc
-          </Text>
-        </View>
+      /> */}
+      <View className="flex-1 bg-white py-4 ">
+        <Text className="text-basic px-4 text-xl font-medium leading-8">
+          Climbing Mont Blanc
+        </Text>
 
         <View className="flex-1">
           <TabView
@@ -114,7 +112,7 @@ export const ChallengeDetailScreenViewOnly: FC<
           </TabView>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

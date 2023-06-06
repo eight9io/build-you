@@ -76,17 +76,15 @@ export const HomeScreen = () => {
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <MainNavBar
+      {/* <MainNavBar
         title={t('top_nav.your_feed')}
         navigation={navigation}
         withSearch
-      />
+      /> */}
       <View className={clsx('h-full w-full bg-gray-50 pb-32')}>
         <FlatList
           data={arrayPost}
-          renderItem={({ item }) => (
-            <FeedPostCard itemFeedPostCard={item} />
-          )}
+          renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
           keyExtractor={(item) => item.id as unknown as string}
         />
       </View>

@@ -2,9 +2,9 @@ import { create } from 'zustand';
 import { IUserData } from '../types/user';
 
 export interface UserProfileStore {
-  userProfile: IUserData;
-  setUserProfile: (profile: IUserData) => void;
-  getUserProfile: () => IUserData;
+  userProfile: IUserData | null;
+  setUserProfile: (profile: IUserData | null) => void;
+  getUserProfile: () => IUserData | null;
 }
 
 export const useUserProfileStore = create<UserProfileStore>(

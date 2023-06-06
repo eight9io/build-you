@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
   ScaledSize,
+  Platform,
 } from 'react-native';
 import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -108,17 +109,17 @@ export const AddNewChallengeProgressModal: FC<
       animationType="slide"
       presentationStyle="pageSheet"
       visible={isVisible}
+      className="h-full"
     >
       <SafeAreaView className="bg-white">
-        <View className="mt-4 flex h-full  rounded-t-xl bg-white">
-          <View className="mt-6">
-            <Header
-              title="New challenge"
-              rightBtn="CREATE"
-              leftBtn="Cancel"
-              onLeftBtnPress={onClose}
-            />
-          </View>
+        <View className="  h-full  rounded-t-xl bg-white">
+          <Header
+            title="New challenge"
+            rightBtn="CREATE"
+            leftBtn="Cancel"
+            onLeftBtnPress={onClose}
+            containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
+          />
 
           <View className="flex flex-col justify-between px-5 pt-4">
             <CustomTextInput

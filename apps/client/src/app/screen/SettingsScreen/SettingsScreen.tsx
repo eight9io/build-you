@@ -30,9 +30,12 @@ const SettingsScreen: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-6">
-      <NavBarInnerScreen title={t('user_settings_screen.title')} navigation={navigation} />
-      <View className="bg-gray-veryLight mt-2 flex flex-1 flex-col">
+    <SafeAreaView className="justify-content: space-between flex-1 bg-white">
+      {/* <NavBarInnerScreen
+        title={t('user_settings_screen.title')}
+        navigation={navigation}
+      /> */}
+      <View className="bg-gray-veryLight flex flex-1 flex-col">
         <Settings />
         <View className="w-full bg-white px-4 pt-6">
           <View className="h-12">

@@ -55,14 +55,14 @@ const RightPersonalChallengeDetailOptions = () => {
   );
 };
 
-const PersonalChallengeDetailScreen = ({
+const CompanyChallengeDetailScreen = ({
   navigation,
 }: {
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   return (
-    <SafeAreaView className="bg-white">
-      <Header
+    <SafeAreaView className="bg-white pt-3">
+      {/* <Header
         leftBtn={
           <NavButton
             text="Challenges"
@@ -72,10 +72,10 @@ const PersonalChallengeDetailScreen = ({
         }
         rightBtn={<RightPersonalChallengeDetailOptions />}
         onRightBtnPress={() => {}}
-      />
+      /> */}
       <ChallengeDetailScreen />
     </SafeAreaView>
   );
 };
 
-export default PersonalChallengeDetailScreen;
+export default CompanyChallengeDetailScreen;

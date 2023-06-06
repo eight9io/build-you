@@ -7,14 +7,14 @@ import SkillCompetenceProcess from './SkillCompetenceProcess';
 
 const Skills = () => {
   return (
-    <View className={clsx('flex flex-col w-full pr-4 ')}>
+    <View className={clsx('flex w-full flex-col pr-4 ')}>
       <Text className={clsx('text-h6 font-medium')}>Self-declared</Text>
 
-      <View className={clsx('flex flex-col mt-4')}>
-        <SkillCompetenceProcess skillName='Communication'/>
-        <SkillCompetenceProcess skillName='Teamwork'/>
-        <SkillCompetenceProcess skillName='Stress management'/>
-      </View>        
+      <View className={clsx('mt-4 flex flex-col')}>
+        <SkillCompetenceProcess skillName="Communication" />
+        <SkillCompetenceProcess skillName="Teamwork" />
+        <SkillCompetenceProcess skillName="Stress management" />
+      </View>
     </View>
   );
 };

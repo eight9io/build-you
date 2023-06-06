@@ -1,23 +1,20 @@
-import React from 'react';
-import clsx from 'clsx';
-import { SafeAreaView, View, Text } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { SafeAreaView, View } from 'react-native';
 
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Header from '../../../../component/common/Header';
 import PopUpMenu from '../../../../component/common/PopUpMenu';
 import { RootStackParamList } from '../../../../navigation/navigation.type';
 
-import NavButton from '../../../../component/common/Buttons/NavButton';
 import ChallengeDetailScreen from '../ChallengeDetailScreen/ChallengeDetailScreen';
 import Button from '../../../../component/common/Buttons/Button';
 
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
-
+import EditChallengeModal from '../../../../component/modal/EditChallengeModal';
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
 );
@@ -27,7 +24,13 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   'PersonalChallengeDetailScreen'
 >;
 
-export const RightPersonalChallengeDetailOptions = () => {
+interface IRightPersonalChallengeDetailOptionsProps {
+  onEditChallengeBtnPress: () => void;
+}
+
+export const RightPersonalChallengeDetailOptions: FC<
+  IRightPersonalChallengeDetailOptionsProps
+> = ({ onEditChallengeBtnPress }) => {
   const [isSharing, setIsSharing] = React.useState(false);
 
   // when sharing is available, we can share the image
@@ -50,7 +53,15 @@ export const RightPersonalChallengeDetailOptions = () => {
         <Button Icon={<ShareIcon />} onPress={onShare} />
       </View>
 
-      <PopUpMenu iconColor="#FF7B1D" />
+      <PopUpMenu
+        iconColor="#FF7B1D"
+        options={[
+          {
+            text: 'Edit',
+            onPress: onEditChallengeBtnPress,
+          },
+        ]}
+      />
     </View>
   );
 };
@@ -60,6 +71,25 @@ const PersonalChallengeDetailScreen = ({
 }: {
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
+  const [editChallengeModalIsVisible, setEditChallengeModalIsVisible] =
+    useState(false);
+
+  useEffect(() => {
+    // Set header options, must set it manually to handle the onPress event inside the screen
+    navigation.setOptions({
+      headerRight: () => (
+        <RightPersonalChallengeDetailOptions
+          onEditChallengeBtnPress={handleEditChallengeBtnPress}
+        />
+      ),
+    });
+  }, []);
+  const handleEditChallengeBtnPress = () => {
+    setEditChallengeModalIsVisible(true);
+  };
+  const handleEditChallengeModalClose = () => {
+    setEditChallengeModalIsVisible(false);
+  };
   return (
     <SafeAreaView className="bg-white pt-3">
       {/* <Header
@@ -70,10 +100,18 @@ const PersonalChallengeDetailScreen = ({
             withBackIcon
           />
         }
-        rightBtn={<RightPersonalChallengeDetailOptions />}
+        rightBtn={
+          <RightPersonalChallengeDetailOptions
+            onEditChallengeBtnPress={handleEditChallengeBtnPress}
+          />
+        }
         onRightBtnPress={() => {}}
       /> */}
       <ChallengeDetailScreen />
+      <EditChallengeModal
+        visible={editChallengeModalIsVisible}
+        onClose={handleEditChallengeModalClose}
+      />
     </SafeAreaView>
   );
 };

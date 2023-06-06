@@ -206,5 +206,22 @@
       "security_and_access": "Security and access",
       "condition_of_use": "Condition of use"
     }
+  },
+  "new_challenge_screen": {
+    "title": "New challenge",
+    "create_button": "Create",
+    "description": "Create a new challenge for yourself with a concrete goal and time to reach it.",
+    "your_goal": "Your goal",
+    "your_goal_placeholder": "Set a concrete goal",
+    "benefits": "The benefits",
+    "benefits_placeholder": "List the benefits you will get upon achievement",
+    "reasons": "The reasons",
+    "reasons_placeholder": "Indicate the reasons that push you to achieve it",
+    "time_to_reach_goal": "Time to reach the goal",
+    "time_to_reach_goal_placeholder": "Select time",
+    "your_goal_required": "Please fill in your goal.",
+    "benefits_required": "Please fill in your benefits.",
+    "reasons_required": "Please fill in your reasons.",
+    "time_to_reach_goal_required": "Please select time to reach the goal."
   }
 }

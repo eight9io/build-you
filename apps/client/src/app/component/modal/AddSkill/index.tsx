@@ -2,22 +2,24 @@ import { View, Text, Modal } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import EmojiSelector from 'react-native-emoji-selector';
+
+import httpInstance from '../../../utils/http';
+
+import { IHardSkillProps } from '../../../types/user';
 
 import Header from '../../common/Header';
 import InlineTextInput from '../../common/Inputs/InlineTextInput';
 import AddEmojiButton from '../../common/Buttons/AddEmojiButton';
 import AddEmojiModal from '../AddEmoji';
-
 import Close from '../../../component/asset/close.svg';
 import Button from '../../common/Buttons/Button';
-import WarningSvg from '../asset/warning.svg';
 
 interface IAddSkillModallProps {
   setUserAddSkill: (skills: any) => void;
   isVisible: boolean;
   onClose: () => void;
 }
+
 
 export const AddSkillModal: FC<IAddSkillModallProps> = ({
   setUserAddSkill,
@@ -55,7 +57,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
     }
   }, [skillName]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!selectedEmoji) {
       setSelectEmojiError(true);
     }
@@ -63,8 +65,24 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       setSkillNameError(true);
     }
     if (!selectedEmoji || !skillName) return;
+
     const skill = `${selectedEmoji} ${skillName}`;
-    setUserAddSkill((prev: string[]) => [...prev, skill]);
+
+    let skillToSave: IHardSkillProps | null = null;
+
+    await httpInstance
+      .post('/skill/hard/create', {
+        skill,
+      })
+      .then((res) => {
+        console.log(res.data);
+        skillToSave = res.data
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      console.log(skillToSave);
+    setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
     selectedEmoji && setSelectedEmoji(null);
     reset();
     onClose();
@@ -84,7 +102,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <View className="relative flex h-full flex-col rounded-t-xl bg-white pt-6">
+      <View className="relative flex h-full flex-col rounded-t-xl bg-white">
         <AddEmojiModal
           isVisible={showEmojiModal}
           onClose={onCloseEmojiModal}

@@ -22,6 +22,7 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection,
+      base64: true,
     });
 
     if (!result.canceled) {
@@ -32,10 +33,19 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
 };
 
 export const uploadNewAvatar = async (image: string) => {
-  // set multipart/form-data as content type, on swagger only accept this type, and the field name is 'file'
   const formData = new FormData();
-  formData.append('file', image);
-  const { data } = await httpInstance.post('/user/avatar', formData);
-  
-  return data;
+  const uri = Platform.OS === 'android' ? image : image.replace('file://', '');
+  formData.append('file', {
+    uri,
+    name: 'avatar.jpg',
+    type: 'image/jpeg',
+  } as any);
+
+  const response = await httpInstance.post('/user/avatar', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  console.log(response);
+  return response.data;
 };

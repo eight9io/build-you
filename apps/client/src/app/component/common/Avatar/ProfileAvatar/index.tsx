@@ -14,7 +14,7 @@ import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
-} from '../../../../utils/getUserImage';
+} from '../../../../utils/uploadUserImage';
 
 interface IProfileAvatarProps {
   src: string;

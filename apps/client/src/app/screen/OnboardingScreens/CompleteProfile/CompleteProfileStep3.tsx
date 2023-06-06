@@ -9,11 +9,11 @@ import httpInstance from '../../../utils/http';
 
 import { useCompleteProfileStore } from '../../../store/complete-user-profile';
 
+import { IHardSkillProps } from '../../../types/user';
+
 import StepOfSteps from '../../../component/common/StepofSteps';
 import Button from '../../../component/common/Buttons/Button';
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
-import NavButton from '../../../component/common/Buttons/NavButton';
-import Header from '../../../component/common/Header';
 import AddSkillModal from '../../../component/modal/AddSkill';
 
 interface CompleteProfileStep3Props {
@@ -43,13 +43,13 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   }, []);
 
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
-    string[]
+    IHardSkillProps[]
   >([]);
   const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
   const [isShowAddSkillModal, setIsShowAddSkillModal] =
     useState<boolean>(false);
-  const [userAddSkill, setUserAddSkill] = useState<string[]>([]);
-  const [arraySkills, setArraySkills] = useState<string[]>([]);
+  const [userAddSkill, setUserAddSkill] = useState<IHardSkillProps[]>([]);
+  const [arraySkills, setArraySkills] = useState<IHardSkillProps[]>([]);
 
   const { t } = useTranslation();
   const { setSkills } = useCompleteProfileStore();
@@ -100,12 +100,12 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
     console.log(data);
   };
 
-  const addCompetenceSkill = (skill: string) => {
-    if (!selectedCompetencedSkill.includes(skill)) {
+  const addCompetenceSkill = (skill: IHardSkillProps) => {
+    if (!selectedCompetencedSkill.find((item) => item.id === skill.id)) {
       setSelectedCompetencedSkill((prev) => [...prev, skill]);
     } else {
       setSelectedCompetencedSkill((prev) =>
-        prev.filter((item) => item !== skill)
+        prev.filter((item) => item.id !== skill.id)
       );
     }
   };
@@ -128,22 +128,12 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   }, [selectedCompetencedSkill]);
 
   return (
-    <View className="flex h-full w-full flex-col items-center justify-start">
+    <View className="relative flex h-full w-full flex-col items-center justify-start">
       <AddSkillModal
         setUserAddSkill={setUserAddSkill}
         isVisible={isShowAddSkillModal}
         onClose={() => setIsShowAddSkillModal(false)}
       />
-      {/* <Header
-        title="Complete profile"
-        leftBtn={
-          <NavButton
-            text="Back"
-            withBackIcon={true}
-            onPress={() => navigation.goBack()}
-          />
-        }
-      /> */}
       <View>
         <StepOfSteps step={3} totalSteps={4} />
       </View>
@@ -159,11 +149,11 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
 
       <ScrollView showsVerticalScrollIndicator>
         <View className="h-full w-full flex-col justify-between ">
-          <View className="align-center w-full flex-row flex-wrap justify-center">
+          <View className="items-center w-full flex-row flex-wrap justify-center">
             {arraySkills.map((item, index) => (
               <Button
                 key={index}
-                title={item}
+                title={item.skill}
                 onPress={() => addCompetenceSkill(item)}
                 textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
                 containerClassName={clsx(
@@ -188,18 +178,19 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
               Please select at least 3 skills
             </Text>
           )}
-
-          <Button
-            title="Next"
-            containerClassName="bg-primary-default flex-1 m-5"
-            textClassName="text-white"
-            onPress={() =>
-              checkNumberOfSkills() &&
-              navigation.navigate('CompleteProfileStep4Screen')
-            }
-          />
         </View>
       </ScrollView>
+      <View className="absolute bottom-0 w-full px-4">
+        <Button
+          title="Next"
+          containerClassName="w-full bg-primary-default my-5 "
+          textClassName="text-white text-md leading-6"
+          onPress={() =>
+            checkNumberOfSkills() &&
+            navigation.navigate('CompleteProfileStep4Screen')
+          }
+        />
+      </View>
     </View>
   );
 };

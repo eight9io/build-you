@@ -40,7 +40,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   const [imageSource, loading, error] = getImageFromUrl(imageSrc);
 
   const onPress = () => {
-    if (navigation) navigation.navigate('PersonalChallengeDetailScreen');
+    if (navigation) navigation.navigate('CompanyChallengeDetailScreen');
   };
 
   const isChallengeCompleted = true;

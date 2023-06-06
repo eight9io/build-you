@@ -81,7 +81,7 @@ const ChallengeDetailComment: FC<IChallengeDetailCommentProps> = ({
   return (
     <SafeAreaView className={clsx('flex-1 bg-white')}>
       <ScrollView className={clsx('bg-gray-50')} style={{ width: '100%' }}>
-        <Header
+        {/* <Header
           leftBtn={
             <NavButton
               text="Back"
@@ -89,13 +89,17 @@ const ChallengeDetailComment: FC<IChallengeDetailCommentProps> = ({
               onPress={() => navigation.goBack()}
             />
           }
-        />
+        /> */}
         <View
           className={clsx(
             'border-gray-light flex flex-1 flex-col border-b pb-4'
           )}
         >
-          <View className={clsx('border-gray-light flex border-b p-5 ')}>
+          <View
+            className={clsx(
+              'border-gray-light flex border-b bg-white px-5 py-3 '
+            )}
+          >
             <Text className={clsx('text-h4 font-semibold')}>
               {item.card.title}
             </Text>

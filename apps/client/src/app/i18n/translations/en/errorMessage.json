@@ -9,7 +9,7 @@
     "400": "There aren't any account registered with this email."
   },
   "err_change_password": {
-    "400": "Ops! Qualcosa è andato storto."
+    "400": "The verification code is not accurate."
   },
 
   "500": "Internal error. Please try again later."

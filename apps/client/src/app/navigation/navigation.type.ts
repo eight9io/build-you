@@ -16,6 +16,8 @@ export type RootStackParamList = {
   RegisterScreen: undefined;
   SkillStepThreeScreen: undefined;
 
+  EditPersonalProfileScreen: undefined;
+
   CompleteProfileScreen: undefined;
   CompleteProfileStep1Screen: undefined;
   CompleteProfileStep2Screen: undefined;
@@ -37,6 +39,8 @@ export type RootStackParamList = {
   ChallengeDetailComment: {
     challengeId: string;
   }
+
+  ProfileScreenLoading: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

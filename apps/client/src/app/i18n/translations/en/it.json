@@ -110,23 +110,24 @@
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
-  "modal_skill.arraySkill": {
-    "development": "💻 Development",
-    "art": "🎨  Art",
-    "culture": "🏛️  Culture",
-    "marketing": "📣 Marketing",
-    "kitchen": "🍳  Kitchen",
-    "training": "🎓  Training",
-    "design": "✏️  Design",
-    "tourism": "✈️  Tourism",
-    "mentorships": "🗣️ Mentorships",
-    "languages": "🌍  Foreign languages",
-    "events": "🎉  Events",
-    "reception": "👰  Reception",
-    "dance": "💃  Dance",
-    "architecture": "🏗️  Architecture",
-    "photography": "📷  Photography"
-  },
+  "modal_skill.arraySkill": [
+    { "id": "1", "skill": "💻 Development" },
+    { "id": "2", "skill": "🎨 Art" },
+    { "id": "3", "skill": "🏛️ Culture" },
+    { "id": "4", "skill": "📣 Marketing" },
+    { "id": "5", "skill": "🍳 Kitchen" },
+    { "id": "6", "skill": "🎓 Training" },
+    { "id": "7", "skill": "✏️ Design" },
+    { "id": "8", "skill": "✈️ Tourism" },
+    { "id": "9", "skill": "🗣️ Mentorships" },
+    { "id": "11", "skill": "🌍 Foreign languages" },
+    { "id": "16", "skill": "🎉 Events" },
+    { "id": "12", "skill": "👰 Reception" },
+    { "id": "13", "skill": "💃 Dance" },
+    { "id": "14", "skill": "🏗️ Architecture" },
+    { "id": "15", "skill": "📷 Photography" }
+  ]
+  ,
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
   "button.back": "Back",
@@ -137,10 +138,8 @@
   "login": "Login",
   "forgot_password": "Forgot password?",
   "forgot_password.title": "Forgot password",
-
   "forgot_password.sub_title": "We've sent you a code via your email. Please enter the code and your new password.",
   "change_password.changing": "Change your account password. Please login with new email and password after redirecting...",
-
   "register_screen.or": "Or",
   "send_code": "Send code",
   "reset_password": "Reset Password",
@@ -187,7 +186,6 @@
     }
   },
   "register_screen.creating": "Creating your account. Please log in with your email and password after redirecting...",
-
   "user_settings_screen.title": "Settings",
   "user_settings_screen.logout": "Log out",
   "user_settings_screen.general_settings": "General settings",

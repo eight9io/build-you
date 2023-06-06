@@ -8,18 +8,26 @@ import ProfileTabs from './ProfileTabs/Users';
 import CoverImage from './CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
-import EditProfileModal from '../modal/EditProfileModal';
 import Button from '../common/Buttons/Button';
 import ProfileAvartar from '../common/Avatar/ProfileAvatar';
 
-interface ITopSectionProfileProps {
-  onEditBtnClicked: () => void;
-}
-const TopSectionProfile: FC<ITopSectionProfileProps> = ({
-  onEditBtnClicked,
-}) => {
-  const { t } = useTranslation();
+import { IUserData } from '../../types/user';
+import { useNavigation } from '@react-navigation/native';
 
+interface ITopSectionProfileProps {
+  navigation: any;
+}
+
+interface IProfileComponentProps {
+  userData: IUserData | null;
+  navigation: any;
+}
+
+const TopSectionProfile: FC<ITopSectionProfileProps> = ({ navigation }) => {
+  const { t } = useTranslation();
+  const handleClicked = () => {
+    navigation.navigate('EditPersonalProfileScreen');
+  };
   return (
     <View className={clsx('relative z-10')}>
       <CoverImage src="https://images.unsplash.com/photo-1522774607452-dac2ecc66330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
@@ -32,35 +40,28 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
           title={t('button.edit_profile')}
           containerClassName="px-11 py-2"
           textClassName="text-base"
-          onPress={onEditBtnClicked}
+          onPress={handleClicked}
         />
       </View>
     </View>
   );
 };
 
-const ProfileComponent = () => {
+const ProfileComponent: FC<IProfileComponentProps> = ({
+  userData,
+  navigation,
+}) => {
   const { t } = useTranslation();
-  const [editProfileModalIsOpen, setEditProfileModalIsOpen] = useState(false);
-
-  const handleEditProfileModalOpen = () => {
-    setEditProfileModalIsOpen(true);
-  };
-  const handleEditProfileModalClose = () => {
-    setEditProfileModalIsOpen(false);
-  };
 
   return (
-    <View className={clsx('flex-1 flex-col pt-2')}>
-      <TopSectionProfile onEditBtnClicked={handleEditProfileModalOpen} />
+    <View className={clsx('flex-1 flex-col')}>
+      <TopSectionProfile navigation={navigation} />
       <View className={clsx('mb-3 px-4 pt-12')}>
-        <Text className={clsx('text-[26px] font-medium')}>Marco Rossi</Text>
+        <Text className={clsx('text-[26px] font-medium')}>
+          {userData?.name} {userData?.surname}
+        </Text>
       </View>
       <ProfileTabs />
-      <EditProfileModal
-        isVisible={editProfileModalIsOpen}
-        onClose={handleEditProfileModalClose}
-      />
     </View>
   );
 };

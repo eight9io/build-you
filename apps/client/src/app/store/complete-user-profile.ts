@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { IUserData } from '../types/user';
+import { IUserData, IHardSkillProps } from '../types/user';
 
 interface IUserDataUpload {
   id: string;
@@ -10,7 +10,7 @@ interface IUserDataUpload {
   occupation?: any;
   biography?: string;
   video?: string;
-  skills?: any[];
+  skills?: IHardSkillProps[];
   softSkills?: any[];
 }
 
@@ -18,7 +18,7 @@ export interface CompleteProfileStore {
   profile: IUserDataUpload;
   setProfile: (profile: IUserDataUpload) => void;
   setBiography: (bio: string, video: string) => void;
-  setSkills: (skills: string[]) => void;
+  setSkills: (skills: IHardSkillProps[]) => void;
   setSoftSkills: (softSkills: any[]) => void;
   getProfile: () => IUserDataUpload;
 }
@@ -43,7 +43,7 @@ export const useCompleteProfileStore = create<CompleteProfileStore>(
     setBiography: (bio: string, video: string) => {
       set({ profile: { ...get().profile, biography: bio, video: video } });
     },
-    setSkills: (skills: string[]) => {
+    setSkills: (skills: IHardSkillProps[]) => {
       set({ profile: { ...get().profile, skills: skills } });
     },
     setSoftSkills: (softSkills: any[]) => {

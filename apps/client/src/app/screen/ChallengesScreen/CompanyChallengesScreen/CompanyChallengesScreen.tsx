@@ -9,10 +9,8 @@ import {
 } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import SettingsScreen from '../../SettingsScreen/SettingsScreen';
 import CompanyChallengeDetailScreen from './CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
 
-import MainNavBar from '../../../component/NavBar/MainNavBar';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 import { t } from 'i18next';
 import AppTitle from '../../../component/common/AppTitle';
@@ -115,10 +113,7 @@ const CompanyChallengesScreen = () => {
           ),
         })}
       />
-      <CompanyChallengesStack.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
-      />
+
       <CompanyChallengesStack.Screen
         name="CompanyChallengeDetailScreen"
         component={CompanyChallengeDetailScreen}

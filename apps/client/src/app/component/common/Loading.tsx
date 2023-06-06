@@ -15,11 +15,9 @@ export default function Loading({ containerClassName, text }: ILoadingProps) {
       )}
     >
       <IconLoading />
-      {text && (
-        <Text className="text-h6 mt-4 px-16 text-center font-light text-white">
-          {text}
-        </Text>
-      )}
+      <Text className="text-h6 mt-4 px-16 text-center font-light text-white">
+        {text || 'Loading...'}
+      </Text>
     </View>
   );
 }

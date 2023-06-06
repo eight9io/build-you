@@ -69,12 +69,15 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const payload = {
-        ...data,
-        achievementTime: data.achievementTime as Date,
-        owner: getUserProfile().id,
-      };
-      console.log('payload: ', payload);
+      const userProfile = getUserProfile();
+      if (userProfile) {
+        const payload = {
+          ...data,
+          achievementTime: data.achievementTime as Date,
+          owner: userProfile.id,
+        };
+        console.log('payload: ', payload);
+      }
       // const res = await createChallenge(payload);
       // console.log('res: ', res);
       // if (res.status == 201) {
@@ -93,7 +96,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView className="bg-white">
-        <View className="mt-4 flex h-full  rounded-t-xl bg-white">
+        <View className="flex h-full  rounded-t-xl bg-white">
           <View>
             <Header
               title={t('new_challenge_screen.title') || ''}

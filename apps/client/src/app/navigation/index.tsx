@@ -128,16 +128,32 @@ export const RootNavigation = () => {
             <RootStack.Screen
               name="ChallengeDetailScreenViewOnly"
               component={ChallengeDetailScreenViewOnly}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => '',
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
             />
             <RootStack.Screen
               name="ChallengeDetailComment"
               component={ChallengeDetailComment}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => '',
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
             />
             <RootStack.Screen
               name="SettingsScreen"

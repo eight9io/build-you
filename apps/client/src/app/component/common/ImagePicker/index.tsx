@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import CameraIcon from './asset/camera-icon.svg';
 
-import { getImageFromUserDevice } from '../../../utils/getUserImage';
+import { getImageFromUserDevice } from '../../../utils/uploadUserImage';
 import { getRandomId } from '../../../utils/common';
 import { IUploadMediaWithId } from '../../../types/media';
 

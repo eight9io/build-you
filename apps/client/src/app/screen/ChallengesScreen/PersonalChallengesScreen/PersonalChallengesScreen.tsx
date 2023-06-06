@@ -9,7 +9,6 @@ import {
 } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import SettingsScreen from '../../SettingsScreen/SettingsScreen';
 import PersonalChallengeDetailScreen, {
   RightPersonalChallengeDetailOptions,
 } from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
@@ -118,10 +117,7 @@ const PersonalChallengesScreen = () => {
           ),
         })}
       />
-      <PersonalChallengesStack.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
-      />
+
       <PersonalChallengesStack.Screen
         name="PersonalChallengeDetailScreen"
         component={PersonalChallengeDetailScreen}

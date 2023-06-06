@@ -1,6 +1,5 @@
-import React from 'react';
 import clsx from 'clsx';
-import { SafeAreaView, View, Text, Button, ScrollView } from 'react-native';
+import { SafeAreaView, View, Text, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -10,11 +9,8 @@ import {
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import SettingsScreen from '../../SettingsScreen/SettingsScreen';
-import PersonalChallengeDetailScreen, {
-  RightPersonalChallengeDetailOptions,
-} from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
+import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 
-import MainNavBar from '../../../component/NavBar/MainNavBar';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
@@ -134,7 +130,6 @@ const PersonalChallengesScreen = () => {
               withBackIcon
             />
           ),
-          headerRight: (props) => <RightPersonalChallengeDetailOptions />,
         })}
       />
     </PersonalChallengesStack.Navigator>

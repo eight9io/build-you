@@ -44,7 +44,7 @@ export const Header: FC<IHeaderProps> = ({
 
       {title && (
         <View className={clsx('absolute top-2')}>
-          <Text className={clsx('text-h5 font-semibold', textClassName)}>
+          <Text className={clsx('text-base font-semibold', textClassName)}>
             {title}
           </Text>
         </View>
@@ -54,7 +54,7 @@ export const Header: FC<IHeaderProps> = ({
           className="absolute right-5 top-2"
           onPress={onRightBtnPress}
         >
-          <Text className="text-h5 text-primary-default font-normal">
+          <Text className="text-base text-primary-default font-normal">
             {rightBtn}
           </Text>
         </TouchableOpacity>

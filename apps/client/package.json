@@ -57,7 +57,8 @@
     "expo-apple-authentication": "*",
     "react-native-reanimated": "*",
     "react-native-screens": "*",
-    "@react-native-async-storage/async-storage": "*"
+    "@react-native-async-storage/async-storage": "*",
+    "jwt-decode": "*"
   },
   "scripts": {
     "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps client && npx nx ensure-symlink client",

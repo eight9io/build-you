@@ -14,6 +14,10 @@ import CompanyChallengeDetailScreen from './CompanyChallengeDetailScreen/Company
 
 import MainNavBar from '../../../component/NavBar/MainNavBar';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
+import { t } from 'i18next';
+import AppTitle from '../../../component/common/AppTitle';
+import NavButton from '../../../component/common/Buttons/NavButton';
+import IconSearch from '../../../component/common/IconSearch/IconSearch';
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -46,11 +50,11 @@ const CompanyChallenges = ({
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <MainNavBar
+      {/* <MainNavBar
         title={t('top_nav.challenges')}
         navigation={navigation}
         withSearch
-      />
+      /> */}
       <View className={clsx('h-full w-full bg-gray-50')}>
         {/* <EmptyChallenges /> */}
 
@@ -89,12 +93,27 @@ const CompanyChallengesScreen = () => {
   return (
     <CompanyChallengesStack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerBackVisible: false,
+        headerTitleAlign: 'center',
+        headerShown: true,
       }}
     >
       <CompanyChallengesStack.Screen
         name="CompanyChallengesScreen"
         component={CompanyChallenges}
+        options={({ navigation }) => ({
+          headerTitle: () => <AppTitle title={t('top_nav.challenges')} />,
+          headerRight: (props) => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() => console.log('CompanyChallengesScreen Search')}
+                />
+              }
+            />
+          ),
+        })}
       />
       <CompanyChallengesStack.Screen
         name="SettingsScreen"
@@ -103,6 +122,16 @@ const CompanyChallengesScreen = () => {
       <CompanyChallengesStack.Screen
         name="CompanyChallengeDetailScreen"
         component={CompanyChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('top_nav.challenges') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
       />
     </CompanyChallengesStack.Navigator>
   );

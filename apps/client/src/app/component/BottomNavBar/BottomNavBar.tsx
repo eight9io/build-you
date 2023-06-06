@@ -32,7 +32,7 @@ interface IBottomNavBarProps {}
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
 
-  const isCompany = false;
+  const isCompany = true;
 
   return (
     <Tab.Navigator

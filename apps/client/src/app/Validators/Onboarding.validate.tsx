@@ -6,10 +6,6 @@ export const OnboardingScreen1Validators = () => {
   const { t } = useTranslation();
 
   return yup.object().shape({
-    avatar: yup
-      .string()
-      .trim()
-      .required(t('form_onboarding.screen_1.avatar_error') as string),
     name: yup
       .string()
       .trim()

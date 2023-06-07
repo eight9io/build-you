@@ -28,7 +28,7 @@ const NUMBER_OF_SKILL_REQUIRED = 3;
 const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   navigation,
 }) => {
-  const [fetchedHardSkills, setFetchedHardSkills] = useState<string[]>([]);
+  const [fetchedHardSkills, setFetchedHardSkills] = useState<IHardSkillProps[]>([]);
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -49,7 +49,6 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   const [isShowAddSkillModal, setIsShowAddSkillModal] =
     useState<boolean>(false);
   const [userAddSkill, setUserAddSkill] = useState<IHardSkillProps[]>([]);
-  const [arraySkills, setArraySkills] = useState<IHardSkillProps[]>([]);
 
   const { t } = useTranslation();
   const { setSkills } = useCompleteProfileStore();
@@ -65,40 +64,15 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
       }
       return array;
     };
-    setArraySkills(arraySkill);
+    setFetchedHardSkills(arraySkill);
   }, []);
 
   useEffect(() => {
     if (userAddSkill.length > 0) {
-      setArraySkills((prev) => [...prev, ...userAddSkill]);
+      setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);
       setUserAddSkill([]);
     }
   }, [userAddSkill]);
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    getValues,
-  } = useForm<{
-    name: string;
-    surname: string;
-    birth: Date;
-    occupation: string;
-  }>({
-    defaultValues: {
-      name: '',
-      surname: '',
-      birth: new Date(),
-      occupation: '',
-    },
-  });
-
-  const handleSubmitForm = (data: any) => {
-    // TODO: Handle validate form with yup and remove required in form
-    console.log(data);
-  };
 
   const addCompetenceSkill = (skill: IHardSkillProps) => {
     if (!selectedCompetencedSkill.find((item) => item.id === skill.id)) {
@@ -150,7 +124,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
 
         <View className="w-full flex-col justify-between ">
           <View className="w-full flex-row flex-wrap items-center justify-center">
-            {arraySkills.map((item, index) => (
+            {fetchedHardSkills.map((item, index) => (
               <Button
                 key={index}
                 title={item.skill}

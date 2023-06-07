@@ -2,18 +2,19 @@ import React, { useState, useEffect, FC } from 'react';
 import { Image, View, TouchableOpacity, Text } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-
-import CameraIcon from './asset/camera-icon.svg';
-import { getRandomId } from '../../../utils/common';
 import clsx from 'clsx';
 
+import { IUploadMediaWithId } from '../../../types/media';
+
+import { getRandomId } from '../../../utils/common';
+
+import CameraIcon from './asset/camera-icon.svg';
 import PlayButton from './asset/play-button.svg';
 import CloseButton from './asset/close-button.svg';
-
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
   useBigImage?: boolean;
-  setExternalVideo?: (video: any) => void;
+  setExternalVideo?: (video: IUploadMediaWithId[]) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   removeVideo?: () => void;
 }
@@ -39,7 +40,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       }
       if (setExternalVideo) {
         const id = getRandomId();
-        setExternalVideo([{ id, uri }]);
+        setExternalVideo([{ id, uri: video }]);
         setThumbnailImage(uri);
         return;
       }

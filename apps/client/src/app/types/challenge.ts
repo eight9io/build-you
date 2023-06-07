@@ -3,7 +3,6 @@ export interface ICreateChallenge {
   benefits: string;
   reasons: string;
   achievementTime: Date;
-  owner: string;
 }
 
 export interface IEditChallenge {
@@ -11,4 +10,17 @@ export interface IEditChallenge {
   benefits: string;
   reasons: string;
   achievementTime: Date;
+}
+
+export interface IUpdateChallengeImage {
+  id: string;
+}
+
+export interface IChallenge {
+  id: string;
+  goal: string;
+  benefits: string;
+  reasons: string;
+  achievementTime: Date;
+  image: string;
 }

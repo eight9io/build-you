@@ -1,75 +1,83 @@
-import React, { useState, useEffect, FC } from 'react';
-import { Image, View, TouchableOpacity, Text } from 'react-native';
-import * as ExpoImagePicker from 'expo-image-picker';
+import { useState, FC, useEffect } from 'react';
+import { View, TouchableOpacity, Text, Image } from 'react-native';
 import clsx from 'clsx';
 
 import CameraIcon from './asset/camera-icon.svg';
-
-import { getImageFromUserDevice } from '../../../utils/uploadUserImage';
-import { getRandomId } from '../../../utils/common';
-import { IUploadMediaWithId } from '../../../types/media';
-
+import {
+  getImageExtension,
+  getImageFromUserDevice,
+} from '../../../utils/uploadUserImage';
+import Close from '../../asset/close.svg';
+import Button from '../Buttons/Button';
+import { ImagePickerAsset } from 'expo-image-picker';
 interface IImagePickerProps {
+  images?: string[];
   allowsMultipleSelection?: boolean;
   isSelectedImage?: boolean | null;
-  setExternalImages?: (images: any) => void;
+  onImagesSelected: (images: string[]) => void;
+  onRemoveSelectedImage?: (index: number) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
+  base64?: boolean;
 }
 
 const ImagePicker: FC<IImagePickerProps> = ({
-  setExternalImages,
+  images,
+  onImagesSelected,
+  onRemoveSelectedImage,
   setIsSelectedImage,
-  isSelectedImage = false,
+  isSelectedImage,
   allowsMultipleSelection = false,
+  base64,
 }) => {
-  const [images, setImages] = useState<string[]>([]);
-
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection,
+    base64,
   });
 
   const handlePickImage = async () => {
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-      if (setExternalImages && setIsSelectedImage) {
-        result.assets.forEach((asset) => {
-          const id = getRandomId();
-          setExternalImages((prev: IUploadMediaWithId[]) => [
-            ...prev,
-            { id, uri: asset.uri },
-          ]);
-          setIsSelectedImage(true);
-        });
-      }
-      setImages(result.assets.map((asset) => asset.uri));
+      const imagesPicked = result.assets.map((asset) => asset.uri);
+      onImagesSelected(imagesPicked);
+      if (setIsSelectedImage) setIsSelectedImage(true);
+    }
+  };
+
+  const handleRemoveSelectedImage = (index: number) => {
+    if (onRemoveSelectedImage) {
+      onRemoveSelectedImage(index);
     }
   };
   return (
     <View className="flex flex-col">
-      {images.length > 0 && !setExternalImages && (
+      {/* {images && images.length === 1 && (
         <View className="h-36 w-full">
           <Image
             source={{ uri: images[0] }}
             className="h-full w-full rounded-xl"
           />
         </View>
-      )}
-      {images.length > 0 && setExternalImages && (
+      )} */}
+      {images && images.length > 0 && (
         <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
-          {images.map((image: any) => (
-            <View className="relative aspect-square" style={{ width: 100 }}>
-              <View className="absolute right-1 top-2 z-10">
-                <TouchableOpacity onPress={() => setImages([])}>
-                  {/* <CloseButton fill={'white'} />
-
+          {images.map((uri, index) => (
+            <View
+              key={index}
+              className="relative aspect-square"
+              style={{ width: 100 }}
+            >
+              {onRemoveSelectedImage && (
+                <View className="absolute right-1 top-2 z-10">
                   <Button
-                    onPress={() => handleRemoveItem(media.id)}
+                    onPress={() => handleRemoveSelectedImage(index)}
                     Icon={<Close fill={'white'} />}
-                  /> */}
-                </TouchableOpacity>
-              </View>
+                  />
+                </View>
+              )}
               <Image
-                source={{ uri: image as any }}
+                source={{
+                  uri,
+                }}
                 className="h-full w-full rounded-xl"
               />
             </View>
@@ -79,7 +87,11 @@ const ImagePicker: FC<IImagePickerProps> = ({
 
       <TouchableOpacity
         onPress={handlePickImage}
-        disabled={isSelectedImage === false}
+        disabled={
+          isSelectedImage !== undefined && isSelectedImage === false
+            ? true
+            : false
+        }
         className="bg-gray-light mt-5 h-16 rounded-xl"
       >
         <View className=" mt-5 flex flex-row items-center justify-center rounded-xl">

@@ -24,5 +24,9 @@ export const CreateChallengeValidationSchema = () => {
       .required(
         t('new_challenge_screen.time_to_reach_goal_required') as string
       ),
+
+    image: yup
+      .string()
+      .required(t('new_challenge_screen.image_required') as string),
   });
 };

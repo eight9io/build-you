@@ -13,17 +13,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateChallengeValidationSchema } from '../../Validators/CreateChallenge.validate';
 import ErrorText from '../common/ErrorText';
 import { ICreateChallenge } from '../../types/challenge';
-import { createChallenge } from '../../service/challenge';
+import { createChallenge, updateChallengeImage } from '../../service/challenge';
 import { useNav } from '../../navigation/navigation.type';
 import Loading from '../common/Loading';
-import { useUserProfileStore } from '../../store/user-data';
+import clsx from 'clsx';
+import { getImageExtension } from '../../utils/uploadUserImage';
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
 
 interface ICreateChallengeForm
-  extends Omit<ICreateChallenge, 'achievementTime' | 'owner'> {
+  extends Omit<ICreateChallenge, 'achievementTime'> {
   achievementTime?: Date;
+  image?: string;
 }
 
 export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
@@ -34,10 +36,9 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const { getUserProfile } = useUserProfileStore();
-
   const {
     control,
+    getValues,
     setValue,
     setError,
     handleSubmit,
@@ -48,6 +49,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
       benefits: '',
       reasons: '',
       achievementTime: undefined,
+      image: '',
     },
     resolver: yupResolver(CreateChallengeValidationSchema()),
   });
@@ -65,27 +67,52 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setShowDatePicker(false);
   };
 
+  const handleImagesSelected = (images: string[]) => {
+    setValue('image', images[0], {
+      shouldValidate: true,
+    });
+  };
+
+  const handleRemoveSelectedImage = (index: number) => {
+    setValue('image', undefined, {
+      shouldValidate: true,
+    });
+  };
+
   const onSubmit = async (data: ICreateChallengeForm) => {
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const userProfile = getUserProfile();
-      if (userProfile) {
-        const payload = {
-          ...data,
-          achievementTime: data.achievementTime as Date,
-          owner: userProfile.id,
-        };
-        console.log('payload: ', payload);
+      const { image, ...rest } = data; // Images upload will be handle separately
+      const payload = {
+        ...rest,
+        achievementTime: data.achievementTime as Date,
+      };
+
+      // Create a challenge without image
+      const challengeCreateResponse = await createChallenge(payload);
+      
+      // If challenge created successfully, upload image
+      if (challengeCreateResponse.status === 201 && image) {
+        const extension = getImageExtension(image);
+        const imageData = new FormData();
+        imageData.append('file', {
+          uri: image,
+          name: `image.${extension}`,
+          type: `image/${extension}`,
+        } as any);
+        const challengeImageResponse = await updateChallengeImage(
+          {
+            id: challengeCreateResponse.data.id,
+          },
+          imageData
+        );
+
+        // If image uploaded successfully, navigate to challenge detail
+        if (challengeImageResponse.status === 201) {
+          // TODO: handle navigation to challenge detail
+        }
       }
-      // const res = await createChallenge(payload);
-      // console.log('res: ', res);
-      // if (res.status == 201) {
-        
-      //   // TODO: handle navigate to challenge detail screen
-      // } else {
-      //   setErrorMessage(t('errorMessage:500') || '');
-      // }
     } catch (error) {
       console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
@@ -113,6 +140,12 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             <Text className="text-gray-dark text-md font-normal leading-5">
               {t('new_challenge_screen.description')}
             </Text>
+            {errorMessage && (
+              <ErrorText
+                containerClassName="justify-center "
+                message={errorMessage}
+              />
+            )}
             <View className="pt-5">
               <Controller
                 control={control}
@@ -126,6 +159,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                     onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
+                    className={clsx(errors.goal && 'border-1 border-red-500')}
                   />
                 )}
                 name={'goal'}
@@ -147,7 +181,10 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                     value={value}
                     multiline
                     textAlignVertical="top"
-                    className="h-24"
+                    className={clsx(
+                      'h-24',
+                      errors.benefits && 'border-1 border-red-500'
+                    )}
                   />
                 )}
                 name={'benefits'}
@@ -172,7 +209,10 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                     value={value}
                     multiline
                     textAlignVertical="top"
-                    className="h-24"
+                    className={clsx(
+                      'h-24',
+                      errors.reasons && 'border-1 border-red-500'
+                    )}
                   />
                 )}
                 name={'reasons'}
@@ -201,6 +241,9 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                       value={value ? dayjs(value).format('DD/MM/YYYY') : ''}
                       rightIcon={<CalendarIcon />}
                       onPress={handleShowDatePicker}
+                      className={clsx(
+                        errors.achievementTime && 'border-1 border-red-500'
+                      )}
                     />
                     <DateTimePicker2
                       selectedDate={value as Date}
@@ -217,14 +260,21 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
               ) : null}
             </View>
             <View className="mt-5">
-              <ImagePicker isSelectedImage={true} />
+              <ImagePicker
+                images={getValues('image') ? [getValues('image')!] : []}
+                onImagesSelected={handleImagesSelected}
+                onRemoveSelectedImage={handleRemoveSelectedImage}
+                base64
+              />
+              {errors.image ? (
+                <ErrorText message={errors.image.message} />
+              ) : null}
             </View>
           </View>
         </View>
         {isLoading && (
           <Loading
             containerClassName="absolute top-0 left-0"
-            text={t('register_screen.creating') as string}
           />
         )}
       </SafeAreaView>

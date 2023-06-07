@@ -1,11 +1,5 @@
-import React, { FC, useState, useTransition } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import React, { FC, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -53,12 +47,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     setValue,
     getValues,
   } = useForm<{
+    avatar: string;
     name: string;
     surname: string;
     birth: Date;
     occupation: string;
   }>({
     defaultValues: {
+      avatar: '',
       name: '',
       surname: '',
       birth: new Date(),
@@ -67,6 +63,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     resolver: yupResolver(OnboardingScreen1Validators()),
     reValidateMode: 'onChange',
   });
+
   const { t } = useTranslation();
   const handleDatePicked = (date?: Date) => {
     if (date) {
@@ -93,7 +90,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   return (
-    <View className="relative">
+    <View className="">
       <DateTimePicker2
         selectedDate={selectedDate}
         setSelectedDate={handleDatePicked}
@@ -110,24 +107,23 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
           setShowOccupationPicker(false);
         }}
       />
+      <ScrollView className="h-full w-full">
+        <View className=" flex h-full w-full flex-col items-center justify-start">
+          <View className="pt-2">
+            <StepOfSteps step={1} totalSteps={4} />
+          </View>
+          <View className="flex flex-col items-center justify-center py-6">
+            <Text className="text-black-default text-h4 font-medium leading-6">
+              {t('form_onboarding.screen_1.title')}
+            </Text>
+          </View>
 
-      <View className=" flex h-full w-full flex-col items-center justify-start">
-        <View className="pt-2">
-          <StepOfSteps step={1} totalSteps={4} />
-        </View>
-        <View className="flex flex-col items-center justify-center py-6">
-          <Text className="text-black-default text-h4 font-medium leading-6">
-            {t('form_onboarding.screen_1.title')}
-          </Text>
-        </View>
+          <View className="">
+            <SignupAvatar control={control} errors={errors} />
+          </View>
 
-        <View className="">
-          <SignupAvatar control={control} />
-        </View>
-
-        {/* Form */}
-        <ScrollView className="w-full">
-          <View className=" flex h-full w-full rounded-t-xl">
+          {/* Form */}
+          <View className=" flex h-full w-full">
             <View className="mt-4 flex flex-col px-5 ">
               <View className="pt-3">
                 <Controller
@@ -246,18 +242,16 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
+              <Button
+                title="Next"
+                containerClassName="h-12 w-full bg-primary-default my-5 "
+                textClassName="text-white text-md leading-6"
+                onPress={handleSubmit(handleSubmitForm)}
+              />
             </View>
           </View>
-        </ScrollView>
-      </View>
-      <View className="absolute bottom-0 w-full px-4">
-        <Button
-          title="Next"
-          containerClassName="w-full bg-primary-default my-5 "
-          textClassName="text-white text-md leading-6"
-          onPress={handleSubmit(handleSubmitForm)}
-        />
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };

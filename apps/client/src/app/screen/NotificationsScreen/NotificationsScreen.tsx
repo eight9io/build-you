@@ -13,16 +13,15 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-
-import SettingsScreen from '../SettingsScreen/SettingsScreen';
-
-import MainNavBar from '../../component/NavBar/MainNavBar';
-import Notificaiton from '../../component/Notification';
 import { RootStackParamList } from '../../navigation/navigation.type';
 import { t } from 'i18next';
 import AppTitle from '../../component/common/AppTitle';
 import NavButton from '../../component/common/Buttons/NavButton';
 import IconSearch from '../../component/common/IconSearch/IconSearch';
+
+import Notificaiton from '../../component/Notification';
+import ButtonsWithIcon from '../../component/common/Buttons/ButtonWithIcon';
+
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 

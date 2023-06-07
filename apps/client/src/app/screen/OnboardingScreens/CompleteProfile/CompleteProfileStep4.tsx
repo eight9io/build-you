@@ -4,12 +4,15 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Pressable,
+  StyleSheet,
 } from 'react-native';
 
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
+import { Ionicons } from '@expo/vector-icons';
 
 import { useCompleteProfileStore } from '../../../store/complete-user-profile';
 import { useUserProfileStore } from '../../../store/user-data';
@@ -216,6 +219,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       selectedCompetencedSkill
     );
 
+    // TODO: handle error when null id
     if (!userData?.id) return;
     httpInstance
       .put(`/user/update/${userData.id}`, {
@@ -312,7 +316,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 const isSkillAlreadySelected = selectedCompetencedSkill.find(
                   (selected) => selected.label === item.label
                 );
-                const randomIndex = Math.random().toString();
+                const randomIndex = Math.random().toString().replace('.', '');
                 return (
                   <View key={randomIndex}>
                     <TouchableOpacity
@@ -330,7 +334,9 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                       >
                         <Checkbox
                           value={!!isSkillAlreadySelected}
-                          onValueChange={onPress}
+                          onValueChange={() =>
+                            addCompetencedSkill(item as IFormValueInput)
+                          }
                           color={isSelected ? '#4630EB' : undefined}
                         />
                         <Text

@@ -97,7 +97,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     <Modal animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView className="bg-white">
         <View className="flex h-full  rounded-t-xl bg-white">
-          <View>
+          <View className="mt-3">
             <Header
               title={t('new_challenge_screen.title') || ''}
               rightBtn={t(

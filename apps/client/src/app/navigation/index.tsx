@@ -74,7 +74,7 @@ export const RootNavigation = () => {
       };
       setTimeout(() => {
         hideSplashScreen();
-      }, 1000);
+      }, 500);
     }
   }, [isMainAppLoading, isCompleteProfile]);
 

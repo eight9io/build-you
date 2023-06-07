@@ -7,11 +7,7 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/navigation.type';
-
-import PersonalChallengeDetailScreen, {
-  RightPersonalChallengeDetailOptions,
-} from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
-
+import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';

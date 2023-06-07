@@ -36,7 +36,7 @@ const RegisterModal = ({
       style={{ borderRadius: 10 }}
     >
       <View className=" bg-white " style={{ borderRadius: 10 }}>
-        <View className="absolute z-10 my-4 ml-6 ">
+        <View className="absolute z-10 my-6 ml-4 ">
           <NavButton
             onPress={() => setModalVisible(false)}
             text={t('button.back') as string}

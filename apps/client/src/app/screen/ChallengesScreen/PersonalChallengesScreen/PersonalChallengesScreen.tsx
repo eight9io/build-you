@@ -7,10 +7,7 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/navigation.type';
-
-import SettingsScreen from '../../SettingsScreen/SettingsScreen';
 import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
-
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
@@ -114,10 +111,7 @@ const PersonalChallengesScreen = () => {
           ),
         })}
       />
-      <PersonalChallengesStack.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
-      />
+
       <PersonalChallengesStack.Screen
         name="PersonalChallengeDetailScreen"
         component={PersonalChallengeDetailScreen}

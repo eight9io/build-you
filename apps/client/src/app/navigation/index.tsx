@@ -17,7 +17,7 @@ import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
 import ChallengeDetailComment from '../screen/ChallengeDetailScreen/ChallengeDetailComment/ChallengeDetailComment';
-import NotificationsScreen from '../screen/NotificationsScreen/NotificationsScreen';
+
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
 
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/CompleteProfile';
@@ -74,7 +74,7 @@ export const RootNavigation = () => {
       };
       setTimeout(() => {
         hideSplashScreen();
-      }, 1000);
+      }, 500);
     }
   }, [isMainAppLoading, isCompleteProfile]);
 
@@ -158,9 +158,19 @@ export const RootNavigation = () => {
             <RootStack.Screen
               name="SettingsScreen"
               component={SettingsScreen}
-              options={{
-                headerShown: false,
-              }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => (
+                  <AppTitle title={t('user_settings_screen.title')} />
+                ),
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
             />
             <RootStack.Screen
               name="ChallengeDetailScreen"
@@ -184,13 +194,13 @@ export const RootNavigation = () => {
                 ),
               })}
             />
-            <RootStack.Screen
+            {/* <RootStack.Screen
               name="NotificationsScreen"
               component={NotificationsScreen}
               options={{
                 headerShown: false,
               }}
-            />
+            /> */}
           </>
         )}
         {logined && !isCompleteProfile && (

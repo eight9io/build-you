@@ -52,7 +52,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   };
 
   return (
-    <View className="relative flex h-full w-full flex-col items-center justify-start">
+    <View className="flex h-full w-full flex-col items-center justify-start">
       <View className="pt-2">
         <StepOfSteps step={2} totalSteps={4} />
       </View>
@@ -64,8 +64,8 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
 
       {/* Form */}
       <ScrollView className="w-full">
-        <View className="mt-4 flex h-full w-full  rounded-t-xl ">
-          <View className="mt-4 flex flex-col px-5 ">
+        <View className="mt-4 flex w-full flex-col px-5">
+          <View className="mt-4 flex flex-col ">
             <Controller
               control={control}
               name="biography"
@@ -86,23 +86,22 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
               )}
             />
           </View>
-          <View className="mt-10 px-5">
+          <View className="mt-10">
             <VideoPicker
               setExternalVideo={setPickedVideo}
               useBigImage={true}
               removeVideo={removeVideo}
             />
           </View>
+
+          <Button
+            title="Next"
+            containerClassName="h-12 w-full bg-primary-default my-5 "
+            textClassName="text-white text-md leading-6"
+            onPress={handleSubmit(handleSubmitForm)}
+          />
         </View>
       </ScrollView>
-      <View className="absolute bottom-0 w-full px-4">
-        <Button
-          title="Next"
-          containerClassName="w-full bg-primary-default my-5 "
-          textClassName="text-white text-md leading-6"
-          onPress={handleSubmit(handleSubmitForm)}
-        />
-      </View>
     </View>
   );
 };

@@ -54,7 +54,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   const { t } = useTranslation();
 
   return (
-    <View className={clsx('flex-1 flex-col')}>
+    <View className={clsx('mb-24 flex-1 flex-col')}>
       <TopSectionProfile navigation={navigation} />
       <View className={clsx('mb-3 px-4 pt-12')}>
         <Text className={clsx('text-[26px] font-medium')}>

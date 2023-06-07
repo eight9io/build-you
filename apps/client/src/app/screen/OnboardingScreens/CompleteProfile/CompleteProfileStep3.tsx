@@ -134,22 +134,22 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         isVisible={isShowAddSkillModal}
         onClose={() => setIsShowAddSkillModal(false)}
       />
-      <View>
-        <StepOfSteps step={3} totalSteps={4} />
-      </View>
-      <View className="flex flex-col items-center justify-center px-4 py-6 ">
-        <Text className="text-black-default text-h4 text-center font-semibold leading-6">
-          How do you define yourself as competent?
-        </Text>
-        <Text className="text-gray-dark pt-2 text-center text-lg font-normal leading-6">
-          Choose at least 3 and up to a maximum of 10 hard skills to better tell
-          the community about yourself
-        </Text>
-      </View>
-
       <ScrollView showsVerticalScrollIndicator>
-        <View className="h-full w-full flex-col justify-between ">
-          <View className="items-center w-full flex-row flex-wrap justify-center">
+        <View>
+          <StepOfSteps step={3} totalSteps={4} />
+        </View>
+        <View className=" px-4 py-6 ">
+          <Text className="text-black-default text-h4 text-center font-semibold leading-6">
+            How do you define yourself as competent?
+          </Text>
+          <Text className="text-gray-dark pt-2 text-center text-lg font-normal leading-6">
+            Choose at least 3 and up to a maximum of 10 hard skills to better
+            tell the community about yourself
+          </Text>
+        </View>
+
+        <View className="w-full flex-col justify-between ">
+          <View className="w-full flex-row flex-wrap items-center justify-center">
             {arraySkills.map((item, index) => (
               <Button
                 key={index}
@@ -179,18 +179,16 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             </Text>
           )}
         </View>
-      </ScrollView>
-      <View className="absolute bottom-0 w-full px-4">
         <Button
           title="Next"
-          containerClassName="w-full bg-primary-default my-5 "
+          containerClassName="flex-1 bg-primary-default my-5 mx-5"
           textClassName="text-white text-md leading-6"
           onPress={() =>
             checkNumberOfSkills() &&
             navigation.navigate('CompleteProfileStep4Screen')
           }
         />
-      </View>
+      </ScrollView>
     </View>
   );
 };

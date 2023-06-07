@@ -135,6 +135,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         name="Notifications"
         component={NotificationsScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
               <AlertSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
@@ -155,6 +156,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           name="Profilo"
           component={ProfileScreen}
           options={{
+            headerShown: false,
             tabBarIcon: ({ focused }) => (
               <View
                 className={clsx('flex flex-col items-center justify-center')}

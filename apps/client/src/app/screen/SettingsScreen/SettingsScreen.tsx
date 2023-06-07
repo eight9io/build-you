@@ -10,6 +10,7 @@ import { useAuthStore } from '../../store/auth-store';
 import Settings from '../../component/Settings';
 import NavBarInnerScreen from '../../component/NavBar/NavBarInnerScreen';
 import Button from '../../component/common/Buttons/Button';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface INavBarInnerScreenProps {
   navigation: SetingsScreenNavigationProp;
@@ -35,19 +36,21 @@ const SettingsScreen: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         title={t('user_settings_screen.title')}
         navigation={navigation}
       /> */}
-      <View className="bg-gray-veryLight flex flex-1 flex-col">
-        <Settings />
-        <View className="w-full bg-white px-4 pt-6">
-          <View className="h-12">
-            <Button
-              title={t('user_settings_screen.logout')}
-              containerClassName="bg-gray-medium flex-1"
-              textClassName="text-white text-md leading-6"
-              onPress={() => handleLogout()}
-            />
+      <ScrollView>
+        <View className="bg-gray-veryLight flex flex-1 flex-col">
+          <Settings />
+          <View className="w-full bg-white px-4 pt-6">
+            <View className="h-12">
+              <Button
+                title={t('user_settings_screen.logout')}
+                containerClassName="bg-gray-medium flex-1"
+                textClassName="text-white text-md leading-6"
+                onPress={() => handleLogout()}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

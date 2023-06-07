@@ -49,10 +49,11 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
         }
       })
       .catch((error) => {
-        if (error.response?.data.statusCode === 400) {
-          setModalVisible(true);
-        } else {
+        if (error.response?.data.statusCode === 500) {
           setErrMessage(errorMessage(error, 'err_forgot_password') as string);
+        } else {
+          setEmail(data?.email as string);
+          setModalVisible(true);
         }
       })
       .finally(() => {

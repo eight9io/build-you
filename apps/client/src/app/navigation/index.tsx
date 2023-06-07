@@ -35,6 +35,7 @@ import { checkAccessTokenLocal } from '../utils/checkAuth';
 import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
+import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -67,6 +68,8 @@ export const RootNavigation = () => {
     }
   }, [logined]);
 
+  console.log('isCompleteProfile', isCompleteProfile);
+
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
       const hideSplashScreen = async () => {
@@ -74,7 +77,7 @@ export const RootNavigation = () => {
       };
       setTimeout(() => {
         hideSplashScreen();
-      }, 500);
+      }, 700);
     }
   }, [isMainAppLoading, isCompleteProfile]);
 
@@ -203,11 +206,23 @@ export const RootNavigation = () => {
             /> */}
           </>
         )}
-        {logined && !isCompleteProfile && (
+        {logined && !isCompleteProfile && isCompleteProfile !== null && (
           <>
             <RootStack.Screen
               name="CompleteProfileScreen"
               component={CompleteProfileScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
+        )}
+
+        {logined && isCompleteProfile === null && (
+          <>
+            <RootStack.Screen
+              name="ProfileScreenLoading"
+              component={PersonalProfileScreenLoading}
               options={{
                 headerShown: false,
               }}

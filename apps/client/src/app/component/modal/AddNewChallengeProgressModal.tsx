@@ -23,6 +23,7 @@ import CustomTextInput from '../common/Inputs/CustomTextInput';
 import { IUploadMediaWithId } from '../../types/media';
 
 import Close from '../../component/asset/close.svg';
+import { getRandomId } from '../../utils/common';
 
 interface IAddNewChallengeProgressModalProps {
   isVisible: boolean;
@@ -139,7 +140,15 @@ export const AddNewChallengeProgressModal: FC<
 
             <View className="">
               <ImagePicker
-                setExternalImages={setSelectedMedia}
+                onImagesSelected={(images) => {
+                  images.forEach((uri: string) => {
+                    const id = getRandomId();
+                    setSelectedMedia((prev: IUploadMediaWithId[]) => [
+                      ...prev,
+                      { id, uri: uri },
+                    ]);
+                  });
+                }}
                 allowsMultipleSelection
                 isSelectedImage={isSelectedImage}
                 setIsSelectedImage={setIsSelectedImage}

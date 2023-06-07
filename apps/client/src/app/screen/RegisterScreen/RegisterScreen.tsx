@@ -146,11 +146,9 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                                 ))
                               }
                               secureTextEntry={
-                                (item.name === 'password' ||
-                                  item.name === 'repeat_password') &&
+                                (item.name == 'repeat_password' ||
+                                  'password') &&
                                 hidePassword
-                                  ? true
-                                  : false
                               }
                               label={item.label}
                               placeholder={item.placeholder}

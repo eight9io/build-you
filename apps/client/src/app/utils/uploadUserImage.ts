@@ -46,6 +46,5 @@ export const uploadNewAvatar = async (image: string) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  console.log(response);
   return response.data;
 };

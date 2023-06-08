@@ -47,17 +47,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     setValue,
     getValues,
   } = useForm<{
-    avatar: string;
     name: string;
     surname: string;
-    birth: Date;
+    birth: Date | undefined;
     occupation: string;
   }>({
     defaultValues: {
-      avatar: '',
       name: '',
       surname: '',
-      birth: new Date(),
+      birth: undefined,
       occupation: '',
     },
     resolver: yupResolver(OnboardingScreen1Validators()),
@@ -65,17 +63,19 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   });
 
   const { t } = useTranslation();
+
+  const occupation = getValues('occupation');
+  const birth = getValues('birth');
   const handleDatePicked = (date?: Date) => {
     if (date) {
       setValue('birth', date);
       setSelectedDate(date);
     }
-
     setShowDateTimePicker(false);
   };
 
-  const handleOccupationPicked = (index?: number) => {
-    if (index) {
+  const handleOccupationPicked = (index: number) => {
+    if ( index >= 0) {
       setSelectedOccupationIndex(index);
       setValue('occupation', MOCK_OCCUPATION_SELECT[index].label);
     }
@@ -108,7 +108,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         }}
       />
       <ScrollView className="h-full w-full">
-        <View className=" flex h-full w-full flex-col items-center justify-start">
+        <View className=" flex w-full flex-col items-center justify-start">
           <View className="pt-2">
             <StepOfSteps step={1} totalSteps={4} />
           </View>
@@ -118,12 +118,12 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
             </Text>
           </View>
 
-          <View className="">
-            <SignupAvatar control={control} errors={errors} />
+          <View className="h-28">
+            <SignupAvatar />
           </View>
 
           {/* Form */}
-          <View className=" flex h-full w-full">
+          <View className=" flex w-full">
             <View className="mt-4 flex flex-col px-5 ">
               <View className="pt-3">
                 <Controller
@@ -185,7 +185,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                     <View className="flex flex-col">
                       <TextInput
                         label="Birthday"
-                        placeholder={'Enter your birth'}
+                        placeholder={'Enter your birth day'}
                         placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                         rightIcon={
                           <TouchableOpacity
@@ -196,13 +196,13 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         }
                         onBlur={onBlur}
                         onChangeText={onChange}
-                        value={dayjs(value).format('DD/MM/YYYY')}
+                        value={value && dayjs(value).format('DD/MM/YYYY')}
                         // textAlignVertical="top"
                         editable={false}
                         onPress={() => setShowDateTimePicker(true)}
                         className="text-black-default"
                       />
-                      {errors.birth && (
+                      {errors.birth && !birth && (
                         <View className="flex flex-row pt-2">
                           <Warning />
                           <Text className="pl-1 text-sm font-normal text-red-500">
@@ -230,7 +230,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onPress={() => setShowOccupationPicker(true)}
                         value={value}
                       />
-                      {errors.occupation && (
+                      {errors.occupation && !occupation && (
                         <View className="flex flex-row pt-2">
                           <Warning />
                           <Text className="pl-1 text-sm font-normal text-red-500">

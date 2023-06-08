@@ -126,8 +126,7 @@
     { "id": "13", "skill": "💃 Dance" },
     { "id": "14", "skill": "🏗️ Architecture" },
     { "id": "15", "skill": "📷 Photography" }
-  ]
-  ,
+  ],
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
   "button.back": "Back",

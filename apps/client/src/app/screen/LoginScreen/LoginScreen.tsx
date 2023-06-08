@@ -7,7 +7,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,8 +34,22 @@ import IconEyeOff from './asset/eye-off.svg';
 import IconGoogle from './asset/Google.svg';
 import IconEyeOn from './asset/icon-eye.svg';
 import IconLinkedIn from './asset/LinkedIn.svg';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
-export default function Login({ navigation }: { navigation: any }) {
+export default function Login({
+  navigation,
+  route,
+}: {
+  navigation: any;
+  route: any;
+}) {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: {
+        display: 'none',
+      },
+    });
+  }, [navigation]);
   const { t } = useTranslation(['index', 'errorMessage']);
   const [errMessage, setErrMessage] = useState('');
   const {
@@ -80,7 +94,7 @@ export default function Login({ navigation }: { navigation: any }) {
   const [isLoading, setIsLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView className=" h-full bg-white ">
+    <SafeAreaView className="relative h-full bg-white ">
       <View className="relative h-full bg-white ">
         <ScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">
@@ -200,7 +214,9 @@ export default function Login({ navigation }: { navigation: any }) {
             </View>
           </View>
         </ScrollView>
-        {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
+        {isLoading && (
+          <Loading containerClassName="absolute top-0 left-0 h-full" />
+        )}
       </View>
     </SafeAreaView>
   );

@@ -28,6 +28,7 @@ import UncheckedSvg from './asset/uncheck.svg';
 import WarningSvg from '../../../component/asset/warning.svg';
 
 import httpInstance from '../../../utils/http';
+import { uploadNewVideo } from '../../../utils/uploadVideo';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -209,7 +210,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     return true;
   };
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     setOpenDropdown(false);
     setSoftSkills(selectedCompetencedSkill);
     const profile = getProfile();
@@ -221,10 +222,17 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
     // TODO: handle error when null id
     if (!userData?.id) return;
+    uploadNewVideo(profile?.video);
     httpInstance
       .put(`/user/update/${userData.id}`, {
-        ...profile,
-        softSkills: softSkills,
+        name: profile?.name,
+        surname: profile?.surname,
+        birth: profile?.birth,
+        occupation: profile?.occupation,
+        bio: profile?.biography,
+        softSkill: softSkills,
+        hardSkill: profile.skills,
+        company: '',
       })
       .then((res) => {
         if (res.status === 200) {
@@ -234,7 +242,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       })
       .catch((err) => {
         console.error('upload err', err);
-        navigation.navigate('CompleteProfileStep1Screen');
       });
   };
 

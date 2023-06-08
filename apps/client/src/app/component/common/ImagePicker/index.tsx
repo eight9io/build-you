@@ -50,14 +50,6 @@ const ImagePicker: FC<IImagePickerProps> = ({
   };
   return (
     <View className="flex flex-col">
-      {/* {images && images.length === 1 && (
-        <View className="h-36 w-full">
-          <Image
-            source={{ uri: images[0] }}
-            className="h-full w-full rounded-xl"
-          />
-        </View>
-      )} */}
       {images && images.length > 0 && (
         <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
           {images.map((uri, index) => (
@@ -67,7 +59,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
               style={{ width: 100 }}
             >
               {onRemoveSelectedImage && (
-                <View className="absolute right-1 top-2 z-10">
+                <View className="absolute right-1 top-1 z-10">
                   <Button
                     onPress={() => handleRemoveSelectedImage(index)}
                     Icon={<Close fill={'white'} />}

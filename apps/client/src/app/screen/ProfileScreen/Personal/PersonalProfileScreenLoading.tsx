@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import Loading from '../../../component/common/Loading';
+import { SafeAreaView, View, Text } from 'react-native';
 
 const PersonalProfileScreenLoading = () => {
   // TODO: add skeleton loading

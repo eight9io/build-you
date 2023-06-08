@@ -19,8 +19,10 @@ export interface IUpdateChallengeImage {
 export interface IChallenge {
   id: string;
   goal: string;
+  name: string;
   benefits: string;
   reasons: string;
   achievementTime: Date;
-  image: string;
+  image?: string | null;
+  status?: string;
 }

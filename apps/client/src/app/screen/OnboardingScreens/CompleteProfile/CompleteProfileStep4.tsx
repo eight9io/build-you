@@ -160,7 +160,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   );
 
   const { getUserProfile } = useUserProfileStore();
-  const { setIsCompleteProfile } = useGetUserData();
 
   const userData = getUserProfile();
 
@@ -236,7 +235,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       })
       .then((res) => {
         if (res.status === 200) {
-          setIsCompleteProfile(true);
           navigation.navigate('CompleteProfileFinishScreen');
         }
       })

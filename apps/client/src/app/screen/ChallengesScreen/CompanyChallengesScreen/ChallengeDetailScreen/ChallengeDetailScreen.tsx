@@ -18,7 +18,7 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.participants'),
 ];
 
-export const ChallengeDetailScreen = () => {
+export const CompanyChallengeDetailScreen = () => {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
 
@@ -50,4 +50,4 @@ export const ChallengeDetailScreen = () => {
   );
 };
 
-export default ChallengeDetailScreen;
+export default CompanyChallengeDetailScreen;

@@ -11,6 +11,7 @@ interface DateTimePicker2Props {
   setShowDateTimePicker: (show: boolean) => void;
   selectedDate?: Date;
   setSelectedDate: (date: Date) => void;
+  shouldMinus16Years?: boolean;
 }
 
 const DateTimePicker2: FC<DateTimePicker2Props> = ({
@@ -18,9 +19,13 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   setShowDateTimePicker,
   selectedDate,
   setSelectedDate,
+  shouldMinus16Years = false,
 }) => {
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
-    dayjs().subtract(16, 'years').startOf('day').toDate()
+    dayjs()
+      .subtract(shouldMinus16Years ? 16 : 0, 'years')
+      .startOf('day')
+      .toDate()
   );
 
   const onConfirm = () => {
@@ -54,21 +59,40 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
             <View className="flex-1">
               <BottomSheet2 onClose={() => setShowDateTimePicker(false)}>
                 <View className="relative h-full w-full">
-                  <RNDateTimePicker
-                    value={selectedDate || tempSelectedDate}
-                    mode={'date'}
-                    display="spinner"
-                    onChange={(_, value) => setTempSelectedDate(value as Date)}
-                    style={{ height: '80%' }}
-                    maximumDate={dayjs()
-                      .subtract(16, 'years')
-                      .startOf('day')
-                      .toDate()}
-                    minimumDate={dayjs()
-                      .subtract(100, 'years')
-                      .startOf('day')
-                      .toDate()}
-                  />
+                  {shouldMinus16Years && (
+                    <RNDateTimePicker
+                      value={selectedDate || tempSelectedDate}
+                      mode={'date'}
+                      display="spinner"
+                      onChange={(_, value) =>
+                        setTempSelectedDate(value as Date)
+                      }
+                      style={{ height: '80%' }}
+                      maximumDate={dayjs()
+                        .subtract(16, 'years')
+                        .startOf('day')
+                        .toDate()}
+                      minimumDate={dayjs()
+                        .subtract(100, 'years')
+                        .startOf('day')
+                        .toDate()}
+                    />
+                  )}
+                  {!shouldMinus16Years && (
+                    <RNDateTimePicker
+                      value={selectedDate || tempSelectedDate}
+                      mode={'date'}
+                      display="spinner"
+                      onChange={(_, value) =>
+                        setTempSelectedDate(value as Date)
+                      }
+                      style={{ height: '80%' }}
+                      minimumDate={dayjs()
+                        .subtract(0, 'years')
+                        .startOf('day')
+                        .toDate()}
+                    />
+                  )}
                   <View className="absolute bottom-10 h-12 w-full px-4">
                     <Button
                       title={'Save'}
@@ -90,10 +114,12 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
               mode={'date'}
               display="spinner"
               onChange={(event, value) => {
-                if (event.type === 'set') { // User pressed confirm
+                if (event.type === 'set') {
+                  // User pressed confirm
                   setSelectedDate(value as Date);
                   setShowDateTimePicker(false);
-                } else { // User pressed cancel
+                } else {
+                  // User pressed cancel
                   setShowDateTimePicker(false);
                 }
               }}

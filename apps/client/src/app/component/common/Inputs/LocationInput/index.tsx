@@ -6,12 +6,14 @@ import { View, Text, TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import LocationSvg from '../assets/location.svg';
+import ErrorText from '../../ErrorText';
 
 interface ILocationInputProps {
   control?: any;
+  errors?: any;
 }
 
-const LocationInput: React.FC<ILocationInputProps> = ({ control }) => {
+const LocationInput: React.FC<ILocationInputProps> = ({ control, errors }) => {
   const { t } = useTranslation();
   return (
     <View>
@@ -51,6 +53,7 @@ const LocationInput: React.FC<ILocationInputProps> = ({ control }) => {
         )}
         name="location"
       />
+      {errors ? <ErrorText message={errors.message} /> : null}
     </View>
   );
 };

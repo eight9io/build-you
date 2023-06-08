@@ -14,7 +14,6 @@ import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
-import ChallengeDetailScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
 import ChallengeDetailComment from '../screen/ChallengeDetailScreen/ChallengeDetailComment/ChallengeDetailComment';
 
@@ -67,8 +66,6 @@ export const RootNavigation = () => {
       setIsMainAppLoading(false);
     }
   }, [logined]);
-
-  console.log('isCompleteProfile', isCompleteProfile);
 
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
@@ -175,13 +172,7 @@ export const RootNavigation = () => {
                 ),
               })}
             />
-            <RootStack.Screen
-              name="ChallengeDetailScreen"
-              component={ChallengeDetailScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
+
             <RootStack.Screen
               name="EditPersonalProfileScreen"
               component={EditPersonalProfileScreen}

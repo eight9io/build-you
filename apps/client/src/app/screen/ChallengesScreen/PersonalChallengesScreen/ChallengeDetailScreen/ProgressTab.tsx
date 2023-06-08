@@ -7,6 +7,7 @@ import AddIcon from '../../../../component/asset/add.svg';
 
 import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
 import ProgressCard from '../../../../component/Card/ProgressCard/ProgressCard';
+import { IChallenge } from 'apps/client/src/app/types/challenge';
 
 const arrayPost = [
   {
@@ -67,9 +68,11 @@ const arrayPost = [
   },
 ];
 
-interface IProgressTabProps {}
+interface IProgressTabProps {
+  challengeData: IChallenge;
+}
 
-export const ProgressTab: FC<IProgressTabProps> = () => {
+export const ProgressTab: FC<IProgressTabProps> = ({ challengeData }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { t } = useTranslation();
 
@@ -85,6 +88,7 @@ export const ProgressTab: FC<IProgressTabProps> = () => {
             onPress={() => setIsModalVisible(true)}
           />
           <AddNewChallengeProgressModal
+            challengeId={challengeData.id}
             isVisible={isModalVisible}
             onClose={() => setIsModalVisible(false)}
           />

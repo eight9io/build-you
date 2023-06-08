@@ -3,7 +3,6 @@ import {
   Text,
   Modal,
   SafeAreaView,
-  TextInput,
   Image,
   Dimensions,
   ScaledSize,
@@ -11,7 +10,15 @@ import {
 } from 'react-native';
 import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { useUserProfileStore } from '../../store/user-data';
+
+import { IUploadMediaWithId } from '../../types/media';
+
+import { getRandomId } from '../../utils/common';
+import { CreateProgressValidationSchema } from '../../Validators/CreateProgress.validate';
 
 import Header from '../common/Header';
 import Button from '../common/Buttons/Button';
@@ -20,12 +27,14 @@ import VideoPicker from '../common/VideoPicker';
 import LocationInput from '../common/Inputs/LocationInput';
 import CustomTextInput from '../common/Inputs/CustomTextInput';
 
-import { IUploadMediaWithId } from '../../types/media';
-
 import Close from '../../component/asset/close.svg';
-import { getRandomId } from '../../utils/common';
+import httpInstance from '../../utils/http';
+import { createProgress, updateProgressImage } from '../../service/progress';
+import { getImageExtension } from '../../utils/uploadUserImage';
+import { AxiosResponse } from 'axios';
 
 interface IAddNewChallengeProgressModalProps {
+  challengeId: string;
   isVisible: boolean;
   onClose: () => void;
 }
@@ -72,26 +81,31 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
         ))}
     </View>
   );
-  ``;
 };
 
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
-> = ({ isVisible, onClose }) => {
+> = ({ challengeId, isVisible, onClose }) => {
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
+
+  const { getUserProfile } = useUserProfileStore();
+  const userProfile = getUserProfile();
 
   const { t } = useTranslation();
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      goalName: '',
-      uploadMedia: '',
+      challenge: '',
+      caption: '',
       location: '',
     },
+    resolver: yupResolver(CreateProgressValidationSchema()),
+    reValidateMode: 'onChange',
   });
 
   useEffect(() => {
@@ -100,11 +114,46 @@ export const AddNewChallengeProgressModal: FC<
     }
   }, [selectedMedia]);
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (data: any) => {
+    //TODO: handle error
+    if (!userProfile || !userProfile.id) return;
+    const payload = {
+      user: userProfile.id,
+      challenge: challengeId,
+      caption: data.caption,
+      location: data.location,
+    };
+
+    const createProgressResponse = await createProgress(payload);
+    if (
+      createProgressResponse.status === 200 ||
+      (201 && selectedMedia.length > 0)
+    ) {
+      const progressId = createProgressResponse.data.id;
+      const extension = getImageExtension(selectedMedia[0].uri);
+      const imageData = new FormData();
+      imageData.append('file', {
+        uri: selectedMedia[0].uri,
+        name: `${selectedMedia[0].id}.${extension}`,
+        type: `image/${extension}`,
+      } as any);
+      const addImageProgressResponse = (await updateProgressImage(
+        progressId,
+        imageData
+      )) as AxiosResponse;
+
+      if (addImageProgressResponse.status === 200 || 201) {
+        onClose();
+      } else {
+        //TODO: show error modal
+      }
+    } else {
+      //TODO: show create progress error modal
+    }
+  };
   // TODO: handle change CREATE text color when input is entered
 
   const screen = Dimensions.get('window');
-
   return (
     <Modal
       animationType="slide"
@@ -113,12 +162,13 @@ export const AddNewChallengeProgressModal: FC<
       className="h-full"
     >
       <SafeAreaView className="bg-white">
-        <View className="  h-full  rounded-t-xl bg-white">
+        <View className="h-full rounded-t-xl bg-white">
           <Header
-            title="New challenge"
+            title="New Progress"
             rightBtn="CREATE"
             leftBtn="Cancel"
             onLeftBtnPress={onClose}
+            onRightBtnPress={handleSubmit(onSubmit)}
             containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
           />
 
@@ -128,6 +178,7 @@ export const AddNewChallengeProgressModal: FC<
               placeholderClassName="h-32"
               placeholder="What do you achieve?"
               control={control}
+              errors={errors.caption}
             />
 
             {selectedMedia && (
@@ -155,7 +206,7 @@ export const AddNewChallengeProgressModal: FC<
               />
             </View>
 
-            <View className="">
+            <View className="flex flex-col">
               <VideoPicker
                 setExternalVideo={setSelectedMedia}
                 isSelectedImage={isSelectedImage}
@@ -163,8 +214,8 @@ export const AddNewChallengeProgressModal: FC<
               />
             </View>
 
-            <View className="pt-4">
-              <LocationInput control={control} />
+            <View className="flex flex-col pt-4">
+              <LocationInput control={control} errors={errors.location} />
             </View>
           </View>
         </View>

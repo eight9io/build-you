@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
 import clsx from 'clsx';
+import { useUserProfileStore } from '../../../../store/user-data';
 
 import Biography from './Biography';
 import Skills from './Skills';
@@ -11,7 +12,9 @@ import Followers from '../common/Followers';
 import Following from '../common/Following';
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
 
-const ProfileTabs = () => {
+const ProfileTabs: FC = () => {
+  const { getUserProfile } = useUserProfileStore();
+  const userProfile = getUserProfile();
   const { t } = useTranslation();
 
   const titles = [
@@ -27,7 +30,7 @@ const ProfileTabs = () => {
         titles={titles}
         children={[
           <Biography />,
-          <Skills />,
+          <Skills skills={userProfile?.softSkill} />,
           <Followers followers={MOCK_FOLLOW_USERS} />,
           <Following following={MOCK_FOLLOW_USERS} />,
         ]}

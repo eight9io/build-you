@@ -18,6 +18,7 @@ import { useNav } from '../../navigation/navigation.type';
 import Loading from '../common/Loading';
 import clsx from 'clsx';
 import { getImageExtension } from '../../utils/uploadUserImage';
+import { AxiosResponse } from 'axios';
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
@@ -91,27 +92,37 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
 
       // Create a challenge without image
       const challengeCreateResponse = await createChallenge(payload);
-      
       // If challenge created successfully, upload image
-      if (challengeCreateResponse.status === 201 && image) {
-        const extension = getImageExtension(image);
-        const imageData = new FormData();
-        imageData.append('file', {
-          uri: image,
-          name: `image.${extension}`,
-          type: `image/${extension}`,
-        } as any);
-        const challengeImageResponse = await updateChallengeImage(
-          {
-            id: challengeCreateResponse.data.id,
-          },
-          imageData
-        );
+      if (challengeCreateResponse.status === 200 || 201) {
+        if (image) {
+          const extension = getImageExtension(image);
+          const imageData = new FormData();
+          imageData.append('file', {
+            uri: image,
+            name: `image.${extension}`,
+            type: `image/${extension}`,
+          } as any);
+          const challengeImageResponse = (await updateChallengeImage(
+            {
+              id: challengeCreateResponse.data.id,
+            },
+            imageData
+          )) as AxiosResponse;
 
-        // If image uploaded successfully, navigate to challenge detail
-        if (challengeImageResponse.status === 201) {
-          // TODO: handle navigation to challenge detail
+          if (challengeImageResponse.status === 200 || 201) {
+            navigation.navigate('Challenges', {
+              screen: 'PersonalChallengeDetailScreen',
+              params: { challengeId: challengeCreateResponse.data.id },
+            });
+            return;
+          }
+          setErrorMessage(t('errorMessage:500') || '');
+          // TODO: If challenge created successfully but image upload failed, Delete the challenge
         }
+        navigation.navigate('Challenges', {
+          screen: 'PersonalChallengeDetailScreen',
+          params: { challengeId: '1' },
+        });
       }
     } catch (error) {
       console.log(error);
@@ -238,7 +249,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                       onBlur={onBlur}
                       onChangeText={onChange}
                       editable={false}
-                      value={value ? dayjs(value).format('DD/MM/YYYY') : ''}
+                      value={value && dayjs(value).format('DD/MM/YYYY')}
                       rightIcon={<CalendarIcon />}
                       onPress={handleShowDatePicker}
                       className={clsx(
@@ -246,6 +257,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                       )}
                     />
                     <DateTimePicker2
+                      shouldMinus16Years={false}
                       selectedDate={value as Date}
                       setSelectedDate={handleDatePicked}
                       setShowDateTimePicker={setShowDatePicker}
@@ -272,11 +284,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             </View>
           </View>
         </View>
-        {isLoading && (
-          <Loading
-            containerClassName="absolute top-0 left-0"
-          />
-        )}
+        {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </SafeAreaView>
     </Modal>
   );

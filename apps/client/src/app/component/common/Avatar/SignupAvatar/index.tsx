@@ -10,13 +10,17 @@ import {
 } from 'react-native';
 import clsx from 'clsx';
 
-import { getImageFromUserDevice, uploadNewAvatar } from '../../../../utils/uploadUserImage';
-
 import DefaultAvatar from './asset/default-avatar.svg';
 import CameraSvg from './asset/camera.svg';
 import { Controller } from 'react-hook-form';
 
+import {
+  getImageFromUserDevice,
+  uploadNewAvatar,
+} from '../../../../utils/uploadUserImage';
+
 import Warning from '../../../../component/asset/warning.svg';
+import { OutlineButton } from '../../Buttons/Button';
 
 interface ISignupAvatarProps {}
 

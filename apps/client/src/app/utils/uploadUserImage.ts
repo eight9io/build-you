@@ -5,9 +5,10 @@ import * as FileSystem from 'expo-file-system';
 
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
+  base64?: boolean;
 }
 export const getImageFromUserDevice = (props: PickImageOptions) => {
-  const { allowsMultipleSelection } = props;
+  const { allowsMultipleSelection, base64 } = props;
   return async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -18,11 +19,11 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
 
     const result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsEditing: allowsMultipleSelection ? false : true,
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection,
-      base64: true,
+      base64: base64,
     });
 
     if (!result.canceled) {
@@ -48,3 +49,7 @@ export const uploadNewAvatar = async (image: string) => {
   });
   return response.data;
 };
+
+export const getImageExtension = (uri: string) => {
+  return uri.split('.')[1];
+}

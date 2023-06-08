@@ -12,5 +12,6 @@
     "400": "The verification code is not accurate."
   },
 
-  "500": "Internal error. Please try again later."
+  "500": "Internal error. Please try again later.",
+  "401": "Unauthorized."
 }

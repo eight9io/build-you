@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import clsx from 'clsx';
 import Modal from 'react-native-modal';
@@ -16,7 +16,7 @@ interface ISelectPickerProps {
   show: boolean;
   data: Array<any> | null | undefined;
   selectedIndex?: number;
-  onSelect: (index?: number) => void;
+  onSelect: (index: number) => void;
   onCancel: () => void;
 }
 const SelectPicker: FC<ISelectPickerProps> = ({
@@ -26,6 +26,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
   onSelect,
   onCancel,
 }) => {
+  const [selected, setSelected] = useState<number>(0);
   // const flatListRef = useRef<FlatList>(null);
   // useEffect(() => {
   //   if (selectedIndex) {
@@ -65,15 +66,15 @@ const SelectPicker: FC<ISelectPickerProps> = ({
                   return (
                     <View className="px-4" key={`${item?.label + index}`}>
                       <Button
-                        onPress={() => onSelect(index)}
+                        onPress={() => setSelected(index)}
                         title={item.label}
                         containerClassName={clsx(
                           'focus:bg-gray-light',
-                          index === selectedIndex && 'bg-gray-light'
+                          index === selected && 'bg-gray-light'
                         )}
                         textClassName={clsx(
                           'text-base font-normal',
-                          index === selectedIndex && 'font-semibold'
+                          index === selected && 'font-semibold'
                         )}
                       />
                     </View>
@@ -109,7 +110,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
             <View className="absolute bottom-[-40px] h-12 w-full px-4">
               <Button
                 title={'Save'}
-                onPress={onSelect}
+                onPress={() => onSelect(selected)}
                 containerClassName="bg-primary-default flex-1"
                 textClassName="text-white"
               />

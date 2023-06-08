@@ -2,16 +2,17 @@ import React, { FC, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
+
 import { useCompleteProfileStore } from '../../../store/complete-user-profile';
+import { uploadNewVideo } from '../../../utils/uploadVideo';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import TextInput from '../../../component/common/Inputs/TextInput';
-
 import Button from '../../../component/common/Buttons/Button';
+import VideoPicker from '../../../component/common/VideoPicker';
 
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
-
-import VideoPicker from '../../../component/common/VideoPicker';
+import { IUploadMediaWithId } from '../../../types/media';
 
 interface CompleteProfileStep2Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -20,17 +21,14 @@ interface CompleteProfileStep2Props {
 const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   navigation,
 }) => {
-  const [pickedVideo, setPickedVideo] = useState<string[]>([]);
-  const [isSelectedImage, setIsSelectedImage] = useState<boolean>(false);
+  const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
 
-  const { setBiography } = useCompleteProfileStore();
+  const { setBiography, setVideo } = useCompleteProfileStore();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
-    getValues,
   } = useForm<{
     biography: string;
     video: string;
@@ -42,12 +40,15 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   });
 
   const handleSubmitForm = (data: any) => {
-    // keep data to store, add biography
-    setBiography(data.biography, data.video);
+    setBiography(data.biography);
+    if (pickedVideo[0]?.uri) {
+      setVideo(pickedVideo[0]?.uri);
+    }
     navigation.navigate('CompleteProfileStep3Screen');
   };
 
   const removeVideo = () => {
+    uploadNewVideo('');
     setPickedVideo([]);
   };
 

@@ -84,7 +84,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   return (
     <SafeAreaView className=" h-full bg-white ">
       <ScrollView>
-        <View className="flex-column h-full justify-between bg-white px-6  pb-14">
+        <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">
               <Image
@@ -147,7 +147,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                               }
                               secureTextEntry={
                                 (item.name == 'repeat_password' ||
-                                  'password') &&
+                                  item.name == 'password') &&
                                 hidePassword
                               }
                               label={item.label}
@@ -243,13 +243,13 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             setModalVisible={setModalVisible}
           />
         </View>
-        {isLoading && (
-          <Loading
-            containerClassName="absolute top-0 left-0"
-            text={t('register_screen.creating') as string}
-          />
-        )}
       </ScrollView>
+      {isLoading && (
+        <Loading
+          containerClassName="absolute top-0 left-0 h-full"
+          text={t('register_screen.creating') as string}
+        />
+      )}
     </SafeAreaView>
   );
 }

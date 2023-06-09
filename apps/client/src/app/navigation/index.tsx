@@ -30,12 +30,16 @@ import Register from '../screen/RegisterScreen/RegisterScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 
 import { checkUserCompleProfile } from '../utils/checkUserCompleProfile';
-import { checkAccessTokenLocal } from '../utils/checkAuth';
+import {
+  checkAccessTokenLocal,
+  removeAuthTokensLocalOnLogout,
+} from '../utils/checkAuth';
 
 import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
 import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
+import BottomNavBarWithoutLogin from '../component/BottomNavBar/BottomNavBarWithoutLogin';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -294,6 +298,21 @@ export const RootNavigation = () => {
                   />
                 ),
               })}
+            />
+            <RootStack.Screen
+              name="HomeScreen"
+              component={BottomNavBarWithoutLogin}
+              options={{
+                headerShown: false,
+                headerTitle: () => (
+                  <Header
+                    title={t('challenge_detail_screen.title') || undefined}
+                  />
+                ),
+                headerLeft: (props) => {
+                  return <NavButton />;
+                },
+              }}
             />
           </>
         )}

@@ -9,7 +9,6 @@ import {
 } from 'react-native-popup-menu';
 
 import clsx from 'clsx';
-import ConfirmDialog from '../Dialog/ConfirmDialog';
 
 import EditIcon from './assets/edit-icon.svg';
 

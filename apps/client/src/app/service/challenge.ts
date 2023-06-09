@@ -8,10 +8,18 @@ export const createChallenge = (data: ICreateChallenge) => {
 
 export const updateChallengeImage = (
   params: IUpdateChallengeImage,
-  image: FormData
+  image: string
 ) => {
+  const imageData = new FormData();
+  const extension = image.split('.').pop();
+  imageData.append('file', {
+    uri: image,
+    name: `${params.id}.${extension}`,
+    type: `image/${extension}`,
+  } as any);
+
   return retryRequest(() => {
-    return http.post(`/challenge/image/${params.id}`, image, {
+    return http.post(`/challenge/image/${params.id}`, imageData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

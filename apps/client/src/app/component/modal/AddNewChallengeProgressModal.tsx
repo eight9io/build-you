@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useUserProfileStore } from '../../store/user-data';
@@ -29,9 +29,15 @@ import CustomTextInput from '../common/Inputs/CustomTextInput';
 
 import Close from '../../component/asset/close.svg';
 import httpInstance from '../../utils/http';
-import { createProgress, updateProgressImage } from '../../service/progress';
+import {
+  createProgress,
+  updateProgressImage,
+  updateProgressVideo,
+} from '../../service/progress';
 import { getImageExtension } from '../../utils/uploadUserImage';
 import { AxiosResponse } from 'axios';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import Loading from '../common/Loading';
 
 interface IAddNewChallengeProgressModalProps {
   challengeId: string;
@@ -86,8 +92,13 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
 > = ({ challengeId, isVisible, onClose }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
+    null
+  );
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
@@ -115,7 +126,7 @@ export const AddNewChallengeProgressModal: FC<
   }, [selectedMedia]);
 
   const onSubmit = async (data: any) => {
-    //TODO: handle error
+    setIsLoading(true);
     if (!userProfile || !userProfile.id) return;
     const payload = {
       user: userProfile.id,
@@ -130,30 +141,46 @@ export const AddNewChallengeProgressModal: FC<
       (201 && selectedMedia.length > 0)
     ) {
       const progressId = createProgressResponse.data.id;
-      const extension = getImageExtension(selectedMedia[0].uri);
-      const imageData = new FormData();
-      imageData.append('file', {
-        uri: selectedMedia[0].uri,
-        name: `${selectedMedia[0].id}.${extension}`,
-        type: `image/${extension}`,
-      } as any);
-      const addImageProgressResponse = (await updateProgressImage(
-        progressId,
-        imageData
-      )) as AxiosResponse;
-
-      if (addImageProgressResponse.status === 200 || 201) {
-        onClose();
+      if (isSelectedImage) {
+        const addImageProgressResponse = (await updateProgressImage(
+          progressId,
+          selectedMedia
+        )) as AxiosResponse;
+        if (addImageProgressResponse.status === 200 || 201) {
+          setIsRequestSuccess(true);
+          setIsShowModal(true);
+        } else {
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+        }
       } else {
-        //TODO: show error modal
+        const addVideoProgressResponse = (await updateProgressVideo(
+          progressId,
+          selectedMedia[0]
+        )) as AxiosResponse;
+        if (addVideoProgressResponse.status === 200 || 201) {
+          setIsRequestSuccess(true);
+          setIsShowModal(true);
+        } else {
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+        }
       }
     } else {
-      //TODO: show create progress error modal
+      setIsRequestSuccess(false);
+      setIsShowModal(true);
     }
+    setIsLoading(false);
   };
   // TODO: handle change CREATE text color when input is entered
 
   const screen = Dimensions.get('window');
+
+  const handleCloseModal = () => {
+    setIsShowModal(false);
+    onClose();
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -161,7 +188,21 @@ export const AddNewChallengeProgressModal: FC<
       visible={isVisible}
       className="h-full"
     >
-      <SafeAreaView className="bg-white">
+      <SafeAreaView className="relative bg-white">
+        {isLoading && (
+          <Loading containerClassName="absolute top-0 left-0 z-10" />
+        )}
+        <ConfirmDialog
+          title={isRequestSuccess ? 'Success' : 'Error'}
+          description={
+            isRequestSuccess
+              ? 'Your progress has been created successfully'
+              : 'Something went wrong. Please try again later.'
+          }
+          isVisible={isShowModal}
+          onClosed={handleCloseModal}
+          closeButtonLabel="Got it"
+        />
         <View className="h-full rounded-t-xl bg-white">
           <Header
             title="New Progress"
@@ -194,6 +235,7 @@ export const AddNewChallengeProgressModal: FC<
                 onImagesSelected={(images) => {
                   images.forEach((uri: string) => {
                     const id = getRandomId();
+                    console.log('id', id);
                     setSelectedMedia((prev: IUploadMediaWithId[]) => [
                       ...prev,
                       { id, uri: uri },

@@ -24,8 +24,9 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const { goal } = challengeData;
+  
   return (
-    <View className="flex h-full flex-col bg-white py-2">
+    <View className="flex h-full flex-col bg-white py-2 pb-16">
       <View className="px-4">
         <View className="flex flex-row items-center justify-between pt-2">
           <View>

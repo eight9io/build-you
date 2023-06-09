@@ -58,7 +58,7 @@ const PersonalChallenges = ({
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View className={clsx('h-full w-full bg-gray-50')}>
+      <View className={clsx('h-full w-full bg-gray-50 pb-20')}>
         {personalChallengesList.length === 0 ? (
           <EmptyChallenges />
         ) : (

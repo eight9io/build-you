@@ -43,7 +43,7 @@ const SettingsScreen: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
       <ScrollView>
         <View className="bg-gray-veryLight flex flex-1 flex-col">
           <Settings />
-          <View className="w-full bg-white px-4 pt-6">
+          <View className="w-full bg-white px-4 py-6">
             <View className="h-12">
               <Button
                 title={t('user_settings_screen.logout')}

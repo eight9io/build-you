@@ -14,7 +14,7 @@ interface IImagePickerProps {
   images?: string[];
   allowsMultipleSelection?: boolean;
   isSelectedImage?: boolean | null;
-  onImagesSelected: (images: string[]) => void;
+  onImagesSelected?: (images: string[]) => void;
   onRemoveSelectedImage?: (index: number) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   base64?: boolean;
@@ -38,7 +38,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       const imagesPicked = result.assets.map((asset) => asset.uri);
-      onImagesSelected(imagesPicked);
+      onImagesSelected && onImagesSelected(imagesPicked);
       if (setIsSelectedImage) setIsSelectedImage(true);
     }
   };

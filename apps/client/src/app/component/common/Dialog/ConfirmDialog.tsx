@@ -1,42 +1,55 @@
 import clsx from 'clsx';
-import  { FC,  useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Dialog from 'react-native-dialog';
 
 interface IComfirmDialogProps {
   title?: string;
-  actions?: any;
+  description?: string;
   isVisible?: boolean;
+  closeButtonLabel?: string;
+  confirmButtonLabel?: string;
   onClosed?: () => void;
+  onConfirm?: () => void;
 }
 
-const ConfirmDialog:FC<IComfirmDialogProps> = ({
+const ConfirmDialog: FC<IComfirmDialogProps> = ({
   title,
-  actions,
+  description,
   isVisible,
   onClosed,
+  closeButtonLabel,
+  onConfirm,
+  confirmButtonLabel,
 }) => {
-
   const handleCancel = () => {
     onClosed && onClosed();
   };
 
-  const handleDelete = () => {
-    onClosed && onClosed();
+  const handleConfirm = () => {
+    onConfirm && onConfirm();
   };
 
   return (
-    <View className={clsx('flex-1 bg-white items-center justify-center')}>
+    <View className={clsx('flex-1 items-center justify-center bg-white')}>
       <Dialog.Container visible={isVisible}>
-        <Dialog.Title>Account delete</Dialog.Title>
-        <Dialog.Description>
-          Do you want to delete this account? You cannot undo this action.
-        </Dialog.Description>
-        <Dialog.Button label='Cancel' onPress={handleCancel} />
-        <Dialog.Button label='Delete' onPress={handleDelete} />
+        <Dialog.Title>{title}</Dialog.Title>
+        <Dialog.Description>{description}</Dialog.Description>
+        {onClosed && (
+          <Dialog.Button
+            label={closeButtonLabel ?? 'Cancel'}
+            onPress={handleCancel}
+          />
+        )}
+        {onConfirm && (
+          <Dialog.Button
+            label={confirmButtonLabel ?? 'Confirm'}
+            onPress={handleConfirm}
+          />
+        )}
       </Dialog.Container>
     </View>
   );
-}
+};
 
 export default ConfirmDialog;

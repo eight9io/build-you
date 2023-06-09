@@ -1,13 +1,14 @@
 import { View, Text, ScrollView, FlatList } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '../../../../component/common/Buttons/Button';
+
+import { IChallenge } from '../../../../types/challenge';
+import { useUserProfileStore } from '../../../../store/user-data';
 
 import AddIcon from '../../../../component/asset/add.svg';
-
-import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
+import Button from '../../../../component/common/Buttons/Button';
 import ProgressCard from '../../../../component/Card/ProgressCard/ProgressCard';
-import { IChallenge } from 'apps/client/src/app/types/challenge';
+import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
 
 const arrayPost = [
   {
@@ -76,6 +77,10 @@ export const ProgressTab: FC<IProgressTabProps> = ({ challengeData }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { t } = useTranslation();
 
+  const progressData = challengeData.progress;
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+
   const AddNewChallengeProgressButton = () => {
     return (
       <View className="pt-4">
@@ -99,9 +104,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({ challengeData }) => {
 
   return (
     <FlatList
-      data={arrayPost}
+      data={progressData}
       ListHeaderComponent={<AddNewChallengeProgressButton />}
-      renderItem={({ item }) => <ProgressCard itemProgressCard={item} />}
+      renderItem={({ item }) => <ProgressCard itemProgressCard={item} userData={userData}/>}
       contentContainerStyle={{ paddingBottom: 300 }}
     />
   );

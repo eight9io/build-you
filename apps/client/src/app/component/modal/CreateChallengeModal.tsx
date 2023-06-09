@@ -1,7 +1,7 @@
 import { View, Text, Modal, SafeAreaView } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import Header from '../common/Header';
 import ImagePicker from '../common/ImagePicker';
 import CloseIcon from '../asset/close.svg';
@@ -19,6 +19,8 @@ import Loading from '../common/Loading';
 import clsx from 'clsx';
 import { getImageExtension } from '../../utils/uploadUserImage';
 import { AxiosResponse } from 'axios';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import httpInstance from '../../utils/http';
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
@@ -37,6 +39,13 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
+    null
+  );
+  const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
+    undefined
+  );
   const {
     control,
     getValues,
@@ -94,35 +103,29 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
       const challengeCreateResponse = await createChallenge(payload);
       // If challenge created successfully, upload image
       if (challengeCreateResponse.status === 200 || 201) {
+        setNewChallengeId(challengeCreateResponse.data.id);
         if (image) {
-          const extension = getImageExtension(image);
-          const imageData = new FormData();
-          imageData.append('file', {
-            uri: image,
-            name: `image.${extension}`,
-            type: `image/${extension}`,
-          } as any);
           const challengeImageResponse = (await updateChallengeImage(
             {
               id: challengeCreateResponse.data.id,
             },
-            imageData
+            image
           )) as AxiosResponse;
 
           if (challengeImageResponse.status === 200 || 201) {
-            navigation.navigate('Challenges', {
-              screen: 'PersonalChallengeDetailScreen',
-              params: { challengeId: challengeCreateResponse.data.id },
-            });
+            setIsRequestSuccess(true);
+            setIsShowModal(true);
             return;
           }
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+          httpInstance.delete(
+            `/challenge/delete/${challengeCreateResponse.data.id}`
+          );
           setErrorMessage(t('errorMessage:500') || '');
-          // TODO: If challenge created successfully but image upload failed, Delete the challenge
         }
-        navigation.navigate('Challenges', {
-          screen: 'PersonalChallengeDetailScreen',
-          params: { challengeId: '1' },
-        });
+        setIsRequestSuccess(true);
+        setIsShowModal(true);
       }
     } catch (error) {
       console.log(error);
@@ -131,9 +134,33 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setIsLoading(false);
   };
   // TODO: handle change CREATE text color when input is entered
+
+  const handleCloseModal = (newChallengeId: string | undefined) => {
+    setIsShowModal(false);
+    console.log('newChallengeId', newChallengeId);
+    if (isRequestSuccess && newChallengeId) {
+      onClose();
+      navigation.navigate('Challenges', {
+        screen: 'PersonalChallengeDetailScreen',
+        params: { challengeId: newChallengeId },
+      });
+    }
+  };
+
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView className="bg-white">
+        <ConfirmDialog
+          title={isRequestSuccess ? 'Success' : 'Error'}
+          description={
+            isRequestSuccess
+              ? 'Your progress has been created successfully'
+              : 'Something went wrong. Please try again later.'
+          }
+          isVisible={isShowModal}
+          onClosed={() => handleCloseModal(newChallengeId)}
+          closeButtonLabel="Got it"
+        />
         <View className="flex h-full  rounded-t-xl bg-white">
           <View>
             <Header

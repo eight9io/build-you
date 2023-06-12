@@ -55,6 +55,7 @@ export const checkAuthTokenLocalValidation = async () => {
   try {
     const accessTokenLocal = await AsyncStorage.getItem('@auth_token');
     const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
+    console.log('accessTokenLocal', accessTokenLocal);
     if (!accessTokenLocal) return false;
     if (accessTokenLocal) {
       const deocdedToken = decodedAuthToken(accessTokenLocal);

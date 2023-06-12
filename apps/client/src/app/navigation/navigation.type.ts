@@ -13,7 +13,7 @@ export type RootStackParamList = {
   ModalScreen: undefined;
   CreateChallengeScreen: undefined;
   PersonalChallengesScreen: undefined;
-  PersonalChallengeDetailScreen:  {
+  PersonalChallengeDetailScreen: {
     challengeId: string;
   };
   RegisterScreen: undefined;
@@ -50,7 +50,8 @@ export type RootStackParamList = {
     params: {
       challengeId: string;
     };
-  }
+  };
+  HomeScreenWithoutLogin: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

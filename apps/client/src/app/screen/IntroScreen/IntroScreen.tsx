@@ -65,7 +65,9 @@ export const IntroScreen = ({ navigation, route }: any) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('HomeScreenWithoutLogin')}
+        >
           <Text className="text-[#90969E]">
             {t('login_screen.explore_no_account')}
           </Text>

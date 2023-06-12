@@ -43,6 +43,7 @@ interface IAddNewChallengeProgressModalProps {
   challengeId: string;
   isVisible: boolean;
   onClose: () => void;
+  setShouldProgressPageRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IRenderSelectedMediaProps {
@@ -91,7 +92,7 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
 
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
-> = ({ challengeId, isVisible, onClose }) => {
+> = ({ setShouldProgressPageRefresh, challengeId, isVisible, onClose }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
@@ -166,6 +167,7 @@ export const AddNewChallengeProgressModal: FC<
           setIsShowModal(true);
         }
       }
+      setShouldProgressPageRefresh(true);
     } else {
       setIsRequestSuccess(false);
       setIsShowModal(true);
@@ -235,7 +237,6 @@ export const AddNewChallengeProgressModal: FC<
                 onImagesSelected={(images) => {
                   images.forEach((uri: string) => {
                     const id = getRandomId();
-                    console.log('id', id);
                     setSelectedMedia((prev: IUploadMediaWithId[]) => [
                       ...prev,
                       { id, uri: uri },

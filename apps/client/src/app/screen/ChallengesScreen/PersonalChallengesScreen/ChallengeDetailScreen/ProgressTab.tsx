@@ -10,70 +10,16 @@ import Button from '../../../../component/common/Buttons/Button';
 import ProgressCard from '../../../../component/Card/ProgressCard/ProgressCard';
 import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
 
-const arrayPost = [
-  {
-    id: 1,
-    avatar: 'avata',
-    name: 'Marco Rossi',
-    time: '1 hour ago',
-    stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    card: {
-      image: 'https://picsum.photos/200/300',
-      title: 'Climbing Mont Blanc',
-      builder: 'Marco Rossi',
-    },
-    like: 5,
-    comment: 0,
-  },
-  {
-    id: 2,
-    avatar: 'avata',
-    name: 'Marco Rossi22',
-    time: '1 hour ago',
-    stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    card: {
-      image: 'https://picsum.photos/200/300',
-      title: 'Climbing Mont Blanc',
-      builder: 'Marco Rossi',
-    },
-    like: 0,
-    comment: 0,
-  },
-  {
-    id: 3,
-    avatar: 'avata',
-    name: 'Marco Rossi 333',
-    time: '1 hour ago',
-    stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    card: {
-      image: 'https://picsum.photos/200/300',
-      title: 'Climbing Mont Blanc',
-      builder: 'Marco Rossi',
-    },
-    like: 0,
-    comment: 10,
-  },
-  {
-    id: 4,
-    avatar: 'avata',
-    name: 'Marco Rossi',
-    time: '1 hour ago',
-    stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    card: {
-      image: 'https://picsum.photos/200/300',
-      title: 'Climbing Mont Blanc',
-      builder: 'Marco Rossi',
-    },
-    like: 5,
-    comment: 0,
-  },
-];
 
 interface IProgressTabProps {
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   challengeData: IChallenge;
 }
 
-export const ProgressTab: FC<IProgressTabProps> = ({ challengeData }) => {
+export const ProgressTab: FC<IProgressTabProps> = ({
+  setShouldRefresh,
+  challengeData,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { t } = useTranslation();
 
@@ -93,6 +39,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({ challengeData }) => {
             onPress={() => setIsModalVisible(true)}
           />
           <AddNewChallengeProgressModal
+            setShouldProgressPageRefresh={setShouldRefresh}
             challengeId={challengeData.id}
             isVisible={isModalVisible}
             onClose={() => setIsModalVisible(false)}
@@ -106,7 +53,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({ challengeData }) => {
     <FlatList
       data={progressData}
       ListHeaderComponent={<AddNewChallengeProgressButton />}
-      renderItem={({ item }) => <ProgressCard itemProgressCard={item} userData={userData}/>}
+      renderItem={({ item }) => (
+        <ProgressCard itemProgressCard={item} userData={userData} />
+      )}
       contentContainerStyle={{ paddingBottom: 300 }}
     />
   );

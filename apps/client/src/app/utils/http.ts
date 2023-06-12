@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { checkAuthTokenLocalValidation } from './checkAuth';
 
 const httpInstance = axios.create({
   timeout: 60000,
@@ -7,6 +8,22 @@ const httpInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// if repsone status is 401, refresh token and retry
+// httpInstance.interceptors.request.use(
+//   async function (config) {
+//     const isTokenValid = await checkAuthTokenLocalValidation();
+//     if (isTokenValid) {
+//       return config;
+//     } else {
+//       // add gobal modal
+//       return Promise.reject('token is not valid');
+//     }
+//   },
+//   function (error) {
+//     return Promise.reject(error);
+//   }
+// );
 
 const handleError = (error: any) => console.log(error);
 

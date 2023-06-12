@@ -4,6 +4,7 @@ import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useIsFocused } from '@react-navigation/native';
 
 import httpInstance from '../../../../utils/http';
 
@@ -77,13 +78,16 @@ const PersonalChallengeDetailScreen = ({
   route: any;
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
-  const [editChallengeModalIsVisible, setEditChallengeModalIsVisible] =
+  const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState(false);
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
     undefined
   );
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -97,25 +101,30 @@ const PersonalChallengeDetailScreen = ({
   }, []);
 
   useEffect(() => {
-    if (!challengeId) return;
-    httpInstance
-      .get(`/challenge/one/${route.params.challengeId}`)
-      .then((res) => {
-        setChallengeData(res.data);
-      });
-  }, [challengeId]);
+    if (!challengeId || !isFocused) return;
+    if (shouldRefresh) setShouldRefresh(false);
+    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
+      setChallengeData(res.data);
+    });
+  }, [challengeId, isFocused, shouldRefresh]);
+
 
   const handleEditChallengeBtnPress = () => {
-    setEditChallengeModalIsVisible(true);
+    setIsEditChallengeModalVisible(true);
   };
   const handleEditChallengeModalClose = () => {
-    setEditChallengeModalIsVisible(false);
+    setIsEditChallengeModalVisible(false);
   };
   return (
     <SafeAreaView className="bg-white pt-3">
-      {challengeData && <ChallengeDetailScreen challengeData={challengeData} />}
+      {challengeData && (
+        <ChallengeDetailScreen
+          challengeData={challengeData}
+          setShouldRefresh={setShouldRefresh}
+        />
+      )}
       <EditChallengeModal
-        visible={editChallengeModalIsVisible}
+        visible={isEditChallengeModalVisible}
         onClose={handleEditChallengeModalClose}
       />
     </SafeAreaView>

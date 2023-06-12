@@ -92,6 +92,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const onSubmit = async (data: ICreateChallengeForm) => {
     setIsLoading(true);
     setErrorMessage('');
+    
     try {
       const { image, ...rest } = data; // Images upload will be handle separately
       const payload = {
@@ -137,7 +138,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
 
   const handleCloseModal = (newChallengeId: string | undefined) => {
     setIsShowModal(false);
-    console.log('newChallengeId', newChallengeId);
     if (isRequestSuccess && newChallengeId) {
       onClose();
       navigation.navigate('Challenges', {

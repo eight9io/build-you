@@ -9,7 +9,7 @@ export interface IEditChallenge {
   goal: string;
   benefits: string;
   reasons: string;
-  achievementTime: Date;
+  achievementTime: string;
 }
 
 export interface IUpdateChallengeImage {

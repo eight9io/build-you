@@ -1,4 +1,4 @@
-import { ICreateChallenge, IUpdateChallengeImage } from '../types/challenge';
+import { ICreateChallenge, IEditChallenge, IUpdateChallengeImage } from '../types/challenge';
 import http from '../utils/http';
 import { retryRequest } from '../utils/retryRequest';
 
@@ -30,3 +30,7 @@ export const updateChallengeImage = (
 export const getChallengeById = (id: string) => {
   return http.get(`/challenge/one/${id}`);
 };
+
+export const updateChallenge = (id: string, data: IEditChallenge) => {
+  return http.put(`/challenge/update/${id}`, data);
+}

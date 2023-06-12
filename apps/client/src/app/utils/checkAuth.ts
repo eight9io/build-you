@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import httpInstance, { setAuthTokenToHttpHeader } from './http';
-import { useAuthStore } from '../store/auth-store';
 
 interface IToken {
   exp: number;
@@ -55,7 +54,6 @@ export const checkAuthTokenLocalValidation = async () => {
   try {
     const accessTokenLocal = await AsyncStorage.getItem('@auth_token');
     const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
-    console.log('accessTokenLocal', accessTokenLocal);
     if (!accessTokenLocal) return false;
     if (accessTokenLocal) {
       const deocdedToken = decodedAuthToken(accessTokenLocal);
@@ -93,6 +91,39 @@ export const checkAuthTokenLocalValidation = async () => {
         return true;
       }
     }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const checkRefreshTokenLocalValidation = async () => {
+  try {
+    const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
+    if (!refreshTokenLocal) return false;
+    const decodedRefreshToken = decodedAuthToken(refreshTokenLocal);
+    const currentTime = Date.now() / 1000;
+    if (decodedRefreshToken?.exp < currentTime) {
+      removeAuthTokensLocalOnLogout();
+      return false;
+    } else {
+      const newTokens = await httpInstance
+        .post('/auth/refresh', {
+          token: refreshTokenLocal,
+        })
+        .then((res) => {
+          return res;
+        });
+      if (newTokens.status !== 201) {
+        removeAuthTokensLocalOnLogout();
+      } else {
+        addAuthTokensLocalOnLogin(
+          newTokens.data.authorization,
+          newTokens.data.refresh
+        );
+        return true;
+      }
+    }
+    return true;
   } catch (e) {
     console.error(e);
   }

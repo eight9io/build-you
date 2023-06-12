@@ -9,6 +9,10 @@ export const createProgress = (data: ICreateProgress) => {
   return httpInstance.post('/challenge/progress/create', data);
 };
 
+export const deleteProgress = (id: string) => {
+  return httpInstance.delete(`/challenge/progress/delete/${id}`);
+};
+
 export const updateProgressImage = (
   progressId: string,
   image: IUploadMediaWithId[]

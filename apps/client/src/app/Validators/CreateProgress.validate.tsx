@@ -9,10 +9,5 @@ export const CreateProgressValidationSchema = () => {
       .string()
       .trim()
       .required(t('new_progress_modal.caption_required') as string),
-
-    location: yup
-      .string()
-      .trim()
-      .required(t('new_progress_modal.location_required') as string),
   });
 };

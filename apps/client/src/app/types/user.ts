@@ -26,8 +26,6 @@ export interface IUserData {
 }
 
 export interface IHardSkillProps {
-  skill: {
     id: string;
     skill: string;
-  }
 }

@@ -113,23 +113,7 @@
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
-  "modal_skill.arraySkill": [
-    { "id": "1", "skill": "💻 Development" },
-    { "id": "2", "skill": "🎨 Art" },
-    { "id": "3", "skill": "🏛️ Culture" },
-    { "id": "4", "skill": "📣 Marketing" },
-    { "id": "5", "skill": "🍳 Kitchen" },
-    { "id": "6", "skill": "🎓 Training" },
-    { "id": "7", "skill": "✏️ Design" },
-    { "id": "8", "skill": "✈️ Tourism" },
-    { "id": "9", "skill": "🗣️ Mentorships" },
-    { "id": "11", "skill": "🌍 Foreign languages" },
-    { "id": "16", "skill": "🎉 Events" },
-    { "id": "12", "skill": "👰 Reception" },
-    { "id": "13", "skill": "💃 Dance" },
-    { "id": "14", "skill": "🏗️ Architecture" },
-    { "id": "15", "skill": "📷 Photography" }
-  ],
+
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
   "button.back": "Back",

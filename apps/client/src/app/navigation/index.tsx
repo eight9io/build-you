@@ -59,7 +59,6 @@ export const RootNavigation = () => {
   const isCompleteProfile: boolean | null = getIsCompleteProfileStore();
 
   useEffect(() => {
-    console.log('logined', logined);
     checkAccessTokenLocal(setAccessToken);
   }, []);
 

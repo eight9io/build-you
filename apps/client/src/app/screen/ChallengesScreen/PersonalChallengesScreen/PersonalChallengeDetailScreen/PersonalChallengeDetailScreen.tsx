@@ -4,7 +4,7 @@ import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 
 import httpInstance from '../../../../utils/http';
 
@@ -16,6 +16,7 @@ import ChallengeDetailScreen from '../ChallengeDetailScreen/ChallengeDetailScree
 import PopUpMenu from '../../../../component/common/PopUpMenu';
 import Button from '../../../../component/common/Buttons/Button';
 import EditChallengeModal from '../../../../component/modal/EditChallengeModal';
+import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
@@ -31,11 +32,14 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 
 interface IRightPersonalChallengeDetailOptionsProps {
   onEditChallengeBtnPress: () => void;
+  setIsDeleteChallengeDialogVisible: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 }
 
 export const RightPersonalChallengeDetailOptions: FC<
   IRightPersonalChallengeDetailOptionsProps
-> = ({ onEditChallengeBtnPress }) => {
+> = ({ onEditChallengeBtnPress, setIsDeleteChallengeDialogVisible }) => {
   const [isSharing, setIsSharing] = React.useState(false);
 
   // when sharing is available, we can share the image
@@ -65,6 +69,10 @@ export const RightPersonalChallengeDetailOptions: FC<
             text: 'Edit',
             onPress: onEditChallengeBtnPress,
           },
+          {
+            text: 'Delete',
+            onPress: () => setIsDeleteChallengeDialogVisible(true),
+          },
         ]}
       />
     </View>
@@ -79,11 +87,15 @@ const PersonalChallengeDetailScreen = ({
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
-    useState(false);
+    useState<boolean>(false);
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
     undefined
   );
-  const [shouldRefresh, setShouldRefresh] = useState(false);
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
+    useState<boolean>(false);
+  const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
+  const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
@@ -95,6 +107,7 @@ const PersonalChallengeDetailScreen = ({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
+          setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
       ),
     });
@@ -102,12 +115,18 @@ const PersonalChallengeDetailScreen = ({
 
   useEffect(() => {
     if (!challengeId || !isFocused) return;
-    if (shouldRefresh) setShouldRefresh(false);
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-  }, [challengeId, isFocused, shouldRefresh]);
+  }, [challengeId, isFocused]);
 
+  useEffect(() => {
+    if (!shouldRefresh) return;
+    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
+      setChallengeData(res.data);
+    });
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -116,16 +135,68 @@ const PersonalChallengeDetailScreen = ({
     setIsEditChallengeModalVisible(false);
   };
 
-  const handleEditChallengeModalConfirm =  () => {
+  const handleEditChallengeModalConfirm = () => {
     setShouldRefresh(true);
     setIsEditChallengeModalVisible(false);
   };
 
+  const handleDeleteChallenge = () => {
+    if (!challengeData) return;
+    httpInstance
+      .delete(`/challenge/delete/${challengeData.id}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setIsDeleteChallengeDialogVisible(false);
+          setTimeout(() => {
+            setIsDeleteSuccess(true);
+          }, 600);
+        }
+      })
+      .catch((err) => {
+        setIsDeleteChallengeDialogVisible(false);
+        setTimeout(() => {
+          setIsDeleteError(true);
+        }, 600);
+      });
+  };
+
   return (
     <SafeAreaView className="bg-white pt-3">
+      <ConfirmDialog
+        isVisible={isDeleteChallengeDialogVisible}
+        title="Delete Challenge"
+        description="Are you sure you want to delete this challenge?"
+        confirmButtonLabel="Delete"
+        closeButtonLabel="Cancel"
+        onConfirm={handleDeleteChallenge}
+        onClosed={() => setIsDeleteChallengeDialogVisible(false)}
+      />
+
+      <ConfirmDialog
+        isVisible={isDeleteSuccess}
+        title="Challenge Deleted"
+        description="Challenge has been deleted successfully."
+        confirmButtonLabel="Got it"
+        onConfirm={() => {
+          setIsDeleteSuccess(false);
+          navigation.navigate('PersonalChallengesScreen');
+        }}
+      />
+      <ConfirmDialog
+        isVisible={isDeleteError}
+        title="Something went wrong"
+        description="Please try again later."
+        confirmButtonLabel="Close"
+        onConfirm={() => {
+          setIsDeleteError(false);
+        }}
+      />
       {challengeData && (
         <>
-          <ChallengeDetailScreen challengeData={challengeData} setShouldRefresh={setShouldRefresh}/>
+          <ChallengeDetailScreen
+            challengeData={challengeData}
+            setShouldRefresh={setShouldRefresh}
+          />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}
             onClose={handleEditChallengeModalClose}

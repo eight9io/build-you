@@ -10,7 +10,6 @@ import Button from '../../../../component/common/Buttons/Button';
 import ProgressCard from '../../../../component/Card/ProgressCard/ProgressCard';
 import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
 
-
 interface IProgressTabProps {
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   challengeData: IChallenge;
@@ -50,14 +49,17 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   };
 
   return (
-    <FlatList
-      data={progressData}
-      ListHeaderComponent={<AddNewChallengeProgressButton />}
-      renderItem={({ item }) => (
-        <ProgressCard itemProgressCard={item} userData={userData} />
-      )}
-      contentContainerStyle={{ paddingBottom: 300 }}
-    />
+    <View className="h-full flex-1">
+      <FlatList
+        data={progressData}
+        ListHeaderComponent={<AddNewChallengeProgressButton />}
+        renderItem={({ item }) => (
+          <ProgressCard itemProgressCard={item} userData={userData} />
+        )}
+        extraData={progressData}
+        contentContainerStyle={{ paddingBottom: 300 }}
+      />
+    </View>
   );
 };
 

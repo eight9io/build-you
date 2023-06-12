@@ -1,31 +1,22 @@
 import { MutableRefObject } from 'react';
-import { GlobalDialogRef } from './GlobalDialog';
 
-export default function GlobalDialogController(
-  ref: MutableRefObject<GlobalDialogRef> | undefined
-) {
-  const openGlobalDialog = (
-    title: string,
-    description: string,
-    closeButtonLabel: string,
-    confirmButtonLabel: string
-  ) => {
-    if (!ref) return;
-    ref.current?.openGlobalDialog(
-      title,
-      description,
-      closeButtonLabel,
-      confirmButtonLabel
-    );
+export type CustomModalRef = {
+  show: (message?: string) => void;
+  hide: () => void;
+};
+
+export default class GlobalDialogController {
+  static modalRef: MutableRefObject<CustomModalRef>;
+  static setModalRef = (ref: any) => {
+    this.modalRef = ref;
   };
 
-  const closeGlobalDialog = () => {
-    if (!ref) return;
-    ref.current?.closeGlobalDialog();
+  static showModal = (message?: string) => {
+    console.log('show modal');
+    this.modalRef.current?.show(message);
   };
-
-  return {
-    openGlobalDialog,
-    closeGlobalDialog,
+  static hideModal = () => {
+    console.log('hide modal');
+    this.modalRef.current?.hide();
   };
 }

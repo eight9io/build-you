@@ -1,85 +1,112 @@
-import {
-  FC,
-  useState,
-  useEffect,
-  useRef,
-  useImperativeHandle,
+import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, {
   forwardRef,
+  useImperativeHandle,
   useLayoutEffect,
+  useRef,
+  useState,
 } from 'react';
-import { View, Text } from 'react-native';
-import Dialog from 'react-native-dialog';
-import GlobalDialogController from './GlobalDialogController';
+import GlobalDialogController, {
+  CustomModalRef,
+} from './GlobalDialogController';
 
-export interface GlobalDialogRef {
-  openGlobalDialog: (
-    title: string,
-    description: string,
-    closeButtonLabel: string,
-    confirmButtonLabel: string
-  ) => void;
-  closeGlobalDialog: () => void;
-}
+const CustomModal = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [customMessage, setCustomMessage] = useState('');
 
-const GlobalDialog = () => {
-  const [isGlobalDialogVisible, setIsGlobalDialogVisible] =
-    useState<boolean>(false);
-  const [globalDialogTitle, setGlobalDialogTitle] = useState<string>('');
-  const [globalDialogDescription, setGlobalDialogDescription] =
-    useState<string>('');
-  const [globalDialogCloseButtonLabel, setGlobalDialogCloseButtonLabel] =
-    useState<string>('');
-  const [globalDialogConfirmButtonLabel, setGlobalDialogConfirmButtonLabel] =
-    useState<string>('');
-
-  const modalRef = useRef<GlobalDialogRef>(null);
+  const modalRef = useRef<CustomModalRef>();
 
   useLayoutEffect(() => {
-    GlobalDialogController(modalRef);
+    GlobalDialogController.setModalRef(modalRef);
   }, []);
 
   useImperativeHandle(
     modalRef,
     () => ({
-      openGlobalDialog: (
-        title,
-        description,
-        closeButtonLabel,
-        confirmButtonLabel
-      ) => {
-        setGlobalDialogTitle(title);
-        setGlobalDialogDescription(description);
-        setGlobalDialogCloseButtonLabel(closeButtonLabel);
-        setGlobalDialogConfirmButtonLabel(confirmButtonLabel);
-        setIsGlobalDialogVisible(true);
+      show: (message?: string) => {
+        setModalVisible(true);
+        if (message) {
+          setCustomMessage(message);
+        }
       },
-      closeGlobalDialog: () => {
-        setIsGlobalDialogVisible(false);
+      hide: () => {
+        setModalVisible(false);
+        setCustomMessage('');
       },
     }),
     []
   );
 
   return (
-    <View>
-      <Dialog.Container visible={isGlobalDialogVisible}>
-        <Dialog.Title>{globalDialogTitle}</Dialog.Title>
-        <Dialog.Description>{globalDialogDescription}</Dialog.Description>
-        {globalDialogCloseButtonLabel && (
-          <Dialog.Button
-            label={globalDialogCloseButtonLabel}
-            onPress={() => setIsGlobalDialogVisible(false)}
-          />
-        )}
-        {globalDialogConfirmButtonLabel && (
-          <Dialog.Button
-            label={globalDialogConfirmButtonLabel}
-            onPress={() => setIsGlobalDialogVisible(false)}
-          />
-        )}
-      </Dialog.Container>
-    </View>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.');
+        GlobalDialogController.hideModal();
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Hello World!</Text>
+          {customMessage ? (
+            <Text style={styles.modalText}>{customMessage}</Text>
+          ) : null}
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => GlobalDialogController.hideModal()}
+          >
+            <Text style={styles.textStyle}>Hide Modal</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
-export default forwardRef(GlobalDialog);
+export default forwardRef(CustomModal);
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});

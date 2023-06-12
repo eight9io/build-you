@@ -12,6 +12,7 @@ import Header from '../component/common/Header';
 import AppTitle from '../component/common/AppTitle';
 import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
+import GlobalDialog from '../component/common/Dialog/GlobalDialog';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
@@ -58,6 +59,7 @@ export const RootNavigation = () => {
   const isCompleteProfile: boolean | null = getIsCompleteProfileStore();
 
   useEffect(() => {
+    console.log('logined', logined);
     checkAccessTokenLocal(setAccessToken);
   }, []);
 

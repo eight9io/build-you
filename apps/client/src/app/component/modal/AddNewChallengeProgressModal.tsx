@@ -12,7 +12,7 @@ import {
 import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-
+import CloseIcon from '../asset/close.svg';
 import Header from '../common/Header';
 import Button from '../common/Buttons/Button';
 import ImagePicker from '../common/ImagePicker';
@@ -113,15 +113,18 @@ export const AddNewChallengeProgressModal: FC<
       className="h-full"
     >
       <SafeAreaView className="bg-white">
-        <View className="  h-full  rounded-t-xl bg-white">
-          <Header
-            title="New challenge"
-            rightBtn="CREATE"
-            leftBtn="Cancel"
-            onLeftBtnPress={onClose}
-            containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
-          />
-
+        <View className=" mx-4  h-full  rounded-t-xl bg-white">
+          <View>
+            <Header
+              title={t('challenge_detail_screen.new_progress') as string}
+              rightBtn={
+                t('challenge_detail_screen.new_progress_post') as string
+              }
+              leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
+              onLeftBtnPress={onClose}
+              containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
+            />
+          </View>
           <View className="flex flex-col justify-between px-5 pt-4">
             <CustomTextInput
               title="Caption"

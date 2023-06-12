@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
@@ -15,6 +15,8 @@ import Button from '../../../../component/common/Buttons/Button';
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
 import EditChallengeModal from '../../../../component/modal/EditChallengeModal';
+import ConfirmDialog from 'apps/client/src/app/component/common/Dialog/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
 );
@@ -32,7 +34,8 @@ export const RightPersonalChallengeDetailOptions: FC<
   IRightPersonalChallengeDetailOptionsProps
 > = ({ onEditChallengeBtnPress }) => {
   const [isSharing, setIsSharing] = React.useState(false);
-
+  const [isComplete, setIsComplete] = React.useState(false);
+  const { t } = useTranslation();
   // when sharing is available, we can share the image
   const onShare = async () => {
     setIsSharing(true);
@@ -47,21 +50,37 @@ export const RightPersonalChallengeDetailOptions: FC<
   };
 
   return (
-    <View className="-mt-1 flex flex-row items-center">
-      <TaskAltIcon />
-      <View className="pl-4 pr-2">
-        <Button Icon={<ShareIcon />} onPress={onShare} />
-      </View>
+    <View>
+      <View className="-mt-1 flex flex-row items-center">
+        <TouchableOpacity onPress={() => setIsComplete(true)}>
+          <TaskAltIcon />
+        </TouchableOpacity>
+        <View className="pl-4 pr-2">
+          <Button Icon={<ShareIcon />} onPress={onShare} />
+        </View>
 
-      <PopUpMenu
-        iconColor="#FF7B1D"
-        options={[
-          {
-            text: 'Edit',
-            onPress: onEditChallengeBtnPress,
-          },
-        ]}
-      />
+        <PopUpMenu
+          iconColor="#FF7B1D"
+          options={[
+            {
+              text: 'Edit',
+              onPress: onEditChallengeBtnPress,
+            },
+            {
+              text: 'Delete',
+              onPress: () => console.log('Delete'),
+            },
+          ]}
+        />
+      </View>
+      {isComplete && (
+        <ConfirmDialog
+          isVisible={isComplete}
+          onClosed={() => setIsComplete(false)}
+          title={t('dialog.mark_challenge.title') as string}
+          description={t('dialog.mark_challenge.description') as string}
+        />
+      )}
     </View>
   );
 };

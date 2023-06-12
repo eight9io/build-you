@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import  { FC,  useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Dialog from 'react-native-dialog';
 
@@ -8,15 +8,16 @@ interface IComfirmDialogProps {
   actions?: any;
   isVisible?: boolean;
   onClosed?: () => void;
+  description?: string;
 }
 
-const ConfirmDialog:FC<IComfirmDialogProps> = ({
+const ConfirmDialog: FC<IComfirmDialogProps> = ({
   title,
   actions,
   isVisible,
   onClosed,
+  description,
 }) => {
-
   const handleCancel = () => {
     onClosed && onClosed();
   };
@@ -26,17 +27,17 @@ const ConfirmDialog:FC<IComfirmDialogProps> = ({
   };
 
   return (
-    <View className={clsx('flex-1 bg-white items-center justify-center')}>
+    <View
+      className={clsx('h-full flex-1 items-center justify-center bg-white')}
+    >
       <Dialog.Container visible={isVisible}>
-        <Dialog.Title>Account delete</Dialog.Title>
-        <Dialog.Description>
-          Do you want to delete this account? You cannot undo this action.
-        </Dialog.Description>
-        <Dialog.Button label='Cancel' onPress={handleCancel} />
-        <Dialog.Button label='Delete' onPress={handleDelete} />
+        <Dialog.Title>{title}</Dialog.Title>
+        <Dialog.Description>{description}</Dialog.Description>
+        <Dialog.Button label="Cancel" onPress={handleCancel} />
+        <Dialog.Button label="Delete" onPress={handleDelete} />
       </Dialog.Container>
     </View>
   );
-}
+};
 
 export default ConfirmDialog;

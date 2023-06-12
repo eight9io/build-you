@@ -16,6 +16,7 @@ import { useNav } from '../../navigation/navigation.type';
 import Loading from '../common/Loading';
 import { useUserProfileStore } from '../../store/user-data';
 import { EditChallengeValidationSchema } from '../../Validators/EditChallenge.validate';
+import { ScrollView } from 'react-native-gesture-handler';
 interface IEditChallengeModalProps {
   visible: boolean;
   onClose: () => void;
@@ -54,6 +55,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
 
   const handleShowDatePicker = () => {
     setShowDatePicker(true);
+    console.log('show date picker');
   };
 
   const handleDatePicked = (date?: Date) => {
@@ -84,128 +86,132 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       statusBarTranslucent={isLoading}
       visible={visible}
     >
-      <View className="flex h-full rounded-t-xl bg-white">
-        <View>
-          <Header
-            title={t('edit_challenge_screen.title') || ''}
-            rightBtn={t(
-              'edit_challenge_screen.save_button'
-            ).toLocaleUpperCase()}
-            leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
-            onLeftBtnPress={onClose}
-            onRightBtnPress={handleSubmit(onSubmit)}
-          />
-        </View>
-
-        <View className="flex flex-1 flex-col px-5 py-5">
-          <View className="pt-5">
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label={t('edit_challenge_screen.your_goal') || ''}
-                  placeholder={
-                    t('edit_challenge_screen.your_goal_placeholder') || ''
-                  }
-                  placeholderTextColor={'#6C6E76'}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-              name={'goal'}
+      <ScrollView>
+        <View className="mx-4 flex h-full rounded-t-xl bg-white">
+          <View>
+            <Header
+              title={t('edit_challenge_screen.title') || ''}
+              rightBtn={t(
+                'edit_challenge_screen.save_button'
+              ).toLocaleUpperCase()}
+              leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
+              onLeftBtnPress={onClose}
+              onRightBtnPress={handleSubmit(onSubmit)}
             />
-            {errors.goal ? <ErrorText message={errors.goal.message} /> : null}
-          </View>
-          <View className="pt-5">
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label={t('edit_challenge_screen.benefits') || ''}
-                  placeholder={
-                    t('edit_challenge_screen.benefits_placeholder') || ''
-                  }
-                  placeholderTextColor={'#6C6E76'}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  multiline
-                  textAlignVertical="top"
-                  className="h-24"
-                />
-              )}
-              name={'benefits'}
-            />
-            {errors.benefits ? (
-              <ErrorText message={errors.benefits.message} />
-            ) : null}
           </View>
 
-          <View className="pt-5">
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label={t('edit_challenge_screen.reasons') || ''}
-                  placeholder={
-                    t('edit_challenge_screen.reasons_placeholder') || ''
-                  }
-                  placeholderTextColor={'#6C6E76'}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  multiline
-                  textAlignVertical="top"
-                  className="h-24"
-                />
-              )}
-              name={'reasons'}
-            />
-            {errors.reasons ? (
-              <ErrorText message={errors.reasons.message} />
-            ) : null}
-          </View>
-
-          <View className="mt-5">
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <>
+          <View className="flex flex-1 flex-col ">
+            <View className="pt-5">
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    label={t('edit_challenge_screen.time_to_reach_goal') || ''}
+                    label={t('edit_challenge_screen.your_goal') || ''}
                     placeholder={
-                      t(
-                        'edit_challenge_screen.time_to_reach_goal_placeholder'
-                      ) || ''
+                      t('edit_challenge_screen.your_goal_placeholder') || ''
                     }
                     placeholderTextColor={'#6C6E76'}
-                    onBlur={onBlur}
                     onChangeText={onChange}
-                    editable={false}
-                    value={value ? dayjs(value).format('DD/MM/YYYY') : ''}
-                    rightIcon={<CalendarIcon />}
-                    onPress={handleShowDatePicker}
+                    onBlur={onBlur}
+                    value={value}
                   />
-                  <DateTimePicker2
-                    selectedDate={value as Date}
-                    setSelectedDate={handleDatePicked}
-                    setShowDateTimePicker={setShowDatePicker}
-                    showDateTimePicker={showDatePicker}
+                )}
+                name={'goal'}
+              />
+              {errors.goal ? <ErrorText message={errors.goal.message} /> : null}
+            </View>
+            <View className="pt-5">
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label={t('edit_challenge_screen.benefits') || ''}
+                    placeholder={
+                      t('edit_challenge_screen.benefits_placeholder') || ''
+                    }
+                    placeholderTextColor={'#6C6E76'}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    multiline
+                    textAlignVertical="top"
+                    className="h-24"
                   />
-                </>
-              )}
-              name={'achievementTime'}
-            />
-            {errors.achievementTime ? (
-              <ErrorText message={errors.achievementTime.message} />
-            ) : null}
-          </View>
-          <View className="mt-auto mb-16">
-            <ImagePicker isSelectedImage={true} />
+                )}
+                name={'benefits'}
+              />
+              {errors.benefits ? (
+                <ErrorText message={errors.benefits.message} />
+              ) : null}
+            </View>
+
+            <View className="pt-5">
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label={t('edit_challenge_screen.reasons') || ''}
+                    placeholder={
+                      t('edit_challenge_screen.reasons_placeholder') || ''
+                    }
+                    placeholderTextColor={'#6C6E76'}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    multiline
+                    textAlignVertical="top"
+                    className="h-24"
+                  />
+                )}
+                name={'reasons'}
+              />
+              {errors.reasons ? (
+                <ErrorText message={errors.reasons.message} />
+              ) : null}
+            </View>
+
+            <View className="mt-5">
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <>
+                    <TextInput
+                      label={
+                        t('edit_challenge_screen.time_to_reach_goal') || ''
+                      }
+                      placeholder={
+                        t(
+                          'edit_challenge_screen.time_to_reach_goal_placeholder'
+                        ) || ''
+                      }
+                      placeholderTextColor={'#6C6E76'}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      editable={false}
+                      value={value ? dayjs(value).format('DD/MM/YYYY') : ''}
+                      rightIcon={<CalendarIcon />}
+                      onPress={handleShowDatePicker}
+                    />
+                    <DateTimePicker2
+                      selectedDate={value as Date}
+                      setSelectedDate={handleDatePicked}
+                      setShowDateTimePicker={setShowDatePicker}
+                      showDateTimePicker={showDatePicker}
+                    />
+                  </>
+                )}
+                name={'achievementTime'}
+              />
+              {errors.achievementTime ? (
+                <ErrorText message={errors.achievementTime.message} />
+              ) : null}
+            </View>
+            {/* <View className="mb-16 mt-auto">
+              <ImagePicker isSelectedImage={true} />
+            </View> */}
           </View>
         </View>
-      </View>
+      </ScrollView>
       {isLoading && (
         <Loading
           containerClassName="absolute top-0 left-0"

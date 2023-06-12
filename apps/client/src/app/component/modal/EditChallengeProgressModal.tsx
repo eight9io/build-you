@@ -18,6 +18,7 @@ import ImageSwiper from '../common/ImageSwiper';
 import CustomTextInput from '../common/Inputs/CustomTextInput';
 
 import { IUploadMediaWithId } from '../../types/media';
+import Loading from '../common/Loading';
 
 interface IEditChallengeProgressModalProps {
   imageSrc?: string;
@@ -40,17 +41,18 @@ export const EditChallengeProgressModal: FC<
   });
 
   const onSubmit = (data: any) => console.log(data);
-
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <Modal
       animationType="slide"
       presentationStyle="pageSheet"
       visible={isVisible}
+      statusBarTranslucent={isLoading}
     >
-      <SafeAreaView className="mx-4 bg-white">
-        <View className="mt-6 flex h-full flex-col rounded-t-xl bg-white">
+      <SafeAreaView className=" bg-white">
+        <View className="mx-4 flex h-full flex-col rounded-t-xl bg-white">
           <Header
-            title="New challenge"
+            title={t('challenge_detail_screen.edit_progress') || ''}
             rightBtn="SAVE"
             leftBtn="Cancel"
             onLeftBtnPress={onClose}
@@ -65,12 +67,13 @@ export const EditChallengeProgressModal: FC<
             />
           </View>
           {imageSrc && (
-            <View className="h-[430px] w-full pt-5">
+            <View className="mt-5 aspect-square w-full">
               <ImageSwiper imageSrc={imageSrc} />
             </View>
           )}
         </View>
       </SafeAreaView>
+      {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
     </Modal>
   );
 };

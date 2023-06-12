@@ -7,7 +7,8 @@ import ProgressTab from './ProgressTab';
 import { FC, useState } from 'react';
 
 import PopUpMenu from '../../../../component/common/PopUpMenu';
-
+import clsx from 'clsx';
+import CheckCircle from './assets/check_circle.svg';
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.progress'),
   i18n.t('challenge_detail_screen.description'),
@@ -16,17 +17,17 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 export const ChallengeDetailScreen = () => {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
-
+  const isChallengeCompleted = true;
   return (
-    <View className="flex h-full flex-col bg-white py-2">
+    <View className="flex h-full flex-col py-2">
       <View className="px-4">
-        <View className="flex flex-row items-center justify-between pt-2">
-          <View>
-            <Text className="text-basic text-xl font-medium leading-5">
-              Climbing Mont Blanc
-            </Text>
-            <Text className="text-gray-dark text-sm font-normal leading-5">
-              {`${t('challenge_detail_screen.builder')}: Marco Rossi`}
+        <View className="mb-2 flex flex-row items-center justify-between pt-2">
+          <View
+            className={clsx('flex flex-row items-center justify-center gap-2')}
+          >
+            <CheckCircle fill={isChallengeCompleted ? '#20D231' : '#C5C8D2'} />
+            <Text className="text-basic  text-xl font-medium leading-7">
+              Climbing Mont Blancss
             </Text>
           </View>
         </View>

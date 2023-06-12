@@ -67,7 +67,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
               style={{ width: 100 }}
             >
               {onRemoveSelectedImage && (
-                <View className="absolute right-1 top-2 z-10">
+                <View className="absolute right-0 top-0 z-10">
                   <Button
                     onPress={() => handleRemoveSelectedImage(index)}
                     Icon={<Close fill={'white'} />}

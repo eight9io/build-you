@@ -11,6 +11,8 @@ interface DateTimePicker2Props {
   setShowDateTimePicker: (show: boolean) => void;
   selectedDate?: Date;
   setSelectedDate: (date: Date) => void;
+  maximumDate?: Date;
+  minimumDate?: Date;
 }
 
 const DateTimePicker2: FC<DateTimePicker2Props> = ({
@@ -18,6 +20,8 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   setShowDateTimePicker,
   selectedDate,
   setSelectedDate,
+  maximumDate,
+  minimumDate,
 }) => {
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
     dayjs().subtract(16, 'years').startOf('day').toDate()
@@ -60,14 +64,8 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                     display="spinner"
                     onChange={(_, value) => setTempSelectedDate(value as Date)}
                     style={{ height: '80%' }}
-                    maximumDate={dayjs()
-                      .subtract(16, 'years')
-                      .startOf('day')
-                      .toDate()}
-                    minimumDate={dayjs()
-                      .subtract(100, 'years')
-                      .startOf('day')
-                      .toDate()}
+                    maximumDate={maximumDate}
+                    minimumDate={minimumDate}
                   />
                   <View className="absolute bottom-10 h-12 w-full px-4">
                     <Button
@@ -90,22 +88,18 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
               mode={'date'}
               display="spinner"
               onChange={(event, value) => {
-                if (event.type === 'set') { // User pressed confirm
+                if (event.type === 'set') {
+                  // User pressed confirm
                   setSelectedDate(value as Date);
                   setShowDateTimePicker(false);
-                } else { // User pressed cancel
+                } else {
+                  // User pressed cancel
                   setShowDateTimePicker(false);
                 }
               }}
               style={{ height: '80%' }}
-              maximumDate={dayjs()
-                .subtract(16, 'years')
-                .startOf('day')
-                .toDate()}
-              minimumDate={dayjs()
-                .subtract(100, 'years')
-                .startOf('day')
-                .toDate()}
+              maximumDate={maximumDate}
+              minimumDate={minimumDate}
             />
           ) : null}
         </>

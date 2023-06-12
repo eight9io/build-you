@@ -54,19 +54,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         name="Feed"
         component={HomeScreen}
         options={({ navigation }) => ({
-          headerTitle: () => <AppTitle title={t('your_feed.header')} />,
-          headerRight: (props) => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() =>
-                    navigation.navigate('CompleteProfileStep3Screen')
-                  }
-                />
-              }
-            />
-          ),
+          headerShown: false,
 
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>

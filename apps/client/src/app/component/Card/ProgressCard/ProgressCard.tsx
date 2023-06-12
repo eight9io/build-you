@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import { useState, FC, useEffect } from 'react';
 
 import clsx from 'clsx';
 
@@ -16,18 +16,30 @@ import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
 
 import { IProgressChallenge } from '../../../types/challenge';
 import { IUserData } from '../../../types/user';
+import {
+  createProgressLike,
+  getProgressComments,
+  getProgressLikes,
+} from '../../../service/progress';
+import Loading from '../../common/Loading';
+import {
+  ICreateProgressComment,
+  ICreateProgressLike,
+} from '../../../types/progress';
 
 interface IProgressCardProps {
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
 }
 
-const ProgressCard: React.FC<IProgressCardProps> = ({
+const ProgressCard: FC<IProgressCardProps> = ({
   itemProgressCard: { id, challenge, caption, image, video, location },
   userData,
 }) => {
-  const [isShowEditModal, setIsShowEditModal] = React.useState(false);
-  const [isShowDeleteModal, setIsShowDeleteModal] = React.useState(false);
+  const [isShowEditModal, setIsShowEditModal] = useState(false);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfComments, setNumberOfComments] = useState(0);
 
   const time = '1 hour ago';
   const mockImage = 'https://picsum.photos/200/300';
@@ -42,6 +54,31 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
       onPress: () => setIsShowDeleteModal(true),
     },
   ];
+
+  useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+      await loadProgressComments();
+    })();
+  }, []);
+
+  const loadProgressLikes = async () => {
+    try {
+      const response = await getProgressLikes(id);
+      if (response.status === 200) setNumberOfLikes(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadProgressComments = async () => {
+    try {
+      const response = await getProgressComments(id);
+      if (response.status === 200) setNumberOfComments(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
@@ -92,12 +129,14 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
       <View className="mt-4 flex-row ">
         <View className="flex-row items-center gap-2">
           <IconLike />
-          <Text className="text-gray-dark text-md font-normal ">10 likes</Text>
+          <Text className="text-gray-dark text-md font-normal ">
+            {numberOfLikes} like{numberOfLikes > 1 ? 's' : ''}
+          </Text>
         </View>
         <View className="ml-8 flex-row items-center ">
           <IconComment />
           <Text className="text-gray-dark text-md ml-2 font-normal ">
-            3 comments
+            {numberOfComments} comment{numberOfComments > 1 ? 's' : ''}
           </Text>
         </View>
       </View>

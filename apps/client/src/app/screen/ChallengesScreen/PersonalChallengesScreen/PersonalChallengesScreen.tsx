@@ -1,6 +1,13 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, ScrollView, FlatList } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  Platform,
+} from 'react-native';
 import { useSSR, useTranslation } from 'react-i18next';
 import {
   createNativeStackNavigator,
@@ -58,7 +65,12 @@ const PersonalChallenges = ({
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View className={clsx('h-full w-full bg-gray-50 pb-20')}>
+      <View
+        className={clsx(
+          'h-full w-full bg-gray-50   ',
+          Platform.OS === 'ios' ? 'pb-[100px]' : 'pb-[120px]'
+        )}
+      >
         {personalChallengesList.length === 0 ? (
           <EmptyChallenges />
         ) : (

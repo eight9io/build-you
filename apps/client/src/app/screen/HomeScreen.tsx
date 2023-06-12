@@ -100,13 +100,14 @@ const HomeScreen = () => {
       screenOptions={{
         headerBackVisible: false,
         headerTitleAlign: 'center',
-        headerShown: true,
+        headerShown: false,
       }}
     >
       <HomeScreenStack.Screen
         name="FeedScreen"
         component={HomeFeed}
         options={({ navigation }) => ({
+          headerShown: true,
           headerTitle: () => <AppTitle title={t('your_feed.header')} />,
           headerRight: (props) => (
             <NavButton

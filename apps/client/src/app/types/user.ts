@@ -10,6 +10,7 @@ export interface IUserData {
     name: string;
   };
   bio?: string;
+  video?: string;
   company?: {
     id: string;
     piva: string;
@@ -20,9 +21,13 @@ export interface IUserData {
   };
   status?: string;
   avatar?: string;
+  hardSkill?: IHardSkillProps[];
+  softSkill?: any[];
 }
 
 export interface IHardSkillProps {
-  id: string;
-  skill: string;
+  skill: {
+    id: string;
+    skill: string;
+  }
 }

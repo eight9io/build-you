@@ -7,14 +7,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import clsx from 'clsx';
+
+import { IChallenge } from '../../../types/challenge';
 import { getImageFromUrl } from '../../../hooks/getImageFromUrl';
 
 import CheckCircle from '../../asset/check_circle.svg';
 import BackSvg from '../../asset/back.svg';
-import Button from '../../common/Buttons/Button';
 
 interface IChallengeCardProps {
-  name: string;
+  item: IChallenge;
   isCompany?: boolean;
   imageSrc: string;
   authorName: string;
@@ -32,7 +33,7 @@ const CompanyTag = () => {
 };
 
 const ChallengeCard: React.FC<IChallengeCardProps> = ({
-  name,
+  item,
   imageSrc,
   isCompany,
   authorName,
@@ -44,7 +45,10 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   const onPress = () => {
     if (navigation) {
       if (isCompany) navigation.navigate('CompanyChallengeDetailScreen');
-      else navigation.navigate('PersonalChallengeDetailScreen');
+      else
+        navigation.navigate('PersonalChallengeDetailScreen', {
+          challengeId: item.id,
+        });
     }
   };
 
@@ -72,7 +76,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           <View className={clsx('flex flex-row items-center')}>
             <CheckCircle fill={isChallengeCompleted ? '#20D231' : '#C5C8D2'} />
             <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
-              {name}
+              {item?.goal}
             </Text>
           </View>
           <BackSvg />

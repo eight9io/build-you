@@ -1,12 +1,17 @@
 import clsx from 'clsx';
-import { SafeAreaView, View, Text, ScrollView } from 'react-native';
-import { useTranslation } from 'react-i18next';
-
+import { useEffect, useState } from 'react';
+import { SafeAreaView, View, Text, ScrollView, FlatList } from 'react-native';
+import { useSSR, useTranslation } from 'react-i18next';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+
+import httpInstance from '../../../utils/http';
+import { IChallenge } from '../../../types/challenge';
+import { useUserProfileStore } from '../../../store/user-data';
 import { RootStackParamList } from '../../../navigation/navigation.type';
+
 import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
@@ -41,52 +46,42 @@ const PersonalChallenges = ({
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
-  const { t } = useTranslation();
+  const [personalChallengesList, setPersonalChallengesList] = useState([]);
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+
+  useEffect(() => {
+    httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
+      setPersonalChallengesList(res.data);
+    });
+  }, []);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      {/* <MainNavBar
-        title={t('top_nav.challenges')}
-        navigation={navigation}
-        withSearch
-      /> */}
-      <View className={clsx('h-full w-full bg-gray-50')}>
-        {/* <EmptyChallenges /> */}
-
-        <ScrollView className="mb-[120px] px-4 pt-4">
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-            isChallengeCompleted
+      <View className={clsx('h-full w-full bg-gray-50 pb-20')}>
+        {personalChallengesList.length === 0 ? (
+          <EmptyChallenges />
+        ) : (
+          <FlatList
+            className="px-4 pt-4"
+            data={personalChallengesList}
+            renderItem={({ item }: { item: IChallenge }) => (
+              <ChallengeCard
+                item={item}
+                imageSrc="https://picsum.photos/200/300"
+                authorName={userData?.name || 'Author Name'}
+                navigation={navigation}
+              />
+            )}
+            keyExtractor={(item) => item.id}
           />
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-          />
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-            isChallengeCompleted
-          />
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-          />
-        </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );
 };
 
-const PersonalChallengesScreen = () => {
+const PersonalChallengesNavigator = () => {
   const { t } = useTranslation();
   return (
     <PersonalChallengesStack.Navigator
@@ -122,7 +117,7 @@ const PersonalChallengesScreen = () => {
           headerLeft: (props) => (
             <NavButton
               text={t('top_nav.challenges') as string}
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.navigate('PersonalChallengesScreen')}
               withBackIcon
             />
           ),
@@ -132,4 +127,4 @@ const PersonalChallengesScreen = () => {
   );
 };
 
-export default PersonalChallengesScreen;
+export default PersonalChallengesNavigator;

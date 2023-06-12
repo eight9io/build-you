@@ -225,6 +225,16 @@
     "time_to_reach_goal_required": "Please select the time",
     "image_required": "Please upload an image"
   },
+  "new_progress_modal": { 
+    "title": "New progress",
+    "caption": "Caption",
+    "caption_placeholder": "What do you achieve?",
+    "caption_required": "Please fill in the caption.",
+    "image_required": "Please upload an image or a video.",
+    "location": "Location",
+    "location_placeholder": "Where did you achieve it?",
+    "location_required": "Location is required."
+  },
   "edit_challenge_screen": {
     "title": "Edit challenge",
     "save_button": "Save",

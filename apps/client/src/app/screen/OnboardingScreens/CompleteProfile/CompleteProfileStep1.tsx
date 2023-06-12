@@ -92,6 +92,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   return (
     <View className="">
       <DateTimePicker2
+        shouldMinus16Years
         selectedDate={selectedDate}
         setSelectedDate={handleDatePicked}
         setShowDateTimePicker={setShowDateTimePicker}

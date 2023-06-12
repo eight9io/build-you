@@ -4,12 +4,16 @@ import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import PopUpMenu from '../../../../component/common/PopUpMenu';
+
+import httpInstance from '../../../../utils/http';
+
 import { RootStackParamList } from '../../../../navigation/navigation.type';
+import { IChallenge } from '../../../../types/challenge';
 
 import ChallengeDetailScreen from '../ChallengeDetailScreen/ChallengeDetailScreen';
+
+import PopUpMenu from '../../../../component/common/PopUpMenu';
 import Button from '../../../../component/common/Buttons/Button';
 
 import ShareIcon from './assets/share.svg';
@@ -86,12 +90,19 @@ export const RightPersonalChallengeDetailOptions: FC<
 };
 
 const PersonalChallengeDetailScreen = ({
+  route,
   navigation,
 }: {
+  route: any;
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   const [editChallengeModalIsVisible, setEditChallengeModalIsVisible] =
     useState(false);
+  const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
+    undefined
+  );
+
+  const challengeId = route?.params?.challengeId;
 
   useEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -103,6 +114,16 @@ const PersonalChallengeDetailScreen = ({
       ),
     });
   }, []);
+
+  useEffect(() => {
+    if (!challengeId) return;
+    httpInstance
+      .get(`/challenge/one/${route.params.challengeId}`)
+      .then((res) => {
+        setChallengeData(res.data);
+      });
+  }, [challengeId]);
+
   const handleEditChallengeBtnPress = () => {
     setEditChallengeModalIsVisible(true);
   };
@@ -111,22 +132,7 @@ const PersonalChallengeDetailScreen = ({
   };
   return (
     <SafeAreaView className="bg-white pt-3">
-      {/* <Header
-        leftBtn={
-          <NavButton
-            text="Challenges"
-            onPress={() => navigation.goBack()}
-            withBackIcon
-          />
-        }
-        rightBtn={
-          <RightPersonalChallengeDetailOptions
-            onEditChallengeBtnPress={handleEditChallengeBtnPress}
-          />
-        }
-        onRightBtnPress={() => {}}
-      /> */}
-      <ChallengeDetailScreen />
+      {challengeData && <ChallengeDetailScreen challengeData={challengeData} />}
       <EditChallengeModal
         visible={editChallengeModalIsVisible}
         onClose={handleEditChallengeModalClose}

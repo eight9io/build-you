@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import clsx from 'clsx';
 import { Text, View, ScrollView } from 'react-native';
+import { IChallenge } from '../../../../types/challenge';
 
 interface ISingleDescriptionProps {
   title: string;
@@ -8,7 +9,7 @@ interface ISingleDescriptionProps {
 }
 
 interface IDescriptionTabProps {
-  description?: string;
+  challengeData: IChallenge
 }
 
 const SingleDescription: FC<ISingleDescriptionProps> = ({
@@ -27,20 +28,22 @@ const SingleDescription: FC<ISingleDescriptionProps> = ({
   );
 };
 
-export const DescriptionTab: FC<IDescriptionTabProps> = () => {
+export const DescriptionTab: FC<IDescriptionTabProps> = ({ challengeData }) => {
+  const { id, achievementTime, benefits, image, goal, reasons } = challengeData;
+  const date = new Date(achievementTime);
   return (
-    <ScrollView className='px-4 pt-4'>
+    <ScrollView className="px-4 pt-4 h-full">
       <SingleDescription
         title="The benefits"
-        description="Improved weight control, increased hand-eye coordination and balance"
+        description={benefits}
       />
       <SingleDescription
-        title="The benefits"
-        description="Improved weight control, increased hand-eye coordination and balance"
+        title="The reasons"
+        description={reasons}
       />
       <SingleDescription
-        title="The benefits"
-        description="Improved weight control, increased hand-eye coordination and balance"
+        title="Time to reach the goal"
+        description={date.toDateString()}
       />
     </ScrollView>
   );

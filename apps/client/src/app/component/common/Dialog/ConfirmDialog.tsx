@@ -5,36 +5,49 @@ import Dialog from 'react-native-dialog';
 
 interface IComfirmDialogProps {
   title?: string;
-  actions?: any;
-  isVisible?: boolean;
-  onClosed?: () => void;
   description?: string;
+  isVisible?: boolean;
+  closeButtonLabel?: string;
+  confirmButtonLabel?: string;
+  onClosed?: () => void;
+
+  onConfirm?: () => void;
 }
 
 const ConfirmDialog: FC<IComfirmDialogProps> = ({
   title,
-  actions,
+  description,
   isVisible,
   onClosed,
-  description,
+  closeButtonLabel,
+  onConfirm,
+  confirmButtonLabel,
 }) => {
   const handleCancel = () => {
     onClosed && onClosed();
   };
 
-  const handleDelete = () => {
-    onClosed && onClosed();
+  const handleConfirm = () => {
+    onConfirm && onConfirm();
   };
 
   return (
-    <View
-      className={clsx('h-full flex-1 items-center justify-center bg-white')}
-    >
+    <View className={clsx('flex-1 items-center justify-center bg-white')}>
       <Dialog.Container visible={isVisible}>
         <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Description>{description}</Dialog.Description>
-        <Dialog.Button label="Cancel" onPress={handleCancel} />
-        <Dialog.Button label="Delete" onPress={handleDelete} />
+        {onClosed && (
+          <Dialog.Button
+            label={closeButtonLabel ?? 'Cancel'}
+            onPress={handleCancel}
+          />
+        )}
+        {onConfirm && (
+          <Dialog.Button
+            label={confirmButtonLabel ?? 'Confirm'}
+            onPress={handleConfirm}
+          />
+        )}
       </Dialog.Container>
     </View>
   );

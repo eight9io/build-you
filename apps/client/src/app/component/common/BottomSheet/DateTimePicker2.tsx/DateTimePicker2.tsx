@@ -13,6 +13,7 @@ interface DateTimePicker2Props {
   setSelectedDate: (date: Date) => void;
   maximumDate?: Date;
   minimumDate?: Date;
+  shouldMinus16Years?: boolean;
 }
 
 const DateTimePicker2: FC<DateTimePicker2Props> = ({
@@ -22,9 +23,13 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   setSelectedDate,
   maximumDate,
   minimumDate,
+  shouldMinus16Years = false,
 }) => {
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
-    dayjs().subtract(16, 'years').startOf('day').toDate()
+    dayjs()
+      .subtract(shouldMinus16Years ? 16 : 0, 'years')
+      .startOf('day')
+      .toDate()
   );
 
   const onConfirm = () => {
@@ -58,15 +63,38 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
             <View className="flex-1">
               <BottomSheet2 onClose={() => setShowDateTimePicker(false)}>
                 <View className="relative h-full w-full">
-                  <RNDateTimePicker
-                    value={selectedDate || tempSelectedDate}
-                    mode={'date'}
-                    display="spinner"
-                    onChange={(_, value) => setTempSelectedDate(value as Date)}
-                    style={{ height: '80%' }}
-                    maximumDate={maximumDate}
-                    minimumDate={minimumDate}
-                  />
+                  {shouldMinus16Years && (
+                    <RNDateTimePicker
+                      value={selectedDate || tempSelectedDate}
+                      mode={'date'}
+                      display="spinner"
+                      onChange={(_, value) =>
+                        setTempSelectedDate(value as Date)
+                      }
+                      style={{ height: '80%' }}
+                      maximumDate={dayjs()
+                        .subtract(16, 'years')
+                        .startOf('day')
+                        .toDate()}
+                      minimumDate={dayjs()
+                        .subtract(100, 'years')
+                        .startOf('day')
+                        .toDate()}
+                    />
+                  )}
+                  {!shouldMinus16Years && (
+                    <RNDateTimePicker
+                      value={selectedDate || tempSelectedDate}
+                      mode={'date'}
+                      display="spinner"
+                      onChange={(_, value) =>
+                        setTempSelectedDate(value as Date)
+                      }
+                      style={{ height: '80%' }}
+                      maximumDate={maximumDate}
+                      minimumDate={minimumDate}
+                    />
+                  )}
                   <View className="absolute bottom-10 h-12 w-full px-4">
                     <Button
                       title={'Save'}

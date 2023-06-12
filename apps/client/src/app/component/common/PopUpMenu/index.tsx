@@ -9,7 +9,6 @@ import {
 } from 'react-native-popup-menu';
 
 import clsx from 'clsx';
-import ConfirmDialog from '../Dialog/ConfirmDialog';
 
 import EditIcon from './assets/edit-icon.svg';
 
@@ -23,10 +22,10 @@ interface IPopMenuProps {
   options?: MenuOptionProp[];
 }
 
-const ButtonIcon = ({iconColor} : {iconColor: string | undefined}) => {
+const ButtonIcon = ({ iconColor }: { iconColor: string | undefined }) => {
   return (
     <View className={clsx('flex h-6 w-6 items-center justify-center ')}>
-      <EditIcon fill={iconColor ? iconColor : 'black'}/>
+      <EditIcon fill={iconColor ? iconColor : 'black'} />
     </View>
   );
 };
@@ -34,7 +33,7 @@ const ButtonIcon = ({iconColor} : {iconColor: string | undefined}) => {
 const MenuItem = ({ text, onPress }: { text: string; onPress: any }) => {
   return (
     <MenuOption onSelect={onPress}>
-      <View className={clsx('flex flex-row items-center')}>
+      <View className={clsx('flex flex-row items-center  ')}>
         <Text className={clsx('text-md pl-3 font-normal leading-6')}>
           {text}
         </Text>
@@ -47,7 +46,7 @@ const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options }) => {
   return (
     <Menu>
       <MenuTrigger
-        children={<ButtonIcon iconColor={iconColor}/>}
+        children={<ButtonIcon iconColor={iconColor} />}
         customStyles={{
           triggerWrapper: {
             width: 30,
@@ -84,6 +83,7 @@ const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options }) => {
         <MenuOptions
           optionsContainerStyle={{
             borderRadius: 4,
+            width: 100,
           }}
         >
           {options.map((option, id) => (

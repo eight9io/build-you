@@ -53,12 +53,13 @@ const PersonalChallenges = ({
       <View className={clsx('h-full w-full bg-gray-50')}>
         {/* <EmptyChallenges /> */}
 
-        <ScrollView className="px-4 pt-4">
+        <ScrollView className="mb-[120px] px-4 pt-4">
           <ChallengeCard
             name="Challenge Name"
             imageSrc="https://picsum.photos/200/300"
             authorName="Author Name"
             navigation={navigation}
+            isChallengeCompleted
           />
           <ChallengeCard
             name="Challenge Name"
@@ -71,6 +72,7 @@ const PersonalChallenges = ({
             imageSrc="https://picsum.photos/200/300"
             authorName="Author Name"
             navigation={navigation}
+            isChallengeCompleted
           />
           <ChallengeCard
             name="Challenge Name"

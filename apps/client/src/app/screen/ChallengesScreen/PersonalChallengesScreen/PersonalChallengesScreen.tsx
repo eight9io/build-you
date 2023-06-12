@@ -13,6 +13,7 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import { useIsFocused } from '@react-navigation/native';
 
 import httpInstance from '../../../utils/http';
 import { IChallenge } from '../../../types/challenge';
@@ -57,11 +58,19 @@ const PersonalChallenges = ({
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
+      res.data.sort((a: IChallenge, b: IChallenge) => {
+        return (
+          new Date(b.achievementTime).getTime() -
+          new Date(a.achievementTime).getTime()
+        );
+      });
       setPersonalChallengesList(res.data);
     });
-  }, []);
+  }, [isFocused]);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>

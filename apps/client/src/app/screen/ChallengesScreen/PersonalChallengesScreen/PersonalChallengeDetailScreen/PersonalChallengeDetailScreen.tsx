@@ -83,7 +83,7 @@ const PersonalChallengeDetailScreen = ({
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
     undefined
   );
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const [shouldRefresh, setShouldRefresh] = useState(false);
 
   const challengeId = route?.params?.challengeId;
 
@@ -115,18 +115,25 @@ const PersonalChallengeDetailScreen = ({
   const handleEditChallengeModalClose = () => {
     setIsEditChallengeModalVisible(false);
   };
+
+  const handleEditChallengeModalConfirm =  () => {
+    setShouldRefresh(true);
+    setIsEditChallengeModalVisible(false);
+  };
+
   return (
     <SafeAreaView className="bg-white pt-3">
       {challengeData && (
-        <ChallengeDetailScreen
-          challengeData={challengeData}
-          setShouldRefresh={setShouldRefresh}
-        />
+        <>
+          <ChallengeDetailScreen challengeData={challengeData} setShouldRefresh={setShouldRefresh}/>
+          <EditChallengeModal
+            visible={isEditChallengeModalVisible}
+            onClose={handleEditChallengeModalClose}
+            onConfirm={handleEditChallengeModalConfirm}
+            challenge={challengeData}
+          />
+        </>
       )}
-      <EditChallengeModal
-        visible={isEditChallengeModalVisible}
-        onClose={handleEditChallengeModalClose}
-      />
     </SafeAreaView>
   );
 };

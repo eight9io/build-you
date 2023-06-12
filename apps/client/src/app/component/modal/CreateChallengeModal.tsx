@@ -1,7 +1,7 @@
 import { View, Text, Modal, SafeAreaView, ScrollView } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import Header from '../common/Header';
 import ImagePicker from '../common/ImagePicker';
 import CloseIcon from '../asset/close.svg';
@@ -18,6 +18,9 @@ import { useNav } from '../../navigation/navigation.type';
 import Loading from '../common/Loading';
 import clsx from 'clsx';
 import { getImageExtension } from '../../utils/uploadUserImage';
+import { AxiosResponse } from 'axios';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import httpInstance from '../../utils/http';
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
@@ -36,6 +39,13 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
+    null
+  );
+  const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
+    undefined
+  );
   const {
     control,
     getValues,
@@ -91,27 +101,31 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
 
       // Create a challenge without image
       const challengeCreateResponse = await createChallenge(payload);
-
       // If challenge created successfully, upload image
-      if (challengeCreateResponse.status === 201 && image) {
-        const extension = getImageExtension(image);
-        const imageData = new FormData();
-        imageData.append('file', {
-          uri: image,
-          name: `image.${extension}`,
-          type: `image/${extension}`,
-        } as any);
-        const challengeImageResponse = await updateChallengeImage(
-          {
-            id: challengeCreateResponse.data.id,
-          },
-          imageData
-        );
+      if (challengeCreateResponse.status === 200 || 201) {
+        setNewChallengeId(challengeCreateResponse.data.id);
+        if (image) {
+          const challengeImageResponse = (await updateChallengeImage(
+            {
+              id: challengeCreateResponse.data.id,
+            },
+            image
+          )) as AxiosResponse;
 
-        // If image uploaded successfully, navigate to challenge detail
-        if (challengeImageResponse.status === 201) {
-          // TODO: handle navigation to challenge detail
+          if (challengeImageResponse.status === 200 || 201) {
+            setIsRequestSuccess(true);
+            setIsShowModal(true);
+            return;
+          }
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+          httpInstance.delete(
+            `/challenge/delete/${challengeCreateResponse.data.id}`
+          );
+          setErrorMessage(t('errorMessage:500') || '');
         }
+        setIsRequestSuccess(true);
+        setIsShowModal(true);
       }
     } catch (error) {
       console.log(error);
@@ -120,11 +134,35 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setIsLoading(false);
   };
   // TODO: handle change CREATE text color when input is entered
+
+  const handleCloseModal = (newChallengeId: string | undefined) => {
+    setIsShowModal(false);
+    console.log('newChallengeId', newChallengeId);
+    if (isRequestSuccess && newChallengeId) {
+      onClose();
+      navigation.navigate('Challenges', {
+        screen: 'PersonalChallengeDetailScreen',
+        params: { challengeId: newChallengeId },
+      });
+    }
+  };
+
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView className="bg-white">
         <ScrollView>
-          <View className="mx-4 flex h-full  rounded-t-xl bg-white">
+          <ConfirmDialog
+            title={isRequestSuccess ? 'Success' : 'Error'}
+            description={
+              isRequestSuccess
+                ? 'Your progress has been created successfully'
+                : 'Something went wrong. Please try again later.'
+            }
+            isVisible={isShowModal}
+            onClosed={() => handleCloseModal(newChallengeId)}
+            closeButtonLabel="Got it"
+          />
+          <View className="mx-4  flex h-full  rounded-t-xl bg-white">
             <View>
               <Header
                 title={t('new_challenge_screen.title') || ''}
@@ -136,6 +174,18 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                 onRightBtnPress={handleSubmit(onSubmit)}
                 containerStyle="mt-5"
               />
+            </View>
+
+            <View className="flex flex-col px-5 py-5">
+              <Text className="text-gray-dark text-md font-normal leading-5">
+                {t('new_challenge_screen.description')}
+              </Text>
+              {errorMessage && (
+                <ErrorText
+                  containerClassName="justify-center "
+                  message={errorMessage}
+                />
+              )}
             </View>
 
             <View className="flex flex-col  py-5">
@@ -182,9 +232,12 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                       placeholderTextColor={'#6C6E76'}
                       onChangeText={onChange}
                       onBlur={onBlur}
-                      value={value}
                       multiline
                       textAlignVertical="top"
+                      editable={false}
+                      value={value && dayjs(value).format('DD/MM/YYYY')}
+                      rightIcon={<CalendarIcon />}
+                      onPress={handleShowDatePicker}
                       className={clsx(
                         'h-24',
                         errors.benefits && 'border-1 border-red-500'
@@ -202,22 +255,31 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      label={t('new_challenge_screen.reasons') || ''}
-                      placeholder={
-                        t('new_challenge_screen.reasons_placeholder') || ''
-                      }
-                      placeholderTextColor={'#6C6E76'}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      multiline
-                      textAlignVertical="top"
-                      className={clsx(
-                        'h-24',
-                        errors.reasons && 'border-1 border-red-500'
-                      )}
-                    />
+                    <View>
+                      <TextInput
+                        label={t('new_challenge_screen.reasons') || ''}
+                        placeholder={
+                          t('new_challenge_screen.reasons_placeholder') || ''
+                        }
+                        placeholderTextColor={'#6C6E76'}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        multiline
+                        textAlignVertical="top"
+                        className={clsx(
+                          'h-24',
+                          errors.reasons && 'border-1 border-red-500'
+                        )}
+                      />
+                      <DateTimePicker2
+                        shouldMinus16Years={false}
+                        selectedDate={value as Date}
+                        setSelectedDate={handleDatePicked}
+                        setShowDateTimePicker={setShowDatePicker}
+                        showDateTimePicker={showDatePicker}
+                      />
+                    </View>
                   )}
                   name={'reasons'}
                 />

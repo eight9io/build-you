@@ -1,17 +1,17 @@
+import { FC, useEffect } from 'react';
+import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 
+import NavButton from '../common/Buttons/NavButton';
+
 import HomeScreen from '../../screen/HomeScreen';
 import NotificationsScreen from '../../screen/NotificationsScreen/NotificationsScreen';
-import ProfileScreen from '../../screen/ProfileScreen/Personal/Personal';
+import PersonalProfileScreen from '../../screen/ProfileScreen/Personal/PersonalProfileScreen';
 import CompanyProfileScreen from '../../screen/ProfileScreen/Company/CompanyProfileScreen';
-import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen';
+import PersonalChallengesNavigator from '../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen';
 import CompanyChallengesScreen from '../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen';
-
-import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
-import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigation/navigation.type';
 
 import FeedSvg from './asset/feed.svg';
 import CreateSvg from './asset/create.svg';
@@ -20,9 +20,7 @@ import ProfileSvg from './asset/profile.svg';
 import AlertSvg from './asset/noti.svg';
 import AppTitle from '../common/AppTitle';
 import IconSearch from '../common/IconSearch/IconSearch';
-import IconSetting from '../common/IconSetting/IconSetting';
-import { FC } from 'react';
-import NavButton from '../common/Buttons/NavButton';
+import { useGetUserData } from '../../hooks/useGetUser';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
@@ -33,6 +31,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
 
   const isCompany = false;
+  useGetUserData();
 
   return (
     <Tab.Navigator
@@ -74,7 +73,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       <Tab.Screen
         name="Challenges"
         component={
-          isCompany ? CompanyChallengesScreen : PersonalChallengesScreen
+          isCompany ? CompanyChallengesScreen : PersonalChallengesNavigator
         }
         options={{
           headerShown: false,
@@ -142,7 +141,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       {!isCompany ? (
         <Tab.Screen
           name="Profilo"
-          component={ProfileScreen}
+          component={PersonalProfileScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (

@@ -3,7 +3,7 @@ import { View, Image, Text } from 'react-native';
 import Swiper from 'react-native-swiper';
 
 interface IImageSwiperProps {
-  imageSrc: string[] | string;
+  imageSrc: string[] | string | null;
 }
 
 const ImageItem = ({ imageSrc }: { imageSrc: string }) => {
@@ -15,6 +15,7 @@ const ImageItem = ({ imageSrc }: { imageSrc: string }) => {
 };
 
 const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
+  if (!imageSrc) return null;
   return (
     <View className="flex-1 ">
       <Swiper

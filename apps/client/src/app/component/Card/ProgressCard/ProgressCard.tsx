@@ -19,31 +19,26 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 import { useTranslation } from 'react-i18next';
 
+import { IProgressChallenge } from '../../../types/challenge';
+import { IUserData } from '../../../types/user';
+
 interface IProgressCardProps {
-  itemProgressCard: {
-    id: number;
-    name: string;
-    time: string;
-    stt: string;
-    place?: string;
-    card: {
-      image: string;
-      title: string;
-      builder: string;
-    };
-    like: number;
-    comment: number;
-    avatar: string;
-  };
+  itemProgressCard: IProgressChallenge;
+  userData: IUserData | null;
 }
 
 const ProgressCard: React.FC<IProgressCardProps> = ({
-  itemProgressCard: { name, time, place, stt, card, like, comment, avatar },
+  itemProgressCard: { id, challenge, caption, image, video, location, like },
+  userData,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [isShowEditModal, setIsShowEditModal] = React.useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = React.useState(false);
   const { t } = useTranslation();
+
+  const time = '1 hour ago';
+  const mockImage = 'https://picsum.photos/200/300';
+
   const progressOptions = [
     {
       text: 'Edit',
@@ -58,7 +53,7 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
       <EditChallengeProgressModal
-        imageSrc={card.image}
+        imageSrc={image ?? mockImage}
         isVisible={isShowEditModal}
         onClose={() => setIsShowEditModal(false)}
       />
@@ -73,11 +68,11 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
         <View className="flex flex-row">
           <ProgressCardAvatar src="https://picsum.photos/200/300" />
           <View className="ml-2">
-            <Text className="text-h6 font-bold">{name}</Text>
-            <View className="flex flex-row items-center ">
-              <Text className="text-gray-dark mr-3 text-xs font-light">
-                {time}
-              </Text>
+            <Text className="text-h6 font-bold">
+              {userData?.name} {userData?.surname}{' '}
+            </Text>
+            <View className="flex flex-row items-center">
+              <Text className="text-gray-dark text-xs font-light ">{time}</Text>
 
               <Text className="text-gray-dark text-xs font-light ">
                 <IconDot fill={'#7D7E80'} /> 123 Amanda Street
@@ -87,13 +82,20 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
         </View>
         <PopUpMenu options={progressOptions} />
       </View>
-      <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
+      <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
+      {image && (
+        <View className="aspect-square w-full">
+          <ImageSwiper imageSrc={image} />
+        </View>
+      )}
+      {video && (
+        <View>
+          <Text>Render video</Text>
+        </View>
+      )}
 
-      <View className="aspect-square w-full">
-        <ImageSwiper imageSrc={card.image} />
-      </View>
       <View className="mt-4 flex-row">
-        <LikeButton likes={like} />
+        <LikeButton likes={like || 0} />
         <CommentButton
           navigationToComment={() =>
             navigation.navigate('ChallengeDetailComment', {

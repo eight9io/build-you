@@ -13,7 +13,9 @@ export type RootStackParamList = {
   ModalScreen: undefined;
   CreateChallengeScreen: undefined;
   PersonalChallengesScreen: undefined;
-  PersonalChallengeDetailScreen: undefined;
+  PersonalChallengeDetailScreen:  {
+    challengeId: string;
+  };
   RegisterScreen: undefined;
   SkillStepThreeScreen: undefined;
 
@@ -42,6 +44,13 @@ export type RootStackParamList = {
   };
 
   ProfileScreenLoading: undefined;
+
+  Challenges: {
+    screen: string;
+    params: {
+      challengeId: string;
+    };
+  }
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

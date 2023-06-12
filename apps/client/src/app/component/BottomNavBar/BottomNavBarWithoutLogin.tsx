@@ -3,7 +3,7 @@ import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 
 import HomeScreen from '../../screen/HomeScreen';
 import NotificationsScreen from '../../screen/NotificationsScreen/NotificationsScreen';
-import ProfileScreen from '../../screen/ProfileScreen/Personal/Personal';
+// import ProfileScreen from '../../screen/ProfileScreen/Personal/Personal';
 import CompanyProfileScreen from '../../screen/ProfileScreen/Company/CompanyProfileScreen';
 import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen';
 import CompanyChallengesScreen from '../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen';

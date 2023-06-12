@@ -3,7 +3,6 @@ import {
   Text,
   Modal,
   SafeAreaView,
-  TextInput,
   Image,
   Dimensions,
   ScaledSize,
@@ -13,6 +12,16 @@ import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import CloseIcon from '../asset/close.svg';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { useUserProfileStore } from '../../store/user-data';
+
+import { IUploadMediaWithId } from '../../types/media';
+
+import { getRandomId } from '../../utils/common';
+import { CreateProgressValidationSchema } from '../../Validators/CreateProgress.validate';
+
 import Header from '../common/Header';
 import Button from '../common/Buttons/Button';
 import ImagePicker from '../common/ImagePicker';
@@ -20,12 +29,20 @@ import VideoPicker from '../common/VideoPicker';
 import LocationInput from '../common/Inputs/LocationInput';
 import CustomTextInput from '../common/Inputs/CustomTextInput';
 
-import { IUploadMediaWithId } from '../../types/media';
-
 import Close from '../../component/asset/close.svg';
-import { getRandomId } from '../../utils/common';
+import httpInstance from '../../utils/http';
+import {
+  createProgress,
+  updateProgressImage,
+  updateProgressVideo,
+} from '../../service/progress';
+import { getImageExtension } from '../../utils/uploadUserImage';
+import { AxiosResponse } from 'axios';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import Loading from '../common/Loading';
 
 interface IAddNewChallengeProgressModalProps {
+  challengeId: string;
   isVisible: boolean;
   onClose: () => void;
 }
@@ -72,26 +89,36 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
         ))}
     </View>
   );
-  ``;
 };
 
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
-> = ({ isVisible, onClose }) => {
+> = ({ challengeId, isVisible, onClose }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
+    null
+  );
+
+  const { getUserProfile } = useUserProfileStore();
+  const userProfile = getUserProfile();
 
   const { t } = useTranslation();
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      goalName: '',
-      uploadMedia: '',
+      challenge: '',
+      caption: '',
       location: '',
     },
+    resolver: yupResolver(CreateProgressValidationSchema()),
+    reValidateMode: 'onChange',
   });
 
   useEffect(() => {
@@ -100,10 +127,61 @@ export const AddNewChallengeProgressModal: FC<
     }
   }, [selectedMedia]);
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    if (!userProfile || !userProfile.id) return;
+    const payload = {
+      user: userProfile.id,
+      challenge: challengeId,
+      caption: data.caption,
+      location: data.location,
+    };
+
+    const createProgressResponse = await createProgress(payload);
+    if (
+      createProgressResponse.status === 200 ||
+      (201 && selectedMedia.length > 0)
+    ) {
+      const progressId = createProgressResponse.data.id;
+      if (isSelectedImage) {
+        const addImageProgressResponse = (await updateProgressImage(
+          progressId,
+          selectedMedia
+        )) as AxiosResponse;
+        if (addImageProgressResponse.status === 200 || 201) {
+          setIsRequestSuccess(true);
+          setIsShowModal(true);
+        } else {
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+        }
+      } else {
+        const addVideoProgressResponse = (await updateProgressVideo(
+          progressId,
+          selectedMedia[0]
+        )) as AxiosResponse;
+        if (addVideoProgressResponse.status === 200 || 201) {
+          setIsRequestSuccess(true);
+          setIsShowModal(true);
+        } else {
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+        }
+      }
+    } else {
+      setIsRequestSuccess(false);
+      setIsShowModal(true);
+    }
+    setIsLoading(false);
+  };
   // TODO: handle change CREATE text color when input is entered
 
   const screen = Dimensions.get('window');
+
+  const handleCloseModal = () => {
+    setIsShowModal(false);
+    onClose();
+  };
 
   return (
     <Modal
@@ -112,25 +190,38 @@ export const AddNewChallengeProgressModal: FC<
       visible={isVisible}
       className="h-full"
     >
-      <SafeAreaView className="bg-white">
-        <View className=" mx-4  h-full  rounded-t-xl bg-white">
-          <View>
-            <Header
-              title={t('challenge_detail_screen.new_progress') as string}
-              rightBtn={
-                t('challenge_detail_screen.new_progress_post') as string
-              }
-              leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
-              onLeftBtnPress={onClose}
-              containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
-            />
-          </View>
+      <SafeAreaView className="relative bg-white">
+        {isLoading && (
+          <Loading containerClassName="absolute top-0 left-0 z-10" />
+        )}
+        <ConfirmDialog
+          title={isRequestSuccess ? 'Success' : 'Error'}
+          description={
+            isRequestSuccess
+              ? 'Your progress has been created successfully'
+              : 'Something went wrong. Please try again later.'
+          }
+          isVisible={isShowModal}
+          onClosed={handleCloseModal}
+          closeButtonLabel="Got it"
+        />
+        <View className="mx-4  h-full rounded-t-xl bg-white">
+          <Header
+            title={t('challenge_detail_screen.new_progress') as string}
+            rightBtn={t('challenge_detail_screen.new_progress_post') as string}
+            leftBtn="Cancel"
+            onLeftBtnPress={onClose}
+            onRightBtnPress={handleSubmit(onSubmit)}
+            containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
+          />
+
           <View className="flex flex-col justify-between px-5 pt-4">
             <CustomTextInput
               title="Caption"
               placeholderClassName="h-32"
               placeholder="What do you achieve?"
               control={control}
+              errors={errors.caption}
             />
 
             {selectedMedia && (
@@ -146,6 +237,7 @@ export const AddNewChallengeProgressModal: FC<
                 onImagesSelected={(images) => {
                   images.forEach((uri: string) => {
                     const id = getRandomId();
+                    console.log('id', id);
                     setSelectedMedia((prev: IUploadMediaWithId[]) => [
                       ...prev,
                       { id, uri: uri },
@@ -158,7 +250,7 @@ export const AddNewChallengeProgressModal: FC<
               />
             </View>
 
-            <View className="">
+            <View className="flex flex-col">
               <VideoPicker
                 setExternalVideo={setSelectedMedia}
                 isSelectedImage={isSelectedImage}
@@ -166,8 +258,8 @@ export const AddNewChallengeProgressModal: FC<
               />
             </View>
 
-            <View className="pt-4">
-              <LocationInput control={control} />
+            <View className="flex flex-col pt-4">
+              <LocationInput control={control} errors={errors.location} />
             </View>
           </View>
         </View>

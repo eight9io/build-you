@@ -14,7 +14,7 @@ interface IImagePickerProps {
   images?: string[];
   allowsMultipleSelection?: boolean;
   isSelectedImage?: boolean | null;
-  onImagesSelected: (images: string[]) => void;
+  onImagesSelected?: (images: string[]) => void;
   onRemoveSelectedImage?: (index: number) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   base64?: boolean;
@@ -38,7 +38,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       const imagesPicked = result.assets.map((asset) => asset.uri);
-      onImagesSelected(imagesPicked);
+      onImagesSelected && onImagesSelected(imagesPicked);
       if (setIsSelectedImage) setIsSelectedImage(true);
     }
   };
@@ -50,14 +50,6 @@ const ImagePicker: FC<IImagePickerProps> = ({
   };
   return (
     <View className="flex flex-col">
-      {/* {images && images.length === 1 && (
-        <View className="h-36 w-full">
-          <Image
-            source={{ uri: images[0] }}
-            className="h-full w-full rounded-xl"
-          />
-        </View>
-      )} */}
       {images && images.length > 0 && (
         <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
           {images.map((uri, index) => (

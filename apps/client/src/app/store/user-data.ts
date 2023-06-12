@@ -20,6 +20,7 @@ export const useUserProfileStore = create<UserProfileStore>(
       },
       birth: '',
       bio: '',
+      video: '',
       company: {
         id: '',
         piva: '',
@@ -31,6 +32,8 @@ export const useUserProfileStore = create<UserProfileStore>(
       role: '',
       status: '',
       avatar: '',
+      hardSkill: [],
+      softSkill: [],
     },
     setUserProfile: (profile) => {
       set({ userProfile: profile });

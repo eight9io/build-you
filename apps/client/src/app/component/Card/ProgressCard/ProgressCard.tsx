@@ -131,13 +131,14 @@ const ProgressCard: FC<IProgressCardProps> = ({
       )}
 
       <View className="mt-4 flex-row">
-        <LikeButton likes={like || 0} />
+        <LikeButton likes={numberOfLikes || 0} />
         <CommentButton
           navigationToComment={() =>
             navigation.navigate('ChallengeDetailComment', {
               challengeId: '1',
             })
           }
+          numberOfComments={numberOfComments}
         />
       </View>
     </View>

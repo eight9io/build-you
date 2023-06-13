@@ -106,7 +106,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       statusBarTranslucent={isLoading}
       visible={visible}
     >
-      {' '}
       <ScrollView>
         <SafeAreaView>
           <View className="mx-4 flex h-full rounded-t-xl bg-white">
@@ -123,7 +122,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
               />
             </View>
 
-            <View className="flex flex-1 flex-col px-5 py-5">
+            <View className="flex flex-1 flex-col">
               <View className="pt-5">
                 <Controller
                   control={control}

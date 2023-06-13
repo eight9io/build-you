@@ -6,16 +6,17 @@ import CommentSvg from './asset/comment.svg';
 
 interface ICommentButtonProps {
   post?: any;
+  numberOfComments?: number;
   isViewOnly?: boolean;
   navigationToComment: () => void;
 }
 
 const CommentButton: FC<ICommentButtonProps> = ({
   post,
+  numberOfComments = 0,
   isViewOnly = false,
   navigationToComment,
 }) => {
-  const [commentCount, setCommentCount] = useState(0);
   const handleNavigationToComment = () => {
     !isViewOnly && navigationToComment();
   };
@@ -28,7 +29,7 @@ const CommentButton: FC<ICommentButtonProps> = ({
       <View className={clsx('flex-row items-center justify-center gap-2')}>
         <CommentSvg />
         <Text className={clsx('text-gray-dark text-md font-normal ')}>
-          3 comments
+          {numberOfComments} comment{numberOfComments > 1 && 's'}
         </Text>
       </View>
     </TouchableOpacity>

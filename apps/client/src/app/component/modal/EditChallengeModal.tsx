@@ -60,7 +60,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
 
   const handleShowDatePicker = () => {
     setShowDatePicker(true);
-    console.log('show date picker');
   };
 
   const handleDatePicked = (date?: Date) => {
@@ -85,7 +84,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
         setErrorMessage(t('errorMessage:500') || '');
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
     }
     setIsLoading(false);
@@ -221,6 +219,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
                         setSelectedDate={handleDatePicked}
                         setShowDateTimePicker={setShowDatePicker}
                         showDateTimePicker={showDatePicker}
+                        minimumDate={new Date()}
                       />
                     </>
                   )}

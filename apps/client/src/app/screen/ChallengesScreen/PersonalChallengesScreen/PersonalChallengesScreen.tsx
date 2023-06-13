@@ -94,7 +94,6 @@ const PersonalChallenges = ({
               <ChallengeCard
                 item={item}
                 imageSrc="https://picsum.photos/200/300"
-                authorName={userData?.name || 'Author Name'}
                 navigation={navigation}
               />
             )}

@@ -85,6 +85,7 @@ export const RootNavigation = () => {
 
   return (
     <NavigationContainer>
+      <GlobalDialog />
       <RootStack.Navigator
         screenOptions={{
           headerBackVisible: false,

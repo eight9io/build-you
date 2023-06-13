@@ -47,37 +47,34 @@ export const setAuthTokenToHttpHeader = (token: string | null) => {
 //     }
 //   );
 
-  httpInstance.interceptors.response.use(
-    function (res) {
-      if ([200, 201, 203, 204 ].includes(res.status)) {
-        return res;
-      } else if ([400, 401].includes(res.status)) {
-        const result = res.data;
-        handleError(result);
-        return result;
-      } else if ([401].includes(res.status)) {
-        const originalRequest = res.config;
-        if (!originalRequest._retry) {
-          originalRequest._retry = true;
-          return checkRefreshTokenLocalValidation().then((res) => {
-            if (res) {
-              return httpInstance(originalRequest);
-            } else {
-              // add gobal modal
-              return Promise.reject('token is not valid');
-            }
-          });
-        } else {
-          // add gobal modal
-          return Promise.reject('token is not valid');
-        }
+httpInstance.interceptors.response.use(
+  function (res) {
+    return res;
+  },
+  function (error) {
+    if ([400].includes(error.status)) {
+      const result = error.data;
+      handleError(result);
+      return result;
+    } else if ([401].includes(error.status)) {
+      const originalRequest = error.config;
+      if (!originalRequest._retry) {
+        originalRequest._retry = true;
+        return checkRefreshTokenLocalValidation().then((res) => {
+          if (res) {
+            return httpInstance(originalRequest);
+          } else {
+            // add gobal modal
+            return Promise.reject('token is not valid');
+          }
+        });
+      } else {
+        // add gobal modal
+        return Promise.reject('token is not valid');
       }
-      return;
-    },
-    function (error) {
-      handleError(error);
-      return Promise.reject(error);
     }
-  );
+    return Promise.reject(error);
+  }
+);
 
 export default httpInstance;

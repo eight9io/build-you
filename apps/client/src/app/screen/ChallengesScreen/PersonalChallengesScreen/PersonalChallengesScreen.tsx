@@ -46,7 +46,13 @@ const EmptyChallenges = ({
       </Text>
       <Text className={clsx('text-lg')}>
         Click
-        <Text className={clsx('text-primary-default')} onPress={() => navigation.navigate('CreateChallengeScreen')}> Create </Text>
+        <Text
+          className={clsx('text-primary-default')}
+          onPress={() => navigation.navigate('CreateChallengeScreen')}
+        >
+          {' '}
+          Create{' '}
+        </Text>
         to Create new challenge.
       </Text>
     </View>
@@ -78,12 +84,7 @@ const PersonalChallenges = ({
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View
-        className={clsx(
-          'h-full w-full bg-gray-50   ',
-          Platform.OS === 'ios' ? 'pb-[100px]' : 'pb-[120px]'
-        )}
-      >
+      <View className={clsx('h-full w-full bg-gray-50 pb-24 ')}>
         {personalChallengesList.length === 0 ? (
           <EmptyChallenges navigation={navigation} />
         ) : (
@@ -93,8 +94,7 @@ const PersonalChallenges = ({
             renderItem={({ item }: { item: IChallenge }) => (
               <ChallengeCard
                 item={item}
-                imageSrc="https://picsum.photos/200/300"
-                authorName={userData?.name || 'Author Name'}
+                imageSrc={`https://picsum.photos/200/300.webp?random=${item.id}`}
                 navigation={navigation}
               />
             )}

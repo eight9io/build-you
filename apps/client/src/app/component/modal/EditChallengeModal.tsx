@@ -60,7 +60,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
 
   const handleShowDatePicker = () => {
     setShowDatePicker(true);
-    console.log('show date picker');
   };
 
   const handleDatePicked = (date?: Date) => {
@@ -85,7 +84,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
         setErrorMessage(t('errorMessage:500') || '');
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
     }
     setIsLoading(false);
@@ -221,6 +219,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
                         setSelectedDate={handleDatePicked}
                         setShowDateTimePicker={setShowDatePicker}
                         showDateTimePicker={showDatePicker}
+                        minimumDate={new Date()}
                       />
                     </>
                   )}
@@ -232,19 +231,19 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
               </View>
             </View>
           </View>
-          <ConfirmDialog
-            title={(!errorMessage ? t('success') : t('error')) || ''}
-            description={
-              (!errorMessage
-                ? t('edit_challenge_screen.edit_success')
-                : t('errorMessage:500')) || ''
-            }
-            isVisible={isConfirmModalVisible}
-            onClosed={() => handleCloseConfirmModal(challenge.id)}
-            closeButtonLabel={t('close') || ''}
-          />
         </SafeAreaView>
       </ScrollView>
+      <ConfirmDialog
+        title={(!errorMessage ? t('success') : t('error')) || ''}
+        description={
+          (!errorMessage
+            ? t('edit_challenge_screen.edit_success')
+            : t('errorMessage:500')) || ''
+        }
+        isVisible={isConfirmModalVisible}
+        onClosed={() => handleCloseConfirmModal(challenge.id)}
+        closeButtonLabel={t('close') || ''}
+      />
       {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
     </Modal>
   );

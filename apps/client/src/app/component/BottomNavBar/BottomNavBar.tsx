@@ -1,10 +1,8 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
-
-import NavButton from '../common/Buttons/NavButton';
+import { View, Text, Platform } from 'react-native';
 
 import HomeScreen from '../../screen/HomeScreen';
 import NotificationsScreen from '../../screen/NotificationsScreen/NotificationsScreen';
@@ -18,8 +16,6 @@ import CreateSvg from './asset/create.svg';
 import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
 import AlertSvg from './asset/noti.svg';
-import AppTitle from '../common/AppTitle';
-import IconSearch from '../common/IconSearch/IconSearch';
 import { useGetUserData } from '../../hooks/useGetUser';
 
 const Tab = createBottomTabNavigator();
@@ -29,6 +25,7 @@ interface IBottomNavBarProps {}
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
+  const isAndroid = Platform.OS === 'android';
 
   const isCompany = false;
   useGetUserData();
@@ -39,10 +36,12 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         tabBarShowLabel: false,
         headerShown: true,
         headerTitleAlign: 'center',
+
         tabBarStyle: {
           position: 'absolute',
           backgroundColor: '#FFFFFF',
-          height: 100,
+          height: isAndroid ? 68 : 102,
+          paddingBottom: isAndroid ? 0 : 30,
         },
         headerRightContainerStyle: {
           paddingRight: 10,
@@ -140,7 +139,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       />
       {!isCompany ? (
         <Tab.Screen
-          name="Profilo"
+          name="Profile"
           component={PersonalProfileScreen}
           options={{
             headerShown: false,

@@ -42,7 +42,7 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
 const PersonalProfileScreen = () => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
-
+  const { t } = useTranslation();
   return (
     <ProfileStack.Navigator
       screenOptions={{
@@ -56,11 +56,7 @@ const PersonalProfileScreen = () => {
         component={Profile}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => (
-            <AppTitle
-              title={`${userProfile?.name} ${userProfile?.surname || ''}`}
-            />
-          ),
+          headerTitle: () => <AppTitle title={t('profile_title')} />,
           headerRight: (props) => (
             <ButtonWithIcon
               icon="setting"

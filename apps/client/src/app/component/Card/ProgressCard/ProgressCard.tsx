@@ -13,6 +13,11 @@ import ImageSwiper from '../../common/ImageSwiper';
 
 import EditChallengeProgressModal from '../../modal/EditChallengeProgressModal';
 import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
+import LikeButton from '../../Post/LikeButton';
+import CommentButton from '../../Post/CommentButton';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../../navigation/navigation.type';
+import { useTranslation } from 'react-i18next';
 
 import { IProgressChallenge } from '../../../types/challenge';
 import { IUserData } from '../../../types/user';
@@ -26,21 +31,25 @@ import {
   ICreateProgressComment,
   ICreateProgressLike,
 } from '../../../types/progress';
+import VideoPlayer from '../../common/VideoPlayer';
 
 interface IProgressCardProps {
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
+  onEditProgress?: () => void;
 }
 
 const ProgressCard: FC<IProgressCardProps> = ({
-  itemProgressCard: { id, challenge, caption, image, video, location },
+  itemProgressCard,
   userData,
+  onEditProgress
 }) => {
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
   const [numberOfLikes, setNumberOfLikes] = useState(0);
   const [numberOfComments, setNumberOfComments] = useState(0);
-
+  const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const time = '1 hour ago';
   const mockImage = 'https://picsum.photos/200/300';
 
@@ -64,7 +73,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const loadProgressLikes = async () => {
     try {
-      const response = await getProgressLikes(id);
+      const response = await getProgressLikes(itemProgressCard.id);
       if (response.status === 200) setNumberOfLikes(response.data.length);
     } catch (error) {
       console.log(error);
@@ -73,26 +82,32 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const loadProgressComments = async () => {
     try {
-      const response = await getProgressComments(id);
+      const response = await getProgressComments(itemProgressCard.id);
       if (response.status === 200) setNumberOfComments(response.data.length);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleConfirmEditChallengeProgress = async () => {
+    setIsShowEditModal(false); // Close the edit modal
+    onEditProgress && onEditProgress(); // Navigate to the challenge progresses screen to refresh the list
+  }
+
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
       <EditChallengeProgressModal
-        imageSrc={image ?? mockImage}
+        progress={itemProgressCard}
         isVisible={isShowEditModal}
         onClose={() => setIsShowEditModal(false)}
+        onConfirm={handleConfirmEditChallengeProgress}
       />
 
       <ConfirmDialog
-        title="Delete progress"
-        description="Are you sure you want to delete this progress?"
         isVisible={isShowDeleteModal}
         onClosed={() => setIsShowDeleteModal(false)}
+        title={t('dialog.delete_progress.title') as string}
+        description={t('dialog.delete_progress.description') as string}
       />
       <View className="mb-3 flex flex-row items-center justify-between ">
         <View className="flex flex-row">
@@ -102,43 +117,36 @@ const ProgressCard: FC<IProgressCardProps> = ({
               {userData?.name} {userData?.surname}{' '}
             </Text>
             <View className="flex flex-row items-center">
+              <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+
               <Text className="text-gray-dark text-xs font-light ">
-                {time}
-                {'  '}
-              </Text>
-              <IconDot fill={'#7D7E80'} />
-              <Text className="text-gray-dark text-xs font-light ">
-                {'  '}123 Amanda Street
+                <IconDot fill={'#7D7E80'} /> 123 Amanda Street
               </Text>
             </View>
           </View>
         </View>
         <PopUpMenu options={progressOptions} />
       </View>
-      <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
-      {image && (
+      <Text className=" text-md mb-3 font-normal leading-5">
+        {itemProgressCard.caption}
+      </Text>
+      {itemProgressCard.image && (
         <View className="aspect-square w-full">
-          <ImageSwiper imageSrc={image} />
+          <ImageSwiper imageSrc={itemProgressCard.image} />
         </View>
       )}
-      {video && (
-        <View>
-          <Text>Render video</Text>
-        </View>
-      )}
-      <View className="mt-4 flex-row ">
-        <View className="flex-row items-center gap-2">
-          <IconLike />
-          <Text className="text-gray-dark text-md font-normal ">
-            {numberOfLikes} like{numberOfLikes > 1 ? 's' : ''}
-          </Text>
-        </View>
-        <View className="ml-8 flex-row items-center ">
-          <IconComment />
-          <Text className="text-gray-dark text-md ml-2 font-normal ">
-            {numberOfComments} comment{numberOfComments > 1 ? 's' : ''}
-          </Text>
-        </View>
+      {itemProgressCard.video && <VideoPlayer src={itemProgressCard.video} />}
+
+      <View className="mt-4 flex-row">
+        <LikeButton likes={numberOfLikes || 0} />
+        <CommentButton
+          navigationToComment={() =>
+            navigation.navigate('ChallengeDetailComment', {
+              challengeId: '1',
+            })
+          }
+          numberOfComments={numberOfComments}
+        />
       </View>
     </View>
   );

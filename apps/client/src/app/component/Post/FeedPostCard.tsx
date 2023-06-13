@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ImageSourcePropType,
 } from 'react-native';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { clsx } from 'clsx';
 
 import Card from '../common/Card';
@@ -16,10 +16,12 @@ import CommentButton from './CommentButton';
 import BackSvg from '../asset/back.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/navigation.type';
+import { useAuthStore } from '../../store/auth-store';
+import { getProgressComments, getProgressLikes } from '../../service/progress';
 
 interface IFeedPostCardProps {
   itemFeedPostCard: {
-    id: number;
+    id: string;
     name: string;
     time: string;
     stt: string;
@@ -70,10 +72,39 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 };
 
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
-  itemFeedPostCard: { name, time, stt, card, like, comment, avatar },
+  itemFeedPostCard: { id, name, time, stt, card, like, comment, avatar },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { getAccessToken } = useAuthStore();
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfComments, setNumberOfComments] = useState(0);
 
+  useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+      await loadProgressComments();
+    })();
+  }, []);
+
+  const loadProgressLikes = async () => {
+    try {
+      const response = await getProgressLikes(id);
+      if (response.status === 200) setNumberOfLikes(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadProgressComments = async () => {
+    try {
+      const response = await getProgressComments(id);
+      if (response.status === 200) setNumberOfComments(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const isToken = getAccessToken();
   return (
     <View className="mb-1 flex-1">
       <View className="bg-gray-50 p-5">
@@ -100,13 +131,17 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           }
         />
         <View className="mt-4 flex-row">
-          <LikeButton likes={like} />
+          <LikeButton likes={numberOfLikes} navigation={navigation} />
           <CommentButton
-            navigationToComment={() =>
-              navigation.navigate('ChallengeDetailComment', {
-                challengeId: '1',
-              })
+            navigationToComment={
+              isToken
+                ? () =>
+                    navigation.navigate('ChallengeDetailComment', {
+                      challengeId: '1',
+                    })
+                : () => navigation.navigate('LoginScreen')
             }
+            numberOfComments={numberOfComments}
           />
         </View>
       </View>

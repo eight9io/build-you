@@ -4,16 +4,24 @@ import { clsx } from 'clsx';
 
 import ThumbUp from './asset/thumb_up.svg';
 import FilledThumbUP from './asset/filled_thumb_up.svg';
+import { useAuthStore } from '../../store/auth-store';
 
 interface ILikeButtonProps {
   likes: number;
+  navigation?: any;
 }
 
-const LikeButton: FC<ILikeButtonProps> = ({ likes }) => {
+const LikeButton: FC<ILikeButtonProps> = ({ likes = 0, navigation }) => {
+  const { getAccessToken } = useAuthStore();
+
   const [isLiked, setIsLiked] = React.useState(false);
   const [tempLikes, setTempLikes] = React.useState(likes);
+  const isToken = getAccessToken();
   const handleLike = () => {
     // TODO: handle like api
+    if (!isToken) {
+      return navigation.navigate('LoginScreen');
+    }
     if (isLiked) {
       setTempLikes(tempLikes - 1);
     } else {
@@ -28,7 +36,9 @@ const LikeButton: FC<ILikeButtonProps> = ({ likes }) => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handleLike}>
-      <View className={clsx('flex-1 flex-row justify-center items-center gap-2')}>
+      <View
+        className={clsx('flex-1 flex-row items-center justify-center gap-2')}
+      >
         {isLiked ? <FilledThumbUP /> : <ThumbUp />}
         <Text className={clsx('text-gray-dark text-md font-normal ')}>
           {tempLikes > 0 ? `${tempLikes} likes` : `0 like`}

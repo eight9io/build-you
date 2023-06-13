@@ -24,11 +24,14 @@ interface MyObject {
 }
 
 const NUMBER_OF_SKILL_REQUIRED = 3;
+const MAX_NUMBER_OF_SKILL = 10;
 
 const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   navigation,
 }) => {
-  const [fetchedHardSkills, setFetchedHardSkills] = useState<IHardSkillProps[]>([]);
+  const [fetchedHardSkills, setFetchedHardSkills] = useState<IHardSkillProps[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -61,6 +64,13 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   }, [userAddSkill]);
 
   const addCompetenceSkill = (skill: IHardSkillProps) => {
+    if (
+      selectedCompetencedSkill.length >= MAX_NUMBER_OF_SKILL &&
+      !selectedCompetencedSkill.find((item) => item.id === skill.id)
+    ) {
+      setNumberOfSkillError(true);
+      return;
+    }
     if (!selectedCompetencedSkill.find((item) => item.id === skill.id)) {
       setSelectedCompetencedSkill((prev) => [...prev, skill]);
     } else {
@@ -71,17 +81,26 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   };
 
   const checkNumberOfSkills = () => {
-    if (selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED) {
+    if (
+      selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length > MAX_NUMBER_OF_SKILL
+    ) {
       setNumberOfSkillError(true);
       return false;
     }
     setNumberOfSkillError(false);
     setSkills(selectedCompetencedSkill);
-    return selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED;
+    return (
+      selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length <= MAX_NUMBER_OF_SKILL
+    );
   };
 
   useEffect(() => {
-    if (selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED) {
+    if (
+      selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length <= MAX_NUMBER_OF_SKILL
+    ) {
       setNumberOfSkillError(false);
       return;
     }
@@ -135,7 +154,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
           />
           {numberOfSkillError && (
             <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
-              Please select at least 3 skills
+              Please select at least 3 skills and maximum of 10 skills
             </Text>
           )}
         </View>

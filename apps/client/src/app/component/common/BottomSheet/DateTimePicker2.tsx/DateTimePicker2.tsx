@@ -11,6 +11,8 @@ interface DateTimePicker2Props {
   setShowDateTimePicker: (show: boolean) => void;
   selectedDate?: Date;
   setSelectedDate: (date: Date) => void;
+  maximumDate?: Date;
+  minimumDate?: Date;
   shouldMinus16Years?: boolean;
 }
 
@@ -19,6 +21,8 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   setShowDateTimePicker,
   selectedDate,
   setSelectedDate,
+  maximumDate,
+  minimumDate,
   shouldMinus16Years = false,
 }) => {
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
@@ -87,10 +91,8 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                         setTempSelectedDate(value as Date)
                       }
                       style={{ height: '80%' }}
-                      minimumDate={dayjs()
-                        .subtract(0, 'years')
-                        .startOf('day')
-                        .toDate()}
+                      maximumDate={maximumDate}
+                      minimumDate={minimumDate}
                     />
                   )}
                   <View className="absolute bottom-10 h-12 w-full px-4">
@@ -124,14 +126,8 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                 }
               }}
               style={{ height: '80%' }}
-              maximumDate={dayjs()
-                .subtract(16, 'years')
-                .startOf('day')
-                .toDate()}
-              minimumDate={dayjs()
-                .subtract(100, 'years')
-                .startOf('day')
-                .toDate()}
+              maximumDate={maximumDate}
+              minimumDate={minimumDate}
             />
           ) : null}
         </>

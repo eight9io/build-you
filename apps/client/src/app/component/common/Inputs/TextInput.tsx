@@ -20,7 +20,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
   return (
     <View className="flex flex-col gap-1">
       {label ? (
-        <Text className="text-primary-default text-md font-semibold">
+        <Text className="text-primary-default text-md mb-1 font-semibold">
           {label}
         </Text>
       ) : null}
@@ -32,17 +32,18 @@ export const TextInput: FC<ITextInputProps> = (props) => {
               className={clsx(
                 'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
                 inputProps?.className,
-                Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
+                Platform.OS === 'ios' ? 'p-3' : 'p-2.5',
               )}
+              textAlignVertical="top"
               autoCapitalize="none"
             />
           </View>
+          {rightIcon ? (
+            <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
+              {rightIcon}
+            </View>
+          ) : null}
         </TouchableOpacity>
-        {rightIcon ? (
-          <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
-            {rightIcon}
-          </View>
-        ) : null}
       </View>
     </View>
   );

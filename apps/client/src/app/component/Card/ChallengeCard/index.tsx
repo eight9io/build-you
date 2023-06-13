@@ -20,6 +20,7 @@ interface IChallengeCardProps {
   imageSrc: string;
   authorName: string;
   navigation?: any;
+  isChallengeCompleted?: boolean;
 }
 
 const CompanyTag = () => {
@@ -37,6 +38,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   isCompany,
   authorName,
   navigation,
+  isChallengeCompleted,
 }) => {
   const [imageSource, loading, error] = getImageFromUrl(imageSrc);
 
@@ -49,8 +51,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
         });
     }
   };
-
-  const isChallengeCompleted = true;
 
   return (
     <TouchableOpacity

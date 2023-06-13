@@ -26,6 +26,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
+  const handleEditProgress = () => { 
+    setShouldRefresh(true);
+  }
   const AddNewChallengeProgressButton = () => {
     return (
       <View className="pt-4">
@@ -54,7 +57,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         data={progressData}
         ListHeaderComponent={<AddNewChallengeProgressButton />}
         renderItem={({ item }) => (
-          <ProgressCard itemProgressCard={item} userData={userData} />
+          <ProgressCard
+            itemProgressCard={item}
+            userData={userData}
+            onEditProgress={handleEditProgress}
+          />
         )}
         extraData={progressData}
         contentContainerStyle={{ paddingBottom: 300 }}

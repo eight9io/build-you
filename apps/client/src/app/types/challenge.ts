@@ -21,7 +21,7 @@ export interface IProgressChallenge {
   // user: string; missing from api but we can get
   challenge: string;
   caption: string;
-  image: string | null;
+  image: string[] | string | null;
   video: string | null;
   location: string;
   like: number;

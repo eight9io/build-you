@@ -223,6 +223,14 @@
     "location_placeholder": "Where did you achieve it?",
     "location_required": "Location is required."
   },
+  "edit_progress_modal": {
+    "title": "Edit progress",
+    "save_button": "Save",
+    "caption": "Caption",
+    "caption_placeholder": "What do you achieve?",
+    "caption_required": "Please fill in the caption.",
+    "edit_success": "Your progress has been updated successfully"
+  },
   "edit_challenge_screen": {
     "title": "Edit challenge",
     "save_button": "Save",

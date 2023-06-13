@@ -38,7 +38,7 @@ export const HomeFeed = () => {
 
   const arrayPost = [
     {
-      id: 1,
+      id: '1',
       avatar: 'avata',
       name: 'Marco Rossi',
       time: '1 hour ago',
@@ -52,7 +52,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: 2,
+      id: '2',
       avatar: 'avata',
       name: 'Marco Rossi22',
       time: '1 hour ago',
@@ -66,7 +66,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: 3,
+      id: '3',
       avatar: 'avata',
       name: 'Marco Rossi 333',
       time: '1 hour ago',

@@ -65,12 +65,10 @@ export const ChallengeProgressCardForComment: React.FC<
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [numberOfLikes, setNumberOfLikes] = useState(0);
-  const [numberOfComments, setNumberOfComments] = useState(0);
 
   useEffect(() => {
     (async () => {
       await loadProgressLikes();
-      await loadProgressComments();
     })();
   }, []);
 
@@ -83,18 +81,9 @@ export const ChallengeProgressCardForComment: React.FC<
     }
   };
 
-  const loadProgressComments = async () => {
-    try {
-      const response = await getProgressComments(id);
-      if (response.status === 200) setNumberOfComments(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const navigationToComment = () => {
-    navigation.navigate('ChallengeDetailComment', {
-      challengeId: id,
+    navigation.navigate('ProgressCommentScreen', {
+      progressId: id,
     });
   };
 
@@ -128,7 +117,7 @@ export const ChallengeProgressCardForComment: React.FC<
           <CommentButton
             isViewOnly={true}
             navigationToComment={navigationToComment}
-            numberOfComments={numberOfComments}
+            progressId={id}
           />
         </View>
       </View>
@@ -159,12 +148,10 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [numberOfLikes, setNumberOfLikes] = useState(0);
-  const [numberOfComments, setNumberOfComments] = useState(0);
 
   useEffect(() => {
     (async () => {
       await loadProgressLikes();
-      await loadProgressComments();
     })();
   }, []);
 
@@ -177,18 +164,9 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
     }
   };
 
-  const loadProgressComments = async () => {
-    try {
-      const response = await getProgressComments(id);
-      if (response.status === 200) setNumberOfComments(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const navigationToComment = () => {
-    navigation.navigate('ChallengeDetailComment', {
-      challengeId: id,
+    navigation.navigate('ProgressCommentScreen', {
+      progressId: id,
     });
   };
 
@@ -217,7 +195,7 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
           <LikeButton likes={numberOfLikes} />
           <CommentButton
             navigationToComment={navigationToComment}
-            numberOfComments={numberOfComments}
+            progressId={id}
           />
         </View>
       </View>

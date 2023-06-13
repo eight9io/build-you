@@ -14,7 +14,7 @@ import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
-import ChallengeDetailComment from '../screen/ChallengeDetailScreen/ChallengeDetailComment/ChallengeDetailComment';
+import ProgressCommentScreen from '../screen/ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
 
@@ -35,6 +35,7 @@ import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
 import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
 import BottomNavBarWithoutLogin from '../component/BottomNavBar/BottomNavBarWithoutLogin';
+import GlobalDialog from '../component/common/Dialog/GlobalDialog';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -142,8 +143,8 @@ export const RootNavigation = () => {
               })}
             />
             <RootStack.Screen
-              name="ChallengeDetailComment"
-              component={ChallengeDetailComment}
+              name="ProgressCommentScreen"
+              component={ProgressCommentScreen}
               options={({ navigation }) => ({
                 headerShown: true,
                 headerTitle: () => '',

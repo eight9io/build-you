@@ -23,6 +23,7 @@ import { IProgressChallenge } from '../../../types/challenge';
 import { IUserData } from '../../../types/user';
 import {
   createProgressLike,
+  deleteProgress,
   getProgressComments,
   getProgressLikes,
 } from '../../../service/progress';
@@ -32,26 +33,34 @@ import {
   ICreateProgressLike,
 } from '../../../types/progress';
 import VideoPlayer from '../../common/VideoPlayer';
+import useModal from '../../../hooks/useModal';
 
 interface IProgressCardProps {
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
   onEditProgress?: () => void;
+  onDeleteProgressSuccess?: () => void;
 }
 
 const ProgressCard: FC<IProgressCardProps> = ({
   itemProgressCard,
   userData,
-  onEditProgress
+  onEditProgress,
+  onDeleteProgressSuccess,
 }) => {
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
   const [numberOfLikes, setNumberOfLikes] = useState(0);
-  const [numberOfComments, setNumberOfComments] = useState(0);
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const time = '1 hour ago';
   const mockImage = 'https://picsum.photos/200/300';
+  const [errorMessage, setErrorMessage] = useState('');
+  const {
+    isVisible: isAckModalVisible,
+    openModal: openAckModal,
+    closeModal: closeAckModal,
+  } = useModal();
 
   const progressOptions = [
     {
@@ -67,23 +76,14 @@ const ProgressCard: FC<IProgressCardProps> = ({
   useEffect(() => {
     (async () => {
       await loadProgressLikes();
-      await loadProgressComments();
     })();
   }, []);
 
   const loadProgressLikes = async () => {
     try {
+      console.log('async: ');
       const response = await getProgressLikes(itemProgressCard.id);
       if (response.status === 200) setNumberOfLikes(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const loadProgressComments = async () => {
-    try {
-      const response = await getProgressComments(itemProgressCard.id);
-      if (response.status === 200) setNumberOfComments(response.data.length);
     } catch (error) {
       console.log(error);
     }
@@ -92,7 +92,29 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const handleConfirmEditChallengeProgress = async () => {
     setIsShowEditModal(false); // Close the edit modal
     onEditProgress && onEditProgress(); // Navigate to the challenge progresses screen to refresh the list
-  }
+  };
+
+  const handleCloseAckModal = () => {
+    console.log('handleCloseAckModal: ');
+    closeAckModal();
+    onDeleteProgressSuccess && onDeleteProgressSuccess(); // Navigate to the challenge progresses screen => delete it and refresh the list
+  };
+
+  const handleConfirmDeleteChallengeProgress = async () => {
+    setIsShowDeleteModal(false); // Close the delete confirm modal
+    setErrorMessage('');
+    try {
+      const res = await deleteProgress(itemProgressCard.id);
+      if (res.status === 200) {
+        openAckModal();
+      } else {
+        setErrorMessage(t('errorMessage:500') || '');
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(t('errorMessage:500') || '');
+    }
+  };
 
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
@@ -101,13 +123,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
         isVisible={isShowEditModal}
         onClose={() => setIsShowEditModal(false)}
         onConfirm={handleConfirmEditChallengeProgress}
-      />
-
-      <ConfirmDialog
-        isVisible={isShowDeleteModal}
-        onClosed={() => setIsShowDeleteModal(false)}
-        title={t('dialog.delete_progress.title') as string}
-        description={t('dialog.delete_progress.description') as string}
       />
       <View className="mb-3 flex flex-row items-center justify-between ">
         <View className="flex flex-row">
@@ -141,13 +156,34 @@ const ProgressCard: FC<IProgressCardProps> = ({
         <LikeButton likes={numberOfLikes || 0} />
         <CommentButton
           navigationToComment={() =>
-            navigation.navigate('ChallengeDetailComment', {
-              challengeId: '1',
+            navigation.navigate('ProgressCommentScreen', {
+              progressId: itemProgressCard.id,
             })
           }
-          numberOfComments={numberOfComments}
+          progressId={itemProgressCard.id}
         />
       </View>
+
+      <ConfirmDialog
+        title={(!errorMessage ? t('success') : t('error')) || ''}
+        description={
+          (!errorMessage
+            ? t('delete_progress.delete_success')
+            : t('errorMessage:500')) || ''
+        }
+        isVisible={isAckModalVisible}
+        onClosed={handleCloseAckModal}
+        closeButtonLabel={t('close') || ''}
+      />
+      <ConfirmDialog
+        isVisible={isShowDeleteModal}
+        onConfirm={handleConfirmDeleteChallengeProgress}
+        onClosed={() => setIsShowDeleteModal(false)}
+        title={t('dialog.delete_progress.title') as string}
+        confirmButtonLabel="Delete"
+        closeButtonLabel="Cancel"
+        description={t('dialog.delete_progress.description') as string}
+      />
     </View>
   );
 };

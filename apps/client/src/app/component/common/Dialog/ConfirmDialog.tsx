@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { FC, useState } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import Dialog from 'react-native-dialog';
 
 interface IComfirmDialogProps {
@@ -32,23 +32,25 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   };
 
   return (
-    <View className={clsx('flex-1 items-center justify-center bg-white')}>
-      <Dialog.Container visible={isVisible}>
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>{description}</Dialog.Description>
-        {onClosed && (
-          <Dialog.Button
-            label={closeButtonLabel ?? 'Cancel'}
-            onPress={handleCancel}
-          />
-        )}
-        {onConfirm && (
-          <Dialog.Button
-            label={confirmButtonLabel ?? 'Confirm'}
-            onPress={handleConfirm}
-          />
-        )}
-      </Dialog.Container>
+    <View>
+      {isVisible && (
+        <Dialog.Container visible={true}>
+          <Dialog.Title>{title}</Dialog.Title>
+          <Dialog.Description>{description}</Dialog.Description>
+          {onClosed && (
+            <Dialog.Button
+              label={closeButtonLabel ?? 'Cancel'}
+              onPress={handleCancel}
+            />
+          )}
+          {onConfirm && (
+            <Dialog.Button
+              label={confirmButtonLabel ?? 'Confirm'}
+              onPress={handleConfirm}
+            />
+          )}
+        </Dialog.Container>
+      )}
     </View>
   );
 };

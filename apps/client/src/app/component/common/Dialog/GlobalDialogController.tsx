@@ -1,18 +1,17 @@
 import { MutableRefObject } from 'react';
 
-export type CustomModalRef = {
+export type GlobalDialogRef = {
   show: (message?: string) => void;
   hide: () => void;
 };
 
 export default class GlobalDialogController {
-  static modalRef: MutableRefObject<CustomModalRef>;
+  static modalRef: MutableRefObject<GlobalDialogRef>;
   static setModalRef = (ref: any) => {
     this.modalRef = ref;
   };
 
   static showModal = (message?: string) => {
-    console.log('show modal');
     this.modalRef.current?.show(message);
   };
   static hideModal = () => {

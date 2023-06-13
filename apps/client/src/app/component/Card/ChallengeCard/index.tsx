@@ -10,6 +10,7 @@ import clsx from 'clsx';
 
 import { IChallenge } from '../../../types/challenge';
 import { getImageFromUrl } from '../../../hooks/getImageFromUrl';
+import { getChallengeStatusColor } from '../../../utils/common';
 
 import CheckCircle from '../../asset/check_circle.svg';
 import BackSvg from '../../asset/back.svg';
@@ -18,9 +19,7 @@ interface IChallengeCardProps {
   item: IChallenge;
   isCompany?: boolean;
   imageSrc: string;
-  authorName: string;
   navigation?: any;
-  isChallengeCompleted?: boolean;
 }
 
 const CompanyTag = () => {
@@ -36,9 +35,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   item,
   imageSrc,
   isCompany,
-  authorName,
   navigation,
-  isChallengeCompleted,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -81,7 +78,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           )}
         >
           <View className={clsx('flex flex-row items-center')}>
-            <CheckCircle fill={isChallengeCompleted ? '#20D231' : '#C5C8D2'} />
+            <CheckCircle fill={getChallengeStatusColor(item.status)} />
             <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
               {item?.goal}
             </Text>

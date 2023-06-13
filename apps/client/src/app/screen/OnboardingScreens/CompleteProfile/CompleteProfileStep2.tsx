@@ -54,24 +54,26 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
 
   return (
     <View className="flex h-full w-full flex-col items-center justify-start">
-      <View className="pt-2">
-        <StepOfSteps step={2} totalSteps={4} />
-      </View>
-      <View className="flex w-64 flex-col items-center justify-center pt-6">
-        <Text className="text-black-default text-h4 text-center font-semibold leading-6">
-          Tell the others something about you
-        </Text>
-      </View>
+      <ScrollView className="w-full ">
+        <View className="pt-2">
+          <StepOfSteps step={2} totalSteps={4} />
+        </View>
+        <View className="flex flex-col items-center justify-center  pt-6">
+          <View className="flex w-64 ">
+            <Text className="text-black-default text-h4 text-center font-semibold leading-6">
+              Tell the others something about you
+            </Text>
+          </View>
+        </View>
 
-      {/* Form */}
-      <ScrollView className="w-full">
+        {/* Form */}
         <View className="mt-4 flex w-full flex-col px-5">
           <View className="mt-4 flex flex-col ">
             <Controller
               control={control}
               name="biography"
               render={({ field: { onChange, onBlur, value } }) => (
-                <View className="flex h-40 flex-col">
+                <View className="flex flex-col">
                   <TextInput
                     label="Biography"
                     placeholder={'Your biography'}
@@ -80,8 +82,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
                     onChangeText={onChange}
                     value={value}
                     multiline={true}
-                    numberOfLines={4}
-                    className="h-40"
+                    className='h-40 '
                   />
                 </View>
               )}

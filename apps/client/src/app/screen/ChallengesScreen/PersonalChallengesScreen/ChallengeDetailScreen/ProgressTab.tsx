@@ -26,14 +26,17 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
+  const handleEditProgress = () => { 
+    setShouldRefresh(true);
+  }
   const AddNewChallengeProgressButton = () => {
     return (
       <View className="pt-4">
-        <View className="mx-4 h-12">
+        <View className="mx-4 ">
           <Button
+            containerClassName="  bg-primary-default flex-none px-1 "
+            textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
             title={t('challenge_detail_screen.upload_new_progress') as string}
-            containerClassName="bg-primary-default"
-            textClassName="text-white text-md font-semibold py-4 ml-2"
             Icon={<AddIcon fill={'white'} />}
             onPress={() => setIsModalVisible(true)}
           />
@@ -54,7 +57,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         data={progressData}
         ListHeaderComponent={<AddNewChallengeProgressButton />}
         renderItem={({ item }) => (
-          <ProgressCard itemProgressCard={item} userData={userData} />
+          <ProgressCard
+            itemProgressCard={item}
+            userData={userData}
+            onEditProgress={handleEditProgress}
+          />
         )}
         extraData={progressData}
         contentContainerStyle={{ paddingBottom: 300 }}

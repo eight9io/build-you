@@ -25,12 +25,16 @@ const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
         autoplay={false}
         dotColor="white"
         activeDotColor="#FF7B1C"
-        snapToAlignment='center'
+        snapToAlignment="center"
         containerStyle={{ width: '100%', height: '100%' }}
       >
-        <ImageItem imageSrc="https://picsum.photos/200/300" />
-        <ImageItem imageSrc="https://picsum.photos/200/300" />
-        <ImageItem imageSrc="https://picsum.photos/200/300" />
+        {typeof imageSrc === 'string' ? (
+          <ImageItem imageSrc={imageSrc} />
+        ) : (
+          imageSrc.map((item, index) => (
+            <ImageItem imageSrc={item} key={index} />
+          ))
+        )}
       </Swiper>
     </View>
   );

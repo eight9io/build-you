@@ -24,3 +24,7 @@ export interface ICreateProgressComment {
   progress: string; // progress id
   comment: string;
 }
+
+export interface IUpdateProgress {
+  caption: string;
+}

@@ -20,8 +20,15 @@ import FeedPostCard from '../component/Post/FeedPostCard';
 import clsx from 'clsx';
 import MainNavBar from '../component/NavBar/MainNavBar';
 import { useTranslation } from 'react-i18next';
-
-export const HomeScreen = () => {
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { t } from 'i18next';
+import AppTitle from '../component/common/AppTitle';
+import NavButton from '../component/common/Buttons/NavButton';
+import IconSearch from '../component/common/IconSearch/IconSearch';
+import CompanyChallengeDetailScreen from './ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
+import ChallengeDetailScreenViewOnly from './ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
+const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
+export const HomeFeed = () => {
   const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0);
   const scrollViewRef = useRef<null | ScrollView>(null);
 
@@ -85,6 +92,54 @@ export const HomeScreen = () => {
         <View className="h-16" />
       </View>
     </SafeAreaView>
+  );
+};
+const HomeScreen = () => {
+  return (
+    <HomeScreenStack.Navigator
+      screenOptions={{
+        headerBackVisible: false,
+        headerTitleAlign: 'center',
+        headerShown: false,
+      }}
+    >
+      <HomeScreenStack.Screen
+        name="FeedScreen"
+        component={HomeFeed}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title={t('your_feed.header')} />,
+          headerRight: (props) => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() =>
+                    navigation.navigate('CompleteProfileStep3Screen')
+                  }
+                />
+              }
+            />
+          ),
+        })}
+      />
+
+      <HomeScreenStack.Screen
+        name="ChallengeDetailScreenViewOnly"
+        component={ChallengeDetailScreenViewOnly}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+    </HomeScreenStack.Navigator>
   );
 };
 

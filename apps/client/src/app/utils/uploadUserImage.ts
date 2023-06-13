@@ -13,6 +13,7 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
+      // TODO: add to global dialog
       alert('Sorry, we need camera roll permissions to make this work!');
       return;
     }

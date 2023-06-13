@@ -62,6 +62,7 @@ const CompanyChallenges = ({
             imageSrc="https://picsum.photos/200/300"
             authorName="Author Name"
             navigation={navigation}
+            isChallengeCompleted
           />
           <ChallengeCard
             name="Challenge Name"
@@ -74,6 +75,7 @@ const CompanyChallenges = ({
             imageSrc="https://picsum.photos/200/300"
             authorName="Author Name"
             navigation={navigation}
+            isChallengeCompleted
           />
           <ChallengeCard
             name="Challenge Name"

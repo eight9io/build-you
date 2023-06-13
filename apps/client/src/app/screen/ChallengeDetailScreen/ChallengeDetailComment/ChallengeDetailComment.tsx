@@ -32,6 +32,7 @@ const item = {
   },
   like: 5,
   comment: 0,
+  location: '123 Amanda Street',
 };
 
 const COMMENTS = [
@@ -90,11 +91,7 @@ const ChallengeDetailComment: FC<IChallengeDetailCommentProps> = ({
             />
           }
         /> */}
-        <View
-          className={clsx(
-            'border-gray-light flex flex-1 flex-col border-b pb-4'
-          )}
-        >
+        <View className={clsx(' flex flex-1 flex-col ')}>
           <View
             className={clsx(
               'border-gray-light flex border-b bg-white px-5 py-3 '
@@ -106,7 +103,7 @@ const ChallengeDetailComment: FC<IChallengeDetailCommentProps> = ({
           </View>
           <ChallengeProgressCardForComment item={item} />
         </View>
-        <View className="flex flex-1 flex-col justify-start">
+        <View className=" flex flex-1 flex-col justify-start bg-white px-5 py-3">
           {COMMENTS.map((item, id) => (
             <View key={id}>
               <SingleComment comment={item} />

@@ -161,6 +161,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
   useGetUserData();
   const { getUserProfile } = useUserProfileStore();
+  useGetUserData();
   const userData = getUserProfile();
 
   useEffect(() => {

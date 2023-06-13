@@ -20,7 +20,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
   return (
     <View className="flex flex-col gap-1">
       {label ? (
-        <Text className="text-primary-default text-md font-semibold">
+        <Text className="text-primary-default text-md mb-1 font-semibold">
           {label}
         </Text>
       ) : null}
@@ -37,12 +37,12 @@ export const TextInput: FC<ITextInputProps> = (props) => {
               autoCapitalize="none"
             />
           </View>
+          {rightIcon ? (
+            <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
+              {rightIcon}
+            </View>
+          ) : null}
         </TouchableOpacity>
-        {rightIcon ? (
-          <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
-            {rightIcon}
-          </View>
-        ) : null}
       </View>
     </View>
   );

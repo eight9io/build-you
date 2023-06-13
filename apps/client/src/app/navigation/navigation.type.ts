@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   IntroScreen: undefined;
+  FeedScreen: undefined;
   HomeScreen: undefined;
   InnerScreen: undefined;
   NotificationsScreen: undefined;
@@ -12,7 +13,7 @@ export type RootStackParamList = {
   ModalScreen: undefined;
   CreateChallengeScreen: undefined;
   PersonalChallengesScreen: undefined;
-  PersonalChallengeDetailScreen:  {
+  PersonalChallengeDetailScreen: {
     challengeId: string;
   };
   RegisterScreen: undefined;
@@ -40,7 +41,7 @@ export type RootStackParamList = {
   };
   ChallengeDetailComment: {
     challengeId: string;
-  }
+  };
 
   ProfileScreenLoading: undefined;
 
@@ -49,7 +50,8 @@ export type RootStackParamList = {
     params: {
       challengeId: string;
     };
-  }
+  };
+  HomeScreenWithoutLogin: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

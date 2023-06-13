@@ -99,7 +99,7 @@ export default function ForgotPasswordModal({
     >
       <View className="h-full bg-white">
         <ScrollView>
-          <View className="h-full pt-5">
+          <View className="mx-4 h-full pt-5">
             <Header
               title={t('forgot_password.title') as string}
               leftBtn={

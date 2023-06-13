@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { set, useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import CloseIcon from '../asset/close.svg';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useUserProfileStore } from '../../store/user-data';
@@ -209,10 +211,10 @@ export const AddNewChallengeProgressModal: FC<
           onClosed={handleCloseModal}
           closeButtonLabel="Got it"
         />
-        <View className="h-full rounded-t-xl bg-white">
+        <View className="mx-4  h-full rounded-t-xl bg-white">
           <Header
-            title="New Progress"
-            rightBtn="CREATE"
+            title={t('challenge_detail_screen.new_progress') as string}
+            rightBtn={t('challenge_detail_screen.new_progress_post') as string}
             leftBtn="Cancel"
             onLeftBtnPress={onClose}
             onRightBtnPress={handleSubmit(onSubmit)}

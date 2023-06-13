@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 
 import { clsx } from 'clsx';
 import PostAvatar from '../Avatar/PostAvatar/index';
+import PopUpMenu from '../PopUpMenu';
 
 interface ISingleCommentProps {
   comment: {
@@ -19,8 +20,16 @@ interface ISingleCommentProps {
 
 const SingleComment: FC<ISingleCommentProps> = ({ comment }) => {
   return (
-    <View className={clsx('flex flex-col items-start justify-between p-4 w-full')}>
-      <View className={clsx('bg-gray-veryLight mb-3 flex-row justify-between w-full')}>
+    <View
+      className={clsx(
+        'mt-2 flex w-full flex-col items-start justify-between rounded-xl bg-[#FAFBFF] p-4'
+      )}
+    >
+      <View
+        className={clsx(
+          'bg-gray-veryLight mb-3 w-full flex-row justify-between'
+        )}
+      >
         <View className={clsx('flex-row')}>
           <PostAvatar src={'https://picsum.photos/200/300'} />
           <View className={clsx('ml-2')}>
@@ -38,13 +47,21 @@ const SingleComment: FC<ISingleCommentProps> = ({ comment }) => {
           </View>
         </View>
         {comment?.isOwner && (
-          <TouchableOpacity onPress={() => console.log('press')}>
-            <Text className={clsx('text-h6 font-medium')}>...</Text>
-          </TouchableOpacity>
+          <PopUpMenu
+            iconColor="#FF7B1D"
+            options={[
+              {
+                text: 'Delete',
+                onPress: () => console.log('Delete'),
+              },
+            ]}
+          />
         )}
       </View>
       <View>
-        <Text className={clsx('text-gray-dark text-sm')}>{comment.comment}</Text>
+        <Text className={clsx('text-gray-dark text-sm')}>
+          {comment.comment}
+        </Text>
       </View>
     </View>
   );

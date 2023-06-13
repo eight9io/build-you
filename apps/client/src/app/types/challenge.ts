@@ -18,12 +18,13 @@ export interface IUpdateChallengeImage {
 
 export interface IProgressChallenge {
   id: string;
-  // user: string; missing from api but we can get 
+  // user: string; missing from api but we can get
   challenge: string;
   caption: string;
   image: string | null;
   video: string | null;
   location: string;
+  like: number;
 }
 
 export interface IChallenge {

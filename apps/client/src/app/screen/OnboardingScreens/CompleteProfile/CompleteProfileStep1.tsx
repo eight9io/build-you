@@ -75,7 +75,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   };
 
   const handleOccupationPicked = (index: number) => {
-    if ( index >= 0) {
+    if (index >= 0) {
       setSelectedOccupationIndex(index);
       setValue('occupation', MOCK_OCCUPATION_SELECT[index].label);
     }
@@ -97,6 +97,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         setSelectedDate={handleDatePicked}
         setShowDateTimePicker={setShowDateTimePicker}
         showDateTimePicker={showDateTimePicker}
+        maximumDate={dayjs().subtract(16, 'years').startOf('day').toDate()}
+        minimumDate={dayjs().subtract(100, 'years').startOf('day').toDate()}
       />
 
       <SelectPicker

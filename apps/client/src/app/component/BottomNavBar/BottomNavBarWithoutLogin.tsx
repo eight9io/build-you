@@ -1,18 +1,10 @@
+import { FC } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
-
-import HomeScreen from '../../screen/HomeScreen';
-import NotificationsScreen from '../../screen/NotificationsScreen/NotificationsScreen';
-// import ProfileScreen from '../../screen/ProfileScreen/Personal/Personal';
-import CompanyProfileScreen from '../../screen/ProfileScreen/Company/CompanyProfileScreen';
-import PersonalChallengesScreen from '../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen';
-import CompanyChallengesScreen from '../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen';
-
+import { View, Text } from 'react-native';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigation/navigation.type';
 
+import HomeScreen from '../../screen/HomeScreen';
 import FeedSvg from './asset/feed.svg';
 import CreateSvg from './asset/create.svg';
 import ChallengesSvg from './asset/challenges.svg';
@@ -20,8 +12,6 @@ import ProfileSvg from './asset/profile.svg';
 import AlertSvg from './asset/noti.svg';
 import AppTitle from '../common/AppTitle';
 import IconSearch from '../common/IconSearch/IconSearch';
-import IconSetting from '../common/IconSetting/IconSetting';
-import { FC } from 'react';
 import NavButton from '../common/Buttons/NavButton';
 import Login from '../../screen/LoginScreen/LoginScreen';
 
@@ -171,7 +161,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         })}
       />
       <Tab.Screen
-        name="Profilo"
+        name="Profile"
         component={Login}
         options={({ navigation }) => ({
           headerShown: true,

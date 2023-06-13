@@ -1,44 +1,25 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useRef, useState } from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Linking,
-  Image,
-  FlatList,
-  SafeAreaView,
-} from 'react-native';
+import React from 'react';
+import { View, FlatList, SafeAreaView } from 'react-native';
+import clsx from 'clsx';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { t } from 'i18next';
 
-import { useNavigation } from '@react-navigation/native';
-import type { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/navigation.type';
 
 import FeedPostCard from '../component/Post/FeedPostCard';
-import clsx from 'clsx';
-import MainNavBar from '../component/NavBar/MainNavBar';
-import { useTranslation } from 'react-i18next';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { t } from 'i18next';
 import AppTitle from '../component/common/AppTitle';
 import NavButton from '../component/common/Buttons/NavButton';
+import Button from '../component/common/Buttons/Button';
 import IconSearch from '../component/common/IconSearch/IconSearch';
-import CompanyChallengeDetailScreen from './ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
 import ChallengeDetailScreenViewOnly from './ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
+import ShareIcon from '../../../assets/svg/share.svg';
+
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 export const HomeFeed = () => {
-  const [whatsNextYCoord, setWhatsNextYCoord] = useState<number>(0);
-  const scrollViewRef = useRef<null | ScrollView>(null);
-
-  const t = useTranslation().t;
-
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   const arrayPost = [
     {
-      id: 1,
+      id: '1',
       avatar: 'avata',
       name: 'Marco Rossi',
       time: '1 hour ago',
@@ -52,7 +33,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: 2,
+      id: '2',
       avatar: 'avata',
       name: 'Marco Rossi22',
       time: '1 hour ago',
@@ -66,7 +47,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: 3,
+      id: '3',
       avatar: 'avata',
       name: 'Marco Rossi 333',
       time: '1 hour ago',
@@ -137,6 +118,16 @@ const HomeScreen = () => {
               withBackIcon
             />
           ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
         })}
       />
     </HomeScreenStack.Navigator>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -40,7 +40,8 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   navigation,
   isChallengeCompleted,
 }) => {
-  const [imageSource, loading, error] = getImageFromUrl(imageSrc);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
   const onPress = () => {
     if (navigation) {
@@ -66,7 +67,13 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
         )}
         <Image
           className={clsx('aspect-square w-full rounded-t-xl')}
-          source={imageSource as ImageSourcePropType}
+          source={{ uri: imageSrc }}
+          onLoadStart={() => setLoading(true)}
+          onLoadEnd={() => setLoading(false)}
+          onError={(err) => {
+            setLoading(false);
+            setError(true);
+          }}
         />
         <View
           className={clsx(

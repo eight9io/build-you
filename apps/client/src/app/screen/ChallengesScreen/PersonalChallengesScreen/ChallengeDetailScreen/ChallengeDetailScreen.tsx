@@ -19,7 +19,7 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
-  setShouldRefresh:  React.Dispatch<React.SetStateAction<boolean>>;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
@@ -33,14 +33,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   return (
     <View className="flex h-full flex-col bg-white py-2 pb-16">
       <View className="px-4">
-        <View className="flex flex-row items-center justify-between pt-2">
+        <View className="flex flex-row items-center  gap-2 pt-2">
           <CheckCircle fill={isChallengeCompleted ? '#20D231' : '#C5C8D2'} />
           <View>
             <Text className="text-basic text-xl font-medium leading-5">
               {goal}
-            </Text>
-            <Text className="text-gray-dark text-sm font-normal leading-5">
-              {`${t('challenge_detail_screen.builder')}: Marco Rossi`}
             </Text>
           </View>
         </View>
@@ -56,7 +53,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               activeTabIndex={index}
               setActiveTabIndex={setIndex}
             >
-              <ProgressTab challengeData={challengeData} setShouldRefresh={setShouldRefresh} />
+              <ProgressTab
+                challengeData={challengeData}
+                setShouldRefresh={setShouldRefresh}
+              />
               <DescriptionTab challengeData={challengeData} />
             </TabView>
           </View>

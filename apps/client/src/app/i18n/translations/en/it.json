@@ -33,6 +33,7 @@
   "register_modal.linked": "Register with Linkedin",
   "register_modal.register": "Register with email and password",
   "button.edit_profile": "Edit profile",
+  "profile_title": "My profile",
   "profile_screen_tabs.biography": "biography",
   "profile_screen_tabs.skills": "skills",
   "profile_screen_tabs.followers": "followers",
@@ -225,7 +226,7 @@
     "time_to_reach_goal_required": "Please select the time",
     "image_required": "Please upload an image"
   },
-  "new_progress_modal": { 
+  "new_progress_modal": {
     "title": "New progress",
     "caption": "Caption",
     "caption_placeholder": "What do you achieve?",

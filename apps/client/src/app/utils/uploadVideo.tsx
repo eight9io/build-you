@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 
 export const uploadNewVideo = async (video: string | undefined) => {
   try {
+    console.log('video', video);
     if (!video) return;
     const formData = new FormData();
     // detect file type

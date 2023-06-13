@@ -1,4 +1,7 @@
 {
+  "success": "Success",
+  "error": "Error",
+  "close": "Close",
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
   "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Register for free ",
@@ -114,23 +117,7 @@
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
-  "modal_skill.arraySkill": [
-    { "id": "1", "skill": "💻 Development" },
-    { "id": "2", "skill": "🎨 Art" },
-    { "id": "3", "skill": "🏛️ Culture" },
-    { "id": "4", "skill": "📣 Marketing" },
-    { "id": "5", "skill": "🍳 Kitchen" },
-    { "id": "6", "skill": "🎓 Training" },
-    { "id": "7", "skill": "✏️ Design" },
-    { "id": "8", "skill": "✈️ Tourism" },
-    { "id": "9", "skill": "🗣️ Mentorships" },
-    { "id": "11", "skill": "🌍 Foreign languages" },
-    { "id": "16", "skill": "🎉 Events" },
-    { "id": "12", "skill": "👰 Reception" },
-    { "id": "13", "skill": "💃 Dance" },
-    { "id": "14", "skill": "🏗️ Architecture" },
-    { "id": "15", "skill": "📷 Photography" }
-  ],
+
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
   "button.back": "Back",
@@ -267,6 +254,11 @@
       "description": "You cannot undo this action"
     },
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "your_goal_required": "Please set your goal",
+    "benefits_required": "Please list the benefits",
+    "reasons_required": "Please indicate the reasons",
+    "time_to_reach_goal_required": "Please select the time",
+    "edit_success": "Your challenge has been updated successfully"
   }
 }

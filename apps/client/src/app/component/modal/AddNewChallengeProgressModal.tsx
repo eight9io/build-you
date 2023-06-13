@@ -33,6 +33,7 @@ import Close from '../../component/asset/close.svg';
 import httpInstance from '../../utils/http';
 import {
   createProgress,
+  deleteProgress,
   updateProgressImage,
   updateProgressVideo,
 } from '../../service/progress';
@@ -155,6 +156,7 @@ export const AddNewChallengeProgressModal: FC<
         } else {
           setIsRequestSuccess(false);
           setIsShowModal(true);
+          deleteProgress(progressId);
         }
       } else {
         const addVideoProgressResponse = (await updateProgressVideo(
@@ -167,6 +169,7 @@ export const AddNewChallengeProgressModal: FC<
         } else {
           setIsRequestSuccess(false);
           setIsShowModal(true);
+          deleteProgress(progressId);
         }
       }
       setShouldProgressPageRefresh(true);
@@ -182,6 +185,7 @@ export const AddNewChallengeProgressModal: FC<
 
   const handleCloseModal = () => {
     setIsShowModal(false);
+
     onClose();
   };
 

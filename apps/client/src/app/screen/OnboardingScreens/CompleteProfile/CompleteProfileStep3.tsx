@@ -54,20 +54,6 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   const { setSkills } = useCompleteProfileStore();
 
   useEffect(() => {
-    const arraySkill = () => {
-      const array = [];
-      const ojb: MyObject = t('modal_skill.arraySkill', {
-        returnObjects: true,
-      });
-      for (const key in ojb) {
-        array.push(ojb[key]);
-      }
-      return array;
-    };
-    setFetchedHardSkills(arraySkill);
-  }, []);
-
-  useEffect(() => {
     if (userAddSkill.length > 0) {
       setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);
       setUserAddSkill([]);

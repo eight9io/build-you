@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import { useState, FC, useEffect } from 'react';
 
 import clsx from 'clsx';
 
@@ -21,21 +21,32 @@ import { useTranslation } from 'react-i18next';
 
 import { IProgressChallenge } from '../../../types/challenge';
 import { IUserData } from '../../../types/user';
+import {
+  createProgressLike,
+  getProgressComments,
+  getProgressLikes,
+} from '../../../service/progress';
+import Loading from '../../common/Loading';
+import {
+  ICreateProgressComment,
+  ICreateProgressLike,
+} from '../../../types/progress';
 
 interface IProgressCardProps {
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
 }
 
-const ProgressCard: React.FC<IProgressCardProps> = ({
+const ProgressCard: FC<IProgressCardProps> = ({
   itemProgressCard: { id, challenge, caption, image, video, location, like },
   userData,
 }) => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [isShowEditModal, setIsShowEditModal] = React.useState(false);
-  const [isShowDeleteModal, setIsShowDeleteModal] = React.useState(false);
+  const [isShowEditModal, setIsShowEditModal] = useState(false);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfComments, setNumberOfComments] = useState(0);
   const { t } = useTranslation();
-
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const time = '1 hour ago';
   const mockImage = 'https://picsum.photos/200/300';
 
@@ -49,6 +60,31 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
       onPress: () => setIsShowDeleteModal(true),
     },
   ];
+
+  useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+      await loadProgressComments();
+    })();
+  }, []);
+
+  const loadProgressLikes = async () => {
+    try {
+      const response = await getProgressLikes(id);
+      if (response.status === 200) setNumberOfLikes(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadProgressComments = async () => {
+    try {
+      const response = await getProgressComments(id);
+      if (response.status === 200) setNumberOfComments(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">

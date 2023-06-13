@@ -34,7 +34,11 @@ type PersonalChallengesScreenNavigationProp = NativeStackNavigationProp<
   'PersonalChallengesScreen'
 >;
 
-const EmptyChallenges = () => {
+const EmptyChallenges = ({
+  navigation,
+}: {
+  navigation: PersonalChallengesScreenNavigationProp;
+}) => {
   return (
     <View className={clsx('flex h-3/4 flex-col items-center justify-center')}>
       <Text className={clsx('text-lg')}>
@@ -42,7 +46,7 @@ const EmptyChallenges = () => {
       </Text>
       <Text className={clsx('text-lg')}>
         Click
-        <Text className={clsx('text-primary-default')}> Create </Text>
+        <Text className={clsx('text-primary-default')} onPress={() => navigation.navigate('CreateChallengeScreen')}> Create </Text>
         to Create new challenge.
       </Text>
     </View>
@@ -81,7 +85,7 @@ const PersonalChallenges = ({
         )}
       >
         {personalChallengesList.length === 0 ? (
-          <EmptyChallenges />
+          <EmptyChallenges navigation={navigation} />
         ) : (
           <FlatList
             className="px-4 pt-4"

@@ -1,11 +1,16 @@
+import { AxiosResponse } from 'axios';
 import httpInstance from '../utils/http';
 import { retryRequest } from '../utils/retryRequest';
-import { ICreateProgress } from '../types/progress';
+import { ICreateProgress, ICreateProgressComment, ICreateProgressLike, IProgressComment, IProgressLike } from '../types/progress';
 import { getImageExtension } from '../utils/uploadUserImage';
 import { IUploadMediaWithId } from '../types/media';
 
 export const createProgress = (data: ICreateProgress) => {
   return httpInstance.post('/challenge/progress/create', data);
+};
+
+export const deleteProgress = (id: string) => {
+  return httpInstance.delete(`/challenge/progress/delete/${id}`);
 };
 
 export const updateProgressImage = (
@@ -56,3 +61,23 @@ export const updateProgressVideo = (
 };
 
 export const getProgressById = (id: string) => {};
+
+export const getProgressLikes = (
+  id: string
+): Promise<AxiosResponse<IProgressLike[]>> => {
+  return httpInstance.get(`/challenge/progress/like/${id}`);
+};
+
+export const getProgressComments = (
+  id: string
+): Promise<AxiosResponse<IProgressComment[]>> => {
+  return httpInstance.get(`/challenge/progress/comment/${id}`);
+};
+
+export const createProgressLike = (data: ICreateProgressLike) => {
+  return httpInstance.post('/challenge/progress/like/create', data);
+}
+
+export const createProgressComment = (data: ICreateProgressComment) => {
+  return httpInstance.post('/challenge/progress/comment/create', data);
+}

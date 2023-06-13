@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useEffect, useState } from 'react';
-import { Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +11,6 @@ import Header from '../component/common/Header';
 import AppTitle from '../component/common/AppTitle';
 import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
-import GlobalDialog from '../component/common/Dialog/GlobalDialog';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
@@ -30,10 +28,7 @@ import Register from '../screen/RegisterScreen/RegisterScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 
 import { checkUserCompleProfile } from '../utils/checkUserCompleProfile';
-import {
-  checkAccessTokenLocal,
-  removeAuthTokensLocalOnLogout,
-} from '../utils/checkAuth';
+import { checkAccessTokenLocal } from '../utils/checkAuth';
 
 import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
@@ -138,7 +133,7 @@ export const RootNavigation = () => {
                 headerTitle: () => '',
                 headerLeft: (props) => (
                   <NavButton
-                    text={t('button.back') as string}
+                    text={'error'}
                     onPress={() => navigation.goBack()}
                     withBackIcon
                   />

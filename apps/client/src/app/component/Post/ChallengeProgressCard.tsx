@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ImageSourcePropType,
 } from 'react-native';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { clsx } from 'clsx';
 import IconDot from './asset/dot.svg';
 import Card from '../common/Card';
@@ -14,6 +14,7 @@ import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/navigation.type';
+import { getProgressComments, getProgressLikes } from '../../service/progress';
 
 interface IChallengeProgressCardProps {
   item: {
@@ -63,6 +64,34 @@ export const ChallengeProgressCardForComment: React.FC<
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfComments, setNumberOfComments] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+      await loadProgressComments();
+    })();
+  }, []);
+
+  const loadProgressLikes = async () => {
+    try {
+      const response = await getProgressLikes(id);
+      if (response.status === 200) setNumberOfLikes(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadProgressComments = async () => {
+    try {
+      const response = await getProgressComments(id);
+      if (response.status === 200) setNumberOfComments(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const navigationToComment = () => {
     navigation.navigate('ChallengeDetailComment', {
       challengeId: id,
@@ -95,10 +124,11 @@ export const ChallengeProgressCardForComment: React.FC<
           onPress={navigationToComment}
         />
         <View className="mt-4 flex-row">
-          <LikeButton likes={like} />
+          <LikeButton likes={numberOfLikes} />
           <CommentButton
             isViewOnly={true}
             navigationToComment={navigationToComment}
+            numberOfComments={numberOfComments}
           />
         </View>
       </View>
@@ -128,6 +158,33 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
   item: { id, name, time, stt, card, like, comment, avatar },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfComments, setNumberOfComments] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+      await loadProgressComments();
+    })();
+  }, []);
+
+  const loadProgressLikes = async () => {
+    try {
+      const response = await getProgressLikes(id);
+      if (response.status === 200) setNumberOfLikes(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadProgressComments = async () => {
+    try {
+      const response = await getProgressComments(id);
+      if (response.status === 200) setNumberOfComments(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const navigationToComment = () => {
     navigation.navigate('ChallengeDetailComment', {
@@ -157,8 +214,11 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
           onPress={navigationToComment}
         />
         <View className="mt-4 flex-row">
-          <LikeButton likes={like} />
-          <CommentButton navigationToComment={navigationToComment} />
+          <LikeButton likes={numberOfLikes} />
+          <CommentButton
+            navigationToComment={navigationToComment}
+            numberOfComments={numberOfComments}
+          />
         </View>
       </View>
       <View className="bg-gray-light h-2 w-full" />

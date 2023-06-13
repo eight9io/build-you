@@ -11,7 +11,7 @@ interface ILikeButtonProps {
   navigation?: any;
 }
 
-const LikeButton: FC<ILikeButtonProps> = ({ likes, navigation }) => {
+const LikeButton: FC<ILikeButtonProps> = ({ likes = 0, navigation }) => {
   const { getAccessToken } = useAuthStore();
 
   const [isLiked, setIsLiked] = React.useState(false);

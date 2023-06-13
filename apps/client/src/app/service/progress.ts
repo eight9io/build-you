@@ -1,7 +1,14 @@
 import { AxiosResponse } from 'axios';
 import httpInstance from '../utils/http';
 import { retryRequest } from '../utils/retryRequest';
-import { ICreateProgress, ICreateProgressComment, ICreateProgressLike, IProgressComment, IProgressLike } from '../types/progress';
+import {
+  ICreateProgress,
+  ICreateProgressComment,
+  ICreateProgressLike,
+  IProgressComment,
+  IProgressLike,
+  IUpdateProgress,
+} from '../types/progress';
 import { getImageExtension } from '../utils/uploadUserImage';
 import { IUploadMediaWithId } from '../types/media';
 
@@ -81,3 +88,7 @@ export const createProgressLike = (data: ICreateProgressLike) => {
 export const createProgressComment = (data: ICreateProgressComment) => {
   return httpInstance.post('/challenge/progress/comment/create', data);
 }
+
+export const updateProgress = (id: string, data: IUpdateProgress) => {
+  return httpInstance.put(`/challenge/progress/update/${id}`, data);
+};

@@ -37,7 +37,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        headerShown: true,
+        headerShown: false,
         headerTitleAlign: 'center',
         tabBarStyle: {
           position: 'absolute',

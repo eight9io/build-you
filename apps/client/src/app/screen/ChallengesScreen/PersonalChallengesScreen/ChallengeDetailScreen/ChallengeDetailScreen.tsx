@@ -1,5 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 
 import { IChallenge } from 'apps/client/src/app/types/challenge';
 
@@ -43,25 +50,19 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
         </View>
       </View>
 
-      <FlatList
-        data={null}
-        renderItem={({ item }) => null}
-        ListFooterComponent={
-          <View className="mt-2 ">
-            <TabView
-              titles={CHALLENGE_TABS_TITLE_TRANSLATION}
-              activeTabIndex={index}
-              setActiveTabIndex={setIndex}
-            >
-              <ProgressTab
-                challengeData={challengeData}
-                setShouldRefresh={setShouldRefresh}
-              />
-              <DescriptionTab challengeData={challengeData} />
-            </TabView>
-          </View>
-        }
-      />
+      <View className="mt-2 flex flex-1">
+        <TabView
+          titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+          activeTabIndex={index}
+          setActiveTabIndex={setIndex}
+        >
+          <ProgressTab
+            challengeData={challengeData}
+            setShouldRefresh={setShouldRefresh}
+          />
+          <DescriptionTab challengeData={challengeData} />
+        </TabView>
+      </View>
     </View>
   );
 };

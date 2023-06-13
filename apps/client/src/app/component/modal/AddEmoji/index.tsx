@@ -31,6 +31,11 @@ export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
     onClose();
   };
 
+  const hanldleClose = () => {
+    setSelectedEmoji(null);
+    onClose();
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -42,7 +47,7 @@ export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
         <Header
           title="Select emoji"
           leftBtn={<Close fill={'black'} />}
-          onLeftBtnPress={onClose}
+          onLeftBtnPress={hanldleClose}
           rightBtn="Select"
           onRightBtnPress={handleSelectEmoji}
         />

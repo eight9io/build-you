@@ -155,7 +155,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             title={isRequestSuccess ? 'Success' : 'Error'}
             description={
               isRequestSuccess
-                ? 'Your progress has been created successfully'
+                ? 'Your challenge has been created successfully'
                 : 'Something went wrong. Please try again later.'
             }
             isVisible={isShowModal}

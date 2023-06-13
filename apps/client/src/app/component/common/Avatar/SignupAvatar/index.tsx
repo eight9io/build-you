@@ -1,26 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Pressable,
-  ImageStyle,
-  ImageSourcePropType,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, TouchableOpacity, Pressable } from 'react-native';
 import clsx from 'clsx';
 
 import DefaultAvatar from './asset/default-avatar.svg';
 import CameraSvg from './asset/camera.svg';
-import { Controller } from 'react-hook-form';
 
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
-
-import Warning from '../../../../component/asset/warning.svg';
-import { OutlineButton } from '../../Buttons/Button';
 
 interface ISignupAvatarProps {}
 
@@ -58,7 +46,7 @@ const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
         <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
           <View
             className={clsx(
-              'absolute bottom-[-60px] right-[38px] h-[28px] w-[28px] rounded-full'
+              'absolute bottom-[-65px] right-[34px] h-[32px] w-[32px] rounded-full'
             )}
           >
             <CameraSvg />

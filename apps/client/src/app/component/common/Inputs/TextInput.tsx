@@ -32,8 +32,9 @@ export const TextInput: FC<ITextInputProps> = (props) => {
               className={clsx(
                 'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
                 inputProps?.className,
-                Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
+                Platform.OS === 'ios' ? 'p-3' : 'p-2.5',
               )}
+              textAlignVertical="top"
               autoCapitalize="none"
             />
           </View>

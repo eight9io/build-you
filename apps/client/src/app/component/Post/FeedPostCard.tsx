@@ -16,6 +16,7 @@ import CommentButton from './CommentButton';
 import BackSvg from '../asset/back.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/navigation.type';
+import { useAuthStore } from '../../store/auth-store';
 
 interface IFeedPostCardProps {
   itemFeedPostCard: {
@@ -73,7 +74,8 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   itemFeedPostCard: { name, time, stt, card, like, comment, avatar },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const { getAccessToken } = useAuthStore();
+  const isToken = getAccessToken();
   return (
     <View className="mb-1 flex-1">
       <View className="bg-gray-50 p-5">
@@ -100,12 +102,15 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           }
         />
         <View className="mt-4 flex-row">
-          <LikeButton likes={like} />
+          <LikeButton likes={like} navigation={navigation} />
           <CommentButton
-            navigationToComment={() =>
-              navigation.navigate('ChallengeDetailComment', {
-                challengeId: '1',
-              })
+            navigationToComment={
+              isToken
+                ? () =>
+                    navigation.navigate('ChallengeDetailComment', {
+                      challengeId: '1',
+                    })
+                : () => navigation.navigate('LoginScreen')
             }
           />
         </View>

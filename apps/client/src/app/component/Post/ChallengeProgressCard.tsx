@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React, { FC } from 'react';
 import { clsx } from 'clsx';
-
+import IconDot from './asset/dot.svg';
 import Card from '../common/Card';
 import PostAvatar from '../common/Avatar/PostAvatar';
 import LikeButton from './LikeButton';
@@ -29,6 +29,7 @@ interface IChallengeProgressCardProps {
     like: number;
     comment: number;
     avatar: string;
+    location: string;
   };
 }
 
@@ -57,7 +58,9 @@ const ChallengeImageForComment: FC<IChallengeImageProps> = ({
 
 export const ChallengeProgressCardForComment: React.FC<
   IChallengeProgressCardProps
-> = ({ item: { id, name, time, stt, card, like, comment, avatar } }) => {
+> = ({
+  item: { id, name, time, stt, card, like, comment, avatar, location },
+}) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const navigationToComment = () => {
@@ -74,7 +77,14 @@ export const ChallengeProgressCardForComment: React.FC<
             <PostAvatar src="https://picsum.photos/200/300" />
             <View className="ml-2">
               <Text className="text-h6 font-bold">{name}</Text>
-              <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+              <View className="flex-row gap-3">
+                <Text className="text-gray-dark text-xs font-light ">
+                  {time}
+                </Text>
+                <Text className="text-gray-dark text-xs font-light ">
+                  <IconDot fill={'#7D7E80'} /> {location}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -86,10 +96,13 @@ export const ChallengeProgressCardForComment: React.FC<
         />
         <View className="mt-4 flex-row">
           <LikeButton likes={like} />
-          <CommentButton isViewOnly={true} navigationToComment={navigationToComment} />
+          <CommentButton
+            isViewOnly={true}
+            navigationToComment={navigationToComment}
+          />
         </View>
       </View>
-      <View className="bg-gray-light h-2 w-full" />
+      {/* <View className="bg-gray-light h-2 w-full" /> */}
     </View>
   );
 };

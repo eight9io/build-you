@@ -10,6 +10,7 @@ interface IComfirmDialogProps {
   closeButtonLabel?: string;
   confirmButtonLabel?: string;
   onClosed?: () => void;
+
   onConfirm?: () => void;
 }
 

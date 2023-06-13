@@ -292,7 +292,7 @@ export const RootNavigation = () => {
               })}
             />
             <RootStack.Screen
-              name="HomeScreen"
+              name="HomeScreenWithoutLogin"
               component={BottomNavBarWithoutLogin}
               options={{
                 headerShown: false,

@@ -231,19 +231,19 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
               </View>
             </View>
           </View>
-          <ConfirmDialog
-            title={(!errorMessage ? t('success') : t('error')) || ''}
-            description={
-              (!errorMessage
-                ? t('edit_challenge_screen.edit_success')
-                : t('errorMessage:500')) || ''
-            }
-            isVisible={isConfirmModalVisible}
-            onClosed={() => handleCloseConfirmModal(challenge.id)}
-            closeButtonLabel={t('close') || ''}
-          />
         </SafeAreaView>
       </ScrollView>
+      <ConfirmDialog
+        title={(!errorMessage ? t('success') : t('error')) || ''}
+        description={
+          (!errorMessage
+            ? t('edit_challenge_screen.edit_success')
+            : t('errorMessage:500')) || ''
+        }
+        isVisible={isConfirmModalVisible}
+        onClosed={() => handleCloseConfirmModal(challenge.id)}
+        closeButtonLabel={t('close') || ''}
+      />
       {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
     </Modal>
   );

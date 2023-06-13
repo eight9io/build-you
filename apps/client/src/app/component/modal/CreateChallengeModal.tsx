@@ -176,18 +176,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
               />
             </View>
 
-            <View className="flex flex-col px-5 py-5">
-              <Text className="text-gray-dark text-md font-normal leading-5">
-                {t('new_challenge_screen.description')}
-              </Text>
-              {errorMessage && (
-                <ErrorText
-                  containerClassName="justify-center "
-                  message={errorMessage}
-                />
-              )}
-            </View>
-
             <View className="flex flex-col  py-5">
               <Text className="text-gray-dark text-md font-normal leading-5">
                 {t('new_challenge_screen.description')}
@@ -234,10 +222,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                       onBlur={onBlur}
                       multiline
                       textAlignVertical="top"
-                      editable={false}
-                      value={value && dayjs(value).format('DD/MM/YYYY')}
-                      rightIcon={<CalendarIcon />}
-                      onPress={handleShowDatePicker}
+                      value={value}
                       className={clsx(
                         'h-24',
                         errors.benefits && 'border-1 border-red-500'
@@ -271,13 +256,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                           'h-24',
                           errors.reasons && 'border-1 border-red-500'
                         )}
-                      />
-                      <DateTimePicker2
-                        shouldMinus16Years={false}
-                        selectedDate={value as Date}
-                        setSelectedDate={handleDatePicked}
-                        setShowDateTimePicker={setShowDatePicker}
-                        showDateTimePicker={showDatePicker}
                       />
                     </View>
                   )}

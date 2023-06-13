@@ -31,15 +31,18 @@ import {
   ICreateProgressComment,
   ICreateProgressLike,
 } from '../../../types/progress';
+import VideoPlayer from '../../common/VideoPlayer';
 
 interface IProgressCardProps {
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
+  onEditProgress?: () => void;
 }
 
 const ProgressCard: FC<IProgressCardProps> = ({
-  itemProgressCard: { id, challenge, caption, image, video, location, like },
+  itemProgressCard,
   userData,
+  onEditProgress
 }) => {
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
@@ -70,7 +73,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const loadProgressLikes = async () => {
     try {
-      const response = await getProgressLikes(id);
+      const response = await getProgressLikes(itemProgressCard.id);
       if (response.status === 200) setNumberOfLikes(response.data.length);
     } catch (error) {
       console.log(error);
@@ -79,19 +82,25 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const loadProgressComments = async () => {
     try {
-      const response = await getProgressComments(id);
+      const response = await getProgressComments(itemProgressCard.id);
       if (response.status === 200) setNumberOfComments(response.data.length);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleConfirmEditChallengeProgress = async () => {
+    setIsShowEditModal(false); // Close the edit modal
+    onEditProgress && onEditProgress(); // Navigate to the challenge progresses screen to refresh the list
+  }
+
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
       <EditChallengeProgressModal
-        imageSrc={image ?? mockImage}
+        progress={itemProgressCard}
         isVisible={isShowEditModal}
         onClose={() => setIsShowEditModal(false)}
+        onConfirm={handleConfirmEditChallengeProgress}
       />
 
       <ConfirmDialog
@@ -118,17 +127,15 @@ const ProgressCard: FC<IProgressCardProps> = ({
         </View>
         <PopUpMenu options={progressOptions} />
       </View>
-      <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
-      {image && (
+      <Text className=" text-md mb-3 font-normal leading-5">
+        {itemProgressCard.caption}
+      </Text>
+      {itemProgressCard.image && (
         <View className="aspect-square w-full">
-          <ImageSwiper imageSrc={image} />
+          <ImageSwiper imageSrc={itemProgressCard.image} />
         </View>
       )}
-      {video && (
-        <View>
-          <Text>Render video</Text>
-        </View>
-      )}
+      {itemProgressCard.video && <VideoPlayer src={itemProgressCard.video} />}
 
       <View className="mt-4 flex-row">
         <LikeButton likes={numberOfLikes || 0} />

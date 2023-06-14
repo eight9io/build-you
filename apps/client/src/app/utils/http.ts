@@ -52,22 +52,25 @@ httpInstance.interceptors.response.use(
     return res;
   },
   function (error) {
-    if ([400].includes(error.status)) {
+    console.log('axios error', error);
+    const status = error.response ? error.response.status : null
+    if ([400].includes(status)) {
       const result = error.data;
+      // TODO: add gobal modal error
       handleError(result);
       return result;
-    } else if ([401].includes(error.status)) {
+    } else if ([401].includes(status)) {
       const originalRequest = error.config;
       if (!originalRequest._retry) {
         originalRequest._retry = true;
-        return checkRefreshTokenLocalValidation().then((res) => {
-          if (res) {
-            return httpInstance(originalRequest);
-          } else {
-            // add gobal modal
-            return Promise.reject('token is not valid');
-          }
-        });
+        const canRefreshToken = checkRefreshTokenLocalValidation();
+        console.log('canRefreshToken', canRefreshToken);
+        if (!canRefreshToken) {
+          // TODO: add logout
+          return Promise.reject('token is not valid');
+        } else {
+          return httpInstance(originalRequest);
+        }
       } else {
         // add gobal modal
         return Promise.reject('token is not valid');

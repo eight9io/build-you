@@ -15,16 +15,24 @@ import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
+import { useUserProfileStore } from '../../../../store/user-data';
+import { IUserData } from '../../../../types/user';
 
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
+  setIsLoadingAvatar?: (value: boolean) => void;
 }
 
-const ProfileAvatar: React.FC<IProfileAvatarProps> = ({ src, onPress }) => {
+const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
+  src,
+  onPress,
+  setIsLoadingAvatar,
+}) => {
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
   const [imageSource, loading, error] = getImageFromUrl(src);
-
+  const { setUserProfile, getUserProfile } = useUserProfileStore();
+  const userProfile = getUserProfile();
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
   });
@@ -32,9 +40,15 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({ src, onPress }) => {
   const handlePickImage = async () => {
     const result = await pickImageFunction();
     if (result && !result.canceled) {
+      if (setIsLoadingAvatar) setIsLoadingAvatar(true);
       const imageToUpload = result.assets[0].uri;
-      setNewAvatarUpload(imageToUpload);
       uploadNewAvatar(result.assets[0].uri);
+      const newAvatar = await uploadNewAvatar(result.assets[0].uri);
+      if (newAvatar) {
+        setUserProfile({ ...userProfile, avatar: newAvatar } as IUserData);
+        setNewAvatarUpload(imageToUpload);
+        if (setIsLoadingAvatar) setIsLoadingAvatar(false);
+      }
     }
   };
 

@@ -77,6 +77,7 @@ export const EmployeesTab: FC<IEmployeesTabProps> = () => {
       ListHeaderComponent={<AddNewChallengeEmployeesButton />}
       renderItem={({ item }) => <EmployeesItem item={item} />}
       contentContainerStyle={{ paddingBottom: 300 }}
+      keyExtractor={(item, index) => index.toString()}
     />
   );
 };

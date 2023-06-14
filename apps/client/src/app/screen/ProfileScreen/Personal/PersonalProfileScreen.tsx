@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
   createNativeStackNavigator,
@@ -14,6 +14,7 @@ import ProfileComponent from '../../../component/Profile';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
 import { ScrollView } from 'react-native-gesture-handler';
+import Loading from '../../../component/common/Loading';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,11 +31,22 @@ interface IProfileProps {
 const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
+  const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
   return (
-    <SafeAreaView className="justify-content: space-between flex-1 bg-gray-50 ">
-      <ScrollView className="w-full bg-gray-50">
-        <ProfileComponent userData={userProfile} navigation={navigation} />
-      </ScrollView>
+    <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
+      <View className="h-full">
+        <ScrollView className="w-full bg-gray-50">
+          <ProfileComponent
+            userData={userProfile}
+            navigation={navigation}
+            isLoadingAvatar={isLoadingAvatar}
+            setIsLoadingAvatar={setIsLoadingAvatar}
+          />
+        </ScrollView>
+        {isLoadingAvatar && (
+          <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
+        )}
+      </View>
     </SafeAreaView>
   );
 };

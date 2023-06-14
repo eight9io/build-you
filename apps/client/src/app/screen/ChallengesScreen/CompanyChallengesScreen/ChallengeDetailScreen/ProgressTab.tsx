@@ -99,6 +99,7 @@ export const ProgressTab: FC<IProgressTabProps> = () => {
       ListHeaderComponent={<AddNewChallengeProgressButton />}
       renderItem={({ item }) => <ProgressCard itemProgressCard={item} />}
       contentContainerStyle={{ paddingBottom: 300 }}
+      keyExtractor={(item, index) => index.toString()}
     />
   );
 };

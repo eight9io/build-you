@@ -22,11 +22,12 @@ const Skills: FC<ISkillsProps> = ({ skills }) => {
       <Text className={clsx('text-h6 font-medium')}>Self-declared</Text>
 
       <View className={clsx('mt-4 flex flex-col')}>
-        {skills?.map((skill: ISoftSkillProps) => {
+        {skills?.map((skill: ISoftSkillProps, index) => {
           return (
             <SkillCompetenceProcess
               skillName={skill.skill.skill}
               skillCompetence={skill.rating}
+              key={index}
             />
           );
         })}

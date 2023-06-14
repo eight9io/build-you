@@ -113,10 +113,13 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
         <ChallengeImage
           name={card.title}
           image={card.image}
-          onPress={() =>
-            navigation.navigate('ChallengeDetailScreenViewOnly', {
-              challengeId: '1',
-            })
+          onPress={
+            isToken
+              ? () =>
+                  navigation.navigate('ChallengeDetailScreenViewOnly', {
+                    challengeId: '1',
+                  })
+              : () => navigation.navigate('LoginScreen')
           }
         />
         <View className="mt-4 flex-row">

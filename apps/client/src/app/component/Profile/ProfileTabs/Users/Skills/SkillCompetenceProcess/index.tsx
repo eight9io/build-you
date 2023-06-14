@@ -32,7 +32,7 @@ const SkillCompetenceProcess: React.FC<ISkillCompetenceProcessProps> = ({
   return (
     <View className="mb-2 flex flex-col justify-start rounded-xl bg-white py-4">
       <View className="px-4">
-        <Text className="text-h6 pb-2 font-medium leading-4 text-black">
+        <Text className="pb-2 text-sm font-medium leading-4 text-black">
           {skillName}
         </Text>
         <View className="bg-gray-light h-2.5 w-full rounded-full">

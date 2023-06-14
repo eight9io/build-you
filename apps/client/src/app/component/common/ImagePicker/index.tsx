@@ -32,6 +32,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection,
     base64,
+    maxImages: 3,
   });
 
   const handlePickImage = async () => {

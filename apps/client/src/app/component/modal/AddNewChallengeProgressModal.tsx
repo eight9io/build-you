@@ -11,7 +11,6 @@ import {
 import React, { FC, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-import CloseIcon from '../asset/close.svg';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -30,14 +29,12 @@ import LocationInput from '../common/Inputs/LocationInput';
 import CustomTextInput from '../common/Inputs/CustomTextInput';
 
 import Close from '../../component/asset/close.svg';
-import httpInstance from '../../utils/http';
 import {
   createProgress,
   deleteProgress,
   updateProgressImage,
   updateProgressVideo,
 } from '../../service/progress';
-import { getImageExtension } from '../../utils/uploadUserImage';
 import { AxiosResponse } from 'axios';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 import Loading from '../common/Loading';
@@ -48,6 +45,8 @@ interface IAddNewChallengeProgressModalProps {
   isVisible: boolean;
   onClose: () => void;
   setShouldProgressPageRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setShouldRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  setProgressLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IRenderSelectedMediaProps {
@@ -99,7 +98,14 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
 
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
-> = ({ setShouldProgressPageRefresh, challengeId, isVisible, onClose }) => {
+> = ({
+  setShouldProgressPageRefresh,
+  setProgressLoading,
+  setShouldRefetch,
+  challengeId,
+  isVisible,
+  onClose,
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
@@ -197,6 +203,8 @@ export const AddNewChallengeProgressModal: FC<
     setIsShowModal(false);
     onClose();
     setShouldProgressPageRefresh(true);
+    setProgressLoading(true);
+    setShouldRefetch(true);
   };
 
   return (

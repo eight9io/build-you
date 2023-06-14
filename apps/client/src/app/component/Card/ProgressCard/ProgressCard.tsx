@@ -1,11 +1,6 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useState, FC, useEffect } from 'react';
 
-import clsx from 'clsx';
-
-import Card from '../../common/Card';
-import IconLike from './asset/like.svg';
-import IconComment from './asset/comment.svg';
 import IconDot from './asset/dot.svg';
 import ProgressCardAvatar from '../../common/Avatar/PostAvatar';
 import PopUpMenu from '../../common/PopUpMenu';
@@ -35,6 +30,8 @@ import {
 import VideoPlayer from '../../common/VideoPlayer';
 import useModal from '../../../hooks/useModal';
 
+import { getTimeDiffToNow } from '../../../utils/time';
+
 interface IProgressCardProps {
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
@@ -53,8 +50,8 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const [numberOfLikes, setNumberOfLikes] = useState(0);
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const time = '1 hour ago';
-  const mockImage = 'https://picsum.photos/200/300';
+  const timeDiff = getTimeDiffToNow(itemProgressCard.createdAt);
+
   const [errorMessage, setErrorMessage] = useState('');
   const {
     isVisible: isAckModalVisible,
@@ -109,7 +106,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
         setErrorMessage(t('errorMessage:500') || '');
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
     }
   };
@@ -130,7 +126,9 @@ const ProgressCard: FC<IProgressCardProps> = ({
               {userData?.name} {userData?.surname}{' '}
             </Text>
             <View className="flex flex-row items-center">
-              <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+              <Text className="text-gray-dark text-xs font-light ">
+                {timeDiff}{' '}
+              </Text>
 
               <Text className="text-gray-dark text-xs font-light ">
                 <IconDot fill={'#7D7E80'} /> 123 Amanda Street

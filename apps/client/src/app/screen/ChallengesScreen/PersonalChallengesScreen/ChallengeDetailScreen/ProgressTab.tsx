@@ -1,14 +1,17 @@
 import { View, Text, ScrollView, FlatList } from 'react-native';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IChallenge } from '../../../../types/challenge';
+import { IChallenge, IProgressChallenge } from '../../../../types/challenge';
 import { useUserProfileStore } from '../../../../store/user-data';
 
 import AddIcon from '../../../../component/asset/add.svg';
 import Button from '../../../../component/common/Buttons/Button';
 import ProgressCard from '../../../../component/Card/ProgressCard/ProgressCard';
 import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChallengeProgressModal';
+import httpInstance from '../../../../utils/http';
+
+import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 
 interface IProgressTabProps {
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,9 +23,47 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   challengeData,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [localProgressData, setLocalProgressData] = useState<
+    IProgressChallenge[]
+  >([]);
+  const [shouldUseLocalProgressData, setShouldUseLocalProgressData] =
+    useState<boolean>(false);
+  const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
+  const [progressLoading, setProgressLoading] = useState<boolean>(false);
+
   const { t } = useTranslation();
 
-  const progressData = challengeData.progress;
+  const progressData =
+    challengeData?.progress &&
+    challengeData?.progress.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+  useEffect(() => {
+    if (shouldUseLocalProgressData || shouldRefetch) {
+      httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
+        const progressDataLocal =
+          res.data?.progress &&
+          res.data?.progress.sort(
+            (
+              a: { createdAt: string | number | Date },
+              b: { createdAt: string | number | Date }
+            ) => {
+              return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+              );
+            }
+          );
+        setLocalProgressData(progressDataLocal);
+      });
+      setShouldRefetch(false);
+      setTimeout(() => {
+        setProgressLoading(false);
+      }, 600);
+    }
+  }, [shouldUseLocalProgressData, shouldRefetch]);
+
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
@@ -45,7 +86,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             onPress={() => setIsModalVisible(true)}
           />
           <AddNewChallengeProgressModal
-            setShouldProgressPageRefresh={setShouldRefresh}
+            setProgressLoading={setProgressLoading}
+            setShouldProgressPageRefresh={setShouldUseLocalProgressData}
+            setShouldRefetch={setShouldRefetch}
             challengeId={challengeData.id}
             isVisible={isModalVisible}
             onClose={() => setIsModalVisible(false)}
@@ -57,20 +100,37 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   return (
     <View className="h-full flex-1">
-      <FlatList
-        data={progressData}
-        ListHeaderComponent={<AddNewChallengeProgressButton />}
-        renderItem={({ item }) => (
-          <ProgressCard
-            itemProgressCard={item}
-            userData={userData}
-            onEditProgress={handleEditProgress}
-            onDeleteProgressSuccess={handleDeleteProgressSuccess}
-          />
-        )}
-        extraData={progressData}
-        contentContainerStyle={{ paddingBottom: 300 }}
-      />
+      {progressLoading && <SkeletonLoadingCommon />}
+      {!shouldUseLocalProgressData && !progressLoading && (
+        <FlatList
+          data={progressData}
+          ListHeaderComponent={<AddNewChallengeProgressButton />}
+          renderItem={({ item }) => (
+            <ProgressCard
+              itemProgressCard={item}
+              userData={userData}
+              onEditProgress={handleEditProgress}
+              onDeleteProgressSuccess={handleDeleteProgressSuccess}
+            />
+          )}
+          contentContainerStyle={{ paddingBottom: 300 }}
+        />
+      )}
+      {shouldUseLocalProgressData && !progressLoading && (
+        <FlatList
+          data={localProgressData}
+          ListHeaderComponent={<AddNewChallengeProgressButton />}
+          renderItem={({ item }) => (
+            <ProgressCard
+              itemProgressCard={item}
+              userData={userData}
+              onEditProgress={handleEditProgress}
+              onDeleteProgressSuccess={handleDeleteProgressSuccess}
+            />
+          )}
+          contentContainerStyle={{ paddingBottom: 300 }}
+        />
+      )}
     </View>
   );
 };

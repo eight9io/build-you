@@ -141,8 +141,8 @@ export const AddNewChallengeProgressModal: FC<
 
     const createProgressResponse = await createProgress(payload);
     if (
-      createProgressResponse.status === 200 ||
-      (201 && selectedMedia.length > 0)
+      (createProgressResponse.status === 200 || 201) &&
+      selectedMedia.length > 0
     ) {
       const progressId = createProgressResponse.data.id;
       if (isSelectedImage) {
@@ -172,7 +172,6 @@ export const AddNewChallengeProgressModal: FC<
           deleteProgress(progressId);
         }
       }
-      setShouldProgressPageRefresh(true);
     } else {
       setIsRequestSuccess(false);
       setIsShowModal(true);
@@ -185,8 +184,8 @@ export const AddNewChallengeProgressModal: FC<
 
   const handleCloseModal = () => {
     setIsShowModal(false);
-
     onClose();
+    setShouldProgressPageRefresh(true);
   };
 
   return (
@@ -221,7 +220,7 @@ export const AddNewChallengeProgressModal: FC<
             containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
           />
 
-          <View className="flex flex-col justify-between px-5 pt-4">
+          <View className="flex flex-col justify-between pt-4">
             <CustomTextInput
               title="Caption"
               placeholderClassName="h-32"

@@ -1,12 +1,4 @@
-import { useTranslation } from 'react-i18next';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import { View, Text } from 'react-native';
 
 import { IChallenge } from 'apps/client/src/app/types/challenge';
 
@@ -16,9 +8,10 @@ import DescriptionTab from './DescriptionTab';
 import ProgressTab from './ProgressTab';
 import { FC, useState } from 'react';
 
-import PopUpMenu from '../../../../component/common/PopUpMenu';
-import clsx from 'clsx';
 import CheckCircle from './assets/check_circle.svg';
+
+import { getChallengeStatusColor } from '../../../../utils/common';
+
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.progress'),
   i18n.t('challenge_detail_screen.description'),
@@ -33,15 +26,14 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
   setShouldRefresh,
 }) => {
-  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const { goal } = challengeData;
-  const isChallengeCompleted = true;
+  const statusColor = getChallengeStatusColor(challengeData?.status);
   return (
     <View className="flex h-full flex-col bg-white py-2 pb-16">
       <View className="px-4">
         <View className="flex flex-row items-center  gap-2 pt-2">
-          <CheckCircle fill={isChallengeCompleted ? '#20D231' : '#C5C8D2'} />
+          <CheckCircle fill={statusColor} />
           <View>
             <Text className="text-basic text-xl font-medium leading-5">
               {goal}

@@ -24,21 +24,21 @@ export const updateProgressImage = (
   progressId: string,
   image: IUploadMediaWithId[]
 ) => {
-  const imageData = new FormData();
-
-  image.forEach((image) => {
+  const imageForm = new FormData();
+  const imageData = image.map((image) => {
     const extension = getImageExtension(image.uri);
-    imageData.append('file', {
+    return {
       uri: image.uri,
       name: `${image.id}.${extension}`,
       type: `image/${extension}`,
-    } as any);
+    };
   });
+  imageForm.append('files', imageData as any);
 
   return retryRequest(() => {
     return httpInstance.post(
       `/challenge/progress/image/${progressId}`,
-      imageData,
+      imageForm,
       {
         headers: {
           'Content-Type': 'multipart/form-data',

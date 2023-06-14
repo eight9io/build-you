@@ -77,12 +77,10 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
   const [numberOfLikes, setNumberOfLikes] = useState(0);
-  const [numberOfComments, setNumberOfComments] = useState(0);
 
   useEffect(() => {
     (async () => {
       await loadProgressLikes();
-      await loadProgressComments();
     })();
   }, []);
 
@@ -90,15 +88,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
     try {
       const response = await getProgressLikes(id);
       if (response.status === 200) setNumberOfLikes(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const loadProgressComments = async () => {
-    try {
-      const response = await getProgressComments(id);
-      if (response.status === 200) setNumberOfComments(response.data.length);
     } catch (error) {
       console.log(error);
     }
@@ -136,12 +125,12 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             navigationToComment={
               isToken
                 ? () =>
-                    navigation.navigate('ChallengeDetailComment', {
-                      challengeId: '1',
+                    navigation.navigate('ProgressCommentScreen', {
+                      progressId: '1',
                     })
                 : () => navigation.navigate('LoginScreen')
             }
-            numberOfComments={numberOfComments}
+            progressId={id}
           />
         </View>
       </View>

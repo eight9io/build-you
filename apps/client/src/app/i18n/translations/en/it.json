@@ -245,7 +245,8 @@
     "your_goal_required": "Please fill in your goal.",
     "benefits_required": "Please fill in your benefits.",
     "reasons_required": "Please fill in your reasons.",
-    "time_to_reach_goal_required": "Please select time to reach the goal."
+    "time_to_reach_goal_required": "Please select time to reach the goal.",
+    "edit_success": "Your challenge has been updated successfully"
   },
 
   "dialog": {
@@ -268,5 +269,11 @@
     "reasons_required": "Please indicate the reasons",
     "time_to_reach_goal_required": "Please select the time",
     "edit_success": "Your challenge has been updated successfully"
+  },
+  "progress_comment_screen": {
+    "comment_input_placeholder": "Write a comment..."
+  },
+  "delete_progress": {
+    "delete_success": "Your progress has been deleted successfully"
   }
 }

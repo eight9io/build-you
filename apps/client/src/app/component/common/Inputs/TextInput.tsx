@@ -13,10 +13,11 @@ interface ITextInputProps extends TextInputProps {
   label?: string;
   rightIcon?: ReactNode;
   onPress?: () => void;
+  multiline?: boolean;
 }
 
 export const TextInput: FC<ITextInputProps> = (props) => {
-  const { label, rightIcon, onPress, ...inputProps } = props;
+  const { label, rightIcon, onPress, multiline, ...inputProps } = props;
   return (
     <View className="flex flex-col gap-1">
       {label ? (
@@ -35,7 +36,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
                   inputProps?.className,
                   Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
                 )}
-                textAlignVertical="top"
+                textAlignVertical={multiline ? 'top' : 'center'}
                 autoCapitalize="none"
               />
             </View>
@@ -55,7 +56,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
                   inputProps?.className,
                   Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
                 )}
-                textAlignVertical="top"
+                textAlignVertical={multiline ? 'top' : 'center'}
                 autoCapitalize="none"
               />
             </View>

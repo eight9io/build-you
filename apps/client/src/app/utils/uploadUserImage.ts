@@ -53,4 +53,4 @@ export const uploadNewAvatar = async (image: string) => {
 
 export const getImageExtension = (uri: string) => {
   return uri.split('.')[1];
-}
+};

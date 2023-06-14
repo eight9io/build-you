@@ -13,6 +13,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         data={following}
         showsVerticalScrollIndicator={true}
         renderItem={({ item, index }) => {

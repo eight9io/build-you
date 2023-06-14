@@ -27,7 +27,7 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
     <View
       className={clsx('relative flex flex-col items-center justify-center')}
     >
-      {!src && (
+      {/* {!src && (
         <Video
           ref={videoPlayer}
           source={{
@@ -43,7 +43,7 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
           resizeMode={ResizeMode.CONTAIN}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
         />
-      )}
+      )} */}
       {src && (
         <Video
           ref={videoPlayer}
@@ -84,26 +84,29 @@ const Biography = () => {
   const videoSrc = userProfile?.video;
 
   return (
-    <View className="justify-content: space-between pt-6">
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+    <View className="justify-content: space-between ">
+      {videoSrc && (
+        <View className={clsx(' flex flex-col pr-4')}>
+          <View className={clsx('py-6')}>
+            <VideoWithPlayButton src={videoSrc} />
+          </View>
+        </View>
+      )}
+      <Text className={clsx('text-h6 text-gray-dark')}>
+        {bio ? bio : 'No biography yet'}
+      </Text>
+      <View className="align-center mt-3 flex-row flex-wrap  ">
         {hardSkill &&
           hardSkill.map((content, index) => {
             return (
               <Button
+                containerClassName="border-gray-light ml-1 border-[1px] mx-2 my-1.5  h-[48px] flex-none px-5"
+                textClassName="line-[30px] text-center text-md font-medium"
                 key={index}
-                containerClassName="p-4 border border-gray-80"
-                title={content.skill.skill}
+                title={content?.skill?.skill as string}
               />
             );
           })}
-      </ScrollView>
-      <View className={clsx('mt-4 flex flex-col pr-4')}>
-        <Text className={clsx('text-h6 text-gray-dark')}>
-          {bio ? bio : 'No biography yet'}
-        </Text>
-        <View className={clsx('py-6')}>
-          <VideoWithPlayButton src={videoSrc} />
-        </View>
       </View>
     </View>
   );

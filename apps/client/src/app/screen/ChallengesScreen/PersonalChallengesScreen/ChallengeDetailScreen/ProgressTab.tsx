@@ -26,53 +26,53 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
-  const handleEditProgress = () => { 
+  const handleEditProgress = () => {
     setShouldRefresh(true);
-  }
+  };
 
-   const handleDeleteProgressSuccess = () => {
-     setShouldRefresh(true);
-   };
-   const AddNewChallengeProgressButton = () => {
-     return (
-       <View className="pt-4">
-         <View className="mx-4 ">
-           <Button
-             containerClassName="  bg-primary-default flex-none px-1 "
-             textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
-             title={t('challenge_detail_screen.upload_new_progress') as string}
-             Icon={<AddIcon fill={'white'} />}
-             onPress={() => setIsModalVisible(true)}
-           />
-           <AddNewChallengeProgressModal
-             setShouldProgressPageRefresh={setShouldRefresh}
-             challengeId={challengeData.id}
-             isVisible={isModalVisible}
-             onClose={() => setIsModalVisible(false)}
-           />
-         </View>
-       </View>
-     );
-   };
+  const handleDeleteProgressSuccess = () => {
+    setShouldRefresh(true);
+  };
+  const AddNewChallengeProgressButton = () => {
+    return (
+      <View className="pt-4">
+        <View className="mx-4 ">
+          <Button
+            containerClassName="  bg-primary-default flex-none px-1 "
+            textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
+            title={t('challenge_detail_screen.upload_new_progress') as string}
+            Icon={<AddIcon fill={'white'} />}
+            onPress={() => setIsModalVisible(true)}
+          />
+          <AddNewChallengeProgressModal
+            setShouldProgressPageRefresh={setShouldRefresh}
+            challengeId={challengeData.id}
+            isVisible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
+          />
+        </View>
+      </View>
+    );
+  };
 
-   return (
-     <View className="h-full flex-1">
-       <FlatList
-         data={progressData}
-         ListHeaderComponent={<AddNewChallengeProgressButton />}
-         renderItem={({ item }) => (
-           <ProgressCard
-             itemProgressCard={item}
-             userData={userData}
-             onEditProgress={handleEditProgress}
-             onDeleteProgressSuccess={handleDeleteProgressSuccess}
-           />
-         )}
-         extraData={progressData}
-         contentContainerStyle={{ paddingBottom: 300 }}
-       />
-     </View>
-   );
+  return (
+    <View className="h-full flex-1">
+      <FlatList
+        data={progressData}
+        ListHeaderComponent={<AddNewChallengeProgressButton />}
+        renderItem={({ item }) => (
+          <ProgressCard
+            itemProgressCard={item}
+            userData={userData}
+            onEditProgress={handleEditProgress}
+            onDeleteProgressSuccess={handleDeleteProgressSuccess}
+          />
+        )}
+        extraData={progressData}
+        contentContainerStyle={{ paddingBottom: 300 }}
+      />
+    </View>
+  );
 };
 
 export default ProgressTab;

@@ -12,8 +12,9 @@ interface IParticipantsTabProps {
 
 const ParticipantsTab: FC<IParticipantsTabProps> = ({ paticipant = [] }) => {
   return (
-    <View className={clsx('flex-1 px-4 pt-4 mb-32')}>
+    <View className={clsx('mb-32 flex-1 px-4 pt-4')}>
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         data={paticipant}
         showsVerticalScrollIndicator={true}
         renderItem={({ item, index }) => {

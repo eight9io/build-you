@@ -39,6 +39,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
     },
   });
 
+  const { setSoftSkills, getProfile } = useCompleteProfileStore();
   const handleSubmitForm = (data: any) => {
     setBiography(data.biography);
     if (pickedVideo[0]?.uri) {

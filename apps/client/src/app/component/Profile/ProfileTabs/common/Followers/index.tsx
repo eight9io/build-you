@@ -15,6 +15,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
       <FlatList
         data={followers}
         showsVerticalScrollIndicator={true}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           return (
             <TouchableOpacity

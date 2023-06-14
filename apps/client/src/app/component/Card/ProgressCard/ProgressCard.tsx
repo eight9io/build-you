@@ -81,7 +81,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const loadProgressLikes = async () => {
     try {
-      console.log('async: ');
       const response = await getProgressLikes(itemProgressCard.id);
       if (response.status === 200) setNumberOfLikes(response.data.length);
     } catch (error) {
@@ -95,7 +94,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
   };
 
   const handleCloseAckModal = () => {
-    console.log('handleCloseAckModal: ');
     closeAckModal();
     onDeleteProgressSuccess && onDeleteProgressSuccess(); // Navigate to the challenge progresses screen => delete it and refresh the list
   };

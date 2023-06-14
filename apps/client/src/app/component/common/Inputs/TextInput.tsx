@@ -25,25 +25,47 @@ export const TextInput: FC<ITextInputProps> = (props) => {
         </Text>
       ) : null}
       <View className="relative">
-        <TouchableOpacity onPress={onPress}>
-          <View pointerEvents={onPress ? 'none' : 'auto'}>
-            <Base
-              {...inputProps}
-              className={clsx(
-                'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
-                inputProps?.className,
-                Platform.OS === 'ios' ? 'p-3' : 'p-2.5',
-              )}
-              textAlignVertical="top"
-              autoCapitalize="none"
-            />
-          </View>
-          {rightIcon ? (
-            <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
-              {rightIcon}
+        {onPress ? (
+          <TouchableOpacity onPress={onPress}>
+            <View pointerEvents={'none'}>
+              <Base
+                {...inputProps}
+                className={clsx(
+                  'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
+                  inputProps?.className,
+                  Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
+                )}
+                textAlignVertical="top"
+                autoCapitalize="none"
+              />
             </View>
-          ) : null}
-        </TouchableOpacity>
+            {rightIcon ? (
+              <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
+                {rightIcon}
+              </View>
+            ) : null}
+          </TouchableOpacity>
+        ) : (
+          <>
+            <View pointerEvents={'auto'}>
+              <Base
+                {...inputProps}
+                className={clsx(
+                  'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
+                  inputProps?.className,
+                  Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
+                )}
+                textAlignVertical="top"
+                autoCapitalize="none"
+              />
+            </View>
+            {rightIcon ? (
+              <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
+                {rightIcon}
+              </View>
+            ) : null}
+          </>
+        )}
       </View>
     </View>
   );

@@ -3,20 +3,35 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { clsx } from 'clsx';
 
 import CommentSvg from './asset/comment.svg';
+import { getProgressComments } from '../../service/progress';
 
 interface ICommentButtonProps {
-  post?: any;
-  numberOfComments?: number;
+  progressId: string;
   isViewOnly?: boolean;
   navigationToComment: () => void;
 }
 
 const CommentButton: FC<ICommentButtonProps> = ({
-  post,
-  numberOfComments = 0,
+  progressId,
   isViewOnly = false,
   navigationToComment,
 }) => {
+  const [numberOfComments, setNumberOfComments] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      await loadProgressComments();
+    })();
+  }, []);
+
+  const loadProgressComments = async () => {
+    try {
+      const response = await getProgressComments(progressId);
+      if (response.status === 200) setNumberOfComments(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleNavigationToComment = () => {
     !isViewOnly && navigationToComment();
   };

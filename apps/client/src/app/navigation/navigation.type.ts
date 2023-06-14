@@ -39,8 +39,8 @@ export type RootStackParamList = {
   ChallengeDetailScreenViewOnly: {
     challengeId: string;
   };
-  ChallengeDetailComment: {
-    challengeId: string;
+  ProgressCommentScreen: {
+    progressId: string;
   };
 
   ProfileScreenLoading: undefined;

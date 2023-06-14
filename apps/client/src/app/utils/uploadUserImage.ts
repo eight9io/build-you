@@ -6,6 +6,7 @@ import * as FileSystem from 'expo-file-system';
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
   base64?: boolean;
+  maxImages?: number;
 }
 export const getImageFromUserDevice = (props: PickImageOptions) => {
   const { allowsMultipleSelection, base64 } = props;
@@ -24,6 +25,7 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection,
+      selectionLimit: props.maxImages,
       base64: base64,
     });
 

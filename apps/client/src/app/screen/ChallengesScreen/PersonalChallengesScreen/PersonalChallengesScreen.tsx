@@ -21,6 +21,8 @@ import { useUserProfileStore } from '../../../store/user-data';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
+import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
+
 import ChallengeCard from '../../../component/Card/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
@@ -65,12 +67,14 @@ const PersonalChallenges = ({
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
   const [personalChallengesList, setPersonalChallengesList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    if (!isFocused) return;
     httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
       res.data.sort((a: IChallenge, b: IChallenge) => {
         return (
@@ -79,29 +83,35 @@ const PersonalChallenges = ({
         );
       });
       setPersonalChallengesList(res.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     });
   }, [isFocused]);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View className={clsx('h-full w-full bg-gray-50 pb-24 ')}>
-        {personalChallengesList.length === 0 ? (
-          <EmptyChallenges navigation={navigation} />
-        ) : (
-          <FlatList
-            className="px-4 pt-4"
-            data={personalChallengesList}
-            renderItem={({ item }: { item: IChallenge }) => (
-              <ChallengeCard
-                item={item}
-                imageSrc={`https://picsum.photos/200/300.webp?random=${item.id}`}
-                navigation={navigation}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </View>
+      {isLoading && <SkeletonLoadingChallengesScreen />}
+      {!isLoading && (
+        <View className={clsx('h-full w-full bg-gray-50 pb-24 ')}>
+          {personalChallengesList.length === 0 ? (
+            <EmptyChallenges navigation={navigation} />
+          ) : (
+            <FlatList
+              className="px-4 pt-4"
+              data={personalChallengesList}
+              renderItem={({ item }: { item: IChallenge }) => (
+                <ChallengeCard
+                  item={item}
+                  imageSrc={`https://picsum.photos/200/300.webp?random=${item.id}`}
+                  navigation={navigation}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 };

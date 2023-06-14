@@ -10,3 +10,4 @@ export const getUrlParam = (url: string, param: string) => {
 export const getChallengeStatusColor = (status: string | undefined) => {
     return status !== 'open' ? '#20D231' : '#C5C8D2';
   };
+

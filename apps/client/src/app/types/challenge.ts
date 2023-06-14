@@ -25,6 +25,7 @@ export interface IProgressChallenge {
   video: string | null;
   location: string;
   like: number;
+  createdAt: string;
 }
 
 export interface IChallenge {

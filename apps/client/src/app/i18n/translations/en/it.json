@@ -231,6 +231,12 @@
     "caption_required": "Please fill in the caption.",
     "edit_success": "Your progress has been updated successfully"
   },
+  "add_hard_skill_modal": {
+    "title": "Hard skill",
+    "save_button": "Save",
+    "caption": "  How do you define yourself as competent?",
+    "caption_placeholder": "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself"
+  },
   "edit_challenge_screen": {
     "title": "Edit challenge",
     "save_button": "Save",

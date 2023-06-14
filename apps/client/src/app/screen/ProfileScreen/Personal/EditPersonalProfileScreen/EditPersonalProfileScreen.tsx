@@ -26,6 +26,7 @@ import { EditProfileValidators } from '../../../../Validators/EditProfile.valida
 import { useUserProfileStore } from '../../../../store/user-data';
 import { useCompleteProfileStore } from '../../../../store/complete-user-profile';
 import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
+import AddHardSkills from 'apps/client/src/app/component/modal/AddHardSkills/AddHardSkills';
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
@@ -127,7 +128,7 @@ const EditPersonalProfileScreen = () => {
   return (
     <SafeAreaView className="h-full bg-white">
       <View className="  h-full rounded-t-xl bg-white ">
-        <AddSkillModal
+        <AddHardSkills
           setUserAddSkill={setUserAddSkill}
           isVisible={isShowAddSkillModal}
           onClose={() => setIsShowAddSkillModal(false)}

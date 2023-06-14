@@ -37,6 +37,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
                   Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
                 )}
                 textAlignVertical={multiline ? 'top' : 'center'}
+                multiline={multiline}
                 autoCapitalize="none"
               />
             </View>
@@ -58,6 +59,7 @@ export const TextInput: FC<ITextInputProps> = (props) => {
                 )}
                 textAlignVertical={multiline ? 'top' : 'center'}
                 autoCapitalize="none"
+                multiline={multiline}
               />
             </View>
             {rightIcon ? (

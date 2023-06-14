@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import clsx from 'clsx';
 import { Text, View, ScrollView } from 'react-native';
+
+import dayjs from '../../../../utils/date.util';
 import { IChallenge } from '../../../../types/challenge';
 
 interface ISingleDescriptionProps {
@@ -9,7 +11,7 @@ interface ISingleDescriptionProps {
 }
 
 interface IDescriptionTabProps {
-  challengeData: IChallenge
+  challengeData: IChallenge;
 }
 
 const SingleDescription: FC<ISingleDescriptionProps> = ({
@@ -32,18 +34,12 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({ challengeData }) => {
   const { id, achievementTime, benefits, image, goal, reasons } = challengeData;
   const date = new Date(achievementTime);
   return (
-    <ScrollView className="px-4 pt-4 h-full">
-      <SingleDescription
-        title="The benefits"
-        description={benefits}
-      />
-      <SingleDescription
-        title="The reasons"
-        description={reasons}
-      />
+    <ScrollView className="h-full px-4 pt-4">
+      <SingleDescription title="The benefits" description={benefits} />
+      <SingleDescription title="The reasons" description={reasons} />
       <SingleDescription
         title="Time to reach the goal"
-        description={date.toDateString()}
+        description={dayjs(date).format('DD/MM/YYYY')}
       />
     </ScrollView>
   );

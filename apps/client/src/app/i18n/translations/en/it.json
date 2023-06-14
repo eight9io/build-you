@@ -105,13 +105,13 @@
       "required": "Please fill in your password.",
       "error": "Your password must contain 8 or more characters, 1 uppercase letter, 1 lowercase letter and 1 number.",
       "type": "password",
-      "placeholder": "Enter your password "
+      "placeholder": "Enter your password"
     },
     {
       "label": "Repeat password",
       "name": "repeat_password",
       "error": "Passwords do not match.",
-      "required": "Please fill in your  password.",
+      "required": "Please repeat your password.",
       "type": "password",
       "placeholder": "Repeat your password"
     }
@@ -128,7 +128,7 @@
   "login": "Login",
   "forgot_password": "Forgot password?",
   "forgot_password.title": "Forgot password",
-  "forgot_password.sub_title": "We've sent you a code via ryour email. Please enter the code and your new password.",
+  "forgot_password.sub_title": "We've sent you a code via your email. Please enter the code and your new password.",
   "change_password.changing": "Change your account password. Please login with new email and password after redirecting...",
   "register_screen.or": "Or",
   "send_code": "Send code",

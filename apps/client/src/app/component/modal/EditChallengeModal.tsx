@@ -45,7 +45,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
   const {
     control,
     setValue,
-    setError,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IEditChallenge>({
@@ -114,7 +114,10 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
                   'edit_challenge_screen.save_button'
                 ).toLocaleUpperCase()}
                 leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
-                onLeftBtnPress={onClose}
+                onLeftBtnPress={() => {
+                  onClose();
+                  reset();
+                }}
                 onRightBtnPress={handleSubmit(onSubmit)}
                 containerStyle="mt-2"
               />

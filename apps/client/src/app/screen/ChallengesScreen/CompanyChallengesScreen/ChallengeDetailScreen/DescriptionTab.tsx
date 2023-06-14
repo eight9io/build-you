@@ -29,17 +29,17 @@ const SingleDescription: FC<ISingleDescriptionProps> = ({
 
 export const DescriptionTab: FC<IDescriptionTabProps> = () => {
   return (
-    <ScrollView className='px-4 pt-4'>
+    <ScrollView className="px-4 pt-4">
       <SingleDescription
         title="The benefits"
         description="Improved weight control, increased hand-eye coordination and balance"
       />
       <SingleDescription
-        title="The benefits"
+        title="The reasons"
         description="Improved weight control, increased hand-eye coordination and balance"
       />
       <SingleDescription
-        title="The benefits"
+        title="Time to reach the goal"
         description="Improved weight control, increased hand-eye coordination and balance"
       />
     </ScrollView>

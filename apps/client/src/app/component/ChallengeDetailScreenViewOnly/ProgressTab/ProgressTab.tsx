@@ -10,13 +10,18 @@ interface IChronoStepTabProps {
 export const ChronoStepTab: FC<IChronoStepTabProps> = ({ arrProgress }) => {
   const { t } = useTranslation();
   return (
-    <ScrollView className="bg-gray-50" style={{ width: '100%' }}>
-      {arrProgress.map((item: any, id: number) => (
-        <View key={id}>
-          <ChallengeProgressCard item={item} />
-        </View>
-      ))}
-    </ScrollView>
+    <FlatList
+      data={arrProgress}
+      renderItem={({ item }) => <ChallengeProgressCard item={item} />}
+      keyExtractor={(item) => item.id as unknown as string}
+    />
+    // <ScrollView className="bg-gray-50" style={{ width: '100%' }}>
+    //   {arrProgress.map((item: any, id: number) => (
+    //     <View key={id}>
+    //       <ChallengeProgressCard item={item} />
+    //     </View>
+    //   ))}
+    // </ScrollView>
   );
 };
 

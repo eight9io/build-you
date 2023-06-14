@@ -35,11 +35,11 @@ export const DescriptionTab: FC<IDescriptionTabProps> = () => {
         description="Improved weight control, increased hand-eye coordination and balance"
       />
       <SingleDescription
-        title="The benefits"
+        title="The reasons"
         description="Improved weight control, increased hand-eye coordination and balance"
       />
       <SingleDescription
-        title="The benefits"
+        title="Time to reach the goal"
         description="Improved weight control, increased hand-eye coordination and balance"
       />
     </ScrollView>

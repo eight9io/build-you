@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native';
 
 import { IChallenge } from 'apps/client/src/app/types/challenge';
-
 import i18n from '../../../../i18n/i18n';
 import TabView from '../../../../component/common/Tab/TabView';
 import DescriptionTab from './DescriptionTab';

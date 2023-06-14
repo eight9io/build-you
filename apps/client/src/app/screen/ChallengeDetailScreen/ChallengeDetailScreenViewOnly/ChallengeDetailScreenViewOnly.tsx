@@ -1,4 +1,4 @@
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { FC, useState } from 'react';
@@ -13,6 +13,7 @@ import DescriptionTab from '../../../component/ChallengeDetailScreenViewOnly/Des
 
 import { RootStackParamList } from '../../../navigation/navigation.type';
 import i18n from '../../../i18n/i18n';
+import clsx from 'clsx';
 
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.progress'),
@@ -82,7 +83,12 @@ export const ChallengeDetailScreenViewOnly: FC<
   ];
 
   return (
-    <View className=" h-full bg-white ">
+    <View
+      className={clsx('bg-white', {
+        'h-[calc(100%-7.6%)]': Platform.OS === 'android',
+        'h-[calc(100%-10.8%)]': Platform.OS === 'ios',
+      })}
+    >
       {/* <Header
         leftBtn={
           <NavButton
@@ -92,25 +98,23 @@ export const ChallengeDetailScreenViewOnly: FC<
           />
         }
       /> */}
-      <View className="flex-1 bg-white py-4 ">
+      <View className="flex flex-1 flex-col bg-white py-4 ">
         <Text className="text-basic px-4 text-xl font-medium leading-8">
           Climbing Mont Blanc
         </Text>
 
-        <View className="flex-1">
-          <TabView
-            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
-            activeTabIndex={index}
-            setActiveTabIndex={setIndex}
-          >
-            <ProgressTab arrProgress={arrayProgress} />
-            <DescriptionTab
-              description={
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at venenatis eros. Nam volutpat leo at eros accumsan, in accumsan erat euismod. Praesent tincidunt nec lorem euismod ullamcorper. Aenean feugiat turpis quis ligula efficitur molestie. Aliquam erat volutpat. Etiam in luctus lacus, ac luctus nisi. Phasellus hendrerit felis vitae bibendum tristique. Donec accumsan orci erat, eu fermentum metus consequat id. \nSed gravida felis nec quam vestibulum dignissim. Suspendisse lectus mauris, vestibulum eu ornare in, dignissim vel nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla vestibulum, massa at fringilla elementum, ex nulla imperdiet quam, auctor bibendum arcu lacus ac arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at venenatis eros. Nam volutpat leo at eros accumsan, in accumsan erat euismod. Praesent tincidunt nec lorem euismod ullamcorper. Aenean feugiat turpis quis ligula efficitur molestie. Aliquam erat volutpat. Etiam in luctus lacus, ac luctus nisi. Phasellus hendrerit felis vitae bibendum tristique. Donec accumsan orci erat, eu fermentum metus consequat id. \nSed gravida felis nec quam vestibulum dignissim. Suspendisse lectus mauris, vestibulum eu ornare in, dignissim vel nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla vestibulum, massa at fringilla elementum, ex nulla imperdiet quam, auctor bibendum arcu lacus ac arcu.'
-              }
-            />
-          </TabView>
-        </View>
+        <TabView
+          titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+          activeTabIndex={index}
+          setActiveTabIndex={setIndex}
+        >
+          <ProgressTab arrProgress={arrayProgress} />
+          <DescriptionTab
+            description={
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at venenatis eros. Nam volutpat leo at eros accumsan, in accumsan erat euismod. Praesent tincidunt nec lorem euismod ullamcorper. Aenean feugiat turpis quis ligula efficitur molestie. Aliquam erat volutpat. Etiam in luctus lacus, ac luctus nisi. Phasellus hendrerit felis vitae bibendum tristique. Donec accumsan orci erat, eu fermentum metus consequat id. \nSed gravida felis nec quam vestibulum dignissim. Suspendisse lectus mauris, vestibulum eu ornare in, dignissim vel nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla vestibulum, massa at fringilla elementum, ex nulla imperdiet quam, auctor bibendum arcu lacus ac arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at venenatis eros. Nam volutpat leo at eros accumsan, in accumsan erat euismod. Praesent tincidunt nec lorem euismod ullamcorper. Aenean feugiat turpis quis ligula efficitur molestie. Aliquam erat volutpat. Etiam in luctus lacus, ac luctus nisi. Phasellus hendrerit felis vitae bibendum tristique. Donec accumsan orci erat, eu fermentum metus consequat id. \nSed gravida felis nec quam vestibulum dignissim. Suspendisse lectus mauris, vestibulum eu ornare in, dignissim vel nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla vestibulum, massa at fringilla elementum, ex nulla imperdiet quam, auctor bibendum arcu lacus ac arcu.'
+            }
+          />
+        </TabView>
       </View>
     </View>
   );

@@ -84,23 +84,21 @@ const ImagePicker: FC<IImagePickerProps> = ({
             ? true
             : false
         }
-        className="bg-gray-light mt-5 h-16 rounded-xl"
+        className="bg-gray-light mt-5 flex h-14 flex-row items-center justify-center rounded-xl"
       >
-        <View className=" mt-5 flex flex-row items-center justify-center rounded-xl">
-          <CameraIcon
-            fill={
-              isSelectedImage || isSelectedImage == null ? '#1C1B1F' : '#C5C8D2'
-            }
-          />
-          <Text
-            className={clsx(
-              'text-black-light ml-1.5 mt-1 text-sm font-semibold',
-              isSelectedImage === false && 'text-gray-medium'
-            )}
-          >
-            Upload image
-          </Text>
-        </View>
+        <CameraIcon
+          fill={
+            isSelectedImage || isSelectedImage == null ? '#1C1B1F' : '#C5C8D2'
+          }
+        />
+        <Text
+          className={clsx(
+            'text-black-light ml-1.5 mt-1 text-sm font-semibold',
+            isSelectedImage === false && 'text-gray-medium'
+          )}
+        >
+          Upload image
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -41,6 +41,7 @@ import { getImageExtension } from '../../utils/uploadUserImage';
 import { AxiosResponse } from 'axios';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 import Loading from '../common/Loading';
+import ErrorText from '../common/ErrorText';
 
 interface IAddNewChallengeProgressModalProps {
   challengeId: string;
@@ -53,16 +54,19 @@ interface IRenderSelectedMediaProps {
   screen: ScaledSize;
   selectedMedia: IUploadMediaWithId[];
   setSelectedMedia: (prev: IUploadMediaWithId[]) => void;
+  onRemoveItem?: (medias: IUploadMediaWithId[]) => void;
 }
 
 const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
   screen,
   selectedMedia,
   setSelectedMedia,
+  onRemoveItem,
 }) => {
   const handleRemoveItem = (id: string) => {
     const filteredMedia = selectedMedia.filter((media) => media.id !== id);
     setSelectedMedia(filteredMedia);
+    onRemoveItem && onRemoveItem(filteredMedia);
   };
 
   // px-5 + gap-2 + gap-2 = 56
@@ -112,12 +116,19 @@ export const AddNewChallengeProgressModal: FC<
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
-  } = useForm({
+    setError,
+    formState: { errors, isDirty },
+  } = useForm<{
+    challenge: string;
+    caption: string;
+    location: string;
+    media?: any;
+  }>({
     defaultValues: {
       challenge: '',
       caption: '',
       location: '',
+      media: undefined,
     },
     resolver: yupResolver(CreateProgressValidationSchema()),
     reValidateMode: 'onChange',
@@ -203,7 +214,7 @@ export const AddNewChallengeProgressModal: FC<
           title={isRequestSuccess ? 'Success' : 'Error'}
           description={
             isRequestSuccess
-              ? 'Your progress has been created successfully'
+              ? 'Your challenge has been created successfully'
               : 'Something went wrong. Please try again later.'
           }
           isVisible={isShowModal}
@@ -234,32 +245,47 @@ export const AddNewChallengeProgressModal: FC<
                 screen={screen}
                 selectedMedia={selectedMedia}
                 setSelectedMedia={setSelectedMedia}
+                onRemoveItem={(medias) => {
+                  if (!medias.length) {
+                    setError('media', {
+                      message: 'Please upload images or video',
+                      type: 'required',
+                    });
+                  }
+                }}
               />
             )}
 
-            <View className="">
-              <ImagePicker
-                onImagesSelected={(images) => {
-                  images.forEach((uri: string) => {
-                    const id = getRandomId();
-                    setSelectedMedia((prev: IUploadMediaWithId[]) => [
-                      ...prev,
-                      { id, uri: uri },
-                    ]);
-                  });
-                }}
-                allowsMultipleSelection
-                isSelectedImage={isSelectedImage}
-                setIsSelectedImage={setIsSelectedImage}
-              />
-            </View>
+            <View>
+              <View className="">
+                <ImagePicker
+                  onImagesSelected={(images) => {
+                    images.forEach((uri: string) => {
+                      const id = getRandomId();
+                      setSelectedMedia((prev: IUploadMediaWithId[]) => [
+                        ...prev,
+                        { id, uri: uri },
+                      ]);
+                      setValue('media', uri, { shouldValidate: true });
+                    });
+                  }}
+                  allowsMultipleSelection
+                  isSelectedImage={isSelectedImage}
+                  setIsSelectedImage={setIsSelectedImage}
+                />
+              </View>
 
-            <View className="flex flex-col">
-              <VideoPicker
-                setExternalVideo={setSelectedMedia}
-                isSelectedImage={isSelectedImage}
-                setIsSelectedImage={setIsSelectedImage}
-              />
+              <View className="flex flex-col">
+                <VideoPicker
+                  setExternalVideo={(video) => {
+                    setSelectedMedia(video);
+                    setValue('media', video, { shouldValidate: true });
+                  }}
+                  isSelectedImage={isSelectedImage}
+                  setIsSelectedImage={setIsSelectedImage}
+                />
+              </View>
+              {errors?.media && <ErrorText message={errors.media.message} />}
             </View>
 
             <View className="flex flex-col pt-4">

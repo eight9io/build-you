@@ -95,10 +95,17 @@ export const ProgressTab: FC<IProgressTabProps> = ({
       <View className="pt-4">
         <View className="mx-4 ">
           <Button
-            containerClassName="  bg-primary-default flex-none px-1 "
+            isDisabled={challengeData.status === 'closed'}
+            containerClassName="bg-primary-default flex-none px-1"
             textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
+            disabledContainerClassName="bg-gray-light flex-none px-1"
+            disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
             title={t('challenge_detail_screen.upload_new_progress') as string}
-            Icon={<AddIcon fill={'white'} />}
+            Icon={
+              <AddIcon
+                fill={challengeData.status === 'closed' ? '#C5C8D2' : 'white'}
+              />
+            }
             onPress={() => setIsModalVisible(true)}
           />
           <AddNewChallengeProgressModal

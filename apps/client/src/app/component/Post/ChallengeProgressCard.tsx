@@ -181,9 +181,9 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
               <Text className="text-gray-dark text-xs font-light ">{time}</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => console.log('press')}>
+          {/* <TouchableOpacity onPress={() => console.log('press')}>
             <Text className="text-h6 font-medium ">...</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
         <ChallengeImage

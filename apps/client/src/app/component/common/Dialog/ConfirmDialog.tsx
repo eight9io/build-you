@@ -45,6 +45,7 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
           )}
           {onConfirm && (
             <Dialog.Button
+              bold
               label={confirmButtonLabel ?? 'Confirm'}
               onPress={handleConfirm}
             />

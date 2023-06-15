@@ -8,20 +8,30 @@ interface IButtonProps {
   textClassName?: string;
   onPress?: () => void;
   Icon?: React.ReactNode;
+  isDisabled?: boolean;
+  disabledContainerClassName?: string;
+  disabledTextClassName?: string;
 }
 
 const Button: FC<IButtonProps> = ({
-  title,
-  containerClassName,
-  textClassName,
-  onPress,
   Icon,
+  title,
+  onPress,
+  isDisabled,
+  textClassName,
+  containerClassName,
+  disabledTextClassName,
+  disabledContainerClassName,
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className={clsx('mr-1 h-12 flex-1 rounded-full', containerClassName)}
+      className={clsx(
+        'mr-1 h-12 flex-1 rounded-full',
+        isDisabled ? disabledContainerClassName : containerClassName
+      )}
       onPress={onPress}
+      disabled={isDisabled}
     >
       <View className="flex-1 flex-row items-center justify-center">
         {Icon && Icon}
@@ -29,7 +39,7 @@ const Button: FC<IButtonProps> = ({
           <Text
             className={clsx(
               'line-[30px] text-center text-sm font-medium',
-              textClassName
+              isDisabled ? disabledTextClassName : textClassName
             )}
           >
             {title}

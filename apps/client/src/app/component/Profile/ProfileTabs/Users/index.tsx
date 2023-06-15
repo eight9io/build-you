@@ -29,10 +29,10 @@ const ProfileTabs: FC = () => {
       <TabViewFlatlist
         titles={titles}
         children={[
-          <Biography />,
-          <Skills skills={userProfile?.softSkill} />,
-          <Followers followers={MOCK_FOLLOW_USERS} />,
-          <Following following={MOCK_FOLLOW_USERS} />,
+          <Biography key="Biography" />,
+          <Skills key="Skills" skills={userProfile?.softSkill} />,
+          <Followers key="Followers" followers={MOCK_FOLLOW_USERS} />,
+          <Following key="Following" following={MOCK_FOLLOW_USERS} />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"

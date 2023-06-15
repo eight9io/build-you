@@ -1,3 +1,5 @@
+import { IUserData } from "./user";
+
 export interface ICreateProgress {
   user: string; // user id
   challenge: string; // challenge id
@@ -15,9 +17,14 @@ export interface ICreateProgressLike {
 }
 
 export interface IProgressComment {
+  id: string;
   progress: string; // progress id
   user: string; // user id
+  userName: string;
+  avatar: string;
   comment: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ICreateProgressComment {

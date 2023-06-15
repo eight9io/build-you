@@ -277,7 +277,8 @@
     "edit_success": "Your challenge has been updated successfully"
   },
   "progress_comment_screen": {
-    "comment_input_placeholder": "Write a comment..."
+    "comment_input_placeholder": "Write a comment...",
+    "delete_comment_success": "Your comment has been deleted successfully"
   },
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"

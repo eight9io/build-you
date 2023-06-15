@@ -17,16 +17,11 @@ import { useTranslation } from 'react-i18next';
 import { IProgressChallenge } from '../../../types/challenge';
 import { IUserData } from '../../../types/user';
 import {
-  createProgressLike,
   deleteProgress,
-  getProgressComments,
   getProgressLikes,
 } from '../../../service/progress';
 import Loading from '../../common/Loading';
-import {
-  ICreateProgressComment,
-  ICreateProgressLike,
-} from '../../../types/progress';
+
 import VideoPlayer from '../../common/VideoPlayer';
 import useModal from '../../../hooks/useModal';
 
@@ -47,7 +42,9 @@ const ProgressCard: FC<IProgressCardProps> = ({
 }) => {
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
-  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
+  const [isLikedByCurrentUser, setIsLikedByCurrentUser] =
+    useState<boolean>(false);
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const timeDiff = getTimeDiffToNow(itemProgressCard.createdAt);
@@ -79,7 +76,12 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const loadProgressLikes = async () => {
     try {
       const response = await getProgressLikes(itemProgressCard.id);
-      if (response.status === 200) setNumberOfLikes(response.data.length);
+      if (response.status === 200) {
+        setNumberOfLikes(response.data.length);
+        const userId = userData?.id;
+        const isLiked = response.data.some((like) => like.user === userId);
+        setIsLikedByCurrentUser(isLiked);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -149,7 +151,12 @@ const ProgressCard: FC<IProgressCardProps> = ({
       {itemProgressCard.video && <VideoPlayer src={itemProgressCard.video} />}
 
       <View className="mt-4 flex-row">
-        <LikeButton likes={numberOfLikes || 0} />
+        <LikeButton
+          likes={numberOfLikes || 0}
+          isLikedByCurrentUser={isLikedByCurrentUser}
+          setIsLikedByCurrentUser={setIsLikedByCurrentUser}
+          progressId={itemProgressCard.id}
+        />
         <CommentButton
           navigationToComment={() =>
             navigation.navigate('ProgressCommentScreen', {

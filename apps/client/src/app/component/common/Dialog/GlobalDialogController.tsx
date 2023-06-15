@@ -15,7 +15,6 @@ export default class GlobalDialogController {
     this.modalRef.current?.show(message);
   };
   static hideModal = () => {
-    console.log('hide modal');
     this.modalRef.current?.hide();
   };
 }

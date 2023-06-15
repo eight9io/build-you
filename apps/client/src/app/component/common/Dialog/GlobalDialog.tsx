@@ -1,4 +1,4 @@
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
 import Dialog from 'react-native-dialog';
 import GlobalDialogController, {
   GlobalDialogRef,
@@ -39,7 +40,7 @@ const GlobalDialog = () => {
   );
 
   return (
-    <View className='items-center justify-center bg-white'>
+    <View className="items-center justify-center bg-white">
       <Dialog.Container visible={modalVisible}>
         <Dialog.Title>Alert</Dialog.Title>
         <Dialog.Description>{customMessage}</Dialog.Description>

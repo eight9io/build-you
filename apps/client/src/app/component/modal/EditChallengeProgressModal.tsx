@@ -24,12 +24,9 @@ interface IEditChallengeProgressModalProps {
   onConfirm: () => void;
 }
 
-export const EditChallengeProgressModal: FC<IEditChallengeProgressModalProps> = ({
-  progress,
-  isVisible,
-  onClose,
-  onConfirm,
-}) => {
+export const EditChallengeProgressModal: FC<
+  IEditChallengeProgressModalProps
+> = ({ progress, isVisible, onClose, onConfirm }) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -40,6 +37,7 @@ export const EditChallengeProgressModal: FC<IEditChallengeProgressModalProps> = 
   } = useModal();
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -85,7 +83,10 @@ export const EditChallengeProgressModal: FC<IEditChallengeProgressModalProps> = 
             title={t('challenge_detail_screen.edit_progress') || ''}
             rightBtn={t('edit_progress_modal.save_button').toLocaleUpperCase()}
             leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
-            onLeftBtnPress={onClose}
+            onLeftBtnPress={() => {
+              onClose();
+              reset();
+            }}
             onRightBtnPress={handleSubmit(onSubmit)}
           />
 

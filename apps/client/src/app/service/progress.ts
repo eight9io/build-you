@@ -108,3 +108,7 @@ export const createProgressComment = (data: ICreateProgressComment) => {
 export const updateProgress = (id: string, data: IUpdateProgress) => {
   return httpInstance.put(`/challenge/progress/update/${id}`, data);
 };
+
+export const deleteProgressComment = (id: string) => {
+  return httpInstance.delete(`/challenge/progress/comment/delete/${id}`);
+}

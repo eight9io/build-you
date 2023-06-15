@@ -80,6 +80,7 @@ export default function Login({
           );
           setErrMessage('');
         } else {
+          console.log('err', res);
           setErrMessage(err_server);
         }
       })
@@ -205,12 +206,14 @@ export default function Login({
                 </Text>
               </TouchableOpacity>
 
-              <Button
-                containerClassName="  bg-primary-default flex-none px-1 "
-                textClassName="line-[30px] text-center text-md font-medium text-white"
-                title={t('login_screen.login')}
-                onPress={handleSubmit(onSubmit)}
-              />
+              <View className="pt-2">
+                <Button
+                  containerClassName="bg-primary-default flex-none px-1 "
+                  textClassName="line-[30px] text-center text-md font-medium text-white"
+                  title={t('login_screen.login')}
+                  onPress={handleSubmit(onSubmit)}
+                />
+              </View>
             </View>
           </View>
         </ScrollView>

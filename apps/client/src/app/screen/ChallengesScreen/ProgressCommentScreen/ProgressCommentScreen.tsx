@@ -20,6 +20,7 @@ import SingleComment from '../../../component/common/SingleComment';
 import {
   createProgressComment,
   getProgressComments,
+  getProgressById,
 } from '../../../service/progress';
 import PostAvatar from '../../../component/common/Avatar/PostAvatar';
 import TextInput from '../../../component/common/Inputs/TextInput';
@@ -30,6 +31,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IProgressComment } from '../../../types/progress';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 import { sortArrayByCreatedAt } from '../../../utils/common';
+import { IProgressChallenge } from '../../../types/challenge';
 interface IProgressCommentScreenProps {
   route: Route<
     'ProgressCommentScreen',
@@ -44,59 +46,6 @@ interface ICommentInputProps {
   avatar?: string;
   handleOnSubmit: (comment: string) => void;
 }
-
-const item = {
-  id: '1',
-  avatar: 'avata',
-  name: 'Marco Rossi',
-  time: '1 hour ago',
-  stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-  card: {
-    image: 'https://picsum.photos/200/300',
-    title: 'Lose 10kg',
-    builder: 'Marco Rossi',
-  },
-  like: 5,
-  comment: 0,
-  location: '123 Amanda Street',
-};
-
-const COMMENTS = [
-  {
-    id: '1',
-    user: {
-      name: 'Marco Rossi',
-      avatar: 'https://picsum.photos/200/300',
-    },
-    time: '1 hour ago',
-
-    comment:
-      "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    isOwner: true,
-  },
-  {
-    id: '2',
-    user: {
-      name: 'Marco Rossi',
-      avatar: 'https://picsum.photos/200/300',
-    },
-    time: '1 hour ago',
-    comment:
-      "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    isOwner: true,
-  },
-  {
-    id: '3',
-    user: {
-      name: 'Marco Rossi',
-      avatar: 'https://picsum.photos/200/300',
-    },
-    time: '1 hour ago',
-    comment:
-      "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    isOwner: false,
-  },
-];
 
 const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
   const { t } = useTranslation();
@@ -150,6 +99,21 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [comments, setComments] = useState<IProgressComment[]>([]);
+  const [progressData, setProgressData] = useState<IProgressChallenge>(
+    {} as IProgressChallenge
+  );
+
+  useEffect(() => {
+    if (!progressId) return;
+    const progressDataResponse = getProgressById(progressId);
+    progressDataResponse
+      .then((res) => {
+        setProgressData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -196,7 +160,8 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       );
       console.log(error);
     }
-  };
+  };  
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <KeyboardAvoidingView
@@ -223,10 +188,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                 <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
                   <View className="border-gray-light flex border-b bg-white px-5 py-5">
                     <Text className="text-h4 font-semibold">
-                      {item.card.title}
+                      {progressData.caption}
                     </Text>
                   </View>
-                  <ChallengeProgressCardForComment item={item} />
+                  <ChallengeProgressCardForComment progress={progressData} />
                 </View>
               }
               ListHeaderComponentStyle={{

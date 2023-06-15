@@ -15,23 +15,11 @@ import CommentButton from './CommentButton';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/navigation.type';
 import { getProgressComments, getProgressLikes } from '../../service/progress';
+import { IProgressChallenge } from '../../types/challenge';
+import ImageSwiper from '../common/ImageSwiper';
 
 interface IChallengeProgressCardProps {
-  item: {
-    id: string;
-    name: string;
-    time: string;
-    stt: string;
-    card: {
-      image: string;
-      title: string;
-      builder: string;
-    };
-    like: number;
-    comment: number;
-    avatar: string;
-    location: string;
-  };
+  progress: IProgressChallenge;
 }
 
 interface IChallengeImageProps {
@@ -60,7 +48,7 @@ const ChallengeImageForComment: FC<IChallengeImageProps> = ({
 export const ChallengeProgressCardForComment: React.FC<
   IChallengeProgressCardProps
 > = ({
-  item: { id, name, time, stt, card, like, comment, avatar, location },
+  progress: { id, caption, createdAt, challenge, comments, image, video, location },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -94,24 +82,24 @@ export const ChallengeProgressCardForComment: React.FC<
           <View className="flex-row">
             <PostAvatar src="https://picsum.photos/200/300" />
             <View className="ml-2">
-              <Text className="text-h6 font-bold">{name}</Text>
+              <Text className="text-h6 font-bold">{caption}</Text>
               <View className="flex-row gap-3">
                 <Text className="text-gray-dark text-xs font-light ">
-                  {time}
+                  {createdAt}
                 </Text>
                 <Text className="text-gray-dark text-xs font-light ">
-                  <IconDot fill={'#7D7E80'} /> {location}
+                  <IconDot fill={'#7D7E80'} />
+                  {'   '} {location || 'Address here'}
                 </Text>
               </View>
             </View>
           </View>
         </View>
-        <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
-        <ChallengeImageForComment
-          name={card.title}
-          image={card.image}
-          onPress={navigationToComment}
-        />
+        {image && (
+          <View className="aspect-square w-full">
+            <ImageSwiper imageSrc={image} />
+          </View>
+        )}
         <View className="mt-4 flex-row">
           <LikeButton likes={numberOfLikes} />
           <CommentButton
@@ -144,7 +132,7 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 };
 
 const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
-  item: { id, name, time, stt, card, like, comment, avatar },
+  progress: { id, caption, createdAt, challenge, comments, image, video, location },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [numberOfLikes, setNumberOfLikes] = useState(0);
@@ -177,20 +165,21 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
           <View className="flex-row">
             <PostAvatar src="https://picsum.photos/200/300" />
             <View className="ml-2">
-              <Text className="text-h6 font-bold">{name}</Text>
-              <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+              <Text className="text-h6 font-bold">{caption}</Text>
+              <Text className="text-gray-dark text-xs font-light ">
+                {createdAt}
+              </Text>
             </View>
           </View>
           {/* <TouchableOpacity onPress={() => console.log('press')}>
             <Text className="text-h6 font-medium ">...</Text>
           </TouchableOpacity> */}
         </View>
-        <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
-        <ChallengeImage
-          name={card.title}
-          image={card.image}
-          onPress={navigationToComment}
-        />
+        {image && (
+          <View className="aspect-square w-full">
+            <ImageSwiper imageSrc={image} />
+          </View>
+        )}
         <View className="mt-4 flex-row">
           <LikeButton likes={numberOfLikes} />
           <CommentButton

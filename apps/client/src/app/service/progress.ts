@@ -71,7 +71,9 @@ export const updateProgressVideo = (
   });
 };
 
-export const getProgressById = (id: string) => {};
+export const getProgressById = (id: string) => {
+  return httpInstance.get(`/challenge/progress/${id}`);
+};
 
 export const getProgressLikes = (
   id: string

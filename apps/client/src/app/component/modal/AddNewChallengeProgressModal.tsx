@@ -44,7 +44,6 @@ interface IAddNewChallengeProgressModalProps {
   challengeId: string;
   isVisible: boolean;
   onClose: () => void;
-  setShouldProgressPageRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setShouldRefetch: React.Dispatch<React.SetStateAction<boolean>>;
   setProgressLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -99,7 +98,6 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
 > = ({
-  setShouldProgressPageRefresh,
   setProgressLoading,
   setShouldRefetch,
   challengeId,
@@ -202,7 +200,6 @@ export const AddNewChallengeProgressModal: FC<
   const handleCloseModal = () => {
     setIsShowModal(false);
     onClose();
-    setShouldProgressPageRefresh(true);
     setProgressLoading(true);
     setShouldRefetch(true);
   };

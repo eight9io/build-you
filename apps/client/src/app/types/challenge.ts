@@ -24,8 +24,9 @@ export interface IProgressChallenge {
   image: string[] | string | null;
   video: string | null;
   location: string;
-  like: number;
   createdAt: string;
+  likes?: any[];
+  first?: boolean; 
 }
 
 export interface IChallenge {

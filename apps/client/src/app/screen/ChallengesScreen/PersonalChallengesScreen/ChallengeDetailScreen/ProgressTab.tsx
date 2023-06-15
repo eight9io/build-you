@@ -26,21 +26,37 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [localProgressData, setLocalProgressData] = useState<
     IProgressChallenge[]
   >([]);
-  const [shouldUseLocalProgressData, setShouldUseLocalProgressData] =
-    useState<boolean>(false);
   const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
-  const [progressLoading, setProgressLoading] = useState<boolean>(false);
+  const [progressLoading, setProgressLoading] = useState<boolean>(true);
 
   const { t } = useTranslation();
 
-  const progressData =
-    challengeData?.progress &&
-    challengeData?.progress.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  useEffect(() => {
+    const progressData =
+      challengeData?.progress &&
+      challengeData?.progress.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
+    progressData?.forEach((progress) => {
+      httpInstance
+        .get(`/challenge/progress/like/${progress.id}`)
+        .then((res) => {
+          progress.likes = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
+    setLocalProgressData(progressData as IProgressChallenge[]);
+    setTimeout(() => {
+      setProgressLoading(false);
+    }, 800);
+  }, [challengeData]);
 
   useEffect(() => {
-    if (shouldUseLocalProgressData || shouldRefetch) {
+    if (shouldRefetch) {
       httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
         const progressDataLocal =
           res.data?.progress &&
@@ -60,9 +76,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
       setShouldRefetch(false);
       setTimeout(() => {
         setProgressLoading(false);
-      }, 600);
+      }, 800);
     }
-  }, [shouldUseLocalProgressData, shouldRefetch]);
+  }, [shouldRefetch]);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -87,7 +103,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           />
           <AddNewChallengeProgressModal
             setProgressLoading={setProgressLoading}
-            setShouldProgressPageRefresh={setShouldUseLocalProgressData}
             setShouldRefetch={setShouldRefetch}
             challengeId={challengeData.id}
             isVisible={isModalVisible}
@@ -101,22 +116,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   return (
     <View className="h-full flex-1">
       {progressLoading && <SkeletonLoadingCommon />}
-      {!shouldUseLocalProgressData && !progressLoading && (
-        <FlatList
-          data={progressData}
-          ListHeaderComponent={<AddNewChallengeProgressButton />}
-          renderItem={({ item }) => (
-            <ProgressCard
-              itemProgressCard={item}
-              userData={userData}
-              onEditProgress={handleEditProgress}
-              onDeleteProgressSuccess={handleDeleteProgressSuccess}
-            />
-          )}
-          contentContainerStyle={{ paddingBottom: 300 }}
-        />
-      )}
-      {shouldUseLocalProgressData && !progressLoading && (
+      {!progressLoading && (
         <FlatList
           data={localProgressData}
           ListHeaderComponent={<AddNewChallengeProgressButton />}

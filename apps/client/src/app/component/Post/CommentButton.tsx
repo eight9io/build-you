@@ -19,10 +19,11 @@ const CommentButton: FC<ICommentButtonProps> = ({
   const [numberOfComments, setNumberOfComments] = useState(0);
 
   useEffect(() => {
+    if (!progressId) return;
     (async () => {
       await loadProgressComments();
     })();
-  }, []);
+  }, [progressId]);
 
   const loadProgressComments = async () => {
     try {

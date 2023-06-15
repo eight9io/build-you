@@ -8,6 +8,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 
 import httpInstance from '../../../../utils/http';
+import {
+  deleteChallenge,
+  completeChallenge,
+} from '../../../../service/challenge';
 
 import { RootStackParamList } from '../../../../navigation/navigation.type';
 import { IChallenge } from '../../../../types/challenge';
@@ -23,6 +27,7 @@ import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
 
 import { useTranslation } from 'react-i18next';
+
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
 );
@@ -33,6 +38,7 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 interface IRightPersonalChallengeDetailOptionsProps {
+  challengeData: IChallenge | undefined;
   onEditChallengeBtnPress: () => void;
   setIsDeleteChallengeDialogVisible: React.Dispatch<
     React.SetStateAction<boolean>
@@ -41,10 +47,13 @@ interface IRightPersonalChallengeDetailOptionsProps {
 
 export const RightPersonalChallengeDetailOptions: FC<
   IRightPersonalChallengeDetailOptionsProps
-> = ({ onEditChallengeBtnPress, setIsDeleteChallengeDialogVisible }) => {
+> = ({
+  challengeData,
+  onEditChallengeBtnPress,
+  setIsDeleteChallengeDialogVisible,
+}) => {
   const [isSharing, setIsSharing] = React.useState(false);
-  const [isComplete, setIsComplete] = React.useState(false);
-  const { t } = useTranslation();
+
   // when sharing is available, we can share the image
   const onShare = async () => {
     setIsSharing(true);
@@ -57,11 +66,19 @@ export const RightPersonalChallengeDetailOptions: FC<
     }
     setIsSharing(false);
   };
+  const onCompleteChallenge = () => {
+    if (!challengeData) return;
+    completeChallenge(challengeData.id).then((res) => {
+      console.log(res)
+      console.log(res.status);
+    }
+    );
+  };
 
   return (
     <View>
       <View className="-mt-1 flex flex-row items-center">
-        <TouchableOpacity onPress={() => setIsComplete(true)}>
+        <TouchableOpacity onPress={onCompleteChallenge}>
           <TaskAltIcon />
         </TouchableOpacity>
         <View className="pl-4 pr-2">
@@ -113,12 +130,13 @@ const PersonalChallengeDetailScreen = ({
     navigation.setOptions({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
+          challengeData={challengeData}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
           setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
       ),
     });
-  }, []);
+  }, [challengeData]);
 
   useEffect(() => {
     if (!challengeId || !isFocused) return;
@@ -149,8 +167,7 @@ const PersonalChallengeDetailScreen = ({
 
   const handleDeleteChallenge = () => {
     if (!challengeData) return;
-    httpInstance
-      .delete(`/challenge/delete/${challengeData.id}`)
+    deleteChallenge(challengeData.id)
       .then((res) => {
         if (res.status === 200) {
           setIsDeleteChallengeDialogVisible(false);

@@ -59,11 +59,15 @@ export const updateProgressVideo = (
     type: `video/mp4`,
   } as any);
   return retryRequest(() => {
-    return httpInstance.post(`/challenge/progress/video/${progressId}`, videoData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    return httpInstance.post(
+      `/challenge/progress/video/${progressId}`,
+      videoData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
   });
 };
 
@@ -81,14 +85,30 @@ export const getProgressComments = (
   return httpInstance.get(`/challenge/progress/comment/${id}`);
 };
 
-export const createProgressLike = (data: ICreateProgressLike) => {
-  return httpInstance.post('/challenge/progress/like/create', data);
-}
+export const createProgressLike = (progressId?: string) => {
+  if (!progressId) {
+    return Promise.reject('progressId is required');
+  }
+  return httpInstance.post('/challenge/progress/like/create', {
+    progress: progressId,
+  });
+};
+
+export const deleteProgressLike = (progressId?: string) => {
+  if (!progressId) {
+    return Promise.reject('progressId is required');
+  }
+  return httpInstance.delete(`/challenge/progress/like/delete/${progressId}`);
+};
 
 export const createProgressComment = (data: ICreateProgressComment) => {
   return httpInstance.post('/challenge/progress/comment/create', data);
-}
+};
 
 export const updateProgress = (id: string, data: IUpdateProgress) => {
   return httpInstance.put(`/challenge/progress/update/${id}`, data);
 };
+
+export const deleteProgressComment = (id: string) => {
+  return httpInstance.delete(`/challenge/progress/comment/delete/${id}`);
+}

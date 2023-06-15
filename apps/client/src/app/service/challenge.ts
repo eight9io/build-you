@@ -1,4 +1,9 @@
-import { ICreateChallenge, IEditChallenge, IUpdateChallengeImage } from '../types/challenge';
+import {
+  IChallenge,
+  ICreateChallenge,
+  IEditChallenge,
+  IUpdateChallengeImage,
+} from '../types/challenge';
 import http from '../utils/http';
 import { retryRequest } from '../utils/retryRequest';
 
@@ -33,4 +38,14 @@ export const getChallengeById = (id: string) => {
 
 export const updateChallenge = (id: string, data: IEditChallenge) => {
   return http.put(`/challenge/update/${id}`, data);
-}
+};
+
+export const completeChallenge = (challengeId: string) => {
+  return http.put(`/challenge/update/${challengeId}`, {
+    status: 'closed',
+  });
+};
+
+export const deleteChallenge = (id: string) => {
+  return http.delete(`/challenge/delete/${id}`);
+};

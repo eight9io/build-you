@@ -14,10 +14,18 @@ interface ITextInputProps extends TextInputProps {
   rightIcon?: ReactNode;
   onPress?: () => void;
   multiline?: boolean;
+  onRightIconPress?: () => void;
 }
 
 export const TextInput: FC<ITextInputProps> = (props) => {
-  const { label, rightIcon, onPress, multiline, ...inputProps } = props;
+  const {
+    label,
+    rightIcon,
+    onPress,
+    onRightIconPress,
+    multiline,
+    ...inputProps
+  } = props;
   return (
     <View className="flex flex-col gap-1">
       {label ? (
@@ -64,7 +72,13 @@ export const TextInput: FC<ITextInputProps> = (props) => {
             </View>
             {rightIcon ? (
               <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
-                {rightIcon}
+                {onRightIconPress ? (
+                  <TouchableOpacity onPress={onRightIconPress}>
+                    {rightIcon}
+                  </TouchableOpacity>
+                ) : (
+                  <>{rightIcon}</>
+                )}
               </View>
             ) : null}
           </>

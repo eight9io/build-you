@@ -129,6 +129,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           ListHeaderComponent={<AddNewChallengeProgressButton />}
           renderItem={({ item }) => (
             <ProgressCard
+              isChallengeCompleted={challengeData.status === 'closed'}
               itemProgressCard={item}
               userData={userData}
               onEditProgress={handleEditProgress}

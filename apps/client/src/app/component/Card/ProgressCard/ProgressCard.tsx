@@ -16,10 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IProgressChallenge } from '../../../types/challenge';
 import { IUserData } from '../../../types/user';
-import {
-  deleteProgress,
-  getProgressLikes,
-} from '../../../service/progress';
+import { deleteProgress, getProgressLikes } from '../../../service/progress';
 import Loading from '../../common/Loading';
 
 import VideoPlayer from '../../common/VideoPlayer';
@@ -28,6 +25,7 @@ import useModal from '../../../hooks/useModal';
 import { getTimeDiffToNow } from '../../../utils/time';
 
 interface IProgressCardProps {
+  isChallengeCompleted?: boolean;
   itemProgressCard: IProgressChallenge;
   userData: IUserData | null;
   onEditProgress?: () => void;
@@ -35,6 +33,7 @@ interface IProgressCardProps {
 }
 
 const ProgressCard: FC<IProgressCardProps> = ({
+  isChallengeCompleted = false,
   itemProgressCard,
   userData,
   onEditProgress,
@@ -138,7 +137,10 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </View>
-        <PopUpMenu options={progressOptions} />
+        <PopUpMenu
+          options={progressOptions}
+          isDisabled={isChallengeCompleted}
+        />
       </View>
       <Text className=" text-md mb-3 font-normal leading-5">
         {itemProgressCard.caption}

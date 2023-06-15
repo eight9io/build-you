@@ -64,6 +64,8 @@ export const RightPersonalChallengeDetailOptions: FC<
     setIsChallengeAlreadyCompletedDialogVisible,
   ] = useState<boolean>(false);
 
+  const isChallengeCompleted = challengeData?.status === 'closed';
+
   // when sharing is available, we can share the image
   const onShare = async () => {
     setIsSharing(true);
@@ -79,7 +81,7 @@ export const RightPersonalChallengeDetailOptions: FC<
 
   const onCheckChallengeCompleted = () => {
     if (!challengeData) return;
-    if (challengeData.status === 'closed') {
+    if (isChallengeCompleted) {
       setIsChallengeAlreadyCompletedDialogVisible(true);
     } else {
       setIsCompletedChallengeDialogVisible(true);
@@ -155,6 +157,7 @@ export const RightPersonalChallengeDetailOptions: FC<
 
         <PopUpMenu
           iconColor="#FF7B1D"
+          isDisabled={isChallengeCompleted}
           options={[
             {
               text: 'Edit',

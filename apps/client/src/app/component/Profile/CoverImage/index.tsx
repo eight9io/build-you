@@ -1,45 +1,84 @@
-import { clsx } from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { View, Image } from 'react-native';
-import CameraSvg from './asset/camera.svg';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  ImageStyle,
+  ImageSourcePropType,
+} from 'react-native';
+import clsx from 'clsx';
 
-interface ICoverImageProps {
+
+
+
+
+import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
+import { getImageFromUserDevice, uploadNewAvatar } from '../../../utils/uploadUserImage';
+interface IProfileAvatarProps {
   src: string;
+  onPress?: () => void;
+  setIsLoadingAvatar?: (value: boolean) => void;
 }
 
-const CoverImage: React.FC<ICoverImageProps> = ({ src }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-  const [imageSource, setImageSource] = useState<{}>({});
+const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
+  src,
+  onPress,
+  setIsLoadingAvatar,
+}) => {
+  const pickImageFunction = getImageFromUserDevice({
+    allowsMultipleSelection: false,
+  });
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await fetch(src);
-        const imageData = await response.blob();
-        setImageSource({ uri: URL.createObjectURL(imageData) });
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        setError(true);
-        setLoading(false);
+  const handlePickImage = async () => {
+
+    const result = await pickImageFunction();
+    if (result && !result.canceled) {
+      const imageToUpload = result.assets[0].uri;
+      setIsLoadingAvatar && setIsLoadingAvatar(true);
+      const res = await uploadNewAvatar(imageToUpload);
+      if (res) {
+        setTimeout(() => {
+          setIsLoadingAvatar && setIsLoadingAvatar(false);
+        }, 3000);
       }
-    };
-
-    fetchImage();
-  }, [src]);
+    }
+  };
 
   return (
-    <View className={clsx('relative overflow-hidden')}>
-      <Image
-        className={clsx('h-[115px]')}
-        source={imageSource}
-      />
-      <View className={clsx('absolute top-3 right-4')}>
-        <CameraSvg />
-      </View>
+    <View className={clsx('relative flex flex-row items-center')}>
+      <Pressable onPress={onPress}>
+        <View
+          className={clsx(
+            'z-100 relative   border-white bg-white'
+          )}
+        >
+          {src && (
+
+
+            <Image
+              className={clsx(' z-100 h-[115px] w-full ')}
+              source={{ uri: src + '?' + new Date() }}
+              alt="profile image"
+            />
+
+          )}
+          {/* {!src && <DefaultAvatar />} */}
+        </View>
+      </Pressable>
+
+      <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
+        <Image
+          className={clsx(
+            'absolute top-[-40px] right-4 h-[28px] w-[28px] rounded-full'
+          )}
+          source={require('./asset/camera.png')}
+        />
+      </TouchableOpacity>
+
     </View>
   );
 };
 
-export default CoverImage;
+export default ProfileAvatar;

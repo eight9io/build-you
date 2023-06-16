@@ -1,11 +1,11 @@
-import { View, Text, Modal } from 'react-native';
+import { View, Text, Modal, ScrollView } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
 import httpInstance from '../../../utils/http';
 
-import { IHardSkillProps } from '../../../types/user';
+import { IHardSkill, IHardSkillProps } from '../../../types/user';
 
 import Header from '../../common/Header';
 import InlineTextInput from '../../common/Inputs/InlineTextInput';
@@ -13,24 +13,26 @@ import AddEmojiButton from '../../common/Buttons/AddEmojiButton';
 import AddEmojiModal from '../AddEmoji';
 import Close from '../../../component/asset/close.svg';
 import Button from '../../common/Buttons/Button';
+import clsx from 'clsx';
+import AddSkillModal from '../AddSkill';
 
 interface IAddSkillModallProps {
-  setUserAddSkill: (skills: any) => void;
+  setIsShowAddHardSkillModal: (value: boolean) => void;
   isVisible: boolean;
   onClose: () => void;
+  setArrayMyHardSkills: (skills: any) => void;
+  arrayMyHardSkills: IHardSkill[];
 }
 
+const NUMBER_OF_SKILL_REQUIRED = 3;
+const MAX_NUMBER_OF_SKILL = 10;
 export const AddHardSkills: FC<IAddSkillModallProps> = ({
-  setUserAddSkill,
+  setIsShowAddHardSkillModal,
   isVisible,
   onClose,
+  setArrayMyHardSkills,
+  arrayMyHardSkills,
 }) => {
-  const [showEmojiModal, setShowEmojiModal] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
-
-  const [selectEmojiError, setSelectEmojiError] = useState<boolean>(false);
-  const [skillNameError, setSkillNameError] = useState<boolean>(false);
-
   const { t } = useTranslation();
   const {
     control,
@@ -43,56 +45,74 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
       Skill: null,
     },
   });
+  const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
+    IHardSkill[]
+  >([]);
 
-  const onCloseEmojiModal = () => {
-    setShowEmojiModal(false);
-  };
-
-  const skillName = watch('Skill');
+  const [fetchedHardSkills, setFetchedHardSkills] = useState<IHardSkill[]>([]);
 
   useEffect(() => {
-    if (skillName) {
-      setSkillNameError(false);
+    const fetchSkills = async () => {
+      try {
+        const response = await httpInstance.get('/skill/hard/list');
+        setFetchedHardSkills(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSkills();
+    setSelectedCompetencedSkill(arrayMyHardSkills);
+  }, [arrayMyHardSkills]);
+
+  const [isShowAddSkillModal, setIsShowAddSkillModal] =
+    useState<boolean>(false);
+  const [userAddSkill, setUserAddSkill] = useState<IHardSkill[]>([]);
+  const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
+  const addCompetenceSkill = (skill: IHardSkill) => {
+    if (
+      selectedCompetencedSkill.length >= MAX_NUMBER_OF_SKILL &&
+      !selectedCompetencedSkill.find((item) => item.id === skill.id)
+    ) {
+      setNumberOfSkillError(true);
+      return;
     }
-  }, [skillName]);
-
-  const handleSave = async () => {
-    if (!selectedEmoji) {
-      setSelectEmojiError(true);
+    if (!selectedCompetencedSkill.find((item) => item.id === skill.id)) {
+      setSelectedCompetencedSkill((prev) => [...prev, skill]);
+    } else {
+      setSelectedCompetencedSkill((prev) =>
+        prev.filter((item) => item.id !== skill.id)
+      );
     }
-    if (!skillName) {
-      setSkillNameError(true);
+  };
+  const checkNumberOfSkills = () => {
+    if (
+      selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length > MAX_NUMBER_OF_SKILL
+    ) {
+      setNumberOfSkillError(true);
+      return false;
     }
-    if (!selectedEmoji || !skillName) return;
+    setNumberOfSkillError(false);
 
-    const skill = `${selectedEmoji} ${skillName}`;
-
-    let skillToSave: IHardSkillProps | null = null;
-
-    await httpInstance
-      .post('/skill/hard/create', {
-        skill,
-      })
-      .then((res) => {
-        console.log(res.data);
-        skillToSave = res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(skillToSave);
-    setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
-    selectedEmoji && setSelectedEmoji(null);
-    reset();
-    onClose();
+    return (
+      selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length <= MAX_NUMBER_OF_SKILL
+    );
   };
 
-  const onCloseAddSkillModal = () => {
-    onClose();
-    setSelectedEmoji(null);
-    selectEmojiError && setSelectEmojiError(false);
-    skillNameError && setSkillNameError(false);
-    reset();
+  useEffect(() => {
+    if (userAddSkill.length > 0) {
+      setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);
+      setUserAddSkill([]);
+    }
+  }, [userAddSkill]);
+  const changeHardSkill = async () => {
+    const isNumberOfSkills = await checkNumberOfSkills();
+
+    if (isNumberOfSkills) {
+      await setArrayMyHardSkills(selectedCompetencedSkill);
+      onClose();
+    }
   };
 
   return (
@@ -101,59 +121,68 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
-        <AddEmojiModal
-          isVisible={showEmojiModal}
-          onClose={onCloseEmojiModal}
-          setExternalSelectedEmoji={setSelectedEmoji}
-          setSelectEmojiError={setSelectEmojiError}
-        />
-        <Header
-          title={t('add_hard_skill_modal.title') as string}
-          leftBtn={<Close fill={'black'} />}
-          rightBtn={
-            <Text className="text-base font-normal text-[#6C6E76]">
-              {t('add_hard_skill_modal.save_button').toLocaleUpperCase()}
-            </Text>
-          }
-          onRightBtnPress={handleSubmit(handleSave)}
-          onLeftBtnPress={onCloseAddSkillModal}
-        />
-        <View className="px-4">
-          <View className="py-4">
-            <Text className="text-gray-dark text-md">
-              Select the emoji and enter the skill name
-            </Text>
-          </View>
-
-          <View className="py-2">
-            <AddEmojiButton
-              selectedEmoji={selectedEmoji}
-              triggerFunction={() => setShowEmojiModal(true)}
-              selectEmojiError={selectEmojiError}
-            />
-          </View>
-          <View className="py-8">
-            <InlineTextInput
-              title="Skill"
-              containerClassName="pl-6"
-              placeholder="Enter your skill name"
-              control={control}
-              errors={errors}
-              showError={skillNameError}
-            />
-          </View>
-        </View>
-
-        <View className="absolute bottom-12 left-0 h-12 w-full px-4">
-          <Button
-            title="Save"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-            onPress={handleSave}
+      <ScrollView showsVerticalScrollIndicator>
+        <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
+          <Header
+            title={t('add_hard_skill_modal.title') as string}
+            leftBtn={<Close fill={'black'} />}
+            rightBtn={t('add_hard_skill_modal.save_button').toLocaleUpperCase()}
+            onRightBtnPress={changeHardSkill}
+            onLeftBtnPress={onClose}
           />
+
+          <View className=" px-4 py-6 ">
+            <Text className="text-black-default text-h4 text-center font-semibold leading-6">
+              {t('add_hard_skill_modal.caption')}
+            </Text>
+            <Text className="text-gray-dark text-md mx-2 pt-2 text-center font-normal leading-6">
+              {t('add_hard_skill_modal.caption_placeholder')}
+            </Text>
+            {numberOfSkillError && (
+              <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
+                {t('add_hard_skill_modal.caption_required')}
+              </Text>
+            )}
+            <View className="w-full flex-col justify-between py-4 ">
+              <View className="w-full flex-row flex-wrap items-center justify-center">
+                {fetchedHardSkills.map((item, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      title={item.skill as any}
+                      onPress={() => addCompetenceSkill(item)}
+                      textClassName="line-[30px] text-center text-md text-gray-dark font-medium"
+                      containerClassName={clsx(
+                        'border-gray-300 ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-3',
+                        {
+                          'bg-primary-10': selectedCompetencedSkill.find(
+                            (skill) => skill.id === item.id
+                          ),
+                          'border-primary-default':
+                            selectedCompetencedSkill.find(
+                              (skill) => skill.id === item.id
+                            ),
+                        }
+                      )}
+                    />
+                  );
+                })}
+              </View>
+              <Button
+                containerClassName="flex-none px-1"
+                textClassName="line-[30px] text-center text-md font-medium text-primary-default"
+                title={t('modal_skill.manually')}
+                onPress={() => setIsShowAddSkillModal(true)}
+              />
+            </View>
+          </View>
         </View>
-      </View>
+      </ScrollView>
+      <AddSkillModal
+        setUserAddSkill={setUserAddSkill}
+        isVisible={isShowAddSkillModal}
+        onClose={() => setIsShowAddSkillModal(false)}
+      />
     </Modal>
   );
 };

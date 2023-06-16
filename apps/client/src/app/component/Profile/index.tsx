@@ -28,7 +28,7 @@ interface IProfileComponentProps {
   isLoadingAvatar: boolean;
   setIsLoadingAvatar: (value: boolean) => void;
 }
-
+const coverDefaultImage = "https://images.unsplash.com/photo-1522774607452-dac2ecc66330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
 const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   navigation,
   userData,
@@ -40,7 +40,7 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   };
   return (
     <View className={clsx('relative z-10')}>
-      <CoverImage src="https://images.unsplash.com/photo-1522774607452-dac2ecc66330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
+      <CoverImage src={userData?.cover as string || coverDefaultImage} />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         <ProfileAvartar

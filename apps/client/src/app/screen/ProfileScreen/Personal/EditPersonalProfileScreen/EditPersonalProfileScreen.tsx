@@ -9,11 +9,10 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { IHardSkillProps } from '../../../../types/user';
+import { IHardSkill, IHardSkillProps } from '../../../../types/user';
 
 import Warning from '../../../../component/asset/warning.svg';
 import TextInput from '../../../../component/common/Inputs/TextInput';
-import AddSkillModal from '../../../../component/modal/AddSkill';
 
 import PencilEditSvg from '../../../../component/asset/pencil-edit.svg';
 import Button from '../../../../component/common/Buttons/Button';
@@ -24,21 +23,24 @@ import { MOCK_OCCUPATION_SELECT } from '../../../../mock-data/occupation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
 import { useUserProfileStore } from '../../../../store/user-data';
-import { useCompleteProfileStore } from '../../../../store/complete-user-profile';
 import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
 import AddHardSkills from 'apps/client/src/app/component/modal/AddHardSkills/AddHardSkills';
+import { useAuthStore } from 'apps/client/src/app/store/auth-store';
+import DateTimePicker2 from 'apps/client/src/app/component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
 
 interface IHardSkillSectionProps {
   setOpenModal: () => void;
-  hardSkill: IHardSkillProps[];
+  hardSkill: IHardSkill[];
+  setArrayMyHardSkills: (value: IHardSkill[]) => void;
 }
 
 const HardSkillSection: FC<IHardSkillSectionProps> = ({
   setOpenModal,
   hardSkill,
+  setArrayMyHardSkills,
 }) => {
   const handleOpenEditHardSkillModal = () => {
     setOpenModal();
@@ -65,7 +67,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
                   containerClassName="border-gray-light ml-1 border-[1px] mx-2 my-1.5  h-[48px] flex-none px-5"
                   textClassName="line-[30px] text-center text-md font-medium"
                   key={index}
-                  title={content?.skill?.skill as string}
+                  title={content?.skill as string}
                 />
               );
             })}
@@ -81,39 +83,49 @@ const EditPersonalProfileScreen = () => {
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
     number | undefined
   >();
-  const [userAddSkill, setUserAddSkill] = useState<IHardSkillProps[]>([]);
-  const [isShowAddSkillModal, setIsShowAddSkillModal] =
+  const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
 
   const { t } = useTranslation();
-  const [requestError, setRequestError] = useState<string | null>(null);
 
   const { getUserProfile, setUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
+  const userData = getUserProfile();
+
   useGetUserData();
   const {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<{
     name: string;
     surname: string;
-    birth: string;
+    birth: Date | undefined | string;
     occupation: string;
     bio: string;
     hardSkill: IHardSkillProps[];
   }>({
     defaultValues: {
-      name: userProfile?.name || '',
-      surname: userProfile?.surname || '',
-      birth: (userProfile?.birth as string) || undefined,
-      occupation: '',
-      bio: userProfile?.bio || '',
-      hardSkill: userProfile?.hardSkill || [],
+      name: userData?.name || '',
+      surname: userData?.surname || '',
+      birth: userData?.birth || undefined,
+      occupation: userData?.occupation?.name || 'Developer',
+      bio: userData?.bio || '',
+      hardSkill: userData?.hardSkill || [],
     },
     resolver: yupResolver(EditProfileValidators()),
   });
+  const occupation = getValues('occupation');
+  const birth = getValues('birth');
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const handleDatePicked = (date?: Date) => {
+    if (date) {
+      setValue('birth', date);
+      setSelectedDate(date);
+    }
+    setShowDateTimePicker(false);
+  };
 
   const handleOccupationPicked = (index: number) => {
     if (index >= 0) {
@@ -122,27 +134,65 @@ const EditPersonalProfileScreen = () => {
     }
     setShowOccupationPicker(false);
   };
+  const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
+  useEffect(() => {
+    if (userData?.hardSkill) {
+      const hardSkill = userData?.hardSkill.map((item) => {
+        return {
+          skill: item.skill.skill,
+          id: item.skill.id,
+        };
+      });
+      setArrayMyHardSkills(hardSkill);
+    }
+  }, [userData?.hardSkill]);
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    const hardSkill = arrayMyHardSkills.map((item) => {
+      return {
+        skill: {
+          skill: item.skill,
+          id: item.id,
+        },
+      };
+    });
+    console.log(
+      '🚀 ~ file: EditPersonalProfileScreen.tsx:159 ~ hardSkill ~ hardSkill:',
+      hardSkill
+    );
   };
+
   return (
     <SafeAreaView className="h-full bg-white">
       <View className="  h-full rounded-t-xl bg-white ">
         <AddHardSkills
-          setUserAddSkill={setUserAddSkill}
-          isVisible={isShowAddSkillModal}
-          onClose={() => setIsShowAddSkillModal(false)}
+          setIsShowAddHardSkillModal={setIsShowAddHardSkillModal}
+          isVisible={isShowAddHardSkillModal}
+          onClose={() => setIsShowAddHardSkillModal(false)}
+          setArrayMyHardSkills={setArrayMyHardSkills}
+          arrayMyHardSkills={arrayMyHardSkills}
         />
-        <View className="mt-8 px-4">
-          {requestError && (
-            <View className="mb-2 flex flex-row">
-              <Text className="pl-1 text-sm font-normal text-red-500">
-                {requestError}
-              </Text>
-            </View>
-          )}
-        </View>
-        {userProfile && (
+        <DateTimePicker2
+          shouldMinus16Years
+          selectedDate={selectedDate}
+          setSelectedDate={handleDatePicked}
+          setShowDateTimePicker={setShowDateTimePicker}
+          showDateTimePicker={showDateTimePicker}
+          maximumDate={dayjs().subtract(16, 'years').startOf('day').toDate()}
+          minimumDate={dayjs().subtract(100, 'years').startOf('day').toDate()}
+        />
+
+        <SelectPicker
+          show={showOccupationPicker}
+          data={MOCK_OCCUPATION_SELECT}
+          selectedIndex={selectedOccupationIndex}
+          onSelect={handleOccupationPicked}
+          onCancel={() => {
+            setShowOccupationPicker(false);
+          }}
+        />
+
+        {userData && (
           <ScrollView className=" h-full w-full px-4 ">
             <View>
               <Controller
@@ -205,6 +255,7 @@ const EditPersonalProfileScreen = () => {
                   <View className="flex flex-col">
                     <TextInput
                       label="Birthday"
+                      placeholder={'Enter your birth day'}
                       placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                       rightIcon={
                         <TouchableOpacity
@@ -221,7 +272,7 @@ const EditPersonalProfileScreen = () => {
                       onPress={() => setShowDateTimePicker(true)}
                       className="text-black-default"
                     />
-                    {errors.birth && (
+                    {errors.birth && !birth && (
                       <View className="flex flex-row pt-2">
                         <Warning />
                         <Text className="pl-1 text-sm font-normal text-red-500">
@@ -248,7 +299,7 @@ const EditPersonalProfileScreen = () => {
                       onPress={() => setShowOccupationPicker(true)}
                       value={value}
                     />
-                    {errors.occupation && (
+                    {errors.occupation && !occupation && (
                       <View className="flex flex-row pt-2">
                         <Warning />
                         <Text className="pl-1 text-sm font-normal text-red-500">
@@ -283,8 +334,9 @@ const EditPersonalProfileScreen = () => {
             </View>
 
             <HardSkillSection
-              setOpenModal={() => setIsShowAddSkillModal(true)}
-              hardSkill={userProfile?.hardSkill || []}
+              setOpenModal={() => setIsShowAddHardSkillModal(true)}
+              hardSkill={arrayMyHardSkills || []}
+              setArrayMyHardSkills={setArrayMyHardSkills}
             />
 
             <Button

@@ -80,7 +80,6 @@ export default function Login({
           );
           setErrMessage('');
         } else {
-          console.log('err', res);
           setErrMessage(err_server);
         }
       })

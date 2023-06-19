@@ -32,7 +32,6 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
-  console.log(isLoadingAvatar)
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">

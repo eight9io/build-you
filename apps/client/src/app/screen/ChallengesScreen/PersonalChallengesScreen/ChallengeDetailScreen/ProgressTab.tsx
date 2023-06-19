@@ -14,12 +14,14 @@ import httpInstance from '../../../../utils/http';
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 
 interface IProgressTabProps {
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  shouldRefresh: boolean;
   challengeData: IChallenge;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ProgressTab: FC<IProgressTabProps> = ({
   setShouldRefresh,
+  shouldRefresh,
   challengeData,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -56,7 +58,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   }, [challengeData]);
 
   useEffect(() => {
-    if (shouldRefetch) {
+    if (shouldRefetch || shouldRefresh) {
+      setProgressLoading(true);
+
       httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
         const progressDataLocal =
           res.data?.progress &&
@@ -74,11 +78,12 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         setLocalProgressData(progressDataLocal);
       });
       setShouldRefetch(false);
+      setShouldRefresh(false);
       setTimeout(() => {
         setProgressLoading(false);
       }, 800);
     }
-  }, [shouldRefetch]);
+  }, [shouldRefetch, shouldRefresh]);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -129,6 +134,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           ListHeaderComponent={<AddNewChallengeProgressButton />}
           renderItem={({ item }) => (
             <ProgressCard
+              challengeOwner={challengeData?.owner[0]}
               isChallengeCompleted={challengeData.status === 'closed'}
               itemProgressCard={item}
               userData={userData}

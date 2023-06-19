@@ -1,4 +1,4 @@
-import { IUserData } from "./user";
+import { IUserData } from './user';
 
 export interface ICreateProgress {
   user: string; // user id
@@ -21,6 +21,7 @@ export interface IProgressComment {
   progress: string; // progress id
   user: string; // user id
   userName: string;
+  surName?: string;
   avatar: string;
   comment: string;
   createdAt: Date;
@@ -34,4 +35,14 @@ export interface ICreateProgressComment {
 
 export interface IUpdateProgress {
   caption: string;
+}
+
+export interface IProgressLikeData {
+  id: string;
+  progress: string; //progressId
+  user: string; //userId
+  userName: string;
+  avatar: string;
+  createdAt: string;
+  updatedAt: string;
 }

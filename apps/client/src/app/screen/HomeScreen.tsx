@@ -7,12 +7,15 @@ import { t } from 'i18next';
 
 import { RootStackParamList } from '../navigation/navigation.type';
 
-import FeedPostCard from '../component/Post/FeedPostCard';
-import AppTitle from '../component/common/AppTitle';
-import NavButton from '../component/common/Buttons/NavButton';
-import Button from '../component/common/Buttons/Button';
-import IconSearch from '../component/common/IconSearch/IconSearch';
+import OtherUserProfileScreen from './ProfileScreen/OtherUser/OtherUserProfileScreen';
 import ChallengeDetailScreenViewOnly from './ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
+
+import AppTitle from '../component/common/AppTitle';
+import Button from '../component/common/Buttons/Button';
+import FeedPostCard from '../component/Post/FeedPostCard';
+import NavButton from '../component/common/Buttons/NavButton';
+import IconSearch from '../component/common/IconSearch/IconSearch';
+
 import ShareIcon from '../../../assets/svg/share.svg';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
@@ -108,6 +111,31 @@ const HomeScreen = () => {
       <HomeScreenStack.Screen
         name="ChallengeDetailScreenViewOnly"
         component={ChallengeDetailScreenViewOnly}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
+      <HomeScreenStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',

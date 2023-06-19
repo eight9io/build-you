@@ -18,11 +18,13 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
+  shouldRefresh: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
+  shouldRefresh,
   setShouldRefresh,
 }) => {
   const [index, setIndex] = useState(0);
@@ -48,6 +50,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
+            shouldRefresh={shouldRefresh}
             challengeData={challengeData}
             setShouldRefresh={setShouldRefresh}
           />

@@ -22,6 +22,7 @@ import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
 import PostAvatar from '../common/Avatar/PostAvatar';
 import ImageSwiper from '../common/ImageSwiper';
+import { getTimeDiffToNow } from '../../utils/time';
 
 interface IChallengeProgressCardProps {
   progress: IProgressChallenge;
@@ -91,7 +92,7 @@ export const ChallengeProgressCardForComment: React.FC<
               </Text>
               <View className="flex-row gap-3">
                 <Text className="text-gray-dark text-xs font-light ">
-                  {createdAt}
+                  {getTimeDiffToNow(createdAt)}
                 </Text>
                 <Text className="text-gray-dark text-xs font-light ">
                   <IconDot fill={'#7D7E80'} />

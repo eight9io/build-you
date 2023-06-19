@@ -15,6 +15,8 @@ import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loading from '../../../component/common/Loading';
+import { useIsFocused } from '@react-navigation/native';
+import { serviceGetMyProfile } from '../../../service/auth';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -29,22 +31,33 @@ interface IProfileProps {
 }
 
 const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
-  const { getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
-  const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
-  console.log(isLoadingAvatar)
+  const isFocused = useIsFocused();
+  const { getUserProfile, setUserProfile } = useUserProfileStore();
+  useEffect(() => {
+    if (!isFocused) return;
+
+    serviceGetMyProfile()
+      .then((res) => {
+        setUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.error('err', err);
+      });
+  }, [isFocused])
+  const userData = getUserProfile();
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">
         <ScrollView className="w-full bg-gray-50">
           <ProfileComponent
-            userData={userProfile}
+            userData={userData}
             navigation={navigation}
-            isLoadingAvatar={isLoadingAvatar}
-            setIsLoadingAvatar={setIsLoadingAvatar}
+
+            setIsLoading={setIsLoading}
           />
         </ScrollView>
-        {isLoadingAvatar && (
+        {isLoading && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}
       </View>
@@ -54,7 +67,6 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
 
 const PersonalProfileScreen = () => {
   const { getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
   const { t } = useTranslation();
   return (
     <ProfileStack.Navigator

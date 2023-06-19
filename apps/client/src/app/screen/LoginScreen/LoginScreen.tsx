@@ -85,7 +85,6 @@ export default function Login({
         }
       })
       .catch((error) => {
-        console.log("🚀 ~ file: LoginScreen.tsx:88 ~ onSubmit ~ error:", error.response.data.statusCode)
         setErrMessage(errorMessage(error, 'err_login') as string);
       })
       .finally(() => {

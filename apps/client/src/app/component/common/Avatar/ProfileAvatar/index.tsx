@@ -20,17 +20,21 @@ import { IUserData } from '../../../../types/user';
 
 import DefaultAvatar from './asset/default-avatar.svg';
 import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
+import ConfirmDialog from '../../Dialog/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
-  setIsLoadingAvatar?: (value: boolean) => void;
+  setIsLoading?: (value: boolean) => void;
 }
 
 const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,
   onPress,
-  setIsLoadingAvatar,
+  setIsLoading,
 }) => {
+  const { t } = useTranslation();
+  const [isErrDialog, setIsErrDialog] = useState(false)
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
   });
@@ -40,11 +44,11 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       const imageToUpload = result.assets[0].uri;
-      setIsLoadingAvatar && setIsLoadingAvatar(true);
+      setIsLoading && setIsLoading(true);
       const res = await uploadNewAvatar(imageToUpload);
       if (res) {
         setTimeout(() => {
-          setIsLoadingAvatar && setIsLoadingAvatar(false);
+          setIsLoading && setIsLoading(false);
         }, 3000);
       }
     }
@@ -52,6 +56,15 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
 
   return (
     <View className={clsx('relative flex flex-row items-center')}>
+      <ConfirmDialog
+        title={t('dialog.err_title_update_img') as string}
+        description={
+          t('dialog.err_update_profile') as string
+        }
+        isVisible={isErrDialog}
+        onClosed={() => setIsErrDialog(false)}
+        closeButtonLabel={t('close') || ''}
+      />
       <Pressable onPress={onPress}>
         <View
           className={clsx(
@@ -66,15 +79,18 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
                 )}
                 source={require('./asset/avatar-load.png')}
                 alt="profile image"
+
               />
               <Image
                 className={clsx(' z-100 h-[101px] w-[101px] rounded-full')}
                 source={{ uri: src + '?' + new Date() }}
                 alt="profile image"
+
               />
             </>
           )}
           {!src && <DefaultAvatar />}
+
         </View>
       </Pressable>
 

@@ -23,10 +23,14 @@ import { MOCK_OCCUPATION_SELECT } from '../../../../mock-data/occupation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
 import { useUserProfileStore } from '../../../../store/user-data';
-import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
-import AddHardSkills from 'apps/client/src/app/component/modal/AddHardSkills/AddHardSkills';
-import { useAuthStore } from 'apps/client/src/app/store/auth-store';
-import DateTimePicker2 from 'apps/client/src/app/component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+import { useGetUserData } from '../../../../hooks/useGetUser';
+import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkills';
+import { useAuthStore } from '../../../../store/auth-store';
+import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+import httpInstance from '../../../../utils/http';
+import Loading from '../../../../component/common/Loading';
+import { serviceUpdateMyProfile } from '../../../../service/profile';
+import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
@@ -40,14 +44,14 @@ interface IHardSkillSectionProps {
 const HardSkillSection: FC<IHardSkillSectionProps> = ({
   setOpenModal,
   hardSkill,
-  setArrayMyHardSkills,
+
 }) => {
   const handleOpenEditHardSkillModal = () => {
     setOpenModal();
   };
   return (
     <View className="flex flex-col items-start justify-start ">
-      <View className="flex flex-row items-center">
+      <View className="flex-row justify-between items-center w-full">
         <Text className="text-primary-dark pr-2 text-base font-semibold">
           Hard skills
         </Text>
@@ -77,7 +81,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
   );
 };
 
-const EditPersonalProfileScreen = () => {
+const EditPersonalProfileScreen = ({ navigation }: any) => {
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [showOccupationPicker, setShowOccupationPicker] = useState(false);
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
@@ -85,12 +89,12 @@ const EditPersonalProfileScreen = () => {
   >();
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState(false)
+  const [isErrDialog, setIsErrDialog] = useState(false)
   const { t } = useTranslation();
 
-  const { getUserProfile, setUserProfile } = useUserProfileStore();
+  const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-
   useGetUserData();
   const {
     control,
@@ -148,23 +152,43 @@ const EditPersonalProfileScreen = () => {
   }, [userData?.hardSkill]);
 
   const onSubmit = (data: any) => {
-    const hardSkill = arrayMyHardSkills.map((item) => {
-      return {
-        skill: {
-          skill: item.skill,
-          id: item.id,
-        },
-      };
-    });
-    console.log(
-      '🚀 ~ file: EditPersonalProfileScreen.tsx:159 ~ hardSkill ~ hardSkill:',
-      hardSkill
-    );
+    setIsLoading(true)
+    serviceUpdateMyProfile(userData?.id, {
+      name: data.name,
+      surname: data.surname,
+      bio: data.bio,
+      birth: data.birth,
+      occupation: data.occupation,
+      hardSkill: arrayMyHardSkills
+    })
+      .then(async (res) => {
+        if (res.status === 200) {
+          setIsLoading(false)
+          navigation.navigate('Profile')
+
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false)
+        setIsErrDialog(true)
+      });
+
+
+
   };
 
   return (
     <SafeAreaView className="h-full bg-white">
       <View className="  h-full rounded-t-xl bg-white ">
+        <ConfirmDialog
+          title={t('dialog.err_title_update_profile') as string}
+          description={
+            t('dialog.err_update_profile') as string
+          }
+          isVisible={isErrDialog}
+          onClosed={() => setIsErrDialog(false)}
+          closeButtonLabel={t('close') || ''}
+        />
         <AddHardSkills
           setIsShowAddHardSkillModal={setIsShowAddHardSkillModal}
           isVisible={isShowAddHardSkillModal}
@@ -193,7 +217,7 @@ const EditPersonalProfileScreen = () => {
         />
 
         {userData && (
-          <ScrollView className=" h-full w-full px-4 ">
+          <ScrollView className=" h-full w-full px-4 pt-8 ">
             <View>
               <Controller
                 control={control}
@@ -326,7 +350,7 @@ const EditPersonalProfileScreen = () => {
                       value={value}
                       multiline={true}
                       numberOfLines={4}
-                      // className="h-32"
+                    // className="h-32"
                     />
                   </View>
                 )}
@@ -346,6 +370,9 @@ const EditPersonalProfileScreen = () => {
               onPress={handleSubmit(onSubmit)}
             />
           </ScrollView>
+        )}
+        {isLoading && (
+          <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}
       </View>
     </SafeAreaView>

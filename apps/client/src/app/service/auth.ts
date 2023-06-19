@@ -44,3 +44,6 @@ export const serviceForgotPassword = (email: string) => {
 export const validateInAppToken = (token: string) => {
   return http.post('/auth/validate', { token });
 };
+export const serviceGetMyProfile = () => {
+  return http.get('/user/me')
+};

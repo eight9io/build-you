@@ -53,6 +53,24 @@ export const uploadNewAvatar = async (image: string) => {
   return response.data;
 };
 
+
+export const uploadNewCover = async (image: string) => {
+  const formData = new FormData();
+  const uri = Platform.OS === 'android' ? image : image.replace('file://', '');
+  formData.append('file', {
+    uri,
+    name: 'avatar.jpg',
+    type: 'image/jpeg',
+  } as any);
+
+  const response = await httpInstance.post('/user/cover', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
 export const getImageExtension = (uri: string) => {
   return uri.split('.')[1];
 };

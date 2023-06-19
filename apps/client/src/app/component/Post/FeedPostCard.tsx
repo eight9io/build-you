@@ -76,22 +76,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
-  const [numberOfLikes, setNumberOfLikes] = useState(0);
-
-  useEffect(() => {
-    (async () => {
-      await loadProgressLikes();
-    })();
-  }, []);
-
-  const loadProgressLikes = async () => {
-    try {
-      const response = await getProgressLikes(id);
-      if (response.status === 200) setNumberOfLikes(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const isToken = getAccessToken();
   return (
@@ -123,7 +107,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           }
         />
         <View className="mt-4 flex-row">
-          <LikeButton likes={numberOfLikes} navigation={navigation} />
+          <LikeButton progressId={id} />
           <CommentButton
             navigationToComment={
               isToken

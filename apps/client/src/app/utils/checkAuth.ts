@@ -99,6 +99,7 @@ export const checkAuthTokenLocalValidation = async () => {
 export const checkRefreshTokenLocalValidation = async () => {
   try {
     const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
+    console.log('refreshTokenLocal', refreshTokenLocal);
     if (!refreshTokenLocal) return false;
     const decodedRefreshToken = decodedAuthToken(refreshTokenLocal);
     const currentTime = Date.now() / 1000;
@@ -113,6 +114,7 @@ export const checkRefreshTokenLocalValidation = async () => {
         .then((res) => {
           return res;
         });
+      console.log('refreshTokenLocal', newTokens);
       if (newTokens.status !== 201) {
         removeAuthTokensLocalOnLogout();
       } else {

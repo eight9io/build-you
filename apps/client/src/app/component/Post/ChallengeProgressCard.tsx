@@ -7,19 +7,26 @@ import {
 } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { clsx } from 'clsx';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+
+import { RootStackParamList } from '../../navigation/navigation.type';
+import { IProgressChallenge } from '../../types/challenge';
+
+import { useGetOtherUserData } from '../../hooks/useGetUser';
+import { getProgressComments, getProgressLikes } from '../../service/progress';
+
 import IconDot from './asset/dot.svg';
+
 import Card from '../common/Card';
-import PostAvatar from '../common/Avatar/PostAvatar';
 import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigation/navigation.type';
-import { getProgressComments, getProgressLikes } from '../../service/progress';
-import { IProgressChallenge } from '../../types/challenge';
+import PostAvatar from '../common/Avatar/PostAvatar';
 import ImageSwiper from '../common/ImageSwiper';
 
 interface IChallengeProgressCardProps {
   progress: IProgressChallenge;
+  ownerId?: string;
+  shouldRefreshComments?: boolean;
 }
 
 interface IChallengeImageProps {
@@ -48,30 +55,27 @@ const ChallengeImageForComment: FC<IChallengeImageProps> = ({
 export const ChallengeProgressCardForComment: React.FC<
   IChallengeProgressCardProps
 > = ({
-  progress: { id, caption, createdAt, challenge, comments, image, video, location },
+  progress: {
+    id,
+    caption,
+    createdAt,
+    challenge,
+    comments,
+    image,
+    video,
+    location,
+  },
+  ownerId,
+  shouldRefreshComments,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [numberOfLikes, setNumberOfLikes] = useState(0);
-
-  useEffect(() => {
-    (async () => {
-      await loadProgressLikes();
-    })();
-  }, []);
-
-  const loadProgressLikes = async () => {
-    try {
-      const response = await getProgressLikes(id);
-      if (response.status === 200) setNumberOfLikes(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const progressOwnerData = ownerId && useGetOtherUserData(ownerId);
 
   const navigationToComment = () => {
     navigation.navigate('ProgressCommentScreen', {
       progressId: id,
+      ownerId,
     });
   };
 
@@ -82,7 +86,9 @@ export const ChallengeProgressCardForComment: React.FC<
           <View className="flex-row">
             <PostAvatar src="https://picsum.photos/200/300" />
             <View className="ml-2">
-              <Text className="text-h6 font-bold">{caption}</Text>
+              <Text className="text-h6 font-bold">
+                {progressOwnerData?.name} {progressOwnerData?.surname}
+              </Text>
               <View className="flex-row gap-3">
                 <Text className="text-gray-dark text-xs font-light ">
                   {createdAt}
@@ -101,11 +107,12 @@ export const ChallengeProgressCardForComment: React.FC<
           </View>
         )}
         <View className="mt-4 flex-row">
-          <LikeButton likes={numberOfLikes} />
+          <LikeButton progressId={id} />
           <CommentButton
             isViewOnly={true}
             navigationToComment={navigationToComment}
             progressId={id}
+            shouldRefreshComments={shouldRefreshComments}
           />
         </View>
       </View>
@@ -132,25 +139,18 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 };
 
 const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
-  progress: { id, caption, createdAt, challenge, comments, image, video, location },
+  progress: {
+    id,
+    caption,
+    createdAt,
+    challenge,
+    comments,
+    image,
+    video,
+    location,
+  },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [numberOfLikes, setNumberOfLikes] = useState(0);
-
-  useEffect(() => {
-    (async () => {
-      await loadProgressLikes();
-    })();
-  }, []);
-
-  const loadProgressLikes = async () => {
-    try {
-      const response = await getProgressLikes(id);
-      if (response.status === 200) setNumberOfLikes(response.data.length);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const navigationToComment = () => {
     navigation.navigate('ProgressCommentScreen', {
@@ -181,7 +181,7 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
           </View>
         )}
         <View className="mt-4 flex-row">
-          <LikeButton likes={numberOfLikes} />
+          <LikeButton progressId={id} />
           <CommentButton
             navigationToComment={navigationToComment}
             progressId={id}

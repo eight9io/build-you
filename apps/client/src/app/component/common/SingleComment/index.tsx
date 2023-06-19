@@ -62,7 +62,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
                   'text-primary-light'
               )}
             >
-              {comment.userName}
+              {comment.userName} {comment.surName}
             </Text>
             <Text className={clsx('text-gray-dark text-xs font-light ')}>
               {dayjs(comment.createdAt).fromNow()}

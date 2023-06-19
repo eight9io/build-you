@@ -41,6 +41,7 @@ export type RootStackParamList = {
   };
   ProgressCommentScreen: {
     progressId: string;
+    ownerId?: string;
   };
 
   ProfileScreenLoading: undefined;
@@ -52,6 +53,10 @@ export type RootStackParamList = {
     };
   };
   HomeScreenWithoutLogin: undefined;
+
+  OtherUserProfileScreen: {
+    userId: string;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

@@ -9,12 +9,14 @@ interface ICommentButtonProps {
   progressId: string;
   isViewOnly?: boolean;
   navigationToComment: () => void;
+  shouldRefreshComments?: boolean;
 }
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
   isViewOnly = false,
   navigationToComment,
+  shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
 
@@ -24,6 +26,13 @@ const CommentButton: FC<ICommentButtonProps> = ({
       await loadProgressComments();
     })();
   }, [progressId]);
+
+  useEffect(() => {
+    if (!shouldRefreshComments) return;
+    (async () => {
+      await loadProgressComments();
+    })();
+  }, [shouldRefreshComments]);
 
   const loadProgressComments = async () => {
     try {

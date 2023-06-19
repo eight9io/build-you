@@ -5,31 +5,59 @@ import { clsx } from 'clsx';
 import ThumbUp from './asset/thumb_up.svg';
 import FilledThumbUP from './asset/filled_thumb_up.svg';
 import { useAuthStore } from '../../store/auth-store';
-import { createProgressLike, deleteProgressLike } from '../../service/progress';
+import {
+  createProgressLike,
+  deleteProgressLike,
+  getProgressLikes,
+} from '../../service/progress';
+import { use } from 'i18next';
+import { useUserProfileStore } from '../../store/user-data';
 
 interface ILikeButtonProps {
-  likes: number;
-  isLikedByCurrentUser?: boolean;
-  setIsLikedByCurrentUser?: React.Dispatch<React.SetStateAction<boolean>>;
   progressId?: string;
   navigation?: any;
 }
 
-const LikeButton: FC<ILikeButtonProps> = ({
-  likes = 0,
-  isLikedByCurrentUser = false,
-  setIsLikedByCurrentUser,
-  navigation,
-  progressId,
-}) => {
+const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
   const { getAccessToken } = useAuthStore();
 
+  const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
+  const [isLikedByCurrentUser, setIsLikedByCurrentUser] =
+    useState<boolean>(false);
+
   const [isLiked, setIsLiked] = React.useState(false);
-  const [tempLikes, setTempLikes] = React.useState(likes);
+  const [tempLikes, setTempLikes] = React.useState(numberOfLikes);
   const [shouldOptimisticUpdate, setShouldOptimisticUpdate] =
     React.useState(false);
 
   const isToken = getAccessToken();
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+
+  const loadProgressLikes = async () => {
+    if (!progressId) return;
+    try {
+      const response = await getProgressLikes(progressId);
+      if (response.status === 200) {
+        setNumberOfLikes(response.data.length);
+        const userId = userData?.id;
+        const isLiked = response.data.some((like) => like.user === userId);
+        setIsLikedByCurrentUser(isLiked);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+    })();
+  }, [progressId]);
+
+  useEffect(() => {
+    setTempLikes(numberOfLikes);
+  }, [numberOfLikes]);
 
   const handleLike = () => {
     if (!isToken) {
@@ -41,8 +69,8 @@ const LikeButton: FC<ILikeButtonProps> = ({
         setShouldOptimisticUpdate(true);
         setIsLikedByCurrentUser && setIsLikedByCurrentUser(false);
         setIsLiked(false);
+        setTempLikes((prev) => prev - 1);
       });
-      setTempLikes((prev) => prev - 1);
       return;
     }
     createProgressLike(progressId)
@@ -50,20 +78,12 @@ const LikeButton: FC<ILikeButtonProps> = ({
         setShouldOptimisticUpdate(true);
         setIsLikedByCurrentUser && setIsLikedByCurrentUser(true);
         setIsLiked(true);
+        setTempLikes((prev) => prev + 1);
       })
       .catch((err) => {
         console.log(err);
       });
-    if (isLiked) {
-      setTempLikes((prev) => prev - 1);
-    } else {
-      setTempLikes((prev) => prev + 1);
-    }
-    setIsLiked(!isLiked);
   };
-  useEffect(() => {
-    setTempLikes(likes);
-  }, [likes]);
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handleLike}>
@@ -74,7 +94,9 @@ const LikeButton: FC<ILikeButtonProps> = ({
           (isLikedByCurrentUser ? <FilledThumbUP /> : <ThumbUp />)}
         {shouldOptimisticUpdate && (isLiked ? <FilledThumbUP /> : <ThumbUp />)}
         <Text className={clsx('text-gray-dark text-md font-normal ')}>
-          {shouldOptimisticUpdate ? `${tempLikes} likes` : `${likes} like`}
+          {shouldOptimisticUpdate
+            ? `${tempLikes} ${tempLikes > 1 ? 'likes' : 'like'}`
+            : `${numberOfLikes} ${numberOfLikes > 1 ? 'likes' : 'like'}`}
         </Text>
       </View>
     </TouchableOpacity>

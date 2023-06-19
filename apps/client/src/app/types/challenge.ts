@@ -34,6 +34,12 @@ export interface IChallenge {
   id: string;
   goal: string;
   name: string;
+  owner: {
+    id: string;
+    avatar: string;
+    name: string;
+    surname: string;
+  }[];
   benefits: string;
   reasons: string;
   achievementTime: Date;

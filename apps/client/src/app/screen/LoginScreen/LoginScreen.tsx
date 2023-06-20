@@ -109,7 +109,7 @@ export default function Login({
               <View className="flex-row">
                 {Platform.OS === 'ios' ? <AppleLoginButton /> : null}
                 <LinkedInLoginButton />
-                <GoogleLoginButton />
+                {/* <GoogleLoginButton /> */}
               </View>
               <View className="mt-5 flex-row items-center justify-center px-6">
                 <View className="bg-black-default h-[0.5px] w-[50%]"></View>

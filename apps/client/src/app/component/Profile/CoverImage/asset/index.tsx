@@ -5,28 +5,32 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  ImageStyle,
+  ImageSourcePropType,
 } from 'react-native';
 import clsx from 'clsx';
+
+import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
+import { useUserProfileStore } from '../../../../store/user-data';
+import { IUserData } from '../../../../types/user';
+
 import DefaultAvatar from './asset/default-avatar.svg';
-import ConfirmDialog from '../../Dialog/ConfirmDialog';
-import { useTranslation } from 'react-i18next';
+import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
-  setIsLoading?: (value: boolean) => void;
+  setIsLoadingAvatar?: (value: boolean) => void;
 }
 
 const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,
   onPress,
-  setIsLoading,
+  setIsLoadingAvatar,
 }) => {
-  const { t } = useTranslation();
-  const [isErrDialog, setIsErrDialog] = useState(false)
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
   });
@@ -36,11 +40,11 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       const imageToUpload = result.assets[0].uri;
-      setIsLoading && setIsLoading(true);
+      setIsLoadingAvatar && setIsLoadingAvatar(true);
       const res = await uploadNewAvatar(imageToUpload);
       if (res) {
         setTimeout(() => {
-          setIsLoading && setIsLoading(false);
+          setIsLoadingAvatar && setIsLoadingAvatar(false);
         }, 3000);
       }
     }
@@ -48,15 +52,6 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
 
   return (
     <View className={clsx('relative flex flex-row items-center')}>
-      <ConfirmDialog
-        title={t('dialog.err_title_update_img') as string}
-        description={
-          t('dialog.err_update_profile') as string
-        }
-        isVisible={isErrDialog}
-        onClosed={() => setIsErrDialog(false)}
-        closeButtonLabel={t('close') || ''}
-      />
       <Pressable onPress={onPress}>
         <View
           className={clsx(
@@ -71,18 +66,15 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
                 )}
                 source={require('./asset/avatar-load.png')}
                 alt="profile image"
-
               />
               <Image
                 className={clsx(' z-100 h-[101px] w-[101px] rounded-full')}
                 source={{ uri: src + '?' + new Date() }}
                 alt="profile image"
-
               />
             </>
           )}
           {!src && <DefaultAvatar />}
-
         </View>
       </Pressable>
 

@@ -20,7 +20,6 @@ interface IAddSkillModallProps {
   onClose: () => void;
 }
 
-
 export const AddSkillModal: FC<IAddSkillModallProps> = ({
   setUserAddSkill,
   isVisible,
@@ -76,12 +75,12 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       })
       .then((res) => {
         console.log(res.data);
-        skillToSave = res.data
+        skillToSave = res.data;
       })
       .catch((err) => {
         console.log(err);
       });
-      console.log(skillToSave);
+    console.log(skillToSave);
     setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
     selectedEmoji && setSelectedEmoji(null);
     reset();
@@ -102,7 +101,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <View className="relative flex h-full flex-col rounded-t-xl bg-white">
+      <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
         <AddEmojiModal
           isVisible={showEmojiModal}
           onClose={onCloseEmojiModal}

@@ -69,10 +69,14 @@ const SelectPicker: FC<ISelectPickerProps> = ({
               <View className="flex h-full w-full flex-col pb-10 ">
                 {data?.map((item, index) => {
                   return (
+<<<<<<< HEAD
+                    <View className="px-4" key={`${item?.name + index}`}>
+=======
                     <View className="px-4" key={index}>
+>>>>>>> a0537ea4d088e3b638ceac98405fe2e93a290e47
                       <Button
                         onPress={() => setSelected(index)}
-                        title={item.label}
+                        title={item.name}
                         containerClassName={clsx(
                           'focus:bg-gray-light',
                           index === selected && 'bg-gray-light'
@@ -90,16 +94,13 @@ const SelectPicker: FC<ISelectPickerProps> = ({
 
             <FlatList
               data={data}
-              initialNumToRender={data?.length || 0}
-              keyExtractor={(item, index) =>
-                `${item.key}-${item.label}-${index}`
-              }
+              keyExtractor={(item, index) => `${item?.name + index}`}
               renderItem={({ item, index }) => {
                 return (
-                  <View className="mb-2 px-4">
-                    <BottomSheetOption
-                      onPress={() => setSelected(index)}
-                      title={item.label}
+                  <View className="px-4" key={`${item?.name + index}`}>
+                    <Button
+                      onPress={() => onSelect(index)}
+                      title={item.name}
                       containerClassName={clsx(
                         'focus:bg-gray-light',
                         index === selected && 'bg-gray-light'

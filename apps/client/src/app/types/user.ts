@@ -23,6 +23,7 @@ export interface IUserData {
   avatar?: string;
   hardSkill?: IHardSkillProps[];
   softSkill?: any[];
+  cover?: string;
 }
 
 export interface IHardSkillProps {
@@ -30,4 +31,8 @@ export interface IHardSkillProps {
     id: string;
     skill: string;
   };
+}
+export interface IHardSkill {
+  id: string;
+  skill: string;
 }

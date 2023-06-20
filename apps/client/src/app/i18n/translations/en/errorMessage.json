@@ -11,6 +11,7 @@
   "err_change_password": {
     "400": "The verification code is not accurate."
   },
+  "err_password":"Password is incorrect, Please try again",
 
   "500": "Internal error. Please try again later.",
   "401": "Unauthorized."

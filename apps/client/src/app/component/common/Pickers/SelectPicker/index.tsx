@@ -9,7 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 interface ISelectPickerProps {
   show: boolean;
-  title: string;
+  title?: string;
   data: Array<any> | null | undefined;
   selectedIndex?: number;
   onSelect: (index: number) => void;

@@ -12,9 +12,25 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidationSchema } from '../../Validators/Login.validate';
 import { useUserProfileStore } from '../../store/user-data';
 import Button from '../../component/common/Buttons/Button';
+import { LoginForm } from '../../types/auth';
+import ConfirmDialog from '../../component/common/Dialog/ConfirmDialog';
+import { serviceLogin } from '../../service/auth';
+import { serviceDeleteAccount } from '../../service/profile';
+import { removeAuthTokensLocalOnLogout } from '../../utils/checkAuth';
+import { useAuthStore } from '../../store/auth-store';
+import { useIsCompleteProfileStore } from '../../store/is-complete-profile';
 
 export default function DeleteAccountScreen({ navigation }: any) {
+    const { setAccessToken } = useAuthStore();
+    const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+
     const [hidePassword, setHidePassword] = useState(true);
+    const [isShowModal, setIsShowModal] = useState({
+        isModalDelete: false,
+        isModalErr: false,
+        isModalPasswordIncorrect: false,
+    });
+
     const { t } = useTranslation()
     const { getUserProfile } = useUserProfileStore()
     const userData = getUserProfile()
@@ -23,7 +39,7 @@ export default function DeleteAccountScreen({ navigation }: any) {
         handleSubmit,
         formState: { errors },
         setValue,
-    } = useForm({
+    } = useForm<LoginForm>({
         defaultValues: {
             user: userData?.email || '',
             password: '',
@@ -32,19 +48,104 @@ export default function DeleteAccountScreen({ navigation }: any) {
         reValidateMode: 'onChange',
         mode: 'onSubmit',
     });
+    const onSubmit = async (data: LoginForm) => {
+        serviceLogin(data)
+            .then((res) => {
+                if (res.status == 201) {
+                    setIsShowModal({
+                        isModalDelete: true,
+                        isModalErr: false,
+                        isModalPasswordIncorrect: false,
+                    })
+                }
+            })
+            .catch((error) => {
+                if (error.response.status == 400) {
+                    setIsShowModal({
+                        isModalDelete: false,
+                        isModalErr: false,
+                        isModalPasswordIncorrect: true
+                    })
+                }
+                else {
+                    setIsShowModal({
+                        isModalDelete: false,
+                        isModalErr: true,
+                        isModalPasswordIncorrect: false
+                    })
+                }
+
+
+
+
+            })
+
+    };
+    const handleDeleteAccount = async () => {
+        setIsShowModal({ ...isShowModal, isModalDelete: false })
+        serviceDeleteAccount(userData?.id)
+            .then((res) => {
+                if (res.status == 200) {
+                    removeAuthTokensLocalOnLogout();
+                    setIsCompleteProfileStore(null);
+                    setAccessToken(null);
+
+                }
+            })
+            .catch((error) => {
+                setIsShowModal({
+                    isModalDelete: false,
+                    isModalErr: true,
+                    isModalPasswordIncorrect: false
+                })
+
+            })
+
+    };
+
+
+
     return (
-        <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-3 px-4">
-            <ScrollView>
+        <SafeAreaView className=" w-full bg-white pt-3 px-4 h-full">
+            <ScrollView className='h-full '>
+                <ConfirmDialog
+                    title={t('dialog.delete_account.title') || ''}
+                    description={t('dialog.delete_account.description') || ''}
+                    isVisible={isShowModal.isModalDelete}
+                    onClosed={() => setIsShowModal({ ...isShowModal, isModalDelete: false })}
+                    closeButtonLabel={t('dialog.cancel') || ''}
+                    confirmButtonLabel={t('dialog.delete') || ''}
+                    onConfirm={() => handleDeleteAccount()}
+                />
+                <ConfirmDialog
+                    title={t('dialog.err_title_delete_account') as string}
+                    description={
+                        t('dialog.err_update_profile') as string
+                    }
+                    isVisible={isShowModal.isModalErr}
+                    onClosed={() => setIsShowModal({ ...isShowModal, isModalErr: false })}
+                    closeButtonLabel={t('close') || ''}
+                />
+                <ConfirmDialog
+                    title={t('dialog.delete_password_incorrect.title') as string}
+                    description={t('dialog.delete_password_incorrect.description') as string}
+                    isVisible={isShowModal.isModalPasswordIncorrect}
+                    onClosed={() => setIsShowModal({ ...isShowModal, isModalPasswordIncorrect: false })}
+                    closeButtonLabel={t('close') || ''}
+                />
                 <View className={clsx('py-4')}>
                     <Text className={clsx('text-h6 font-medium')}>
                         {t('delete_account.title_sub')}
                     </Text>
-                    <Text className={clsx('text-h6 pt-4  leading-5 text-[#34363F] font-normal')}>
+                    <Text className={clsx('text-h6 py-4  leading-5 text-[#34363F] font-normal')}>
                         {t('delete_account.description')}
+                    </Text>
+                    <Text className={clsx('text-h6 font-medium')}>
+                        {t('delete_account.confirming_password')}
                     </Text>
                 </View>
                 <View className=" py-4">
-                    {userData && <View className=" px-1" >
+                    {userData && <View className=" px-1 py-1" >
                         <Controller
                             control={control}
                             name="password"
@@ -88,23 +189,26 @@ export default function DeleteAccountScreen({ navigation }: any) {
                                     />
                                 </View>
                             )}
+
                         />
                         {errors.password && (
                             <ErrorText
                                 message={
                                     errors.password?.message
                                 }
+
                             />
                         )}
-                        <View className=" pt-8">
-                            <Button
-                                title={t('dialog.delete')}
-                                containerClassName="border-[1px] flex-1 border-slate-300 "
-                                textClassName="text-black text-md leading-6"
-                            // onPress={() => handleLogout()}
-                            />
-                        </View>
-                    </View>}
+                    </View>
+                    }
+
+                    <Button
+                        title={t('dialog.delete')}
+                        containerClassName=" flex-1 my-4 bg-[#E7E9F1]"
+                        textClassName="text-black text-md leading-6"
+                        onPress={handleSubmit(onSubmit)}
+                    />
+
                 </View>
             </ScrollView>
         </SafeAreaView>

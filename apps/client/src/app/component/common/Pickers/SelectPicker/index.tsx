@@ -11,20 +11,25 @@ import {
   ScrollView,
   NativeViewGestureHandler,
 } from 'react-native-gesture-handler';
+import BottomSheetOption from '../../Buttons/BottomSheetOption';
 
 interface ISelectPickerProps {
   show: boolean;
+  title: string;
   data: Array<any> | null | undefined;
   selectedIndex?: number;
   onSelect: (index: number) => void;
   onCancel: () => void;
+  onLoadMore?: () => void;
 }
 const SelectPicker: FC<ISelectPickerProps> = ({
   show,
+  title,
   data,
   selectedIndex,
   onSelect,
   onCancel,
+  onLoadMore,
 }) => {
   const [selected, setSelected] = useState<number>(0);
   // const flatListRef = useRef<FlatList>(null);
@@ -50,21 +55,21 @@ const SelectPicker: FC<ISelectPickerProps> = ({
       style={{ margin: 0, justifyContent: 'flex-end' }}
     >
       <TouchableOpacity
-        style={{ height: '30%', backgroundColor: 'transperent' }}
+        style={{ height: '30%', backgroundColor: 'transparent' }}
         activeOpacity={0}
         onPressOut={onCancel}
       ></TouchableOpacity>
-      <View className="flex-1">
+      <View className='flex-1'>
         <BottomSheet2 onClose={onCancel} snapPoints={['100%']}>
           <View className="relative">
             <View className="flex w-full flex-row items-center justify-center pb-8">
-              <Text className="text-base font-semibold">Occupation</Text>
+              <Text className="text-base font-semibold">{title}</Text>
             </View>
-            <ScrollView className="h-4/5">
+            {/* <ScrollView className="h-4/5 bg-red-400">
               <View className="flex h-full w-full flex-col pb-10 ">
                 {data?.map((item, index) => {
                   return (
-                    <View className="px-4" key={`${item?.label + index}`}>
+                    <View className="px-4" key={index}>
                       <Button
                         onPress={() => setSelected(index)}
                         title={item.label}
@@ -81,32 +86,36 @@ const SelectPicker: FC<ISelectPickerProps> = ({
                   );
                 })}
               </View>
-            </ScrollView>
+            </ScrollView> */}
 
-            {/* TODO: if we want to use FlatList instead of ScrollView for scrolling to the selected item, we need to fix the height of the FlatList */}
-            {/* <FlatList
+            <FlatList
               data={data}
-              keyExtractor={(item, index) => `${item?.label + index}`}
+              initialNumToRender={data?.length || 0}
+              keyExtractor={(item, index) =>
+                `${item.key}-${item.label}-${index}`
+              }
               renderItem={({ item, index }) => {
                 return (
-                  <View className="px-4" key={`${item?.label + index}`}>
-                    <Button
-                      onPress={() => onSelect(index)}
+                  <View className="mb-2 px-4">
+                    <BottomSheetOption
+                      onPress={() => setSelected(index)}
                       title={item.label}
                       containerClassName={clsx(
                         'focus:bg-gray-light',
-                        index === selectedIndex && 'bg-gray-light'
+                        index === selected && 'bg-gray-light'
                       )}
                       textClassName={clsx(
                         'text-base font-normal',
-                        index === selectedIndex && 'font-semibold'
+                        index === selected && 'font-semibold'
                       )}
                     />
                   </View>
                 );
-              }
-              }
-            /> */}
+              }}
+              onEndReached={onLoadMore}
+              onEndReachedThreshold={0.5}
+              className="h-4/5"
+            />
             <View className="absolute bottom-[-40px] h-12 w-full px-4">
               <Button
                 title={'Save'}

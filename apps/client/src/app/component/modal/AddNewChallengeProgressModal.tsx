@@ -294,7 +294,7 @@ export const AddNewChallengeProgressModal: FC<
             </View>
 
             <View className="flex flex-col pt-4">
-              <LocationInput control={control} errors={errors.location} />
+              <LocationInput control={control} errors={errors.location} setFormValue={setValue} />
             </View>
           </View>
         </View>

@@ -221,7 +221,9 @@
     "image_required": "Please upload an image or a video.",
     "location": "Location",
     "location_placeholder": "Where did you achieve it?",
-    "location_required": "Location is required."
+    "location_required": "Location is required.",
+    "enable_location_required": "Please enable location permission.",
+    "enter_your_location": "Select your location"
   },
   "edit_progress_modal": {
     "title": "Edit progress",
@@ -274,7 +276,9 @@
     "benefits_required": "Please list the benefits",
     "reasons_required": "Please indicate the reasons",
     "time_to_reach_goal_required": "Please select the time",
-    "edit_success": "Your challenge has been updated successfully"
+    "edit_success": "Your challenge has been updated successfully",
+    "open_settings": "Open settings",
+    "alert_title": "Alert"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

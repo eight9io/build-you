@@ -102,6 +102,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       />
 
       <SelectPicker
+        title='Occupation'
         show={showOccupationPicker}
         data={MOCK_OCCUPATION_SELECT}
         selectedIndex={selectedOccupationIndex}

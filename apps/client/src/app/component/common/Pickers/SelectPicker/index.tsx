@@ -15,7 +15,7 @@ import BottomSheetOption from '../../Buttons/BottomSheetOption';
 
 interface ISelectPickerProps {
   show: boolean;
-  title: string;
+  title?: string;
   data: Array<any> | null | undefined;
   selectedIndex?: number;
   onSelect: (index: number) => void;
@@ -69,11 +69,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
               <View className="flex h-full w-full flex-col pb-10 ">
                 {data?.map((item, index) => {
                   return (
-<<<<<<< HEAD
                     <View className="px-4" key={`${item?.name + index}`}>
-=======
-                    <View className="px-4" key={index}>
->>>>>>> a0537ea4d088e3b638ceac98405fe2e93a290e47
                       <Button
                         onPress={() => setSelected(index)}
                         title={item.name}

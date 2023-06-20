@@ -8,7 +8,6 @@ import { t } from 'i18next';
 import { RootStackParamList } from '../navigation/navigation.type';
 
 import OtherUserProfileScreen from './ProfileScreen/OtherUser/OtherUserProfileScreen';
-import ChallengeDetailScreenViewOnly from './ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
 
 import AppTitle from '../component/common/AppTitle';
 import Button from '../component/common/Buttons/Button';
@@ -17,12 +16,13 @@ import NavButton from '../component/common/Buttons/NavButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 
 import ShareIcon from '../../../assets/svg/share.svg';
+import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 export const HomeFeed = () => {
   const arrayPost = [
     {
-      id: '1',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
       avatar: 'avata',
       name: 'Marco Rossi',
       time: '1 hour ago',
@@ -36,7 +36,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: '2',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
       avatar: 'avata',
       name: 'Marco Rossi22',
       time: '1 hour ago',
@@ -50,7 +50,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: '3',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
       avatar: 'avata',
       name: 'Marco Rossi 333',
       time: '1 hour ago',
@@ -107,10 +107,9 @@ const HomeScreen = () => {
           ),
         })}
       />
-
       <HomeScreenStack.Screen
-        name="ChallengeDetailScreenViewOnly"
-        component={ChallengeDetailScreenViewOnly}
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',
@@ -134,8 +133,8 @@ const HomeScreen = () => {
         })}
       />
       <HomeScreenStack.Screen
-        name="OtherUserProfileScreen"
-        component={OtherUserProfileScreen}
+        name="OtherUserProfileDetailsScreen"
+        component={OtherUserProfileDetailsScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',

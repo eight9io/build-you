@@ -16,13 +16,15 @@ import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings
 interface IProgressTabProps {
   shouldRefresh: boolean;
   challengeData: IChallenge;
+  isOtherUserProfile?: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ProgressTab: FC<IProgressTabProps> = ({
-  setShouldRefresh,
   shouldRefresh,
   challengeData,
+  setShouldRefresh,
+  isOtherUserProfile = false,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<
@@ -128,10 +130,12 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   return (
     <View className="h-full flex-1">
       {progressLoading && <SkeletonLoadingCommon />}
-      {!progressLoading && (
+      {!progressLoading && localProgressData.length > 0 && (
         <FlatList
           data={localProgressData}
-          ListHeaderComponent={<AddNewChallengeProgressButton />}
+          ListHeaderComponent={
+            !isOtherUserProfile ? <AddNewChallengeProgressButton /> : null
+          }
           renderItem={({ item }) => (
             <ProgressCard
               challengeOwner={challengeData?.owner[0]}
@@ -144,6 +148,13 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           )}
           contentContainerStyle={{ paddingBottom: 300 }}
         />
+      )}
+      {!progressLoading && localProgressData?.length == 0 && (
+        <View className="px-4 py-4">
+          <Text className="selection: text-base">
+            {t('challenge_detail_screen.no_progress_yet') as string}
+          </Text>
+        </View>
       )}
     </View>
   );

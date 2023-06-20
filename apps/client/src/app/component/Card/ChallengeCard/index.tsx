@@ -20,6 +20,7 @@ interface IChallengeCardProps {
   isCompany?: boolean;
   imageSrc: string;
   navigation?: any;
+  handlePress?: () => void;
 }
 
 const CompanyTag = () => {
@@ -36,18 +37,22 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   imageSrc,
   isCompany,
   navigation,
+  handlePress,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
   const onPress = () => {
+    // handlePress or navigation
     if (navigation) {
       if (isCompany) navigation.navigate('CompanyChallengeDetailScreen');
       else
         navigation.navigate('PersonalChallengeDetailScreen', {
           challengeId: item.id,
         });
+      return;
     }
+    if (handlePress) handlePress();
   };
 
   return (

@@ -12,12 +12,13 @@ import Card from '../common/Card';
 import PostAvatar from '../common/Avatar/PostAvatar';
 import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
+import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 import BackSvg from '../asset/back.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/navigation.type';
 import { useAuthStore } from '../../store/auth-store';
-import { getProgressComments, getProgressLikes } from '../../service/progress';
+import { useTranslation } from 'react-i18next';
 
 interface IFeedPostCardProps {
   itemFeedPostCard: {
@@ -78,10 +79,26 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   const { getAccessToken } = useAuthStore();
 
   const isToken = getAccessToken();
+  const { t } = useTranslation();
+
+  const navigateToUserProfile = () => {
+    if (!id) {
+      GlobalDialogController.showModal(
+        t('error_general_message') ||
+          'Something went wrong. Please try again later!'
+      );
+      return;
+    }
+    navigation.navigate('OtherUserProfileScreen', { userId: id });
+  };
+
   return (
     <View className="mb-1 flex-1">
       <View className="bg-gray-50 p-5">
-        <View className="mb-3 flex-row justify-between">
+        <TouchableOpacity
+          className="mb-3 flex-row justify-between"
+          onPress={navigateToUserProfile}
+        >
           <View className="flex-row">
             <PostAvatar src="https://picsum.photos/200/300" />
             <View className="ml-2">
@@ -92,7 +109,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           {/* <TouchableOpacity onPress={() => console.log('press')}>
             <Text className="text-h6 font-medium ">...</Text>
           </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
         <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
         <ChallengeImage
           name={card.title}

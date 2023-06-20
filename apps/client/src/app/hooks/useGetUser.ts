@@ -28,7 +28,9 @@ export const useGetUserData = (setLoading?: any) => {
   }, []);
 };
 
-export const useGetOtherUserData = (userId: string) => {
+export const useGetOtherUserData = (userId: string | null | undefined) => {
+  if (!userId || userId === null) return null;
+
   const [otherUserProfile, setOtherUserProfile] = useState<any>({});
 
   const fetchingUserData = async () => {

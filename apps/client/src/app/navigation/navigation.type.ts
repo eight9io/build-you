@@ -38,9 +38,6 @@ export type RootStackParamList = {
   CompanyChallengeDetailScreen: undefined;
   CreateCompanyChallengeScreen: undefined;
 
-  ChallengeDetailScreenViewOnly: {
-    challengeId: string;
-  };
   ProgressCommentScreen: {
     progressId: string;
     ownerId?: string;
@@ -58,6 +55,10 @@ export type RootStackParamList = {
 
   OtherUserProfileScreen: {
     userId: string;
+  };
+
+  OtherUserProfileDetailsScreen: {
+    challengeId: string;
   };
 };
 

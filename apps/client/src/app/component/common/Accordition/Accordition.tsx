@@ -5,7 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import AccorditionItem from './AccorditionItem';
 
-const Accordition = () => {
+interface IAccorditionProps {
+  navigation: any;
+}
+const Accordition = ({ navigation }: IAccorditionProps) => {
   const { t } = useTranslation();
 
   return (
@@ -57,7 +60,7 @@ const Accordition = () => {
           title={t(
             'user_settings_screen.account_settings_sections.personal_information'
           )}
-        />
+          onPress={() => navigation.navigate("PersonalInformationScreen")} />
         <AccorditionItem
           title={t(
             'user_settings_screen.account_settings_sections.security_and_access'

@@ -9,6 +9,8 @@ export type RootStackParamList = {
   NotificationsScreen: undefined;
   ChallengeDetailScreen: undefined;
   SettingsScreen: undefined;
+  PersonalInformationScreen: undefined;
+  DeleteAccountScreen: undefined;
   ProfileScreen: undefined;
   ModalScreen: undefined;
   CreateChallengeScreen: undefined;

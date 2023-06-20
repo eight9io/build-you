@@ -48,6 +48,8 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
     });
   };
 
+  console.log('otherUserChallenge', otherUserChallenge)
+
   return (
     <View>
       {otherUserChallenge.length > 0 && (
@@ -57,7 +59,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
           renderItem={({ item }: { item: IChallenge }) => (
             <ChallengeCard
               item={item}
-              imageSrc={`https://picsum.photos/200/300.webp?random=${item.id}`}
+              imageSrc={`${item.image}`}
               handlePress={() => handleNavigateToChallengeDetail(item.id)}
             />
           )}

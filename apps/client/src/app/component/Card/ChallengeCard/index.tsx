@@ -67,7 +67,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             <CompanyTag />
           </View>
         )}
-        {imageSrc && (
+        {imageSrc && !imageLoadingError && (
           <Image
             className={clsx('aspect-square w-full rounded-t-xl')}
             source={{ uri: imageSrc }}
@@ -83,7 +83,9 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           <View className={clsx('aspect-square w-full rounded-t-xl')}>
             <Image
               className={clsx('aspect-square w-full rounded-t-xl')}
-              source={{ uri: `https://picsum.photos/200/300.webp?random=${item.id}`}}
+              source={{
+                uri: `https://picsum.photos/200/300.webp?random=${item.id}`,
+              }}
             />
           </View>
         )}

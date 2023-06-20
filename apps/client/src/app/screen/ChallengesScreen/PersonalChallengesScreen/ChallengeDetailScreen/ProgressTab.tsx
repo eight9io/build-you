@@ -34,7 +34,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
 
   const { t } = useTranslation();
-  console.log('localProgressData', localProgressData);
 
   useEffect(() => {
     const progressData =

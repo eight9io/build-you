@@ -172,9 +172,6 @@ const ChallengeProgressCard: React.FC<IChallengeProgressCardProps> = ({
               </Text>
             </View>
           </View>
-          {/* <TouchableOpacity onPress={() => console.log('press')}>
-            <Text className="text-h6 font-medium ">...</Text>
-          </TouchableOpacity> */}
         </View>
         {image && (
           <View className="aspect-square w-full">

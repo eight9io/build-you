@@ -1,14 +1,7 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  ScrollView,
-  FlatList,
-  Platform,
-} from 'react-native';
-import { useSSR, useTranslation } from 'react-i18next';
+import { SafeAreaView, View, Text, FlatList } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -66,7 +59,7 @@ const PersonalChallenges = ({
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
-  const [personalChallengesList, setPersonalChallengesList] = useState([]);
+  const [personalChallengesList, setPersonalChallengesList] = useState<IChallenge[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -93,7 +86,7 @@ const PersonalChallenges = ({
     <SafeAreaView className={clsx('bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && (
-        <View className={clsx('h-full w-full bg-gray-50 pb-24 ')}>
+        <View className={clsx('h-full w-full bg-gray-50')}>
           {personalChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
@@ -103,11 +96,12 @@ const PersonalChallenges = ({
               renderItem={({ item }: { item: IChallenge }) => (
                 <ChallengeCard
                   item={item}
-                  imageSrc={`https://picsum.photos/200/300.webp?random=${item.id}`}
+                  imageSrc={item?.image}
                   navigation={navigation}
                 />
               )}
               keyExtractor={(item) => item.id}
+              ListFooterComponent={<View className="h-20" />}
             />
           )}
         </View>

@@ -99,7 +99,6 @@ export const checkAuthTokenLocalValidation = async () => {
 export const checkRefreshTokenLocalValidation = async () => {
   try {
     const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
-    console.log('refreshTokenLocal', refreshTokenLocal);
     if (!refreshTokenLocal) return false;
     const decodedRefreshToken = decodedAuthToken(refreshTokenLocal);
     const currentTime = Date.now() / 1000;

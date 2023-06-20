@@ -216,6 +216,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
         />
 
         <SelectPicker
+          title='Occupation'
           show={showOccupationPicker}
           data={occupationList}
           selectedIndex={selectedOccupationIndex}

@@ -5,21 +5,13 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
-  ImageStyle,
-  ImageSourcePropType,
 } from 'react-native';
 import clsx from 'clsx';
-
-import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
-import { useUserProfileStore } from '../../../../store/user-data';
-import { IUserData } from '../../../../types/user';
-
 import DefaultAvatar from './asset/default-avatar.svg';
-import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
 import ConfirmDialog from '../../Dialog/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
 interface IProfileAvatarProps {

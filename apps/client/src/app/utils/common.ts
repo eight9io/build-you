@@ -27,3 +27,8 @@ export const sortArrayByCreatedAt = (
       : dateB.getTime() - dateA.getTime();
   });
 };
+
+
+export const isObjectEmpty = (obj: any) => {
+  return Object.keys(obj).length === 0;
+}

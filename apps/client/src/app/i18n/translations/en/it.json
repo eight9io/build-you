@@ -221,7 +221,9 @@
     "image_required": "Please upload an image or a video.",
     "location": "Location",
     "location_placeholder": "Where did you achieve it?",
-    "location_required": "Location is required."
+    "location_required": "Location is required.",
+    "enable_location_required": "Please enable location permission.",
+    "enter_your_location": "Select your location"
   },
   "edit_progress_modal": {
     "title": "Edit progress",
@@ -278,7 +280,9 @@
     "edit_success": "Your challenge has been updated successfully",
     "err_title_update_img":"Can’t update your image",
     "err_title_update_profile":"Can’t update your profile",
-    "err_update_profile":"Something went wrong. Please try again later"
+    "err_update_profile":"Something went wrong. Please try again later",
+    "open_settings": "Open settings",
+    "alert_title": "Alert"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

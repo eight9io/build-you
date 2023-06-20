@@ -12,7 +12,6 @@ import ConfirmDialog from '../../Dialog/ConfirmDialog';
 import SelectPicker from '../../Pickers/SelectPicker';
 import { ISelectOption } from '../../../../types/common';
 import { getNearbyLocations } from '../../../../service/location';
-import { MOCK_ADDRESS_OPTIONS } from '../../../../mock-data/location';
 
 interface ILocationInputProps {
   control?: any;

@@ -2,16 +2,10 @@ import { FC, useEffect, useState, useRef } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import clsx from 'clsx';
 import Modal from 'react-native-modal';
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 
 import Button from '../../Buttons/Button';
 import BottomSheet2 from '../../BottomSheet/BottomSheet';
-import {
-  FlatList,
-  ScrollView,
-  NativeViewGestureHandler,
-} from 'react-native-gesture-handler';
-import BottomSheetOption from '../../Buttons/BottomSheetOption';
+import { FlatList } from 'react-native-gesture-handler';
 
 interface ISelectPickerProps {
   show: boolean;
@@ -59,39 +53,12 @@ const SelectPicker: FC<ISelectPickerProps> = ({
         activeOpacity={0}
         onPressOut={onCancel}
       ></TouchableOpacity>
-      <View className='flex-1'>
+      <View className="flex-1">
         <BottomSheet2 onClose={onCancel} snapPoints={['100%']}>
           <View className="relative">
             <View className="flex w-full flex-row items-center justify-center pb-8">
               <Text className="text-base font-semibold">{title}</Text>
             </View>
-            {/* <ScrollView className="h-4/5 bg-red-400">
-              <View className="flex h-full w-full flex-col pb-10 ">
-                {data?.map((item, index) => {
-                  return (
-<<<<<<< HEAD
-                    <View className="px-4" key={`${item?.name + index}`}>
-=======
-                    <View className="px-4" key={index}>
->>>>>>> a0537ea4d088e3b638ceac98405fe2e93a290e47
-                      <Button
-                        onPress={() => setSelected(index)}
-                        title={item.name}
-                        containerClassName={clsx(
-                          'focus:bg-gray-light',
-                          index === selected && 'bg-gray-light'
-                        )}
-                        textClassName={clsx(
-                          'text-base font-normal',
-                          index === selected && 'font-semibold'
-                        )}
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-            </ScrollView> */}
-
             <FlatList
               data={data}
               keyExtractor={(item, index) => `${item?.name + index}`}

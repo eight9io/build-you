@@ -116,7 +116,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   };
 
   const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);
-  console.log(extractedImageUrls)
+
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
       <EditChallengeProgressModal

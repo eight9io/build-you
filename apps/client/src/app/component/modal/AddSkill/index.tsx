@@ -80,8 +80,8 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       .catch((err) => {
         console.log(err);
       });
-    console.log(skillToSave);
-    setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
+
+      setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
     selectedEmoji && setSelectedEmoji(null);
     reset();
     onClose();

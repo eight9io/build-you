@@ -18,6 +18,8 @@ import {
 import { useUserProfileStore } from '../../../../store/user-data';
 import { IUserData } from '../../../../types/user';
 
+import DefaultAvatar from '../../../asset/default-avatar.svg';
+
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
@@ -56,7 +58,12 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
     <View className={clsx('relative flex flex-row items-center')}>
       <Pressable onPress={onPress}>
         <View className={clsx('rounded-full border-4 border-white')}>
-          {!newAvatarUpload && (
+          {!newAvatarUpload && !imageSource && (
+            <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
+              <DefaultAvatar />
+            </View>
+          )}
+          {!newAvatarUpload && imageSource && (
             <Image
               className={clsx('h-[101px] w-[101px] rounded-full')}
               source={imageSource as ImageSourcePropType}

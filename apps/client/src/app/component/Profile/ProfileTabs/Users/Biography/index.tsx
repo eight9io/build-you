@@ -85,7 +85,7 @@ const Biography = () => {
 
   return (
     <View className="justify-content: space-between ">
-      {videoSrc && (
+      {videoSrc && videoSrc !== null && (
         <View className={clsx(' flex flex-col pr-4')}>
           <View className={clsx('py-6')}>
             <VideoWithPlayButton src={videoSrc} />

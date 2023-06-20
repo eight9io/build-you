@@ -45,7 +45,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
 
   return (
     <View className="flex-1">
-      <View>
+      <View className='bg-white'>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}

@@ -16,6 +16,7 @@ import ConfirmDialog from '../../Dialog/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
 interface IProfileAvatarProps {
   src: string;
+  isOtherUser?: boolean;
   onPress?: () => void;
   setIsLoading?: (value: boolean) => void;
 }
@@ -24,6 +25,7 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,
   onPress,
   setIsLoading,
+  isOtherUser = false,
 }) => {
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false)
@@ -85,16 +87,16 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
 
         </View>
       </Pressable>
-
-      <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
-        <Image
-          className={clsx(
-            'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
-          )}
-          source={require('./asset/camera.png')}
-        />
-      </TouchableOpacity>
-
+      {!isOtherUser && (
+        <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
+          <Image
+            className={clsx(
+              'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
+            )}
+            source={require('./asset/camera.png')}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

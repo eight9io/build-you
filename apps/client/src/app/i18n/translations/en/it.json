@@ -2,6 +2,7 @@
   "success": "Success",
   "error": "Error",
   "close": "Close",
+  "error_general_message": "Something went wrong. Please try again later.",
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
   "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Register for free ",
@@ -36,6 +37,10 @@
   "register_modal.linked": "Register with Linkedin",
   "register_modal.register": "Register with email and password",
   "button.edit_profile": "Edit profile",
+  "button.follow": "Follow",
+  "button.following": "Following",
+  "button.followers": "Followers",
+  "button.unfollow": "Unfollow",
   "profile_title": "My profile",
   "profile_screen_tabs.biography": "biography",
   "profile_screen_tabs.skills": "skills",
@@ -117,7 +122,6 @@
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
-
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
   "button.back": "Back",
@@ -257,7 +261,6 @@
     "time_to_reach_goal_required": "Please select time to reach the goal.",
     "edit_success": "Your challenge has been updated successfully"
   },
-
   "dialog": {
     "delete_account": {
       "title": "Account delete",
@@ -278,9 +281,9 @@
     "reasons_required": "Please indicate the reasons",
     "time_to_reach_goal_required": "Please select the time",
     "edit_success": "Your challenge has been updated successfully",
-    "err_title_update_img":"Can’t update your image",
-    "err_title_update_profile":"Can’t update your profile",
-    "err_update_profile":"Something went wrong. Please try again later",
+    "err_title_update_img": "Can’t update your image",
+    "err_title_update_profile": "Can’t update your profile",
+    "err_update_profile": "Something went wrong. Please try again later",
     "open_settings": "Open settings",
     "alert_title": "Alert"
   },
@@ -291,14 +294,15 @@
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"
   },
-  "personal_information":{
-    "title":"Personal informations",
-    "description":"Your BiuldYou information",
-    "delete_account":"Delete my account"
+  "personal_information": {
+    "title": "Personal informations",
+    "description": "Your BiuldYou information",
+    "delete_account": "Delete my account"
   },
-  "delete_account":{
-    "title":"Delete account",
-    "title_sub":"Gorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "description":"Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus."
-  }
+  "delete_account": {
+    "title": "Delete account",
+    "title_sub": "Gorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "description": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus."
+  },
+  "challenge_detail_screen.no_progress_yet": "No progress yet"
 }

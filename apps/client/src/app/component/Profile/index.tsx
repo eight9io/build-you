@@ -8,21 +8,17 @@ import ProfileTabs from './ProfileTabs/Users';
 import CoverImage from './CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
-import Button from '../common/Buttons/Button';
-import ProfileAvartar from '../common/Avatar/ProfileAvatar';
+import ProfileAvatar from '../common/Avatar/ProfileAvatar';
 
 import { IUserData } from '../../types/user';
-import { useNavigation } from '@react-navigation/native';
-import Loading from '../common/Loading';
-import { ScrollView } from 'react-native-gesture-handler';
 
-interface ITopSectionProfileProps {
+export interface ITopSectionProfileProps {
   navigation: any;
   userData: IUserData | null;
   setIsLoading: (value: boolean) => void;
 }
 
-interface IProfileComponentProps {
+export interface IProfileComponentProps {
   userData: IUserData | null;
   navigation: any;
   setIsLoading: (value: boolean) => void;
@@ -42,7 +38,7 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
       <CoverImage src={userData?.cover as string} setIsLoading={setIsLoading} />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
-        <ProfileAvartar
+        <ProfileAvatar
           src={userData?.avatar as string}
           setIsLoading={setIsLoading}
         />

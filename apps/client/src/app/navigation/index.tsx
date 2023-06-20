@@ -13,7 +13,6 @@ import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
-import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
 import ProgressCommentScreen from '../screen/ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
@@ -127,21 +126,7 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-            <RootStack.Screen
-              name="ChallengeDetailScreenViewOnly"
-              component={ChallengeDetailScreenViewOnly}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => '',
-                headerLeft: (props) => (
-                  <NavButton
-                    text={'error'}
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
+
             <RootStack.Screen
               name="ProgressCommentScreen"
               component={ProgressCommentScreen}

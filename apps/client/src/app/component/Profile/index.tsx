@@ -19,20 +19,19 @@ import { ScrollView } from 'react-native-gesture-handler';
 interface ITopSectionProfileProps {
   navigation: any;
   userData: IUserData | null;
-  setIsLoadingAvatar: (value: boolean) => void;
+  setIsLoading: (value: boolean) => void;
 }
 
 interface IProfileComponentProps {
   userData: IUserData | null;
   navigation: any;
-  isLoadingAvatar: boolean;
-  setIsLoadingAvatar: (value: boolean) => void;
+  setIsLoading: (value: boolean) => void;
 }
 
 const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   navigation,
   userData,
-  setIsLoadingAvatar,
+  setIsLoading
 }) => {
   const { t } = useTranslation();
   const handleClicked = () => {
@@ -40,12 +39,12 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   };
   return (
     <View className={clsx('relative z-10')}>
-      <CoverImage src="https://images.unsplash.com/photo-1522774607452-dac2ecc66330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
+      <CoverImage src={userData?.cover as string} setIsLoading={setIsLoading} />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         <ProfileAvartar
           src={userData?.avatar as string}
-          setIsLoadingAvatar={setIsLoadingAvatar}
+          setIsLoading={setIsLoading}
         />
       </View>
       <View className={clsx('absolute bottom-[-25px] right-4 ')}>
@@ -63,15 +62,17 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
 const ProfileComponent: FC<IProfileComponentProps> = ({
   userData,
   navigation,
-  setIsLoadingAvatar,
-  isLoadingAvatar,
+  setIsLoading,
+
 }) => {
+
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
+
       <TopSectionProfile
         navigation={navigation}
         userData={userData}
-        setIsLoadingAvatar={setIsLoadingAvatar}
+        setIsLoading={setIsLoading}
       />
       <View className={clsx('mb-3 px-4 pt-12')}>
         <Text className={clsx('text-[26px] font-medium')}>

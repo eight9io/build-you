@@ -14,3 +14,7 @@ export interface ChangePasswordForm {
   email: string;
   password: string;
 }
+export interface IOccupation{
+id:string,
+name:string
+}

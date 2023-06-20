@@ -66,7 +66,6 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
 };
 
 const PersonalProfileScreen = () => {
-  const { getUserProfile } = useUserProfileStore();
   const { t } = useTranslation();
   return (
     <ProfileStack.Navigator

@@ -19,18 +19,17 @@ import Button from '../../../../component/common/Buttons/Button';
 import CalendarIcon from './asset/calendar-icon.svg';
 import dayjs from '../../../../utils/date.util';
 import SelectPicker from '../../../../component/common/Pickers/SelectPicker';
-import { MOCK_OCCUPATION_SELECT } from '../../../../mock-data/occupation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
 import { useUserProfileStore } from '../../../../store/user-data';
 import { useGetUserData } from '../../../../hooks/useGetUser';
 import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkills';
-import { useAuthStore } from '../../../../store/auth-store';
 import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 import httpInstance from '../../../../utils/http';
 import Loading from '../../../../component/common/Loading';
-import { serviceUpdateMyProfile } from '../../../../service/profile';
+import { serviceGetListOccupation, serviceUpdateMyProfile } from '../../../../service/profile';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
+import { IOccupation } from 'apps/client/src/app/types/auth';
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
@@ -82,6 +81,14 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
 };
 
 const EditPersonalProfileScreen = ({ navigation }: any) => {
+  const [occupationList, setOccupationList] = useState<IOccupation[]>([])
+  useEffect(() => {
+    const getOccupationList = async () => {
+      const { data } = await serviceGetListOccupation();
+      setOccupationList(data);
+    };
+    getOccupationList();
+  }, [])
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [showOccupationPicker, setShowOccupationPicker] = useState(false);
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
@@ -134,7 +141,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   const handleOccupationPicked = (index: number) => {
     if (index >= 0) {
       setSelectedOccupationIndex(index);
-      setValue('occupation', MOCK_OCCUPATION_SELECT[index].label);
+      setValue('occupation', occupationList[index].name);
     }
     setShowOccupationPicker(false);
   };
@@ -152,13 +159,15 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   }, [userData?.hardSkill]);
 
   const onSubmit = (data: any) => {
+    console.log(arrayMyHardSkills);
+
     setIsLoading(true)
     serviceUpdateMyProfile(userData?.id, {
       name: data.name,
       surname: data.surname,
       bio: data.bio,
       birth: data.birth,
-      occupation: data.occupation,
+      // occupation: data.occupation,
       hardSkill: arrayMyHardSkills
     })
       .then(async (res) => {
@@ -208,7 +217,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
         <SelectPicker
           show={showOccupationPicker}
-          data={MOCK_OCCUPATION_SELECT}
+          data={occupationList}
           selectedIndex={selectedOccupationIndex}
           onSelect={handleOccupationPicked}
           onCancel={() => {

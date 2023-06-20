@@ -160,19 +160,7 @@ export const RootNavigation = () => {
             <RootStack.Screen
               name="SettingsScreen"
               component={SettingsScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => (
-                  <AppTitle title={t('user_settings_screen.title')} />
-                ),
-                headerLeft: (props) => (
-                  <NavButton
-                    text={t('button.back') as string}
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
+
             />
 
             <RootStack.Screen

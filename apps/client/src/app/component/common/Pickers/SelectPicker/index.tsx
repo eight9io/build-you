@@ -64,10 +64,10 @@ const SelectPicker: FC<ISelectPickerProps> = ({
               <View className="flex h-full w-full flex-col pb-10 ">
                 {data?.map((item, index) => {
                   return (
-                    <View className="px-4" key={`${item?.label + index}`}>
+                    <View className="px-4" key={`${item?.name + index}`}>
                       <Button
                         onPress={() => setSelected(index)}
-                        title={item.label}
+                        title={item.name}
                         containerClassName={clsx(
                           'focus:bg-gray-light',
                           index === selected && 'bg-gray-light'
@@ -86,13 +86,13 @@ const SelectPicker: FC<ISelectPickerProps> = ({
             {/* TODO: if we want to use FlatList instead of ScrollView for scrolling to the selected item, we need to fix the height of the FlatList */}
             {/* <FlatList
               data={data}
-              keyExtractor={(item, index) => `${item?.label + index}`}
+              keyExtractor={(item, index) => `${item?.name + index}`}
               renderItem={({ item, index }) => {
                 return (
-                  <View className="px-4" key={`${item?.label + index}`}>
+                  <View className="px-4" key={`${item?.name + index}`}>
                     <Button
                       onPress={() => onSelect(index)}
-                      title={item.label}
+                      title={item.name}
                       containerClassName={clsx(
                         'focus:bg-gray-light',
                         index === selectedIndex && 'bg-gray-light'

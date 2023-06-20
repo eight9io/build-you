@@ -65,7 +65,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
           <ProfileAvatar
             isOtherUser
             src={otherUserData?.avatar as string}
-            setIsLoadingAvatar={setIsLoadingAvatar}
+            setIsLoading={setIsLoadingAvatar}
           />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>

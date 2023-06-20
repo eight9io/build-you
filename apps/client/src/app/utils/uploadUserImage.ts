@@ -53,7 +53,6 @@ export const uploadNewAvatar = async (image: string) => {
   return response.data;
 };
 
-
 export const uploadNewCover = async (image: string) => {
   const formData = new FormData();
   const uri = Platform.OS === 'android' ? image : image.replace('file://', '');
@@ -73,4 +72,26 @@ export const uploadNewCover = async (image: string) => {
 
 export const getImageExtension = (uri: string) => {
   return uri.split('.')[1];
+};
+
+const extractPrefix = (url: string) => {
+  const match = url.match(/^(https?:\/\/[^/]+)/);
+  return match ? match[1] : '';
+};
+
+export const getSeperateImageUrls = (url: string | null) => {
+  if (!url || url === null) return '';
+  const urls = url.split(';');
+  const prefix = extractPrefix(urls[0]);
+  const imageUrls = [];
+
+  for (let i = 0; i < urls.length; i++) {
+    const url = urls[i].trim();
+    if (url.startsWith('/')) {
+      imageUrls.push(prefix + url);
+    } else {
+      imageUrls.push(url);
+    }
+  }
+  return imageUrls.filter((url) => url !== '');
 };

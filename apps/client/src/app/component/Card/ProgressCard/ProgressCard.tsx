@@ -1,28 +1,29 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useState, FC, useEffect } from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
-import IconDot from './asset/dot.svg';
-import ProgressCardAvatar from '../../common/Avatar/PostAvatar';
+import { IUserData } from '../../../types/user';
+import { IProgressChallenge } from '../../../types/challenge';
+import { RootStackParamList } from '../../../navigation/navigation.type';
+
 import PopUpMenu from '../../common/PopUpMenu';
 import ImageSwiper from '../../common/ImageSwiper';
+import VideoPlayer from '../../common/VideoPlayer';
+import ProgressCardAvatar from '../../common/Avatar/PostAvatar';
 
 import EditChallengeProgressModal from '../../modal/EditChallengeProgressModal';
 import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
 import LikeButton from '../../Post/LikeButton';
 import CommentButton from '../../Post/CommentButton';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../../navigation/navigation.type';
-import { useTranslation } from 'react-i18next';
 
-import { IProgressChallenge } from '../../../types/challenge';
-import { IUserData } from '../../../types/user';
-import { deleteProgress, getProgressLikes } from '../../../service/progress';
-import Loading from '../../common/Loading';
-
-import VideoPlayer from '../../common/VideoPlayer';
 import useModal from '../../../hooks/useModal';
-
+import { deleteProgress } from '../../../service/progress';
 import { getTimeDiffToNow } from '../../../utils/time';
+import { getSeperateImageUrls } from '../../../utils/uploadUserImage';
+import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
+
+import IconDot from './asset/dot.svg';
 
 interface IProgressCardProps {
   challengeOwner: {
@@ -103,6 +104,19 @@ const ProgressCard: FC<IProgressCardProps> = ({
     }
   };
 
+  const handleNavigationToComment = () => {
+    if (!itemProgressCard?.id || !challengeOwner?.id) {
+      GlobalDialogController.showModal(t('errorMessage:500') as string);
+      return;
+    }
+    navigation.navigate('ProgressCommentScreen', {
+      progressId: itemProgressCard.id,
+      ownerId: challengeOwner.id,
+    });
+  };
+
+  const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);
+  console.log(extractedImageUrls)
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
       <EditChallengeProgressModal
@@ -137,9 +151,9 @@ const ProgressCard: FC<IProgressCardProps> = ({
       <Text className=" text-md mb-3 font-normal leading-5">
         {itemProgressCard.caption}
       </Text>
-      {itemProgressCard.image && (
+      {extractedImageUrls && (
         <View className="aspect-square w-full">
-          <ImageSwiper imageSrc={itemProgressCard.image} />
+          <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
       )}
       {itemProgressCard.video && <VideoPlayer src={itemProgressCard.video} />}
@@ -147,12 +161,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
       <View className="mt-4 flex-row">
         <LikeButton progressId={itemProgressCard.id} />
         <CommentButton
-          navigationToComment={() =>
-            navigation.navigate('ProgressCommentScreen', {
-              progressId: itemProgressCard.id,
-              ownerId: challengeOwner.id,
-            })
-          }
+          navigationToComment={handleNavigationToComment}
           progressId={itemProgressCard.id}
         />
       </View>

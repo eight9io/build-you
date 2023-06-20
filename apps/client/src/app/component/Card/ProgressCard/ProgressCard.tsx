@@ -71,6 +71,13 @@ const ProgressCard: FC<IProgressCardProps> = ({
     },
   ];
 
+  const progressOptionForFirstProgress = [
+    {
+      text: 'Edit',
+      onPress: () => setIsShowEditModal(true),
+    },
+  ];
+
   const handleConfirmEditChallengeProgress = async () => {
     setIsShowEditModal(false); // Close the edit modal
     onEditProgress && onEditProgress(); // Navigate to the challenge progresses screen to refresh the list

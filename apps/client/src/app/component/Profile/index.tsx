@@ -40,7 +40,7 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         <ProfileAvatar
           src={userData?.avatar as string}
-          setIsLoading={setIsLoading}
+          setIsLoadingAvatar={setIsLoading}
         />
       </View>
       <View className={clsx('absolute bottom-[-25px] right-4 ')}>

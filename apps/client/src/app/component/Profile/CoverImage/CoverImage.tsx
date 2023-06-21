@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
 import CameraSvg from './asset/camera.svg';
 import {
   getImageFromUserDevice,
@@ -8,38 +8,43 @@ import {
 } from '../../../utils/uploadUserImage';
 import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
+import { getImageFromUrl } from '../../../hooks/getImageFromUrl';
 
 interface ICoverImageProps {
   src: string;
   isOtherUser?: boolean;
-  setIsLoading?: (value: boolean) => void;
+  setIsLoadingCover?: (value: boolean) => void;
 }
 
 const CoverImage: React.FC<ICoverImageProps> = ({
   src,
   isOtherUser = false,
-  setIsLoading,
+  setIsLoadingCover,
 }) => {
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
+  const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
+  const [imageSource] = getImageFromUrl(src);
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
   });
 
   const handlePickImage = async () => {
+
     const result = await pickImageFunction();
     if (result && !result.canceled) {
+      if (setIsLoadingCover) setIsLoadingCover(true);
       const imageToUpload = result.assets[0].uri;
-      setIsLoading && setIsLoading(true);
-      const res = await uploadNewCover(imageToUpload);
-      if (res) {
-        setTimeout(() => {
-          setIsLoading && setIsLoading(false);
-        }, 3000);
+      const newAvatar = await uploadNewCover(result.assets[0].uri);
+      if (newAvatar) {
+        setNewAvatarUpload(imageToUpload);
+        if (setIsLoadingCover) setIsLoadingCover(false);
+      } else {
+        setIsErrDialog(true);
+        if (setIsLoadingCover) setIsLoadingCover(false);
       }
     }
   };
-
   return (
     <View className={clsx(' overflow-hidden')}>
       <ConfirmDialog
@@ -55,27 +60,33 @@ const CoverImage: React.FC<ICoverImageProps> = ({
             'z-100 relative rounded-full border-white bg-white'
           )}
         >
-          {src && (
-            <>
-              <Image
-                className={clsx('absolute left-0  top-0  h-[115px] w-full')}
-                source={require('./asset/Cover-loading.png')}
-                alt="profile image"
-              />
-              <Image
-                className={clsx(' z-100 h-[115px] w-full')}
-                source={{ uri: src + '?' + new Date() }}
-                alt="profile image"
-              />
-            </>
-          )}
-          {!src && (
+          <Image
+            className={clsx('absolute left-0  top-0  h-[115px] w-full')}
+            source={require('./asset/Cover-loading.png')}
+            alt="profile image"
+          />
+          {!newAvatarUpload && !imageSource && (
             <Image
               className={clsx(' h-[115px] w-full')}
               source={require('./asset/Cover-loading.png')}
               alt="profile image"
             />
           )}
+          {!newAvatarUpload && imageSource && (
+            <Image
+              className={clsx(' z-100 h-[115px] w-full')}
+              source={imageSource as ImageSourcePropType}
+              alt="profile image"
+            />
+          )}
+          {newAvatarUpload && (
+            <Image
+              className={clsx(' z-100 h-[115px] w-full')}
+              source={{ uri: newAvatarUpload }}
+              alt="profile image"
+            />
+          )}
+
         </View>
 
         {!isOtherUser && (

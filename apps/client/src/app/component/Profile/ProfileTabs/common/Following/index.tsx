@@ -1,12 +1,10 @@
+import clsx from 'clsx';
+import { IUserData } from '../../../../../types/user';
 import { FC } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
 interface IFollowingProps {
-  following: {
-    id: number;
-    avatar: string;
-    name: string;
-  }[];
+  following: IUserData[];
 }
 
 const Following: FC<IFollowingProps> = ({ following = [] }) => {
@@ -22,14 +20,23 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
-              onPress={() => {}}
+              onPress={() => { }}
               className="mb-5 flex-row items-center gap-3"
             >
-              <Image
-                source={{ uri: item.avatar }}
-                resizeMode="contain"
-                className="h-10 w-10 rounded-full"
-              />
+              <View className="relative">
+                <Image
+                  className={clsx(
+                    'absolute left-0  top-0 h-10 w-10  rounded-full'
+                  )}
+                  source={require('../asset/avatar-load.png')}
+                  alt="profile image"
+                />
+                <Image
+                  source={{ uri: item.avatar }}
+                  resizeMode="cover"
+                  className="h-10 w-10 rounded-full"
+                />
+              </View>
               <Text className="text-basic-black text-base font-semibold">
                 {item.name}
               </Text>

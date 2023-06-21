@@ -10,12 +10,12 @@ export default function PersonalInformationScreen({ navigation }: any) {
     return (
         <SafeAreaView className="justify-content: space-between flex-1 bg-white pt-3 px-4">
             <ScrollView>
-                <View className={clsx('py-4')}>
+                <View className={clsx('py-4 px-4')}>
                     <Text className={clsx('text-h4 font-medium')}>
                         {t('personal_information.description')}
                     </Text>
                 </View>
-                <View>
+                <View className='px-4' >
                     <AccorditionItem
                         title={t('lorem1111')}
                     />

@@ -10,7 +10,7 @@ import { useUserProfileStore } from '../../../store/user-data';
 
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import ProfileComponent from '../../../component/Profile';
+import ProfileComponent from '../../../component/Profile/ProfileComponent';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
 import Loading from '../../../component/common/Loading';

@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
-import ProfileTabs from './ProfileTabs/Users';
-import CoverImage from './CoverImage';
+
+import CoverImage from './CoverImage/CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
-import ProfileAvatar from '../common/Avatar/ProfileAvatar';
+import ProfileAvatar from '../common/Avatar/ProfileAvatar/ProfileAvatar';
 
 import { IUserData } from '../../types/user';
 import { useUserProfileStore } from '../../store/user-data';
+import ProfileTabs from './ProfileTabs/Users/ProfileTabs';
 
 export interface ITopSectionProfileProps {
   navigation: any;
@@ -42,7 +43,7 @@ export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   };
   return (
     <View className={clsx('relative z-10')}>
-      <CoverImage src={userData?.cover as string} setIsLoading={setIsLoading} />
+      <CoverImage src={userData?.cover as string} setIsLoadingCover={setIsLoading} />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         <ProfileAvatar

@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 import Button from '../../Buttons/Button';
 import BottomSheet2 from '../../BottomSheet/BottomSheet';
 import { FlatList } from 'react-native-gesture-handler';
+import BottomSheetOption from '../../Buttons/BottomSheetOption';
 
 interface ISelectPickerProps {
   show: boolean;
@@ -36,6 +37,10 @@ const SelectPicker: FC<ISelectPickerProps> = ({
   //   }
   // }, []);
 
+  useEffect(() => {
+    setSelected(selectedIndex || 0);
+  }, [selectedIndex]);
+
   return (
     <Modal
       isVisible={show}
@@ -53,7 +58,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
         activeOpacity={0}
         onPressOut={onCancel}
       ></TouchableOpacity>
-      <View className="flex-1">
+      <View className=" flex-1">
         <BottomSheet2 onClose={onCancel} snapPoints={['100%']}>
           <View className="relative">
             <View className="flex w-full flex-row items-center justify-center pb-8">
@@ -61,12 +66,12 @@ const SelectPicker: FC<ISelectPickerProps> = ({
             </View>
             <FlatList
               data={data}
-              keyExtractor={(item, index) => `${item?.name + index}`}
+              keyExtractor={(item, index) => `${item?.id}`}
               renderItem={({ item, index }) => {
                 return (
-                  <View className="px-4" key={`${item?.name + index}`}>
-                    <Button
-                      onPress={() => onSelect(index)}
+                  <View className="px-4" key={`${item?.id}`}>
+                    <BottomSheetOption
+                      onPress={() => setSelected(index)}
                       title={item.name}
                       containerClassName={clsx(
                         'focus:bg-gray-light',
@@ -81,6 +86,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
                 );
               }}
               onEndReached={onLoadMore}
+              ListFooterComponent={<View className="h-10" />}
               onEndReachedThreshold={0.5}
               className="h-4/5"
             />

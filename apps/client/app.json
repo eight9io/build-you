@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Client",
-    "slug": "client",
-    "version": "1.0.0",
+    "name": "BuildYou",
+    "slug": "build-you",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,11 +17,10 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.buildyoutest.client",
+      "bundleIdentifier": "it.buildyou.buildyou",
       "associatedDomains": [
-        "applinks:com.buildyoutest.client"
+        "applinks:it.buildyou.buildyou"
       ],
-      "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "1",
       "supportsTablet": false
     },
@@ -30,10 +29,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.buildyoutest.client",
+      "package": "it.buildyou.buildyou",
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS"
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
       ]
     },
     "web": {
@@ -41,7 +43,7 @@
       "bundler": "metro"
     },
     "userInterfaceStyle": "automatic",
-    "scheme": "com.buildyoutest.client",
+    "scheme": "it.buildyou.buildyou",
     "plugins": [
       [
         "expo-av",
@@ -67,7 +69,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "739022da-a6a1-403c-bb0a-0d9371925e8d"
+        "projectId": "6fef699d-c9d1-4275-9011-cb2fb97c7711"
       }
     }
   }

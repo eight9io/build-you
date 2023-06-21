@@ -11,6 +11,7 @@ import { OutlineButton } from '../common/Buttons/Button';
 import ProfileAvatar from '../common/Avatar/ProfileAvatar';
 
 import { IUserData } from '../../types/user';
+import { useUserProfileStore } from '../../store/user-data';
 
 export interface ITopSectionProfileProps {
   navigation: any;
@@ -24,13 +25,19 @@ export interface IProfileComponentProps {
   setIsLoading: (value: boolean) => void;
 }
 
-const TopSectionProfile: FC<ITopSectionProfileProps> = ({
+export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   navigation,
   userData,
   setIsLoading
 }) => {
   const { t } = useTranslation();
   const handleClicked = () => {
+    // const isCompany = userData?.companyAccount;
+    const isCompany = true;
+    if (isCompany) {
+      navigation.navigate('EditCompanyProfileScreen');
+      return;
+    }
     navigation.navigate('EditPersonalProfileScreen');
   };
   return (
@@ -59,12 +66,9 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   userData,
   navigation,
   setIsLoading,
-
 }) => {
-
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
-
       <TopSectionProfile
         navigation={navigation}
         userData={userData}

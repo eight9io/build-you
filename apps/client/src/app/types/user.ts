@@ -24,6 +24,7 @@ export interface IUserData {
   hardSkill?: IHardSkillProps[];
   softSkill?: any[];
   cover?: string;
+  companyAccount?: boolean | null;
 }
 
 export interface IHardSkillProps {

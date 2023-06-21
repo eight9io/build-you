@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React, { FC } from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 

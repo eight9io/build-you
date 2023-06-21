@@ -48,24 +48,22 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <SafeAreaView className="bg-white">
-        <View className="mt-6 flex  h-full rounded-t-xl bg-white">
-          <Header
-            title="New employee"
-            rightBtn="SAVE"
-            leftBtn={<Close fill={'black'} />}
-            onLeftBtnPress={onClose}
+      <View className=" flex h-full rounded-t-xl bg-white px-4">
+        <Header
+          title="New employee"
+          rightBtn="SAVE"
+          leftBtn={<Close fill={'black'} />}
+          onLeftBtnPress={onClose}
+        />
+        <View className="px-2 pt-8">
+          <CustomTextInput
+            title="Email"
+            placeholder="Enter employee email"
+            control={control}
+            maxChar={60}
           />
-          <View className="px-4 pt-5">
-            <CustomTextInput
-              title="Email"
-              placeholder="Enter employee email"
-              control={control}
-              maxChar={60}
-            />
-          </View>
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

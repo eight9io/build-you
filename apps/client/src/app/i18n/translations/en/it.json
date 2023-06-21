@@ -316,5 +316,7 @@
   },
   "company_profile_screen": {
     "no_challenge": "No challenge at the moment"
-  }
+  },
+"empty_followers":"You have no followers at the moment",
+"empty_following":"You follow no one at the moment"
 }

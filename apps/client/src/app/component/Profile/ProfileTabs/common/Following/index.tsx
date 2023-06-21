@@ -13,6 +13,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        className="pt-4"
         keyExtractor={(item, index) => index.toString()}
         data={following}
         showsVerticalScrollIndicator={true}
@@ -35,6 +36,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
             </TouchableOpacity>
           );
         }}
+        ListFooterComponent={<View className="h-20" />}
       />
     </View>
   );

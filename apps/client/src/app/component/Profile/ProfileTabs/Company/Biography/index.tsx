@@ -5,7 +5,7 @@ import { useUserProfileStore } from '../../../../../store/user-data';
 
 const Biography = ({ bio }: { bio: string | undefined }) => {
   return (
-    <View className="justify-content: space-between">
+    <View className="justify-content: space-between pt-4">
       <View className={clsx(' flex flex-col pr-4')}>
         <Text className={clsx('text-h6 text-gray-dark')}>
           {bio ? bio : 'No biography yet'}

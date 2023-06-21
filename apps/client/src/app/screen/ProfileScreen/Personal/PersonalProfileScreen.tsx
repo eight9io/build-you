@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, FlatList, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
   createNativeStackNavigator,
@@ -13,7 +13,6 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 import ProfileComponent from '../../../component/Profile';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
-import { ScrollView } from 'react-native-gesture-handler';
 import Loading from '../../../component/common/Loading';
 import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
@@ -54,13 +53,11 @@ const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">
-        <ScrollView className="w-full bg-gray-50">
-          <ProfileComponent
-            userData={userData}
-            navigation={navigation}
-            setIsLoading={setIsLoading}
-          />
-        </ScrollView>
+        <ProfileComponent
+          userData={userData}
+          navigation={navigation}
+          setIsLoading={setIsLoading}
+        />
         {isLoading && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}

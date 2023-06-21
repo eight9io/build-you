@@ -9,7 +9,7 @@ interface IFollowingProps {
 
 const Following: FC<IFollowingProps> = ({ following = [] }) => {
   return (
-    <View style={{ flex: 1 }}>
+    <View className="-mr-2 flex-1">
       <FlatList
         className="pt-4"
         keyExtractor={(item, index) => index.toString()}

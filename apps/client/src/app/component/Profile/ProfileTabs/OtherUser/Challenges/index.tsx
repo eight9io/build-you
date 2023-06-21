@@ -50,6 +50,13 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
 
   return (
     <View>
+      {otherUserChallenge.length === 0 && !isLoading && (
+        <View className=" pt-4">
+          <Text className="text-base text-gray-500">
+            {t('company_profile_screen.no_challenge')}
+          </Text>
+        </View>
+      )}
       {otherUserChallenge.length > 0 && (
         <FlatList
           className="px-4 pt-4"
@@ -65,7 +72,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
         />
       )}
       {otherUserChallenge.length === 0 && !isLoading && (
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <Text className="text-lg text-gray-400">
             {t('company_profile_screen.no_challenge')}
           </Text>

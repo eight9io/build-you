@@ -14,7 +14,7 @@ export const checkUserCompleProfileAndCompany = async (
 
       await httpInstance.get('/user/me').then((res) => {
         //TODO: change companyAccount to true
-        if (res.data?.companyAccount === null) {
+        if (res.data?.companyAccount === true) {
           setIsCompleteProfile(true);
         } else {
           if (res.data?.birth) {

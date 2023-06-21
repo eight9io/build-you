@@ -62,19 +62,12 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (
-    <SafeAreaView className="justify-content: space-between h-full flex-1">
+    <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">
-        <FlatList
-          data={[]}
-          renderItem={() => <View />}
-          ListFooterComponent={() => <View className="h-20" />}
-          ListHeaderComponent={
-            <CompanyComponent
-              userData={userData}
-              navigation={navigation}
-              setIsLoading={setIsLoading}
-            />
-          }
+        <CompanyComponent
+          userData={userData}
+          navigation={navigation}
+          setIsLoading={setIsLoading}
         />
         {isLoading && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />

@@ -11,9 +11,10 @@ interface IFollowersProps {
 
 const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
   return (
-    <View style={{ flex: 1 }}>
+    <View className="flex-1">
       <FlatList
         data={followers}
+        className="pt-4"
         showsVerticalScrollIndicator={true}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
@@ -35,6 +36,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
             </TouchableOpacity>
           );
         }}
+        ListFooterComponent={<View className="h-20" />}
       />
     </View>
   );

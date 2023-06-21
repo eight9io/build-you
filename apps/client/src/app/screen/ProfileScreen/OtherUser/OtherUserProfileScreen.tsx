@@ -21,18 +21,14 @@ import OtherUserProfileTabs from '../../../component/Profile/ProfileTabs/OtherUs
 interface IOtherUserProfileComponentProps {
   userId: string | null | undefined;
   navigation: any;
-  isLoadingAvatar: boolean;
-  setIsLoadingAvatar: (value: boolean) => void;
 }
 
 interface ITopSectionOtherProfileProps {
   otherUserData: IUserData | null;
-  setIsLoadingAvatar: (value: boolean) => void;
 }
 
 const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   otherUserData,
-  setIsLoadingAvatar,
 }) => {
   const { t } = useTranslation();
 
@@ -55,11 +51,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         {otherUserData?.avatar ? (
-          <ProfileAvatar
-            isOtherUser
-            src={otherUserData?.avatar as string}
-            setIsLoading={setIsLoadingAvatar}
-          />
+          <ProfileAvatar isOtherUser src={otherUserData?.avatar as string} />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
             <DefaultAvatar />
@@ -98,7 +90,6 @@ interface IOtherUserProfileScreenProps {
 
 const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
   userId,
-  setIsLoadingAvatar,
 }) => {
   const otherUserData = useGetOtherUserData(userId);
 
@@ -112,10 +103,7 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
 
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
-      <TopSectionOtherProfile
-        otherUserData={otherUserData}
-        setIsLoadingAvatar={setIsLoadingAvatar}
-      />
+      <TopSectionOtherProfile otherUserData={otherUserData} />
       <View className={clsx('bg-white px-4 pb-3 pt-12')}>
         <Text className={clsx('text-[26px] font-medium')}>
           {otherUserData?.name} {otherUserData?.surname}
@@ -143,8 +131,6 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
             <OtherUserProfileComponent
               userId={userId}
               navigation={navigation}
-              isLoadingAvatar={isLoadingAvatar}
-              setIsLoadingAvatar={setIsLoadingAvatar}
             />
           }
         />

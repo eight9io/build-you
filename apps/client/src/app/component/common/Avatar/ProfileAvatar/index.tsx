@@ -23,6 +23,7 @@ import DefaultAvatar from '../../../asset/default-avatar.svg';
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
+  isOtherUser?: boolean;
   setIsLoadingAvatar?: (value: boolean) => void;
 }
 
@@ -33,7 +34,7 @@ function removeAvatarPrefix(str: string) {
 const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,
   onPress,
-  // setIsLoadingAvatar,
+  isOtherUser = false,
 }) => {
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
   const [imageSource, loading, error] = getImageFromUrl(src);
@@ -46,15 +47,16 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   const handlePickImage = async () => {
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-      // if (setIsLoadingAvatar) setIsLoadingAvatar(true);
       const imageToUpload = result.assets[0].uri;
       uploadNewAvatar(result.assets[0].uri);
       const newAvatar = await uploadNewAvatar(result.assets[0].uri);
       console.log(newAvatar);
       if (newAvatar) {
-        setUserProfile({ ...userProfile, avatar: removeAvatarPrefix(newAvatar) } as IUserData);
+        setUserProfile({
+          ...userProfile,
+          avatar: removeAvatarPrefix(newAvatar),
+        } as IUserData);
         setNewAvatarUpload(imageToUpload);
-        // if (setIsLoadingAvatar) setIsLoadingAvatar(false);
       }
     }
   };
@@ -84,14 +86,16 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
           )}
         </View>
       </Pressable>
-      <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
-        <Image
-          className={clsx(
-            'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
-          )}
-          source={require('./asset/camera.png')}
-        />
-      </TouchableOpacity>
+      {!isOtherUser && (
+        <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
+          <Image
+            className={clsx(
+              'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
+            )}
+            source={require('./asset/camera.png')}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

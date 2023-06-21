@@ -5,10 +5,10 @@ import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
 import CompanyProfileTabs from '../ProfileTabs/Company';
-import CoverImage from '../CoverImage';
+import CoverImage from '../CoverImage/CoverImage';
 
 import { OutlineButton } from '../../common/Buttons/Button';
-import ProfileAvartar from '../../common/Avatar/ProfileAvatar';
+import ProfileAvartar from '../../common/Avatar/ProfileAvatar/ProfileAvatar';
 import EditCompanyProfileModal from '../../modal/company/EditCompanyProfileModal';
 
 interface ITopSectionCompanyProfileProps {

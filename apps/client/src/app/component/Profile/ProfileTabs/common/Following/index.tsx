@@ -21,7 +21,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
-              onPress={() => {}}
+              onPress={() => { }}
               className="mb-5 flex-row items-center gap-3"
             >
               <Image

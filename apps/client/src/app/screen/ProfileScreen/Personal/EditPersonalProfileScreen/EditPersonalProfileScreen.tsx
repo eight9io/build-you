@@ -159,7 +159,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   }, [userData?.hardSkill]);
 
   const onSubmit = (data: any) => {
-    console.log(arrayMyHardSkills);
+    const IdOccupation = occupationList.find((item) => item.name === data.occupation)?.id
 
     setIsLoading(true)
     serviceUpdateMyProfile(userData?.id, {
@@ -167,7 +167,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       surname: data.surname,
       bio: data.bio,
       birth: data.birth,
-      // occupation: data.occupation,
+      occupation: IdOccupation,
       hardSkill: arrayMyHardSkills
     })
       .then(async (res) => {

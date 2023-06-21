@@ -1,7 +1,7 @@
 import httpInstance, { setAuthTokenToHttpHeader } from './http';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const checkUserCompleProfile = async (
+export const checkUserCompleProfileAndCompany = async (
   setIsCompleteProfile: any,
   setIsMainAppLoading: any
 ) => {
@@ -13,10 +13,15 @@ export const checkUserCompleProfile = async (
       setIsMainAppLoading(true);
 
       await httpInstance.get('/user/me').then((res) => {
-        if (res.data?.birth) {
+        //TODO: change companyAccount to true
+        if (res.data?.companyAccount === null) {
           setIsCompleteProfile(true);
         } else {
-          setIsCompleteProfile(false);
+          if (res.data?.birth) {
+            setIsCompleteProfile(true);
+          } else {
+            setIsCompleteProfile(false);
+          }
         }
       });
       setIsMainAppLoading(false);

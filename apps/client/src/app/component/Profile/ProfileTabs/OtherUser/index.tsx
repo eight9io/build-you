@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
-import Biography from '../Users/Biography';
+import Biography from '../OtherUser/Biography';
 import Skills from '../Users/Skills';
 import ChallengesTab from './Challenges';
 import { IUserData } from '../../../../types/user';
@@ -31,7 +31,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
         <TabViewFlatlist
           titles={titles}
           children={[
-            <Biography />,
+            <Biography bio={otherUserData.bio}/>,
             <Skills skills={otherUserData?.softSkill} />,
             <ChallengesTab userId={otherUserData.id} />,
           ]}

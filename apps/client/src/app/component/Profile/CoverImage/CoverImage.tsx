@@ -57,7 +57,7 @@ const CoverImage: React.FC<ICoverImageProps> = ({
       <View className="relative">
         <View
           className={clsx(
-            'z-100 relative rounded-full border-4 border-white bg-white'
+            'z-100 relative rounded-full border-white bg-white'
           )}
         >
           <Image

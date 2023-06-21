@@ -22,6 +22,7 @@ export type RootStackParamList = {
   SkillStepThreeScreen: undefined;
 
   EditPersonalProfileScreen: undefined;
+  EditCompanyProfileScreen: undefined;
 
   CompleteProfileScreen: undefined;
   CompleteProfileStep1Screen: undefined;

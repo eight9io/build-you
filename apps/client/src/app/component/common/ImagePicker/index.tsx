@@ -18,6 +18,7 @@ interface IImagePickerProps {
   onRemoveSelectedImage?: (index: number) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   base64?: boolean;
+  isDisabled?: boolean;
 }
 
 const ImagePicker: FC<IImagePickerProps> = ({
@@ -28,6 +29,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
   isSelectedImage,
   allowsMultipleSelection = false,
   base64,
+  isDisabled = false,
 }) => {
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection,
@@ -81,7 +83,8 @@ const ImagePicker: FC<IImagePickerProps> = ({
       <TouchableOpacity
         onPress={handlePickImage}
         disabled={
-          isSelectedImage !== undefined && isSelectedImage === false
+          (isSelectedImage !== undefined && isSelectedImage === false) ||
+          isDisabled
             ? true
             : false
         }
@@ -89,13 +92,15 @@ const ImagePicker: FC<IImagePickerProps> = ({
       >
         <CameraIcon
           fill={
-            isSelectedImage || isSelectedImage == null ? '#1C1B1F' : '#C5C8D2'
+            (isSelectedImage || isSelectedImage == null) && !isDisabled
+              ? '#1C1B1F'
+              : '#C5C8D2'
           }
         />
         <Text
           className={clsx(
             'text-black-light ml-1.5 mt-1 text-sm font-semibold',
-            isSelectedImage === false && 'text-gray-medium'
+            (isSelectedImage === false || isDisabled) && 'text-gray-medium'
           )}
         >
           Upload image

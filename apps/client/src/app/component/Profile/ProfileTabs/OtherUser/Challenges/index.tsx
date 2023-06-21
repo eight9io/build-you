@@ -48,8 +48,6 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
     });
   };
 
-  console.log('otherUserChallenge', otherUserChallenge)
-
   return (
     <View>
       {otherUserChallenge.length > 0 && (
@@ -65,6 +63,13 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
           )}
           keyExtractor={(item) => item.id}
         />
+      )}
+      {otherUserChallenge.length === 0 && !isLoading && (
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-lg text-gray-400">
+            {t('company_profile_screen.no_challenge')}
+          </Text>
+        </View>
       )}
     </View>
   );

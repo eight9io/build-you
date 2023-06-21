@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,7 +10,6 @@ import {
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
-
 import { IProgressComment } from '../../../types/progress';
 import { IProgressChallenge } from '../../../types/challenge';
 import { RootStackParamList } from '../../../navigation/navigation.type';
@@ -27,10 +26,10 @@ import SingleComment from '../../../component/common/SingleComment';
 
 import ErrorText from '../../../component/common/ErrorText';
 import SendIcon from '../../../component/asset/send-icon.svg';
-import TextInput from '../../../component/common/Inputs/TextInput';
 import PostAvatar from '../../../component/common/Avatar/PostAvatar';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
+import TextInputWithMention from '../../../component/common/Inputs/TextInputWithMention';
 
 interface IProgressCommentScreenProps {
   route: Route<
@@ -72,18 +71,16 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <TextInputWithMention
               placeholder={
                 t('progress_comment_screen.comment_input_placeholder') || ''
               }
               placeholderTextColor={'#C5C8D2'}
               rightIcon={value !== '' ? <SendIcon /> : null}
-              onChangeText={onChange}
+              onChange={onChange}
               onBlur={onBlur}
               value={value}
-              className="w-full rounded-xl bg-white px-4 py-5"
               onRightIconPress={handleSubmit(onSubmit)}
-              multiline
             />
           )}
           name={'comment'}

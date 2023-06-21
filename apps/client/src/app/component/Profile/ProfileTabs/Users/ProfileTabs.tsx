@@ -8,8 +8,8 @@ import { useUserProfileStore } from '../../../../store/user-data';
 
 import Biography from './Biography';
 import Skills from './Skills';
-import Followers from '../common/Followers';
-import Following from '../common/Following';
+import Followers from '../common/Followers/Followers';
+import Following from '../common/Following/Following';
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
 import { serviceGetListFollower, serviceGetListFollowing } from 'apps/client/src/app/service/profile';
 import { IUserData } from '../../../../types/user';

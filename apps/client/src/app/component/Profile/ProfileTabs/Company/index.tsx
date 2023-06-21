@@ -6,8 +6,8 @@ import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 import clsx from 'clsx';
 
 import Biography from './Biography';
-import Followers from '../common/Followers';
-import Following from '../common/Following';
+import Followers from '../common/Followers/Followers';
+import Following from '../common/Following/Following';
 import Employees from './Employees';
 import ChallengesTab from '../OtherUser/Challenges';
 

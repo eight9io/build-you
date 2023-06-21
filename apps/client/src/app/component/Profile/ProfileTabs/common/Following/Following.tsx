@@ -2,15 +2,17 @@ import clsx from 'clsx';
 import { IUserData } from '../../../../../types/user';
 import { FC } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-
+import Empty from '../asset/emptyFollow.svg';
+import { useTranslation } from 'react-i18next';
 interface IFollowingProps {
   following: IUserData[];
 }
 
 const Following: FC<IFollowingProps> = ({ following = [] }) => {
+  const { t } = useTranslation();
   return (
     <View className="-mr-2 flex-1">
-      <FlatList
+      {following.length > 0 && <FlatList
         className="pt-4"
         keyExtractor={(item, index) => index.toString()}
         data={following}
@@ -44,7 +46,13 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
           );
         }}
         ListFooterComponent={<View className="h-20" />}
-      />
+      />}
+      {
+        following.length == 0 && (<View className="flex-1 justify-center items-center mb-[100px]">
+          <Empty />
+          <Text className='text-h6 text-[#6C6E76] font-light leading-10'>{t('empty_following')}</Text>
+        </View>)
+      }
     </View>
   );
 };

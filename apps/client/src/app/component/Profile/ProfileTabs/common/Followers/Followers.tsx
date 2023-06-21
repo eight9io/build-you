@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-
+import Empty from '../asset/emptyFollow.svg';
+import { useTranslation } from 'react-i18next';
 interface IFollowersProps {
   followers: {
     id: number;
@@ -10,9 +11,10 @@ interface IFollowersProps {
 }
 
 const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
+  const { t } = useTranslation();
   return (
-    <View className="-mr-2 flex-1">
-      <FlatList
+    <View className="mr-2 flex-1">
+      {followers.length > 0 && <FlatList
         data={followers}
         className="pt-4"
         showsVerticalScrollIndicator={true}
@@ -22,7 +24,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
-              onPress={() => {}}
+              onPress={() => { }}
               className="mb-5 flex-row items-center gap-3"
             >
               <Image
@@ -37,7 +39,13 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
           );
         }}
         ListFooterComponent={<View className="h-20" />}
-      />
+      />}
+      {
+        followers.length == 0 && (<View className="flex-1 justify-center items-center mb-[100px]">
+          <Empty />
+          <Text className='text-h6 text-[#6C6E76] font-light leading-10'>{t('empty_followers')}</Text>
+        </View>)
+      }
     </View>
   );
 };

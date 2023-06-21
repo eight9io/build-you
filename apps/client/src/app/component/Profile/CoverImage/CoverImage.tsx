@@ -30,10 +30,10 @@ const CoverImage: React.FC<ICoverImageProps> = ({
   });
 
   const handlePickImage = async () => {
-    if (setIsLoadingCover) setIsLoadingCover(true);
+
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-
+      if (setIsLoadingCover) setIsLoadingCover(true);
       const imageToUpload = result.assets[0].uri;
       const newAvatar = await uploadNewCover(result.assets[0].uri);
       if (newAvatar) {

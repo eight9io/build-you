@@ -2,6 +2,7 @@ import * as ExpoImagePicker from 'expo-image-picker';
 import httpInstance from './http';
 import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import { serviceUpdateAvatar, serviceUpdateCover } from '../service/profile';
 
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
@@ -45,12 +46,18 @@ export const uploadNewAvatar = async (image: string) => {
     type: 'image/jpeg',
   } as any);
 
-  const response = await httpInstance.post('/user/avatar', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+ const response= serviceUpdateAvatar(formData)
+  .then((res)=>{
+    return res.data;
+    
+  })
+  .catch((err)=>{
+    console.log(err)
+    return undefined
+  }
+
+  )
+  return response
 };
 
 export const uploadNewCover = async (image: string) => {
@@ -62,12 +69,19 @@ export const uploadNewCover = async (image: string) => {
     type: 'image/jpeg',
   } as any);
 
-  const response = await httpInstance.post('/user/cover', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+ 
+  const response= serviceUpdateCover(formData)
+  .then((res)=>{
+    return res.data;
+    
+  })
+  .catch((err)=>{
+    console.log(err)
+    return undefined
+  }
+
+  )
+  return response
 };
 
 export const getImageExtension = (uri: string) => {

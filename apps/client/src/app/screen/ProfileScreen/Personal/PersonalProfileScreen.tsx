@@ -10,7 +10,7 @@ import { useUserProfileStore } from '../../../store/user-data';
 
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import ProfileComponent from '../../../component/Profile';
+import ProfileComponent from '../../../component/Profile/ProfileComponent';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -35,7 +35,6 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
   const { getUserProfile, setUserProfile } = useUserProfileStore();
   useEffect(() => {
     if (!isFocused) return;
-
     serviceGetMyProfile()
       .then((res) => {
         setUserProfile(res.data);
@@ -53,7 +52,6 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
           <ProfileComponent
             userData={userData}
             navigation={navigation}
-
             setIsLoading={setIsLoading}
           />
         </ScrollView>

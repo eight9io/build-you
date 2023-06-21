@@ -5,13 +5,13 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { IUserData } from '../../../types/user';
-import { ITopSectionProfileProps } from '../../../component/Profile';
+import { ITopSectionProfileProps } from '../../../component/Profile/ProfileComponent';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 import { useGetOtherUserData } from '../../../hooks/useGetUser';
 
 import Loading from '../../../component/common/Loading';
-import CoverImage from '../../../component/Profile/CoverImage';
-import ProfileAvatar from '../../../component/common/Avatar/ProfileAvatar';
+import CoverImage from '../../../component/Profile/CoverImage/CoverImage';
+import ProfileAvatar from '../../../component/common/Avatar/ProfileAvatar/ProfileAvatar';
 import { OutlineButton } from '../../../component/common/Buttons/Button';
 
 import DefaultAvatar from '../../../component/asset/default-avatar.svg';
@@ -65,7 +65,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
           <ProfileAvatar
             isOtherUser
             src={otherUserData?.avatar as string}
-            setIsLoading={setIsLoadingAvatar}
+            setIsLoadingAvatar={setIsLoadingAvatar}
           />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>

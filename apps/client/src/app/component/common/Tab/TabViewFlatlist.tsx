@@ -60,6 +60,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
                 isActive={index === activeTabIndex}
                 activeTabClassName={activeTabClassName}
                 defaultTabClassName={defaultTabClassName}
+                key={index}
               />
             </TouchableOpacity>
           )}
@@ -67,7 +68,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
           contentContainerStyle={{ paddingHorizontal: 10, backgroundColor: 'white' }}
         />
       </View>
-      <View className="mt-4 flex-1 px-4">{children[activeTabIndex]}</View>
+      <View className="mt-4 flex-1 px-4"    >{children[activeTabIndex]}</View>
     </View>
   );
 };

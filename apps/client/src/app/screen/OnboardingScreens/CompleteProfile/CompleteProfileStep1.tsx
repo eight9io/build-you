@@ -91,8 +91,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   };
 
   const handleSubmitForm = (data: any) => {
-    // TODO: Handle validate form with yup and remove required in form
-    setProfile(data);
+    const IdOccupation = occupationList.find((item) => item.name === data.occupation)?.id
+    setProfile({ ...data, occupation: IdOccupation });
     navigation.navigate('CompleteProfileStep2Screen');
   };
 

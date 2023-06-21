@@ -26,15 +26,21 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 interface IProfileProps {
-  userName?: string;
   navigation: ProfileScreenNavigationProp;
 }
 
-const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
+const Profile: React.FC<IProfileProps> = ({ navigation }) => {
+  const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
+    useState<boolean>(true);
+
   const isFocused = useIsFocused();
-  const { getUserProfile, setUserProfile } = useUserProfileStore();
+  const { setUserProfile, getUserProfile } = useUserProfileStore();
   useEffect(() => {
     if (!isFocused) return;
+    if (shouldNotLoadOnFirstFocus) {
+      setShouldNotLoadOnFirstFocus(false);
+      return;
+    }
     serviceGetMyProfile()
       .then((res) => {
         setUserProfile(res.data);
@@ -42,9 +48,9 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
       .catch((err) => {
         console.error('err', err);
       });
-  }, [isFocused])
+  }, [isFocused]);
   const userData = getUserProfile();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">

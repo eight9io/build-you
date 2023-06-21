@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '../../../../component/common/Buttons/Button';

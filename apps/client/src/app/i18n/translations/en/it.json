@@ -313,5 +313,8 @@
     "title_sub":"We're sorry to see you go!",
     "description":"Just a quick reminder, delete your account means that all of your information will be lost forever, including the challenges you’ve completed. We will not be able to restore your account. Are you still want to delete your account?",
     "confirming_password":"Confirming by typing your password below"
+  },
+  "company_profile_screen": {
+    "no_challenge": "No challenge at the moment"
   }
 }

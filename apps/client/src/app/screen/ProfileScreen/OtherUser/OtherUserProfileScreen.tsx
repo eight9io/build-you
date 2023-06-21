@@ -8,11 +8,13 @@ import { IUserData } from '../../../types/user';
 import { ITopSectionProfileProps } from '../../../component/Profile/ProfileComponent';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 import { useGetOtherUserData } from '../../../hooks/useGetUser';
+import { isObjectEmpty } from '../../../utils/common';
 
 import Loading from '../../../component/common/Loading';
 import CoverImage from '../../../component/Profile/CoverImage/CoverImage';
 import ProfileAvatar from '../../../component/common/Avatar/ProfileAvatar/ProfileAvatar';
 import { OutlineButton } from '../../../component/common/Buttons/Button';
+import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 
 import DefaultAvatar from '../../../component/asset/default-avatar.svg';
 import OtherUserProfileTabs from '../../../component/Profile/ProfileTabs/OtherUser';
@@ -36,14 +38,6 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   const { t } = useTranslation();
 
   const isCurrentUserFollowed = false;
-
-  if (!otherUserData) {
-    return (
-      <View className="flex flex-row items-center justify-center px-6">
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
 
   const handleFllowClicked = () => {
     console.log('Follow clicked');
@@ -107,8 +101,15 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
   userId,
   setIsLoadingAvatar,
 }) => {
-  const { t } = useTranslation();
   const otherUserData = useGetOtherUserData(userId);
+
+  if (isObjectEmpty(otherUserData)) {
+    return (
+      <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
+        <SkeletonLoadingCommon />
+      </View>
+    );
+  }
 
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import clsx from 'clsx';
 
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
@@ -27,23 +27,6 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
     <View
       className={clsx('relative flex flex-col items-center justify-center')}
     >
-      {/* {!src && (
-        <Video
-          ref={videoPlayer}
-          source={{
-            uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-          }}
-          style={{
-            width: '100%',
-            height: 200,
-            backgroundColor: '#FFFFF',
-            borderRadius: 12,
-          }}
-          useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-        />
-      )} */}
       {src && (
         <Video
           ref={videoPlayer}

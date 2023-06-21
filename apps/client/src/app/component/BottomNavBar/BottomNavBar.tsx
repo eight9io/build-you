@@ -31,7 +31,8 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
-  const isCompany = currentUser && currentUser.companyAccount !== null;
+  // const isCompany = currentUser && currentUser?.companyAccount;
+  const isCompany = true;
 
   return (
     <Tab.Navigator

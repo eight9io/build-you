@@ -124,16 +124,7 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">
-        <FlatList
-          data={[]}
-          renderItem={({ item }) => <Text>{item}</Text>}
-          ListHeaderComponent={
-            <OtherUserProfileComponent
-              userId={userId}
-              navigation={navigation}
-            />
-          }
-        />
+        <OtherUserProfileComponent userId={userId} navigation={navigation} />
         {isLoadingAvatar && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}

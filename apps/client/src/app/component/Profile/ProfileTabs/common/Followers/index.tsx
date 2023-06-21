@@ -11,7 +11,7 @@ interface IFollowersProps {
 
 const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
   return (
-    <View className="flex-1">
+    <View className="-mr-2 flex-1">
       <FlatList
         data={followers}
         className="pt-4"

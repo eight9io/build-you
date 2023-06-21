@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
-import ProfileTabs from './ProfileTabs/Users';
+
 import CoverImage from './CoverImage/CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
@@ -12,6 +12,7 @@ import ProfileAvatar from '../common/Avatar/ProfileAvatar/ProfileAvatar';
 
 import { IUserData } from '../../types/user';
 import { useUserProfileStore } from '../../store/user-data';
+import ProfileTabs from './ProfileTabs/Users/ProfileTabs';
 
 export interface ITopSectionProfileProps {
   navigation: any;

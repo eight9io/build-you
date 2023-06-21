@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { clsx } from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 import ThumbUp from './asset/thumb_up.svg';
 import FilledThumbUP from './asset/filled_thumb_up.svg';
@@ -10,8 +11,9 @@ import {
   deleteProgressLike,
   getProgressLikes,
 } from '../../service/progress';
-import { use } from 'i18next';
 import { useUserProfileStore } from '../../store/user-data';
+
+import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 interface ILikeButtonProps {
   progressId?: string;
@@ -20,6 +22,7 @@ interface ILikeButtonProps {
 
 const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
   const { getAccessToken } = useAuthStore();
+  const { t } = useTranslation();
 
   const [numberOfLikes, setNumberOfLikes] = useState<number>(0);
   const [isLikedByCurrentUser, setIsLikedByCurrentUser] =
@@ -81,6 +84,7 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
         setTempLikes((prev) => prev + 1);
       })
       .catch((err) => {
+        GlobalDialogController.showModal(t('error_general_message') as string || 'Something went wrong');
         console.log(err);
       });
   };

@@ -68,7 +68,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   setIsLoading,
 }) => {
   return (
-    <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
+    <View className={clsx('relative h-full flex-1 flex-col ')}>
       <TopSectionProfile
         navigation={navigation}
         userData={userData}

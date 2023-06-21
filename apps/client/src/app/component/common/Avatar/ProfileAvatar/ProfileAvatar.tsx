@@ -37,7 +37,7 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,
   onPress,
   setIsLoadingAvatar,
-  isOtherUser
+  isOtherUser = false
 }) => {
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
@@ -49,10 +49,9 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   });
 
   const handlePickImage = async () => {
-    if (setIsLoadingAvatar) setIsLoadingAvatar(true);
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-
+      if (setIsLoadingAvatar) setIsLoadingAvatar(true);
       const imageToUpload = result.assets[0].uri;
       const newAvatar = await uploadNewAvatar(result.assets[0].uri);
       if (newAvatar) {

@@ -17,6 +17,7 @@ import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
 import AlertSvg from './asset/noti.svg';
 import { useGetUserData } from '../../hooks/useGetUser';
+import { useUserProfileStore } from '../../store/user-data';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
@@ -26,9 +27,11 @@ interface IBottomNavBarProps {}
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
   const isAndroid = Platform.OS === 'android';
-
-  const isCompany = false;
   useGetUserData();
+
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const isCompany = currentUser && currentUser.companyAccount === null;
 
   return (
     <Tab.Navigator
@@ -165,6 +168,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           name="Company Profile"
           component={CompanyProfileScreen}
           options={{
+            headerShown: false,
             tabBarIcon: ({ focused }) => (
               <View
                 className={clsx('flex flex-col items-center justify-center')}

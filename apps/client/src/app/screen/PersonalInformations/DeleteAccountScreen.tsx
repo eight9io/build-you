@@ -107,7 +107,7 @@ export default function DeleteAccountScreen({ navigation }: any) {
 
     return (
         <SafeAreaView className=" w-full bg-white pt-3 px-4 h-full">
-            <ScrollView className='h-full '>
+            <ScrollView className='h-full px-4  '>
                 <ConfirmDialog
                     title={t('dialog.delete_account.title') || ''}
                     description={t('dialog.delete_account.description') || ''}

@@ -5,13 +5,14 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { IUserData } from '../../../types/user';
+import { ITopSectionProfileProps } from '../../../component/Profile/ProfileComponent';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 import { useGetOtherUserData } from '../../../hooks/useGetUser';
 import { isObjectEmpty } from '../../../utils/common';
 
 import Loading from '../../../component/common/Loading';
-import CoverImage from '../../../component/Profile/CoverImage';
-import ProfileAvatar from '../../../component/common/Avatar/ProfileAvatar';
+import CoverImage from '../../../component/Profile/CoverImage/CoverImage';
+import ProfileAvatar from '../../../component/common/Avatar/ProfileAvatar/ProfileAvatar';
 import { OutlineButton } from '../../../component/common/Buttons/Button';
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 
@@ -21,14 +22,18 @@ import OtherUserProfileTabs from '../../../component/Profile/ProfileTabs/OtherUs
 interface IOtherUserProfileComponentProps {
   userId: string | null | undefined;
   navigation: any;
+  isLoadingAvatar?: boolean;
+  setIsLoadingAvatar: (value: boolean) => void;
 }
 
 interface ITopSectionOtherProfileProps {
   otherUserData: IUserData | null;
+  setIsLoadingAvatar: (value: boolean) => void;
 }
 
 const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   otherUserData,
+  setIsLoadingAvatar,
 }) => {
   const { t } = useTranslation();
 
@@ -51,7 +56,11 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         {otherUserData?.avatar ? (
-          <ProfileAvatar isOtherUser src={otherUserData?.avatar as string} />
+          <ProfileAvatar
+            isOtherUser
+            src={otherUserData?.avatar as string}
+            setIsLoadingAvatar={setIsLoadingAvatar}
+          />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
             <DefaultAvatar />
@@ -90,6 +99,7 @@ interface IOtherUserProfileScreenProps {
 
 const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
   userId,
+  setIsLoadingAvatar,
 }) => {
   const otherUserData = useGetOtherUserData(userId);
 
@@ -103,7 +113,10 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
 
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
-      <TopSectionOtherProfile otherUserData={otherUserData} />
+      <TopSectionOtherProfile
+        otherUserData={otherUserData}
+        setIsLoadingAvatar={setIsLoadingAvatar}
+      />
       <View className={clsx('bg-white px-4 pb-3 pt-12')}>
         <Text className={clsx('text-[26px] font-medium')}>
           {otherUserData?.name} {otherUserData?.surname}
@@ -124,7 +137,7 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">
-        <OtherUserProfileComponent userId={userId} navigation={navigation} />
+        <OtherUserProfileComponent userId={userId} navigation={navigation} setIsLoadingAvatar={setIsLoadingAvatar} />
         {isLoadingAvatar && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}

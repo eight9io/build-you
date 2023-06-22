@@ -30,7 +30,7 @@ const CompanyProfileComponent: FC<ICompanyProfileComponentProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <View className={clsx('flex-1 flex-col')}>
+    <View className={clsx('relative h-full flex-1 flex-col bg-white')}>
       <TopSectionProfile
         navigation={navigation}
         userData={userData}

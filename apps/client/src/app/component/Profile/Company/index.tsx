@@ -7,15 +7,8 @@ import { View, Text } from 'react-native';
 import { IUserData } from '../../../types/user';
 
 import CompanyProfileTabs from '../ProfileTabs/Company';
-import CoverImage from '../CoverImage/CoverImage';
 
-import { OutlineButton } from '../../common/Buttons/Button';
-import ProfileAvartar from '../../common/Avatar/ProfileAvatar/ProfileAvatar';
-import EditCompanyProfileModal from '../../modal/company/EditCompanyProfileModal';
 import { TopSectionProfile } from '../ProfileComponent';
-
-
-
 
 interface ICompanyProfileComponentProps {
   userData: IUserData | null;

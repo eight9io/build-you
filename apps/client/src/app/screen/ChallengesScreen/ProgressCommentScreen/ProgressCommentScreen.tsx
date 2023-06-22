@@ -21,7 +21,7 @@ import {
 } from '../../../service/progress';
 import { sortArrayByCreatedAt } from '../../../utils/common';
 
-import { ChallengeProgressCardForComment } from '../../../component/Post/ChallengeProgressCard';
+import ChallengeProgressCardForComment from '../../../component/Post/ChallengeProgressCard';
 import SingleComment from '../../../component/common/SingleComment';
 
 import ErrorText from '../../../component/common/ErrorText';
@@ -37,6 +37,7 @@ interface IProgressCommentScreenProps {
     {
       progressId: string;
       ownerId?: string;
+      challengeName: string;
     }
   >;
 }
@@ -92,7 +93,7 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
 };
 
 const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
-  const { progressId, ownerId } = route.params;
+  const { progressId, ownerId, challengeName } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [progressCommentScreenLoading, setProgressCommentScreenLoading] =
@@ -195,7 +196,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                   <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
                     <View className="border-gray-light flex border-b bg-white px-5 py-5">
                       <Text className="text-h4 font-semibold">
-                        {progressData.caption || 'Challenge created'}
+                        {challengeName || 'Challenge created'}
                       </Text>
                     </View>
                     <ChallengeProgressCardForComment

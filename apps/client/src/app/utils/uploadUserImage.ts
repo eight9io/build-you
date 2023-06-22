@@ -1,30 +1,38 @@
 import * as ExpoImagePicker from 'expo-image-picker';
 import httpInstance from './http';
 import { Platform } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import { manipulateAsync } from 'expo-image-manipulator';
 import { serviceUpdateAvatar, serviceUpdateCover } from '../service/profile';
+import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
+
+import { useTranslation } from 'react-i18next';
 
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
   base64?: boolean;
   maxImages?: number;
+  quality?: number;
 }
+
 export const getImageFromUserDevice = (props: PickImageOptions) => {
   const { allowsMultipleSelection, base64 } = props;
+  const { t } = useTranslation();
   return async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      // TODO: add to global dialog
-      alert('Sorry, we need camera roll permissions to make this work!');
+      GlobalDialogController.showModal(
+        t('error_permission_message') ||
+          'Permission denied. Please try again later.'
+      );
       return;
     }
 
     const result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-      allowsEditing: allowsMultipleSelection ? false : true,
+      allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: props?.quality || 1,
       allowsMultipleSelection,
       selectionLimit: props.maxImages,
       base64: base64,
@@ -46,18 +54,15 @@ export const uploadNewAvatar = async (image: string) => {
     type: 'image/jpeg',
   } as any);
 
- const response= serviceUpdateAvatar(formData)
-  .then((res)=>{
-    return res.data;
-    
-  })
-  .catch((err)=>{
-    console.log(err)
-    return undefined
-  }
-
-  )
-  return response
+  const response = serviceUpdateAvatar(formData)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return undefined;
+    });
+  return response;
 };
 
 export const uploadNewCover = async (image: string) => {
@@ -69,19 +74,15 @@ export const uploadNewCover = async (image: string) => {
     type: 'image/jpeg',
   } as any);
 
- 
-  const response= serviceUpdateCover(formData)
-  .then((res)=>{
-    return res.data;
-    
-  })
-  .catch((err)=>{
-    console.log(err)
-    return undefined
-  }
-
-  )
-  return response
+  const response = serviceUpdateCover(formData)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return undefined;
+    });
+  return response;
 };
 
 export const getImageExtension = (uri: string) => {

@@ -3,6 +3,9 @@
   "error": "Error",
   "close": "Close",
   "error_general_message": "Something went wrong. Please try again later.",
+  "error_network_message": "Please check your internet connection and try again.",
+  "error_permission_message": "Permission denied. Please try again later.",
+
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
   "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Register for free ",

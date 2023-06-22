@@ -138,11 +138,12 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           }
           renderItem={({ item }) => (
             <ProgressCard
+              userData={userData}
+              itemProgressCard={item}
+              challengeName={challengeData.goal}
+              onEditProgress={handleEditProgress}
               challengeOwner={challengeData?.owner[0]}
               isChallengeCompleted={challengeData.status === 'closed'}
-              itemProgressCard={item}
-              userData={userData}
-              onEditProgress={handleEditProgress}
               onDeleteProgressSuccess={handleDeleteProgressSuccess}
             />
           )}

@@ -42,6 +42,7 @@ export type RootStackParamList = {
   ProgressCommentScreen: {
     progressId: string;
     ownerId?: string;
+    challengeName: string;
   };
 
   ProfileScreenLoading: undefined;

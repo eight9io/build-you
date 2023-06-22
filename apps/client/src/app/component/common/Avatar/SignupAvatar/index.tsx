@@ -17,6 +17,7 @@ const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
 
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
+    quality: 0.7,
   });
 
   const handlePickImage = async () => {

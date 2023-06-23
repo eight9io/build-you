@@ -5,10 +5,11 @@ import clsx from 'clsx';
 
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
-import Biography from '../OtherUser/Biography';
+
 import Skills from '../Users/Skills';
 import ChallengesTab from './Challenges';
 import { IUserData } from '../../../../types/user';
+import Biography from '../Users/Biography';
 
 interface IOtherUserProfileTabsProps {
   otherUserData: IUserData | null;
@@ -26,14 +27,15 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
   ];
 
   return (
-    <View className={clsx('flex-1 bg-gray-50')}>
+    <ScrollView className={clsx('flex-1 bg-gray-50 h-full')}>
       {otherUserData !== null && (
         <TabViewFlatlist
+
           titles={titles}
           children={[
-            <Biography bio={otherUserData.bio}/>,
-            <Skills skills={otherUserData?.softSkill} />,
-            <ChallengesTab userId={otherUserData.id} />,
+            <Biography userProfile={otherUserData} key="0" />,
+            <Skills skills={otherUserData?.softSkill} key="1" />,
+            <ChallengesTab userId={otherUserData.id} key="2" />,
           ]}
           activeTabClassName=""
           defaultTabClassName="text-gray-dark"
@@ -44,7 +46,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
           <Text className={clsx('text-gray-dark')}>Loading...</Text>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 

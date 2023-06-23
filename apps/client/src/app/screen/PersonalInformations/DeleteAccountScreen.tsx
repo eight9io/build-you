@@ -90,6 +90,7 @@ export default function DeleteAccountScreen({ navigation }: any) {
                     setIsCompleteProfileStore(null);
                     setAccessToken(null);
 
+
                 }
             })
             .catch((error) => {

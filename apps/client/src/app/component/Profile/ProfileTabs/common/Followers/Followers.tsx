@@ -2,16 +2,16 @@ import { FC } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import Empty from '../asset/emptyFollow.svg';
 import { useTranslation } from 'react-i18next';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { IUserData } from 'apps/client/src/app/types/user';
 interface IFollowersProps {
-  followers: {
-    id: number;
-    avatar: string;
-    name: string;
-  }[];
+  followers: IUserData[]
 }
 
 const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
   const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <View className="mr-2 flex-1">
       {followers.length > 0 && <FlatList
@@ -24,7 +24,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
-              onPress={() => { }}
+              onPress={() => navigation.navigate('OtherUserProfileScreen', { userId: item.id })}
               className="mb-5 flex-row items-center gap-3"
             >
               <Image

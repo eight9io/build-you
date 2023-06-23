@@ -289,9 +289,8 @@
     "err_title_update_img":"Can’t update your image",
     "err_title_update_profile":"Can’t update your profile",
     "err_title_delete_account":"Can’t delete your account",
-    "err_update_profile":"Something went wrong. Please try again later",
-    "err_title_update_img": "Can’t update your image",
-    "err_title_update_profile": "Can’t update your profile",
+ 
+
     "err_update_profile": "Something went wrong. Please try again later",
     "open_settings": "Open settings",
     "alert_title": "Alert"
@@ -305,7 +304,7 @@
   },
   "personal_information": {
     "title": "Personal informations",
-    "description": "Your BiuldYou information",
+    "description": "Your BuilddYou information",
     "delete_account": "Delete my account"
   },
   "delete_account":{

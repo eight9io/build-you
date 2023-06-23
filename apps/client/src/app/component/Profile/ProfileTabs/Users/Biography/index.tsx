@@ -6,7 +6,10 @@ import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 
 import Button from '../../../../common/Buttons/Button';
 import PlayButton from './asset/play-button.svg';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { IUserData } from 'apps/client/src/app/types/user';
+interface IBiographyProps {
+  userProfile: IUserData | null;
+}
 
 const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
   const videoPlayer = React.useRef(null);
@@ -58,9 +61,7 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
   );
 };
 
-const Biography = () => {
-  const { getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
+const Biography = ({ userProfile }: IBiographyProps) => {
 
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;

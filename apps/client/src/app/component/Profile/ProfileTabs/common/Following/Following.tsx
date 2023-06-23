@@ -4,15 +4,19 @@ import { FC } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import Empty from '../asset/emptyFollow.svg';
 import { useTranslation } from 'react-i18next';
+import GlobalDialogController from '../../../../common/Dialog/GlobalDialogController';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
 interface IFollowingProps {
-  following: IUserData[];
+  following: IUserData[] | null;
 }
 
 const Following: FC<IFollowingProps> = ({ following = [] }) => {
   const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <View className="-mr-2 flex-1">
-      {following.length > 0 && <FlatList
+      {following && following.length > 0 && <FlatList
         className="pt-4"
         keyExtractor={(item, index) => index.toString()}
         data={following}
@@ -22,7 +26,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
-              onPress={() => { }}
+              onPress={() => navigation.navigate('OtherUserProfileScreen', { userId: item.id, isFollowing: true })}
               className="mb-5 flex-row items-center gap-3"
             >
               <View className="relative">
@@ -48,7 +52,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
         ListFooterComponent={<View className="h-20" />}
       />}
       {
-        following.length == 0 && (<View className="flex-1 justify-center items-center mb-[100px]">
+        following && following.length == 0 && (<View className="flex-1 justify-center items-center mb-[100px]">
           <Empty />
           <Text className='text-h6 text-[#6C6E76] font-light leading-10'>{t('empty_following')}</Text>
         </View>)

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
 import clsx from 'clsx';
-import { useUserProfileStore } from '../../../../store/user-data';
+import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
 
 import Biography from './Biography';
 import Skills from './Skills';
@@ -13,27 +13,28 @@ import Following from '../common/Following/Following';
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
 import { serviceGetListFollower, serviceGetListFollowing } from 'apps/client/src/app/service/profile';
 import { IUserData } from '../../../../types/user';
+import { useIsFocused } from '@react-navigation/native';
 
 const ProfileTabs: FC = () => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const { t } = useTranslation();
-  const [followList, setFollowList] = useState({
-    followingList: [],
-    followerList: []
-  })
+  const { getFollowingList } = useFollowingListStore()
+
+  const [followerList, setFollowerList] = useState([])
+  const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
+    useState<boolean>(true);
+
+  const isFocused = useIsFocused();
   useEffect(() => {
-    if (!userProfile?.id) return
+    if (!userProfile?.id || !isFocused) return
     const getFollowerList = async () => {
-      const [{ data: followingList }, { data: followerList }] = await Promise.all([
-        serviceGetListFollowing(userProfile?.id),
-        serviceGetListFollower(userProfile?.id)
-      ]);
-      setFollowList({ followingList, followerList });
+      const { data: followerList } = await serviceGetListFollower(userProfile?.id);
+      setFollowerList(followerList);
     };
     getFollowerList();
-  }, [])
-
+  }, [isFocused])
+  const followingList = getFollowingList()
   const titles = [
     t('profile_screen_tabs.biography'),
     t('profile_screen_tabs.skills'),
@@ -46,10 +47,10 @@ const ProfileTabs: FC = () => {
       <TabViewFlatlist
         titles={titles}
         children={[
-          <Biography key="0" />,
+          <Biography key="0" userProfile={userProfile} />,
           <Skills skills={userProfile?.softSkill} key="1" />,
-          <Followers followers={followList?.followerList} key="2" />,
-          <Following following={followList?.followingList} key="3" />,
+          <Followers followers={followerList} key="2" />,
+          <Following following={followingList} key="3" />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"

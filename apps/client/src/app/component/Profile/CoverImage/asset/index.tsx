@@ -10,16 +10,12 @@ import {
 } from 'react-native';
 import clsx from 'clsx';
 
-import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
-import { useUserProfileStore } from '../../../../store/user-data';
-import { IUserData } from '../../../../types/user';
 
 import DefaultAvatar from './asset/default-avatar.svg';
-import { useGetUserData } from 'apps/client/src/app/hooks/useGetUser';
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
@@ -49,7 +45,6 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
       }
     }
   };
-
   return (
     <View className={clsx('relative flex flex-row items-center')}>
       <Pressable onPress={onPress}>

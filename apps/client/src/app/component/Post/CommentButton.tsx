@@ -8,7 +8,7 @@ import { getProgressComments } from '../../service/progress';
 interface ICommentButtonProps {
   progressId: string;
   isViewOnly?: boolean;
-  navigationToComment: () => void;
+  navigationToComment?: () => void;
   shouldRefreshComments?: boolean;
 }
 
@@ -43,7 +43,7 @@ const CommentButton: FC<ICommentButtonProps> = ({
     }
   };
   const handleNavigationToComment = () => {
-    !isViewOnly && navigationToComment();
+    !isViewOnly && navigationToComment && navigationToComment();
   };
   return (
     <TouchableOpacity

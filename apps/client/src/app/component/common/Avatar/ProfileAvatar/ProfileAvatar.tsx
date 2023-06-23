@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Pressable,
-  ImageStyle,
   ImageSourcePropType,
 } from 'react-native';
 import clsx from 'clsx';
@@ -15,8 +13,6 @@ import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
-import { useUserProfileStore } from '../../../../store/user-data';
-import { IUserData } from '../../../../types/user';
 
 import DefaultAvatar from '../../../asset/default-avatar.svg';
 import ConfirmDialog from '../../Dialog/ConfirmDialog';
@@ -37,15 +33,16 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,
   onPress,
   setIsLoadingAvatar,
-  isOtherUser = false
+  isOtherUser = false,
 }) => {
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
   const [imageSource] = getImageFromUrl(src);
-  // const userProfile = getUserProfile();
+
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
+    quality: 0.7,
   });
 
   const handlePickImage = async () => {
@@ -83,7 +80,11 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
             alt="profile image"
           />
           {!newAvatarUpload && !imageSource && (
-            <View className={clsx('h-[101px] w-[101px] rounded-full bg-white  z-10')}>
+            <View
+              className={clsx(
+                'z-10 h-[101px] w-[101px] rounded-full  bg-white'
+              )}
+            >
               <DefaultAvatar />
             </View>
           )}
@@ -101,17 +102,18 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
               alt="profile image"
             />
           )}
-
         </View>
       </Pressable>
-      {!isOtherUser && <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
-        <Image
-          className={clsx(
-            'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
-          )}
-          source={require('./asset/camera.png')}
-        />
-      </TouchableOpacity>}
+      {!isOtherUser && (
+        <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
+          <Image
+            className={clsx(
+              'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
+            )}
+            source={require('./asset/camera.png')}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

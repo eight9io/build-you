@@ -33,8 +33,7 @@ export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
 }) => {
   const { t } = useTranslation();
   const handleClicked = () => {
-    // const isCompany = userData?.companyAccount;
-    const isCompany = true;
+    const isCompany = userData?.companyAccount || false;
     if (isCompany) {
       navigation.navigate('EditCompanyProfileScreen');
       return;
@@ -69,7 +68,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   setIsLoading,
 }) => {
   return (
-    <View className={clsx('relative h-full flex-1 flex-col ')}>
+    <View className={clsx('relative h-full flex-1 flex-col bg-white')}>
       <TopSectionProfile
         navigation={navigation}
         userData={userData}

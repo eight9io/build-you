@@ -20,7 +20,7 @@ import CommentButton from '../../Post/CommentButton';
 import useModal from '../../../hooks/useModal';
 import { deleteProgress } from '../../../service/progress';
 import { getTimeDiffToNow } from '../../../utils/time';
-import { getSeperateImageUrls } from '../../../utils/uploadUserImage';
+import { getSeperateImageUrls } from '../../../utils/image';
 import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 import IconDot from './asset/dot.svg';
@@ -32,20 +32,22 @@ interface IProgressCardProps {
     name: string;
     surname: string;
   };
-  isChallengeCompleted?: boolean;
-  itemProgressCard: IProgressChallenge;
+  challengeName: string;
   userData: IUserData | null;
   onEditProgress?: () => void;
+  isChallengeCompleted?: boolean;
+  itemProgressCard: IProgressChallenge;
   onDeleteProgressSuccess?: () => void;
 }
 
 const ProgressCard: FC<IProgressCardProps> = ({
-  challengeOwner,
-  isChallengeCompleted = false,
-  itemProgressCard,
   userData,
+  challengeName,
   onEditProgress,
+  challengeOwner,
+  itemProgressCard,
   onDeleteProgressSuccess,
+  isChallengeCompleted = false,
 }) => {
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
@@ -69,13 +71,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
     {
       text: 'Delete',
       onPress: () => setIsShowDeleteModal(true),
-    },
-  ];
-
-  const progressOptionForFirstProgress = [
-    {
-      text: 'Edit',
-      onPress: () => setIsShowEditModal(true),
     },
   ];
 
@@ -112,6 +107,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
     navigation.navigate('ProgressCommentScreen', {
       progressId: itemProgressCard.id,
       ownerId: challengeOwner.id,
+      challengeName: challengeName || '',
     });
   };
 

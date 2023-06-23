@@ -50,7 +50,7 @@ const EmptyChallenges = ({
         Click
         <Text
           className={clsx('text-primary-default')}
-          onPress={() => navigation.navigate('CreateChallengeScreen')}
+          onPress={() => navigation.navigate('CreateCompanyChallengeScreen')}
         >
           {' '}
           Create{' '}

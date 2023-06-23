@@ -24,7 +24,7 @@ export const Header: FC<IHeaderProps> = ({
   return (
     <View
       className={clsx(
-        'relative mt-5 flex h-9 w-full items-center justify-start',
+        'relative flex h-9 w-full items-center justify-start',
         Platform.OS === 'ios' ? 'mt-5' : 'mt-0',
         containerStyle
       )}

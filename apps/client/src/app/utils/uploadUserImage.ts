@@ -1,7 +1,5 @@
 import * as ExpoImagePicker from 'expo-image-picker';
-import httpInstance from './http';
 import { Platform } from 'react-native';
-import { manipulateAsync } from 'expo-image-manipulator';
 import { serviceUpdateAvatar, serviceUpdateCover } from '../service/profile';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 
@@ -21,10 +19,13 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      GlobalDialogController.showModal(
-        t('error_permission_message') ||
-          'Permission denied. Please try again later.'
-      );
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_permission_message') ||
+          'Permission denied. Please try again later.',
+        button: 'OK',
+      });
       return;
     }
 
@@ -88,4 +89,3 @@ export const uploadNewCover = async (image: string) => {
 export const getImageExtension = (uri: string) => {
   return uri.split('.')[1];
 };
-

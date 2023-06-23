@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,6 +20,12 @@ import ChallengeCard from '../../../component/Card/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import IconSearch from '../../../component/common/IconSearch/IconSearch';
+import OtherUserProfileScreen from '../../ProfileScreen/OtherUser/OtherUserProfileScreen';
+import Button from '../../../component/common/Buttons/Button';
+
+import ShareIcon from '../../../../../assets/svg/share.svg';
+import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
+import OtherUserProfileDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -59,7 +65,9 @@ const PersonalChallenges = ({
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
-  const [personalChallengesList, setPersonalChallengesList] = useState<IChallenge[]>([]);
+  const [personalChallengesList, setPersonalChallengesList] = useState<
+    IChallenge[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -147,6 +155,71 @@ const PersonalChallengesNavigator = () => {
             <NavButton
               text={t('top_nav.challenges') as string}
               onPress={() => navigation.navigate('PersonalChallengesScreen')}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <PersonalChallengesStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
+      <PersonalChallengesStack.Screen
+        name="OtherUserProfileDetailsScreen"
+        component={OtherUserProfileDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
+      <PersonalChallengesStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
               withBackIcon
             />
           ),

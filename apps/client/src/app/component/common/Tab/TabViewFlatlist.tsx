@@ -71,7 +71,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
           }}
         />
       </View>
-      <View className="mt-4 flex-1 px-4"    >{children[activeTabIndex]}</View>
+      <View className="flex-1 px-4">{children[activeTabIndex]}</View>
     </View>
   );
 };

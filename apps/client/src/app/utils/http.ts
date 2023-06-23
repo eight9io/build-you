@@ -25,28 +25,32 @@ httpInstance.interceptors.response.use(
     return res;
   },
   function (error) {
-    const status = error.response ? error.response.status : null;
-    if ([401].includes(status)) {
-      const originalRequest = error.config;
-      if (!originalRequest._retry) {
-        originalRequest._retry = true;
-        const canRefreshToken = checkRefreshTokenLocalValidation();
-        if (!canRefreshToken) {
-          return Promise.reject('token is not valid');
+    return new Promise(async (resolve, reject) => {
+      const status = error.response ? error.response.status : null;
+      if ([401].includes(status)) {
+        const originalRequest = error.config;
+        if (!originalRequest._retry) {
+          originalRequest._retry = true;
+          const canRefreshToken = await checkRefreshTokenLocalValidation();
+          if (!canRefreshToken) {
+            reject('token is not valid');
+          } else {
+            resolve(httpInstance(originalRequest));
+          }
         } else {
-          return httpInstance(originalRequest);
+          // add gobal modal
+          reject('token is not valid');
         }
-      } else {
-        // add gobal modal
-        return Promise.reject('token is not valid');
+      } else if ([500, 501, 502, 503].includes(status)) {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message: 'Something went wrong',
+          button: 'OK',
+        });
+        reject('Server error');
       }
-    } else if ([500, 501, 502, 503].includes(status)) {
-      GlobalDialogController.showModal(
-        'Something went wrong. Please try again laters.'
-      );
-      return Promise.reject('Server error');
-    }
-    return Promise.reject(error);
+      reject(error);
+    });
   }
 );
 

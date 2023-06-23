@@ -84,7 +84,12 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
         setTempLikes((prev) => prev + 1);
       })
       .catch((err) => {
-        GlobalDialogController.showModal(t('error_general_message') as string || 'Something went wrong');
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message:
+            (t('error_general_message') as string) || 'Something went wrong',
+          button: 'OK',
+        });
         console.log(err);
       });
   };

@@ -9,8 +9,12 @@ import {
   FlatList,
 } from 'react-native';
 import {
+  Part,
+  PartType,
+  parseValue,
   MentionInput,
   replaceMentionValues,
+  isMentionPartType,
 } from 'react-native-controlled-mentions';
 import {
   MentionInputProps,
@@ -83,6 +87,7 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
     </>
   );
 };
+
 
 export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
   const {

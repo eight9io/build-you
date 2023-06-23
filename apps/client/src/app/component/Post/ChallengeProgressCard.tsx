@@ -31,12 +31,6 @@ interface IChallengeProgressCardProps {
   shouldRefreshComments?: boolean;
 }
 
-interface IChallengeImageProps {
-  name: string;
-  image: string;
-  onPress: () => void;
-}
-
 const ChallengeProgressCardForComment: React.FC<
   IChallengeProgressCardProps
 > = ({
@@ -66,6 +60,7 @@ const ChallengeProgressCardForComment: React.FC<
               <Text className="text-h6 font-bold">
                 {progressOwnerData?.name} {progressOwnerData?.surname}
               </Text>
+
               <View className="flex-row gap-3">
                 <Text className="text-gray-dark text-xs font-light ">
                   {getTimeDiffToNow(createdAt)}
@@ -78,6 +73,11 @@ const ChallengeProgressCardForComment: React.FC<
             </View>
           </View>
         </View>
+
+        <View className='py-2 pb-3'>
+          <Text className="text-md font-normal">{caption}</Text>
+        </View>
+
         {image && (
           <View className="aspect-square w-full">
             <ImageSwiper imageSrc={extractedImageUrls} />

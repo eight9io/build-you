@@ -1,9 +1,15 @@
 import { MutableRefObject } from 'react';
 
 export type GlobalDialogRef = {
-  show: (message?: string) => void;
+  show: (notification: IGlobalDialogProps) => void;
   hide: () => void;
 };
+
+export interface IGlobalDialogProps {
+  title?: 'Success' | 'Error' | 'Alert';
+  message?: string;
+  button?: string;
+}
 
 export default class GlobalDialogController {
   static modalRef: MutableRefObject<GlobalDialogRef>;
@@ -11,8 +17,8 @@ export default class GlobalDialogController {
     this.modalRef = ref;
   };
 
-  static showModal = (message?: string) => {
-    this.modalRef.current?.show(message);
+  static showModal = (notification: IGlobalDialogProps) => {
+    this.modalRef.current?.show(notification);
   };
   static hideModal = () => {
     this.modalRef.current?.hide();

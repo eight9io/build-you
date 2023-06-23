@@ -17,6 +17,7 @@ import IconSearch from '../component/common/IconSearch/IconSearch';
 
 import ShareIcon from '../../../assets/svg/share.svg';
 import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 export const HomeFeed = () => {
@@ -155,6 +156,21 @@ const HomeScreen = () => {
               </View>
             );
           },
+        })}
+      />
+      <HomeScreenStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
         })}
       />
     </HomeScreenStack.Navigator>

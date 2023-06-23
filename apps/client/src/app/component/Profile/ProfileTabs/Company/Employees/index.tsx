@@ -20,7 +20,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({ item }) => {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={() => {}}
-      className="mb-5 flex-row items-center justify-between gap-3 mr-5"
+      className="mb-5 mr-5 flex-row items-center justify-between gap-3"
     >
       <View className="flex flex-row items-center justify-center">
         <Image
@@ -46,8 +46,8 @@ export const EmployeesTab: FC<IEmployeesTabProps> = () => {
 
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className="pb-4 pt-4 mr-2">
-        <View className=" h-12">
+      <View className="mr-2 pb-4 pt-6">
+        <View className="h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}
             containerClassName="bg-primary-default"

@@ -28,3 +28,14 @@ export const RegisterValidationSchema = () => {
       .required(t('register_screen.err_policy') as string),
   });
 };
+
+export const AddNewEmployeeValidationSchema = () => {
+  const { t } = useTranslation();
+  return yup.object().shape({
+    email: yup
+      .string()
+      .email(t('form.0.error') as string)
+      .required(t('form.0.required') as string)
+      .notOneOf([''], t('form.0.required') as string),
+  });
+};

@@ -35,7 +35,17 @@ httpInstance.interceptors.response.use(
           if (!canRefreshToken) {
             reject('token is not valid');
           } else {
-            resolve(httpInstance(originalRequest));
+            // change token in orqinal request
+            const newRequest = {
+              ...originalRequest,
+              headers: {
+                ...originalRequest.headers,
+                Authorization: `Bearer ${localStorage.getItem(
+                  '@access_token'
+                )}`,
+              },
+            };
+            resolve(httpInstance(newRequest));
           }
         } else {
           // add gobal modal

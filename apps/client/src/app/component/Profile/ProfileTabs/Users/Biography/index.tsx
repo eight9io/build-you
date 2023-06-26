@@ -80,8 +80,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
         <Text className={clsx('text-h6 text-gray-dark')}>
           {bio ? bio : 'No biography yet'}
         </Text>
-        <View className="align-center mt-3 flex-row flex-wrap  ">
-          {hardSkill &&
+        {hardSkill && <View className="align-center mt-3 flex-row flex-wrap  ">
+          {
             hardSkill.map((content, index) => {
               return (
                 <Button
@@ -92,7 +92,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 />
               );
             })}
-        </View>
+        </View>}
       </View>
     </ScrollView>
   );

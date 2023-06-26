@@ -285,8 +285,13 @@
       "title": "Password incorrect",
       "description": "Please try again"
     },
+    "unfollow_user": {
+      "title": "Unfollow this account",
+      "description": "You are going to unfollow this account"
+    },
     "cancel": "Cancel",
     "delete": "Delete",
+    "unfollow": "Unfollow",
     "your_goal_required": "Please set your goal",
     "benefits_required": "Please list the benefits",
     "reasons_required": "Please indicate the reasons",
@@ -318,8 +323,15 @@
     "confirming_password": "Confirming by typing your password below"
   },
   "company_profile_screen": {
-    "no_challenge": "No challenge at the moment"
+    "no_challenge": "No challenge at the moment",
+    "no_employee": "No employee at the moment"
   },
 "empty_followers":"You have no followers at the moment",
-"empty_following":"You follow no one at the moment"
+"empty_following":"You follow no one at the moment",
+"empty_employee":{
+  "content_1":"You have no employee at the moment.",
+  "content_2":"Click",
+  "content_3":"Add new employee",
+  "content_4":"to add employee to your company."
+}
 }

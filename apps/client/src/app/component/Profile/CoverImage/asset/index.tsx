@@ -10,14 +10,12 @@ import {
 } from 'react-native';
 import clsx from 'clsx';
 
-import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
-import { useUserProfileStore } from '../../../../store/user-data';
-import { IUserData } from '../../../../types/user';
 
+import DefaultAvatar from './asset/default-avatar.svg';
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
@@ -29,49 +27,52 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   onPress,
   setIsLoadingAvatar,
 }) => {
-  const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
-  const [imageSource, loading, error] = getImageFromUrl(src);
-  const { setUserProfile, getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
   });
 
   const handlePickImage = async () => {
+
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-      if (setIsLoadingAvatar) setIsLoadingAvatar(true);
       const imageToUpload = result.assets[0].uri;
-      uploadNewAvatar(result.assets[0].uri);
-      const newAvatar = await uploadNewAvatar(result.assets[0].uri);
-      if (newAvatar) {
-        setUserProfile({ ...userProfile, avatar: newAvatar } as IUserData);
-        setNewAvatarUpload(imageToUpload);
-        if (setIsLoadingAvatar) setIsLoadingAvatar(false);
+      setIsLoadingAvatar && setIsLoadingAvatar(true);
+      const res = await uploadNewAvatar(imageToUpload);
+      if (res) {
+        setTimeout(() => {
+          setIsLoadingAvatar && setIsLoadingAvatar(false);
+        }, 3000);
       }
     }
   };
-
   return (
     <View className={clsx('relative flex flex-row items-center')}>
       <Pressable onPress={onPress}>
-        <View className={clsx('rounded-full border-4 border-white')}>
-          {!newAvatarUpload && (
-            <Image
-              className={clsx('h-[101px] w-[101px] rounded-full')}
-              source={imageSource as ImageSourcePropType}
-              alt="profile image"
-            />
+        <View
+          className={clsx(
+            'z-100 relative rounded-full border-4 border-white bg-white'
           )}
-          {newAvatarUpload && (
-            <Image
-              className={clsx('h-[101px] w-[101px] rounded-full')}
-              source={{ uri: newAvatarUpload }}
-              alt="profile image"
-            />
+        >
+          {src && (
+            <>
+              <Image
+                className={clsx(
+                  'absolute left-0  top-0 h-[101px] w-[101px] rounded-full'
+                )}
+                source={require('./asset/avatar-load.png')}
+                alt="profile image"
+              />
+              <Image
+                className={clsx(' z-100 h-[101px] w-[101px] rounded-full')}
+                source={{ uri: src + '?' + new Date() }}
+                alt="profile image"
+              />
+            </>
           )}
+          {!src && <DefaultAvatar />}
         </View>
       </Pressable>
+
       <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
         <Image
           className={clsx(
@@ -80,6 +81,7 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
           source={require('./asset/camera.png')}
         />
       </TouchableOpacity>
+
     </View>
   );
 };

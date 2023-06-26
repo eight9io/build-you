@@ -18,21 +18,23 @@ interface ISkillsProps {
 
 const Skills: FC<ISkillsProps> = ({ skills }) => {
   return (
-    <View className={clsx('flex w-full flex-col pr-4 ')}>
-      <Text className={clsx('text-h6 font-medium')}>Self-declared</Text>
+    <ScrollView>
+      <View className={clsx('flex w-full flex-col pr-4 pt-4')}>
+        <Text className={clsx('text-h6 font-medium')}>Self-declared</Text>
 
-      <View className={clsx('mt-4 flex flex-col')}>
-        {skills?.map((skill: ISoftSkillProps, index) => {
-          return (
-            <SkillCompetenceProcess
-              skillName={skill.skill.skill}
-              skillCompetence={skill.rating}
-              key={index}
-            />
-          );
-        })}
+        <View className={clsx('mt-4 flex flex-col')}>
+          {skills?.map((skill: ISoftSkillProps, index) => {
+            return (
+              <SkillCompetenceProcess
+                skillName={skill.skill.skill}
+                skillCompetence={skill.rating}
+                key={index}
+              />
+            );
+          })}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

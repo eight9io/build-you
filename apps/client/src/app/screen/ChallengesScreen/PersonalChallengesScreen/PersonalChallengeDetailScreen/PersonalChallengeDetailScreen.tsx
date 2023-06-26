@@ -26,8 +26,6 @@ import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
 
-import { useTranslation } from 'react-i18next';
-
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
 );
@@ -40,6 +38,7 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 interface IRightPersonalChallengeDetailOptionsProps {
   challengeData: IChallenge | undefined;
   onEditChallengeBtnPress: () => void;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteChallengeDialogVisible: React.Dispatch<
     React.SetStateAction<boolean>
   >;
@@ -49,10 +48,23 @@ export const RightPersonalChallengeDetailOptions: FC<
   IRightPersonalChallengeDetailOptionsProps
 > = ({
   challengeData,
+  setShouldRefresh,
   onEditChallengeBtnPress,
   setIsDeleteChallengeDialogVisible,
 }) => {
   const [isSharing, setIsSharing] = React.useState(false);
+  const [
+    isCompletedChallengeDialogVisible,
+    setIsCompletedChallengeDialogVisible,
+  ] = useState<boolean>(false);
+  const [isCompletedChallengeSuccess, setIsCompletedChallengeSuccess] =
+    useState<boolean | null>(null);
+  const [
+    isChallengeAlreadyCompletedDialogVisible,
+    setIsChallengeAlreadyCompletedDialogVisible,
+  ] = useState<boolean>(false);
+
+  const isChallengeCompleted = challengeData?.status === 'closed';
 
   // when sharing is available, we can share the image
   const onShare = async () => {
@@ -66,19 +78,77 @@ export const RightPersonalChallengeDetailOptions: FC<
     }
     setIsSharing(false);
   };
+
+  const onCheckChallengeCompleted = () => {
+    if (!challengeData) return;
+    if (isChallengeCompleted) {
+      setIsChallengeAlreadyCompletedDialogVisible(true);
+    } else {
+      setIsCompletedChallengeDialogVisible(true);
+    }
+  };
+
   const onCompleteChallenge = () => {
     if (!challengeData) return;
-    completeChallenge(challengeData.id).then((res) => {
-      console.log(res)
-      console.log(res.status);
-    }
-    );
+    completeChallenge(challengeData.id)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsCompletedChallengeDialogVisible(false);
+          setTimeout(() => {
+            setIsCompletedChallengeSuccess(true);
+            setShouldRefresh(true);
+          }, 600);
+        }
+      })
+      .catch((err) => {
+        setIsCompletedChallengeDialogVisible(false);
+        setTimeout(() => {
+          setIsCompletedChallengeSuccess(false);
+        }, 600);
+      });
+  };
+
+  const onCloseSuccessDialog = () => {
+    setIsCompletedChallengeSuccess(null);
   };
 
   return (
     <View>
+      <ConfirmDialog
+        isVisible={isCompletedChallengeDialogVisible}
+        title="Mark this challenge as complete?"
+        description="You cannot edit challenge or update progress after marking the challenge as complete"
+        confirmButtonLabel="Complete"
+        closeButtonLabel="Cancel"
+        onConfirm={onCompleteChallenge}
+        onClosed={() => setIsCompletedChallengeDialogVisible(false)}
+      />
+      <ConfirmDialog
+        isVisible={isChallengeAlreadyCompletedDialogVisible}
+        title="Challenge already completed"
+        description="This challenge has already been completed. Please try another one."
+        confirmButtonLabel="Got it"
+        onConfirm={() => {
+          setIsChallengeAlreadyCompletedDialogVisible(false);
+        }}
+      />
+      {isCompletedChallengeSuccess !== null && (
+        <ConfirmDialog
+          isVisible={isCompletedChallengeSuccess !== null}
+          title={
+            isCompletedChallengeSuccess ? 'Congrats!' : 'Something went wrong'
+          }
+          description={
+            isCompletedChallengeSuccess
+              ? 'Challenge has been completed successfully.'
+              : 'Please try again later.'
+          }
+          confirmButtonLabel="Got it"
+          onConfirm={onCloseSuccessDialog}
+        />
+      )}
       <View className="-mt-1 flex flex-row items-center">
-        <TouchableOpacity onPress={onCompleteChallenge}>
+        <TouchableOpacity onPress={onCheckChallengeCompleted}>
           <TaskAltIcon />
         </TouchableOpacity>
         <View className="pl-4 pr-2">
@@ -87,6 +157,7 @@ export const RightPersonalChallengeDetailOptions: FC<
 
         <PopUpMenu
           iconColor="#FF7B1D"
+          isDisabled={isChallengeCompleted}
           options={[
             {
               text: 'Edit',
@@ -116,6 +187,7 @@ const PersonalChallengeDetailScreen = ({
     undefined
   );
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
   const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
@@ -131,6 +203,7 @@ const PersonalChallengeDetailScreen = ({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
           challengeData={challengeData}
+          setShouldRefresh={setShouldRefresh}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
           setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
@@ -138,20 +211,19 @@ const PersonalChallengeDetailScreen = ({
     });
   }, [challengeData]);
 
-  useEffect(() => {
-    if (!challengeId || !isFocused) return;
-    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
-      setChallengeData(res.data);
-    });
-  }, [challengeId, isFocused]);
 
   useEffect(() => {
-    if (!shouldRefresh) return;
+    if (!challengeId && !shouldRefresh) return;
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
     setShouldRefresh(false);
-  }, [shouldRefresh]);
+  }, [challengeId, shouldRefresh]);
+
+  useEffect(() => {
+    if (!isFocused) return;
+    setShouldRefresh(true);
+  }, [isFocused]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -219,6 +291,7 @@ const PersonalChallengeDetailScreen = ({
         <>
           <ChallengeDetailScreen
             challengeData={challengeData}
+            shouldRefresh={shouldRefresh}
             setShouldRefresh={setShouldRefresh}
           />
           <EditChallengeModal

@@ -13,7 +13,6 @@ import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
-import ChallengeDetailScreenViewOnly from '../screen/ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
 import ProgressCommentScreen from '../screen/ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
@@ -22,18 +21,19 @@ import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/C
 import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen';
 import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateCompanyChallengeScreen';
 import CompanyChallengeDetailScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
+import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
+import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
+import EditCompanyProfileScreen from '../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen';
 
 import Login from '../screen/LoginScreen/LoginScreen';
 import Register from '../screen/RegisterScreen/RegisterScreen';
 import ForgotPassword from '../screen/ForgotPassword/ForgotPassword';
 
-import { checkUserCompleProfile } from '../utils/checkUserCompleProfile';
+import { checkUserCompleProfileAndCompany } from '../utils/checkUserCompleProfile';
 import { checkAccessTokenLocal } from '../utils/checkAuth';
 
 import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
-import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
-import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
 import BottomNavBarWithoutLogin from '../component/BottomNavBar/BottomNavBarWithoutLogin';
 import GlobalDialog from '../component/common/Dialog/GlobalDialog';
 
@@ -61,7 +61,10 @@ export const RootNavigation = () => {
   useEffect(() => {
     if (logined) {
       setIsCompleteProfileStore(null);
-      checkUserCompleProfile(setIsCompleteProfileStore, setIsMainAppLoading);
+      checkUserCompleProfileAndCompany(
+        setIsCompleteProfileStore,
+        setIsMainAppLoading
+      );
     } else if (!logined && logined !== null) {
       setIsCompleteProfileStore(false);
       setIsMainAppLoading(false);
@@ -127,21 +130,7 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-            <RootStack.Screen
-              name="ChallengeDetailScreenViewOnly"
-              component={ChallengeDetailScreenViewOnly}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => '',
-                headerLeft: (props) => (
-                  <NavButton
-                    text={'error'}
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
+{/* 
             <RootStack.Screen
               name="ProgressCommentScreen"
               component={ProgressCommentScreen}
@@ -156,28 +145,30 @@ export const RootNavigation = () => {
                   />
                 ),
               })}
-            />
+            /> */}
             <RootStack.Screen
               name="SettingsScreen"
               component={SettingsScreen}
+            />
+
+            <RootStack.Screen
+              name="EditPersonalProfileScreen"
+              component={EditPersonalProfileScreen}
               options={({ navigation }) => ({
                 headerShown: true,
-                headerTitle: () => (
-                  <AppTitle title={t('user_settings_screen.title')} />
-                ),
+                headerTitle: () => <AppTitle title="Edit profile" />,
                 headerLeft: (props) => (
                   <NavButton
-                    text={t('button.back') as string}
+                    text="Back"
                     onPress={() => navigation.goBack()}
                     withBackIcon
                   />
                 ),
               })}
             />
-
             <RootStack.Screen
-              name="EditPersonalProfileScreen"
-              component={EditPersonalProfileScreen}
+              name="EditCompanyProfileScreen"
+              component={EditCompanyProfileScreen}
               options={({ navigation }) => ({
                 headerShown: true,
                 headerTitle: () => <AppTitle title="Edit profile" />,

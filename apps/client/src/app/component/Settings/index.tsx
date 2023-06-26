@@ -4,11 +4,13 @@ import { View, Text } from 'react-native';
 import clsx from 'clsx';
 
 import Accordition from '../common/Accordition/Accordition';
-
-const Settings = () => {
+interface ISettingsProps {
+  navigation: any;
+}
+const Settings = ({ navigation }: ISettingsProps) => {
   return (
-    <View className={clsx('px-7')}>
-      <Accordition />
+    <View className={clsx('px-4')}>
+      <Accordition navigation={navigation} />
     </View>
   );
 };

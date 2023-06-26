@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, FlatList, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
   createNativeStackNavigator,
@@ -10,11 +10,12 @@ import { useUserProfileStore } from '../../../store/user-data';
 
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import ProfileComponent from '../../../component/Profile';
+import ProfileComponent from '../../../component/Profile/ProfileComponent';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
-import { ScrollView } from 'react-native-gesture-handler';
 import Loading from '../../../component/common/Loading';
+import { useIsFocused } from '@react-navigation/native';
+import { serviceGetMyProfile } from '../../../service/auth';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,26 +25,40 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 interface IProfileProps {
-  userName?: string;
   navigation: ProfileScreenNavigationProp;
 }
 
-const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
-  const { getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
-  const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
+const Profile: React.FC<IProfileProps> = ({ navigation }) => {
+  const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
+    useState<boolean>(true);
+
+  const isFocused = useIsFocused();
+  const { setUserProfile, getUserProfile } = useUserProfileStore();
+  useEffect(() => {
+    if (!isFocused) return;
+    if (shouldNotLoadOnFirstFocus) {
+      setShouldNotLoadOnFirstFocus(false);
+      return;
+    }
+    serviceGetMyProfile()
+      .then((res) => {
+        setUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.error('err', err);
+      });
+  }, [isFocused]);
+  const userData = getUserProfile();
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <View className="h-full">
-        <ScrollView className="w-full bg-gray-50">
-          <ProfileComponent
-            userData={userProfile}
-            navigation={navigation}
-            isLoadingAvatar={isLoadingAvatar}
-            setIsLoadingAvatar={setIsLoadingAvatar}
-          />
-        </ScrollView>
-        {isLoadingAvatar && (
+        <ProfileComponent
+          userData={userData}
+          navigation={navigation}
+          setIsLoading={setIsLoading}
+        />
+        {isLoading && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}
       </View>
@@ -52,8 +67,6 @@ const Profile: React.FC<IProfileProps> = ({ userName, navigation }) => {
 };
 
 const PersonalProfileScreen = () => {
-  const { getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
   const { t } = useTranslation();
   return (
     <ProfileStack.Navigator

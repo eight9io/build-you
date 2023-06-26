@@ -4,48 +4,50 @@ import { useTranslation } from 'react-i18next';
 import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
-import ProfileTabs from './ProfileTabs/Users';
-import CoverImage from './CoverImage';
+
+import CoverImage from './CoverImage/CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
-import Button from '../common/Buttons/Button';
-import ProfileAvartar from '../common/Avatar/ProfileAvatar';
+import ProfileAvatar from '../common/Avatar/ProfileAvatar/ProfileAvatar';
 
 import { IUserData } from '../../types/user';
-import { useNavigation } from '@react-navigation/native';
-import Loading from '../common/Loading';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useUserProfileStore } from '../../store/user-data';
+import ProfileTabs from './ProfileTabs/Users/ProfileTabs';
 
-interface ITopSectionProfileProps {
+export interface ITopSectionProfileProps {
   navigation: any;
   userData: IUserData | null;
-  setIsLoadingAvatar: (value: boolean) => void;
+  setIsLoading: (value: boolean) => void;
 }
 
-interface IProfileComponentProps {
+export interface IProfileComponentProps {
   userData: IUserData | null;
   navigation: any;
-  isLoadingAvatar: boolean;
-  setIsLoadingAvatar: (value: boolean) => void;
+  setIsLoading: (value: boolean) => void;
 }
 
-const TopSectionProfile: FC<ITopSectionProfileProps> = ({
+export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   navigation,
   userData,
-  setIsLoadingAvatar,
+  setIsLoading
 }) => {
   const { t } = useTranslation();
   const handleClicked = () => {
+    const isCompany = userData?.companyAccount || false;
+    if (isCompany) {
+      navigation.navigate('EditCompanyProfileScreen');
+      return;
+    }
     navigation.navigate('EditPersonalProfileScreen');
   };
   return (
     <View className={clsx('relative z-10')}>
-      <CoverImage src="https://images.unsplash.com/photo-1522774607452-dac2ecc66330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
+      <CoverImage src={userData?.cover as string} setIsLoadingCover={setIsLoading} />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
-        <ProfileAvartar
+        <ProfileAvatar
           src={userData?.avatar as string}
-          setIsLoadingAvatar={setIsLoadingAvatar}
+          setIsLoadingAvatar={setIsLoading}
         />
       </View>
       <View className={clsx('absolute bottom-[-25px] right-4 ')}>
@@ -63,15 +65,14 @@ const TopSectionProfile: FC<ITopSectionProfileProps> = ({
 const ProfileComponent: FC<IProfileComponentProps> = ({
   userData,
   navigation,
-  setIsLoadingAvatar,
-  isLoadingAvatar,
+  setIsLoading,
 }) => {
   return (
-    <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
+    <View className={clsx('relative h-full flex-1 flex-col bg-white')}>
       <TopSectionProfile
         navigation={navigation}
         userData={userData}
-        setIsLoadingAvatar={setIsLoadingAvatar}
+        setIsLoading={setIsLoading}
       />
       <View className={clsx('mb-3 px-4 pt-12')}>
         <Text className={clsx('text-[26px] font-medium')}>

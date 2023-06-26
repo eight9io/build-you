@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, Pressable } from 'react-native';
 import clsx from 'clsx';
 
-import DefaultAvatar from './asset/default-avatar.svg';
+import DefaultAvatar from '../../../asset/default-avatar.svg';
 import CameraSvg from './asset/camera.svg';
 
 import {
@@ -17,6 +17,7 @@ const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
 
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
+    quality: 0.7,
   });
 
   const handlePickImage = async () => {

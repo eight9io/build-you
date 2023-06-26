@@ -17,7 +17,6 @@ import { createChallenge, updateChallengeImage } from '../../service/challenge';
 import { useNav } from '../../navigation/navigation.type';
 import Loading from '../common/Loading';
 import clsx from 'clsx';
-import { getImageExtension } from '../../utils/uploadUserImage';
 import { AxiosResponse } from 'axios';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 import httpInstance from '../../utils/http';

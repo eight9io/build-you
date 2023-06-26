@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
@@ -9,13 +9,20 @@ import Biography from './Biography';
 import Followers from '../common/Followers';
 import Following from '../common/Following';
 import Employees from './Employees';
-import Challenges from './Challenges';
+import ChallengesTab from '../OtherUser/Challenges';
 
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
+import { useUserProfileStore } from '../../../../store/user-data';
 
 const CompanyProfileTabs = () => {
   const { t } = useTranslation();
 
+  const { getUserProfile } = useUserProfileStore();
+  const userProfile = getUserProfile();
+  const bio = userProfile?.bio;
+  const userId = userProfile?.id;
+
+  if (!userId) return null;
   const titles = [
     t('profile_screen_tabs.biography'),
     t('profile_screen_tabs.followers'),
@@ -29,11 +36,11 @@ const CompanyProfileTabs = () => {
       <TabViewFlatlist
         titles={titles}
         children={[
-          <Biography />,
+          <Biography bio={bio} />,
           <Followers followers={MOCK_FOLLOW_USERS} />,
           <Following following={MOCK_FOLLOW_USERS} />,
           <Employees />,
-          <Challenges />,
+          <ChallengesTab userId={userId} />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"

@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '../../../../../component/common/Buttons/Button';
@@ -27,7 +20,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({ item }) => {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={() => {}}
-      className="mb-5 flex-row items-center justify-between gap-3"
+      className="mb-5 mr-5 flex-row items-center justify-between gap-3"
     >
       <View className="flex flex-row items-center justify-center">
         <Image
@@ -53,8 +46,8 @@ export const EmployeesTab: FC<IEmployeesTabProps> = () => {
 
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className="pb-4">
-        <View className=" h-12">
+      <View className="mr-2 pb-4 pt-6">
+        <View className="h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}
             containerClassName="bg-primary-default"
@@ -72,13 +65,15 @@ export const EmployeesTab: FC<IEmployeesTabProps> = () => {
   };
 
   return (
-    <FlatList
-      data={MOCK_FOLLOW_USERS}
-      ListHeaderComponent={<AddNewChallengeEmployeesButton />}
-      renderItem={({ item }) => <EmployeesItem item={item} />}
-      contentContainerStyle={{ paddingBottom: 300 }}
-      keyExtractor={(item, index) => index.toString()}
-    />
+    <View className="-mr-3 flex-1">
+      <FlatList
+        data={MOCK_FOLLOW_USERS}
+        ListHeaderComponent={<AddNewChallengeEmployeesButton />}
+        renderItem={({ item }) => <EmployeesItem item={item} />}
+        contentContainerStyle={{ paddingBottom: 300 }}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
   );
 };
 

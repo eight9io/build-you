@@ -11,6 +11,7 @@ import {
 } from '../types/progress';
 import { getImageExtension } from '../utils/uploadUserImage';
 import { IUploadMediaWithId } from '../types/media';
+import { Platform } from 'react-native';
 
 export const createProgress = (data: ICreateProgress) => {
   return httpInstance.post('/challenge/progress/create', data);
@@ -25,15 +26,17 @@ export const updateProgressImage = (
   image: IUploadMediaWithId[]
 ) => {
   const imageForm = new FormData();
-  const imageData = image.map((image) => {
+  image.map((image) => {
     const extension = getImageExtension(image.uri);
-    return {
-      uri: image.uri,
+    const uri =
+      Platform.OS === 'android' ? image : image?.uri.replace('file://', '');
+    const imageItemToUpload = {
+      uri: uri,
       name: `${image.id}.${extension}`,
       type: `image/${extension}`,
     };
+    imageForm.append('files', imageItemToUpload as any);
   });
-  imageForm.append('files', imageData as any);
 
   return retryRequest(() => {
     return httpInstance.post(
@@ -71,7 +74,9 @@ export const updateProgressVideo = (
   });
 };
 
-export const getProgressById = (id: string) => {};
+export const getProgressById = (id: string) => {
+  return httpInstance.get(`/challenge/progress/${id}`);
+};
 
 export const getProgressLikes = (
   id: string
@@ -111,4 +116,4 @@ export const updateProgress = (id: string, data: IUpdateProgress) => {
 
 export const deleteProgressComment = (id: string) => {
   return httpInstance.delete(`/challenge/progress/comment/delete/${id}`);
-}
+};

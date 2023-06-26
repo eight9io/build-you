@@ -9,6 +9,8 @@ export type RootStackParamList = {
   NotificationsScreen: undefined;
   ChallengeDetailScreen: undefined;
   SettingsScreen: undefined;
+  PersonalInformationScreen: undefined;
+  DeleteAccountScreen: undefined;
   ProfileScreen: undefined;
   ModalScreen: undefined;
   CreateChallengeScreen: undefined;
@@ -20,6 +22,7 @@ export type RootStackParamList = {
   SkillStepThreeScreen: undefined;
 
   EditPersonalProfileScreen: undefined;
+  EditCompanyProfileScreen: undefined;
 
   CompleteProfileScreen: undefined;
   CompleteProfileStep1Screen: undefined;
@@ -36,11 +39,10 @@ export type RootStackParamList = {
   CompanyChallengeDetailScreen: undefined;
   CreateCompanyChallengeScreen: undefined;
 
-  ChallengeDetailScreenViewOnly: {
-    challengeId: string;
-  };
   ProgressCommentScreen: {
     progressId: string;
+    ownerId?: string;
+    challengeName: string;
   };
 
   ProfileScreenLoading: undefined;
@@ -52,6 +54,14 @@ export type RootStackParamList = {
     };
   };
   HomeScreenWithoutLogin: undefined;
+
+  OtherUserProfileScreen: {
+    userId: string;
+  };
+
+  OtherUserProfileDetailsScreen: {
+    challengeId: string;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

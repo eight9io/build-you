@@ -14,13 +14,17 @@ import httpInstance from '../../../../utils/http';
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 
 interface IProgressTabProps {
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  shouldRefresh: boolean;
   challengeData: IChallenge;
+  isOtherUserProfile?: boolean;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ProgressTab: FC<IProgressTabProps> = ({
-  setShouldRefresh,
+  shouldRefresh,
   challengeData,
+  setShouldRefresh,
+  isOtherUserProfile = false,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<
@@ -56,7 +60,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   }, [challengeData]);
 
   useEffect(() => {
-    if (shouldRefetch) {
+    if (shouldRefetch || shouldRefresh) {
+      setProgressLoading(true);
+
       httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
         const progressDataLocal =
           res.data?.progress &&
@@ -74,11 +80,12 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         setLocalProgressData(progressDataLocal);
       });
       setShouldRefetch(false);
+      setShouldRefresh(false);
       setTimeout(() => {
         setProgressLoading(false);
       }, 800);
     }
-  }, [shouldRefetch]);
+  }, [shouldRefetch, shouldRefresh]);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -95,10 +102,17 @@ export const ProgressTab: FC<IProgressTabProps> = ({
       <View className="pt-4">
         <View className="mx-4 ">
           <Button
-            containerClassName="  bg-primary-default flex-none px-1 "
+            isDisabled={challengeData.status === 'closed'}
+            containerClassName="bg-primary-default flex-none px-1"
             textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
+            disabledContainerClassName="bg-gray-light flex-none px-1"
+            disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
             title={t('challenge_detail_screen.upload_new_progress') as string}
-            Icon={<AddIcon fill={'white'} />}
+            Icon={
+              <AddIcon
+                fill={challengeData.status === 'closed' ? '#C5C8D2' : 'white'}
+              />
+            }
             onPress={() => setIsModalVisible(true)}
           />
           <AddNewChallengeProgressModal
@@ -116,20 +130,32 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   return (
     <View className="h-full flex-1">
       {progressLoading && <SkeletonLoadingCommon />}
-      {!progressLoading && (
+      {!progressLoading && localProgressData.length > 0 && (
         <FlatList
           data={localProgressData}
-          ListHeaderComponent={<AddNewChallengeProgressButton />}
+          ListHeaderComponent={
+            !isOtherUserProfile ? <AddNewChallengeProgressButton /> : null
+          }
           renderItem={({ item }) => (
             <ProgressCard
-              itemProgressCard={item}
               userData={userData}
+              itemProgressCard={item}
+              challengeName={challengeData.goal}
               onEditProgress={handleEditProgress}
+              challengeOwner={challengeData?.owner[0]}
+              isChallengeCompleted={challengeData.status === 'closed'}
               onDeleteProgressSuccess={handleDeleteProgressSuccess}
             />
           )}
           contentContainerStyle={{ paddingBottom: 300 }}
         />
+      )}
+      {!progressLoading && localProgressData?.length == 0 && (
+        <View className="px-4 py-4">
+          <Text className="selection: text-base">
+            {t('challenge_detail_screen.no_progress_yet') as string}
+          </Text>
+        </View>
       )}
     </View>
   );

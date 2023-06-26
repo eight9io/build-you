@@ -1,21 +1,21 @@
 export const MOCK_FOLLOW_USERS = [
   {
-    id: 1,
+    id: '95ba5302-950c-4c7b-ab61-1da316ff0617',
     avatar: 'https://picsum.photos/200',
     name: 'Robert Trini',
   },
   {
-    id: 2,
+    id: '95ba5302-950c-4c7b-ab61-1da316ff0617',
     avatar: 'https://picsum.photos/200',
     name: 'Francesca Pastilli',
   },
   {
-    id: 3,
+    id: '95ba5302-950c-4c7b-ab61-1da316ff0617',
     avatar: 'https://picsum.photos/200',
     name: 'Lorenzo Rossi',
   },
   {
-    id: 4,
+    id: '95ba5302-950c-4c7b-ab61-1da316ff0617',
     avatar: 'https://picsum.photos/200',
     name: 'Alessia Conti',
   },

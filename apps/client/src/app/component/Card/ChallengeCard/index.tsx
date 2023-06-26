@@ -18,8 +18,9 @@ import BackSvg from '../../asset/back.svg';
 interface IChallengeCardProps {
   item: IChallenge;
   isCompany?: boolean;
-  imageSrc: string;
+  imageSrc: string | null | undefined;
   navigation?: any;
+  handlePress?: () => void;
 }
 
 const CompanyTag = () => {
@@ -36,18 +37,21 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   imageSrc,
   isCompany,
   navigation,
+  handlePress,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
+  const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
   const onPress = () => {
+    // handlePress or navigation
     if (navigation) {
       if (isCompany) navigation.navigate('CompanyChallengeDetailScreen');
       else
         navigation.navigate('PersonalChallengeDetailScreen', {
           challengeId: item.id,
         });
+      return;
     }
+    if (handlePress) handlePress();
   };
 
   return (
@@ -62,16 +66,28 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             <CompanyTag />
           </View>
         )}
-        <Image
-          className={clsx('aspect-square w-full rounded-t-xl')}
-          source={{ uri: imageSrc }}
-          onLoadStart={() => setLoading(true)}
-          onLoadEnd={() => setLoading(false)}
-          onError={(err) => {
-            setLoading(false);
-            setError(true);
-          }}
-        />
+        {imageSrc && !imageLoadingError && (
+          <Image
+            className={clsx('aspect-square w-full rounded-t-xl')}
+            source={{ uri: imageSrc }}
+            onLoadStart={() => setLoading(true)}
+            onLoadEnd={() => setLoading(false)}
+            onError={(err) => {
+              setLoading(false);
+              setImageLoadingError(true);
+            }}
+          />
+        )}
+        {imageLoadingError && (
+          <View className={clsx('aspect-square w-full rounded-t-xl')}>
+            <Image
+              className={clsx('aspect-square w-full rounded-t-xl')}
+              source={{
+                uri: `https://picsum.photos/200/300.webp?random=${item.id}`,
+              }}
+            />
+          </View>
+        )}
         <View
           className={clsx(
             'flex flex-row items-center justify-between px-4 py-3'

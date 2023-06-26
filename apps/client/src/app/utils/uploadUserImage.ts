@@ -1,21 +1,31 @@
 import * as ExpoImagePicker from 'expo-image-picker';
-import httpInstance from './http';
 import { Platform } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import { serviceUpdateAvatar, serviceUpdateCover } from '../service/profile';
+import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
+
+import { useTranslation } from 'react-i18next';
 
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
   base64?: boolean;
   maxImages?: number;
+  quality?: number;
 }
+
 export const getImageFromUserDevice = (props: PickImageOptions) => {
   const { allowsMultipleSelection, base64 } = props;
+  const { t } = useTranslation();
   return async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      // TODO: add to global dialog
-      alert('Sorry, we need camera roll permissions to make this work!');
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_permission_message') ||
+          'Permission denied. Please try again later.',
+        button: 'OK',
+      });
       return;
     }
 
@@ -23,7 +33,7 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
       allowsEditing: allowsMultipleSelection ? false : true,
       aspect: [4, 3],
-      quality: 1,
+      quality: props?.quality || 1,
       allowsMultipleSelection,
       selectionLimit: props.maxImages,
       base64: base64,
@@ -45,12 +55,35 @@ export const uploadNewAvatar = async (image: string) => {
     type: 'image/jpeg',
   } as any);
 
-  const response = await httpInstance.post('/user/avatar', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+  const response = serviceUpdateAvatar(formData)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return undefined;
+    });
+  return response;
+};
+
+export const uploadNewCover = async (image: string) => {
+  const formData = new FormData();
+  const uri = Platform.OS === 'android' ? image : image.replace('file://', '');
+  formData.append('file', {
+    uri,
+    name: 'avatar.jpg',
+    type: 'image/jpeg',
+  } as any);
+
+  const response = serviceUpdateCover(formData)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return undefined;
+    });
+  return response;
 };
 
 export const getImageExtension = (uri: string) => {

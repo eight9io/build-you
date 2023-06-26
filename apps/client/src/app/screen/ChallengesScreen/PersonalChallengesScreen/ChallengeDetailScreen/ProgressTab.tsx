@@ -147,7 +147,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               onDeleteProgressSuccess={handleDeleteProgressSuccess}
             />
           )}
-          contentContainerStyle={{ paddingBottom: 300 }}
+          // contentContainerStyle={{ paddingBottom: 300 }}
         />
       )}
       {!progressLoading && localProgressData?.length == 0 && (

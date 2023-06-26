@@ -6,7 +6,7 @@ import { View, Text } from 'react-native';
 
 import { IUserData } from '../../../types/user';
 
-import CompanyProfileTabs from '../ProfileTabs/Company';
+import CompanyProfileTabs from '../ProfileTabs/Company/CompanyProfileTabs';
 
 import { TopSectionProfile } from '../ProfileComponent';
 

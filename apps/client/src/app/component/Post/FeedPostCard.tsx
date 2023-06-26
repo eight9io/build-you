@@ -102,7 +102,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           onPress={navigateToUserProfile}
         >
           <View className="flex-row">
-            <PostAvatar src="https://picsum.photos/200/300" />
+            <PostAvatar src="https://picsum.photos/200/300" onPress={navigateToUserProfile} />
             <View className="ml-2">
               <Text className="text-h6 font-bold">{name}</Text>
               <Text className="text-gray-dark text-xs font-light ">{time}</Text>
@@ -113,14 +113,14 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
         <ChallengeImage
           name={card.title}
           image={card.image}
-          // onPress={
-          //   isToken
-          //     ? () =>
-          //         navigation.navigate('ChallengeDetailScreenViewOnly', {
-          //           challengeId: '1',
-          //         })
-          //     : () => navigation.navigate('LoginScreen')
-          // }
+        // onPress={
+        //   isToken
+        //     ? () =>
+        //         navigation.navigate('ChallengeDetailScreenViewOnly', {
+        //           challengeId: '1',
+        //         })
+        //     : () => navigation.navigate('LoginScreen')
+        // }
         />
         <View className="mt-4 flex-row">
           <LikeButton progressId={id} />
@@ -128,11 +128,11 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             navigationToComment={
               isToken
                 ? () =>
-                    navigation.navigate('ProgressCommentScreen', {
-                      progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
-                      ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
-                      challengeName: 'Climbing Mont Blanc',
-                    })
+                  navigation.navigate('ProgressCommentScreen', {
+                    progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
+                    ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
+                    challengeName: 'Climbing Mont Blanc',
+                  })
                 : () => navigation.navigate('LoginScreen')
             }
             progressId={id}

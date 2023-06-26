@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, FlatList, SafeAreaView } from 'react-native';
 import clsx from 'clsx';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { t } from 'i18next';
+import { t, use } from 'i18next';
 
 import { RootStackParamList } from '../navigation/navigation.type';
 
@@ -17,6 +17,9 @@ import IconSearch from '../component/common/IconSearch/IconSearch';
 
 import ShareIcon from '../../../assets/svg/share.svg';
 import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import { useFollowingListStore, useUserProfileStore } from '../store/user-data';
+import { serviceGetListFollowing } from '../service/profile';
+import { useGetListFollowing } from '../hooks/useGetUser';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
@@ -65,6 +68,8 @@ export const HomeFeed = () => {
       comment: 10,
     },
   ];
+  useGetListFollowing();
+
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
@@ -121,16 +126,16 @@ const HomeScreen = () => {
               withBackIcon
             />
           ),
-          headerRight: () => {
-            return (
-              <View>
-                <Button
-                  Icon={<ShareIcon />}
-                  onPress={() => console.log('press share')}
-                />
-              </View>
-            );
-          },
+          // headerRight: () => {
+          //   return (
+          //     <View>
+          //       <Button
+          //         Icon={<ShareIcon />}
+          //         onPress={() => console.log('press share')}
+          //       />
+          //     </View>
+          //   );
+          // },
         })}
       />
       <HomeScreenStack.Screen
@@ -158,6 +163,7 @@ const HomeScreen = () => {
           },
         })}
       />
+
       <HomeScreenStack.Screen
         name="ProgressCommentScreen"
         component={ProgressCommentScreen}

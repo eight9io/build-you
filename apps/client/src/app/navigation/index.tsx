@@ -130,22 +130,7 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-{/* 
-            <RootStack.Screen
-              name="ProgressCommentScreen"
-              component={ProgressCommentScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => '',
-                headerLeft: (props) => (
-                  <NavButton
-                    text={t('button.back') as string}
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
-            /> */}
+
             <RootStack.Screen
               name="SettingsScreen"
               component={SettingsScreen}

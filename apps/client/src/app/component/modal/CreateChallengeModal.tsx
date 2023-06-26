@@ -91,7 +91,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const onSubmit = async (data: ICreateChallengeForm) => {
     setIsLoading(true);
     setErrorMessage('');
-    
+
     try {
       const { image, ...rest } = data; // Images upload will be handle separately
       const payload = {

@@ -19,7 +19,7 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import MainNavBar from '../../../component/NavBar/MainNavBar';
 import Notificaiton from '../../../component/Notification';
-import CompanyComponent from '../../../component/Profile/Company';
+import CompanyComponent from '../../../component/Profile/Company/CompanyProfileComponent';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
 import Loading from '../../../component/common/Loading';
@@ -27,6 +27,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
 import { useUserProfileStore } from '../../../store/user-data';
 import { FlatList } from 'react-native-gesture-handler';
+import OtherUserProfileScreen from '../OtherUser/OtherUserProfileScreen';
+import NavButton from '../../../component/common/Buttons/NavButton';
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -100,6 +102,22 @@ const CompanyProfileScreen = () => {
               onPress={() => navigation.push('SettingsScreen')}
             />
           ),
+        })}
+      />
+      <CompanyStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+
         })}
       />
     </CompanyStack.Navigator>

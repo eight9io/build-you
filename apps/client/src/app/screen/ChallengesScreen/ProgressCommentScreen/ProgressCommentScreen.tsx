@@ -105,6 +105,8 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     {} as IProgressChallenge
   );
 
+  const isAndroid = Platform.OS === 'android';
+
   useEffect(() => {
     if (!progressId) return;
     const progressDataResponse = getProgressById(progressId);
@@ -185,8 +187,8 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
           enabled={Platform.OS === 'ios'}
           keyboardVerticalOffset={94}
         >
-          <View className="flex-1">
-            <View className="mb-5 flex-1">
+          <View className="relative flex-1">
+            <View className="mb-5 ">
               <FlatList
                 data={comments}
                 renderItem={({ item, index }) => {
@@ -218,7 +220,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                 }}
               />
             </View>
-            <View>
+            <View className={`absolute bottom-0 w-full ${isAndroid ? "bottom-[38px]" : "bottom-[72px]"}`}>
               <CommentInput handleOnSubmit={handleSubmit} />
             </View>
           </View>

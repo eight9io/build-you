@@ -147,7 +147,6 @@ export const AddNewChallengeProgressModal: FC<
   }, [selectedMedia]);
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true);
     if (!userProfile || !userProfile.id) return;
     const payload = {
       user: userProfile.id,

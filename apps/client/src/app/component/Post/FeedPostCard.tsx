@@ -83,10 +83,12 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
 
   const navigateToUserProfile = () => {
     if (!id) {
-      GlobalDialogController.showModal(
-        t('error_general_message') ||
-        'Something went wrong. Please try again later!'
-      );
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_general_message') ||
+          'Something went wrong. Please try again later!',
+      });
       return;
     }
     navigation.navigate('OtherUserProfileScreen', { userId: id });
@@ -127,7 +129,9 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
               isToken
                 ? () =>
                   navigation.navigate('ProgressCommentScreen', {
-                    progressId: '1',
+                    progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
+                    ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
+                    challengeName: 'Climbing Mont Blanc',
                   })
                 : () => navigation.navigate('LoginScreen')
             }

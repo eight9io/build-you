@@ -138,9 +138,12 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         setProgressCommentScreenLoading(false);
       }, 600);
     } catch (error) {
-      GlobalDialogController.showModal(
-        t('errorMessage:500') || 'Something went wrong. Please try again later!'
-      );
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          (t('error_general_message') as string) || 'Something went wrong',
+        button: 'OK',
+      });
       console.log(error);
     }
   };
@@ -148,6 +151,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const handleRefreshComments = async () => {
     setShouldRefreshComments(true);
     await loadProgressComments();
+    setShouldRefreshComments(false);
   };
 
   const handleSubmit = async (comment: string) => {
@@ -161,9 +165,12 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         await handleRefreshComments();
       }
     } catch (error) {
-      GlobalDialogController.showModal(
-        t('errorMessage:500') || 'Something went wrong. Please try again later!'
-      );
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          (t('error_general_message') as string) || 'Something went wrong',
+        button: 'OK',
+      });
       console.log(error);
     }
   };

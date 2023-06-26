@@ -20,6 +20,7 @@ import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserPr
 import { useFollowingListStore, useUserProfileStore } from '../store/user-data';
 import { serviceGetListFollowing } from '../service/profile';
 import { useGetListFollowing } from '../hooks/useGetUser';
+import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 export const HomeFeed = () => {
@@ -163,6 +164,21 @@ const HomeScreen = () => {
         })}
       />
 
+      <HomeScreenStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
     </HomeScreenStack.Navigator>
   );
 };

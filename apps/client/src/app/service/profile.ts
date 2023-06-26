@@ -22,4 +22,10 @@ export const serviceUpdateCover=(formData:any)=> http.post('/user/cover',formDat
   export const serviceFollow=(idUser:any)=> http.post('/user/follow',{
     "following": idUser
   });
+
+  // ==== COMPANY  ====== 
+
+  export const serviceGetEmployeeList=(idCompany:any)=> http.post(`/user/employee/all/${idCompany}`);
+  export const serviceRemoveEmployee=(newEmployee:any)=> http.post('/user/employee/remove',newEmployee);
+  export const serviceAddEmployee=(newEmployee:any)=> http.post('/user/employee/add',newEmployee);
   

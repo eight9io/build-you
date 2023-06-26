@@ -5,7 +5,7 @@ import { useFollowingListStore, useUserProfileStore } from '../store/user-data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { serviceGetOtherUserData } from '../service/user';
 import { serviceGetMyProfile } from '../service/auth';
-import { serviceGetListFollowing } from '../service/profile';
+import { serviceGetEmployeeList, serviceGetListFollowing } from '../service/profile';
 import { useAuthStore } from '../store/auth-store';
 
 export const useGetUserData = (setLoading?: any) => {
@@ -33,7 +33,7 @@ export const useGetUserData = (setLoading?: any) => {
 
 export const useGetOtherUserData = (userId: string | null | undefined) => {
   if (!userId || userId === null) return null;
-  const [otherUserProfile, setOtherUserProfile] = useState<any|undefined>({});
+  const [otherUserProfile, setOtherUserProfile] = useState<any | undefined>({});
 
   const fetchingUserData = async () => {
     await serviceGetOtherUserData(userId)
@@ -41,7 +41,7 @@ export const useGetOtherUserData = (userId: string | null | undefined) => {
         setOtherUserProfile(res.data);
       })
       .catch((err) => {
-        setOtherUserProfile (undefined);
+        setOtherUserProfile(undefined);
       });
   };
 
@@ -51,36 +51,27 @@ export const useGetOtherUserData = (userId: string | null | undefined) => {
 
   return otherUserProfile;
 };
-export const fetchNewFollowingData =  (id:any,setFollowingList:any) => {
-   serviceGetListFollowing(id)
-  .then((res) => {
-    console.log(222);
-   setFollowingList(res.data)
- })
- .catch((err) => {
-  if(err.response.status == 403) setFollowingList([])
- });
 
-};
 export const useGetListFollowing = () => {
   const { getAccessToken } = useAuthStore();
   const { getUserProfile } = useUserProfileStore();
   const isToken = getAccessToken();
   const userProfile = getUserProfile();
   const { setFollowingList } = useFollowingListStore()
-  if(!isToken) return null;
+  if (!isToken) return null;
   const fetchFollowingData = async () => {
-     await serviceGetListFollowing(userProfile?.id)
-     .then((res) => {
-      setFollowingList(res.data)
-    })
-    .catch((err) => {
-      if(err.response.status == 403)setFollowingList([])
-    });
+    await serviceGetListFollowing(userProfile?.id)
+      .then((res) => {
+        setFollowingList(res.data)
+      })
+      .catch((err) => {
+        if (err.response.status == 403) setFollowingList([])
+      });
 
   };
   useEffect(() => {
     fetchFollowingData();
   }
-  , [userProfile?.id]);
+    , [userProfile?.id]);
 }
+

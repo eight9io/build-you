@@ -85,7 +85,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
     if (!id) {
       GlobalDialogController.showModal(
         t('error_general_message') ||
-          'Something went wrong. Please try again later!'
+        'Something went wrong. Please try again later!'
       );
       return;
     }
@@ -100,7 +100,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           onPress={navigateToUserProfile}
         >
           <View className="flex-row">
-            <PostAvatar src="https://picsum.photos/200/300" />
+            <PostAvatar src="https://picsum.photos/200/300" onPress={navigateToUserProfile} />
             <View className="ml-2">
               <Text className="text-h6 font-bold">{name}</Text>
               <Text className="text-gray-dark text-xs font-light ">{time}</Text>
@@ -111,14 +111,14 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
         <ChallengeImage
           name={card.title}
           image={card.image}
-          // onPress={
-          //   isToken
-          //     ? () =>
-          //         navigation.navigate('ChallengeDetailScreenViewOnly', {
-          //           challengeId: '1',
-          //         })
-          //     : () => navigation.navigate('LoginScreen')
-          // }
+        // onPress={
+        //   isToken
+        //     ? () =>
+        //         navigation.navigate('ChallengeDetailScreenViewOnly', {
+        //           challengeId: '1',
+        //         })
+        //     : () => navigation.navigate('LoginScreen')
+        // }
         />
         <View className="mt-4 flex-row">
           <LikeButton progressId={id} />
@@ -126,9 +126,9 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             navigationToComment={
               isToken
                 ? () =>
-                    navigation.navigate('ProgressCommentScreen', {
-                      progressId: '1',
-                    })
+                  navigation.navigate('ProgressCommentScreen', {
+                    progressId: '1',
+                  })
                 : () => navigation.navigate('LoginScreen')
             }
             progressId={id}

@@ -17,11 +17,13 @@ import { OutlineButton } from '../../../component/common/Buttons/Button';
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 
 import DefaultAvatar from '../../../component/asset/default-avatar.svg';
-import OtherUserProfileTabs from '../../../component/Profile/ProfileTabs/OtherUser';
+import OtherUserProfileTabs from '../../../component/Profile/ProfileTabs/OtherUser/OtherUserProfileTabs';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 import { useFollowingListStore, useUserProfileStore } from '../../../store/user-data';
 import { serviceFollow, serviceUnfollow } from '../../../service/profile';
-import { fetchNewFollowingData, useGetOtherUserData } from '../../../hooks/useGetUser';
+import { useGetOtherUserData } from '../../../hooks/useGetUser';
+import ConfirmDialog from '../../../component/common/Dialog/ConfirmDialog';
+import { fetchNewFollowingData } from '../../../utils/profile';
 
 interface IOtherUserProfileComponentProps {
   userId: string | null | undefined;
@@ -43,19 +45,38 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   const userProfile = getUserProfile();
   const followingList = getFollowingList()
   const isFollowing = followingList && followingList.find((item) => item.id === otherUserData?.id)
-
+  const [isShowModalUnfollow, setIsShowModalUnfollow] = useState(false);
   const handleFllowClicked = async () => {
-    await serviceFollow(otherUserData?.id)
-    fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
+    try {
+      await serviceFollow(otherUserData?.id)
+      fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
+    } catch (error) {
+      GlobalDialogController.showModal(t('errorMessage:500') as string)
+    }
   };
 
   const handleUnfollowClicked = async () => {
-    await serviceUnfollow(otherUserData?.id)
-    fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
+    try {
+      await serviceUnfollow(otherUserData?.id)
+      await fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
+      setIsShowModalUnfollow(false)
+    } catch (error) {
+      GlobalDialogController.showModal(t('errorMessage:500') as string)
+    }
+
   };
 
   return (
     <View className={clsx('relative z-10 bg-white')}>
+      <ConfirmDialog
+        title={t('dialog.unfollow_user.title') || ''}
+        description={t('dialog.unfollow_user.description') || ''}
+        isVisible={isShowModalUnfollow}
+        onClosed={() => setIsShowModalUnfollow(false)}
+        closeButtonLabel={t('dialog.cancel') || ''}
+        confirmButtonLabel={t('dialog.unfollow') || ''}
+        onConfirm={() => handleUnfollowClicked()}
+      />
       <CoverImage
         isOtherUser
         src={otherUserData?.cover as string}
@@ -87,7 +108,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
             title={t('button.unfollow')}
             containerClassName="px-11 py-2  border-[#6C6E76]"
             textClassName="text-base text-[#6C6E76]"
-            onPress={handleUnfollowClicked}
+            onPress={() => setIsShowModalUnfollow(true)}
           />
         )}
       </View>
@@ -119,14 +140,12 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
       navigation.goBack();
     }, 2000);
   }
-
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
       {otherUserData &&
         <View>
           <TopSectionOtherProfile
             otherUserData={otherUserData}
-
           />
           <View className={clsx('bg-white px-4 pb-3 pt-12')}>
             <Text className={clsx('text-[26px] font-medium')}>
@@ -148,7 +167,6 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
       <ScrollView className="h-full">
         <OtherUserProfileComponent userId={userId} navigation={navigation} />
-
       </ScrollView>
     </SafeAreaView>
   );

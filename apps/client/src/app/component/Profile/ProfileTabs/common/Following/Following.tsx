@@ -26,7 +26,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
-              onPress={() => navigation.navigate('OtherUserProfileScreen', { userId: item.id, isFollowing: true })}
+              onPress={() => navigation.navigate('OtherUserProfileScreen', { userId: item.id })}
               className="mb-5 flex-row items-center gap-3"
             >
               <View className="relative">

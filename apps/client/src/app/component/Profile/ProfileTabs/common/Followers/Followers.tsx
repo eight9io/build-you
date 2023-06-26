@@ -29,7 +29,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
             >
               <Image
                 source={{ uri: item.avatar }}
-                resizeMode="contain"
+                resizeMode="cover"
                 className="h-10 w-10 rounded-full"
               />
               <Text className="text-basic-black text-base font-semibold">

@@ -1,27 +1,32 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
 import clsx from 'clsx';
-import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
 
-import Biography from './Biography';
-import Skills from './Skills';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
-import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
-import { serviceGetListFollower, serviceGetListFollowing } from 'apps/client/src/app/service/profile';
-import { IUserData } from '../../../../types/user';
-import { useIsFocused } from '@react-navigation/native';
+import Employees from './Employees/Employees';
+import ChallengesTab from '../OtherUser/Challenges/ChallengesTab';
 
-const ProfileTabs: FC = () => {
+import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
+import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
+import Biography from '../Users/Biography';
+import { useIsFocused } from '@react-navigation/native';
+import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
+import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
+
+
+const CompanyProfileTabs = () => {
+  const { t } = useTranslation();
+
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
-  const { t } = useTranslation();
+  const userId = userProfile?.id;
   const { getFollowingList } = useFollowingListStore()
-
   const [followerList, setFollowerList] = useState([])
+  const [employeeList, setEmployeeList] = useState([])
 
 
   const isFocused = useIsFocused();
@@ -31,25 +36,32 @@ const ProfileTabs: FC = () => {
       const { data: followerList } = await serviceGetListFollower(userProfile?.id);
       setFollowerList(followerList);
     };
+    fetchListEmployee(userProfile?.id, (res: any) => {
+
+      return setEmployeeList(res)
+    })
     getFollowerList();
-  }, [isFocused])
+  }, [isFocused, userProfile?.id])
   const followingList = getFollowingList()
+  if (!userId) return null;
   const titles = [
     t('profile_screen_tabs.biography'),
-    t('profile_screen_tabs.skills'),
     t('profile_screen_tabs.followers'),
     t('profile_screen_tabs.following'),
+    t('profile_screen_tabs.employees'),
+    t('profile_screen_tabs.challenges'),
   ];
 
   return (
-    <View className={clsx('flex-1  bg-gray-50')}>
+    <View className={clsx('flex-1 bg-gray-50')}>
       <TabViewFlatlist
         titles={titles}
         children={[
           <Biography key="0" userProfile={userProfile} />,
-          <Skills skills={userProfile?.softSkill} key="1" />,
-          <Followers followers={followerList} key="2" />,
-          <Following following={followingList} key="3" />,
+          <Followers followers={followerList} key="1" />,
+          <Following following={followingList} key="2" />,
+          <Employees key='3' employeeList={employeeList} />,
+          <ChallengesTab userId={userId} key='4' />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"
@@ -58,4 +70,4 @@ const ProfileTabs: FC = () => {
   );
 };
 
-export default ProfileTabs;
+export default CompanyProfileTabs;

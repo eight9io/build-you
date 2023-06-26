@@ -104,215 +104,216 @@ export const AddNewChallengeProgressModal: FC<
   isVisible,
   onClose,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
-  const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
-  const [isShowModal, setIsShowModal] = useState<boolean>(false);
-  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
-    null
-  );
-  const [shouldDisableAddImage, setShouldDisableAddImage] =
-    useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
+    const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
+    const [isShowModal, setIsShowModal] = useState<boolean>(false);
+    const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
+      null
+    );
+    const [shouldDisableAddImage, setShouldDisableAddImage] =
+      useState<boolean>(false);
 
-  const { getUserProfile } = useUserProfileStore();
-  const userProfile = getUserProfile();
+    const { getUserProfile } = useUserProfileStore();
+    const userProfile = getUserProfile();
 
-  const { t } = useTranslation();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    setError,
-    formState: { errors, isDirty },
-  } = useForm<{
-    challenge: string;
-    caption: string;
-    location: string;
-    media?: any;
-  }>({
-    defaultValues: {
-      challenge: '',
-      caption: '',
-      location: '',
-      media: undefined,
-    },
-    resolver: yupResolver(CreateProgressValidationSchema()),
-    reValidateMode: 'onChange',
-  });
+    const { t } = useTranslation();
+    const {
+      control,
+      handleSubmit,
+      setValue,
+      setError,
+      formState: { errors, isDirty },
+    } = useForm<{
+      challenge: string;
+      caption: string;
+      location: string;
+      media?: any;
+    }>({
+      defaultValues: {
+        challenge: '',
+        caption: '',
+        location: '',
+        media: undefined,
+      },
+      resolver: yupResolver(CreateProgressValidationSchema()),
+      reValidateMode: 'onChange',
+    });
 
-  useEffect(() => {
-    if (selectedMedia.length === 0) {
-      setIsSelectedImage(null);
-      setShouldDisableAddImage(false);
-      return;
-    } else if (selectedMedia.length >= 3) {
-      setShouldDisableAddImage(true);
-    } else if (selectedMedia.length < 3) {
-      setShouldDisableAddImage(false);
-    }
-  }, [selectedMedia]);
+    useEffect(() => {
+      if (selectedMedia.length === 0) {
+        setIsSelectedImage(null);
+        setShouldDisableAddImage(false);
+        return;
+      } else if (selectedMedia.length >= 3) {
+        setShouldDisableAddImage(true);
+      } else if (selectedMedia.length < 3) {
+        setShouldDisableAddImage(false);
+      }
+    }, [selectedMedia]);
 
-  const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    if (!userProfile || !userProfile.id) return;
-    const payload = {
-      user: userProfile.id,
-      challenge: challengeId,
-      caption: data.caption,
-      location: data.location,
-    };
+    const onSubmit = async (data: any) => {
 
-    const createProgressResponse = await createProgress(payload);
-    if (
-      (createProgressResponse.status === 200 || 201) &&
-      selectedMedia.length > 0
-    ) {
-      const progressId = createProgressResponse.data.id;
-      if (isSelectedImage) {
-        const addImageProgressResponse = (await updateProgressImage(
-          progressId,
-          selectedMedia
-        )) as AxiosResponse;
-        if (addImageProgressResponse.status === 200 || 201) {
-          setIsRequestSuccess(true);
-          setIsShowModal(true);
+
+      if (!userProfile || !userProfile.id) return;
+      const payload = {
+        user: userProfile.id,
+        challenge: challengeId,
+        caption: data.caption,
+        location: data.location,
+      };
+
+      const createProgressResponse = await createProgress(payload);
+      if (
+        (createProgressResponse.status === 200 || 201) &&
+        selectedMedia.length > 0
+      ) {
+        const progressId = createProgressResponse.data.id;
+        if (isSelectedImage) {
+          const addImageProgressResponse = (await updateProgressImage(
+            progressId,
+            selectedMedia
+          )) as AxiosResponse;
+          if (addImageProgressResponse.status === 200 || 201) {
+            setIsRequestSuccess(true);
+            setIsShowModal(true);
+          } else {
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
+            deleteProgress(progressId);
+          }
         } else {
-          setIsRequestSuccess(false);
-          setIsShowModal(true);
-          deleteProgress(progressId);
+          const addVideoProgressResponse = (await updateProgressVideo(
+            progressId,
+            selectedMedia[0]
+          )) as AxiosResponse;
+          if (addVideoProgressResponse.status === 200 || 201) {
+            setIsRequestSuccess(true);
+            setIsShowModal(true);
+          } else {
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
+            deleteProgress(progressId);
+          }
         }
       } else {
-        const addVideoProgressResponse = (await updateProgressVideo(
-          progressId,
-          selectedMedia[0]
-        )) as AxiosResponse;
-        if (addVideoProgressResponse.status === 200 || 201) {
-          setIsRequestSuccess(true);
-          setIsShowModal(true);
-        } else {
-          setIsRequestSuccess(false);
-          setIsShowModal(true);
-          deleteProgress(progressId);
-        }
+        setIsRequestSuccess(false);
+        setIsShowModal(true);
       }
-    } else {
-      setIsRequestSuccess(false);
-      setIsShowModal(true);
-    }
-    setIsLoading(false);
-  };
-  // TODO: handle change CREATE text color when input is entered
+      setIsLoading(false);
+    };
+    // TODO: handle change CREATE text color when input is entered
 
-  const screen = Dimensions.get('window');
+    const screen = Dimensions.get('window');
 
-  const handleCloseModal = () => {
-    setIsShowModal(false);
-    onClose();
-    setProgressLoading(true);
-    setShouldRefetch(true);
-  };
+    const handleCloseModal = () => {
+      setIsShowModal(false);
+      onClose();
+      setProgressLoading(true);
+      setShouldRefetch(true);
+    };
 
-  return (
-    <Modal
-      animationType="slide"
-      presentationStyle="pageSheet"
-      visible={isVisible}
-      className="h-full"
-    >
-      <SafeAreaView className="relative bg-white">
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 z-10" />
-        )}
-        <ConfirmDialog
-          title={isRequestSuccess ? 'Success' : 'Error'}
-          description={
-            isRequestSuccess
-              ? 'Your progress has been created successfully'
-              : 'Something went wrong. Please try again later.'
-          }
-          isVisible={isShowModal}
-          onClosed={handleCloseModal}
-          closeButtonLabel="Got it"
-        />
-        <View className="mx-4  h-full rounded-t-xl bg-white">
-          <Header
-            title={t('challenge_detail_screen.new_progress') as string}
-            rightBtn={t('challenge_detail_screen.new_progress_post') as string}
-            leftBtn="Cancel"
-            onLeftBtnPress={onClose}
-            onRightBtnPress={handleSubmit(onSubmit)}
-            containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
+    return (
+      <Modal
+        animationType="slide"
+        presentationStyle="pageSheet"
+        visible={isVisible}
+        className="h-full"
+      >
+        <SafeAreaView className="relative bg-white">
+          {isLoading && (
+            <Loading containerClassName="absolute top-0 left-0 z-10" />
+          )}
+          <ConfirmDialog
+            title={isRequestSuccess ? 'Success' : 'Error'}
+            description={
+              isRequestSuccess
+                ? 'Your progress has been created successfully'
+                : 'Something went wrong. Please try again later.'
+            }
+            isVisible={isShowModal}
+            onClosed={handleCloseModal}
+            closeButtonLabel="Got it"
           />
-
-          <View className="flex flex-col justify-between pt-4">
-            <CustomTextInput
-              title="Caption"
-              placeholderClassName="h-32"
-              placeholder="What do you achieve?"
-              control={control}
-              errors={errors.caption}
+          <View className="mx-4  h-full rounded-t-xl bg-white">
+            <Header
+              title={t('challenge_detail_screen.new_progress') as string}
+              rightBtn={t('challenge_detail_screen.new_progress_post') as string}
+              leftBtn="Cancel"
+              onLeftBtnPress={onClose}
+              onRightBtnPress={handleSubmit(onSubmit)}
+              containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
             />
 
-            {selectedMedia && (
-              <RenderSelectedMedia
-                screen={screen}
-                selectedMedia={selectedMedia}
-                setSelectedMedia={setSelectedMedia}
-                onRemoveItem={(medias) => {
-                  if (!medias.length) {
-                    setError('media', {
-                      message: 'Please upload images or video',
-                      type: 'required',
-                    });
-                  }
-                }}
-              />
-            )}
-
-            <View>
-              <View className="">
-                <ImagePicker
-                  onImagesSelected={(images) => {
-                    images.forEach((uri: string) => {
-                      const id = getRandomId();
-                      setSelectedMedia((prev: IUploadMediaWithId[]) => [
-                        ...prev,
-                        { id, uri: uri },
-                      ]);
-                      setValue('media', uri, { shouldValidate: true });
-                    });
-                  }}
-                  allowsMultipleSelection
-                  isSelectedImage={isSelectedImage}
-                  setIsSelectedImage={setIsSelectedImage}
-                  isDisabled={shouldDisableAddImage}
-                />
-              </View>
-
-              <View className="flex flex-col">
-                <VideoPicker
-                  setExternalVideo={(video) => {
-                    setSelectedMedia(video);
-                    setValue('media', video, { shouldValidate: true });
-                  }}
-                  isSelectedImage={isSelectedImage}
-                  setIsSelectedImage={setIsSelectedImage}
-                />
-              </View>
-              {errors?.media && <ErrorText message={errors.media.message} />}
-            </View>
-
-            <View className="flex flex-col pt-4">
-              <LocationInput
+            <View className="flex flex-col justify-between pt-4">
+              <CustomTextInput
+                title="Caption"
+                placeholderClassName="h-32"
+                placeholder="What do you achieve?"
                 control={control}
-                errors={errors.location}
-                setFormValue={setValue}
+                errors={errors.caption}
               />
+
+              {selectedMedia && (
+                <RenderSelectedMedia
+                  screen={screen}
+                  selectedMedia={selectedMedia}
+                  setSelectedMedia={setSelectedMedia}
+                  onRemoveItem={(medias) => {
+                    if (!medias.length) {
+                      setError('media', {
+                        message: 'Please upload images or video',
+                        type: 'required',
+                      });
+                    }
+                  }}
+                />
+              )}
+
+              <View>
+                <View className="">
+                  <ImagePicker
+                    onImagesSelected={(images) => {
+                      images.forEach((uri: string) => {
+                        const id = getRandomId();
+                        setSelectedMedia((prev: IUploadMediaWithId[]) => [
+                          ...prev,
+                          { id, uri: uri },
+                        ]);
+                        setValue('media', uri, { shouldValidate: true });
+                      });
+                    }}
+                    allowsMultipleSelection
+                    isSelectedImage={isSelectedImage}
+                    setIsSelectedImage={setIsSelectedImage}
+                    isDisabled={shouldDisableAddImage}
+                  />
+                </View>
+
+                <View className="flex flex-col">
+                  <VideoPicker
+                    setExternalVideo={(video) => {
+                      setSelectedMedia(video);
+                      setValue('media', video, { shouldValidate: true });
+                    }}
+                    isSelectedImage={isSelectedImage}
+                    setIsSelectedImage={setIsSelectedImage}
+                  />
+                </View>
+                {errors?.media && <ErrorText message={errors.media.message} />}
+              </View>
+
+              <View className="flex flex-col pt-4">
+                <LocationInput
+                  control={control}
+                  errors={errors.location}
+                  setFormValue={setValue}
+                />
+              </View>
             </View>
           </View>
-        </View>
-      </SafeAreaView>
-    </Modal>
-  );
-};
+        </SafeAreaView>
+      </Modal>
+    );
+  };
 export default AddNewChallengeProgressModal;

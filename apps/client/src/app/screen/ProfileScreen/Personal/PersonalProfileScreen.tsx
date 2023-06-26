@@ -16,6 +16,8 @@ import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
 import Loading from '../../../component/common/Loading';
 import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
+import NavButton from '../../../component/common/Buttons/NavButton';
+import OtherUserProfileScreen from '../OtherUser/OtherUserProfileScreen';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -31,7 +33,6 @@ interface IProfileProps {
 const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
     useState<boolean>(true);
-
   const isFocused = useIsFocused();
   const { setUserProfile, getUserProfile } = useUserProfileStore();
   useEffect(() => {
@@ -88,6 +89,31 @@ const PersonalProfileScreen = () => {
               onPress={() => navigation.push('SettingsScreen')}
             />
           ),
+        })}
+      />
+      <ProfileStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          // headerRight: () => {
+          //   return (
+          //     <View>
+          //       <Button
+          //         Icon={<ShareIcon />}
+          //         onPress={() => console.log('press share')}
+          //       />
+          //     </View>
+          //   );
+          // },
         })}
       />
     </ProfileStack.Navigator>

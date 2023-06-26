@@ -57,6 +57,8 @@ export type RootStackParamList = {
 
   OtherUserProfileScreen: {
     userId: string;
+    isFollowing?: boolean;
+    isFollower?: boolean;
   };
 
   OtherUserProfileDetailsScreen: {

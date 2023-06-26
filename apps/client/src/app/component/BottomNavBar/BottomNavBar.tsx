@@ -22,7 +22,7 @@ import { useUserProfileStore } from '../../store/user-data';
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
 
-interface IBottomNavBarProps {}
+interface IBottomNavBarProps { }
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
@@ -32,6 +32,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCompany = currentUser && currentUser?.companyAccount;
+
 
   return (
     <Tab.Navigator

@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   Modal,
   SafeAreaView,
   Image,
@@ -8,26 +7,22 @@ import {
   ScaledSize,
   Platform,
 } from 'react-native';
-import React, { FC, useState, useEffect, ReactNode } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
-
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosResponse } from 'axios';
 
 import { useUserProfileStore } from '../../store/user-data';
-
 import { IUploadMediaWithId } from '../../types/media';
-
 import { getRandomId } from '../../utils/common';
 import { CreateProgressValidationSchema } from '../../Validators/CreateProgress.validate';
-
 import Header from '../common/Header';
 import Button from '../common/Buttons/Button';
 import ImagePicker from '../common/ImagePicker';
 import VideoPicker from '../common/VideoPicker';
 import LocationInput from '../common/Inputs/LocationInput';
 import CustomTextInput from '../common/Inputs/CustomTextInput';
-
 import Close from '../../component/asset/close.svg';
 import {
   createProgress,
@@ -35,7 +30,6 @@ import {
   updateProgressImage,
   updateProgressVideo,
 } from '../../service/progress';
-import { AxiosResponse } from 'axios';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 import Loading from '../common/Loading';
 import ErrorText from '../common/ErrorText';
@@ -273,13 +267,22 @@ export const AddNewChallengeProgressModal: FC<
               <View className="">
                 <ImagePicker
                   onImagesSelected={(images) => {
-                    images.forEach((uri: string) => {
-                      const id = getRandomId();
-                      setSelectedMedia((prev: IUploadMediaWithId[]) => [
-                        ...prev,
-                        { id, uri: uri },
-                      ]);
-                      setValue('media', uri, { shouldValidate: true });
+                    setSelectedMedia((prev: IUploadMediaWithId[]) => {
+                      const imagesSelected: IUploadMediaWithId[] = images.map(
+                        (uri) => {
+                          const id = getRandomId();
+                          setValue('media', uri, { shouldValidate: true });
+                          return {
+                            id,
+                            uri: uri,
+                          };
+                        }
+                      );
+
+                      if (prev.length + imagesSelected.length > 3) {
+                        return prev;
+                      }
+                      return [...prev, ...imagesSelected];
                     });
                   }}
                   allowsMultipleSelection

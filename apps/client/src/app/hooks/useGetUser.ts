@@ -27,3 +27,26 @@ export const useGetUserData = (setLoading?: any) => {
     fetchingUserData();
   }, []);
 };
+
+export const useGetOtherUserData = (userId: string | null | undefined) => {
+  if (!userId || userId === null) return null;
+
+  const [otherUserProfile, setOtherUserProfile] = useState<any>({});
+
+  const fetchingUserData = async () => {
+    await httpInstance
+      .get(`/user/${userId}`)
+      .then((res) => {
+        setOtherUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.error('err', err);
+      });
+  };
+
+  useEffect(() => {
+    fetchingUserData();
+  }, []);
+
+  return { ...otherUserProfile };
+};

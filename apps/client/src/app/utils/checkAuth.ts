@@ -113,6 +113,7 @@ export const checkRefreshTokenLocalValidation = async () => {
         .then((res) => {
           return res;
         });
+      console.log('new refreshTokenLocal', newTokens);
       if (newTokens.status !== 201) {
         removeAuthTokensLocalOnLogout();
       } else {

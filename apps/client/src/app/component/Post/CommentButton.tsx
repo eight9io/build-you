@@ -8,21 +8,31 @@ import { getProgressComments } from '../../service/progress';
 interface ICommentButtonProps {
   progressId: string;
   isViewOnly?: boolean;
-  navigationToComment: () => void;
+  navigationToComment?: () => void;
+  shouldRefreshComments?: boolean;
 }
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
   isViewOnly = false,
   navigationToComment,
+  shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
 
   useEffect(() => {
+    if (!progressId) return;
     (async () => {
       await loadProgressComments();
     })();
-  }, []);
+  }, [progressId]);
+
+  useEffect(() => {
+    if (!shouldRefreshComments) return;
+    (async () => {
+      await loadProgressComments();
+    })();
+  }, [shouldRefreshComments]);
 
   const loadProgressComments = async () => {
     try {
@@ -33,7 +43,7 @@ const CommentButton: FC<ICommentButtonProps> = ({
     }
   };
   const handleNavigationToComment = () => {
-    !isViewOnly && navigationToComment();
+    !isViewOnly && navigationToComment && navigationToComment();
   };
   return (
     <TouchableOpacity

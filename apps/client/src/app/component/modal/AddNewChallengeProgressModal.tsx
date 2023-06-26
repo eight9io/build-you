@@ -111,6 +111,8 @@ export const AddNewChallengeProgressModal: FC<
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
     null
   );
+  const [shouldDisableAddImage, setShouldDisableAddImage] =
+    useState<boolean>(false);
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
@@ -141,6 +143,12 @@ export const AddNewChallengeProgressModal: FC<
   useEffect(() => {
     if (selectedMedia.length === 0) {
       setIsSelectedImage(null);
+      setShouldDisableAddImage(false);
+      return;
+    } else if (selectedMedia.length >= 3) {
+      setShouldDisableAddImage(true);
+    } else if (selectedMedia.length < 3) {
+      setShouldDisableAddImage(false);
     }
   }, [selectedMedia]);
 
@@ -277,6 +285,7 @@ export const AddNewChallengeProgressModal: FC<
                   allowsMultipleSelection
                   isSelectedImage={isSelectedImage}
                   setIsSelectedImage={setIsSelectedImage}
+                  isDisabled={shouldDisableAddImage}
                 />
               </View>
 
@@ -294,7 +303,11 @@ export const AddNewChallengeProgressModal: FC<
             </View>
 
             <View className="flex flex-col pt-4">
-              <LocationInput control={control} errors={errors.location} />
+              <LocationInput
+                control={control}
+                errors={errors.location}
+                setFormValue={setValue}
+              />
             </View>
           </View>
         </View>

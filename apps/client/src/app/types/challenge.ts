@@ -19,13 +19,14 @@ export interface IUpdateChallengeImage {
 export interface IProgressChallenge {
   id: string;
   // user: string; missing from api but we can get
-  challenge: string;
+  challenge?: string;
   caption: string;
-  image: string[] | string | null;
+  image: string | null;
   video: string | null;
   location: string;
   createdAt: string;
   likes?: any[];
+  comments?: any[];
   first?: boolean; 
 }
 
@@ -33,6 +34,12 @@ export interface IChallenge {
   id: string;
   goal: string;
   name: string;
+  owner: {
+    id: string;
+    avatar: string;
+    name: string;
+    surname: string;
+  }[];
   benefits: string;
   reasons: string;
   achievementTime: Date;

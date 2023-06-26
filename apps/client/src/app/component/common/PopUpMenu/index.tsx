@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, { FC } from 'react';
 import {
   Menu,
-  MenuProvider,
   MenuOptions,
   MenuOption,
   MenuTrigger,
@@ -20,6 +19,7 @@ type MenuOptionProp = {
 interface IPopMenuProps {
   iconColor?: string;
   options?: MenuOptionProp[];
+  isDisabled?: boolean;
 }
 
 const ButtonIcon = ({ iconColor }: { iconColor: string | undefined }) => {
@@ -42,11 +42,12 @@ const MenuItem = ({ text, onPress }: { text: string; onPress: any }) => {
   );
 };
 
-const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options }) => {
+const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options, isDisabled }) => {
   return (
     <Menu>
       <MenuTrigger
-        children={<ButtonIcon iconColor={iconColor} />}
+        disabled={isDisabled}
+        children={<ButtonIcon iconColor={isDisabled ? '#C5C8D2' : iconColor} />}
         customStyles={{
           triggerWrapper: {
             width: 30,

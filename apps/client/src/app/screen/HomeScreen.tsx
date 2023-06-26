@@ -7,19 +7,23 @@ import { t } from 'i18next';
 
 import { RootStackParamList } from '../navigation/navigation.type';
 
-import FeedPostCard from '../component/Post/FeedPostCard';
+import OtherUserProfileScreen from './ProfileScreen/OtherUser/OtherUserProfileScreen';
+
 import AppTitle from '../component/common/AppTitle';
-import NavButton from '../component/common/Buttons/NavButton';
 import Button from '../component/common/Buttons/Button';
+import FeedPostCard from '../component/Post/FeedPostCard';
+import NavButton from '../component/common/Buttons/NavButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
-import ChallengeDetailScreenViewOnly from './ChallengeDetailScreen/ChallengeDetailScreenViewOnly/ChallengeDetailScreenViewOnly';
+
 import ShareIcon from '../../../assets/svg/share.svg';
+import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 export const HomeFeed = () => {
   const arrayPost = [
     {
-      id: '1',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
       avatar: 'avata',
       name: 'Marco Rossi',
       time: '1 hour ago',
@@ -33,7 +37,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: '2',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
       avatar: 'avata',
       name: 'Marco Rossi22',
       time: '1 hour ago',
@@ -47,7 +51,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: '3',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
       avatar: 'avata',
       name: 'Marco Rossi 333',
       time: '1 hour ago',
@@ -104,10 +108,9 @@ const HomeScreen = () => {
           ),
         })}
       />
-
       <HomeScreenStack.Screen
-        name="ChallengeDetailScreenViewOnly"
-        component={ChallengeDetailScreenViewOnly}
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',
@@ -128,6 +131,46 @@ const HomeScreen = () => {
               </View>
             );
           },
+        })}
+      />
+      <HomeScreenStack.Screen
+        name="OtherUserProfileDetailsScreen"
+        component={OtherUserProfileDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
+      <HomeScreenStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
         })}
       />
     </HomeScreenStack.Navigator>

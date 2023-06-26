@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import clsx from 'clsx';
 
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
@@ -27,23 +27,6 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
     <View
       className={clsx('relative flex flex-col items-center justify-center')}
     >
-      {/* {!src && (
-        <Video
-          ref={videoPlayer}
-          source={{
-            uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-          }}
-          style={{
-            width: '100%',
-            height: 200,
-            backgroundColor: '#FFFFF',
-            borderRadius: 12,
-          }}
-          useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-        />
-      )} */}
       {src && (
         <Video
           ref={videoPlayer}
@@ -84,31 +67,33 @@ const Biography = () => {
   const videoSrc = userProfile?.video;
 
   return (
-    <View className="justify-content: space-between ">
-      {videoSrc && (
-        <View className={clsx(' flex flex-col pr-4')}>
-          <View className={clsx('py-6')}>
-            <VideoWithPlayButton src={videoSrc} />
+    <ScrollView>
+      <View className="justify-content: space-between pt-4">
+        {videoSrc && videoSrc !== null && (
+          <View className={clsx(' flex flex-col pr-4')}>
+            <View className={clsx('py-6')}>
+              <VideoWithPlayButton src={videoSrc} />
+            </View>
           </View>
+        )}
+        <Text className={clsx('text-h6 text-gray-dark')}>
+          {bio ? bio : 'No biography yet'}
+        </Text>
+        <View className="align-center mt-3 flex-row flex-wrap  ">
+          {hardSkill &&
+            hardSkill.map((content, index) => {
+              return (
+                <Button
+                  containerClassName="border-gray-light ml-1 border-[1px] mx-2 my-1.5  h-[48px] flex-none px-5"
+                  textClassName="line-[30px] text-center text-md font-medium"
+                  key={index}
+                  title={content?.skill?.skill as string}
+                />
+              );
+            })}
         </View>
-      )}
-      <Text className={clsx('text-h6 text-gray-dark')}>
-        {bio ? bio : 'No biography yet'}
-      </Text>
-      <View className="align-center mt-3 flex-row flex-wrap  ">
-        {hardSkill &&
-          hardSkill.map((content, index) => {
-            return (
-              <Button
-                containerClassName="border-gray-light ml-1 border-[1px] mx-2 my-1.5  h-[48px] flex-none px-5"
-                textClassName="line-[30px] text-center text-md font-medium"
-                key={index}
-                title={content?.skill?.skill as string}
-              />
-            );
-          })}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

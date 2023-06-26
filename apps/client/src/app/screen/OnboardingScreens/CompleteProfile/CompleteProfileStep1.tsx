@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -15,7 +15,6 @@ import TextInput from '../../../component/common/Inputs/TextInput';
 
 import CalendarIcon from './asset/calendar-icon.svg';
 import SelectPicker from '../../../component/common/Pickers/SelectPicker';
-import { MOCK_OCCUPATION_SELECT } from '../../../mock-data/occupation';
 import Button from '../../../component/common/Buttons/Button';
 
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
@@ -24,6 +23,8 @@ import Warning from '../../../component/asset/warning.svg';
 
 import DateTimePicker2 from '../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 import { useTranslation } from 'react-i18next';
+import { serviceGetListOccupation } from '../../../service/profile';
+import { IOccupation } from '../../../types/auth';
 
 interface CompleteProfileStep1Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -39,7 +40,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   >();
 
   const { setProfile } = useCompleteProfileStore();
-
+  const [occupationList, setOccupationList] = useState<IOccupation[]>([])
+  useEffect(() => {
+    const getOccupationList = async () => {
+      const { data } = await serviceGetListOccupation();
+      setOccupationList(data);
+    };
+    getOccupationList();
+  }, [])
   const {
     control,
     handleSubmit,
@@ -77,14 +85,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   const handleOccupationPicked = (index: number) => {
     if (index >= 0) {
       setSelectedOccupationIndex(index);
-      setValue('occupation', MOCK_OCCUPATION_SELECT[index].label);
+      setValue('occupation', occupationList[index].name);
     }
     setShowOccupationPicker(false);
   };
 
   const handleSubmitForm = (data: any) => {
-    // TODO: Handle validate form with yup and remove required in form
-    setProfile(data);
+    const IdOccupation = occupationList.find((item) => item.name === data.occupation)?.id
+    setProfile({ ...data, occupation: IdOccupation });
     navigation.navigate('CompleteProfileStep2Screen');
   };
 
@@ -102,8 +110,9 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       />
 
       <SelectPicker
+        title='Occupation'
         show={showOccupationPicker}
-        data={MOCK_OCCUPATION_SELECT}
+        data={occupationList}
         selectedIndex={selectedOccupationIndex}
         onSelect={handleOccupationPicked}
         onCancel={() => {

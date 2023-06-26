@@ -1,41 +1,43 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
   Text,
-  ScrollView,
   FlatList,
-  TouchableNativeFeedback,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { ChallengeProgressCardForComment } from '../../../component/Post/ChallengeProgressCard';
-import Header from '../../../component/common/Header';
+import { Controller, useForm } from 'react-hook-form';
+import { IProgressComment } from '../../../types/progress';
+import { IProgressChallenge } from '../../../types/challenge';
 import { RootStackParamList } from '../../../navigation/navigation.type';
-import NavButton from '../../../component/common/Buttons/NavButton';
-import SingleComment from '../../../component/common/SingleComment';
+
 import {
   createProgressComment,
   getProgressComments,
+  getProgressById,
 } from '../../../service/progress';
-import PostAvatar from '../../../component/common/Avatar/PostAvatar';
-import TextInput from '../../../component/common/Inputs/TextInput';
-import { Controller, useForm } from 'react-hook-form';
+import { sortArrayByCreatedAt } from '../../../utils/common';
+
+import ChallengeProgressCardForComment from '../../../component/Post/ChallengeProgressCard';
+import SingleComment from '../../../component/common/SingleComment';
+
 import ErrorText from '../../../component/common/ErrorText';
 import SendIcon from '../../../component/asset/send-icon.svg';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { IProgressComment } from '../../../types/progress';
+import PostAvatar from '../../../component/common/Avatar/PostAvatar';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
-import { sortArrayByCreatedAt } from '../../../utils/common';
+import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
+import TextInputWithMention from '../../../component/common/Inputs/TextInputWithMention';
+
 interface IProgressCommentScreenProps {
   route: Route<
     'ProgressCommentScreen',
     {
       progressId: string;
-      ownerId: string;
+      ownerId?: string;
+      challengeName: string;
     }
   >;
 }
@@ -44,59 +46,6 @@ interface ICommentInputProps {
   avatar?: string;
   handleOnSubmit: (comment: string) => void;
 }
-
-const item = {
-  id: '1',
-  avatar: 'avata',
-  name: 'Marco Rossi',
-  time: '1 hour ago',
-  stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-  card: {
-    image: 'https://picsum.photos/200/300',
-    title: 'Lose 10kg',
-    builder: 'Marco Rossi',
-  },
-  like: 5,
-  comment: 0,
-  location: '123 Amanda Street',
-};
-
-const COMMENTS = [
-  {
-    id: '1',
-    user: {
-      name: 'Marco Rossi',
-      avatar: 'https://picsum.photos/200/300',
-    },
-    time: '1 hour ago',
-
-    comment:
-      "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    isOwner: true,
-  },
-  {
-    id: '2',
-    user: {
-      name: 'Marco Rossi',
-      avatar: 'https://picsum.photos/200/300',
-    },
-    time: '1 hour ago',
-    comment:
-      "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    isOwner: true,
-  },
-  {
-    id: '3',
-    user: {
-      name: 'Marco Rossi',
-      avatar: 'https://picsum.photos/200/300',
-    },
-    time: '1 hour ago',
-    comment:
-      "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-    isOwner: false,
-  },
-];
 
 const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
   const { t } = useTranslation();
@@ -123,18 +72,16 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <TextInputWithMention
               placeholder={
                 t('progress_comment_screen.comment_input_placeholder') || ''
               }
               placeholderTextColor={'#C5C8D2'}
               rightIcon={value !== '' ? <SendIcon /> : null}
-              onChangeText={onChange}
+              onChange={onChange}
               onBlur={onBlur}
               value={value}
-              className="w-full rounded-xl bg-white px-4 py-5"
               onRightIconPress={handleSubmit(onSubmit)}
-              multiline
             />
           )}
           name={'comment'}
@@ -146,10 +93,29 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
 };
 
 const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
-  const { progressId, ownerId } = route.params;
+  const { progressId, ownerId, challengeName } = route.params;
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [progressCommentScreenLoading, setProgressCommentScreenLoading] =
+    useState<boolean>(true);
   const [comments, setComments] = useState<IProgressComment[]>([]);
+  const [shouldRefreshComments, setShouldRefreshComments] =
+    useState<boolean>(false);
+  const [progressData, setProgressData] = useState<IProgressChallenge>(
+    {} as IProgressChallenge
+  );
+
+  useEffect(() => {
+    if (!progressId) return;
+    const progressDataResponse = getProgressById(progressId);
+    progressDataResponse
+      .then((res) => {
+        setProgressData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -168,16 +134,24 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         );
         setComments(sortedComments);
       }
+      setTimeout(() => {
+        setProgressCommentScreenLoading(false);
+      }, 600);
     } catch (error) {
-      GlobalDialogController.showModal(
-        t('errorMessage:500') || 'Something went wrong. Please try again later!'
-      );
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          (t('error_general_message') as string) || 'Something went wrong',
+        button: 'OK',
+      });
       console.log(error);
     }
   };
 
   const handleRefreshComments = async () => {
+    setShouldRefreshComments(true);
     await loadProgressComments();
+    setShouldRefreshComments(false);
   };
 
   const handleSubmit = async (comment: string) => {
@@ -191,54 +165,65 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         await handleRefreshComments();
       }
     } catch (error) {
-      GlobalDialogController.showModal(
-        t('errorMessage:500') || 'Something went wrong. Please try again later!'
-      );
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          (t('error_general_message') as string) || 'Something went wrong',
+        button: 'OK',
+      });
       console.log(error);
     }
   };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAvoidingView
-        behavior={'padding'}
-        className="flex-1"
-        enabled={Platform.OS === 'ios'}
-        keyboardVerticalOffset={94}
-      >
-        <View className="flex-1">
-          <View className="mb-5 flex-1">
-            <FlatList
-              data={comments}
-              renderItem={({ item, index }) => {
-                return (
-                  <View key={index} className="px-3">
-                    <SingleComment
-                      comment={item}
-                      onDeleteCommentSuccess={handleRefreshComments}
+      {progressCommentScreenLoading && <SkeletonLoadingCommon />}
+      {!progressCommentScreenLoading && (
+        <KeyboardAvoidingView
+          behavior={'padding'}
+          className="flex-1"
+          enabled={Platform.OS === 'ios'}
+          keyboardVerticalOffset={94}
+        >
+          <View className="flex-1">
+            <View className="mb-5 flex-1">
+              <FlatList
+                data={comments}
+                renderItem={({ item, index }) => {
+                  return (
+                    <View key={index} className="px-3">
+                      <SingleComment
+                        comment={item}
+                        onDeleteCommentSuccess={handleRefreshComments}
+                      />
+                    </View>
+                  );
+                }}
+                ListHeaderComponent={
+                  <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
+                    <View className="border-gray-light flex border-b bg-white px-5 py-5">
+                      <Text className="text-h4 font-semibold">
+                        {challengeName || 'Challenge created'}
+                      </Text>
+                    </View>
+                    <ChallengeProgressCardForComment
+                      progress={progressData}
+                      ownerId={ownerId}
+                      shouldRefreshComments={shouldRefreshComments}
                     />
                   </View>
-                );
-              }}
-              ListHeaderComponent={
-                <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
-                  <View className="border-gray-light flex border-b bg-white px-5 py-5">
-                    <Text className="text-h4 font-semibold">
-                      {item.card.title}
-                    </Text>
-                  </View>
-                  <ChallengeProgressCardForComment item={item} />
-                </View>
-              }
-              ListHeaderComponentStyle={{
-                flex: 1,
-              }}
-            />
+                }
+                ListHeaderComponentStyle={{
+                  flex: 1,
+                }}
+              />
+            </View>
+            <View>
+              <CommentInput handleOnSubmit={handleSubmit} />
+            </View>
           </View>
-          <View>
-            <CommentInput handleOnSubmit={handleSubmit} />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      )}
     </SafeAreaView>
   );
 };

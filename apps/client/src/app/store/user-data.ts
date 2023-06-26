@@ -34,6 +34,7 @@ export const useUserProfileStore = create<UserProfileStore>(
       avatar: '',
       hardSkill: [],
       softSkill: [],
+      cover:''
     },
     setUserProfile: (profile) => {
       set({ userProfile: profile });

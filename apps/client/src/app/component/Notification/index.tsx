@@ -1,6 +1,5 @@
 import React from 'react';
-import clsx from 'clsx';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 
 import NotiItem from './NotiItem';
 

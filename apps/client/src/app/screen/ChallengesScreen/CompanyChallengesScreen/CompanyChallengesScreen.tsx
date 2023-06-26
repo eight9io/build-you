@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { SafeAreaView, View, Text, Button, ScrollView } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  Button,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -16,6 +23,12 @@ import { t } from 'i18next';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import IconSearch from '../../../component/common/IconSearch/IconSearch';
+import { IChallenge } from '../../../types/challenge';
+import { useUserProfileStore } from '../../../store/user-data';
+import { useIsFocused } from '@react-navigation/native';
+import httpInstance from '../../../utils/http';
+import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
+import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,7 +37,11 @@ type CompanyChallengesScreenNavigationProp = NativeStackNavigationProp<
   'CompanyChallengesScreen'
 >;
 
-const EmptyChallenges = () => {
+const EmptyChallenges = ({
+  navigation,
+}: {
+  navigation: CompanyChallengesScreenNavigationProp;
+}) => {
   return (
     <View className={clsx('flex h-3/4 flex-col items-center justify-center')}>
       <Text className={clsx('text-lg')}>
@@ -32,7 +49,13 @@ const EmptyChallenges = () => {
       </Text>
       <Text className={clsx('text-lg')}>
         Click
-        <Text className={clsx('text-primary-default')}> Create </Text>
+        <Text
+          className={clsx('text-primary-default')}
+          onPress={() => navigation.navigate('CreateCompanyChallengeScreen')}
+        >
+          {' '}
+          Create{' '}
+        </Text>
         to Create new challenge.
       </Text>
     </View>
@@ -45,46 +68,55 @@ const CompanyChallenges = ({
   navigation: CompanyChallengesScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
+  const [companyChallengesList, setCompanyChallengesList] = useState<
+    IChallenge[]
+  >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused) return;
+    httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
+      res.data.sort((a: IChallenge, b: IChallenge) => {
+        return (
+          new Date(b.achievementTime).getTime() -
+          new Date(a.achievementTime).getTime()
+        );
+      });
+      setCompanyChallengesList(res.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    });
+  }, [isFocused]);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      {/* <MainNavBar
-        title={t('top_nav.challenges')}
-        navigation={navigation}
-        withSearch
-      /> */}
-      <View className={clsx('h-full w-full bg-gray-50')}>
-        {/* <EmptyChallenges /> */}
-
-        <ScrollView className="px-4 pt-4">
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-            isChallengeCompleted
-          />
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-          />
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-            isChallengeCompleted
-          />
-          <ChallengeCard
-            name="Challenge Name"
-            imageSrc="https://picsum.photos/200/300"
-            authorName="Author Name"
-            navigation={navigation}
-          />
-        </ScrollView>
-      </View>
+      {isLoading && <SkeletonLoadingChallengesScreen />}
+      {!isLoading && (
+        <View className={clsx('h-full w-full bg-gray-50 pb-24 ')}>
+          {companyChallengesList.length === 0 ? (
+            <EmptyChallenges navigation={navigation} />
+          ) : (
+            <FlatList
+              className="px-4 pt-4"
+              data={companyChallengesList}
+              renderItem={({ item }: { item: IChallenge }) => (
+                <ChallengeCard
+                  item={item}
+                  imageSrc={item?.image}
+                  navigation={navigation}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -124,6 +156,21 @@ const CompanyChallengesScreen = () => {
           headerLeft: (props) => (
             <NavButton
               text={t('top_nav.challenges') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <CompanyChallengesStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
               onPress={() => navigation.goBack()}
               withBackIcon
             />

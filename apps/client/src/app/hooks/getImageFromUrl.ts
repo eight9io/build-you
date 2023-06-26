@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ImageSourcePropType } from 'react-native';
 
-export const getImageFromUrl = (url: string): [ImageSourcePropType | undefined, boolean, boolean] => {
+export const getImageFromUrl = (url: string | null): [ImageSourcePropType | undefined, boolean, boolean] => {
+  if (!url) return [undefined, false, false];
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [imageSource, setImageSource] = useState<ImageSourcePropType>({} as ImageSourcePropType);

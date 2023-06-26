@@ -41,7 +41,7 @@ httpInstance.interceptors.response.use(
               headers: {
                 ...originalRequest.headers,
                 Authorization: `Bearer ${localStorage.getItem(
-                  '@access_token'
+                  '@auth_token'
                 )}`,
               },
             };

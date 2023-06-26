@@ -90,6 +90,7 @@ export default function DeleteAccountScreen({ navigation }: any) {
                     setIsCompleteProfileStore(null);
                     setAccessToken(null);
 
+
                 }
             })
             .catch((error) => {
@@ -180,8 +181,8 @@ export default function DeleteAccountScreen({ navigation }: any) {
                                                 ? true
                                                 : false
                                         }
-                                        label="Password"
-                                        placeholder="Password"
+                                        label={t('form.3.label') as string}
+                                        placeholder={t('form.3.placeholder') as string}
                                         placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                                         onBlur={onBlur}
                                         onChangeText={(text) => onChange(text)}

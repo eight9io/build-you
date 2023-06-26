@@ -24,8 +24,8 @@ import OtherUserProfileScreen from '../../ProfileScreen/OtherUser/OtherUserProfi
 import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
-import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 import OtherUserProfileDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();

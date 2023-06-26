@@ -162,6 +162,7 @@ const CompanyChallengesScreen = () => {
           ),
         })}
       />
+
       <CompanyChallengesStack.Screen
         name="ProgressCommentScreen"
         component={ProgressCommentScreen}

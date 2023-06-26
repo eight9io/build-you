@@ -285,17 +285,19 @@
       "title": "Password incorrect",
       "description": "Please try again"
     },
+    "unfollow_user": {
+      "title": "Unfollow this account",
+      "description": "You are going to unfollow this account"
+    },
     "cancel": "Cancel",
     "delete": "Delete",
+    "unfollow": "Unfollow",
     "your_goal_required": "Please set your goal",
     "benefits_required": "Please list the benefits",
     "reasons_required": "Please indicate the reasons",
     "time_to_reach_goal_required": "Please select the time",
     "edit_success": "Your challenge has been updated successfully",
-    "err_title_update_img": "Can’t update your image",
-    "err_title_update_profile": "Can’t update your profile",
     "err_title_delete_account": "Can’t delete your account",
-    "err_update_profile": "Something went wrong. Please try again later",
     "err_title_update_img": "Can’t update your image",
     "err_title_update_profile": "Can’t update your profile",
     "err_update_profile": "Something went wrong. Please try again later",
@@ -311,7 +313,7 @@
   },
   "personal_information": {
     "title": "Personal informations",
-    "description": "Your BiuldYou information",
+    "description": "Your BuilddYou information",
     "delete_account": "Delete my account"
   },
   "delete_account": {
@@ -321,6 +323,15 @@
     "confirming_password": "Confirming by typing your password below"
   },
   "company_profile_screen": {
-    "no_challenge": "No challenge at the moment"
-  }
+    "no_challenge": "No challenge at the moment",
+    "no_employee": "No employee at the moment"
+  },
+"empty_followers":"You have no followers at the moment",
+"empty_following":"You follow no one at the moment",
+"empty_employee":{
+  "content_1":"You have no employee at the moment.",
+  "content_2":"Click",
+  "content_3":"Add new employee",
+  "content_4":"to add employee to your company."
+}
 }

@@ -28,7 +28,6 @@ import { useUserProfileStore } from '../../../store/user-data';
 import { useIsFocused } from '@react-navigation/native';
 import httpInstance from '../../../utils/http';
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
-import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -156,21 +155,6 @@ const CompanyChallengesScreen = () => {
           headerLeft: (props) => (
             <NavButton
               text={t('top_nav.challenges') as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <CompanyChallengesStack.Screen
-        name="ProgressCommentScreen"
-        component={ProgressCommentScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => '',
-          headerLeft: (props) => (
-            <NavButton
-              text={t('button.back') as string}
               onPress={() => navigation.goBack()}
               withBackIcon
             />

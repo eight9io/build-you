@@ -130,7 +130,7 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-{/* 
+
             <RootStack.Screen
               name="ProgressCommentScreen"
               component={ProgressCommentScreen}
@@ -145,7 +145,7 @@ export const RootNavigation = () => {
                   />
                 ),
               })}
-            /> */}
+            />
             <RootStack.Screen
               name="SettingsScreen"
               component={SettingsScreen}

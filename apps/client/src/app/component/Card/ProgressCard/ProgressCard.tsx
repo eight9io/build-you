@@ -1,6 +1,10 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useState, FC, useEffect } from 'react';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  StackActions,
+} from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { IUserData } from '../../../types/user';
@@ -101,14 +105,20 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const handleNavigationToComment = () => {
     if (!itemProgressCard?.id || !challengeOwner?.id) {
-      GlobalDialogController.showModal(t('errorMessage:500') as string);
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
       return;
     }
-    navigation.navigate('ProgressCommentScreen', {
+
+    const pushAction = StackActions.push('ProgressCommentScreen', {
       progressId: itemProgressCard.id,
       ownerId: challengeOwner.id,
       challengeName: challengeName || '',
     });
+
+    navigation.dispatch(pushAction);
   };
 
   const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);

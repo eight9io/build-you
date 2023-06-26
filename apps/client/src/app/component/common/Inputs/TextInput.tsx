@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 interface ITextInputProps extends TextInputProps {
+  ref?: any;
   label?: string;
   rightIcon?: ReactNode;
   onPress?: () => void;

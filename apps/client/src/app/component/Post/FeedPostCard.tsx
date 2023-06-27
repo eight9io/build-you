@@ -40,7 +40,7 @@ interface IFeedPostCardProps {
 interface IChallengeImageProps {
   name: string;
   image: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
@@ -95,51 +95,51 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   };
 
   return (
-    <View className="mb-1 flex-1">
-      <View className="bg-gray-50 p-5">
-        <TouchableOpacity
-          className="mb-3 flex-row justify-between"
-          onPress={navigateToUserProfile}
-        >
-          <View className="flex-row">
-            <PostAvatar src="https://picsum.photos/200/300" onPress={navigateToUserProfile} />
-            <View className="ml-2">
-              <Text className="text-h6 font-bold">{name}</Text>
-              <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+    <View>
+      <View className="mb-1 flex-1 relative">
+
+        <View className="bg-gray-50 p-5">
+          <TouchableOpacity
+            className="mb-3 flex-row justify-between"
+            onPress={navigateToUserProfile}
+          >
+            <View className="flex-row">
+              <PostAvatar src="https://picsum.photos/200/300" onPress={navigateToUserProfile} />
+              <View className="ml-2">
+                <Text className="text-h6 font-bold">{name}</Text>
+                <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
-        <ChallengeImage
-          name={card.title}
-          image={card.image}
-        // onPress={
-        //   isToken
-        //     ? () =>
-        //         navigation.navigate('ChallengeDetailScreenViewOnly', {
-        //           challengeId: '1',
-        //         })
-        //     : () => navigation.navigate('LoginScreen')
-        // }
-        />
-        <View className="mt-4 flex-row">
-          <LikeButton progressId={id} />
-          <CommentButton
-            navigationToComment={
-              isToken
-                ? () =>
-                  navigation.navigate('ProgressCommentScreen', {
-                    progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
-                    ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
-                    challengeName: 'Climbing Mont Blanc',
-                  })
-                : () => navigation.navigate('LoginScreen')
-            }
-            progressId={id}
+          </TouchableOpacity>
+          <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
+          <ChallengeImage
+            name={card.title}
+            image={card.image}
+          //   onPress={
+          //     () => navigation.navigate('ChallengeDetailScreenViewOnly', {
+          //       challengeId: '1',
+          //     }
+          // }
           />
+          <View className="mt-4 flex-row">
+            <LikeButton progressId={id} />
+            <CommentButton
+              navigationToComment={
+                () => navigation.navigate('ProgressCommentScreen', {
+                  progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
+                  ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
+                  challengeName: 'Climbing Mont Blanc',
+                })
+              }
+              progressId={id}
+            />
+          </View>
         </View>
+        <View className="bg-gray-light h-2 w-full" />
       </View>
-      <View className="bg-gray-light h-2 w-full" />
+      {!isToken && <TouchableOpacity className=' h-full w-full absolute top-0 left-0 z-10 '
+        onPress={() => navigation.navigate('LoginScreen')}
+      ></TouchableOpacity>}
     </View>
   );
 };

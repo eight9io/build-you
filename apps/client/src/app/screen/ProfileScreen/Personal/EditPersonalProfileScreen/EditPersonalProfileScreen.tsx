@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { IHardSkill, IHardSkillProps } from '../../../../types/user';
 
 import Warning from '../../../../component/asset/warning.svg';
@@ -188,204 +188,211 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-      <View className="  h-full rounded-t-xl bg-white ">
-        <ConfirmDialog
-          title={t('dialog.err_title_update_profile') as string}
-          description={
-            t('dialog.err_update_profile') as string
-          }
-          isVisible={isErrDialog}
-          onClosed={() => setIsErrDialog(false)}
-          closeButtonLabel={t('close') || ''}
-        />
-        <AddHardSkills
-          setIsShowAddHardSkillModal={setIsShowAddHardSkillModal}
-          isVisible={isShowAddHardSkillModal}
-          onClose={() => setIsShowAddHardSkillModal(false)}
-          setArrayMyHardSkills={setArrayMyHardSkills}
-          arrayMyHardSkills={arrayMyHardSkills}
-        />
-        <DateTimePicker2
-          shouldMinus16Years
-          selectedDate={selectedDate}
-          setSelectedDate={handleDatePicked}
-          setShowDateTimePicker={setShowDateTimePicker}
-          showDateTimePicker={showDateTimePicker}
-          maximumDate={dayjs().subtract(16, 'years').startOf('day').toDate()}
-          minimumDate={dayjs().subtract(100, 'years').startOf('day').toDate()}
-        />
 
-        <SelectPicker
-          title='Occupation'
-          show={showOccupationPicker}
-          data={occupationList}
-          selectedIndex={selectedOccupationIndex}
-          onSelect={handleOccupationPicked}
-          onCancel={() => {
-            setShowOccupationPicker(false);
-          }}
-        />
 
-        {userData && (
-          <ScrollView className=" h-full w-full px-4 pt-8 ">
-            <View>
-              <Controller
-                control={control}
-                name="name"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col">
-                    <TextInput
-                      label="First Name"
-                      placeholder={'Enter your first name'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                    />
-                    {errors.name && (
-                      <View className="flex flex-row pt-2">
-                        <Warning />
-                        <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.name.message}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                )}
+      <KeyboardAwareScrollView >
+        <View className="  h-full rounded-t-xl bg-white ">
+          <ConfirmDialog
+            title={t('dialog.err_title_update_profile') as string}
+            description={
+              t('dialog.err_update_profile') as string
+            }
+            isVisible={isErrDialog}
+            onClosed={() => setIsErrDialog(false)}
+            closeButtonLabel={t('close') || ''}
+          />
+          <AddHardSkills
+            setIsShowAddHardSkillModal={setIsShowAddHardSkillModal}
+            isVisible={isShowAddHardSkillModal}
+            onClose={() => setIsShowAddHardSkillModal(false)}
+            setArrayMyHardSkills={setArrayMyHardSkills}
+            arrayMyHardSkills={arrayMyHardSkills}
+          />
+          <DateTimePicker2
+            shouldMinus16Years
+            selectedDate={selectedDate}
+            setSelectedDate={handleDatePicked}
+            setShowDateTimePicker={setShowDateTimePicker}
+            showDateTimePicker={showDateTimePicker}
+            maximumDate={dayjs().subtract(16, 'years').startOf('day').toDate()}
+            minimumDate={dayjs().subtract(100, 'years').startOf('day').toDate()}
+          />
+
+          <SelectPicker
+            title='Occupation'
+            show={showOccupationPicker}
+            data={occupationList}
+            selectedIndex={selectedOccupationIndex}
+            onSelect={handleOccupationPicked}
+            onCancel={() => {
+              setShowOccupationPicker(false);
+            }}
+          />
+
+          {userData && (
+            <View className=" h-full w-full px-4 pt-8 ">
+              <View>
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label="First Name"
+                        placeholder={'Enter your first name'}
+                        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                      {errors.name && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.name.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
+
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="surname"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label="Last Name"
+                        placeholder={'Enter your first name'}
+                        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                      {errors.surname && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.surname.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="birth"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label="Birthday"
+                        placeholder={'Enter your birth day'}
+                        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                        rightIcon={
+                          <TouchableOpacity
+                            onPress={() => setShowDateTimePicker(true)}
+                          >
+                            <CalendarIcon />
+                          </TouchableOpacity>
+                        }
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value && dayjs(value).format('DD/MM/YYYY')}
+                        // textAlignVertical="top"
+                        editable={false}
+                        onPress={() => setShowDateTimePicker(true)}
+                        className="text-black-default"
+                      />
+                      {errors.birth && !birth && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.birth.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  name="occupation"
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label="Occupation"
+                        placeholder={'Enter your occupation'}
+                        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        onPress={() => setShowOccupationPicker(true)}
+                        value={value}
+                      />
+                      {errors.occupation && !occupation && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.occupation.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="bio"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label="Biography"
+                        placeholder={'Your biography'}
+                        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        multiline={true}
+                        numberOfLines={4}
+                      // className="h-32"
+                      />
+                    </View>
+                  )}
+                />
+              </View>
+
+              <HardSkillSection
+                setOpenModal={() => setIsShowAddHardSkillModal(true)}
+                hardSkill={arrayMyHardSkills || []}
+                setArrayMyHardSkills={setArrayMyHardSkills}
+              />
+
+              <Button
+                title="Update"
+                containerClassName=" bg-primary-default mt-10"
+                textClassName="text-white text-md leading-6"
+                onPress={handleSubmit(onSubmit)}
               />
             </View>
+          )}
+          {isLoading && (
+            <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
+          )}
+        </View>
+      </KeyboardAwareScrollView>
 
-            <View className="pt-3">
-              <Controller
-                control={control}
-                name="surname"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col">
-                    <TextInput
-                      label="Last Name"
-                      placeholder={'Enter your first name'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                    />
-                    {errors.surname && (
-                      <View className="flex flex-row pt-2">
-                        <Warning />
-                        <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.surname.message}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                )}
-              />
-            </View>
-            <View className="pt-3">
-              <Controller
-                control={control}
-                name="birth"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col">
-                    <TextInput
-                      label="Birthday"
-                      placeholder={'Enter your birth day'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      rightIcon={
-                        <TouchableOpacity
-                          onPress={() => setShowDateTimePicker(true)}
-                        >
-                          <CalendarIcon />
-                        </TouchableOpacity>
-                      }
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value && dayjs(value).format('DD/MM/YYYY')}
-                      // textAlignVertical="top"
-                      editable={false}
-                      onPress={() => setShowDateTimePicker(true)}
-                      className="text-black-default"
-                    />
-                    {errors.birth && !birth && (
-                      <View className="flex flex-row pt-2">
-                        <Warning />
-                        <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.birth.message}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                )}
-              />
-            </View>
-            <View className="pt-3">
-              <Controller
-                name="occupation"
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col">
-                    <TextInput
-                      label="Occupation"
-                      placeholder={'Enter your occupation'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      onPress={() => setShowOccupationPicker(true)}
-                      value={value}
-                    />
-                    {errors.occupation && !occupation && (
-                      <View className="flex flex-row pt-2">
-                        <Warning />
-                        <Text className="pl-1 text-sm font-normal text-red-500">
-                          {errors.occupation.message}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                )}
-              />
-            </View>
-            <View className="pt-3">
-              <Controller
-                control={control}
-                name="bio"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="flex flex-col">
-                    <TextInput
-                      label="Biography"
-                      placeholder={'Your biography'}
-                      placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      multiline={true}
-                      numberOfLines={4}
-                    // className="h-32"
-                    />
-                  </View>
-                )}
-              />
-            </View>
 
-            <HardSkillSection
-              setOpenModal={() => setIsShowAddHardSkillModal(true)}
-              hardSkill={arrayMyHardSkills || []}
-              setArrayMyHardSkills={setArrayMyHardSkills}
-            />
-
-            <Button
-              title="Update"
-              containerClassName=" bg-primary-default my-10"
-              textClassName="text-white text-md leading-6"
-              onPress={handleSubmit(onSubmit)}
-            />
-          </ScrollView>
-        )}
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
-        )}
-      </View>
     </SafeAreaView>
+
   );
 };
 

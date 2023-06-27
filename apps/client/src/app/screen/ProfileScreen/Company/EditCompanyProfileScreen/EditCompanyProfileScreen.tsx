@@ -4,7 +4,7 @@ import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { IHardSkill, IHardSkillProps } from '../../../../types/user';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Warning from '../../../../component/asset/warning.svg';
 import TextInput from '../../../../component/common/Inputs/TextInput';
 
@@ -75,7 +75,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           closeButtonLabel={t('close') || ''}
         />
         {userData && (
-          <ScrollView className=" h-full w-full px-4 pt-8 ">
+
+          <KeyboardAwareScrollView className=" h-full w-full px-4 pt-8 ">
             <View>
               <Controller
                 control={control}
@@ -131,7 +132,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               textClassName="text-white text-md leading-6"
               onPress={handleSubmit(onSubmit)}
             />
-          </ScrollView>
+          </KeyboardAwareScrollView>
         )}
         {isLoading && (
           <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />

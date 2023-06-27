@@ -125,10 +125,10 @@ const ProgressCard: FC<IProgressCardProps> = ({
   };
 
   return (
-    <View className="mb-1 flex-1 bg-gray-50 p-5 ">
+    <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
         <View className="flex flex-row">
-          <ProgressCardAvatar src="https://picsum.photos/200/300" />
+          <ProgressCardAvatar src={userData?.avatar} />
           <View className="ml-2">
             <Text className="text-h6 font-bold">
               {userData?.name} {userData?.surname}{' '}
@@ -138,9 +138,11 @@ const ProgressCard: FC<IProgressCardProps> = ({
                 {timeDiff}{' '}
               </Text>
 
-              <Text className="text-gray-dark text-xs font-light ">
-                <IconDot fill={'#7D7E80'} /> 123 Amanda Street
-              </Text>
+              {itemProgressCard?.location && (
+                <Text className="text-gray-dark text-xs font-light ">
+                  <IconDot fill={'#7D7E80'} /> {itemProgressCard?.location}
+                </Text>
+              )}
             </View>
           </View>
         </View>

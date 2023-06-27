@@ -18,6 +18,7 @@ import CompleteProfileFinish from './CompleteProfileFinish';
 import Header from '../../../component/common/Header';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,7 +33,11 @@ interface ICompleteProfileProps {
 
 const CompleteProfile: React.FC<ICompleteProfileProps> = ({ component }) => {
   return (
-    <SafeAreaView className="bg-white">{component && component()}</SafeAreaView>
+    <SafeAreaView className="flex-1 bg-white">
+      <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+        {component && component()}
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 

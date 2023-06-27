@@ -1,4 +1,5 @@
 import { View, Text, Modal, SafeAreaView, ScrollView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller, set } from 'react-hook-form';
@@ -148,8 +149,8 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
 
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
-      <SafeAreaView className="bg-white">
-        <ScrollView>
+      <SafeAreaView className="flex-1 bg-white">
+        <KeyboardAwareScrollView>
           <ConfirmDialog
             title={isRequestSuccess ? 'Success' : 'Error'}
             description={
@@ -318,7 +319,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
               </View>
             </View>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </SafeAreaView>
     </Modal>

@@ -53,7 +53,7 @@ const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <View className="h-full">
+      <View className="h-full pb-[100px]">
         <ProfileComponent
           userData={userData}
           navigation={navigation}

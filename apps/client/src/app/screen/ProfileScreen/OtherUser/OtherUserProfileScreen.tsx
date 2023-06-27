@@ -44,6 +44,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const followingList = getFollowingList()
+  console.log("🚀 ~ file: OtherUserProfileScreen.tsx:47 ~ followingList:", followingList)
   const isFollowing = followingList && followingList.find((item) => item.id === otherUserData?.id)
   const [isShowModalUnfollow, setIsShowModalUnfollow] = useState(false);
   const handleFllowClicked = async () => {
@@ -61,6 +62,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       await fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
       setIsShowModalUnfollow(false)
     } catch (error) {
+      console.log("🚀 ~ file: OtherUserProfileScreen.tsx:65 ~ handleUnfollowClicked ~ error:", error)
       GlobalDialogController.showModal(t('errorMessage:500') as string)
     }
 

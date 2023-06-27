@@ -11,8 +11,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AxiosResponse } from 'axios';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useUserProfileStore } from '../../store/user-data';
 import { IUploadMediaWithId } from '../../types/media';
 import { getRandomId } from '../../utils/common';
@@ -213,104 +212,108 @@ export const AddNewChallengeProgressModal: FC<
       visible={isVisible}
       className="h-full"
     >
-      <SafeAreaView className=" bg-white">
-        <ConfirmDialog
-          title={isRequestSuccess ? 'Success' : 'Error'}
-          description={
-            isRequestSuccess
-              ? 'Your progress has been created successfully'
-              : 'Something went wrong. Please try again later.'
-          }
-          isVisible={isShowModal}
-          onClosed={handleCloseModal}
-          closeButtonLabel="Got it"
-        />
-        <View className="mx-4  h-full rounded-t-xl bg-white">
-          <Header
-            title={t('challenge_detail_screen.new_progress') as string}
-            rightBtn={t('challenge_detail_screen.new_progress_post') as string}
-            leftBtn="Cancel"
-            onLeftBtnPress={onClose}
-            onRightBtnPress={handleSubmit(onSubmit)}
-            containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
+      <SafeAreaView className="flex-1 bg-white">
+        <KeyboardAwareScrollView>
+          <ConfirmDialog
+            title={isRequestSuccess ? 'Success' : 'Error'}
+            description={
+              isRequestSuccess
+                ? 'Your progress has been created successfully'
+                : 'Something went wrong. Please try again later.'
+            }
+            isVisible={isShowModal}
+            onClosed={handleCloseModal}
+            closeButtonLabel="Got it"
           />
-
-          <View className="flex flex-col justify-between pt-4">
-            <CustomTextInput
-              title="Caption"
-              placeholderClassName="h-32"
-              placeholder="What do you achieve?"
-              control={control}
-              errors={errors.caption}
+          <View className="mx-4  h-full rounded-t-xl bg-white">
+            <Header
+              title={t('challenge_detail_screen.new_progress') as string}
+              rightBtn={
+                t('challenge_detail_screen.new_progress_post') as string
+              }
+              leftBtn="Cancel"
+              onLeftBtnPress={onClose}
+              onRightBtnPress={handleSubmit(onSubmit)}
+              containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
             />
 
-            {selectedMedia && (
-              <RenderSelectedMedia
-                screen={screen}
-                selectedMedia={selectedMedia}
-                setSelectedMedia={setSelectedMedia}
-                onRemoveItem={(medias) => {
-                  if (!medias.length) {
-                    setError('media', {
-                      message: 'Please upload images or video',
-                      type: 'required',
-                    });
-                  }
-                }}
-              />
-            )}
-
-            <View>
-              <View className="">
-                <ImagePicker
-                  onImagesSelected={(images) => {
-                    setSelectedMedia((prev: IUploadMediaWithId[]) => {
-                      const imagesSelected: IUploadMediaWithId[] = images.map(
-                        (uri) => {
-                          const id = getRandomId();
-                          setValue('media', uri, { shouldValidate: true });
-                          return {
-                            id,
-                            uri: uri,
-                          };
-                        }
-                      );
-
-                      if (prev.length + imagesSelected.length > 3) {
-                        return prev;
-                      }
-                      return [...prev, ...imagesSelected];
-                    });
-                  }}
-                  allowsMultipleSelection
-                  isSelectedImage={isSelectedImage}
-                  setIsSelectedImage={setIsSelectedImage}
-                  isDisabled={shouldDisableAddImage}
-                />
-              </View>
-
-              <View className="flex flex-col">
-                <VideoPicker
-                  setExternalVideo={(video) => {
-                    setSelectedMedia(video);
-                    setValue('media', video, { shouldValidate: true });
-                  }}
-                  isSelectedImage={isSelectedImage}
-                  setIsSelectedImage={setIsSelectedImage}
-                />
-              </View>
-              {errors?.media && <ErrorText message={errors.media.message} />}
-            </View>
-
-            <View className="flex flex-col pt-4">
-              <LocationInput
+            <View className="flex flex-col justify-between pt-4">
+              <CustomTextInput
+                title="Caption"
+                placeholderClassName="h-32"
+                placeholder="What do you achieve?"
                 control={control}
-                errors={errors.location}
-                setFormValue={setValue}
+                errors={errors.caption}
               />
+
+              {selectedMedia && (
+                <RenderSelectedMedia
+                  screen={screen}
+                  selectedMedia={selectedMedia}
+                  setSelectedMedia={setSelectedMedia}
+                  onRemoveItem={(medias) => {
+                    if (!medias.length) {
+                      setError('media', {
+                        message: 'Please upload images or video',
+                        type: 'required',
+                      });
+                    }
+                  }}
+                />
+              )}
+
+              <View>
+                <View className="">
+                  <ImagePicker
+                    onImagesSelected={(images) => {
+                      setSelectedMedia((prev: IUploadMediaWithId[]) => {
+                        const imagesSelected: IUploadMediaWithId[] = images.map(
+                          (uri) => {
+                            const id = getRandomId();
+                            setValue('media', uri, { shouldValidate: true });
+                            return {
+                              id,
+                              uri: uri,
+                            };
+                          }
+                        );
+
+                        if (prev.length + imagesSelected.length > 3) {
+                          return prev;
+                        }
+                        return [...prev, ...imagesSelected];
+                      });
+                    }}
+                    allowsMultipleSelection
+                    isSelectedImage={isSelectedImage}
+                    setIsSelectedImage={setIsSelectedImage}
+                    isDisabled={shouldDisableAddImage}
+                  />
+                </View>
+
+                <View className="flex flex-col">
+                  <VideoPicker
+                    setExternalVideo={(video) => {
+                      setSelectedMedia(video);
+                      setValue('media', video, { shouldValidate: true });
+                    }}
+                    isSelectedImage={isSelectedImage}
+                    setIsSelectedImage={setIsSelectedImage}
+                  />
+                </View>
+                {errors?.media && <ErrorText message={errors.media.message} />}
+              </View>
+
+              <View className="flex flex-col pt-4">
+                <LocationInput
+                  control={control}
+                  errors={errors.location}
+                  setFormValue={setValue}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
         {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </SafeAreaView>
     </Modal>

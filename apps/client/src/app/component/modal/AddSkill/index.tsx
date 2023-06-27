@@ -2,6 +2,7 @@ import { View, Text, Modal } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import httpInstance from '../../../utils/http';
 
@@ -101,53 +102,55 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
-        <AddEmojiModal
-          isVisible={showEmojiModal}
-          onClose={onCloseEmojiModal}
-          setExternalSelectedEmoji={setSelectedEmoji}
-          setSelectEmojiError={setSelectEmojiError}
-        />
-        <Header
-          title="Add skill"
-          leftBtn={<Close fill={'black'} />}
-          onLeftBtnPress={onCloseAddSkillModal}
-        />
-        <View className="px-4">
-          <View className="py-4">
-            <Text className="text-gray-dark text-md">
-              Select the emoji and enter the skill name
-            </Text>
-          </View>
-
-          <View className="py-2">
-            <AddEmojiButton
-              selectedEmoji={selectedEmoji}
-              triggerFunction={() => setShowEmojiModal(true)}
-              selectEmojiError={selectEmojiError}
-            />
-          </View>
-          <View className="py-8">
-            <InlineTextInput
-              title="Skill"
-              containerClassName="pl-6"
-              placeholder="Enter your skill name"
-              control={control}
-              errors={errors}
-              showError={skillNameError}
-            />
-          </View>
-        </View>
-
-        <View className="absolute bottom-12 left-0 h-12 w-full px-4">
-          <Button
-            title="Save"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-            onPress={handleSave}
+      <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
+        <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
+          <AddEmojiModal
+            isVisible={showEmojiModal}
+            onClose={onCloseEmojiModal}
+            setExternalSelectedEmoji={setSelectedEmoji}
+            setSelectEmojiError={setSelectEmojiError}
           />
+          <Header
+            title="Add skill"
+            leftBtn={<Close fill={'black'} />}
+            onLeftBtnPress={onCloseAddSkillModal}
+          />
+          <View className="px-4">
+            <View className="py-4">
+              <Text className="text-gray-dark text-md">
+                Select the emoji and enter the skill name
+              </Text>
+            </View>
+
+            <View className="py-2">
+              <AddEmojiButton
+                selectedEmoji={selectedEmoji}
+                triggerFunction={() => setShowEmojiModal(true)}
+                selectEmojiError={selectEmojiError}
+              />
+            </View>
+            <View className="py-8">
+              <InlineTextInput
+                title="Skill"
+                containerClassName="pl-6"
+                placeholder="Enter your skill name"
+                control={control}
+                errors={errors}
+                showError={skillNameError}
+              />
+            </View>
+          </View>
+
+          <View className="absolute bottom-12 left-0 h-12 w-full px-4">
+            <Button
+              title="Save"
+              containerClassName="bg-primary-default flex-1"
+              textClassName="text-white"
+              onPress={handleSave}
+            />
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </Modal>
   );
 };

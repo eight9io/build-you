@@ -24,6 +24,7 @@ import { serviceRegister } from '../../service/auth';
 import Loading from '../../component/common/Loading';
 import { err_server, errorMessage } from '../../utils/statusCode';
 import { ScrollView } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 type FormData = {
   email: string;
   password: string;
@@ -83,7 +84,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   const [hidePassword, setHidePassword] = useState(true);
   return (
     <SafeAreaView className=" h-full bg-white ">
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">
@@ -243,7 +244,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             setModalVisible={setModalVisible}
           />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
       {isLoading && (
         <Loading
           containerClassName="absolute top-0 left-0 h-full"

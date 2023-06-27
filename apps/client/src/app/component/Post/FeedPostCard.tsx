@@ -19,28 +19,17 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../navigation/navigation.type';
 import { useAuthStore } from '../../store/auth-store';
 import { useTranslation } from 'react-i18next';
-
-interface IFeedPostCardProps {
-  itemFeedPostCard: {
-    id: string;
-    name: string;
-    time: string;
-    stt: string;
-    card: {
-      image: string;
-      title: string;
-      builder: string;
-    };
-    like: number;
-    comment: number;
-    avatar: string;
-  };
-}
+import { IFeedPostProps } from '../../types/common';
+import { getTimeDiffToNow } from '../../utils/time';
 
 interface IChallengeImageProps {
   name: string;
-  image: string;
+  image: string | string[] | null;
   onPress?: () => void;
+}
+
+interface IFeedPostCardProps {
+  itemFeedPostCard: IFeedPostProps;
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
@@ -53,7 +42,9 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
       <View className={clsx('relative w-full')}>
         <Image
           className={clsx('aspect-square w-full rounded-t-xl')}
-          source={{ uri: image }}
+          source={{
+            uri: image as string,
+          }}
         />
         <View
           className={clsx(
@@ -73,7 +64,7 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 };
 
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
-  itemFeedPostCard: { id, name, time, stt, card, like, comment, avatar },
+  itemFeedPostCard: { id, caption, user, image, updatedAt },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
@@ -95,37 +86,41 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   };
 
   return (
-    <View>
-      <View className="mb-1 flex-1 relative">
-
+    <View className="relative w-full">
+      <View className="relative mb-1">
         <View className="bg-gray-50 p-5">
           <TouchableOpacity
             className="mb-3 flex-row justify-between"
             onPress={navigateToUserProfile}
           >
             <View className="flex-row">
-              <PostAvatar src="https://picsum.photos/200/300" onPress={navigateToUserProfile} />
+              <PostAvatar
+                src="https://picsum.photos/200/300"
+                onPress={navigateToUserProfile}
+              />
               <View className="ml-2">
-                <Text className="text-h6 font-bold">{name}</Text>
-                <Text className="text-gray-dark text-xs font-light ">{time}</Text>
+                <Text className="text-h6 font-bold">{user.name} {user.surname}</Text>
+                <Text className="text-gray-dark text-xs font-light ">
+                  {getTimeDiffToNow(updatedAt)}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
-          <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
+          <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
           <ChallengeImage
-            name={card.title}
-            image={card.image}
-          //   onPress={
-          //     () => navigation.navigate('ChallengeDetailScreenViewOnly', {
-          //       challengeId: '1',
-          //     }
-          // }
+            name={caption}
+            image={image}
+            //   onPress={
+            //     () => navigation.navigate('ChallengeDetailScreenViewOnly', {
+            //       challengeId: '1',
+            //     }
+            // }
           />
           <View className="mt-4 flex-row">
             <LikeButton progressId={id} />
             <CommentButton
-              navigationToComment={
-                () => navigation.navigate('ProgressCommentScreen', {
+              navigationToComment={() =>
+                navigation.navigate('ProgressCommentScreen', {
                   progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
                   ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
                   challengeName: 'Climbing Mont Blanc',
@@ -137,9 +132,12 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
         </View>
         <View className="bg-gray-light h-2 w-full" />
       </View>
-      {!isToken && <TouchableOpacity className=' h-full w-full absolute top-0 left-0 z-10 '
-        onPress={() => navigation.navigate('LoginScreen')}
-      ></TouchableOpacity>}
+      {!isToken && (
+        <TouchableOpacity
+          className=" absolute left-0 top-0 z-10 h-full w-full "
+          onPress={() => navigation.navigate('LoginScreen')}
+        ></TouchableOpacity>
+      )}
     </View>
   );
 };

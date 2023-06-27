@@ -48,7 +48,6 @@ const ChallengeProgressCardForComment: React.FC<
   shouldRefreshComments,
 }) => {
   const progressOwnerData = ownerId && useGetOtherUserData(ownerId);
-  const extractedImageUrls = getSeperateImageUrls(image);
 
   return (
     <View className="mb-1 flex-1">
@@ -80,7 +79,7 @@ const ChallengeProgressCardForComment: React.FC<
 
         {image && (
           <View className="aspect-square w-full">
-            <ImageSwiper imageSrc={extractedImageUrls} />
+            <ImageSwiper imageSrc={image} />
           </View>
         )}
         <View className="mt-4 flex-row">

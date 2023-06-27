@@ -147,6 +147,7 @@ export const AddNewChallengeProgressModal: FC<
   }, [selectedMedia]);
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     if (!userProfile || !userProfile.id) return;
     const payload = {
       user: userProfile.id,
@@ -162,31 +163,31 @@ export const AddNewChallengeProgressModal: FC<
     ) {
       const progressId = createProgressResponse.data.id;
       if (isSelectedImage) {
-        const addImageProgressResponse = (await updateProgressImage(
-          progressId,
-          selectedMedia
-        )) as AxiosResponse;
-        if (addImageProgressResponse.status === 200 || 201) {
-          setIsRequestSuccess(true);
-          setIsShowModal(true);
-        } else {
-          setIsRequestSuccess(false);
-          setIsShowModal(true);
-          deleteProgress(progressId);
-        }
+        await updateProgressImage(progressId, selectedMedia)
+          .then((res) => {
+            if (res.status === 200 || 201) {
+              setIsRequestSuccess(true);
+              setIsShowModal(true);
+            }
+          })
+          .catch((_) => {
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
+            deleteProgress(progressId);
+          });
       } else {
-        const addVideoProgressResponse = (await updateProgressVideo(
-          progressId,
-          selectedMedia[0]
-        )) as AxiosResponse;
-        if (addVideoProgressResponse.status === 200 || 201) {
-          setIsRequestSuccess(true);
-          setIsShowModal(true);
-        } else {
-          setIsRequestSuccess(false);
-          setIsShowModal(true);
-          deleteProgress(progressId);
-        }
+        await updateProgressVideo(progressId, selectedMedia[0])
+          .then((res) => {
+            if (res.status === 200 || 201) {
+              setIsRequestSuccess(true);
+              setIsShowModal(true);
+            }
+          })
+          .catch((_) => {
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
+            deleteProgress(progressId);
+          });
       }
     } else {
       setIsRequestSuccess(false);
@@ -212,10 +213,7 @@ export const AddNewChallengeProgressModal: FC<
       visible={isVisible}
       className="h-full"
     >
-      <SafeAreaView className="relative bg-white">
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 z-10" />
-        )}
+      <SafeAreaView className=" bg-white">
         <ConfirmDialog
           title={isRequestSuccess ? 'Success' : 'Error'}
           description={
@@ -313,6 +311,7 @@ export const AddNewChallengeProgressModal: FC<
             </View>
           </View>
         </View>
+        {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </SafeAreaView>
     </Modal>
   );

@@ -221,26 +221,28 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
     // TODO: handle error when null id
     if (!userData?.id) return;
-    uploadNewVideo(profile?.video);
-    httpInstance
-      .put(`/user/update/${userData.id}`, {
-        name: profile?.name,
-        surname: profile?.surname,
-        birth: profile?.birth,
-        occupation: profile?.occupation,
-        bio: profile?.biography,
-        softSkill: softSkills,
-        hardSkill: profile.skills,
-        company: '',
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          navigation.navigate('CompleteProfileFinishScreen');
-        }
-      })
-      .catch((err) => {
-        console.error('upload err', err);
-      });
+    await Promise.all([
+      uploadNewVideo(profile?.video),
+      httpInstance
+        .put(`/user/update/${userData.id}`, {
+          name: profile?.name,
+          surname: profile?.surname,
+          birth: profile?.birth,
+          occupation: profile?.occupation,
+          bio: profile?.biography,
+          softSkill: softSkills,
+          hardSkill: profile.skills,
+          company: '',
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            navigation.navigate('CompleteProfileFinishScreen');
+          }
+        })
+        .catch((err) => {
+          console.error('upload err', err);
+        }),
+    ])
   };
 
   const addCompetencedSkill = (skill: IFormValueInput | undefined) => {

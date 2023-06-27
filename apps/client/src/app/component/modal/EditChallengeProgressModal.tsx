@@ -1,5 +1,5 @@
 import { View, Modal, SafeAreaView } from 'react-native';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -39,13 +39,22 @@ export const EditChallengeProgressModal: FC<
     control,
     reset,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      caption: progress.caption,
+      caption: progress?.caption,
     },
     resolver: yupResolver(EditProgressValidationSchema()),
+    reValidateMode: 'onChange',
   });
+
+  useEffect(() => {
+    if (progress) {
+      setValue('caption', progress?.caption);
+    }
+  }
+  , [progress]);
 
   const onSubmit = async (data: IUpdateProgress) => {
     setIsLoading(true);

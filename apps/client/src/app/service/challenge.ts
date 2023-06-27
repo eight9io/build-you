@@ -23,12 +23,10 @@ export const updateChallengeImage = (
     type: `image/${extension}`,
   } as any);
 
-  return retryRequest(() => {
-    return http.post(`/challenge/image/${params.id}`, imageData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+  return http.post(`/challenge/image/${params.id}`, imageData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
 };
 

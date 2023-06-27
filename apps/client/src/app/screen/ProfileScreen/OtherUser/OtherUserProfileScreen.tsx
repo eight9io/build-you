@@ -167,7 +167,7 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
 
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <ScrollView className="h-full">
+      <ScrollView className="h-full pb-[100px]">
         <OtherUserProfileComponent userId={userId} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>

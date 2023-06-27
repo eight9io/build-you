@@ -17,13 +17,24 @@ import IconSearch from '../component/common/IconSearch/IconSearch';
 
 import ShareIcon from '../../../assets/svg/share.svg';
 import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
-import { useFollowingListStore, useUserProfileStore } from '../store/user-data';
-import { serviceGetListFollowing } from '../service/profile';
+import { serviceGetFeed } from '../service/feed';
+
 import { useGetListFollowing } from '../hooks/useGetUser';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
+import { set } from 'react-native-reanimated';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
+
+interface IFeedDataProps {}
+
 export const HomeFeed = () => {
+  const [feedData, setFeedData] = React.useState<any>([]);
+  const [feedIndex, setFeedIndex] = React.useState<number>(1);
+  const [feedPage, setFeedPage] = React.useState<number>(1);
+  const [totalPage, setTotalPage] = React.useState<number>(1);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
+
   const arrayPost = [
     {
       id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
@@ -70,6 +81,28 @@ export const HomeFeed = () => {
   ];
   useGetListFollowing();
 
+  useEffect(() => {
+    const getFeed = async () => {
+      await serviceGetFeed({
+        page: feedIndex,
+        take: 20,
+      }).then((res) => {
+        setFeedData(res);
+      });
+      // setFeedData(res);
+    };
+    getFeed();
+  }, []);
+
+  const getNewFeed = async () => {
+    await serviceGetFeed({
+      page: feedIndex + 1,
+      take: 10,
+    }).then((res) => {
+      setFeedData((prev: any) => [...prev, ...res.data]);
+    });
+    setFeedIndex((prev) => prev + 1);
+  };
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
@@ -78,6 +111,8 @@ export const HomeFeed = () => {
           data={arrayPost}
           renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
           keyExtractor={(item) => item.id as unknown as string}
+          onEndReached={getNewFeed}
+          onEndReachedThreshold={0.6}
         />
         <View className="h-16" />
       </View>

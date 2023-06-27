@@ -21,7 +21,7 @@ import { serviceGetFeed } from '../service/feed';
 
 import { useGetListFollowing } from '../hooks/useGetUser';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
-import { set } from 'react-native-reanimated';
+import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,84 +35,62 @@ export const HomeFeed = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
 
-  const arrayPost = [
-    {
-      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
-      avatar: 'avata',
-      name: 'Marco Rossi',
-      time: '1 hour ago',
-      stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-      card: {
-        image: 'https://picsum.photos/200/300',
-        title: 'Climbing Mont Blanc',
-        builder: 'Marco Rossi',
-      },
-      like: 5,
-      comment: 0,
-    },
-    {
-      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771f',
-      avatar: 'avata',
-      name: 'Marco Rossi22',
-      time: '1 hour ago',
-      stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-      card: {
-        image: 'https://picsum.photos/200/300',
-        title: 'Climbing Mont Blanc',
-        builder: 'Marco Rossi',
-      },
-      like: 0,
-      comment: 0,
-    },
-    {
-      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771a',
-      avatar: 'avata',
-      name: 'Marco Rossi 333',
-      time: '1 hour ago',
-      stt: "I finally bought the equipment for my challenge. Mont Blanc I'm coming!!! 🧗🏻‍♂️",
-      card: {
-        image: 'https://picsum.photos/200/300',
-        title: 'Climbing Mont Blanc',
-        builder: 'Marco Rossi',
-      },
-      like: 0,
-      comment: 10,
-    },
-  ];
   useGetListFollowing();
 
-  useEffect(() => {
-    const getFeed = async () => {
-      await serviceGetFeed({
-        page: feedIndex,
-        take: 20,
-      }).then((res) => {
-        setFeedData(res);
+  const getInitialFeeds = async () => {
+    await serviceGetFeed({
+      page: 1,
+      take: 5,
+    })
+      .then((res) => {
+        if (res.data?.data) {
+          setFeedData(res.data.data);
+          setFeedIndex(5);
+        }
+      })
+      .catch((err) => {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message:
+            t('error_general_message') ||
+            'Something went wrong. Please try again later!',
+        });
       });
-      // setFeedData(res);
-    };
-    getFeed();
+  };
+
+  useEffect(() => {
+    getInitialFeeds();
   }, []);
 
   const getNewFeed = async () => {
     await serviceGetFeed({
-      page: feedIndex + 1,
-      take: 10,
+      page: 1,
+      take: feedIndex + 5,
     }).then((res) => {
-      setFeedData((prev: any) => [...prev, ...res.data]);
+      if (res?.data?.data) {
+        setFeedData((prev: any) => [...res.data.data]);
+      }
     });
-    setFeedIndex((prev) => prev + 1);
+    setFeedIndex((prev) => prev + 5);
+  };
+
+  const handleScroll = async () => {
+    setIsRefreshing(true);
+    await getInitialFeeds();
+    setIsRefreshing(false);
   };
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View className={clsx('flex h-full w-full flex-col bg-gray-50 ')}>
+      <View className={clsx('h-full w-full bg-gray-50')}>
         <FlatList
-          data={arrayPost}
+          data={feedData}
           renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
           keyExtractor={(item) => item.id as unknown as string}
           onEndReached={getNewFeed}
-          onEndReachedThreshold={0.6}
+          onEndReachedThreshold={0.7}
+          onRefresh={handleScroll}
+          refreshing={isRefreshing}
         />
         <View className="h-16" />
       </View>

@@ -125,7 +125,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   };
 
   return (
-    <View className="mb-1 flex-1 bg-gray-50 p-5 ">
+    <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
         <View className="flex flex-row">
           <ProgressCardAvatar src={userData?.avatar} />

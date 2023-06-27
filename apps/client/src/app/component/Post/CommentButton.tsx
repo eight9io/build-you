@@ -19,7 +19,6 @@ const CommentButton: FC<ICommentButtonProps> = ({
   shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
-
   useEffect(() => {
     if (!progressId) return;
     (async () => {

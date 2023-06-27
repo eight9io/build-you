@@ -21,7 +21,7 @@ export const deleteProgress = (id: string) => {
   return httpInstance.delete(`/challenge/progress/delete/${id}`);
 };
 
-export const updateProgressImage = (
+export const updateProgressImage = async (
   progressId: string,
   image: IUploadMediaWithId[]
 ) => {
@@ -38,17 +38,17 @@ export const updateProgressImage = (
     imageForm.append('files', imageItemToUpload as any);
   });
 
-  return retryRequest(() => {
-    return httpInstance.post(
-      `/challenge/progress/image/${progressId}`,
-      imageForm,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-  });
+  const uploadingImage = await httpInstance.post(
+    `/challenge/progress/image/${progressId}`,
+    imageForm,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+
+  return uploadingImage;
 };
 
 export const updateProgressVideo = (
@@ -61,17 +61,15 @@ export const updateProgressVideo = (
     name: `${video.id}.mp4`,
     type: `video/mp4`,
   } as any);
-  return retryRequest(() => {
-    return httpInstance.post(
-      `/challenge/progress/video/${progressId}`,
-      videoData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-  });
+  return httpInstance.post(
+    `/challenge/progress/video/${progressId}`,
+    videoData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
 };
 
 export const getProgressById = (id: string) => {

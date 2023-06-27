@@ -38,29 +38,29 @@ interface IProgressCardProps {
   };
   challengeName: string;
   userData: IUserData | null;
-  onEditProgress?: () => void;
+  setProgressIndexToUpdate?: any;
   isChallengeCompleted?: boolean;
   itemProgressCard: IProgressChallenge;
-  onDeleteProgressSuccess?: () => void;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsShowEditModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProgressCard: FC<IProgressCardProps> = ({
   userData,
   challengeName,
-  onEditProgress,
   challengeOwner,
+  setShouldRefresh,
   itemProgressCard,
-  onDeleteProgressSuccess,
+  setIsShowEditModal,
+  setProgressIndexToUpdate,
   isChallengeCompleted = false,
 }) => {
-  const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState('');
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const timeDiff = getTimeDiffToNow(itemProgressCard.createdAt);
 
-  const [errorMessage, setErrorMessage] = useState('');
   const {
     isVisible: isAckModalVisible,
     openModal: openAckModal,
@@ -70,38 +70,15 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const progressOptions = [
     {
       text: 'Edit',
-      onPress: () => setIsShowEditModal(true),
+      onPress: () => {
+        setIsShowEditModal(true), setProgressIndexToUpdate();
+      },
     },
     {
       text: 'Delete',
       onPress: () => setIsShowDeleteModal(true),
     },
   ];
-
-  const handleConfirmEditChallengeProgress = async () => {
-    setIsShowEditModal(false); // Close the edit modal
-    onEditProgress && onEditProgress(); // Navigate to the challenge progresses screen to refresh the list
-  };
-
-  const handleCloseAckModal = () => {
-    closeAckModal();
-    onDeleteProgressSuccess && onDeleteProgressSuccess(); // Navigate to the challenge progresses screen => delete it and refresh the list
-  };
-
-  const handleConfirmDeleteChallengeProgress = async () => {
-    setIsShowDeleteModal(false); // Close the delete confirm modal
-    setErrorMessage('');
-    try {
-      const res = await deleteProgress(itemProgressCard.id);
-      if (res.status === 200) {
-        openAckModal();
-      } else {
-        setErrorMessage(t('errorMessage:500') || '');
-      }
-    } catch (error) {
-      setErrorMessage(t('errorMessage:500') || '');
-    }
-  };
 
   const handleNavigationToComment = () => {
     if (!itemProgressCard?.id || !challengeOwner?.id) {
@@ -123,14 +100,32 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);
 
+  const handleConfirmDeleteChallengeProgress = async () => {
+    setIsShowDeleteModal(false); // Close the delete confirm modal
+    setErrorMessage('');
+    try {
+      const res = await deleteProgress(itemProgressCard.id);
+      if (res.status === 200) {
+        openAckModal();
+      } else {
+        setErrorMessage(t('errorMessage:500') || '');
+      }
+    } catch (error) {
+      setErrorMessage(t('errorMessage:500') || '');
+    }
+  };
+
+  const handleDeleteProgressSuccess = () => {
+    setShouldRefresh(true);
+  };
+
+  const handleCloseAckModal = () => {
+    closeAckModal();
+    handleDeleteProgressSuccess(); // Navigate to the challenge progresses screen => delete it and refresh the list
+  };
+
   return (
     <View className="mb-1 flex-1 bg-gray-50 p-5 ">
-      <EditChallengeProgressModal
-        progress={itemProgressCard}
-        isVisible={isShowEditModal}
-        onClose={() => setIsShowEditModal(false)}
-        onConfirm={handleConfirmEditChallengeProgress}
-      />
       <View className="mb-3 flex flex-row items-center justify-between ">
         <View className="flex flex-row">
           <ProgressCardAvatar src="https://picsum.photos/200/300" />
@@ -155,14 +150,14 @@ const ProgressCard: FC<IProgressCardProps> = ({
         />
       </View>
       <Text className=" text-md mb-3 font-normal leading-5">
-        {itemProgressCard.caption}
+        {itemProgressCard?.caption}
       </Text>
       {extractedImageUrls && (
         <View className="aspect-square w-full">
           <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
       )}
-      {itemProgressCard.video && <VideoPlayer src={itemProgressCard.video} />}
+      {itemProgressCard?.video && <VideoPlayer src={itemProgressCard.video} />}
 
       <View className="mt-4 flex-row">
         <LikeButton progressId={itemProgressCard.id} />

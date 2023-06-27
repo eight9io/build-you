@@ -7,8 +7,9 @@ export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
         .then((res) => {
             setFollowingList(res.data)
         })
+
         .catch((err) => {
-            if (err.response.status == 403) setFollowingList([])
+            if (err.response.status == 404) setFollowingList([])
         });
 
 };
@@ -17,12 +18,12 @@ export const fetchListEmployee = (id: any, setEmployeeList: any) => {
     serviceGetEmployeeList(id)
         .then((res) => {
             setEmployeeList(res.data)
-            console.log("🚀 ~ file: profile.ts:21 ~ .then ~ res.data:", res.data)
+            // console.log("🚀 ~ file: profile.ts:21 ~ .then ~ res.data:", res.data)
         })
 
         .catch((err) => {
-            console.log("🚀 ~ file: profile.ts:22 ~ fetchListEmployee ~ err:", err)
-            if (err.response.status == 403) setEmployeeList([])
+            // console.log("🚀 ~ file: profile.ts:22 ~ fetchListEmployee ~ err:", err)
+            if (err.response.status == 404) setEmployeeList([])
         });
 
 };

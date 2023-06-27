@@ -12,6 +12,7 @@ import AddNewChallengeProgressModal from '../../../../component/modal/AddNewChal
 import httpInstance from '../../../../utils/http';
 
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
+import EditChallengeProgressModal from '../../../../component/modal/EditChallengeProgressModal';
 
 interface IProgressTabProps {
   shouldRefresh: boolean;
@@ -30,8 +31,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [localProgressData, setLocalProgressData] = useState<
     IProgressChallenge[]
   >([]);
+  const [progressIndexToUpdate, setProgressIndexToUpdate] =
+    useState<number>(-1);
   const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
+  const [isShowEditModal, setIsShowEditModal] = useState(false);
 
   const { t } = useTranslation();
 
@@ -85,7 +89,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         setProgressLoading(false);
       }, 800);
     }
-  }, [shouldRefetch, shouldRefresh]);
+  }, [shouldRefetch]);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -94,9 +98,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setShouldRefresh(true);
   };
 
-  const handleDeleteProgressSuccess = () => {
-    setShouldRefresh(true);
-  };
   const AddNewChallengeProgressButton = () => {
     return (
       <View className="pt-4">
@@ -127,24 +128,39 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     );
   };
 
+  const handleConfirmEditChallengeProgress = async () => {
+    setIsShowEditModal(false); // Close the edit modal
+    handleEditProgress(); // Navigate to the challenge progresses screen to refresh the list
+  };
+
   return (
     <View className="h-full flex-1">
+      {progressIndexToUpdate > -1 && (
+        <EditChallengeProgressModal
+          progress={localProgressData[progressIndexToUpdate]}
+          isVisible={isShowEditModal}
+          onClose={() => setIsShowEditModal(false)}
+          onConfirm={handleConfirmEditChallengeProgress}
+        />
+      )}
       {progressLoading && <SkeletonLoadingCommon />}
       {!progressLoading && localProgressData.length > 0 && (
         <FlatList
           data={localProgressData}
+          keyExtractor={(item) => item.id}
           ListHeaderComponent={
             !isOtherUserProfile ? <AddNewChallengeProgressButton /> : null
           }
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <ProgressCard
               userData={userData}
               itemProgressCard={item}
               challengeName={challengeData.goal}
-              onEditProgress={handleEditProgress}
+              setShouldRefresh={setShouldRefresh}
+              setIsShowEditModal={setIsShowEditModal}
               challengeOwner={challengeData?.owner[0]}
               isChallengeCompleted={challengeData.status === 'closed'}
-              onDeleteProgressSuccess={handleDeleteProgressSuccess}
+              setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />
           )}
           // contentContainerStyle={{ paddingBottom: 300 }}

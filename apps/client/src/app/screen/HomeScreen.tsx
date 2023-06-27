@@ -40,7 +40,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771f',
       avatar: 'avata',
       name: 'Marco Rossi22',
       time: '1 hour ago',
@@ -54,7 +54,7 @@ export const HomeFeed = () => {
       comment: 0,
     },
     {
-      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771e',
+      id: '4387ef8e-7a1d-44a8-bcd0-d55f74b3771a',
       avatar: 'avata',
       name: 'Marco Rossi 333',
       time: '1 hour ago',

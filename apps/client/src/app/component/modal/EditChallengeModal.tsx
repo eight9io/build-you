@@ -2,6 +2,7 @@ import { View, Modal, SafeAreaView } from 'react-native';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '../common/Header';
 import CloseIcon from '../asset/close.svg';
 import TextInput from '../common/Inputs/TextInput';
@@ -104,8 +105,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       statusBarTranslucent={isLoading}
       visible={visible}
     >
-      <ScrollView>
-        <SafeAreaView>
+      <SafeAreaView className='flex-1'>
+        <KeyboardAwareScrollView>
           <View className="mx-4 flex h-full rounded-t-xl bg-white">
             <View>
               <Header
@@ -234,8 +235,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
               </View>
             </View>
           </View>
-        </SafeAreaView>
-      </ScrollView>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
       <ConfirmDialog
         title={(!errorMessage ? t('success') : t('error')) || ''}
         description={

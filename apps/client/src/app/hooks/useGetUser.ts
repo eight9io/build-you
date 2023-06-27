@@ -65,7 +65,7 @@ export const useGetListFollowing = () => {
         setFollowingList(res.data)
       })
       .catch((err) => {
-        if (err.response.status == 403) setFollowingList([])
+        if (err.response.status == 404) setFollowingList([])
       });
 
   };

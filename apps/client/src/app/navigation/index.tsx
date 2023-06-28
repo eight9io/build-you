@@ -1,10 +1,19 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+  useNavigation,
+} from '@react-navigation/native';
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import * as SplashScreen from 'expo-splash-screen';
-
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+import * as TaskManager from 'expo-task-manager';
 import { RootStackParamList } from './navigation.type';
 
 import Header from '../component/common/Header';
@@ -36,8 +45,23 @@ import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 import BottomNavBarWithoutLogin from '../component/BottomNavBar/BottomNavBarWithoutLogin';
 import GlobalDialog from '../component/common/Dialog/GlobalDialog';
+import {
+  handleNewNotification,
+  handleUserTapOnNotification,
+  registerForPushNotificationsAsync,
+} from '../utils/notification.util';
+import { useNotificationStore } from '../store/notification';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
+const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true, // Set to true to display notifications in foreground, issue: https://github.com/expo/expo/issues/20351
+    shouldSetBadge: false,
+  }),
+});
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -49,6 +73,15 @@ export const RootNavigation = () => {
   const { setAccessToken, getAccessToken } = useAuthStore();
   const { setIsCompleteProfileStore, getIsCompleteProfileStore } =
     useIsCompleteProfileStore();
+  const { setPushToken, setHasNewNotification } = useNotificationStore();
+  const notificationListener = useRef<Notifications.Subscription>();
+  const responseListener = useRef<Notifications.Subscription>();
+  const navigationRef =
+    useRef<NavigationContainerRef<RootStackParamList>>(null);
+  TaskManager.defineTask(
+    BACKGROUND_NOTIFICATION_TASK,
+    ({ data, error, executionInfo }) => handleNewNotification(data.notification)
+  );
 
   const logined = getAccessToken();
 
@@ -59,17 +92,29 @@ export const RootNavigation = () => {
   }, []);
 
   useEffect(() => {
-    if (logined) {
+    if (logined && navigationRef.current) {
       setIsCompleteProfileStore(null);
       checkUserCompleProfileAndCompany(
         setIsCompleteProfileStore,
         setIsMainAppLoading
       );
+      initNotification(navigationRef.current);
     } else if (!logined && logined !== null) {
       setIsCompleteProfileStore(false);
       setIsMainAppLoading(false);
     }
-  }, [logined]);
+
+    return () => {
+      // cleanup the listener and task registry
+      if (notificationListener.current)
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      if (responseListener.current)
+        Notifications.removeNotificationSubscription(responseListener.current);
+      Notifications.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+    };
+  }, [logined, navigationRef.current]);
 
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
@@ -82,8 +127,30 @@ export const RootNavigation = () => {
     }
   }, [isMainAppLoading, isCompleteProfile]);
 
+  const initNotification = (
+    navigation: NavigationContainerRef<RootStackParamList>
+  ) => {
+    // register task to run whenever is received while the app is in the background
+    Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) setPushToken(token);
+    });
+
+    // listener triggered whenever a notification is received while the app is in the foreground
+    Notifications.addNotificationReceivedListener((notification) => {
+      console.log('notification: ', notification.request.content.data);
+      setHasNewNotification(true);
+    });
+
+    // listener triggered whenever a user taps on a notification
+    Notifications.addNotificationResponseReceivedListener((response) => {
+      handleUserTapOnNotification(response, navigation);
+      setHasNewNotification(false); // reset the new notification flag
+    });
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <GlobalDialog />
       <RootStack.Navigator
         screenOptions={{

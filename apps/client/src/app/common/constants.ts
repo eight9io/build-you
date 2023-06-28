@@ -15,3 +15,10 @@ export const GOOGLE_MAP_API = {
   API_KEY: process.env.NX_GOOGLE_MAP_API_KEY || '',
   DEFAULT_RADIUS: 1500, // unit: meters
 }
+
+export const NOTIFICATION_TYPES = {
+  NEW_CHALLENGE_FROM_FOLLOWING: 'new_challenge_from_following',
+  NEW_COMMENT: 'new_comment',
+  NEW_MENTION: 'new_mention',
+  NEW_FOLLOWER: 'new_follower',
+}

@@ -69,7 +69,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
 
   return (
     <ScrollView>
-      <View className="justify-content: space-between pt-4 mb-[120px] ">
+      <View className="justify-content: space-between pt-4 mb-[100px] ">
         {videoSrc && videoSrc !== null && (
           <View className={clsx(' flex flex-col pr-4')}>
             <View className={clsx('py-6')}>

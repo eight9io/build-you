@@ -7,9 +7,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
+import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { IProgressComment } from '../../../types/progress';
 import { IProgressChallenge } from '../../../types/challenge';
 import { RootStackParamList } from '../../../navigation/navigation.type';
@@ -181,14 +183,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     <SafeAreaView className="flex-1 bg-white">
       {progressCommentScreenLoading && <SkeletonLoadingCommon />}
       {!progressCommentScreenLoading && (
-        <KeyboardAvoidingView
-          behavior={'padding'}
-          className="flex-1"
-          enabled={Platform.OS === 'ios'}
-          keyboardVerticalOffset={94}
+        <KeyboardAwareScrollView
         >
           <View className="relative flex-1">
-            <View className="mb-5 ">
+            <View className="mb-[146px] ">
               <FlatList
                 data={comments}
                 renderItem={({ item, index }) => {
@@ -220,11 +218,12 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                 }}
               />
             </View>
-            <View className={`absolute bottom-0 w-full ${isAndroid ? "bottom-[38px]" : "bottom-[72px]"}`}>
+
+            <View className={`absolute bottom-0 w-full ${isAndroid ? "bottom-[38px]" : "bottom-[67px]"}`}>
               <CommentInput handleOnSubmit={handleSubmit} />
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       )}
     </SafeAreaView>
   );

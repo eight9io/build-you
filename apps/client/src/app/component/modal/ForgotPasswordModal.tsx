@@ -24,6 +24,7 @@ import IconEyeOff from './asset/eye-off.svg';
 import Loading from '../common/Loading';
 import { serviceChangePassword } from '../../service/auth';
 import { err_server, errorMessage } from '../../utils/statusCode';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -97,20 +98,20 @@ export default function ForgotPasswordModal({
       presentationStyle="pageSheet"
       statusBarTranslucent={isLoading}
     >
-      <View className="h-full bg-white">
-        <ScrollView>
-          <View className="mx-4 h-full pt-5">
-            <Header
-              title={t('forgot_password.title') as string}
-              leftBtn={
-                <NavButton
-                  text={t('button.back') as string}
-                  onPress={() => setModalVisible(false)}
-                  withBackIcon
-                />
-              }
+      <View className="h-full bg-white mx-1">
+        <Header
+          containerStyle='mx-4'
+          title={t('forgot_password.title') as string}
+          leftBtn={
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => setModalVisible(false)}
+              withBackIcon
             />
-
+          }
+        />
+        <KeyboardAwareScrollView>
+          <View className="h-full pt-5">
             <SafeAreaView>
               <View className="flex-column h-full justify-between bg-white px-6  pb-14">
                 <View>
@@ -205,9 +206,9 @@ export default function ForgotPasswordModal({
                     })}
                   </View>
                 </View>
-                <View>
+                <View className="pt-10 pb-10">
                   <Button
-                    containerClassName="  bg-primary-default flex-none px-1 "
+                    containerClassName="bg-primary-default flex-none px-1 "
                     textClassName="line-[30px] text-center text-md font-medium text-white"
                     title={t('reset_password')}
                     onPress={handleSubmit(onSubmit)}
@@ -216,7 +217,7 @@ export default function ForgotPasswordModal({
               </View>
             </SafeAreaView>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         {isLoading && (
           <Loading
             containerClassName="absolute top-0 left-0"

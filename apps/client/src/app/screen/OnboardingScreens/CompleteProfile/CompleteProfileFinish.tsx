@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import { View, Text } from 'react-native';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 
-import BuildYouLogo from './asset/buildYou_logo.svg';
-import StarLogo from './asset/auto_awesome.svg';
+import BuildYouLogo from  '../../../common/svg/buildYou_logo.svg'
+import StarLogo from '../../../common/svg/auto_awesome.svg';
 import { useIsCompleteProfileStore } from '../../../store/is-complete-profile';
 
 interface CompleteProfileFinishProps {
@@ -15,8 +16,8 @@ interface CompleteProfileFinishProps {
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
   navigation,
 }) => {
-
   const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+  const { t } = useTranslation();
 
   setTimeout(() => {
     setIsCompleteProfileStore(true);
@@ -32,8 +33,8 @@ const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
 
         <View>
           <Text className="text-gray-dark text-md mx-12 pt-4 text-center font-normal">
-            Thank you for your information. We're personalizing your
-            experience...
+            {t('form_onboarding.finished_screen.title') ||
+              "Thank you for your information. We're personalizing your experience..."}
           </Text>
         </View>
       </View>

@@ -11,7 +11,6 @@ import {
 } from '../service/profile';
 import { useAuthStore } from '../store/auth-store';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
-import { useNavigation } from '@react-navigation/native';
 
 export const useGetUserData = (setLoading?: any) => {
   const { setUserProfile } = useUserProfileStore();
@@ -38,17 +37,14 @@ export const useGetUserData = (setLoading?: any) => {
 
 export const useGetOtherUserData = (
   userId: string | null | undefined,
-  setOtherUserData: any
+  setOtherUserData?: any
 ) => {
   if (!userId || userId === null) return null;
-
-  const navigation = useNavigation();
 
   const fetchingUserData = async () => {
     await serviceGetOtherUserData(userId)
       .then((res) => {
         setOtherUserData(res.data);
-        console.log('res', res.data);
       })
       .catch((err) => {
         GlobalDialogController.showModal({

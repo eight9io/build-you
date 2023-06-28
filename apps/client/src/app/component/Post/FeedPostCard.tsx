@@ -74,7 +74,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
 
   const navigateToUserProfile = () => {
     if (!user?.id) {
-
       GlobalDialogController.showModal({
         title: 'Error',
         message:
@@ -84,6 +83,24 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       return;
     }
     navigation.navigate('OtherUserProfileScreen', { userId: user?.id });
+  };
+
+  const navigateToProgressComment = () => {
+    if (!user?.id || !caption || !id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_general_message') ||
+          'Something went wrong. Please try again later!',
+      });
+      return;
+    }
+
+    navigation.navigate('ProgressCommentScreen', {
+      progressId: id,
+      ownerId: user?.id,
+      challengeName: 'Climbing Mont Blanc',
+    });
   };
   return (
     <View className="relative w-full">
@@ -122,13 +139,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           <View className="mt-4 flex-row">
             <LikeButton progressId={id} />
             <CommentButton
-              navigationToComment={() =>
-                navigation.navigate('ProgressCommentScreen', {
-                  progressId: '0bcfa0c4-c847-41f4-859b-df4fbdf3617a',
-                  ownerId: '95ba5302-950c-4c7b-ab61-1da316ff0617',
-                  challengeName: 'Climbing Mont Blanc',
-                })
-              }
+              navigationToComment={navigateToProgressComment}
               progressId={id}
             />
           </View>

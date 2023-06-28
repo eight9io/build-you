@@ -47,7 +47,8 @@ const ChallengeProgressCardForComment: React.FC<
   ownerId,
   shouldRefreshComments,
 }) => {
-  const progressOwnerData = ownerId && useGetOtherUserData(ownerId);
+  const [otherData, setOtherData] = useState<any>();
+  ownerId && useGetOtherUserData(ownerId, setOtherData);
 
   return (
     <View className="mb-1 flex-1">
@@ -57,7 +58,7 @@ const ChallengeProgressCardForComment: React.FC<
             <PostAvatar src="https://picsum.photos/200/300" />
             <View className="ml-2">
               <Text className="text-h6 font-bold">
-                {progressOwnerData?.name} {progressOwnerData?.surname}
+                {otherData?.name} {otherData?.surname}
               </Text>
 
               <View className="flex-row gap-3">
@@ -73,7 +74,7 @@ const ChallengeProgressCardForComment: React.FC<
           </View>
         </View>
 
-        <View className='py-2 pb-3'>
+        <View className="py-2 pb-3">
           <Text className="text-md font-normal">{caption}</Text>
         </View>
 

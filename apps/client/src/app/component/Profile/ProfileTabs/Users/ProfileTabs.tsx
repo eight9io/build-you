@@ -25,7 +25,6 @@ const ProfileTabs: FC = () => {
   const { getFollowingList } = useFollowingListStore()
 
   const [followerList, setFollowerList] = useState([])
-  console.log("🚀 ~ file: ProfileTabs.tsx:28 ~ followerList:", followerList)
 
 
   const isFocused = useIsFocused();

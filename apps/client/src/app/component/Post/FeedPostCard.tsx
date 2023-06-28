@@ -73,7 +73,8 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   const { t } = useTranslation();
 
   const navigateToUserProfile = () => {
-    if (!id) {
+    if (!user?.id) {
+
       GlobalDialogController.showModal({
         title: 'Error',
         message:
@@ -82,9 +83,8 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       });
       return;
     }
-    navigation.navigate('OtherUserProfileScreen', { userId: id });
+    navigation.navigate('OtherUserProfileScreen', { userId: user?.id });
   };
-
   return (
     <View className="relative w-full">
       <View className="relative mb-1">
@@ -99,7 +99,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
                 onPress={navigateToUserProfile}
               />
               <View className="ml-2">
-                <Text className="text-h6 font-bold">{user.name} {user.surname}</Text>
+                <Text className="text-h6 font-bold">{user?.name} {user?.surname}</Text>
                 <Text className="text-gray-dark text-xs font-light ">
                   {getTimeDiffToNow(updatedAt)}
                 </Text>
@@ -110,11 +110,11 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           <ChallengeImage
             name={caption}
             image={image}
-            //   onPress={
-            //     () => navigation.navigate('ChallengeDetailScreenViewOnly', {
-            //       challengeId: '1',
-            //     }
-            // }
+          //   onPress={
+          //     () => navigation.navigate('ChallengeDetailScreenViewOnly', {
+          //       challengeId: '1',
+          //     }
+          // }
           />
           <View className="mt-4 flex-row">
             <LikeButton progressId={id} />

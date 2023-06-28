@@ -19,7 +19,7 @@ interface ISkillsProps {
 const Skills: FC<ISkillsProps> = ({ skills }) => {
   return (
     <ScrollView>
-      <View className={clsx('flex w-full flex-col pr-4 pt-4')}>
+      <View className={clsx('flex w-full flex-col pr-4 pt-4 mb-[100px]')}>
         <Text className={clsx('text-h6 font-medium')}>Self-declared</Text>
 
         <View className={clsx('mt-4 flex flex-col')}>

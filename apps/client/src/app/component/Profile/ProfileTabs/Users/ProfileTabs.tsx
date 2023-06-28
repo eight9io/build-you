@@ -25,6 +25,7 @@ const ProfileTabs: FC = () => {
   const { getFollowingList } = useFollowingListStore()
 
   const [followerList, setFollowerList] = useState([])
+  console.log("🚀 ~ file: ProfileTabs.tsx:28 ~ followerList:", followerList)
 
 
   const isFocused = useIsFocused();
@@ -45,7 +46,7 @@ const ProfileTabs: FC = () => {
   ];
 
   return (
-    <View className={clsx('flex-1  bg-gray-50')}>
+    <View className={clsx('flex-1  bg-gray-50 ')}>
       <TabViewFlatlist
         titles={titles}
         children={[

@@ -52,7 +52,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       await serviceFollow(otherUserData?.id)
       fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
     } catch (error) {
-      GlobalDialogController.showModal(t('errorMessage:500') as string)
+      GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
     }
   };
 
@@ -62,8 +62,9 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       await fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
       setIsShowModalUnfollow(false)
     } catch (error) {
-      console.log("🚀 ~ file: OtherUserProfileScreen.tsx:65 ~ handleUnfollowClicked ~ error:", error)
-      GlobalDialogController.showModal(t('errorMessage:500') as string)
+
+      GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
+      GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
     }
 
   };
@@ -130,6 +131,7 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
   const { t } = useTranslation();
 
   const otherUserData = useGetOtherUserData(userId)
+
   if (otherUserData && isObjectEmpty(otherUserData)) {
     return (
       <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
@@ -137,7 +139,7 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
       </View>
     );
   } else if (!otherUserData) {
-    GlobalDialogController.showModal(t('errorMessage:500') as string)
+    GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
     setTimeout(() => {
       navigation.goBack();
     }, 2000);
@@ -165,9 +167,10 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { userId } = route.params;
 
+
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <ScrollView className="h-full pb-[100px]">
+      <ScrollView className="h-full ">
         <OtherUserProfileComponent userId={userId} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>

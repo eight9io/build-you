@@ -66,6 +66,7 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   itemFeedPostCard: { id, caption, user, image, updatedAt },
 }) => {
+  console.log("🚀 ~ file: FeedPostCard.tsx:69 ~ user:", user)
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
 

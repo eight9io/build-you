@@ -13,7 +13,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="mr-2 flex-1">
+    <View className="mr-2 flex-1 mb-[100px]">
       {followers.length > 0 && <FlatList
         data={followers}
         className="pt-4"
@@ -33,7 +33,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
                 className="h-10 w-10 rounded-full"
               />
               <Text className="text-basic-black text-base font-semibold">
-                {item.name}
+                {item.name}  {item.surname}
               </Text>
             </TouchableOpacity>
           );

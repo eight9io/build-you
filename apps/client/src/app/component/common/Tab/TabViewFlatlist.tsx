@@ -44,7 +44,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   return (
-    <View className="flex-1 h-full">
+    <View className="flex-1 h-full ">
       <View className="bg-white">
         <FlatList
           horizontal

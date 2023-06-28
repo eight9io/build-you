@@ -5,7 +5,7 @@ import i18n from '../../../../i18n/i18n';
 import TabView from '../../../../component/common/Tab/TabView';
 import DescriptionTab from './DescriptionTab';
 import ProgressTab from './ProgressTab';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import CheckCircle from './assets/check_circle.svg';
 
@@ -30,6 +30,12 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const [index, setIndex] = useState(0);
   const { goal } = challengeData;
   const statusColor = getChallengeStatusColor(challengeData?.status);
+
+  useEffect(() => {
+    // refresh when user switch tab
+    setShouldRefresh(true);
+  }, [index]);
+
   return (
     <View className="flex h-full flex-col bg-white py-2 pb-16">
       <View className="px-4">

@@ -10,7 +10,6 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import { isObjectEmpty } from '../../../utils/common';
 
-
 import CoverImage from '../../../component/Profile/CoverImage/CoverImage';
 import ProfileAvatar from '../../../component/common/Avatar/ProfileAvatar/ProfileAvatar';
 import { OutlineButton } from '../../../component/common/Buttons/Button';
@@ -19,7 +18,10 @@ import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/Sk
 import DefaultAvatar from '../../../component/asset/default-avatar.svg';
 import OtherUserProfileTabs from '../../../component/Profile/ProfileTabs/OtherUser/OtherUserProfileTabs';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
-import { useFollowingListStore, useUserProfileStore } from '../../../store/user-data';
+import {
+  useFollowingListStore,
+  useUserProfileStore,
+} from '../../../store/user-data';
 import { serviceFollow, serviceUnfollow } from '../../../service/profile';
 import { useGetOtherUserData } from '../../../hooks/useGetUser';
 import ConfirmDialog from '../../../component/common/Dialog/ConfirmDialog';
@@ -36,37 +38,43 @@ interface ITopSectionOtherProfileProps {
 
 const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   otherUserData,
-
-
 }) => {
   const { t } = useTranslation();
-  const { getFollowingList, setFollowingList } = useFollowingListStore()
+  const { getFollowingList, setFollowingList } = useFollowingListStore();
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
-  const followingList = getFollowingList()
-  console.log("🚀 ~ file: OtherUserProfileScreen.tsx:47 ~ followingList:", followingList)
-  const isFollowing = followingList && followingList.find((item) => item.id === otherUserData?.id)
+  const followingList = getFollowingList();
+  const isFollowing =
+    followingList &&
+    followingList.find((item) => item.id === otherUserData?.id);
   const [isShowModalUnfollow, setIsShowModalUnfollow] = useState(false);
   const handleFllowClicked = async () => {
     try {
-      await serviceFollow(otherUserData?.id)
-      fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
+      await serviceFollow(otherUserData?.id);
+      fetchNewFollowingData(userProfile?.id, (res: any) =>
+        setFollowingList(res)
+      );
     } catch (error) {
-      GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
     }
   };
 
   const handleUnfollowClicked = async () => {
     try {
-      await serviceUnfollow(otherUserData?.id)
-      await fetchNewFollowingData(userProfile?.id, (res: any) => setFollowingList(res))
-      setIsShowModalUnfollow(false)
+      await serviceUnfollow(otherUserData?.id);
+      await fetchNewFollowingData(userProfile?.id, (res: any) =>
+        setFollowingList(res)
+      );
+      setIsShowModalUnfollow(false);
     } catch (error) {
-
-      GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
-      GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
     }
-
   };
 
   return (
@@ -80,18 +88,11 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
         confirmButtonLabel={t('dialog.unfollow') || ''}
         onConfirm={() => handleUnfollowClicked()}
       />
-      <CoverImage
-        isOtherUser
-        src={otherUserData?.cover as string}
-      />
+      <CoverImage isOtherUser src={otherUserData?.cover as string} />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         {otherUserData?.avatar ? (
-          <ProfileAvatar
-            isOtherUser
-            src={otherUserData?.avatar as string}
-
-          />
+          <ProfileAvatar isOtherUser src={otherUserData?.avatar as string} />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
             <DefaultAvatar />
@@ -120,18 +121,21 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
 };
 
 interface IOtherUserProfileScreenProps {
-  route: Route<'OtherUserProfileScreen', { userId: string, isFollowing?: boolean, isFollower?: boolean }>;
+  route: Route<
+    'OtherUserProfileScreen',
+    { userId: string; isFollowing?: boolean; isFollower?: boolean }
+  >;
 }
 
 const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
   userId,
   navigation,
-
 }) => {
+  const [otherUserData, setOtherUserData] = useState<any | undefined>({});
+
   const { t } = useTranslation();
 
-  const otherUserData = useGetOtherUserData(userId)
-
+  useGetOtherUserData(userId, setOtherUserData);
   if (otherUserData && isObjectEmpty(otherUserData)) {
     return (
       <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
@@ -139,24 +143,27 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
       </View>
     );
   } else if (!otherUserData) {
-    GlobalDialogController.showModal({ message: t('errorMessage:500') as string })
+    GlobalDialogController.showModal({
+      title: 'Error',
+      message: t('errorMessage:500') as string,
+    });
     setTimeout(() => {
       navigation.goBack();
     }, 2000);
   }
   return (
     <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
-      {otherUserData &&
+      {otherUserData && (
         <View>
-          <TopSectionOtherProfile
-            otherUserData={otherUserData}
-          />
+          <TopSectionOtherProfile otherUserData={otherUserData} />
           <View className={clsx('bg-white px-4 pb-3 pt-12')}>
             <Text className={clsx('text-[26px] font-medium')}>
               {otherUserData?.name} {otherUserData?.surname}
             </Text>
           </View>
-          <OtherUserProfileTabs otherUserData={otherUserData} /></View>}
+          <OtherUserProfileTabs otherUserData={otherUserData} />
+        </View>
+      )}
     </View>
   );
 };

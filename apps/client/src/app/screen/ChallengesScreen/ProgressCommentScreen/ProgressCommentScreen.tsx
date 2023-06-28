@@ -6,6 +6,8 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
@@ -107,6 +109,28 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     {} as IProgressChallenge
   );
 
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const isAndroid = Platform.OS === 'android';
 
   useEffect(() => {
@@ -183,7 +207,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     <SafeAreaView className="flex-1 bg-white">
       {progressCommentScreenLoading && <SkeletonLoadingCommon />}
       {!progressCommentScreenLoading && (
-        <KeyboardAwareScrollView
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={0}
+          style={{ flex: 1 }}
         >
           <View className="relative flex-1">
             <View className="mb-[146px] ">
@@ -216,14 +243,21 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                 ListHeaderComponentStyle={{
                   flex: 1,
                 }}
+                ListFooterComponent={
+                  <View className="h-20" style={{ flex: 1 }} />
+                }
               />
             </View>
 
-            <View className={`absolute bottom-0 w-full ${isAndroid ? "bottom-[38px]" : "bottom-[67px]"}`}>
+            <View
+              className={`absolute w-full ${
+                isAndroid ? 'bottom-[38px]' : 'bottom-[100px]'
+              }`}
+            >
               <CommentInput handleOnSubmit={handleSubmit} />
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </KeyboardAvoidingView>
       )}
     </SafeAreaView>
   );

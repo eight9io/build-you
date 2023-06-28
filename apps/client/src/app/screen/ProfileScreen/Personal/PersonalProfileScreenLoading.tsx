@@ -16,7 +16,7 @@ const PersonalProfileScreenLoading = () => {
         <StarLogo />
 
         <View>
-          <Text className="text-gray-dark text-md mx-12 pt-4 text-center font-normal">
+          <Text className="text-primary-default mx-12 pt-6 text-center text-lg font-normal">
             Welcome
           </Text>
         </View>

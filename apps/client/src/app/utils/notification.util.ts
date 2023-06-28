@@ -74,7 +74,6 @@ export const handleUserTapOnNotification = async (
     case NOTIFICATION_TYPES.NEW_CHALLENGE_FROM_FOLLOWING:
       if (payload.post_id)
         // ProgressCommentScreen is a screen inside a nested stack navigator
-        // TO DO: navigate to the Progress Comment Screen\
         navigation.navigate('HomeScreen', {
           screen: 'Challenges',
           params: {

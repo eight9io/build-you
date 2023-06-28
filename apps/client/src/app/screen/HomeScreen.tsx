@@ -29,9 +29,7 @@ interface IFeedDataProps {}
 
 export const HomeFeed = () => {
   const [feedData, setFeedData] = React.useState<any>([]);
-  const [feedIndex, setFeedIndex] = React.useState<number>(1);
   const [feedPage, setFeedPage] = React.useState<number>(1);
-  const [totalPage, setTotalPage] = React.useState<number>(1);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
 
@@ -45,7 +43,7 @@ export const HomeFeed = () => {
       .then((res) => {
         if (res.data?.data) {
           setFeedData(res.data.data);
-          setFeedIndex(5);
+          setFeedPage(1);
         }
       })
       .catch((err) => {
@@ -64,14 +62,14 @@ export const HomeFeed = () => {
 
   const getNewFeed = async () => {
     await serviceGetFeed({
-      page: 1,
-      take: feedIndex + 5,
+      page: feedPage + 1,
+      take: 5,
     }).then((res) => {
       if (res?.data?.data) {
         setFeedData((prev: any) => [...res.data.data]);
       }
+      setFeedPage((prev) => prev + 1);
     });
-    setFeedIndex((prev) => prev + 5);
   };
 
   const handleScroll = async () => {

@@ -74,7 +74,7 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
 
 const renderValue = (value: string, partTypes: PartType[]) => {
   const { parts } = parseValue(value, partTypes);
-  return <View>{parts.map(renderPart)}</View>;
+  return <View className='flex flex-row items-center'>{parts.map(renderPart)}</View>;
 };
 
 const SingleComment: FC<ISingleCommentProps> = ({

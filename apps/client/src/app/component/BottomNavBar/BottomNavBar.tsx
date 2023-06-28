@@ -15,14 +15,17 @@ import FeedSvg from './asset/feed.svg';
 import CreateSvg from './asset/create.svg';
 import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
-import AlertSvg from './asset/noti.svg';
+import NotificationIcon from '../asset/notification-icon.svg';
+import FocusedNotificationIcon from '../asset/focused-notification-icon.svg';
+import NewNotificationIcon from '../asset/new-notification-icon.svg';
 import { useGetUserData } from '../../hooks/useGetUser';
 import { useUserProfileStore } from '../../store/user-data';
+import { useNotificationStore } from '../../store/notification';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
 
-interface IBottomNavBarProps { }
+interface IBottomNavBarProps {}
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
@@ -30,9 +33,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
   useGetUserData();
 
   const { getUserProfile } = useUserProfileStore();
+  const { getHasNewNotification } = useNotificationStore();
   const currentUser = getUserProfile();
+  const hasNewNotification = getHasNewNotification();
   const isCompany = currentUser && currentUser?.companyAccount;
-
 
   return (
     <Tab.Navigator
@@ -128,7 +132,13 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
-              <AlertSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
+              {focused ? (
+                <FocusedNotificationIcon />
+              ) : hasNewNotification ? (
+                <NewNotificationIcon fill={'#6C6E76'} />
+              ) : (
+                <NotificationIcon fill={'#6C6E76'} />
+              )}
               <Text
                 className={clsx(
                   'text-gray-bottomBar text-md pt-1.5',

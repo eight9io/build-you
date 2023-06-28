@@ -1,12 +1,5 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { useEffect } from 'react';
+import { SafeAreaView, View, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -20,8 +13,8 @@ import NavButton from '../../component/common/Buttons/NavButton';
 import IconSearch from '../../component/common/IconSearch/IconSearch';
 
 import Notificaiton from '../../component/Notification';
-import ButtonsWithIcon from '../../component/common/Buttons/ButtonWithIcon';
-
+import { useNotificationStore } from '../../store/notification';
+import { useIsFocused } from '@react-navigation/native';
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -36,6 +29,17 @@ const Notifications = ({
   navigation: NotificationsScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
+  const isFocused = useIsFocused();
+  const { getHasNewNotification, setHasNewNotification } =
+    useNotificationStore();
+
+  useEffect(() => {
+    if (isFocused) {
+      const hasNewNotification = getHasNewNotification();
+      // Remove new notification icon (if any) when user enter this screen
+      if (hasNewNotification) setHasNewNotification(false);
+    }
+  }, [isFocused]);
 
   return (
     <ScrollView className="h-full ">

@@ -4,7 +4,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 export type RootStackParamList = {
   IntroScreen: undefined;
   FeedScreen: undefined;
-  HomeScreen: undefined;
+  HomeScreen: {
+    screen?: string;
+    params?: Record<string, any>;
+  };
   InnerScreen: undefined;
   NotificationsScreen: undefined;
   ChallengeDetailScreen: undefined;

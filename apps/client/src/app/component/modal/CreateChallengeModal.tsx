@@ -140,9 +140,15 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setIsShowModal(false);
     if (isRequestSuccess && newChallengeId) {
       onClose();
-      navigation.navigate('Challenges', {
-        screen: 'PersonalChallengeDetailScreen',
-        params: { challengeId: newChallengeId },
+
+      navigation.navigate('HomeScreen', {
+        screen: 'Challenges',
+        params: {
+          screen: 'PersonalChallengeDetailScreen',
+          params: {
+            challengeId: newChallengeId,
+          },
+        },
       });
     }
   };

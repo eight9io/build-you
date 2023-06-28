@@ -88,7 +88,6 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
   );
 };
 
-
 export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
   const {
     label,
@@ -141,6 +140,9 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
                   inputProps?.className,
                   Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
                 )}
+                containerStyle={{
+                  paddingRight: rightIcon ? 40 : 0,
+                }}
                 textAlignVertical={multiline ? 'top' : 'center'}
                 autoCapitalize="none"
                 onLayout={(e) => {
@@ -149,7 +151,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
               />
             </View>
             {rightIcon ? (
-              <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
+              <View className="absolute bottom-0 right-1 top-0 flex h-full justify-center">
                 {rightIcon}
               </View>
             ) : null}
@@ -177,10 +179,13 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
                   },
                 ]}
                 className={clsx(
-                  'border-gray-medium bg-gray-veryLight w-full rounded-[10px] border-[1px]',
+                  'border-gray-medium bg-gray-veryLight mr-10 w-full rounded-[10px] border-[1px]',
                   inputProps?.className,
                   Platform.OS === 'ios' ? 'p-3' : 'p-2.5'
                 )}
+                containerStyle={{
+                  paddingRight: rightIcon ? 40 : 0,
+                }}
                 textAlignVertical={multiline ? 'top' : 'center'}
                 autoCapitalize="none"
                 onLayout={(e) => {
@@ -188,8 +193,8 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
                 }}
               />
             </View>
-            {rightIcon ? (
-              <View className="absolute bottom-0 right-4 top-0 flex h-full justify-center">
+            {rightIcon && (
+              <View className="absolute bottom-0 right-1 top-0 flex h-full justify-center">
                 {onRightIconPress ? (
                   <TouchableOpacity onPress={onRightIconPress}>
                     {rightIcon}
@@ -198,7 +203,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
                   <>{rightIcon}</>
                 )}
               </View>
-            ) : null}
+            )}
           </>
         )}
       </View>

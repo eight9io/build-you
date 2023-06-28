@@ -53,8 +53,7 @@ export const EditChallengeProgressModal: FC<
     if (progress) {
       setValue('caption', progress?.caption);
     }
-  }
-  , [progress]);
+  }, [progress]);
 
   const onSubmit = async (data: IUpdateProgress) => {
     setIsLoading(true);

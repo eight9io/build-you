@@ -143,7 +143,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [progressId]);
 
   useEffect(() => {
     (async () => {

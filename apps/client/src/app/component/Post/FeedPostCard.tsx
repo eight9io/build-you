@@ -73,7 +73,8 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   const { t } = useTranslation();
 
   const navigateToUserProfile = () => {
-    if (!id) {
+    if (!user?.id) {
+
       GlobalDialogController.showModal({
         title: 'Error',
         message:
@@ -82,9 +83,8 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       });
       return;
     }
-    navigation.navigate('OtherUserProfileScreen', { userId: id });
+    navigation.navigate('OtherUserProfileScreen', { userId: user?.id });
   };
-
   return (
     <View className="relative w-full">
       <View className="relative mb-1">

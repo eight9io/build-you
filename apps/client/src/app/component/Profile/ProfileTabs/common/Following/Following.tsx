@@ -15,7 +15,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="-mr-2 flex-1">
+    <View className="-mr-2 flex-1 mb-[100px]">
       {following && following.length > 0 && <FlatList
         className="pt-4"
         keyExtractor={(item, index) => index.toString()}
@@ -44,7 +44,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
                 />
               </View>
               <Text className="text-basic-black text-base font-semibold">
-                {item.name}
+                {item.name}  {item.surname}
               </Text>
             </TouchableOpacity>
           );

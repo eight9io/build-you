@@ -70,10 +70,6 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       );
       setIsShowModalUnfollow(false);
     } catch (error) {
-      console.log(
-        '🚀 ~ file: OtherUserProfileScreen.tsx:65 ~ handleUnfollowClicked ~ error:',
-        error
-      );
       GlobalDialogController.showModal({
         title: 'Error',
         message: t('errorMessage:500') as string,
@@ -178,9 +174,10 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { userId } = route.params;
 
+
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <ScrollView className="h-full pb-[100px]">
+      <ScrollView className="h-full ">
         <OtherUserProfileComponent userId={userId} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>

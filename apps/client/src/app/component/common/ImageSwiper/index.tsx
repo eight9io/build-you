@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Image, Text } from 'react-native';
+import { View } from 'react-native';
+import { Image } from 'expo-image';
 import Swiper from 'react-native-swiper';
 
 interface IImageSwiperProps {
@@ -8,8 +9,11 @@ interface IImageSwiperProps {
 
 const ImageItem = ({ imageSrc }: { imageSrc: string }) => {
   return (
-    <View className=''>
-      <Image source={{ uri: imageSrc }} className="aspect-square w-full rounded-xl" />
+    <View className="">
+      <Image
+        source={{ uri: imageSrc }}
+        className="aspect-square w-full rounded-xl"
+      />
     </View>
   );
 };

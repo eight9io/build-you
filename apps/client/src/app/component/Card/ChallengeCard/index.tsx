@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ImageSourcePropType,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
 import { IChallenge } from '../../../types/challenge';
-import { getImageFromUrl } from '../../../hooks/getImageFromUrl';
 import { getChallengeStatusColor } from '../../../utils/common';
 
 import CheckCircle from '../../asset/check_circle.svg';

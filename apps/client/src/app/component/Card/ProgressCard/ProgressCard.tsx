@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { useState, FC, useEffect } from 'react';
 import {
   NavigationProp,

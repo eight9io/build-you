@@ -1,15 +1,13 @@
 import { useState, FC, useEffect } from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
 import CameraIcon from './asset/camera-icon.svg';
-import {
-  getImageExtension,
-  getImageFromUserDevice,
-} from '../../../utils/uploadUserImage';
+import { getImageFromUserDevice } from '../../../utils/uploadUserImage';
 import Close from '../../asset/close.svg';
 import Button from '../Buttons/Button';
-import { ImagePickerAsset } from 'expo-image-picker';
+
 interface IImagePickerProps {
   images?: string[];
   allowsMultipleSelection?: boolean;

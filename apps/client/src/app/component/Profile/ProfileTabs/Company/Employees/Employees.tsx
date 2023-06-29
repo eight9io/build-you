@@ -1,5 +1,6 @@
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { FC, useState } from 'react';
+import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import Button from '../../../../common/Buttons/Button';
 
@@ -33,7 +34,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({ item, isCompany }) => {
       <View className="flex flex-row items-center justify-center">
         <Image
           source={{ uri: item.avatar }}
-          resizeMode="contain"
+          contentFit="contain"
           className="h-10 w-10 rounded-full"
         />
         <Text className="text-basic-black pl-3 text-base font-semibold">

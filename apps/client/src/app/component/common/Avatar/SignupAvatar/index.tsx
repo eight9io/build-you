@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Image, TouchableOpacity, Pressable } from 'react-native';
+import { View, TouchableOpacity, Pressable } from 'react-native';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
 import DefaultAvatar from '../../../asset/default-avatar.svg';
 import CameraSvg from './asset/camera.svg';
@@ -38,7 +39,6 @@ const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
               <Image
                 className={clsx('h-[101px] w-[101px] rounded-full')}
                 source={{ uri: newAvatarUpload }}
-                alt="profile image"
               />
             )}
             {!newAvatarUpload && <DefaultAvatar />}

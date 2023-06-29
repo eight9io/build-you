@@ -1,4 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import React from 'react';
 import { Path, Svg } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +20,7 @@ export default function Card({
         source={{ uri: `${image}` }}
         // className=" h-[150px] w-full  rounded-t-2xl"
         className={clsx('h-[150px] w-full  ', isPost ? 'rounded-t-2xl' : 0)}
-        resizeMode="cover"
+        contentFit="cover"
       />
       {isPost && (
         <View className=" flex-row  items-center  justify-between rounded-b-2xl px-5 py-3">

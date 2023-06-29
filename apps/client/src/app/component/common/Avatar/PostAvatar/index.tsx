@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import clsx from 'clsx';
 import DefaultAvatar from '../../../asset/default-avatar.svg';
 
@@ -19,7 +20,6 @@ const PostAvatar: React.FC<IPostAvatarProps> = ({ src, alt, onPress }) => {
         <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
           <View className={clsx('relative')}>
             <Image
-              alt={alt}
               className={clsx('h-[32px] w-[32px] rounded-full')}
               source={{ uri: src }}
               onLoadStart={() => setLoading(true)}

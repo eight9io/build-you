@@ -1,6 +1,8 @@
 import { clsx } from 'clsx';
+import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { View, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
+import { View, TouchableOpacity, ImageSourcePropType } from 'react-native';
+
 import CameraSvg from './asset/camera.svg';
 import {
   getImageFromUserDevice,
@@ -8,7 +10,6 @@ import {
 } from '../../../utils/uploadUserImage';
 import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
-import { getImageFromUrl } from '../../../hooks/getImageFromUrl';
 
 interface ICoverImageProps {
   src: string;
@@ -24,13 +25,11 @@ const CoverImage: React.FC<ICoverImageProps> = ({
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
-  const [imageSource] = getImageFromUrl(src);
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
   });
 
   const handlePickImage = async () => {
-
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       if (setIsLoadingCover) setIsLoadingCover(true);
@@ -56,37 +55,30 @@ const CoverImage: React.FC<ICoverImageProps> = ({
       />
       <View className="relative">
         <View
-          className={clsx(
-            'z-100 relative rounded-full border-white bg-white'
-          )}
+          className={clsx('z-100 relative rounded-full border-white bg-white')}
         >
           <Image
             className={clsx('absolute left-0  top-0  h-[115px] w-full')}
             source={require('./asset/Cover-loading.png')}
-            alt="profile image"
           />
-          {!newAvatarUpload && !imageSource && (
+          {!newAvatarUpload && !src && (
             <Image
               className={clsx(' h-[115px] w-full')}
               source={require('./asset/Cover-loading.png')}
-              alt="profile image"
             />
           )}
-          {!newAvatarUpload && imageSource && (
+          {!newAvatarUpload && src && (
             <Image
               className={clsx(' z-100 h-[115px] w-full')}
-              source={imageSource as ImageSourcePropType}
-              alt="profile image"
+              source={src as ImageSourcePropType}
             />
           )}
           {newAvatarUpload && (
             <Image
               className={clsx(' z-100 h-[115px] w-full')}
               source={{ uri: newAvatarUpload }}
-              alt="profile image"
             />
           )}
-
         </View>
 
         {!isOtherUser && (

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { checkRefreshTokenLocalValidation } from './checkAuth';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 
@@ -36,13 +38,12 @@ httpInstance.interceptors.response.use(
             reject('token is not valid');
           } else {
             // change token in orqinal request
+            const authToken = await AsyncStorage.getItem('@auth_token');
             const newRequest = {
               ...originalRequest,
               headers: {
                 ...originalRequest.headers,
-                Authorization: `Bearer ${localStorage.getItem(
-                  '@auth_token'
-                )}`,
+                Authorization: `Bearer ${authToken}`,
               },
             };
             resolve(httpInstance(newRequest));

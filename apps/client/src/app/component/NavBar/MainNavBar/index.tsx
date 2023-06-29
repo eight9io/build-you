@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 
 import clsx from 'clsx';
 

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, FC } from 'react';
-import { Image, View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
 import { IUploadMediaWithId } from '../../../types/media';
 

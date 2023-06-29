@@ -52,7 +52,7 @@ const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (
-    <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
+    <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50 w-full ">
       <View className="h-full ">
         <ProfileComponent
           userData={userData}

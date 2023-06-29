@@ -90,7 +90,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
               onEndReachedThreshold={0.5}
               className="h-4/5"
             />
-            <View className="absolute bottom-[-40px] h-12 w-full px-4">
+            <View className="absolute bottom-[-20px] h-12 w-full px-4 bg-white">
               <Button
                 title={'Save'}
                 onPress={() => onSelect(selected)}

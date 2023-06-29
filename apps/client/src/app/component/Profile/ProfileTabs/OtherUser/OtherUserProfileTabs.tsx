@@ -9,7 +9,7 @@ import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 import Skills from '../Users/Skills';
 import ChallengesTab from './Challenges/ChallengesTab';
 import { IUserData } from '../../../../types/user';
-import Biography from '../Users/Biography';
+import Biography from '../Users/Biography/Biography';
 import EmployeesTab from '../Company/Employees/Employees';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 import { useUserProfileStore } from 'apps/client/src/app/store/user-data';

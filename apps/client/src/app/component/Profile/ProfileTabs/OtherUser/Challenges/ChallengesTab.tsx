@@ -5,7 +5,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { getChallengeByUserId } from '../../../../../service/challenge';
 import { IChallenge } from '../../../../../types/challenge';
-import ChallengeCard from '../../../../Card/ChallengeCard';
+import ChallengeCard from '../../../../Card/ChallengeCard/ChallengeCard';
 import { RootStackParamList } from '../../../../../navigation/navigation.type';
 import { ScrollView } from 'react-native-gesture-handler';
 

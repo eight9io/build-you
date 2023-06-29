@@ -27,8 +27,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   setShouldRefresh,
   isOtherUserProfile = false,
 }) => {
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<
+
+
     IProgressChallenge[]
   >([]);
   const [progressIndexToUpdate, setProgressIndexToUpdate] =
@@ -38,7 +41,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [isShowEditModal, setIsShowEditModal] = useState(false);
 
   const { t } = useTranslation();
-
   useEffect(() => {
     const progressData =
       challengeData?.progress &&
@@ -163,7 +165,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />
           )}
-          // contentContainerStyle={{ paddingBottom: 300 }}
+        // contentContainerStyle={{ paddingBottom: 300 }}
         />
       )}
       {!progressLoading && localProgressData?.length == 0 && (

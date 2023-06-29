@@ -62,7 +62,7 @@ const RegisterModal = ({
                 </Text>
               </View>
             </View>
-            <View className="h-[35%] flex-col items-center pt-2">
+            <View className="h-[35%] flex-col items-center pt-5">
               {Platform.OS === 'ios' ? (
                 <AppleLoginButton
                   title={t('register_modal.apple') || 'Register with Apple'}

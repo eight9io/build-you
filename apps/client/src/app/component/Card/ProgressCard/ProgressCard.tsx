@@ -100,6 +100,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);
 
+
   const handleConfirmDeleteChallengeProgress = async () => {
     setIsShowDeleteModal(false); // Close the delete confirm modal
     setErrorMessage('');

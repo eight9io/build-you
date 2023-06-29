@@ -18,7 +18,7 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import CompanyChallengeDetailScreen from './CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
 
-import ChallengeCard from '../../../component/Card/ChallengeCard';
+import ChallengeCard from '../../../component/Card/ChallengeCard/ChallengeCard';
 import { t } from 'i18next';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';

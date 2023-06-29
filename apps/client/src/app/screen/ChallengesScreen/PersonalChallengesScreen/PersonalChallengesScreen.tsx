@@ -16,7 +16,7 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
 
-import ChallengeCard from '../../../component/Card/ChallengeCard';
+import ChallengeCard from '../../../component/Card/ChallengeCard/ChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import IconSearch from '../../../component/common/IconSearch/IconSearch';

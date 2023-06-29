@@ -384,13 +384,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               />
             </View>
           )}
-          {isLoading && (
-            <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
-          )}
+
         </View>
       </KeyboardAwareScrollView>
 
-
+      {isLoading && (
+        <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
+      )}
     </SafeAreaView>
 
   );

@@ -33,6 +33,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   navigation,
   handlePress,
 }) => {
+
   const [loading, setLoading] = useState<boolean>(true);
   const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
   const onPress = () => {

@@ -3,10 +3,9 @@ import {
   Text,
   Modal,
   SafeAreaView,
-  Image,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
+import { Image } from 'expo-image';
 
 import React, { useState } from 'react';
 import Header from '../common/Header';
@@ -98,9 +97,9 @@ export default function ForgotPasswordModal({
       presentationStyle="pageSheet"
       statusBarTranslucent={isLoading}
     >
-      <View className="h-full bg-white mx-1">
+      <View className="mx-1 h-full bg-white">
         <Header
-          containerStyle='mx-4'
+          containerStyle="mx-4"
           title={t('forgot_password.title') as string}
           leftBtn={
             <NavButton
@@ -119,7 +118,7 @@ export default function ForgotPasswordModal({
                     <Image
                       className=" mb-7 mt-10 h-[91px] w-[185px]"
                       source={require('./asset/buildYou1.png')}
-                      resizeMode="cover"
+                      contentFit="cover"
                     />
                     <Text className="text-h6 text-gray-dark px-2 text-center leading-6 ">
                       {t('forgot_password.sub_title')}
@@ -206,7 +205,7 @@ export default function ForgotPasswordModal({
                     })}
                   </View>
                 </View>
-                <View className="pt-10 pb-10">
+                <View className="pb-10 pt-10">
                   <Button
                     containerClassName="bg-primary-default flex-none px-1 "
                     textClassName="line-[30px] text-center text-md font-medium text-white"

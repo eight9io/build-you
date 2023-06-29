@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ImageSourcePropType } from 'react-native';
 
 export const getImageFromUrl = (url: string | null): [ImageSourcePropType | undefined, boolean, boolean] => {
+  //only use with image from react native. no need for expo image
   if (!url) return [undefined, false, false];
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);

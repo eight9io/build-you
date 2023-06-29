@@ -2,11 +2,11 @@ import {
   View,
   Modal,
   SafeAreaView,
-  Image,
   Dimensions,
   ScaledSize,
   Platform,
 } from 'react-native';
+import { Image } from 'expo-image';
 import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';

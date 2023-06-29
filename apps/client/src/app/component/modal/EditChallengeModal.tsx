@@ -105,25 +105,24 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       statusBarTranslucent={isLoading}
       visible={visible}
     >
-      <SafeAreaView className='flex-1'>
+      <SafeAreaView className="flex-1">
+        <View className='px-4 py-4'>
+          <Header
+            title={t('edit_challenge_screen.title') || ''}
+            rightBtn={t(
+              'edit_challenge_screen.save_button'
+            ).toLocaleUpperCase()}
+            leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
+            onLeftBtnPress={() => {
+              onClose();
+              reset();
+            }}
+            onRightBtnPress={handleSubmit(onSubmit)}
+            containerStyle="mt-2"
+          />
+        </View>
         <KeyboardAwareScrollView>
           <View className="mx-4 flex h-full rounded-t-xl bg-white">
-            <View>
-              <Header
-                title={t('edit_challenge_screen.title') || ''}
-                rightBtn={t(
-                  'edit_challenge_screen.save_button'
-                ).toLocaleUpperCase()}
-                leftBtn={<CloseIcon width={24} height={24} fill={'#34363F'} />}
-                onLeftBtnPress={() => {
-                  onClose();
-                  reset();
-                }}
-                onRightBtnPress={handleSubmit(onSubmit)}
-                containerStyle="mt-2"
-              />
-            </View>
-
             <View className="flex flex-1 flex-col">
               <View className="pt-5">
                 <Controller

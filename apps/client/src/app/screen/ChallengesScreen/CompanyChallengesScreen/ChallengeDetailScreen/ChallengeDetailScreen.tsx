@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tab } from '@rneui/themed';
 
-import { View, Image, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 import i18n from '../../../../i18n/i18n';
 import TabView from '../../../../component/common/Tab/TabView';

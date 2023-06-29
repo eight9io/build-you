@@ -48,15 +48,18 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
         />
         <View
           className={clsx(
-            'flex flex-row items-center justify-between px-4 py-3'
+            'relative flex  flex-row items-center justify-between px-4 py-3'
           )}
         >
-          <View className={clsx('flex flex-row items-center')}>
-            <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
+          <View className={clsx('flex w-11/12 flex-row items-center')}>
+            <Text className={clsx('text-h6 font-semibold leading-6')}>
               {name}
             </Text>
           </View>
-          <BackSvg />
+          <View></View>
+          <View className="">
+            <BackSvg />
+          </View>
         </View>
       </View>
     </TouchableOpacity>

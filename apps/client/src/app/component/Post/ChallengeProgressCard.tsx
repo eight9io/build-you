@@ -1,15 +1,9 @@
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity,
-  ImageSourcePropType,
 } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
-import { clsx } from 'clsx';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-import { RootStackParamList } from '../../navigation/navigation.type';
 import { IProgressChallenge } from '../../types/challenge';
 
 import { useGetOtherUserData } from '../../hooks/useGetUser';

@@ -56,7 +56,7 @@ export const EmployeesTab: FC<IEmployeesTabProps> = ({ employeeList }) => {
   const userProfile = getUserProfile();
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className="pb-4 pt-4 mr-2 mb-[100px]">
+      <View className="pb-4 pt-4 mr-2 mb-[100px] px-4 ">
         <View className=" h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}

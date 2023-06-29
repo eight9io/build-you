@@ -30,7 +30,7 @@ export default function PolicyModal({
     >
       <ScrollView>
         <View style={styles.centeredView}>
-          <View>
+          <View className=" ml-4 ">
             <Header
               title="Privacy policy..."
               leftBtn={

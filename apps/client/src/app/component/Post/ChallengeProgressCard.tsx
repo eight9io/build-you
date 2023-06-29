@@ -1,7 +1,4 @@
-import {
-  View,
-  Text,
-} from 'react-native';
+import { View, Text } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 
 import { IProgressChallenge } from '../../types/challenge';
@@ -59,10 +56,12 @@ const ChallengeProgressCardForComment: React.FC<
                 <Text className="text-gray-dark text-xs font-light ">
                   {getTimeDiffToNow(createdAt)}
                 </Text>
-                <Text className="text-gray-dark text-xs font-light ">
-                  <IconDot fill={'#7D7E80'} />
-                  {'   '} {location || 'Address here'}
-                </Text>
+                {location && (
+                  <Text className="text-gray-dark text-xs font-light ">
+                    <IconDot fill={'#7D7E80'} />
+                    {'   '} {location}
+                  </Text>
+                )}
               </View>
             </View>
           </View>

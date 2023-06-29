@@ -46,7 +46,6 @@ const GlobalDialog = () => {
       },
       hide: () => {
         setModalVisible(false);
-        setCustomMessage('');
       },
     }),
     []

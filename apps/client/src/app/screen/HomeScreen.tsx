@@ -66,7 +66,7 @@ export const HomeFeed = () => {
       take: 5,
     }).then((res) => {
       if (res?.data?.data) {
-        setFeedData((prev: any) => [...res.data.data]);
+        setFeedData((prev: any) => [...prev, ...res.data.data]);
       }
       setFeedPage((prev) => prev + 1);
     });
@@ -95,6 +95,7 @@ export const HomeFeed = () => {
     </SafeAreaView>
   );
 };
+
 const HomeScreen = () => {
   return (
     <HomeScreenStack.Navigator

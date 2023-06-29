@@ -16,7 +16,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="mb-[100px] mr-2 flex-1">
+    <View className="mb-[100px] mr-2 flex-1 px-4 ">
       {followers.length > 0 && (
         <FlatList
           data={followers}
@@ -50,7 +50,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
         />
       )}
       {followers.length == 0 && (
-        <View className="mb-[100px] flex-1 items-center justify-center">
+        <View className=" flex-1 items-center justify-center h-full">
           <Empty />
           <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
             {t('empty_followers')}

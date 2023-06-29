@@ -12,7 +12,7 @@ import ChallengesTab from '../OtherUser/Challenges/ChallengesTab';
 
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
 import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
-import Biography from '../Users/Biography';
+import Biography from '../Users/Biography/Biography';
 import { useIsFocused } from '@react-navigation/native';
 import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';

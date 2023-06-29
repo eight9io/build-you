@@ -6,7 +6,7 @@ import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 import clsx from 'clsx';
 import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
 
-import Biography from './Biography';
+import Biography from './Biography/Biography';
 import Skills from './Skills';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
@@ -45,7 +45,7 @@ const ProfileTabs: FC = () => {
   ];
 
   return (
-    <View className={clsx('flex-1  bg-gray-50 ')}>
+    <View className={clsx('flex-1  bg-gray-50 w-full   ')}>
       <TabViewFlatlist
         titles={titles}
         children={[
@@ -55,7 +55,7 @@ const ProfileTabs: FC = () => {
           <Following following={followingList} key="3" />,
         ]}
         activeTabClassName=""
-        defaultTabClassName="text-gray-dark"
+        defaultTabClassName="text-gray-dark "
       />
     </View>
   );

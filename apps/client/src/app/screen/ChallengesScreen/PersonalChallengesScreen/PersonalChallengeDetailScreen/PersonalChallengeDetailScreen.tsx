@@ -25,6 +25,7 @@ import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
+import TaskAltIconGray from './assets/task-alt-gray.svg';
 
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
@@ -148,8 +149,8 @@ export const RightPersonalChallengeDetailOptions: FC<
           />
         )}
         <View className="-mt-1 flex flex-row items-center">
-          <TouchableOpacity onPress={onCheckChallengeCompleted}>
-            <TaskAltIcon />
+          <TouchableOpacity onPress={onCheckChallengeCompleted} disabled={isChallengeCompleted}>
+            {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
           </TouchableOpacity>
           <View className="pl-4 pr-2">
             <Button Icon={<ShareIcon />} onPress={onShare} />

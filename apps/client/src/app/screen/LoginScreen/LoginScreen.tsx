@@ -146,6 +146,9 @@ export default function Login({
                           render={({ field: { onChange, onBlur, value } }) => (
                             <View className="flex flex-col gap-1">
                               <TextInput
+                                inputMode={
+                                  item.name === 'user' ? 'email' : 'text'
+                                }
                                 rightIcon={
                                   item.name === 'password' &&
                                   (!hidePassword ? (

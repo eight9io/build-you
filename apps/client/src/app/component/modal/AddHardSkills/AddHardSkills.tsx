@@ -34,17 +34,7 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
   arrayMyHardSkills,
 }) => {
   const { t } = useTranslation();
-  const {
-    control,
-    watch,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      Skill: null,
-    },
-  });
+
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
     IHardSkill[]
   >([]);

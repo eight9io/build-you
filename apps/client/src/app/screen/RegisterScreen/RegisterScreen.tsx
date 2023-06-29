@@ -1,10 +1,5 @@
-import {
-  View,
-  Text,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
@@ -91,7 +86,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
               <Image
                 className=" mb-7 mt-10 h-[91px] w-[185px]"
                 source={require('./asset/buildYou.png')}
-                resizeMode="cover"
+                contentFit="cover"
               />
               <Text className="text-h6 text-gray-dark px-6 text-center leading-6 ">
                 {t('register_screen.sub_title')}

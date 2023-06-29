@@ -6,13 +6,11 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   Keyboard,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, set, useForm } from 'react-hook-form';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { IProgressComment } from '../../../types/progress';
 import { IProgressChallenge } from '../../../types/challenge';
@@ -57,16 +55,20 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitted },
   } = useForm({
     defaultValues: {
       comment: '',
     },
+    reValidateMode: 'onSubmit',
   });
 
   const onSubmit = (data: { comment: string }) => {
     handleOnSubmit(data.comment);
-    reset();
+    reset({
+      comment: '',
+    });
+
     Keyboard.dismiss();
   };
 
@@ -75,21 +77,24 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
       <PostAvatar src={avatar || 'https://picsum.photos/200/300'} />
       <View className="ml-3 max-h-40 flex-1">
         <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInputWithMention
-              placeholder={
-                t('progress_comment_screen.comment_input_placeholder') || ''
-              }
-              placeholderTextColor={'#C5C8D2'}
-              rightIcon={value !== '' ? <SendIcon /> : null}
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              onRightIconPress={handleSubmit(onSubmit)}
-            />
-          )}
           name={'comment'}
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => {
+            return (
+              <TextInputWithMention
+                placeholder={
+                  t('progress_comment_screen.comment_input_placeholder') || ''
+                }
+                placeholderTextColor={'#C5C8D2'}
+                rightIcon={value !== '' && <SendIcon />}
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}
+                isSubmitting={isSubmitted}
+                onRightIconPress={handleSubmit(onSubmit)}
+              />
+            );
+          }}
         />
         {errors.comment ? <ErrorText message={errors.comment.message} /> : null}
       </View>
@@ -100,7 +105,6 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
 const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const { progressId, ownerId, challengeName } = route.params;
   const { t } = useTranslation();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [progressCommentScreenLoading, setProgressCommentScreenLoading] =
     useState<boolean>(true);
   const [comments, setComments] = useState<IProgressComment[]>([]);

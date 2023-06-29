@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, createRef, useEffect, useRef, useState } from 'react';
 import {
   Text,
   View,
@@ -8,25 +8,23 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {
-  Part,
-  PartType,
-  parseValue,
-  MentionInput,
-  replaceMentionValues,
-  isMentionPartType,
-} from 'react-native-controlled-mentions';
+import { MentionInput } from 'react-native-controlled-mentions';
 import {
   MentionInputProps,
   MentionSuggestionsProps,
 } from 'react-native-controlled-mentions/dist/types';
+
+import { servieGetUserOnSearch } from '../../../service/search';
+import { useDebounce } from '../../../hooks/useDebounce';
 import { MOCK_FOLLOW_USERS } from '../../../mock-data/follow';
 
 interface ITextInputWithMentionProps extends MentionInputProps {
+  reset?: any;
   label?: string;
   rightIcon?: ReactNode;
   onPress?: () => void;
   multiline?: boolean;
+  isSubmitting?: boolean;
   onRightIconPress?: () => void;
 }
 
@@ -39,13 +37,27 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
   keyword,
   onSuggestionPress,
 }) => {
-  if (keyword == null) {
-    return null;
-  }
+  // const [isSearching, setIsSearching] = useState(false);
+  // const [searchResults, setSearchResults] = useState([]);
+  // const debouncedSearchQuery = useDebounce(keyword, 500); // Adjust the delay as needed
+
+  // useEffect(() => {
+  //   if (debouncedSearchQuery) {
+  //     console.log('debouncedSearchQuery', debouncedSearchQuery);
+  //     setIsSearching(true);
+  //     servieGetUserOnSearch(debouncedSearchQuery).then((results) => {
+  //       console.log('results', results);
+  //       setIsSearching(false);
+  //       setSearchResults(results);
+  //     });
+  //   } else {
+  //     setSearchResults([]);
+  //   }
+  // }, [debouncedSearchQuery]);
 
   return (
     <>
-      {MOCK_FOLLOW_USERS.length > 0 && (
+      {keyword && MOCK_FOLLOW_USERS.length > 0 && (
         <FlatList
           className={clsx(
             'bg-gray-veryLight absolute z-10 h-72 w-full rounded-lg px-4 py-2'
@@ -96,15 +108,12 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
     onRightIconPress,
     multiline,
     onChange,
+    isSubmitting,
+    inputRef,
     ...inputProps
   } = props;
   const [textInputHeight, setTextInputHeight] = useState(0);
 
-  const handleOnChange = (value: string) => {
-    // TO-DO: Add custom logic for the mention value
-    // const transformedValue = replaceMentionValues(value, ({ name }) => name); // Default value is '@[username]', this line is to remove '@' from the value
-    onChange(value);
-  };
   return (
     <View className="flex flex-col gap-1">
       {label ? (
@@ -118,7 +127,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             <View pointerEvents={'none'}>
               <MentionInput
                 {...inputProps}
-                onChange={handleOnChange}
+                onChange={onChange}
                 partTypes={[
                   {
                     trigger: '@', // Should be a single character like '@' or '#'
@@ -161,10 +170,11 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             <View pointerEvents={'auto'}>
               <MentionInput
                 {...inputProps}
-                onChange={handleOnChange}
+                onChange={onChange}
+                clearTextOnFocus={true}
                 partTypes={[
                   {
-                    trigger: '@', // Should be a single character like '@' or '#'
+                    trigger: '@',
                     renderSuggestions: (props) =>
                       renderSuggestions({
                         ...props,
@@ -196,7 +206,11 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             {rightIcon && (
               <View className="absolute bottom-0 right-1 top-0 flex h-full justify-center">
                 {onRightIconPress ? (
-                  <TouchableOpacity onPress={onRightIconPress}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      onRightIconPress();
+                    }}
+                  >
                     {rightIcon}
                   </TouchableOpacity>
                 ) : (

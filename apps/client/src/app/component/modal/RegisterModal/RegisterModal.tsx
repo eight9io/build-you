@@ -1,12 +1,5 @@
-import {
-  View,
-  Text,
-  Image,
-  Modal,
-  StyleSheet,
-  SafeAreaView,
-  Platform,
-} from 'react-native';
+import { View, Text, Modal, SafeAreaView, Platform } from 'react-native';
+import { Image } from 'expo-image';
 
 import { useTranslation } from 'react-i18next';
 import NavButton from '../../common/Buttons/NavButton';
@@ -14,7 +7,6 @@ import Button from '../../common/Buttons/Button';
 import AppleLoginButton from '../../common/Buttons/AppleLoginButton';
 import LinkedInLoginButton from '../../common/Buttons/LinkedInLoginButton';
 import GoogleLoginButton from '../../common/Buttons/GoogleLoginButton';
-import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
   modalVisible: boolean;

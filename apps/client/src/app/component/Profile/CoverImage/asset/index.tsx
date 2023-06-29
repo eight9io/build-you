@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Pressable,
-  ImageStyle,
-  ImageSourcePropType,
-} from 'react-native';
+import { View, TouchableOpacity, Pressable } from 'react-native';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
 import {
   getImageFromUserDevice,
@@ -32,7 +25,6 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   });
 
   const handlePickImage = async () => {
-
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       const imageToUpload = result.assets[0].uri;
@@ -60,12 +52,10 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
                   'absolute left-0  top-0 h-[101px] w-[101px] rounded-full'
                 )}
                 source={require('./asset/avatar-load.png')}
-                alt="profile image"
               />
               <Image
                 className={clsx(' z-100 h-[101px] w-[101px] rounded-full')}
                 source={{ uri: src + '?' + new Date() }}
-                alt="profile image"
               />
             </>
           )}
@@ -81,7 +71,6 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
           source={require('./asset/camera.png')}
         />
       </TouchableOpacity>
-
     </View>
   );
 };

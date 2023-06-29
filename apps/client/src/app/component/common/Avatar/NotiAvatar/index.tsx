@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
 interface INotiAvatarProps {
   size?: 'small' | 'medium' | 'large';

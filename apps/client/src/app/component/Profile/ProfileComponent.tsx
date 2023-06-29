@@ -40,6 +40,7 @@ export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
     }
     navigation.navigate('EditPersonalProfileScreen');
   };
+
   return (
     <View className={clsx('relative z-10')}>
       <CoverImage src={userData?.cover as string} setIsLoadingCover={setIsLoading} />

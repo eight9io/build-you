@@ -74,7 +74,11 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
 
 const renderValue = (value: string, partTypes: PartType[]) => {
   const { parts } = parseValue(value, partTypes);
-  return <View className='flex flex-row items-center'>{parts.map(renderPart)}</View>;
+  return (
+    <View className="flex w-full flex-row items-center flex-wrap">
+      {parts.map(renderPart)}
+    </View>
+  );
 };
 
 const SingleComment: FC<ISingleCommentProps> = ({
@@ -151,21 +155,17 @@ const SingleComment: FC<ISingleCommentProps> = ({
           />
         )}
       </View>
-      <View>
-        <Text className={clsx('text-gray-dark text-sm')}>
-          {renderValue(comment.comment, [
-            {
-              trigger: '@',
-              textStyle: {
-                color: '#24252B',
-                fontSize: 14,
-                fontWeight: '600',
-                lineHeight: 20,
-              },
-            },
-          ])}
-        </Text>
-      </View>
+      {renderValue(comment.comment, [
+        {
+          trigger: '@',
+          textStyle: {
+            color: '#24252B',
+            fontSize: 14,
+            fontWeight: '600',
+            lineHeight: 20,
+          },
+        },
+      ])}
     </View>
   );
 };

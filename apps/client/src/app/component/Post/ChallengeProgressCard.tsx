@@ -1,15 +1,6 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageSourcePropType,
-} from 'react-native';
+import { View, Text } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
-import { clsx } from 'clsx';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-import { RootStackParamList } from '../../navigation/navigation.type';
 import { IProgressChallenge } from '../../types/challenge';
 
 import { useGetOtherUserData } from '../../hooks/useGetUser';
@@ -65,10 +56,12 @@ const ChallengeProgressCardForComment: React.FC<
                 <Text className="text-gray-dark text-xs font-light ">
                   {getTimeDiffToNow(createdAt)}
                 </Text>
-                <Text className="text-gray-dark text-xs font-light ">
-                  <IconDot fill={'#7D7E80'} />
-                  {'   '} {location || 'Address here'}
-                </Text>
+                {location && (
+                  <Text className="text-gray-dark text-xs font-light ">
+                    <IconDot fill={'#7D7E80'} />
+                    {'   '} {location}
+                  </Text>
+                )}
               </View>
             </View>
           </View>

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Image,
   TouchableOpacity,
   Pressable,
   ImageSourcePropType,
 } from 'react-native';
 import clsx from 'clsx';
+import { Image } from 'expo-image';
 
-import { getImageFromUrl } from '../../../../hooks/getImageFromUrl';
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
@@ -38,7 +37,6 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
-  const [imageSource] = getImageFromUrl(src);
 
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
@@ -77,9 +75,8 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
               'absolute left-0  top-0 h-[101px] w-[101px] rounded-full'
             )}
             source={require('./asset/avatar-load.png')}
-            alt="profile image"
           />
-          {!newAvatarUpload && !imageSource && (
+          {!newAvatarUpload && !src && (
             <View
               className={clsx(
                 'z-10 h-[101px] w-[101px] rounded-full  bg-white'
@@ -88,18 +85,16 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
               <DefaultAvatar />
             </View>
           )}
-          {!newAvatarUpload && imageSource && (
+          {!newAvatarUpload && src && (
             <Image
               className={clsx('h-[101px] w-[101px] rounded-full')}
-              source={imageSource as ImageSourcePropType}
-              alt="profile image"
+              source={src}
             />
           )}
           {newAvatarUpload && (
             <Image
               className={clsx('h-[101px] w-[101px] rounded-full')}
               source={{ uri: newAvatarUpload }}
-              alt="profile image"
             />
           )}
         </View>

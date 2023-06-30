@@ -68,7 +68,7 @@ export default function Login({
     reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
-  const { setAccessToken, getAccessToken } = useAuthStore();
+  const { setAccessToken, setRefreshToken } = useAuthStore();
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
@@ -76,6 +76,7 @@ export default function Login({
       .then((res) => {
         if (res.status == 201) {
           setAccessToken(res?.data.authorization || null);
+          setRefreshToken(res?.data.refresh || null);
           addAuthTokensLocalOnLogin(
             res?.data.authorization || null,
             res?.data.refresh || null

@@ -47,6 +47,7 @@ export const HomeFeed = () => {
         }
       })
       .catch((err) => {
+        console.log(err);
         GlobalDialogController.showModal({
           title: 'Error',
           message:

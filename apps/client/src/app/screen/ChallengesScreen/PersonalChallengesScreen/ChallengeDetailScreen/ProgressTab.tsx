@@ -13,6 +13,7 @@ import httpInstance from '../../../../utils/http';
 
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import EditChallengeProgressModal from '../../../../component/modal/EditChallengeProgressModal';
+import { useIsFocused } from '@react-navigation/native';
 
 interface IProgressTabProps {
   shouldRefresh: boolean;
@@ -27,11 +28,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   setShouldRefresh,
   isOtherUserProfile = false,
 }) => {
-
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<
-
-
     IProgressChallenge[]
   >([]);
   const [progressIndexToUpdate, setProgressIndexToUpdate] =
@@ -39,6 +37,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
+
+  const isFocused = useIsFocused();
 
   const { t } = useTranslation();
   useEffect(() => {
@@ -66,7 +66,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   }, [challengeData]);
 
   useEffect(() => {
-    if (shouldRefetch || shouldRefresh) {
+    if (shouldRefetch || shouldRefresh || isFocused) {
       setProgressLoading(true);
 
       httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
@@ -91,7 +91,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         setProgressLoading(false);
       }, 800);
     }
-  }, [shouldRefetch]);
+  }, [shouldRefetch, isFocused]);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -165,7 +165,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />
           )}
-        // contentContainerStyle={{ paddingBottom: 300 }}
+          // contentContainerStyle={{ paddingBottom: 300 }}
         />
       )}
       {!progressLoading && localProgressData?.length == 0 && (

@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Controller, set, useForm } from 'react-hook-form';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { IProgressComment } from '../../../types/progress';
 import { IProgressChallenge } from '../../../types/challenge';
@@ -32,6 +33,8 @@ import PostAvatar from '../../../component/common/Avatar/PostAvatar';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import TextInputWithMention from '../../../component/common/Inputs/TextInputWithMention';
+import { useUserProfileStore } from '../../../store/user-data';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface IProgressCommentScreenProps {
   route: Route<
@@ -45,11 +48,13 @@ interface IProgressCommentScreenProps {
 }
 
 interface ICommentInputProps {
-  avatar?: string;
   handleOnSubmit: (comment: string) => void;
 }
 
-const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
+const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
   const { t } = useTranslation();
   const {
     control,
@@ -74,7 +79,7 @@ const CommentInput: FC<ICommentInputProps> = ({ avatar, handleOnSubmit }) => {
 
   return (
     <View className="border-gray-medium flex flex-row border-t-[1px] bg-white px-4 py-4">
-      <PostAvatar src={avatar || 'https://picsum.photos/200/300'} />
+      <PostAvatar src={currentUser?.avatar} />
       <View className="ml-3 max-h-40 flex-1">
         <Controller
           name={'comment'}
@@ -114,7 +119,27 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     {} as IProgressChallenge
   );
 
-  const isAndroid = Platform.OS === 'android';
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (!progressId) return;
@@ -187,19 +212,26 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white ">
       {progressCommentScreenLoading && <SkeletonLoadingCommon />}
       {!progressCommentScreenLoading && (
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={0}
-          style={{ flex: 1 }}
-        >
-          <View className="relative flex-1">
-            <View className="mb-[146px] ">
-              <FlatList
-                data={comments}
-                renderItem={({ item, index }) => {
+        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+          <View className=" relative flex-1">
+            <View className="flex-1">
+              <ScrollView>
+                <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
+                  <View className="border-gray-light flex border-b bg-white px-5 py-5">
+                    <Text className="text-h4 font-semibold">
+                      {challengeName || 'Challenge created'}
+                    </Text>
+                  </View>
+                  <ChallengeProgressCardForComment
+                    progress={progressData}
+                    ownerId={ownerId}
+                    shouldRefreshComments={shouldRefreshComments}
+                  />
+                </View>
+                {comments.map((item, index) => {
                   return (
                     <View key={index} className="px-3">
                       <SingleComment
@@ -208,39 +240,17 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                       />
                     </View>
                   );
-                }}
-                ListHeaderComponent={
-                  <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
-                    <View className="border-gray-light flex border-b bg-white px-5 py-5">
-                      <Text className="text-h4 font-semibold">
-                        {challengeName || 'Challenge created'}
-                      </Text>
-                    </View>
-                    <ChallengeProgressCardForComment
-                      progress={progressData}
-                      ownerId={ownerId}
-                      shouldRefreshComments={shouldRefreshComments}
-                    />
-                  </View>
-                }
-                ListHeaderComponentStyle={{
-                  flex: 1,
-                }}
-                ListFooterComponent={
-                  <View className="h-20" style={{ flex: 1 }} />
-                }
-              />
+                })}
+
+                <View className="h-20" style={{ flex: 1 }} />
+              </ScrollView>
             </View>
 
-            <View
-              className={`absolute w-full ${
-                isAndroid ? 'bottom-[38px]' : 'bottom-[100px]'
-              }`}
-            >
+            <View className={`absolute bottom-0 w-full`}>
               <CommentInput handleOnSubmit={handleSubmit} />
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       )}
     </SafeAreaView>
   );

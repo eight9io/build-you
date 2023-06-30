@@ -5,7 +5,6 @@
   "error_general_message": "Something went wrong. Please try again later.",
   "error_network_message": "Please check your internet connection and try again.",
   "error_permission_message": "Permission denied. Please try again later.",
-
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
   "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
   "login_screen.register": "Register for free ",
@@ -23,6 +22,7 @@
   "challenge_detail_screen.new_progress": "New progress",
   "challenge_detail_screen.new_progress_post": "POST",
   "challenge_detail_screen.add_new_employees": "Add new employees",
+  "challenge_detail_screen.no_progress_yet": "No progress yet",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
@@ -326,12 +326,12 @@
     "no_challenge": "No challenge at the moment",
     "no_employee": "No employee at the moment"
   },
-"empty_followers":"You have no followers at the moment",
-"empty_following":"You follow no one at the moment",
-"empty_employee":{
-  "content_1":"You have no employee at the moment.",
-  "content_2":"Click",
-  "content_3":"Add new employee",
-  "content_4":"to add employee to your company."
-}
+  "empty_followers": "You have no followers at the moment",
+  "empty_following": "You follow no one at the moment",
+  "empty_employee": {
+    "content_1": "You have no employee at the moment.",
+    "content_2": "Click",
+    "content_3": "Add new employee",
+    "content_4": "to add employee to your company."
+  }
 }

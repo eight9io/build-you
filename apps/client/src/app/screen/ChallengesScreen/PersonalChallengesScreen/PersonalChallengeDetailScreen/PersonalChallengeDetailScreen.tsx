@@ -53,127 +53,127 @@ export const RightPersonalChallengeDetailOptions: FC<
   onEditChallengeBtnPress,
   setIsDeleteChallengeDialogVisible,
 }) => {
-    const [isSharing, setIsSharing] = React.useState(false);
-    const [
-      isCompletedChallengeDialogVisible,
-      setIsCompletedChallengeDialogVisible,
-    ] = useState<boolean>(false);
-    const [isCompletedChallengeSuccess, setIsCompletedChallengeSuccess] =
-      useState<boolean | null>(null);
-    const [
-      isChallengeAlreadyCompletedDialogVisible,
-      setIsChallengeAlreadyCompletedDialogVisible,
-    ] = useState<boolean>(false);
+  const [isSharing, setIsSharing] = React.useState(false);
+  const [
+    isCompletedChallengeDialogVisible,
+    setIsCompletedChallengeDialogVisible,
+  ] = useState<boolean>(false);
+  const [isCompletedChallengeSuccess, setIsCompletedChallengeSuccess] =
+    useState<boolean | null>(null);
+  const [
+    isChallengeAlreadyCompletedDialogVisible,
+    setIsChallengeAlreadyCompletedDialogVisible,
+  ] = useState<boolean>(false);
 
-    const isChallengeCompleted = challengeData?.status === 'closed';
+  const isChallengeCompleted = challengeData?.status === 'closed';
 
-    // when sharing is available, we can share the image
-    const onShare = async () => {
-      setIsSharing(true);
-      try {
-        const fileUri = FileSystem.documentDirectory + 'test.png';
-        await FileSystem.downloadAsync(image.uri, fileUri);
-        await Sharing.shareAsync(fileUri);
-      } catch (error) {
-        console.error(error);
-      }
-      setIsSharing(false);
-    };
+  // when sharing is available, we can share the image
+  const onShare = async () => {
+    setIsSharing(true);
+    try {
+      const fileUri = FileSystem.documentDirectory + 'test.png';
+      await FileSystem.downloadAsync(image.uri, fileUri);
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsSharing(false);
+  };
 
-    const onCheckChallengeCompleted = () => {
-      if (!challengeData) return;
-      if (isChallengeCompleted) {
-        setIsChallengeAlreadyCompletedDialogVisible(true);
-      } else {
-        setIsCompletedChallengeDialogVisible(true);
-      }
-    };
+  const onCheckChallengeCompleted = () => {
+    if (!challengeData) return;
+    if (isChallengeCompleted) {
+      setIsChallengeAlreadyCompletedDialogVisible(true);
+    } else {
+      setIsCompletedChallengeDialogVisible(true);
+    }
+  };
 
-    const onCompleteChallenge = () => {
-      if (!challengeData) return;
-      completeChallenge(challengeData.id)
-        .then((res) => {
-          if (res.status === 200 || res.status === 201) {
-            setIsCompletedChallengeDialogVisible(false);
-            setTimeout(() => {
-              setIsCompletedChallengeSuccess(true);
-              setShouldRefresh(true);
-            }, 600);
-          }
-        })
-        .catch((err) => {
+  const onCompleteChallenge = () => {
+    if (!challengeData) return;
+    completeChallenge(challengeData.id)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
           setIsCompletedChallengeDialogVisible(false);
           setTimeout(() => {
-            setIsCompletedChallengeSuccess(false);
+            setIsCompletedChallengeSuccess(true);
+            setShouldRefresh(true);
           }, 600);
-        });
-    };
-
-    const onCloseSuccessDialog = () => {
-      setIsCompletedChallengeSuccess(null);
-    };
-
-    return (
-      <View>
-        <ConfirmDialog
-          isVisible={isCompletedChallengeDialogVisible}
-          title="Mark this challenge as complete?"
-          description="You cannot edit challenge or update progress after marking the challenge as complete"
-          confirmButtonLabel="Complete"
-          closeButtonLabel="Cancel"
-          onConfirm={onCompleteChallenge}
-          onClosed={() => setIsCompletedChallengeDialogVisible(false)}
-        />
-        <ConfirmDialog
-          isVisible={isChallengeAlreadyCompletedDialogVisible}
-          title="Challenge already completed"
-          description="This challenge has already been completed. Please try another one."
-          confirmButtonLabel="Got it"
-          onConfirm={() => {
-            setIsChallengeAlreadyCompletedDialogVisible(false);
-          }}
-        />
-        {isCompletedChallengeSuccess !== null && (
-          <ConfirmDialog
-            isVisible={isCompletedChallengeSuccess !== null}
-            title={
-              isCompletedChallengeSuccess ? 'Congrats!' : 'Something went wrong'
-            }
-            description={
-              isCompletedChallengeSuccess
-                ? 'Challenge has been completed successfully.'
-                : 'Please try again later.'
-            }
-            confirmButtonLabel="Got it"
-            onConfirm={onCloseSuccessDialog}
-          />
-        )}
-        <View className="-mt-1 flex flex-row items-center">
-          <TouchableOpacity onPress={onCheckChallengeCompleted} disabled={isChallengeCompleted}>
-            {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
-          </TouchableOpacity>
-          <View className="pl-4 pr-2">
-            <Button Icon={<ShareIcon />} onPress={onShare} />
-          </View>
-
-          <PopUpMenu
-            iconColor="#FF7B1D"
-            isDisabled={isChallengeCompleted}
-            options={[
-              {
-                text: 'Edit',
-                onPress: onEditChallengeBtnPress,
-              },
-              {
-                text: 'Delete',
-                onPress: () => setIsDeleteChallengeDialogVisible(true),
-              },
-            ]}
-          />
-        </View>
-      </View>
-    );
+        }
+      })
+      .catch((err) => {
+        setIsCompletedChallengeDialogVisible(false);
+        setTimeout(() => {
+          setIsCompletedChallengeSuccess(false);
+        }, 600);
+      });
   };
+
+  const onCloseSuccessDialog = () => {
+    setIsCompletedChallengeSuccess(null);
+  };
+
+  return (
+    <View>
+      <ConfirmDialog
+        isVisible={isCompletedChallengeDialogVisible}
+        title="Mark this challenge as complete?"
+        description="You cannot edit challenge or update progress after marking the challenge as complete"
+        confirmButtonLabel="Complete"
+        closeButtonLabel="Cancel"
+        onConfirm={onCompleteChallenge}
+        onClosed={() => setIsCompletedChallengeDialogVisible(false)}
+      />
+      <ConfirmDialog
+        isVisible={isChallengeAlreadyCompletedDialogVisible}
+        title="Challenge already completed"
+        description="This challenge has already been completed. Please try another one."
+        confirmButtonLabel="Got it"
+        onConfirm={() => {
+          setIsChallengeAlreadyCompletedDialogVisible(false);
+        }}
+      />
+      {isCompletedChallengeSuccess !== null && (
+        <ConfirmDialog
+          isVisible={isCompletedChallengeSuccess !== null}
+          title={
+            isCompletedChallengeSuccess ? 'Congrats!' : 'Something went wrong'
+          }
+          description={
+            isCompletedChallengeSuccess
+              ? 'Challenge has been completed successfully.'
+              : 'Please try again later.'
+          }
+          confirmButtonLabel="Got it"
+          onConfirm={onCloseSuccessDialog}
+        />
+      )}
+      <View className="-mt-1 flex flex-row items-center">
+        <TouchableOpacity onPress={onCheckChallengeCompleted}>
+          <TaskAltIcon />
+        </TouchableOpacity>
+        <View className="pl-4 pr-2">
+          <Button Icon={<ShareIcon />} onPress={onShare} />
+        </View>
+
+        <PopUpMenu
+          iconColor="#FF7B1D"
+          isDisabled={isChallengeCompleted}
+          options={[
+            {
+              text: 'Edit',
+              onPress: onEditChallengeBtnPress,
+            },
+            {
+              text: 'Delete',
+              onPress: () => setIsDeleteChallengeDialogVisible(true),
+            },
+          ]}
+        />
+      </View>
+    </View>
+  );
+};
 
 const PersonalChallengeDetailScreen = ({
   route,
@@ -212,7 +212,6 @@ const PersonalChallengeDetailScreen = ({
       ),
     });
   }, [challengeData]);
-
 
   useEffect(() => {
     if (!challengeId && !shouldRefresh) return;

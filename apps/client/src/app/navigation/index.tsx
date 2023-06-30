@@ -52,6 +52,8 @@ import {
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
 
+import { removeAuthTokensLocalOnLogout } from '../utils/checkAuth';
+
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
@@ -130,6 +132,8 @@ export const RootNavigation = () => {
   const initNotification = (
     navigation: NavigationContainerRef<RootStackParamList>
   ) => {
+    if (!Device.isDevice) return;
+
     // register task to run whenever is received while the app is in the background
     Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
@@ -149,6 +153,7 @@ export const RootNavigation = () => {
       setHasNewNotification(false); // reset the new notification flag
     });
   };
+
   return (
     <NavigationContainer ref={navigationRef}>
       <GlobalDialog />
@@ -182,6 +187,21 @@ export const RootNavigation = () => {
               options={{
                 headerShown: false,
               }}
+            />
+            <RootStack.Screen
+              name="ProgressCommentScreen"
+              component={ProgressCommentScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => '',
+                headerLeft: (props) => (
+                  <NavButton
+                    text={t('button.back') as string}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
             />
             <RootStack.Screen
               name="CreateCompanyChallengeScreen"

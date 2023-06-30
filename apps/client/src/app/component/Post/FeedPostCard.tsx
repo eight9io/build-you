@@ -1,14 +1,15 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageSourcePropType,
-} from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { FC } from 'react';
 import { clsx } from 'clsx';
+import { useTranslation } from 'react-i18next';
 
-import Card from '../common/Card';
+import { IFeedPostProps } from '../../types/common';
+import { RootStackParamList } from '../../navigation/navigation.type';
+
+import { useAuthStore } from '../../store/auth-store';
+import { getImageFromUrl } from '../../hooks/getImageFromUrl';
+import { getTimeDiffToNow } from '../../utils/time';
+
 import PostAvatar from '../common/Avatar/PostAvatar';
 import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
@@ -16,11 +17,6 @@ import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 import BackSvg from '../asset/back.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigation/navigation.type';
-import { useAuthStore } from '../../store/auth-store';
-import { useTranslation } from 'react-i18next';
-import { IFeedPostProps } from '../../types/common';
-import { getTimeDiffToNow } from '../../utils/time';
 
 interface IChallengeImageProps {
   name: string;
@@ -114,10 +110,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             onPress={navigateToUserProfile}
           >
             <View className="flex-row">
-              <PostAvatar
-                src="https://picsum.photos/200/300"
-                onPress={navigateToUserProfile}
-              />
+              <PostAvatar src={user?.avatar} onPress={navigateToUserProfile} />
               <View className="ml-2">
                 <Text className="text-h6 font-bold">
                   {user?.name} {user?.surname}

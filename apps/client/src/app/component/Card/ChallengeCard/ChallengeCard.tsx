@@ -15,6 +15,7 @@ interface IChallengeCardProps {
   imageSrc: string | null | undefined;
   navigation?: any;
   handlePress?: () => void;
+  isFromOtherUser?: boolean;
 }
 
 const CompanyTag = () => {
@@ -32,18 +33,23 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   isCompany,
   navigation,
   handlePress,
+  isFromOtherUser = false,
 }) => {
-
   const [loading, setLoading] = useState<boolean>(true);
   const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
   const onPress = () => {
     // handlePress or navigation
     if (navigation) {
       if (isCompany) navigation.navigate('CompanyChallengeDetailScreen');
-      else
-        navigation.navigate('PersonalChallengeDetailScreen', {
+      else if (isFromOtherUser) {
+        navigation.navigate('OtherUserProfileDetailsScreen', {
           challengeId: item.id,
         });
+        return;
+      }
+      navigation.navigate('PersonalChallengeDetailScreen', {
+        challengeId: item.id,
+      });
       return;
     }
     if (handlePress) handlePress();

@@ -14,6 +14,7 @@ import {
 } from '../../../../utils/uploadUserImage';
 
 import DefaultAvatar from '../../../asset/default-avatar.svg';
+import IconUploadAvatar from './asset/uploadAvatar.svg';
 import ConfirmDialog from '../../Dialog/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
 
@@ -82,7 +83,7 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
                 'z-10 h-[101px] w-[101px] rounded-full  bg-white'
               )}
             >
-              <DefaultAvatar />
+              <DefaultAvatar width={100} height={100} />
             </View>
           )}
           {!newAvatarUpload && src && (
@@ -101,12 +102,14 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
       </Pressable>
       {!isOtherUser && (
         <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
-          <Image
+          <View
             className={clsx(
-              'absolute bottom-[-40px] right-0 h-[28px] w-[28px] rounded-full'
+              'absolute bottom-[-40px] right-0 rounded-full'
             )}
-            source={require('./asset/camera.png')}
-          />
+
+          >
+            <IconUploadAvatar />
+          </View>
         </TouchableOpacity>
       )}
     </View>

@@ -18,11 +18,11 @@ export const fetchListEmployee = (id: any, setEmployeeList: any) => {
     serviceGetEmployeeList(id)
         .then((res) => {
             setEmployeeList(res.data)
-            // console.log("🚀 ~ file: profile.ts:21 ~ .then ~ res.data:", res.data)
+
         })
 
         .catch((err) => {
-            // console.log("🚀 ~ file: profile.ts:22 ~ fetchListEmployee ~ err:", err)
+
             if (err.response.status == 404) setEmployeeList([])
         });
 

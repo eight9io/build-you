@@ -56,8 +56,8 @@ export const EmployeesTab: FC<IEmployeesTabProps> = ({ employeeList }) => {
   const userProfile = getUserProfile();
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className="pb-4 pt-4 mr-2 mb-[100px] px-4 ">
-        <View className=" h-12">
+      <View className="pb-4 pt-4 mr-2 px-4 ">
+        <View className=" h-12 mt-4">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}
             containerClassName="bg-primary-default"
@@ -88,7 +88,7 @@ export const EmployeesTab: FC<IEmployeesTabProps> = ({ employeeList }) => {
         employeeList.length == 0 && userProfile?.companyAccount && (
           <>
             <AddNewChallengeEmployeesButton />
-            <View className=" mx-4 flex-1 justify-center items-center mb-[100px]">
+            <View className=" mx-6 flex-1 justify-center items-center mb-[100px]">
               <Empty />
               <View className={clsx('flex mt-4 flex-col items-center justify-center text-[#6C6E76]')}>
                 <Text className={clsx('text-lg text-[#6C6E76]')}>

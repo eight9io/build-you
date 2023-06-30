@@ -14,6 +14,7 @@ import httpInstance from '../../../../utils/http';
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import EditChallengeProgressModal from '../../../../component/modal/EditChallengeProgressModal';
 import { useIsFocused } from '@react-navigation/native';
+import { IUserData } from 'apps/client/src/app/types/user';
 
 interface IProgressTabProps {
   shouldRefresh: boolean;
@@ -155,7 +156,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           }
           renderItem={({ item, index }) => (
             <ProgressCard
-              userData={userData}
+              userData={
+                isOtherUserProfile
+                  ? (challengeData.owner[0] as IUserData)
+                  : userData
+              }
               itemProgressCard={item}
               challengeName={challengeData.goal}
               setShouldRefresh={setShouldRefresh}

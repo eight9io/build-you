@@ -125,8 +125,34 @@ const HomeScreen = () => {
           ),
         })}
       />
- 
-      {/* <HomeScreenStack.Screen
+
+      <HomeScreenStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          // headerRight: () => {
+          //   return (
+          //     <View>
+          //       <Button
+          //         Icon={<ShareIcon />}
+          //         onPress={() => console.log('press share')}
+          //       />
+          //     </View>
+          //   );
+          // },
+        })}
+      />
+
+      <HomeScreenStack.Screen
         name="OtherUserProfileDetailsScreen"
         component={OtherUserProfileDetailsScreen}
         options={({ navigation }) => ({
@@ -150,9 +176,7 @@ const HomeScreen = () => {
             );
           },
         })}
-      /> */}
-
- 
+      />
     </HomeScreenStack.Navigator>
   );
 };

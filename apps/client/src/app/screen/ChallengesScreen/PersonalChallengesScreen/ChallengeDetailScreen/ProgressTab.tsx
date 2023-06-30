@@ -147,7 +147,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         />
       )}
       {progressLoading && <SkeletonLoadingCommon />}
-      {!progressLoading && localProgressData.length > 0 && (
+      {!progressLoading && localProgressData?.length > 0 && (
         <FlatList
           data={localProgressData}
           keyExtractor={(item) => item.id}

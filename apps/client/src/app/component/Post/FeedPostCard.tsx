@@ -1,7 +1,8 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import React, { FC } from 'react';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
+import { Image } from 'expo-image';
 
 import { IFeedPostProps } from '../../types/common';
 import { RootStackParamList } from '../../navigation/navigation.type';
@@ -39,7 +40,8 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
         <Image
           className={clsx('aspect-square w-full rounded-t-xl')}
           source={{
-            uri: image as string,
+            // uri: image as string,
+            uri: 'https://buildyou-front.stg.startegois.com/uploads/progress/image/474784d3-23a9-4a7c-911f-a628573f3c89_8f1f3826a1d0338920f67ccc0ebc5f43.jpg',
           }}
         />
         <View
@@ -63,7 +65,7 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 };
 
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
-  itemFeedPostCard: { id, caption, user, image, updatedAt },
+  itemFeedPostCard: { id, caption, user, image, updatedAt, challenge },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
@@ -101,6 +103,22 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       challengeName: 'Climbing Mont Blanc',
     });
   };
+
+  const navigateToChallengeDetail = () => {
+    if (!challenge?.id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_general_message') ||
+          'Something went wrong. Please try again later!',
+      });
+      return;
+    }
+    navigation.navigate('OtherUserProfileDetailsScreen', {
+      challengeId: challenge?.id,
+    });
+  };
+
   return (
     <View className="relative w-full">
       <View className="relative mb-1">
@@ -123,14 +141,9 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           </TouchableOpacity>
           <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
           <ChallengeImage
-            name={caption}
+            name={challenge?.goal}
             image={image}
-            onPress={() =>
-              navigation.navigate('ProgressCommentScreen', {
-                progressId: id,
-                challengeName: caption,
-              })
-            }
+            onPress={navigateToChallengeDetail}
           />
           <View className="mt-4 flex-row">
             <LikeButton progressId={id} />

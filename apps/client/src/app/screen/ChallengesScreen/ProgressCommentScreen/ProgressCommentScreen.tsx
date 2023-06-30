@@ -234,7 +234,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                   <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
                     <View className="border-gray-light flex border-b bg-white px-5 py-5">
                       <Text className="text-h4 font-semibold">
-                        {challengeName || 'Challenge created'}
+                        {progressData.challenge?.goal || 'Challenge created'}
                       </Text>
                     </View>
                     <ChallengeProgressCardForComment

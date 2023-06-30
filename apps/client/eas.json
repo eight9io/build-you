@@ -20,6 +20,9 @@
       "ios": {
         "simulator": true
       }
+    },
+    "adhoc": {
+      "distribution": "internal",
     }
   },
   "submit": {

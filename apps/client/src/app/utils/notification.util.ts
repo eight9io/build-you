@@ -74,25 +74,31 @@ export const handleUserTapOnNotification = async (
     case NOTIFICATION_TYPES.NEW_CHALLENGE_FROM_FOLLOWING:
       if (payload.post_id)
         // ProgressCommentScreen is a screen inside a nested stack navigator
-        navigation.navigate('HomeScreen', {
-          screen: 'Challenges',
-          params: {
-            screen: 'ProgressCommentScreen',
-            params: {
-              progressId: payload.post_id,
-              challengeName: 'MOCK CHALLENGE NAME',
-            },
-          },
+        navigation.navigate('ProgressCommentScreen', {
+          progressId: payload.post_id,
         });
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      // TO DO: navigate to the Progress Comment Screen
+      if (payload.post_id)
+        // ProgressCommentScreen is a screen inside a nested stack navigator
+        navigation.navigate('ProgressCommentScreen', {
+          progressId: payload.post_id,
+        });
       break;
     case NOTIFICATION_TYPES.NEW_MENTION:
-      // TO DO: navigate to the Progress Comment Screen
+      if (payload.post_id)
+        // ProgressCommentScreen is a screen inside a nested stack navigator
+        navigation.navigate('ProgressCommentScreen', {
+          progressId: payload.post_id,
+        });
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      // TO DO: navigate to the Progress Comment Screen
+      if (payload.new_follower_id)
+        // ProgressCommentScreen is a screen inside a nested stack navigator
+        navigation.navigate('OtherUserProfileScreen', {
+          userId: payload.new_follower_id,
+          isFollower: true,
+        });
       break;
   }
 };

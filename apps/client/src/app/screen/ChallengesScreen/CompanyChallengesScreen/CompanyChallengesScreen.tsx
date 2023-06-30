@@ -162,22 +162,6 @@ const CompanyChallengesScreen = () => {
           ),
         })}
       />
-
-      {/* <CompanyChallengesStack.Screen
-        name="ProgressCommentScreen"
-        component={ProgressCommentScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => '',
-          headerLeft: (props) => (
-            <NavButton
-              text={t('button.back') as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      /> */}
     </CompanyChallengesStack.Navigator>
   );
 };

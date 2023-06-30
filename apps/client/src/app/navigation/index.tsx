@@ -253,13 +253,6 @@ export const RootNavigation = () => {
                 ),
               })}
             />
-            {/* <RootStack.Screen
-              name="NotificationsScreen"
-              component={NotificationsScreen}
-              options={{
-                headerShown: false,
-              }}
-            /> */}
           </>
         )}
         {logined && !isCompleteProfile && isCompleteProfile !== null && (

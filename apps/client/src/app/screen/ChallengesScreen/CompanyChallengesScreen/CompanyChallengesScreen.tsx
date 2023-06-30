@@ -163,7 +163,7 @@ const CompanyChallengesScreen = () => {
         })}
       />
 
-      <CompanyChallengesStack.Screen
+      {/* <CompanyChallengesStack.Screen
         name="ProgressCommentScreen"
         component={ProgressCommentScreen}
         options={({ navigation }) => ({
@@ -177,7 +177,7 @@ const CompanyChallengesScreen = () => {
             />
           ),
         })}
-      />
+      /> */}
     </CompanyChallengesStack.Navigator>
   );
 };

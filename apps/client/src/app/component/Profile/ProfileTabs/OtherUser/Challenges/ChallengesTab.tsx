@@ -58,6 +58,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
           renderItem={({ item }: { item: IChallenge }) => (
             <ChallengeCard
               item={item}
+              isFromOtherUser
               imageSrc={`${item.image}`}
               handlePress={() => handleNavigateToChallengeDetail(item.id)}
             />

@@ -75,7 +75,7 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
 const renderValue = (value: string, partTypes: PartType[]) => {
   const { parts } = parseValue(value, partTypes);
   return (
-    <View className="flex w-full flex-row items-center flex-wrap">
+    <View className="flex w-full flex-row flex-wrap items-center">
       {parts.map(renderPart)}
     </View>
   );
@@ -121,11 +121,13 @@ const SingleComment: FC<ISingleCommentProps> = ({
     >
       <View
         className={clsx(
-          'bg-gray-veryLight mb-3 w-full flex-row justify-between'
+          'bg-gray-veryLight mb-3 flex w-full flex-row justify-between'
         )}
       >
-        <View className={clsx('flex-row')}>
-          <PostAvatar src={'https://picsum.photos/200/300'} />
+        <View className={clsx('flex flex-row')}>
+          <PostAvatar
+            src={`https://buildyou-front.stg.startegois.com/uploads/profile/image/95ba5302-950c-4c7b-ab61-1da316ff0617_429e13e4646e8dca214334af19d63f70.jpg`}
+          />
           <View className={clsx('ml-2')}>
             <Text
               className={clsx(

@@ -18,6 +18,10 @@ import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import OtherUserProfileScreen from '../OtherUser/OtherUserProfileScreen';
+import OtherUserProfileDetailsScreen from '../OtherUser/OtherUserProfileDetailsScreen';
+import Button from '../../../component/common/Buttons/Button';
+
+import ShareIcon from '../../../../../assets/svg/share.svg';
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -116,6 +120,32 @@ const PersonalProfileScreen = () => {
           // },
         })}
       />
+         <ProfileStack.Screen
+        name="OtherUserProfileDetailsScreen"
+        component={OtherUserProfileDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
+
     </ProfileStack.Navigator>
   );
 };

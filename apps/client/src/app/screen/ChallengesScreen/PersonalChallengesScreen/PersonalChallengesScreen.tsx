@@ -160,7 +160,7 @@ const PersonalChallengesNavigator = () => {
           ),
         })}
       />
-      <PersonalChallengesStack.Screen
+      {/* <PersonalChallengesStack.Screen
         name="OtherUserProfileScreen"
         component={OtherUserProfileScreen}
         options={({ navigation }) => ({
@@ -184,8 +184,8 @@ const PersonalChallengesNavigator = () => {
             );
           },
         })}
-      />
-      <PersonalChallengesStack.Screen
+      /> */}
+      {/* <PersonalChallengesStack.Screen
         name="OtherUserProfileDetailsScreen"
         component={OtherUserProfileDetailsScreen}
         options={({ navigation }) => ({
@@ -209,8 +209,8 @@ const PersonalChallengesNavigator = () => {
             );
           },
         })}
-      />
-      <PersonalChallengesStack.Screen
+      /> */}
+      {/* <PersonalChallengesStack.Screen
         name="ProgressCommentScreen"
         component={ProgressCommentScreen}
         options={({ navigation }) => ({
@@ -224,7 +224,7 @@ const PersonalChallengesNavigator = () => {
             />
           ),
         })}
-      />
+      /> */}
     </PersonalChallengesStack.Navigator>
   );
 };

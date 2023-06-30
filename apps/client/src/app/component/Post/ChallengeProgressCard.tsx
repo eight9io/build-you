@@ -46,7 +46,7 @@ const ChallengeProgressCardForComment: React.FC<
       <View className="bg-white p-5">
         <View className="mb-3 flex-row justify-between">
           <View className="flex-row">
-            <PostAvatar src="https://picsum.photos/200/300" />
+            <PostAvatar src={otherData?.avatar} />
             <View className="ml-2">
               <Text className="text-h6 font-bold">
                 {otherData?.name} {otherData?.surname}

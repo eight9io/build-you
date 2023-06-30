@@ -218,20 +218,9 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
           <View className=" relative flex-1">
             <View className="flex-1">
-              <ScrollView>
-                <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
-                  <View className="border-gray-light flex border-b bg-white px-5 py-5">
-                    <Text className="text-h4 font-semibold">
-                      {challengeName || 'Challenge created'}
-                    </Text>
-                  </View>
-                  <ChallengeProgressCardForComment
-                    progress={progressData}
-                    ownerId={ownerId}
-                    shouldRefreshComments={shouldRefreshComments}
-                  />
-                </View>
-                {comments.map((item, index) => {
+            <FlatList
+                data={comments}
+                renderItem={({ item, index }) => {
                   return (
                     <View key={index} className="px-3">
                       <SingleComment
@@ -240,10 +229,28 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                       />
                     </View>
                   );
-                })}
-
-                <View className="h-20" style={{ flex: 1 }} />
-              </ScrollView>
+                }}
+                ListHeaderComponent={
+                  <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
+                    <View className="border-gray-light flex border-b bg-white px-5 py-5">
+                      <Text className="text-h4 font-semibold">
+                        {challengeName || 'Challenge created'}
+                      </Text>
+                    </View>
+                    <ChallengeProgressCardForComment
+                      progress={progressData}
+                      ownerId={ownerId}
+                      shouldRefreshComments={shouldRefreshComments}
+                    />
+                  </View>
+                }
+                ListHeaderComponentStyle={{
+                  flex: 1,
+                }}
+                ListFooterComponent={
+                  <View className="h-20" style={{ flex: 1 }} />
+                }
+              />
             </View>
 
             <View className={`absolute bottom-0 w-full`}>

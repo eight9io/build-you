@@ -14,9 +14,10 @@ import {
   MentionSuggestionsProps,
 } from 'react-native-controlled-mentions/dist/types';
 
+import { ISearchUserData } from '../../../types/user';
+
 import { servieGetUserOnSearch } from '../../../service/search';
 import { useDebounce } from '../../../hooks/useDebounce';
-import { MOCK_FOLLOW_USERS } from '../../../mock-data/follow';
 
 interface ITextInputWithMentionProps extends MentionInputProps {
   reset?: any;
@@ -37,27 +38,26 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
   keyword,
   onSuggestionPress,
 }) => {
-  // const [isSearching, setIsSearching] = useState(false);
-  // const [searchResults, setSearchResults] = useState([]);
-  // const debouncedSearchQuery = useDebounce(keyword, 500); // Adjust the delay as needed
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<ISearchUserData[]>([]);
+  const debouncedSearchQuery = useDebounce(keyword, 500); // Adjust the delay as needed
 
-  // useEffect(() => {
-  //   if (debouncedSearchQuery) {
-  //     console.log('debouncedSearchQuery', debouncedSearchQuery);
-  //     setIsSearching(true);
-  //     servieGetUserOnSearch(debouncedSearchQuery).then((results) => {
-  //       console.log('results', results);
-  //       setIsSearching(false);
-  //       setSearchResults(results);
-  //     });
-  //   } else {
-  //     setSearchResults([]);
-  //   }
-  // }, [debouncedSearchQuery]);
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      console.log('debouncedSearchQuery', debouncedSearchQuery);
+      setIsSearching(true);
+      servieGetUserOnSearch(debouncedSearchQuery).then((results) => {
+        setIsSearching(false);
+        setSearchResults(results);
+      });
+    } else {
+      setSearchResults([]);
+    }
+  }, [debouncedSearchQuery]);
 
   return (
     <>
-      {keyword && MOCK_FOLLOW_USERS.length > 0 && (
+      {keyword && searchResults.length > 0 && (
         <FlatList
           className={clsx(
             'bg-gray-veryLight absolute z-10 h-72 w-full rounded-lg px-4 py-2'
@@ -65,8 +65,16 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
           style={{
             bottom: commentInputHeight,
           }}
-          data={MOCK_FOLLOW_USERS.filter((one) =>
-            one.name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())
+          data={searchResults.filter(
+            (one) =>
+              (one?.name &&
+                one.name
+                  .toLocaleLowerCase()
+                  .includes(keyword.toLocaleLowerCase())) ||
+              (one?.surname &&
+                one.surname
+                  .toLocaleLowerCase()
+                  .includes(keyword.toLocaleLowerCase()))
           )}
           showsVerticalScrollIndicator={true}
           keyExtractor={(item, index) => index.toString()}

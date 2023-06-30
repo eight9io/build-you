@@ -31,13 +31,8 @@ interface ISingleCommentProps {
 // TODO: @[userName](user_id), haven't handle case where user change their name, need change comment api
 
 const renderPart = (part: Part, index: number, navigataion: any) => {
-  // Just plain text
-  if (!part.partType) {
-    return <Text key={index}>{part.text}</Text>;
-  }
-
   // Mention type part
-  if (isMentionPartType(part.partType)) {
+  if (part?.partType && isMentionPartType(part.partType)) {
     const { t } = useTranslation();
 
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -63,6 +58,10 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
         {part.text}
       </Text>
     );
+  }
+  // Just plain text
+  if (!part.partType) {
+    return <Text key={index}>{part.text}</Text>;
   }
 
   return (

@@ -37,3 +37,12 @@ export interface IHardSkill {
   id: string;
   skill: string;
 }
+
+export interface ISearchUserData {
+  avatar: string;
+  companyAccount: boolean;
+  email: string;
+  id: string;
+  name: string;
+  surname: string;
+}

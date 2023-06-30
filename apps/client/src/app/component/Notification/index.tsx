@@ -2,14 +2,15 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import NotiItem from './NotiItem';
+import { NOTIFICATION_TYPES } from '../../common/enum';
 
-interface INotificaitonProps {
+interface INotificationProps {
   title: string;
   notificationItems?: any[];
   isPrevious?: boolean;
 }
 
-const Notificaiton: React.FC<INotificaitonProps> = ({
+const Notification: React.FC<INotificationProps> = ({
   title,
   notificationItems,
   isPrevious = false,
@@ -20,11 +21,24 @@ const Notificaiton: React.FC<INotificaitonProps> = ({
         <Text className="text-lg font-medium">{title}</Text>
       </View>
 
-      <NotiItem typeOfNoti="comment" isPrevious={isPrevious} />
-      <NotiItem typeOfNoti="follow" isPrevious={isPrevious} />
-      <NotiItem typeOfNoti="comment" isPrevious={isPrevious} />
+      <NotiItem
+        typeOfNoti={NOTIFICATION_TYPES.NEW_COMMENT}
+        isPrevious={isPrevious}
+      />
+      <NotiItem
+        typeOfNoti={NOTIFICATION_TYPES.NEW_FOLLOWER}
+        isPrevious={isPrevious}
+      />
+      <NotiItem
+        typeOfNoti={NOTIFICATION_TYPES.NEW_CHALLENGE_FROM_FOLLOWING}
+        isPrevious={isPrevious}
+      />
+      <NotiItem
+        typeOfNoti={NOTIFICATION_TYPES.NEW_MENTION}
+        isPrevious={isPrevious}
+      />
     </View>
   );
 };
 
-export default Notificaiton;
+export default Notification;

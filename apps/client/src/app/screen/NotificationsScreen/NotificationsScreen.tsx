@@ -12,7 +12,7 @@ import AppTitle from '../../component/common/AppTitle';
 import NavButton from '../../component/common/Buttons/NavButton';
 import IconSearch from '../../component/common/IconSearch/IconSearch';
 
-import Notificaiton from '../../component/Notification';
+import Notification from '../../component/Notification';
 import { useNotificationStore } from '../../store/notification';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -51,8 +51,8 @@ const Notifications = ({
       /> */}
 
         <View>
-          <Notificaiton title="New" />
-          <Notificaiton title="Previous" isPrevious={true} />
+          <Notification title="New" />
+          <Notification title="Previous" isPrevious={true} />
         </View>
       </SafeAreaView>
     </ScrollView>

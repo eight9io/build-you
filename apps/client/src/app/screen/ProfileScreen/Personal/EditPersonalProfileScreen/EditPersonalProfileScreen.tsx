@@ -45,6 +45,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
   hardSkill,
 
 }) => {
+  const { t } = useTranslation();
   const handleOpenEditHardSkillModal = () => {
     setOpenModal();
   };
@@ -76,6 +77,12 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
             })}
         </View>
       </View>
+      {hardSkill.length < 3 && <View className="flex flex-row pt-2">
+        <Warning />
+        <Text className="pl-1 text-sm font-normal text-red-500">
+          {t('form_onboarding.screen_3.error') as string}
+        </Text>
+      </View>}
     </View>
   );
 };

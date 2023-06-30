@@ -1,10 +1,10 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
-import { NOTIFICATION_TYPES } from '../common/constants';
 import { RootStackParamList } from '../navigation/navigation.type';
 import { NavigationContainerRef } from '@react-navigation/native';
 import { INotificationPayload } from '../types/notification';
+import { NOTIFICATION_TYPES } from '../common/enum';
 
 export const registerForPushNotificationsAsync = async () => {
   let token;
@@ -99,6 +99,26 @@ export const handleUserTapOnNotification = async (
           userId: payload.new_follower_id,
           isFollower: true,
         });
+      break;
+  }
+};
+
+export const getNotificationContent = (
+  notificationType: NOTIFICATION_TYPES,
+  contentPayload: any
+) => {
+  switch (notificationType) {
+    case NOTIFICATION_TYPES.NEW_CHALLENGE_FROM_FOLLOWING:
+      return `has added a new progress in ${contentPayload?.challengeName || 'a challenge'}`;
+      break;
+    case NOTIFICATION_TYPES.NEW_COMMENT:
+      return `commented on your update`;
+      break;
+    case NOTIFICATION_TYPES.NEW_MENTION:
+      return `mentioned you in a comment`;
+      break;
+    case NOTIFICATION_TYPES.NEW_FOLLOWER:
+      return `has started following you`;
       break;
   }
 };

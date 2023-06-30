@@ -93,7 +93,7 @@ const CompanyProfileScreen = () => {
           ),
         })}
       />
-      {/* <CompanyStack.Screen
+      <CompanyStack.Screen
         name="OtherUserProfileScreen"
         component={OtherUserProfileScreen}
         options={({ navigation }) => ({
@@ -107,7 +107,7 @@ const CompanyProfileScreen = () => {
             />
           ),
         })}
-      /> */}
+      />
     </CompanyStack.Navigator>
   );
 };

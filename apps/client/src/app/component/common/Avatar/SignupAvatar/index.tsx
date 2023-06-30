@@ -11,7 +11,7 @@ import {
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
 
-interface ISignupAvatarProps {}
+interface ISignupAvatarProps { }
 
 const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
@@ -41,7 +41,7 @@ const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
                 source={{ uri: newAvatarUpload }}
               />
             )}
-            {!newAvatarUpload && <DefaultAvatar />}
+            {!newAvatarUpload && <DefaultAvatar width={100} height={100} />}
           </View>
         </Pressable>
         <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>

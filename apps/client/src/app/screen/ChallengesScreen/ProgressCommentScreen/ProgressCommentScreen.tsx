@@ -60,7 +60,7 @@ const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitted },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       comment: '',
@@ -95,7 +95,6 @@ const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
-                isSubmitting={isSubmitted}
                 onRightIconPress={handleSubmit(onSubmit)}
               />
             );
@@ -215,10 +214,19 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     <SafeAreaView className="flex-1 bg-white ">
       {progressCommentScreenLoading && <SkeletonLoadingCommon />}
       {!progressCommentScreenLoading && (
-        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
-          <View className=" relative flex-1">
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flex: 1 }}
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="interactive"
+          extraHeight={Platform.OS === 'ios' ? 115 : 0}
+        >
+          <ScrollView
+            keyboardShouldPersistTaps="always"
+            keyboardDismissMode="interactive"
+            className=" relative flex-1"
+          >
             <View className="flex-1">
-            <FlatList
+              <FlatList
                 data={comments}
                 renderItem={({ item, index }) => {
                   return (
@@ -256,7 +264,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
             <View className={`absolute bottom-0 w-full`}>
               <CommentInput handleOnSubmit={handleSubmit} />
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAwareScrollView>
       )}
     </SafeAreaView>

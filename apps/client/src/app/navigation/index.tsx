@@ -94,18 +94,20 @@ export const RootNavigation = () => {
   }, []);
 
   useEffect(() => {
-    if (logined && navigationRef.current) {
+    if (logined) {
       setIsCompleteProfileStore(null);
       checkUserCompleProfileAndCompany(
         setIsCompleteProfileStore,
         setIsMainAppLoading
       );
-      initNotification(navigationRef.current);
     } else if (!logined && logined !== null) {
       setIsCompleteProfileStore(false);
       setIsMainAppLoading(false);
     }
+  }, [logined]);
 
+  useEffect(() => {
+    navigationRef?.current && initNotification(navigationRef.current);
     return () => {
       // cleanup the listener and task registry
       if (notificationListener.current)
@@ -116,16 +118,17 @@ export const RootNavigation = () => {
         Notifications.removeNotificationSubscription(responseListener.current);
       Notifications.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
     };
-  }, [logined, navigationRef.current]);
+  }, [navigationRef?.current]);
 
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
       const hideSplashScreen = async () => {
         await SplashScreen.hideAsync();
       };
-      setTimeout(() => {
-        hideSplashScreen();
-      }, 700);
+      hideSplashScreen();
+      // setTimeout(() => {
+      //   hideSplashScreen();
+      // }, 700);
     }
   }, [isMainAppLoading, isCompleteProfile]);
 
@@ -153,6 +156,7 @@ export const RootNavigation = () => {
       setHasNewNotification(false); // reset the new notification flag
     });
   };
+
 
   return (
     <NavigationContainer ref={navigationRef}>

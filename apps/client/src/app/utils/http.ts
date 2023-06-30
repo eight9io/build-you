@@ -1,7 +1,9 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { checkRefreshTokenLocalValidation } from './checkAuth';
+import axios, { Axios } from 'axios';
+import {
+  checkRefreshTokenLocalValidation,
+  logout,
+  removeAuthTokensLocalOnLogout,
+} from './checkAuth';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 
 const httpInstance = axios.create({
@@ -33,23 +35,27 @@ httpInstance.interceptors.response.use(
         const originalRequest = error.config;
         if (!originalRequest._retry) {
           originalRequest._retry = true;
-          const canRefreshToken = await checkRefreshTokenLocalValidation();
-          if (!canRefreshToken) {
+          const newAuthToken = await checkRefreshTokenLocalValidation();
+          if (!newAuthToken) {
             reject('token is not valid');
           } else {
-            // change token in orqinal request
-            const authToken = await AsyncStorage.getItem('@auth_token');
-            const newRequest = {
-              ...originalRequest,
-              headers: {
-                ...originalRequest.headers,
-                Authorization: `Bearer ${authToken}`,
-              },
-            };
-            resolve(httpInstance(newRequest));
+            setAuthTokenToHttpHeader(newAuthToken);
+            originalRequest.headers['Authorization'] = `Bearer ${newAuthToken}`;
+            // call new request with new token
+            try {
+              const res = await httpInstance(originalRequest);
+              resolve(res);
+            } catch (error) {
+              handleError(error);
+            }
           }
         } else {
-          // add gobal modal
+          GlobalDialogController.showModal({
+            title: 'Error',
+            message: 'Session expires. Please login again',
+            button: 'OK',
+          });
+          logout();
           reject('token is not valid');
         }
       } else if ([500, 501, 502, 503].includes(status)) {

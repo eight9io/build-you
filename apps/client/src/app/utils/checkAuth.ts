@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import httpInstance, { setAuthTokenToHttpHeader } from './http';
+import { useAuthStore } from '../store/auth-store';
+import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 
 interface IToken {
   exp: number;
@@ -96,6 +98,17 @@ export const checkAuthTokenLocalValidation = async () => {
   }
 };
 
+// TODO: add logout function
+
+export const logout = async () => {
+  const { setAccessToken, getAccessToken } = useAuthStore();
+  const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+
+  removeAuthTokensLocalOnLogout();
+  setIsCompleteProfileStore(null);
+  setAccessToken(null);
+};
+
 export const checkRefreshTokenLocalValidation = async () => {
   try {
     const refreshTokenLocal = await AsyncStorage.getItem('@refresh_token');
@@ -104,7 +117,7 @@ export const checkRefreshTokenLocalValidation = async () => {
     const currentTime = Date.now() / 1000;
     if (decodedRefreshToken?.exp < currentTime) {
       removeAuthTokensLocalOnLogout();
-      return false;
+      return undefined;
     } else {
       const newTokens = await httpInstance
         .post('/auth/refresh', {
@@ -120,10 +133,9 @@ export const checkRefreshTokenLocalValidation = async () => {
           newTokens.data.authorization,
           newTokens.data.refresh
         );
-        return true;
+        return newTokens.data.authorization;
       }
     }
-    return true;
   } catch (e) {
     console.error(e);
   }

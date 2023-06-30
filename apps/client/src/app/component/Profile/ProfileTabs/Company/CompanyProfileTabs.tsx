@@ -16,6 +16,7 @@ import Biography from '../Users/Biography/Biography';
 import { useIsFocused } from '@react-navigation/native';
 import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
+import GlobalDialogController from '../../../common/Dialog/GlobalDialogController';
 
 
 const CompanyProfileTabs = () => {
@@ -32,15 +33,24 @@ const CompanyProfileTabs = () => {
   const isFocused = useIsFocused();
   useEffect(() => {
     if (!userProfile?.id || !isFocused) return
+
     const getFollowerList = async () => {
       const { data: followerList } = await serviceGetListFollower(userProfile?.id);
       setFollowerList(followerList);
     };
-    fetchListEmployee(userProfile?.id, (res: any) => {
+    try {
+      fetchListEmployee(userProfile?.id, (res: any) => {
+        return setEmployeeList(res)
+      })
+      getFollowerList();
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+    }
 
-      return setEmployeeList(res)
-    })
-    getFollowerList();
+
   }, [isFocused, userProfile?.id])
   const followingList = getFollowingList()
   if (!userId) return null;

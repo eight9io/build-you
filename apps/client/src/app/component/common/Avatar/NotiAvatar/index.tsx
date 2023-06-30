@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import clsx from 'clsx';
 import { Image } from 'expo-image';
+import { NOTIFICATION_TYPES } from '../../../../common/enum';
 
 interface INotiAvatarProps {
   size?: 'small' | 'medium' | 'large';
   src: string;
   alt?: string;
-  typeOfNoti?: 'comment' | 'follow';
+  typeOfNoti?: NOTIFICATION_TYPES;
   onPress?: () => void;
 }
 
@@ -23,7 +24,7 @@ const NotiAvatar: React.FC<INotiAvatarProps> = ({
   const [imageSource, setImageSource] = useState<{}>({});
 
   const imageSourceFromAssets =
-    typeOfNoti === 'comment'
+    typeOfNoti === NOTIFICATION_TYPES.NEW_COMMENT || typeOfNoti === NOTIFICATION_TYPES.NEW_MENTION
       ? require('./asset/comment.png')
       : require('./asset/follow.png');
 

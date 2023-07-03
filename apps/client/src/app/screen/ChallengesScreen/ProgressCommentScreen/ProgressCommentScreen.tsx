@@ -211,7 +211,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white ">
+    <SafeAreaView className=" flex-1 bg-white">
       {progressCommentScreenLoading && <SkeletonLoadingCommon />}
       {!progressCommentScreenLoading && (
         <KeyboardAwareScrollView
@@ -219,11 +219,12 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
           keyboardShouldPersistTaps="always"
           keyboardDismissMode="interactive"
           extraHeight={Platform.OS === 'ios' ? 115 : 0}
+          className="relative"
         >
           <ScrollView
             keyboardShouldPersistTaps="always"
             keyboardDismissMode="interactive"
-            className=" relative flex-1"
+            className="flex-1"
           >
             <View className="flex-1">
               <FlatList
@@ -260,11 +261,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                 }
               />
             </View>
-
-            <View className={`absolute bottom-0 w-full`}>
-              <CommentInput handleOnSubmit={handleSubmit} />
-            </View>
           </ScrollView>
+          <View className={` bottom-0 w-full`}>
+            <CommentInput handleOnSubmit={handleSubmit} />
+          </View>
         </KeyboardAwareScrollView>
       )}
     </SafeAreaView>

@@ -116,11 +116,13 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
       {keyword && searchResults.length > 0 && (
         <ScrollView
           className={clsx(
-            'bg-gray-veryLight absolute z-10 h-72 w-full rounded-lg px-4 py-2'
+            'bg-gray-veryLight absolute z-10 h-auto max-h-72 w-full rounded-lg px-4 py-2'
           )}
           style={{
             bottom: commentInputHeight,
           }}
+          keyboardDismissMode="interactive"
+          keyboardShouldPersistTaps="always"
         >
           {keyword &&
             searchResults.length > 0 &&

@@ -29,6 +29,7 @@ import WarningSvg from '../../../component/asset/warning.svg';
 
 import httpInstance from '../../../utils/http';
 import { uploadNewVideo } from '../../../utils/uploadVideo';
+import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -221,28 +222,31 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
     // TODO: handle error when null id
     if (!userData?.id) return;
-    await Promise.all([
-      uploadNewVideo(profile?.video),
-      httpInstance
-        .put(`/user/update/${userData.id}`, {
-          name: profile?.name,
-          surname: profile?.surname,
-          birth: profile?.birth,
-          occupation: profile?.occupation,
-          bio: profile?.biography,
-          softSkill: softSkills,
-          hardSkill: profile.skills,
-          company: '',
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            navigation.navigate('CompleteProfileFinishScreen');
-          }
-        })
-        .catch((err) => {
-          console.error('upload err', err);
-        }),
-    ])
+    try {
+      await Promise.all([
+        uploadNewVideo(profile?.video),
+        httpInstance
+          .put(`/user/update/${userData.id}`, {
+            name: profile?.name,
+            surname: profile?.surname,
+            birth: profile?.birth,
+            occupation: profile?.occupation,
+            bio: profile?.biography,
+            softSkill: softSkills,
+            hardSkill: profile.skills,
+            company: '',
+          })
+
+      ])
+      navigation.navigate('CompleteProfileFinishScreen');
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+    }
+
+
   };
 
   const addCompetencedSkill = (skill: IFormValueInput | undefined) => {

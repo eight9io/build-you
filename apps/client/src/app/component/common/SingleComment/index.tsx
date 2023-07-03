@@ -112,6 +112,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
       console.error(error);
     }
   };
+
   return (
     <View
       className={clsx(
@@ -124,7 +125,13 @@ const SingleComment: FC<ISingleCommentProps> = ({
         )}
       >
         <View className={clsx('flex flex-row')}>
-          <PostAvatar src={userProfile?.avatar} />
+          <PostAvatar
+            src={
+              userProfile && userProfile.id === comment.user
+                ? userProfile?.avatar?.trim()
+                : comment.avatar?.trim()
+            }
+          />
           <View className={clsx('ml-2')}>
             <Text
               className={clsx(

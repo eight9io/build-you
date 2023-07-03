@@ -15,6 +15,7 @@ import PostAvatar from '../common/Avatar/PostAvatar';
 import ImageSwiper from '../common/ImageSwiper';
 import { getTimeDiffToNow } from '../../utils/time';
 import { getSeperateImageUrls } from '../../utils/image';
+import VideoPlayer from '../common/VideoPlayer';
 
 interface IChallengeProgressCardProps {
   progress: IProgressChallenge;
@@ -76,6 +77,11 @@ const ChallengeProgressCardForComment: React.FC<
             <ImageSwiper imageSrc={image} />
           </View>
         )}
+        {video && (
+          <View className="w-full">
+            <VideoPlayer src={video.trim()} />
+          </View>
+        )}
         <View className="mt-4 flex-row">
           <LikeButton progressId={id} />
           <CommentButton
@@ -85,7 +91,6 @@ const ChallengeProgressCardForComment: React.FC<
           />
         </View>
       </View>
-      {/* <View className="bg-gray-light h-2 w-full" /> */}
     </View>
   );
 };

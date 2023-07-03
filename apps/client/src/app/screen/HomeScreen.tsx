@@ -170,7 +170,6 @@ const HomeScreen = () => {
   const { getAccessToken } = useAuthStore();
 
   const logined = getAccessToken();
-  console.log('logined', logined);
 
   return (
     <HomeScreenStack.Navigator

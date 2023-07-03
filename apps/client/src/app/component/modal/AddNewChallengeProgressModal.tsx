@@ -100,6 +100,7 @@ export const AddNewChallengeProgressModal: FC<
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<IUploadMediaWithId[]>([]);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
     null
@@ -175,7 +176,7 @@ export const AddNewChallengeProgressModal: FC<
             deleteProgress(progressId);
           });
       } else {
-        await updateProgressVideo(progressId, selectedMedia[0])
+        await updateProgressVideo(progressId, selectedVideo[0])
           .then((res) => {
             if (res.status === 200 || 201) {
               setIsRequestSuccess(true);
@@ -297,6 +298,7 @@ export const AddNewChallengeProgressModal: FC<
                       setSelectedMedia(video);
                       setValue('media', video, { shouldValidate: true });
                     }}
+                    setSelectedVideo={setSelectedVideo}
                     isSelectedImage={isSelectedImage}
                     setIsSelectedImage={setIsSelectedImage}
                   />

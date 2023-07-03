@@ -85,7 +85,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             }
           );
 
-        console.log(progressDataLocal)
         setLocalProgressData(progressDataLocal);
       });
       setShouldRefetch(false);

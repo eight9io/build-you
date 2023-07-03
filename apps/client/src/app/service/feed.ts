@@ -14,3 +14,18 @@ export const serviceGetFeed = async ({
     },
   });
 };
+
+export const serviceGetFeedUnregistered = async ({
+  page = 1,
+  take = 20,
+}: {
+  page: number;
+  take: number;
+}) => {
+  return http.get('/feed/unregistered', {
+    params: {
+      page,
+      take,
+    },
+  });
+};

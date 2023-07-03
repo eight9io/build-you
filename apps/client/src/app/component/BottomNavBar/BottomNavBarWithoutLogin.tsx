@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 import clsx from 'clsx';
@@ -14,6 +14,7 @@ import AppTitle from '../common/AppTitle';
 import IconSearch from '../common/IconSearch/IconSearch';
 import NavButton from '../common/Buttons/NavButton';
 import Login from '../../screen/LoginScreen/LoginScreen';
+import React from 'react';
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;

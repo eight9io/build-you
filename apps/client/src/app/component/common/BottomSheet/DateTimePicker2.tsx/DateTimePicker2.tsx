@@ -68,6 +68,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                       value={selectedDate || tempSelectedDate}
                       mode={'date'}
                       display="spinner"
+                      textColor="black" // Fix text turning white when iOS is in dark mode
                       onChange={(_, value) =>
                         setTempSelectedDate(value as Date)
                       }
@@ -87,6 +88,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                       value={selectedDate || tempSelectedDate}
                       mode={'date'}
                       display="spinner"
+                      textColor="black" // Fix text turning white when iOS is in dark mode
                       onChange={(_, value) =>
                         setTempSelectedDate(value as Date)
                       }
@@ -115,6 +117,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
               value={selectedDate || tempSelectedDate}
               mode={'date'}
               display="spinner"
+              textColor="black" // Fix text turning white when iOS is in dark mode
               onChange={(event, value) => {
                 if (event.type === 'set') {
                   // User pressed confirm

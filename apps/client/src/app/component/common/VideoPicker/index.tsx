@@ -15,6 +15,7 @@ import CloseButton from './asset/close-button.svg';
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
   useBigImage?: boolean;
+  setSelectedVideo?: (video: IUploadMediaWithId[]) => void;
   setExternalVideo?: (video: IUploadMediaWithId[]) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   removeVideo?: () => void;
@@ -24,6 +25,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
   isSelectedImage = false,
   useBigImage = false,
   setExternalVideo,
+  setSelectedVideo,
   setIsSelectedImage,
   removeVideo,
 }) => {
@@ -36,6 +38,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       if (setExternalVideo && setIsSelectedImage) {
         const id = getRandomId();
         setExternalVideo([{ id, uri }]);
+        setSelectedVideo && setSelectedVideo([{ id, uri: video }]);
         setIsSelectedImage(false);
         return;
       }

@@ -124,9 +124,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
         )}
       >
         <View className={clsx('flex flex-row')}>
-          <PostAvatar
-            src={`https://buildyou-front.stg.startegois.com/uploads/profile/image/95ba5302-950c-4c7b-ab61-1da316ff0617_429e13e4646e8dca214334af19d63f70.jpg`}
-          />
+          <PostAvatar src={userProfile?.avatar} />
           <View className={clsx('ml-2')}>
             <Text
               className={clsx(

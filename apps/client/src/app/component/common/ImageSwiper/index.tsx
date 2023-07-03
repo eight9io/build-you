@@ -36,7 +36,7 @@ const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
           <ImageItem imageSrc={imageSrc} />
         ) : (
           imageSrc.map((item, index) => (
-            <ImageItem imageSrc={item} key={index} />
+            <ImageItem imageSrc={item.trim()} key={index} />
           ))
         )}
       </Swiper>

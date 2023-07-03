@@ -115,28 +115,6 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     {} as IProgressChallenge
   );
 
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setKeyboardVisible(true); // or some other action
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false); // or some other action
-      }
-    );
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
-
   useEffect(() => {
     if (!progressId) return;
     const progressDataResponse = getProgressById(progressId);
@@ -211,64 +189,50 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     <SafeAreaView className=" flex-1 bg-white">
       {progressCommentScreenLoading && <SkeletonLoadingCommon />}
       {!progressCommentScreenLoading && (
-        // <KeyboardAwareScrollView
-        //   contentContainerStyle={{ flex: 1 }}
-        //   keyboardShouldPersistTaps="always"
-        //   keyboardDismissMode="interactive"
-        //   extraHeight={Platform.OS === 'ios' ? 115 : 0}
-        //   className="relative"
-        // >
-          <KeyboardAvoidingView
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 115 : 0}
-            behavior="padding"
-            className="relative flex-1"
-          >
-            {/* <ScrollView
-              keyboardShouldPersistTaps="always"
-              keyboardDismissMode="interactive"
-              className="flex-1"
-            > */}
-              <View className="flex-1">
-                <FlatList
-                  data={comments}
-                  renderItem={({ item, index }) => {
-                    return (
-                      <View key={index} className="px-3">
-                        <SingleComment
-                          comment={item}
-                          onDeleteCommentSuccess={handleRefreshComments}
-                        />
-                      </View>
-                    );
-                  }}
-                  ListHeaderComponent={
-                    <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
-                      <View className="border-gray-light flex border-b bg-white px-5 py-5">
-                        <Text className="text-h4 font-semibold">
-                          {progressData.challenge?.goal || 'Challenge created'}
-                        </Text>
-                      </View>
-                      <ChallengeProgressCardForComment
-                        progress={progressData}
-                        ownerId={ownerId}
-                        shouldRefreshComments={shouldRefreshComments}
-                      />
-                    </View>
-                  }
-                  ListHeaderComponentStyle={{
-                    flex: 1,
-                  }}
-                  ListFooterComponent={
-                    <View className="h-20" style={{ flex: 1 }} />
-                  }
-                />
-              </View>
-            {/* </ScrollView> */}
-            <View className={` bottom-0 w-full`}>
-              <CommentInput handleOnSubmit={handleSubmit} />
-            </View>
-          </KeyboardAvoidingView>
-        // {/* </KeyboardAwareScrollView> */}
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 115 : 0}
+          behavior="padding"
+          className="relative flex-1"
+        >
+          <View className="flex-1">
+            <FlatList
+              data={comments}
+              renderItem={({ item, index }) => {
+                return (
+                  <View key={index} className="px-3">
+                    <SingleComment
+                      comment={item}
+                      onDeleteCommentSuccess={handleRefreshComments}
+                    />
+                  </View>
+                );
+              }}
+              ListHeaderComponent={
+                <View className="border-gray-medium mb-3 flex-1 flex-col border-b">
+                  <View className="border-gray-light flex border-b bg-white px-5 py-5">
+                    <Text className="text-h4 font-semibold">
+                      {progressData.challenge?.goal || 'Challenge created'}
+                    </Text>
+                  </View>
+                  <ChallengeProgressCardForComment
+                    progress={progressData}
+                    ownerId={ownerId}
+                    shouldRefreshComments={shouldRefreshComments}
+                  />
+                </View>
+              }
+              ListHeaderComponentStyle={{
+                flex: 1,
+              }}
+              ListFooterComponent={
+                <View className="h-20" style={{ flex: 1 }} />
+              }
+            />
+          </View>
+          <View className={` bottom-0 w-full`}>
+            <CommentInput handleOnSubmit={handleSubmit} />
+          </View>
+        </KeyboardAvoidingView>
       )}
     </SafeAreaView>
   );

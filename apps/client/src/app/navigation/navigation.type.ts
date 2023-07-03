@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 export type RootStackParamList = {
   IntroScreen: undefined;
   FeedScreen: undefined;
+  FeedScreenUnregister: undefined;
   HomeScreen: {
     screen?: string;
     params?: Record<string, any>;

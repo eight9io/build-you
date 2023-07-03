@@ -17,11 +17,12 @@ import IconSearch from '../component/common/IconSearch/IconSearch';
 
 import ShareIcon from '../../../assets/svg/share.svg';
 import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
-import { serviceGetFeed } from '../service/feed';
+import { serviceGetFeed, serviceGetFeedUnregistered } from '../service/feed';
 
 import { useGetListFollowing } from '../hooks/useGetUser';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
+import { useAuthStore } from '../store/auth-store';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -97,7 +98,80 @@ export const HomeFeed = () => {
   );
 };
 
+export const HomeFeedUnregister = () => {
+  const [feedData, setFeedData] = React.useState<any>([]);
+  const [feedPage, setFeedPage] = React.useState<number>(1);
+  const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
+
+  const getInitialFeeds = async () => {
+    await serviceGetFeedUnregistered({
+      page: 1,
+      take: 5,
+    })
+      .then((res) => {
+        if (res.data?.data) {
+          setFeedData(res.data.data);
+          setFeedPage(1);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message:
+            t('error_general_message') ||
+            'Something went wrong. Please try again later!',
+        });
+      });
+  };
+
+  useEffect(() => {
+    getInitialFeeds();
+  }, []);
+
+  const getNewFeed = async () => {
+    await serviceGetFeedUnregistered({
+      page: feedPage + 1,
+      take: 5,
+    }).then((res) => {
+      if (res?.data?.data) {
+        setFeedData((prev: any) => [...prev, ...res.data.data]);
+      }
+      setFeedPage((prev) => prev + 1);
+    });
+  };
+
+  const handleScroll = async () => {
+    setIsRefreshing(true);
+    await getInitialFeeds();
+    setIsRefreshing(false);
+  };
+  console.log('feedData', feedData);
+
+  return (
+    <SafeAreaView className={clsx('bg-white')}>
+      <View className={clsx('h-full w-full bg-gray-50')}>
+        <FlatList
+          data={feedData}
+          renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
+          keyExtractor={(item) => item.id as unknown as string}
+          onEndReached={getNewFeed}
+          onEndReachedThreshold={0.7}
+          onRefresh={handleScroll}
+          refreshing={isRefreshing}
+        />
+        <View className="h-16" />
+      </View>
+    </SafeAreaView>
+  );
+};
+
 const HomeScreen = () => {
+  const { getAccessToken } = useAuthStore();
+
+  const logined = getAccessToken();
+  console.log('logined', logined);
+
   return (
     <HomeScreenStack.Navigator
       screenOptions={{
@@ -106,78 +180,104 @@ const HomeScreen = () => {
         headerShown: false,
       }}
     >
-      <HomeScreenStack.Screen
-        name="FeedScreen"
-        component={HomeFeed}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title={t('your_feed.header')} />,
-          headerRight: (props) => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() =>
-                    navigation.navigate('CompleteProfileStep3Screen')
+      {!logined && (
+        <HomeScreenStack.Screen
+          name="FeedScreenUnregister"
+          component={HomeFeedUnregister}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => <AppTitle title={t('your_feed.header')} />,
+            headerRight: (props) => (
+              <NavButton
+                withIcon
+                icon={
+                  <IconSearch
+                    onPress={() =>
+                      navigation.navigate('CompleteProfileStep3Screen')
+                    }
+                  />
+                }
+              />
+            ),
+          })}
+        />
+      )}
+      {logined && (
+        <>
+          <HomeScreenStack.Screen
+            name="FeedScreen"
+            component={HomeFeed}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => <AppTitle title={t('your_feed.header')} />,
+              headerRight: (props) => (
+                <NavButton
+                  withIcon
+                  icon={
+                    <IconSearch
+                      onPress={() =>
+                        navigation.navigate('CompleteProfileStep3Screen')
+                      }
+                    />
                   }
                 />
-              }
-            />
-          ),
-        })}
-      />
+              ),
+            })}
+          />
 
-      <HomeScreenStack.Screen
-        name="OtherUserProfileScreen"
-        component={OtherUserProfileScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => '',
-          headerLeft: (props) => (
-            <NavButton
-              text={t('button.back') as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-          // headerRight: () => {
-          //   return (
-          //     <View>
-          //       <Button
-          //         Icon={<ShareIcon />}
-          //         onPress={() => console.log('press share')}
-          //       />
-          //     </View>
-          //   );
-          // },
-        })}
-      />
-
-      <HomeScreenStack.Screen
-        name="OtherUserProfileDetailsScreen"
-        component={OtherUserProfileDetailsScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => '',
-          headerLeft: (props) => (
-            <NavButton
-              text={t('button.back') as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-          headerRight: () => {
-            return (
-              <View>
-                <Button
-                  Icon={<ShareIcon />}
-                  onPress={() => console.log('press share')}
+          <HomeScreenStack.Screen
+            name="OtherUserProfileScreen"
+            component={OtherUserProfileScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => '',
+              headerLeft: (props) => (
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
                 />
-              </View>
-            );
-          },
-        })}
-      />
+              ),
+              // headerRight: () => {
+              //   return (
+              //     <View>
+              //       <Button
+              //         Icon={<ShareIcon />}
+              //         onPress={() => console.log('press share')}
+              //       />
+              //     </View>
+              //   );
+              // },
+            })}
+          />
+
+          <HomeScreenStack.Screen
+            name="OtherUserProfileDetailsScreen"
+            component={OtherUserProfileDetailsScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => '',
+              headerLeft: (props) => (
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+              headerRight: () => {
+                return (
+                  <View>
+                    <Button
+                      Icon={<ShareIcon />}
+                      onPress={() => console.log('press share')}
+                    />
+                  </View>
+                );
+              },
+            })}
+          />
+        </>
+      )}
     </HomeScreenStack.Navigator>
   );
 };

@@ -15,8 +15,7 @@ import FeedSvg from './asset/feed.svg';
 import CreateSvg from './asset/create.svg';
 import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
-import NotificationIcon from '../asset/notification-icon.svg';
-import FocusedNotificationIcon from '../asset/focused-notification-icon.svg';
+import NotificationIcon from './asset/noti.svg';
 import NewNotificationIcon from '../asset/new-notification-icon.svg';
 import { useGetUserData } from '../../hooks/useGetUser';
 import { useUserProfileStore } from '../../store/user-data';
@@ -132,12 +131,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
-              {focused ? (
-                <FocusedNotificationIcon />
-              ) : hasNewNotification ? (
+              {hasNewNotification ? (
                 <NewNotificationIcon fill={'#6C6E76'} />
               ) : (
-                <NotificationIcon fill={'#6C6E76'} />
+                <NotificationIcon fill={focused ? '#FF7B1C' : '#6C6E76'} />
               )}
               <Text
                 className={clsx(

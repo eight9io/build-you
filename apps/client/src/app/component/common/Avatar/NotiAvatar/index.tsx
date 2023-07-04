@@ -3,10 +3,11 @@ import { View, TouchableOpacity } from 'react-native';
 import clsx from 'clsx';
 import { Image } from 'expo-image';
 import { NOTIFICATION_TYPES } from '../../../../common/enum';
+import DefaultAvatar from '../../../asset/default-avatar.svg';
 
 interface INotiAvatarProps {
   size?: 'small' | 'medium' | 'large';
-  src: string;
+  src?: string;
   alt?: string;
   typeOfNoti?: NOTIFICATION_TYPES;
   onPress?: () => void;
@@ -21,38 +22,27 @@ const NotiAvatar: React.FC<INotiAvatarProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [imageSource, setImageSource] = useState<{}>({});
 
   const imageSourceFromAssets =
-    typeOfNoti === NOTIFICATION_TYPES.NEW_COMMENT || typeOfNoti === NOTIFICATION_TYPES.NEW_MENTION
+    typeOfNoti === NOTIFICATION_TYPES.NEW_COMMENT ||
+    typeOfNoti === NOTIFICATION_TYPES.NEW_MENTION
       ? require('./asset/comment.png')
       : require('./asset/follow.png');
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await fetch(src);
-        const imageData = await response.blob();
-        setImageSource({ uri: URL.createObjectURL(imageData) });
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        setError(true);
-        setLoading(false);
-      }
-    };
-
-    fetchImage();
-  }, [src]);
 
   return (
     <View className={clsx('flex flex-row items-center')}>
       <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
         <View className={clsx('relative')}>
-          <Image
-            className={clsx('h-[57px] w-[57px] rounded-full')}
-            source={imageSource}
-          />
+          {src ? (
+            <Image
+              className="h-[57px] w-[57px] rounded-full"
+              source={{
+                uri: src,
+              }}
+            />
+          ) : (
+            <DefaultAvatar className="h-[57px] w-[57px] rounded-full" />
+          )}
           {typeOfNoti && (
             <Image
               className={clsx(

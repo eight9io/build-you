@@ -182,6 +182,9 @@
       "title": "Thank you for your information. We're personalizing your experience..."
     }
   },
+  "video_profile":"Video Profile",
+  "work_place": "Work place",
+  "show_company": "Show company",
   "register_screen.creating": "Creating your account. Please log in with your email and password after redirecting...",
   "user_settings_screen.title": "Settings",
   "user_settings_screen.logout": "Log out",

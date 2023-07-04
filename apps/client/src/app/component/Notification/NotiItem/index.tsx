@@ -1,52 +1,49 @@
 import React from 'react';
 import clsx from 'clsx';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 import NotiAvatar from '../../common/Avatar/NotiAvatar';
 import { NOTIFICATION_TYPES } from '../../../common/enum';
-import { getNotificationContent } from '../../../utils/notification.util';
+import { getNotificationContent, handleTapOnNotification } from '../../../utils/notification.util';
+import { INotification } from '../../../types/notification';
+import dayjs from '../../../utils/date.util';
+import { useNav } from '../../../navigation/navigation.type';
 interface INotiItemProps {
-  username?: string;
-  avatarUrl?: string;
-  contentPayload?: any;
-  time?: string;
-  isPrevious?: boolean;
-  typeOfNoti: NOTIFICATION_TYPES;
+  notification: INotification;
 }
 
 const NotiItem: React.FC<INotiItemProps> = ({
-  username = 'Rudy Aster',
-  avatarUrl,
-  contentPayload,
-  time,
-  isPrevious,
-  typeOfNoti,
+  notification,
 }) => {
-  const content = getNotificationContent(typeOfNoti, contentPayload);
+  const navigation = useNav();
+  let content = '';
+  if (notification.type === NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING)
+    content = getNotificationContent(notification.type, {
+      challengeName: notification.challengeName,
+    });
+  else content = getNotificationContent(notification.type);
   return (
-    <View
+    <TouchableOpacity
       className={clsx(
-        'bg-primary-100 border-b-gray-medium flex flex-row items-center border-b-[1px] px-6 py-4',
-        isPrevious && 'bg-white'
+        'bg-primary-100 border-b-gray-medium flex-row items-center border-b-[1px] p-4',
+        notification.isRead && 'bg-white'
       )}
+      onPress={() => handleTapOnNotification(notification, navigation)}
     >
       <NotiAvatar
-        src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80"
+        src={notification.user.avatar}
         alt="avatar"
-        typeOfNoti={typeOfNoti}
+        typeOfNoti={notification.type}
       />
-      <View className={clsx('ml-4 flex flex-col')}>
-        <View className={clsx('flex flex-row items-center')}>
-          <Text className={clsx('text-base')}>
-            <Text className={clsx('font-semibold')}>
-              {username || 'Rudy Aster'}
-            </Text>
-            {` ${content}`}
-          </Text>
-        </View>
-        <Text className={clsx('text-[#7C7673]')}>2 hours ago</Text>
+      <View className={clsx('ml-4 flex-1')}>
+        <Text className={clsx('text-base font-normal')}>
+          {`${notification.user.name || 'Rudy Aster'} ${content}`}
+        </Text>
+        <Text className={clsx('text-[#7C7673]')}>
+          {dayjs(notification.createdAt).fromNow()}
+        </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

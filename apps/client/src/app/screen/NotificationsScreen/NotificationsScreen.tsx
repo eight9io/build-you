@@ -8,14 +8,17 @@ import {
 } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/navigation.type';
 import { t } from 'i18next';
+import { useIsFocused } from '@react-navigation/native';
 import AppTitle from '../../component/common/AppTitle';
 import NavButton from '../../component/common/Buttons/NavButton';
 import IconSearch from '../../component/common/IconSearch/IconSearch';
 
 import Notification from '../../component/Notification';
 import { useNotificationStore } from '../../store/notification';
-import { useIsFocused } from '@react-navigation/native';
-
+import OtherUserProfileScreen from '../ProfileScreen/OtherUser/OtherUserProfileScreen';
+import OtherUserProfileDetailsScreen from '../ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import Button from '../../component/common/Buttons/Button';
+import ShareIcon from '../../../../assets/svg/share.svg';
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
 type NotificationsScreenNavigationProp = NativeStackNavigationProp<
@@ -42,20 +45,15 @@ const Notifications = ({
   }, [isFocused]);
 
   return (
-    <ScrollView className="h-full ">
-      <SafeAreaView className="justify-content: space-between mb-24 flex-1 bg-white">
-        {/* <MainNavBar
+    <SafeAreaView className="mb-24 flex-1 bg-[#F7F9FB]">
+      {/* <MainNavBar
         title={t('top_nav.noti')}
         navigation={navigation}
         withSearch
       /> */}
 
-        <View>
-          <Notification title="New" />
-          <Notification title="Previous" isPrevious={true} />
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+      <Notification />
+    </SafeAreaView>
   );
 };
 
@@ -83,6 +81,46 @@ const NotificationsScreen = () => {
               }
             />
           ),
+        })}
+      />
+      <NotificationsStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <NotificationsStack.Screen
+        name="OtherUserProfileDetailsScreen"
+        component={OtherUserProfileDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
         })}
       />
     </NotificationsStack.Navigator>

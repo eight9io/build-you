@@ -10,8 +10,12 @@ import { IUserData } from 'apps/client/src/app/types/user';
 interface IBiographyProps {
   userProfile: IUserData | null;
 }
+interface IVideoWithPlayButtonProps {
+  src: string | undefined;
+  heightVideo?: any;
+}
 
-const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
+export const VideoWithPlayButton = ({ src, heightVideo }: IVideoWithPlayButtonProps) => {
   const videoPlayer = React.useRef(null);
   const [status, setStatus] = React.useState<AVPlaybackStatus>(
     {} as AVPlaybackStatus
@@ -28,7 +32,7 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
   //expo video doesn't support tailwind
   return (
     <View
-      className={clsx('relative flex flex-col items-center justify-center bg-gray-200')}
+      className={clsx('relative flex flex-col items-center justify-center bg-gray-200  rounded-xl')}
     >
       {src && (
         <Video
@@ -38,7 +42,7 @@ const VideoWithPlayButton = ({ src }: { src: string | undefined }) => {
           }}
           style={{
             width: '100%',
-            height: 200,
+            height: heightVideo || 200,
             backgroundColor: '#FFFFF',
             borderRadius: 12,
           }}

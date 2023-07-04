@@ -33,7 +33,7 @@ const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
         containerStyle={{ width: '100%', height: '100%' }}
       >
         {typeof imageSrc === 'string' ? (
-          <ImageItem imageSrc={imageSrc} />
+          <ImageItem imageSrc={imageSrc.trim()} />
         ) : (
           imageSrc.map((item, index) => (
             <ImageItem imageSrc={item.trim()} key={index} />

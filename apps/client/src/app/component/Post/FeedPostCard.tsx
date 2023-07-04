@@ -8,7 +8,6 @@ import { IFeedPostProps } from '../../types/common';
 import { RootStackParamList } from '../../navigation/navigation.type';
 
 import { useAuthStore } from '../../store/auth-store';
-import { getImageFromUrl } from '../../hooks/getImageFromUrl';
 import { getTimeDiffToNow } from '../../utils/time';
 
 import PostAvatar from '../common/Avatar/PostAvatar';
@@ -21,7 +20,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 interface IChallengeImageProps {
   name: string;
-  image: string | string[] | null;
+  image: string | null;
   onPress?: () => void;
 }
 
@@ -30,6 +29,10 @@ interface IFeedPostCardProps {
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
+  let newUrl = image;
+  if (newUrl && !newUrl.startsWith('http')) {
+    newUrl = `https://buildyou-front.stg.startegois.com${image}`;
+  }
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -37,13 +40,12 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
       className={clsx('border-gray-80 w-full rounded-xl border bg-white')}
     >
       <View className={clsx('relative w-full')}>
-        <Image
-          className={clsx('aspect-square w-full rounded-t-xl')}
-          source={{
-            // uri: image as string,
-            uri: 'https://buildyou-front.stg.startegois.com/uploads/progress/image/474784d3-23a9-4a7c-911f-a628573f3c89_8f1f3826a1d0338920f67ccc0ebc5f43.jpg',
-          }}
-        />
+        {newUrl && (
+          <Image
+            className={clsx('aspect-square w-full rounded-t-xl')}
+            source={{ uri: newUrl }}
+          />
+        )}
         <View
           className={clsx(
             'relative flex  flex-row items-center justify-between px-4 py-3'
@@ -87,7 +89,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   };
 
   const navigateToProgressComment = () => {
-    if (!user?.id || !caption || !id) {
+    if (!user?.id || !id) {
       GlobalDialogController.showModal({
         title: 'Error',
         message:
@@ -142,7 +144,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
           <ChallengeImage
             name={challenge?.goal}
-            image={image}
+            image={image as string}
             onPress={navigateToChallengeDetail}
           />
           <View className="mt-4 flex-row">

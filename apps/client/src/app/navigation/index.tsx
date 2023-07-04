@@ -47,7 +47,7 @@ import BottomNavBarWithoutLogin from '../component/BottomNavBar/BottomNavBarWith
 import GlobalDialog from '../component/common/Dialog/GlobalDialog';
 import {
   handleNewNotification,
-  handleUserTapOnNotification,
+  handleTapOnIncomingNotification,
   registerForPushNotificationsAsync,
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
@@ -152,7 +152,7 @@ export const RootNavigation = () => {
 
     // listener triggered whenever a user taps on a notification
     Notifications.addNotificationResponseReceivedListener((response) => {
-      handleUserTapOnNotification(response, navigation);
+      handleTapOnIncomingNotification(response, navigation);
       setHasNewNotification(false); // reset the new notification flag
     });
   };

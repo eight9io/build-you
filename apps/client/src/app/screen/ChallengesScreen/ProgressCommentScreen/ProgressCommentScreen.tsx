@@ -39,7 +39,7 @@ interface IProgressCommentScreenProps {
     {
       progressId: string;
       ownerId?: string;
-      challengeName: string;
+      challengeName?: string;
     }
   >;
 }

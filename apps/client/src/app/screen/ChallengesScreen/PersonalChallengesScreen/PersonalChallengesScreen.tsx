@@ -133,16 +133,6 @@ const PersonalChallengesNavigator = () => {
         component={PersonalChallenges}
         options={({ navigation }) => ({
           headerTitle: () => <AppTitle title={t('top_nav.challenges')} />,
-          headerRight: (props) => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() => console.log('PersonalChallengesScreen Search')}
-                />
-              }
-            />
-          ),
         })}
       />
 

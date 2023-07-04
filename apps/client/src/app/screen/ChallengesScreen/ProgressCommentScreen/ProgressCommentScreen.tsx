@@ -117,14 +117,23 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
 
   useEffect(() => {
     if (!progressId) return;
-    const progressDataResponse = getProgressById(progressId);
-    progressDataResponse
-      .then((res) => {
-        setProgressData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const loadProgressData = async () => {
+      try {
+        const response = await getProgressById(progressId);
+        if (response.status === 200) {
+          setProgressData(response.data);
+        }
+      } catch (error) {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message:
+            (t('error_general_message') as string) || 'Something went wrong',
+          button: 'OK',
+        });
+        console.log(error);
+      }
+    };
+    loadProgressData();
   }, [progressId]);
 
   useEffect(() => {

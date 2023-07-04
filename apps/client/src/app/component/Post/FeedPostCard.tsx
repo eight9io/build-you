@@ -17,10 +17,17 @@ import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 import BackSvg from '../asset/back.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Video } from 'expo-av';
 
 interface IChallengeImageProps {
   name: string;
   image: string | null;
+  onPress?: () => void;
+}
+
+interface IChallengeVideoProps {
+  name: string;
+  video: string | null;
   onPress?: () => void;
 }
 
@@ -30,8 +37,12 @@ interface IFeedPostCardProps {
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
   let newUrl = image;
+
   if (newUrl && !newUrl.startsWith('http')) {
     newUrl = `https://buildyou-front.stg.startegois.com${image}`;
+  }
+  if (newUrl?.includes(';')) {
+    newUrl = newUrl.split(';')[0];
   }
   return (
     <TouchableOpacity
@@ -66,8 +77,47 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
   );
 };
 
+const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
+  let videoUrl = video;
+  if (videoUrl && !videoUrl.startsWith('http')) {
+    videoUrl = `https://buildyou-front.stg.startegois.com${video}`;
+  }
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={onPress}
+      className={clsx('border-gray-80 w-full rounded-xl border bg-white')}
+    >
+      <View className={clsx('relative w-full')}>
+        {videoUrl && (
+          <Video
+            className={clsx('aspect-square w-full rounded-t-xl')}
+            source={{ uri: videoUrl }}
+            useNativeControls
+          />
+        )}
+        <View
+          className={clsx(
+            'relative flex  flex-row items-center justify-between px-4 py-3'
+          )}
+        >
+          <View className={clsx('flex w-11/12 flex-row items-center')}>
+            <Text className={clsx('text-h6 font-semibold leading-6')}>
+              {name}
+            </Text>
+          </View>
+          <View></View>
+          <View className="">
+            <BackSvg />
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
-  itemFeedPostCard: { id, caption, user, image, updatedAt, challenge },
+  itemFeedPostCard: { id, caption, user, image, video, updatedAt, challenge },
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
@@ -142,11 +192,21 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             </View>
           </TouchableOpacity>
           <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
-          <ChallengeImage
-            name={challenge?.goal}
-            image={image as string}
-            onPress={navigateToChallengeDetail}
-          />
+          {image && (
+            <ChallengeImage
+              name={challenge?.goal}
+              image={image as string}
+              onPress={navigateToChallengeDetail}
+            />
+          )}
+          {video && (
+            <ChallengeVideo
+              name={challenge?.goal}
+              video={video as string}
+              onPress={navigateToChallengeDetail}
+            />
+          )}
+
           <View className="mt-4 flex-row">
             <LikeButton progressId={id} />
             <CommentButton

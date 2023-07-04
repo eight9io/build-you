@@ -30,6 +30,14 @@ import Loading from '../../../../component/common/Loading';
 import { serviceGetListOccupation, serviceUpdateMyProfile } from '../../../../service/profile';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import { IOccupation } from 'apps/client/src/app/types/auth';
+import CustomSwitch from 'apps/client/src/app/component/common/Switch';
+import VideoPicker from 'apps/client/src/app/component/common/VideoPicker';
+import { IUploadMediaWithId } from 'apps/client/src/app/types/media';
+import { uploadNewVideo } from 'apps/client/src/app/utils/uploadVideo';
+import { VideoWithPlayButton } from 'apps/client/src/app/component/Profile/ProfileTabs/Users/Biography/Biography';
+import clsx from 'clsx';
+import { useCompleteProfileStore } from 'apps/client/src/app/store/complete-user-profile';
+import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
@@ -52,7 +60,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
   return (
     <View className="flex flex-col items-start justify-start ">
       <View className="flex-row justify-between items-center w-full">
-        <Text className="text-primary-dark pr-2 text-base font-semibold">
+        <Text className="text-primary-default pr-2 text-base font-semibold">
           Hard skills
         </Text>
         <View className="w-6">
@@ -88,6 +96,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
 };
 
 const EditPersonalProfileScreen = ({ navigation }: any) => {
+
   const [occupationList, setOccupationList] = useState<IOccupation[]>([])
   useEffect(() => {
     const getOccupationList = async () => {
@@ -109,6 +118,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
+  console.log("🚀 ~ file: EditPersonalProfileScreen.tsx:117 ~ EditPersonalProfileScreen ~ userData:", userData)
   useGetUserData();
   const {
     control,
@@ -134,6 +144,11 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     },
     resolver: yupResolver(EditProfileValidators()),
   });
+  const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
+  const removeVideo = () => {
+    uploadNewVideo('');
+    setPickedVideo([]);
+  };
   const occupation = getValues('occupation');
   const birth = getValues('birth');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -164,30 +179,30 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       setArrayMyHardSkills(hardSkill);
     }
   }, [userData?.hardSkill]);
-
-  const onSubmit = (data: any) => {
+  const { setVideo } = useCompleteProfileStore();
+  const onSubmit = async (data: any) => {
     const IdOccupation = occupationList.find((item) => item.name === data.occupation)?.id
-
     setIsLoading(true)
-    serviceUpdateMyProfile(userData?.id, {
-      name: data.name,
-      surname: data.surname,
-      bio: data.bio,
-      birth: data.birth,
-      occupation: IdOccupation,
-      hardSkill: arrayMyHardSkills
-    })
-      .then(async (res) => {
-        if (res.status === 200) {
-          setIsLoading(false)
-          navigation.navigate('Profile')
+    try {
+      await Promise.all([
+        uploadNewVideo(pickedVideo[0]?.uri),
+        serviceUpdateMyProfile(userData?.id, {
+          name: data.name,
+          surname: data.surname,
+          bio: data.bio,
+          birth: data.birth,
+          occupation: IdOccupation,
+          hardSkill: arrayMyHardSkills
+        })
 
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false)
-        setIsErrDialog(true)
-      });
+      ])
+      setIsLoading(false)
+      navigation.navigate('Profile')
+    } catch (error) {
+      setIsLoading(false)
+      setIsErrDialog(true)
+    }
+
 
 
 
@@ -355,6 +370,25 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
+
+              <View >
+                <Text className="text-primary-default py-4 text-base font-semibold">
+                  {t('video_profile')}
+                </Text>
+                {userData?.video && pickedVideo.length === 0 && (
+                  <View className={clsx(' flex flex-col ')}>
+                    <View >
+                      <VideoWithPlayButton src={userData?.video} heightVideo={138} />
+                    </View>
+                  </View>
+                )}
+                <VideoPicker
+                  setExternalVideo={setPickedVideo}
+                  useBigImage={true}
+                  removeVideo={removeVideo}
+                />
+              </View>
+
               <View className="pt-3">
                 <Controller
                   control={control}
@@ -382,6 +416,15 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                 hardSkill={arrayMyHardSkills || []}
                 setArrayMyHardSkills={setArrayMyHardSkills}
               />
+              <Text className="text-primary-default pt-4 text-base font-semibold">
+                {t('work_place')}
+              </Text>
+              <View className="flex flex-row items-center justify-between pt-2">
+                <Text className="text-base font-light">
+                  {t('show_company')}
+                </Text>
+                <CustomSwitch textDisable="" textEnable="" />
+              </View>
 
               <Button
                 title="Update"

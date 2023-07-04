@@ -215,7 +215,7 @@ const HomeScreen = () => {
                   icon={
                     <IconSearch
                       onPress={() =>
-                        navigation.navigate('CompleteProfileStep3Screen')
+                        navigation.navigate('MainSearchScreen')
                       }
                     />
                   }

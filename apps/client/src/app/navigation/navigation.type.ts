@@ -68,6 +68,8 @@ export type RootStackParamList = {
   OtherUserProfileDetailsScreen: {
     challengeId: string;
   };
+
+  MainSearchScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

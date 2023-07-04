@@ -2,6 +2,7 @@
   "success": "Success",
   "error": "Error",
   "close": "Close",
+  "search_screen.search": "Search user name",
   "error_general_message": "Something went wrong. Please try again later.",
   "error_network_message": "Please check your internet connection and try again.",
   "error_permission_message": "Permission denied. Please try again later.",

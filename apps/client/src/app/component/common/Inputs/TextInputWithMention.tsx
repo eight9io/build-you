@@ -56,63 +56,6 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
 
   return (
     <>
-      {/* {keyword && searchResults.length > 0 && (
-        <FlatList
-          className={clsx(
-            'bg-gray-veryLight absolute z-10 h-72 w-full rounded-lg px-4 py-2'
-          )}
-          style={{
-            bottom: commentInputHeight,
-          }}
-          data={searchResults.filter(
-            (one) =>
-              (one?.name &&
-                one.name
-                  .toLocaleLowerCase()
-                  .includes(keyword.toLocaleLowerCase())) ||
-              (one?.surname &&
-                one.surname
-                  .toLocaleLowerCase()
-                  .includes(keyword.toLocaleLowerCase()))
-          )}
-          showsVerticalScrollIndicator={true}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                activeOpacity={0.8}
-                onPress={() =>
-                  onSuggestionPress({
-                    id: item.id.toString(),
-                    name: item.name,
-                  })
-                }
-
-                className="mb-5 flex-row items-center gap-3"
-              >
-                <View className='relative'>
-                  <Image
-                    className={clsx(
-                      'absolute left-0  top-0 h-10 w-10 rounded-full'
-                    )}
-                    source={require('./assets/avatar-load.png')}
-                  />
-                  <Image
-                    source={{ uri: item.avatar }}
-                    resizeMode="cover"
-                    className="h-10 w-10 rounded-full"
-                  />
-
-                </View>
-                <Text className="text-basic-black text-base font-semibold">
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      )} */}
       {keyword && searchResults.length > 0 && (
         <ScrollView
           className={clsx(
@@ -141,9 +84,7 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
                 >
                   <View className="relative">
                     <Image
-                      className={clsx(
-                        'absolute left-0  top-0 h-10 w-10 rounded-full'
-                      )}
+                      className={clsx('h-10 w-10 rounded-full')}
                       source={require('./assets/avatar-load.png')}
                     />
                     <Image

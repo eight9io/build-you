@@ -9,6 +9,7 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
+import { Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
@@ -22,17 +23,16 @@ import NavButton from '../component/common/Buttons/NavButton';
 import BottomNavBar from '../component/BottomNavBar/BottomNavBar';
 
 import IntroScreen from '../screen/IntroScreen/IntroScreen';
-import ProgressCommentScreen from '../screen/ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
-
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
-
+import MainSearchScreen from '../screen/MainSearchScreen/MainSearchScreen';
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/CompleteProfile';
+import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
+import ProgressCommentScreen from '../screen/ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
+import EditCompanyProfileScreen from '../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen';
+import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
 import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen';
 import CreateCompanyChallengeScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateCompanyChallengeScreen';
 import CompanyChallengeDetailScreen from '../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
-import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
-import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
-import EditCompanyProfileScreen from '../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen';
 
 import Login from '../screen/LoginScreen/LoginScreen';
 import Register from '../screen/RegisterScreen/RegisterScreen';
@@ -52,7 +52,6 @@ import {
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
 
-import { removeAuthTokensLocalOnLogout } from '../utils/checkAuth';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
@@ -118,7 +117,7 @@ export const RootNavigation = () => {
         Notifications.removeNotificationSubscription(responseListener.current);
       Notifications.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
     };
-  }, [navigationRef?.current]);
+  }, []);
 
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
@@ -156,7 +155,6 @@ export const RootNavigation = () => {
       setHasNewNotification(false); // reset the new notification flag
     });
   };
-
 
   return (
     <NavigationContainer ref={navigationRef}>
@@ -251,6 +249,27 @@ export const RootNavigation = () => {
                 headerLeft: (props) => (
                   <NavButton
                     text="Back"
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                ),
+              })}
+            />
+            <RootStack.Screen
+              name="MainSearchScreen"
+              component={MainSearchScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                headerTitle: () => (
+                  <Text className="text-lg font-semibold">Search User</Text>
+                ),
+                headerSearchBarOptions: {
+                  hideNavigationBar: false,
+                },
+
+                headerLeft: () => (
+                  <NavButton
+                    text={t('button.back') as string}
                     onPress={() => navigation.goBack()}
                     withBackIcon
                   />

@@ -71,16 +71,16 @@ const NotificationsScreen = () => {
         component={Notifications}
         options={({ navigation }) => ({
           headerTitle: () => <AppTitle title={t('top_nav.noti')} />,
-          headerRight: (props) => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() => console.log('NotificationsScreen Search')}
-                />
-              }
-            />
-          ),
+          // headerRight: (props) => (
+          //   <NavButton
+          //     withIcon
+          //     icon={
+          //       <IconSearch
+          //         onPress={() => console.log('NotificationsScreen Search')}
+          //       />
+          //     }
+          //   />
+          // ),
         })}
       />
       <NotificationsStack.Screen

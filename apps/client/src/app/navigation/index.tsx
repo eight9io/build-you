@@ -106,7 +106,9 @@ export const RootNavigation = () => {
   }, [logined]);
 
   useEffect(() => {
-    navigationRef?.current && initNotification(navigationRef.current);
+    // Only init notification when user logined and complete profile
+    if (logined && isCompleteProfile && navigationRef?.current)
+      initNotification(navigationRef.current);
     return () => {
       // cleanup the listener and task registry
       if (notificationListener.current)
@@ -117,7 +119,7 @@ export const RootNavigation = () => {
         Notifications.removeNotificationSubscription(responseListener.current);
       Notifications.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
     };
-  }, []);
+  }, [logined, isCompleteProfile, navigationRef]);
 
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {

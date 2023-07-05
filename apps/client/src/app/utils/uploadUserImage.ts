@@ -10,22 +10,17 @@ interface PickImageOptions {
   base64?: boolean;
   maxImages?: number;
   quality?: number;
+  showPermissionRequest: () => void;
 }
 
 export const getImageFromUserDevice = (props: PickImageOptions) => {
-  const { allowsMultipleSelection, base64 } = props;
+  const { allowsMultipleSelection, base64, showPermissionRequest } = props;
   const { t } = useTranslation();
   return async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      GlobalDialogController.showModal({
-        title: 'Error',
-        message:
-          t('error_permission_message') ||
-          'Permission denied. Please try again later.',
-        button: 'OK',
-      });
+      showPermissionRequest();
       return;
     }
 

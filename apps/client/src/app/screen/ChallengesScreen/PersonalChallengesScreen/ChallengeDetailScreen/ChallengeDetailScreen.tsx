@@ -10,23 +10,34 @@ import { FC, useEffect, useState } from 'react';
 import CheckCircle from './assets/check_circle.svg';
 
 import { getChallengeStatusColor } from '../../../../utils/common';
+import ParticipantsTab from '../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab';
+import { MOCK_FOLLOW_USERS } from 'apps/client/src/app/mock-data/follow';
 
-const CHALLENGE_TABS_TITLE_TRANSLATION = [
-  i18n.t('challenge_detail_screen.progress'),
-  i18n.t('challenge_detail_screen.description'),
-];
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldRefresh: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  isCompanyChallenge?: boolean;
 }
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
   shouldRefresh,
   setShouldRefresh,
+  isCompanyChallenge
 }) => {
+
+  const CHALLENGE_TABS_TITLE_TRANSLATION = isCompanyChallenge ? [
+    i18n.t('challenge_detail_screen.progress'),
+    i18n.t('challenge_detail_screen.description'),
+    i18n.t('challenge_detail_screen.participants'),
+  ] : [
+    i18n.t('challenge_detail_screen.progress'),
+    i18n.t('challenge_detail_screen.description'),
+
+
+  ];
   const [index, setIndex] = useState(0);
   const { goal } = challengeData;
   const statusColor = getChallengeStatusColor(challengeData?.status);
@@ -61,6 +72,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             setShouldRefresh={setShouldRefresh}
           />
           <DescriptionTab challengeData={challengeData} />
+          {isCompanyChallenge && <ParticipantsTab participant={MOCK_FOLLOW_USERS} />}
         </TabView>
       </View>
     </View>

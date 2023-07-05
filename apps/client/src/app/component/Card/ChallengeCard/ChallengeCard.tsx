@@ -35,12 +35,18 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   handlePress,
   isFromOtherUser = false,
 }) => {
+
+
   const [loading, setLoading] = useState<boolean>(true);
   const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
   const onPress = () => {
     // handlePress or navigation
     if (navigation) {
-      if (isCompany) navigation.navigate('CompanyChallengeDetailScreen');
+      if (isCompany) {
+        return navigation.navigate('CompanyChallengeDetailScreen', {
+          challengeId: item.id,
+        })
+      }
       else if (isFromOtherUser) {
         navigation.navigate('OtherUserProfileDetailsScreen', {
           challengeId: item.id,

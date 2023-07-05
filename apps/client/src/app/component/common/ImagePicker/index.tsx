@@ -1,12 +1,15 @@
 import { useState, FC, useEffect } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Linking } from 'react-native';
 import clsx from 'clsx';
 import { Image } from 'expo-image';
+import { useTranslation } from 'react-i18next';
 
 import CameraIcon from './asset/camera-icon.svg';
 import { getImageFromUserDevice } from '../../../utils/uploadUserImage';
 import Close from '../../asset/close.svg';
 import Button from '../Buttons/Button';
+import ConfirmDialog from '../Dialog/ConfirmDialog';
+import GlobalDialogController from '../Dialog/GlobalDialogController';
 
 interface IImagePickerProps {
   images?: string[];
@@ -29,11 +32,21 @@ const ImagePicker: FC<IImagePickerProps> = ({
   base64,
   isDisabled = false,
 }) => {
+  const { t } = useTranslation();
+  const [requirePermissionModal, setRequirePermissionModal] =
+    useState(false);
+  
+  
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection,
     base64,
     maxImages: 3,
     quality: 0.8,
+    showPermissionRequest: handleShowPermissionRequiredModal,
   });
 
   const handlePickImage = async () => {
@@ -49,6 +62,14 @@ const ImagePicker: FC<IImagePickerProps> = ({
     if (onRemoveSelectedImage) {
       onRemoveSelectedImage(index);
     }
+  };
+
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
   };
   return (
     <View className="flex flex-col">
@@ -105,6 +126,15 @@ const ImagePicker: FC<IImagePickerProps> = ({
           Upload image
         </Text>
       </TouchableOpacity>
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
+      />
     </View>
   );
 };

@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { View, TouchableOpacity, ImageSourcePropType } from 'react-native';
+import { View, TouchableOpacity, ImageSourcePropType, Linking } from 'react-native';
 
 import CameraSvg from './asset/camera.svg';
 import {
@@ -25,8 +25,23 @@ const CoverImage: React.FC<ICoverImageProps> = ({
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
+  const [requirePermissionModal, setRequirePermissionModal] = useState(false);
+
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
+  };
+
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
+    showPermissionRequest: handleShowPermissionRequiredModal,
   });
 
   const handlePickImage = async () => {
@@ -89,6 +104,15 @@ const CoverImage: React.FC<ICoverImageProps> = ({
           </TouchableOpacity>
         )}
       </View>
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
+      />
     </View>
   );
 };

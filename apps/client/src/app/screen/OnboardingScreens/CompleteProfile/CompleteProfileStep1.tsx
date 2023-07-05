@@ -226,7 +226,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
-              {/* TODO: Implement a slide modal picker */}
               <View className="pt-3">
                 <Controller
                   name="occupation"

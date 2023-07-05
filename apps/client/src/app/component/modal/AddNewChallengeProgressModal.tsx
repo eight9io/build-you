@@ -195,7 +195,6 @@ export const AddNewChallengeProgressModal: FC<
     }
     setIsLoading(false);
   };
-  // TODO: handle change CREATE text color when input is entered
 
   const screen = Dimensions.get('window');
 

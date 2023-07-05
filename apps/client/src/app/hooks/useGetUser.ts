@@ -5,10 +5,7 @@ import { useFollowingListStore, useUserProfileStore } from '../store/user-data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { serviceGetOtherUserData } from '../service/user';
 import { serviceGetMyProfile } from '../service/auth';
-import {
-  serviceGetEmployeeList,
-  serviceGetListFollowing,
-} from '../service/profile';
+import { serviceGetListFollowing } from '../service/profile';
 import { useAuthStore } from '../store/auth-store';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 
@@ -67,6 +64,7 @@ export const useGetListFollowing = () => {
   const { setFollowingList } = useFollowingListStore();
   if (!isToken) return null;
   const fetchFollowingData = async () => {
+    if (!userProfile?.id) return null;
     await serviceGetListFollowing(userProfile?.id)
       .then((res) => {
         setFollowingList(res.data);

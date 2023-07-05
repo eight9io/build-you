@@ -220,24 +220,28 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       selectedCompetencedSkill
     );
 
-    // TODO: handle error when null id
-    if (!userData?.id) return;
+    if (!userData?.id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+        button: 'OK',
+      });
+      return;
+    }
     try {
       await Promise.all([
         uploadNewVideo(profile?.video),
-        httpInstance
-          .put(`/user/update/${userData.id}`, {
-            name: profile?.name,
-            surname: profile?.surname,
-            birth: profile?.birth,
-            occupation: profile?.occupation,
-            bio: profile?.biography,
-            softSkill: softSkills,
-            hardSkill: profile.skills,
-            company: '',
-          })
-
-      ])
+        httpInstance.put(`/user/update/${userData.id}`, {
+          name: profile?.name,
+          surname: profile?.surname,
+          birth: profile?.birth,
+          occupation: profile?.occupation,
+          bio: profile?.biography,
+          softSkill: softSkills,
+          hardSkill: profile.skills,
+          company: '',
+        }),
+      ]);
       navigation.navigate('CompleteProfileFinishScreen');
     } catch (error) {
       GlobalDialogController.showModal({
@@ -245,8 +249,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         message: t('errorMessage:500') as string,
       });
     }
-
-
   };
 
   const addCompetencedSkill = (skill: IFormValueInput | undefined) => {

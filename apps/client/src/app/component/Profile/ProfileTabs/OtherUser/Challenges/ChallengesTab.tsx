@@ -50,7 +50,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
   };
 
   return (
-    <ScrollView className='px-4 '  >
+    <View className='px-4  h-full'  >
       {otherUserChallenge.length > 0 && (
         <FlatList
           className="px-4 pt-4"
@@ -67,13 +67,13 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
         />
       )}
       {otherUserChallenge.length === 0 && !isLoading && (
-        <View className="items-center justify-center align-center mt-[150px] ">
+        <View className=" flex-1 items-center justify-center h-full">
           <Text className="text-lg text-gray-400 ">
             {t('company_profile_screen.no_challenge')}
           </Text >
         </View >
       )}
-    </ScrollView >
+    </View >
   );
 };
 

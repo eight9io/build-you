@@ -69,6 +69,7 @@ const CompanyChallenges = ({
 }) => {
   const { t } = useTranslation();
   const [companyChallengesList, setCompanyChallengesList] = useState<
+
     IChallenge[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -110,6 +111,7 @@ const CompanyChallenges = ({
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
+                  isCompany={userData?.companyAccount ? true : false}
                 />
               )}
               keyExtractor={(item) => item.id}

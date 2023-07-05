@@ -5,6 +5,16 @@ export interface ICreateChallenge {
   achievementTime: Date;
 }
 
+export interface ICreateCompanyChallenge {
+  goal: string;
+  benefits: string;
+  reasons: string;
+  achievementTime: Date | undefined;
+  maximumPeople: number | undefined;
+  public: boolean;
+  image?: string;
+}
+
 export interface IEditChallenge {
   goal: string;
   benefits: string;

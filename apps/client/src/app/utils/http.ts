@@ -36,13 +36,16 @@ httpInstance.interceptors.response.use(
         if (!originalRequest._retry) {
           originalRequest._retry = true;
           const newAuthToken = await checkRefreshTokenLocalValidation();
+          console.log('newAuthToken', newAuthToken);
           if (!newAuthToken) {
+            console.log('token is not valid');
             reject('token is not valid');
           } else {
             setAuthTokenToHttpHeader(newAuthToken);
             originalRequest.headers['Authorization'] = `Bearer ${newAuthToken}`;
             // call new request with new token
             try {
+              console.log('call new request with new token');
               const res = await httpInstance(originalRequest);
               resolve(res);
             } catch (error) {

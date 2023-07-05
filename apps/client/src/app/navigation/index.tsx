@@ -52,7 +52,6 @@ import {
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
 
-
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 

@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import dayjs from 'dayjs';
 
 import { useNav } from '../../../navigation/navigation.type';
+import { ICreateCompanyChallenge } from '../../../types/challenge';
 
 import { CreateCompanyChallengeValidationSchema } from '../../../Validators/CreateChallenge.validate';
 
@@ -20,9 +21,27 @@ import CustomTextInput from '../../common/Inputs/CustomTextInput';
 import DateTimePicker2 from '../../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 
 import CalendarIcon from '../../asset/calendar.svg';
+import { ICreateChallenge } from '../../../types/challenge';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  createCompanyChallenge,
+  updateChallengeImage,
+} from '../../../service/challenge';
+import { AxiosResponse } from 'axios';
+import httpInstance from '../../../utils/http';
+
+interface ICreateChallengeForm
+  extends Omit<ICreateChallenge, 'achievementTime'> {
+  achievementTime: Date;
+  image?: string | undefined;
+  public: boolean;
+  maximumPeople: number | undefined;
+}
+
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
+
 export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   onClose,
 }) => {
@@ -31,6 +50,8 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState(false);
+
   const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
     undefined
   );
@@ -42,23 +63,71 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const {
     control,
     handleSubmit,
+    getValues,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<ICreateChallengeForm>({
     defaultValues: {
       goal: '',
       benefits: '',
       reasons: '',
       achievementTime: undefined,
+      maximumPeople: undefined,
+      public: false,
       image: '',
-      maxPeople: undefined,
-      isPublic: false,
     },
     resolver: yupResolver(CreateCompanyChallengeValidationSchema()),
   });
 
-  const onSubmit = (data: any) => console.log(data);
-  // TODO: handle change CREATE text color when input is
+  const onSubmit = async (data: ICreateCompanyChallenge) => {
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const { image, ...rest } = data; // Images upload will be handle separately
+      const payload = {
+        ...rest,
+        achievementTime: data.achievementTime as Date,
+      };
+      const challengeCreateResponse = await createCompanyChallenge(payload);
+      // If challenge created successfully, upload image
+      if (challengeCreateResponse.status === 200 || 201) {
+        setNewChallengeId(challengeCreateResponse.data.id);
+        if (image) {
+          const challengeImageResponse = (await updateChallengeImage(
+            {
+              id: challengeCreateResponse.data.id,
+            },
+            image
+          )) as AxiosResponse;
+
+          if (challengeImageResponse.status === 200 || 201) {
+            setIsRequestSuccess(true);
+            setIsShowModal(true);
+            return;
+          }
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+          httpInstance.delete(
+            `/challenge/delete/${challengeCreateResponse.data.id}`
+          );
+          setErrorMessage(t('errorMessage:500') || '');
+        }
+        setIsRequestSuccess(true);
+        setIsShowModal(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(t('errorMessage:500') || '');
+    }
+    setIsLoading(false);
+  };
+
+  const handleImagesSelected = (images: string[]) => {
+    setValue('image', images[0], {
+      shouldValidate: true,
+    });
+  };
 
   const handleCloseModal = (newChallengeId: string | undefined) => {
     setIsShowModal(false);
@@ -80,9 +149,15 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setShowDatePicker(false);
   };
 
+  const handleRemoveSelectedImage = (index: number) => {
+    setValue('image', '', {
+      shouldValidate: true,
+    });
+  };
+
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
-      <SafeAreaView className="bg-white">
+      <SafeAreaView className="flex flex-col bg-white">
         <ConfirmDialog
           title={isRequestSuccess ? 'Success' : 'Error'}
           description={
@@ -94,175 +169,193 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
           onClosed={() => handleCloseModal(newChallengeId)}
           closeButtonLabel="Got it"
         />
-        <View className=" flex h-full  rounded-t-xl bg-white">
-          <View className="px-4">
-            <Header
-              title="New challenge"
-              rightBtn="CREATE"
-              leftBtn="Cancel"
-              onLeftBtnPress={onClose}
-              onRightBtnPress={handleSubmit(onSubmit)}
-            />
-          </View>
-          <ScrollView showsVerticalScrollIndicator>
-            <View className="mb-10 mt-2 flex flex-col px-5">
-              <Text className="text-gray-dark text-md font-normal leading-5">
-                Create a new challenge for yourself with a concrete goal and
-                time to reach it.{' '}
-              </Text>
-              <View className="pt-5">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      label={t('new_challenge_screen.your_goal') || ''}
-                      placeholder={
-                        t('new_challenge_screen.your_goal_placeholder') || ''
-                      }
-                      placeholderTextColor={'#6C6E76'}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      className={clsx(errors.goal && 'border-1 border-red-500')}
-                    />
-                  )}
-                  name={'goal'}
-                />
-                {errors.goal ? (
-                  <ErrorText message={errors.goal.message} />
-                ) : null}
-              </View>
-              <View className="pt-5">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      label={t('new_challenge_screen.benefits') || ''}
-                      placeholder={
-                        t('new_challenge_screen.benefits_placeholder') || ''
-                      }
-                      placeholderTextColor={'#6C6E76'}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      multiline
-                      textAlignVertical="top"
-                      value={value}
-                      className={clsx(
-                        'h-24',
-                        errors.benefits && 'border-1 border-red-500'
-                      )}
-                    />
-                  )}
-                  name={'benefits'}
-                />
-                {errors.benefits ? (
-                  <ErrorText message={errors.benefits.message} />
-                ) : null}
-              </View>
-
-              <View className="pt-5">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <View>
+        <View className="px-4 ">
+          <Header
+            title="New challenge"
+            rightBtn="CREATE"
+            leftBtn="Cancel"
+            onLeftBtnPress={onClose}
+            onRightBtnPress={handleSubmit(onSubmit)}
+          />
+        </View>
+        <KeyboardAwareScrollView extraHeight={150}>
+          <View className=" flex h-full  rounded-t-xl bg-white">
+            <ScrollView showsVerticalScrollIndicator>
+              <View className="mb-10 mt-2 flex flex-col px-5">
+                <Text className="text-gray-dark text-md font-normal leading-5">
+                  Create a new challenge for yourself with a concrete goal and
+                  time to reach it.{' '}
+                </Text>
+                <View className="pt-5">
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
                       <TextInput
-                        label={t('new_challenge_screen.reasons') || ''}
+                        label={t('new_challenge_screen.your_goal') || ''}
                         placeholder={
-                          t('new_challenge_screen.reasons_placeholder') || ''
+                          t('new_challenge_screen.your_goal_placeholder') || ''
                         }
                         placeholderTextColor={'#6C6E76'}
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
-                        multiline
-                        textAlignVertical="top"
                         className={clsx(
-                          'h-24',
-                          errors.reasons && 'border-1 border-red-500'
+                          errors.goal && 'border-1 border-red-500'
                         )}
                       />
-                    </View>
-                  )}
-                  name={'reasons'}
-                />
-                {errors.reasons ? (
-                  <ErrorText message={errors.reasons.message} />
-                ) : null}
-              </View>
-              <View className="mt-5">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <>
+                    )}
+                    name={'goal'}
+                  />
+                  {errors.goal && <ErrorText message={errors.goal.message} />}
+                </View>
+                <View className="pt-5">
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
                       <TextInput
-                        label={
-                          t('new_challenge_screen.time_to_reach_goal') || ''
-                        }
+                        label={t('new_challenge_screen.benefits') || ''}
                         placeholder={
-                          t(
-                            'new_challenge_screen.time_to_reach_goal_placeholder'
-                          ) || ''
+                          t('new_challenge_screen.benefits_placeholder') || ''
                         }
                         placeholderTextColor={'#6C6E76'}
-                        onBlur={onBlur}
                         onChangeText={onChange}
-                        editable={false}
-                        value={value ? dayjs(value).format('DD/MM/YYYY') : ''}
-                        rightIcon={<CalendarIcon />}
-                        onPress={() => setShowDatePicker(true)}
+                        onBlur={onBlur}
+                        multiline
+                        textAlignVertical="top"
+                        value={value}
                         className={clsx(
-                          errors.achievementTime && 'border-1 border-red-500'
+                          'h-24',
+                          errors.benefits && 'border-1 border-red-500'
                         )}
                       />
-                      <DateTimePicker2
-                        selectedDate={value}
-                        setSelectedDate={handleDatePicked}
-                        setShowDateTimePicker={setShowDatePicker}
-                        showDateTimePicker={showDatePicker}
-                        minimumDate={new Date()}
+                    )}
+                    name={'benefits'}
+                  />
+                  {errors.benefits && (
+                    <ErrorText message={errors.benefits.message} />
+                  )}
+                </View>
+
+                <View className="pt-5">
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <View>
+                        <TextInput
+                          label={t('new_challenge_screen.reasons') || ''}
+                          placeholder={
+                            t('new_challenge_screen.reasons_placeholder') || ''
+                          }
+                          placeholderTextColor={'#6C6E76'}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          value={value}
+                          multiline
+                          textAlignVertical="top"
+                          className={clsx(
+                            'h-24',
+                            errors.reasons && 'border-1 border-red-500'
+                          )}
+                        />
+                      </View>
+                    )}
+                    name={'reasons'}
+                  />
+                  {errors.reasons && (
+                    <ErrorText message={errors.reasons.message} />
+                  )}
+                </View>
+                <View className="mt-5">
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <>
+                        <TextInput
+                          label={
+                            t('new_challenge_screen.time_to_reach_goal') || ''
+                          }
+                          placeholder={
+                            t(
+                              'new_challenge_screen.time_to_reach_goal_placeholder'
+                            ) || ''
+                          }
+                          placeholderTextColor={'#6C6E76'}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          editable={false}
+                          value={value ? dayjs(value).format('DD/MM/YYYY') : ''}
+                          rightIcon={<CalendarIcon />}
+                          onPress={() => setShowDatePicker(true)}
+                          className={clsx(
+                            errors.achievementTime && 'border-1 border-red-500'
+                          )}
+                        />
+                        <DateTimePicker2
+                          selectedDate={value}
+                          setSelectedDate={handleDatePicked}
+                          setShowDateTimePicker={setShowDatePicker}
+                          showDateTimePicker={showDatePicker}
+                          minimumDate={new Date()}
+                        />
+                      </>
+                    )}
+                    name={'achievementTime'}
+                  />
+                  {errors.achievementTime && (
+                    <ErrorText message={errors.achievementTime.message} />
+                  )}
+                </View>
+
+                <View className="pt-5">
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        label={t('new_challenge_screen.max_people') || ''}
+                        placeholder={
+                          t('new_challenge_screen.max_people_placeholder') || ''
+                        }
+                        placeholderTextColor={'#6C6E76'}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value ? value.toString() : ''}
+                        keyboardType="numeric"
+                        className={clsx(
+                          errors.goal && 'border-1 border-red-500'
+                        )}
                       />
-                    </>
+                    )}
+                    name={'maximumPeople'}
+                  />
+                  {errors.maximumPeople && (
+                    <ErrorText message={errors.maximumPeople.message} />
                   )}
-                  name={'achievementTime'}
-                />
-                {errors.achievementTime ? (
-                  <ErrorText message={errors.achievementTime.message} />
-                ) : null}
-              </View>
+                </View>
 
-              <View className="pt-5">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      label={t('new_challenge_screen.max_people') || ''}
-                      placeholder={
-                        t('new_challenge_screen.max_people_placeholder') || ''
-                      }
-                      placeholderTextColor={'#6C6E76'}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      className={clsx(errors.goal && 'border-1 border-red-500')}
-                    />
-                  )}
-                  name={'maxPeople'}
-                />
-                {errors.maxPeople ? (
-                  <ErrorText message={errors.maxPeople.message} />
-                ) : null}
-              </View>
+                <View className="flex flex-col justify-start pt-5">
+                  <CustomSwitch textDisable="Private" textEnable="Public" />
+                  <Text className="text-gray-dark pt-2 text-sm font-normal leading-4 ">
+                    Everyone can join your public challenge while only user from
+                    your company can join your private challenge.
+                  </Text>
+                </View>
 
-              <View className="flex flex-row items-center justify-start pt-5">
-                <CustomSwitch textDisable="Private" textEnable="Public" />
+                <View className="mt-5">
+                  {/* <ImagePicker isSelectedImage /> */}
+                  <ImagePicker
+                    images={getValues('image') ? [getValues('image')!] : []}
+                    onImagesSelected={handleImagesSelected}
+                    onRemoveSelectedImage={handleRemoveSelectedImage}
+                    base64
+                  />
+                  {errors.image ? (
+                    <ErrorText message={errors.image.message} />
+                  ) : null}
+                </View>
               </View>
-
-              <View className="">
-                <ImagePicker isSelectedImage />
-              </View>
-            </View>
-          </ScrollView>
-        </View>
+            </ScrollView>
+          </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Modal>
   );

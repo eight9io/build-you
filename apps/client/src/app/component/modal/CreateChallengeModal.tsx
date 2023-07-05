@@ -50,7 +50,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     control,
     getValues,
     setValue,
-    setError,
+
     handleSubmit,
     formState: { errors },
   } = useForm<ICreateChallengeForm>({
@@ -134,7 +134,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     }
     setIsLoading(false);
   };
-  // TODO: handle change CREATE text color when input is entered
 
   const handleCloseModal = (newChallengeId: string | undefined) => {
     setIsShowModal(false);

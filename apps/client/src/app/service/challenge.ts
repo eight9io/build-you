@@ -2,6 +2,7 @@ import {
   IChallenge,
   ICreateChallenge,
   IEditChallenge,
+  ICreateCompanyChallenge,
   IUpdateChallengeImage,
 } from '../types/challenge';
 import http from '../utils/http';
@@ -9,6 +10,10 @@ import { retryRequest } from '../utils/retryRequest';
 
 export const createChallenge = (data: ICreateChallenge) => {
   return http.post('/challenge/create', data);
+};
+
+export const createCompanyChallenge = (data: ICreateCompanyChallenge) => {
+  return http.post('/challenge/company/create', data);
 };
 
 export const updateChallengeImage = (

@@ -85,7 +85,7 @@ const MainSearchScreen = () => {
   return (
     <SafeAreaView className='bg-white flex-1'>
       {searchResults.length > 0 && (
-        <View>
+        <View className='flex-1'>
           <FlatList
             data={searchResults}
             className="flex flex-col bg-white"

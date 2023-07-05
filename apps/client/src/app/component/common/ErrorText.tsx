@@ -10,7 +10,7 @@ export default function ErrorText({ message, containerClassName }: Props) {
   return (
     <View
       className={clsx(
-        'mt-1  flex-row content-center items-center',
+        'mt-4  flex-row content-center items-center',
         containerClassName
       )}
     >

@@ -40,7 +40,9 @@ export type RootStackParamList = {
 
   CompanyProfileScreen: undefined;
   CompanyChallengesScreen: undefined;
-  CompanyChallengeDetailScreen: undefined;
+  CompanyChallengeDetailScreen: {
+    challengeId: string;
+  }
   CreateCompanyChallengeScreen: undefined;
 
   ProgressCommentScreen: {

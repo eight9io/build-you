@@ -68,7 +68,8 @@ const PersonalChallenges = ({
   const [personalChallengesList, setPersonalChallengesList] = useState<
     IChallenge[]
   >([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isFetchingError, setIsFetchingError] = useState<boolean>(false);
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
@@ -76,24 +77,31 @@ const PersonalChallenges = ({
 
   useEffect(() => {
     if (!isFocused) return;
-    httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
-      res.data.sort((a: IChallenge, b: IChallenge) => {
-        return (
-          new Date(b.achievementTime).getTime() -
-          new Date(a.achievementTime).getTime()
-        );
-      });
-      setPersonalChallengesList(res.data);
-      setTimeout(() => {
+    const fetchData = async () => {
+      try {
+        const res = await httpInstance.get(`/challenge/${userData?.id}`);
+        res.data.sort((a: IChallenge, b: IChallenge) => {
+          return (
+            new Date(b.achievementTime).getTime() -
+            new Date(a.achievementTime).getTime()
+          );
+        });
+        setPersonalChallengesList(res.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      } catch (err) {
+        setIsFetchingError(true);
         setIsLoading(false);
-      }, 500);
-    });
+      }
+    };
+    fetchData();
   }, [isFocused]);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && (
+      {!isLoading && !isFetchingError && (
         <View className={clsx('h-full w-full bg-gray-50')}>
           {personalChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
@@ -112,6 +120,18 @@ const PersonalChallenges = ({
               ListFooterComponent={<View className="h-20" />}
             />
           )}
+        </View>
+      )}
+      {!isLoading && isFetchingError && (
+        <View
+          className={clsx('flex h-full flex-col items-center justify-center')}
+        >
+          <Text className={clsx('text-md font-medium')}>
+            Something went wrong.
+          </Text>
+          <Text className={clsx('text-md font-medium')}>
+            Please try again later or contact us.
+          </Text>
         </View>
       )}
     </SafeAreaView>

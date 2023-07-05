@@ -28,8 +28,6 @@ interface ISingleCommentProps {
   onDeleteCommentSuccess: () => void;
 }
 
-// TODO: @[userName](user_id), haven't handle case where user change their name, need change comment api
-
 const renderPart = (part: Part, index: number, navigataion: any) => {
   // Mention type part
   if (part?.partType && isMentionPartType(part.partType)) {
@@ -148,7 +146,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
             </Text>
           </View>
         </View>
-        {/* TODO: uncomment this when we have the isOwner property */}
+
         {userProfile && userProfile.id === comment.user && (
           <PopUpMenu
             iconColor="#FF7B1D"

@@ -49,7 +49,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
     },
   });
   const onSubmit = (data: any) => console.log(data);
-  // TODO: handle change CREATE text color when input is entered
 
   const handleDatePicked = (date?: Date) => {
     if (date) setValue('birth', date);
@@ -146,7 +145,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                 name="birth"
               />
             </View>
-            {/* TODO: Implement a slide modal picker */}
+
             <View className="pt-5">
               <Controller
                 control={control}

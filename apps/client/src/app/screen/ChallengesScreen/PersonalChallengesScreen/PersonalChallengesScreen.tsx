@@ -76,18 +76,24 @@ const PersonalChallenges = ({
 
   useEffect(() => {
     if (!isFocused) return;
-    httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
-      res.data.sort((a: IChallenge, b: IChallenge) => {
-        return (
-          new Date(b.achievementTime).getTime() -
-          new Date(a.achievementTime).getTime()
-        );
-      });
-      setPersonalChallengesList(res.data);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    });
+    const fetchData = async () => {
+      try {
+        const res = await httpInstance.get(`/challenge/${userData?.id}`);
+        res.data.sort((a: IChallenge, b: IChallenge) => {
+          return (
+            new Date(b.achievementTime).getTime() -
+            new Date(a.achievementTime).getTime()
+          );
+        });
+        setPersonalChallengesList(res.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
   }, [isFocused]);
 
   return (

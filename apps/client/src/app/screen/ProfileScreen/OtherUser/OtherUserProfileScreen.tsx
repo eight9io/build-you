@@ -95,7 +95,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
           <ProfileAvatar isOtherUser src={otherUserData?.avatar as string} />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
-            <DefaultAvatar />
+            <DefaultAvatar width={'100%'} height={'100%'}/>
           </View>
         )}
       </View>

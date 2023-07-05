@@ -13,8 +13,8 @@ export const serviceUpdateCover=(formData:any)=> http.post('/user/cover',formDat
       'Content-Type': 'multipart/form-data',
     },
   })
-  export const serviceGetListFollowing=(idUser:any)=> http.post(`/user/following/all/${idUser}`);
-  export const serviceGetListFollower=(id:any)=> http.post(`/user/followers/all/${id}`);
+  export const serviceGetListFollowing=(idUser:any)=> http.get(`/user/following/all/${idUser}`);
+  export const serviceGetListFollower=(id:any)=> http.get(`/user/followers/all/${id}`);
   export const serviceUnfollow=(idUser:any)=> http.post('/user/unfollow',{
     "following": idUser
   });

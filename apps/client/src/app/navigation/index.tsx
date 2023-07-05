@@ -52,7 +52,6 @@ import {
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
 
-
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
@@ -106,6 +105,7 @@ export const RootNavigation = () => {
   }, [logined]);
 
   useEffect(() => {
+    if (!logined) return;
     navigationRef?.current && initNotification(navigationRef.current);
     return () => {
       // cleanup the listener and task registry
@@ -117,7 +117,7 @@ export const RootNavigation = () => {
         Notifications.removeNotificationSubscription(responseListener.current);
       Notifications.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
     };
-  }, []);
+  }, [logined]);
 
   useEffect(() => {
     if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {

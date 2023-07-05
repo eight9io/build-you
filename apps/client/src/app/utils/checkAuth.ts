@@ -98,8 +98,6 @@ export const checkAuthTokenLocalValidation = async () => {
   }
 };
 
-// TODO: add logout function
-
 export const logout = async () => {
   const { setAccessToken, getAccessToken } = useAuthStore();
   const { setIsCompleteProfileStore } = useIsCompleteProfileStore();

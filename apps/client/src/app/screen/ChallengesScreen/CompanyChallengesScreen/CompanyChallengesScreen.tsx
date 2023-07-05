@@ -69,10 +69,10 @@ const CompanyChallenges = ({
 }) => {
   const { t } = useTranslation();
   const [companyChallengesList, setCompanyChallengesList] = useState<
-
     IChallenge[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -81,25 +81,33 @@ const CompanyChallenges = ({
 
   useEffect(() => {
     if (!isFocused) return;
-    httpInstance.get(`/challenge/${userData?.id}`).then((res) => {
-      res.data.sort((a: IChallenge, b: IChallenge) => {
-        return (
-          new Date(b.achievementTime).getTime() -
-          new Date(a.achievementTime).getTime()
-        );
-      });
-      setCompanyChallengesList(res.data);
-      setTimeout(() => {
+    const fetchCompanyChallenges = async () => {
+      try {
+        const res = await httpInstance.get(`/challenge/${userData?.id}`);
+        res.data.sort((a: IChallenge, b: IChallenge) => {
+          return (
+            new Date(b.achievementTime).getTime() -
+            new Date(a.achievementTime).getTime()
+          );
+        });
+        setCompanyChallengesList(res.data);
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsError(false);
+        }, 500);
+      } catch (error) {
         setIsLoading(false);
-      }, 500);
-    });
+        setIsError(true);
+      }
+    };
+    fetchCompanyChallenges();
   }, [isFocused]);
 
   return (
-    <SafeAreaView className={clsx('bg-white')}>
+    <SafeAreaView className={clsx('flex-1 bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && (
-        <View className={clsx('h-full w-full bg-gray-50 pb-24 ')}>
+      {!isLoading && !isError && (
+        <View className={clsx('h-full w-full flex-1 bg-gray-50 pb-24')}>
           {companyChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
@@ -117,6 +125,18 @@ const CompanyChallenges = ({
               keyExtractor={(item) => item.id}
             />
           )}
+        </View>
+      )}
+      {isError && (
+        <View
+          className={clsx('flex h-3/4 flex-col items-center justify-center')}
+        >
+          <Text className={clsx('text-md font-medium')}>
+            Something went wrong.
+          </Text>
+          <Text className={clsx('text-md font-medium')}>
+            Please try again later.
+          </Text>
         </View>
       )}
     </SafeAreaView>

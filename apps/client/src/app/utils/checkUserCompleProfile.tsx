@@ -8,7 +8,10 @@ export const checkUserCompleProfileAndCompany = async (
   const fetchingUserData = async () => {
     try {
       setIsMainAppLoading(true);
-
+      const authToken = await AsyncStorage.getItem('@auth_token');
+      if (authToken) {
+        setAuthTokenToHttpHeader(authToken);
+      }
       await httpInstance.get('/user/me').then((res) => {
         if (res.data?.companyAccount === true) {
           setIsCompleteProfile(true);

@@ -4,17 +4,17 @@ import { useTranslation } from 'react-i18next';
 import TabViewFlatlist from '../../../common/Tab/TabViewFlatlist';
 
 import clsx from 'clsx';
-import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
+import {
+  useFollowingListStore,
+  useUserProfileStore,
+} from '../../../../store/user-data';
 
 import Biography from './Biography/Biography';
 import Skills from './Skills';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
-import {
-  serviceGetListFollower,
-  serviceGetListFollowing,
-} from 'apps/client/src/app/service/profile';
+import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 import { IUserData } from '../../../../types/user';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -22,21 +22,22 @@ const ProfileTabs: FC = () => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const { t } = useTranslation();
-  const { getFollowingList } = useFollowingListStore()
+  const { getFollowingList } = useFollowingListStore();
 
-  const [followerList, setFollowerList] = useState([])
-
+  const [followerList, setFollowerList] = useState([]);
 
   const isFocused = useIsFocused();
   useEffect(() => {
-    if (!userProfile?.id || !isFocused) return
+    if (!userProfile?.id || !isFocused) return;
     const getFollowerList = async () => {
-      const { data: followerList } = await serviceGetListFollower(userProfile?.id);
+      const { data: followerList } = await serviceGetListFollower(
+        userProfile?.id
+      );
       setFollowerList(followerList);
     };
     getFollowerList();
-  }, [isFocused])
-  const followingList = getFollowingList()
+  }, [isFocused]);
+  const followingList = getFollowingList();
   const titles = [
     t('profile_screen_tabs.biography'),
     t('profile_screen_tabs.skills'),
@@ -45,7 +46,7 @@ const ProfileTabs: FC = () => {
   ];
 
   return (
-    <View className={clsx('flex-1  bg-gray-50 w-full   ')}>
+    <View className={clsx('w-full  flex-1 bg-gray-50   ')}>
       <TabViewFlatlist
         titles={titles}
         children={[

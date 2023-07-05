@@ -20,6 +20,15 @@ import CustomTextInput from '../../common/Inputs/CustomTextInput';
 import DateTimePicker2 from '../../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 
 import CalendarIcon from '../../asset/calendar.svg';
+import { ICreateChallenge } from '../../../types/challenge';
+interface ICreateChallengeForm
+  extends Omit<ICreateChallenge, 'achievementTime'> {
+  achievementTime?: Date;
+  image?: string | undefined,
+  isPublic: boolean;
+  maxPeople?: string;
+}
+
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
@@ -42,9 +51,10 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const {
     control,
     handleSubmit,
+    getValues,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<ICreateChallengeForm>({
     defaultValues: {
       goal: '',
       benefits: '',
@@ -56,7 +66,17 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     },
     resolver: yupResolver(CreateCompanyChallengeValidationSchema()),
   });
+  const handleImagesSelected = (images: string[]) => {
+    setValue('image', images[0], {
+      shouldValidate: true,
+    });
+  };
 
+  const handleRemoveSelectedImage = (index: number) => {
+    setValue('image', undefined, {
+      shouldValidate: true,
+    });
+  };
   const onSubmit = (data: any) => console.log(data);
   // TODO: handle change CREATE text color when input is
 
@@ -257,8 +277,16 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                 <CustomSwitch textDisable="Private" textEnable="Public" />
               </View>
 
-              <View className="">
-                <ImagePicker isSelectedImage />
+              <View className="mt-5">
+                <ImagePicker
+                  images={getValues('image') ? [getValues('image')!] : []}
+                  onImagesSelected={handleImagesSelected}
+                  onRemoveSelectedImage={handleRemoveSelectedImage}
+                  base64
+                />
+                {errors.image ? (
+                  <ErrorText message={errors.image.message} />
+                ) : null}
               </View>
             </View>
           </ScrollView>

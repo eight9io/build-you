@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Pressable } from 'react-native';
+import { View, TouchableOpacity, Pressable, Linking } from 'react-native';
 import clsx from 'clsx';
 import { Image } from 'expo-image';
 
@@ -9,6 +9,8 @@ import {
 } from '../../../../utils/uploadUserImage';
 
 import DefaultAvatar from './asset/default-avatar.svg';
+import ConfirmDialog from '../../../common/Dialog/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 interface IProfileAvatarProps {
   src: string;
   onPress?: () => void;
@@ -20,8 +22,24 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   onPress,
   setIsLoadingAvatar,
 }) => {
+  const [requirePermissionModal, setRequirePermissionModal] = useState(false);
+  const { t } = useTranslation();
+
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
+  };
+
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
+    showPermissionRequest: handleShowPermissionRequiredModal,
   });
 
   const handlePickImage = async () => {
@@ -71,6 +89,15 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
           source={require('./asset/camera.png')}
         />
       </TouchableOpacity>
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
+      />
     </View>
   );
 };

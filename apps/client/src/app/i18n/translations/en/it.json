@@ -183,7 +183,7 @@
       "title": "Thank you for your information. We're personalizing your experience..."
     }
   },
-  "video_profile":"Video Profile",
+  "video_profile": "Video Profile",
   "work_place": "Work place",
   "show_company": "Show company",
   "register_screen.creating": "Creating your account. Please log in with your email and password after redirecting...",
@@ -337,5 +337,8 @@
     "content_2": "Click",
     "content_3": "Add new employee",
     "content_4": "to add employee to your company."
+  },
+  "image_picker": {
+    "image_permission_required": "Permission denied. Please enable it your phone settings."
   }
 }

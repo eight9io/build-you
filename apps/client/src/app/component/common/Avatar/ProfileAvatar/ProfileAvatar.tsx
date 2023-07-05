@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   Pressable,
   ImageSourcePropType,
+  Linking,
 } from 'react-native';
 import clsx from 'clsx';
 import { Image } from 'expo-image';
@@ -38,10 +39,23 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   const { t } = useTranslation();
   const [isErrDialog, setIsErrDialog] = useState(false);
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
+  const [requirePermissionModal, setRequirePermissionModal] = useState(false);
 
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
+  };
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
     quality: 0.7,
+    showPermissionRequest: handleShowPermissionRequiredModal,
   });
 
   const handlePickImage = async () => {
@@ -60,6 +74,7 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
     }
   };
 
+
   return (
     <View className={clsx('relative flex flex-row items-center')}>
       <ConfirmDialog
@@ -68,6 +83,15 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
         isVisible={isErrDialog}
         onClosed={() => setIsErrDialog(false)}
         closeButtonLabel={t('close') || ''}
+      />
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
       />
       <Pressable onPress={onPress}>
         <View className={clsx('rounded-full border-4 border-white')}>
@@ -103,10 +127,7 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
       {!isOtherUser && (
         <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
           <View
-            className={clsx(
-              'absolute bottom-[-40px] right-0 rounded-full'
-            )}
-
+            className={clsx('absolute bottom-[-40px] right-0 rounded-full')}
           >
             <IconUploadAvatar />
           </View>

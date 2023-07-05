@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Linking } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import clsx from 'clsx';
@@ -12,6 +12,8 @@ import { getRandomId } from '../../../utils/common';
 import CameraIcon from './asset/camera-icon.svg';
 import PlayButton from './asset/play-button.svg';
 import CloseButton from './asset/close-button.svg';
+import ConfirmDialog from '../Dialog/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
   useBigImage?: boolean;
@@ -31,6 +33,19 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 }) => {
   const [pickedVideo, setPickedVideo] = useState<string[]>([]);
   const [thumbnailImage, setThumbnailImage] = useState<string>();
+  const { t } = useTranslation();
+  const [requirePermissionModal, setRequirePermissionModal] = useState(false);
+
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
+  };
 
   const generateThumbnail = async (video: string) => {
     try {
@@ -59,6 +74,13 @@ const VideoPicker: FC<IVideoPickerProps> = ({
   }, [pickedVideo]);
 
   const pickVideo = async () => {
+    const { status } =
+      await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      handleShowPermissionRequiredModal();
+      return;
+    }
+    
     // No permissions request is necessary for launching the image library
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,
@@ -123,6 +145,15 @@ const VideoPicker: FC<IVideoPickerProps> = ({
           </Text>
         </View>
       </TouchableOpacity>
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
+      />
     </View>
   );
 };

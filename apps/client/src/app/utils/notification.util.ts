@@ -19,8 +19,7 @@ export const registerForPushNotificationsAsync = async () => {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      // TO DO: handle when user doesn't grant permission
-      alert('Failed to get push token for push notification!');
+      // Ignore when user doesn't grant permission
       return;
     }
 

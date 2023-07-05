@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Pressable } from 'react-native';
+import { View, TouchableOpacity, Pressable, Linking } from 'react-native';
 import clsx from 'clsx';
 import { Image } from 'expo-image';
 
@@ -10,15 +10,32 @@ import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from '../../../../utils/uploadUserImage';
+import ConfirmDialog from '../../Dialog/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 
-interface ISignupAvatarProps { }
+interface ISignupAvatarProps {}
 
 const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
   const [newAvatarUpload, setNewAvatarUpload] = useState<string | null>(null);
+  const [requirePermissionModal, setRequirePermissionModal] = useState(false);
+  const { t } = useTranslation();
+  
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
+  };
 
   const pickImageFunction = getImageFromUserDevice({
     allowsMultipleSelection: false,
     quality: 0.7,
+    showPermissionRequest: handleShowPermissionRequiredModal,
   });
 
   const handlePickImage = async () => {
@@ -54,6 +71,15 @@ const SignupAvatar: React.FC<ISignupAvatarProps> = () => {
           </View>
         </TouchableOpacity>
       </View>
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
+      />
     </View>
   );
 };

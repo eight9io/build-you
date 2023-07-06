@@ -105,7 +105,6 @@ export const HomeFeed = () => {
             refreshing={isRefreshing}
           />
         )}
-        <View className="h-16" />
       </View>
     </SafeAreaView>
   );
@@ -171,7 +170,6 @@ export const HomeFeedUnregister = () => {
           onRefresh={handleScroll}
           refreshing={isRefreshing}
         />
-        <View className="h-16" />
       </View>
     </SafeAreaView>
   );

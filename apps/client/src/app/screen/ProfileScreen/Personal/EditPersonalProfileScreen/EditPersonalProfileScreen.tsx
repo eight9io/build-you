@@ -60,7 +60,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
   return (
     <View className="flex flex-col items-start justify-start ">
       <View className="flex-row justify-between items-center w-full">
-        <Text className="text-primary-default pr-2 text-base font-semibold">
+        <Text className="text-primary-default pr-2 text-md font-semibold">
           Hard skills
         </Text>
         <View className="w-6">
@@ -211,10 +211,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-
-
       <KeyboardAwareScrollView >
-        <View className="  h-full rounded-t-xl bg-white ">
+        <View className="flex-1 rounded-t-xl bg-white mb-4">
           <ConfirmDialog
             title={t('dialog.err_title_update_profile') as string}
             description={
@@ -373,7 +371,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               </View>
 
               <View >
-                <Text className="text-primary-default py-4 text-base font-semibold">
+                <Text className="text-primary-default py-4 text-md font-semibold">
                   {t('video_profile')}
                 </Text>
                 {userData?.video && pickedVideo.length === 0 && (
@@ -417,7 +415,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                 hardSkill={arrayMyHardSkills || []}
                 setArrayMyHardSkills={setArrayMyHardSkills}
               />
-              <Text className="text-primary-default pt-4 text-base font-semibold">
+              <Text className="text-primary-default pt-4 text-md font-semibold">
                 {t('work_place')}
               </Text>
               <View className="flex flex-row items-center justify-between pt-2">

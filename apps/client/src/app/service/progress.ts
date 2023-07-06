@@ -29,7 +29,7 @@ export const updateProgressImage = async (
   image.map((image) => {
     const extension = getImageExtension(image.uri);
     const uri =
-      Platform.OS === 'android' ? image : image?.uri.replace('file://', '');
+      Platform.OS === 'android' ? image.uri : image?.uri.replace('file://', '');
     const imageItemToUpload = {
       uri: uri,
       name: `${image.id}.${extension}`,

@@ -213,7 +213,11 @@ export const AddNewChallengeProgressModal: FC<
       className="h-full"
     >
       <SafeAreaView className="flex-1 bg-white">
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flex: 1,
+          }}
+        >
           <ConfirmDialog
             title={isRequestSuccess ? 'Success' : 'Error'}
             description={
@@ -225,7 +229,7 @@ export const AddNewChallengeProgressModal: FC<
             onClosed={handleCloseModal}
             closeButtonLabel="Got it"
           />
-          <View className="mx-4  h-full rounded-t-xl bg-white">
+          <View className="mx-4  h-full rounded-t-xl">
             <Header
               title={t('challenge_detail_screen.new_progress') as string}
               rightBtn={

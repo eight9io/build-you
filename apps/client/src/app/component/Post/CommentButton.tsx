@@ -8,6 +8,7 @@ import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 interface ICommentButtonProps {
   progressId: string;
+  isFocused?: boolean;
   isViewOnly?: boolean;
   navigationToComment?: () => void;
   shouldRefreshComments?: boolean;
@@ -15,11 +16,20 @@ interface ICommentButtonProps {
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
+  isFocused = false,
   isViewOnly = false,
   navigationToComment,
   shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
+  useEffect(() => {
+    if (!isFocused) return;
+    (async () => {
+      await loadProgressComments();
+    })();
+  }
+  , [isFocused]);
+
   useEffect(() => {
     if (!progressId) return;
     (async () => {

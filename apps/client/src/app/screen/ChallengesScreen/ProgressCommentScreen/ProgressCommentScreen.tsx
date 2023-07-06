@@ -9,7 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, set, useForm } from 'react-hook-form';
 import { Route } from '@react-navigation/native';
 
 import { IProgressComment } from '../../../types/progress';

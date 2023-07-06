@@ -45,7 +45,6 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         headerTitleAlign: 'center',
 
         tabBarStyle: {
-          position: 'absolute',
           backgroundColor: '#FFFFFF',
           height: isAndroid ? 68 : 102,
           paddingBottom: isAndroid ? 0 : 30,
@@ -66,7 +65,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               <FeedSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar text-xs font-semibold pt-1.5',
                   focused && 'text-primary-default'
                 )}
               >
@@ -88,7 +87,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               <ChallengesSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar text-xs font-semibold pt-1.5',
                   focused && 'text-primary-default'
                 )}
               >
@@ -114,7 +113,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               <CreateSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar text-xs font-semibold pt-1.5',
                   focused && 'text-primary-default'
                 )}
               >
@@ -138,7 +137,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               )}
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar text-xs font-semibold pt-1.5',
                   focused && 'text-primary-default'
                 )}
               >
@@ -161,7 +160,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
                 <ProfileSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
                 <Text
                   className={clsx(
-                    'text-gray-bottomBar text-md pt-1.5',
+                    'text-gray-bottomBar text-xs font-semibold pt-1.5',
                     focused && 'text-primary-default'
                   )}
                 >
@@ -184,7 +183,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
                 <ProfileSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
                 <Text
                   className={clsx(
-                    'text-gray-bottomBar text-md pt-1.5',
+                    'text-gray-bottomBar text-xs font-semibold pt-1.5',
                     focused && 'text-primary-default'
                   )}
                 >

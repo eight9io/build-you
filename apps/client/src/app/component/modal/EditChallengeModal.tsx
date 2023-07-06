@@ -106,7 +106,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       visible={visible}
     >
       <SafeAreaView className="flex-1">
-        <View className='px-4 py-4'>
+        <View className="px-4 py-4">
           <Header
             title={t('edit_challenge_screen.title') || ''}
             rightBtn={t(
@@ -121,8 +121,12 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
             containerStyle="mt-2"
           />
         </View>
-        <KeyboardAwareScrollView>
-          <View className="mx-4 flex h-full rounded-t-xl bg-white">
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flex: 1,
+          }}
+        >
+          <View className="mx-4 flex h-full rounded-t-xl">
             <View className="flex flex-1 flex-col">
               <View className="pt-5">
                 <Controller

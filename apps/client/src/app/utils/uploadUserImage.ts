@@ -85,5 +85,6 @@ export const uploadNewCover = async (image: string) => {
 };
 
 export const getImageExtension = (uri: string) => {
-  return uri.split('.')[1];
+  const uriSplit = uri.split('.');
+  return uriSplit[uriSplit.length - 1];
 };

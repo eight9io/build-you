@@ -28,6 +28,7 @@ import { getSeperateImageUrls } from '../../../utils/image';
 import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 import IconDot from './asset/dot.svg';
+import { useUserProfileStore } from '../../../store/user-data';
 
 interface IProgressCardProps {
   challengeOwner: {
@@ -60,6 +61,8 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const timeDiff = getTimeDiffToNow(itemProgressCard.createdAt);
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
 
   const {
     isVisible: isAckModalVisible,
@@ -163,7 +166,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
       {itemProgressCard?.video && <VideoPlayer src={itemProgressCard.video} />}
 
       <View className="mt-4 flex-row">
-        <LikeButton progressId={itemProgressCard.id} />
+        <LikeButton progressId={itemProgressCard.id} currentUserId={currentUser?.id}/>
         <CommentButton
           navigationToComment={handleNavigationToComment}
           progressId={itemProgressCard.id}

@@ -157,16 +157,6 @@ const CompanyChallengesScreen = () => {
         component={CompanyChallenges}
         options={({ navigation }) => ({
           headerTitle: () => <AppTitle title={t('top_nav.challenges')} />,
-          headerRight: (props) => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() => console.log('CompanyChallengesScreen Search')}
-                />
-              }
-            />
-          ),
         })}
       />
 

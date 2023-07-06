@@ -55,7 +55,6 @@ export const uploadNewAvatar = async (image: string) => {
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
       return undefined;
     });
   return response;
@@ -74,8 +73,12 @@ export const uploadNewCover = async (image: string) => {
     .then((res) => {
       return res.data;
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((_) => {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Upload cover failed. Please try again later.',
+        button: 'OK',
+      });
       return undefined;
     });
   return response;

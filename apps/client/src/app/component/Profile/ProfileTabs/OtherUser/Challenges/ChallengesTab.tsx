@@ -7,7 +7,7 @@ import { getChallengeByUserId } from '../../../../../service/challenge';
 import { IChallenge } from '../../../../../types/challenge';
 import ChallengeCard from '../../../../Card/ChallengeCard/ChallengeCard';
 import { RootStackParamList } from '../../../../../navigation/navigation.type';
-import { ScrollView } from 'react-native-gesture-handler';
+import GolbalDialogController from '../../../../common/Dialog/GlobalDialogController';
 
 interface IChallengesTabProps {
   userId: string | null | undefined;
@@ -28,7 +28,10 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
         setOtherUserChallenge(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        GolbalDialogController.showModal({
+          title: 'Error',
+          message: 'Something went wrong. Please try again later.',
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -50,7 +53,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
   };
 
   return (
-    <View className='px-4  h-full'  >
+    <View className="h-full  px-4">
       {otherUserChallenge.length > 0 && (
         <FlatList
           className="px-4 pt-4"
@@ -67,13 +70,13 @@ const ChallengesTab: FC<IChallengesTabProps> = ({ userId }) => {
         />
       )}
       {otherUserChallenge.length === 0 && !isLoading && (
-        <View className=" flex-1 items-center justify-center h-full">
+        <View className=" h-full flex-1 items-center justify-center">
           <Text className="text-lg text-gray-400 ">
             {t('company_profile_screen.no_challenge')}
-          </Text >
-        </View >
+          </Text>
+        </View>
       )}
-    </View >
+    </View>
   );
 };
 

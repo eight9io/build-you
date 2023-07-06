@@ -48,7 +48,11 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
         setIsLikedByCurrentUser(isLiked);
       }
     } catch (error) {
-      console.log(error);
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          'Something went wrong when getting likes. Please try again later.',
+      });
     }
   };
 
@@ -90,7 +94,6 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
             (t('error_general_message') as string) || 'Something went wrong',
           button: 'OK',
         });
-        console.log(err);
       });
   };
 

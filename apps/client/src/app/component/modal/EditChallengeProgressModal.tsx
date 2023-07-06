@@ -68,7 +68,6 @@ export const EditChallengeProgressModal: FC<
         setErrorMessage(t('errorMessage:500') || '');
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
     }
     setIsLoading(false);

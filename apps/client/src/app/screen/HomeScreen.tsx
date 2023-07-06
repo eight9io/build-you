@@ -48,7 +48,6 @@ export const HomeFeed = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         GlobalDialogController.showModal({
           title: 'Error',
           message:
@@ -115,7 +114,6 @@ export const HomeFeedUnregister = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         GlobalDialogController.showModal({
           title: 'Error',
           message:
@@ -146,7 +144,6 @@ export const HomeFeedUnregister = () => {
     await getInitialFeeds();
     setIsRefreshing(false);
   };
-  console.log('feedData', feedData);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
@@ -236,17 +233,7 @@ const HomeScreen = () => {
                   onPress={() => navigation.goBack()}
                   withBackIcon
                 />
-              ),
-              // headerRight: () => {
-              //   return (
-              //     <View>
-              //       <Button
-              //         Icon={<ShareIcon />}
-              //         onPress={() => console.log('press share')}
-              //       />
-              //     </View>
-              //   );
-              // },
+              )
             })}
           />
 

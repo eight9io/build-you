@@ -130,7 +130,6 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
             (t('error_general_message') as string) || 'Something went wrong',
           button: 'OK',
         });
-        console.log(error);
       }
     };
     loadProgressData();
@@ -163,7 +162,6 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
           (t('error_general_message') as string) || 'Something went wrong',
         button: 'OK',
       });
-      console.log(error);
     }
   };
 
@@ -190,7 +188,6 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
           (t('error_general_message') as string) || 'Something went wrong',
         button: 'OK',
       });
-      console.log(error);
     }
   };
 

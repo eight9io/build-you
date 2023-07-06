@@ -129,7 +129,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
         setIsShowModal(true);
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
     }
     setIsLoading(false);

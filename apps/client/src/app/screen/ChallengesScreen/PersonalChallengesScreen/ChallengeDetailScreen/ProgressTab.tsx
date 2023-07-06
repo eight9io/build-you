@@ -56,8 +56,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         .then((res) => {
           progress.likes = res.data;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((_) => {
+          progress.likes = [];
         });
     });
     setLocalProgressData(progressData as IProgressChallenge[]);

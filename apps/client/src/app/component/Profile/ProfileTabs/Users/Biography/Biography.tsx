@@ -1,5 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import clsx from 'clsx';
 
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
@@ -15,12 +21,16 @@ interface IVideoWithPlayButtonProps {
   heightVideo?: any;
 }
 
-export const VideoWithPlayButton = ({ src, heightVideo }: IVideoWithPlayButtonProps) => {
+export const VideoWithPlayButton = ({
+  src,
+  heightVideo,
+}: IVideoWithPlayButtonProps) => {
   const videoPlayer = React.useRef(null);
   const [status, setStatus] = React.useState<AVPlaybackStatus>(
     {} as AVPlaybackStatus
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
     if (status && status.isLoaded) {
@@ -32,7 +42,9 @@ export const VideoWithPlayButton = ({ src, heightVideo }: IVideoWithPlayButtonPr
   //expo video doesn't support tailwind
   return (
     <View
-      className={clsx('relative flex flex-col items-center justify-center bg-gray-200  rounded-xl')}
+      className={clsx(
+        'relative flex flex-col items-center justify-center rounded-xl  bg-gray-200'
+      )}
     >
       {src && (
         <Video
@@ -49,9 +61,15 @@ export const VideoWithPlayButton = ({ src, heightVideo }: IVideoWithPlayButtonPr
           useNativeControls
           resizeMode={ResizeMode.CONTAIN}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onLoadStart={() => {
+            setIsLoading(true);
+          }}
+          onReadyForDisplay={() => {
+            setIsLoading(false);
+          }}
         />
       )}
-      {!isVideoPlayed && (
+      {!isVideoPlayed && !isLoading && (
         <TouchableOpacity
           className={clsx('absolute translate-x-1/2 translate-y-1/2')}
           onPress={() => {
@@ -61,6 +79,11 @@ export const VideoWithPlayButton = ({ src, heightVideo }: IVideoWithPlayButtonPr
           <PlayButton />
         </TouchableOpacity>
       )}
+      {isLoading ? (
+        <View className="bg-black-light absolute h-full w-full items-center justify-center rounded-xl  opacity-60 ">
+          <ActivityIndicator animating color="#FFFFFF" size="large" />
+        </View>
+      ) : null}
     </View>
   );
 };

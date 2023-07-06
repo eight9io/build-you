@@ -210,7 +210,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           )}
 
           <View className="mt-4 flex-row">
-            <LikeButton progressId={id} userId={userId} />
+            <LikeButton progressId={id} currentUserId={userId} />
             <CommentButton
               navigationToComment={navigateToProgressComment}
               progressId={id}

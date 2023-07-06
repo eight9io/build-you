@@ -18,13 +18,13 @@ import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 interface ILikeButtonProps {
   progressId?: string;
   navigation?: any;
-  userId: string;
+  currentUserId: string | undefined;
 }
 
 const LikeButton: FC<ILikeButtonProps> = ({
   navigation,
   progressId,
-  userId,
+  currentUserId,
 }) => {
   const { getAccessToken } = useAuthStore();
   const { t } = useTranslation();
@@ -40,12 +40,14 @@ const LikeButton: FC<ILikeButtonProps> = ({
   const isToken = getAccessToken();
 
   const loadProgressLikes = async () => {
-    if (!progressId || !userId) return;
+    if (!progressId || !currentUserId) return;
     try {
       const response = await getProgressLikes(progressId);
       if (response.status === 200) {
         setNumberOfLikes(response.data.length);
-        const isLiked = response.data.some((like) => like.user === userId);
+        const isLiked = response.data.some(
+          (like) => like.user === currentUserId
+        );
         setIsLikedByCurrentUser(isLiked);
       }
     } catch (error) {
@@ -61,7 +63,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
     (async () => {
       await loadProgressLikes();
     })();
-  }, [progressId, userId]);
+  }, [progressId, currentUserId]);
 
   useEffect(() => {
     setTempLikes(numberOfLikes);

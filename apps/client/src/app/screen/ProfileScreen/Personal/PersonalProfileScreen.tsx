@@ -18,7 +18,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import OtherUserProfileScreen from '../OtherUser/OtherUserProfileScreen';
-import OtherUserProfileDetailsScreen from '../OtherUser/OtherUserProfileDetailsScreen';
+import OtherUserProfileChallengeDetailsScreen from '../OtherUser/OtherUserProfileChallengeDetailsScreen';
 import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
@@ -56,7 +56,7 @@ const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (
-    <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50 w-full ">
+    <SafeAreaView className="justify-content: space-between h-full w-full flex-1 bg-gray-50 ">
       <View className="h-full ">
         <ProfileComponent
           userData={userData}
@@ -108,12 +108,11 @@ const PersonalProfileScreen = () => {
               withBackIcon
             />
           ),
-
         })}
       />
-         <ProfileStack.Screen
-        name="OtherUserProfileDetailsScreen"
-        component={OtherUserProfileDetailsScreen}
+      <ProfileStack.Screen
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',
@@ -136,7 +135,6 @@ const PersonalProfileScreen = () => {
           },
         })}
       />
-
     </ProfileStack.Navigator>
   );
 };

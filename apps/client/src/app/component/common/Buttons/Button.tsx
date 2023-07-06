@@ -37,10 +37,7 @@ const Button: FC<IButtonProps> = ({
         {Icon && Icon}
         {title && (
           <Text
-            className={clsx(
-              'line-[30px] text-center text-sm font-medium',
-              isDisabled ? disabledTextClassName : textClassName
-            )}
+            className={clsx(isDisabled ? disabledTextClassName : textClassName)}
           >
             {title}
           </Text>

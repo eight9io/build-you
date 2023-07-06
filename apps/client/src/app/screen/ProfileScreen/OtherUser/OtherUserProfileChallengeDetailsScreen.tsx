@@ -12,9 +12,9 @@ import DescriptionTab from '../../ChallengesScreen/PersonalChallengesScreen/Chal
 import ProgressTab from '../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab';
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 
-interface IOtherUserProfileDetailsScreenProps {
+interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
-    'OtherUserProfileDetailsScreen',
+    'OtherUserProfileChallengeDetailsScreen',
     {
       challengeId: string;
     }
@@ -26,8 +26,8 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.description'),
 ];
 
-const OtherUserProfileDetailsScreen: FC<
-  IOtherUserProfileDetailsScreenProps
+const OtherUserProfileChallengeDetailsScreen: FC<
+  IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
   const { challengeId } = route.params;
   const [index, setIndex] = useState<number>(0);
@@ -84,4 +84,4 @@ const OtherUserProfileDetailsScreen: FC<
   );
 };
 
-export default OtherUserProfileDetailsScreen;
+export default OtherUserProfileChallengeDetailsScreen;

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, SafeAreaView, Text, ScrollView } from 'react-native';
+import { View, SafeAreaView, Text, ScrollView, FlatList } from 'react-native';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -95,7 +95,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
           <ProfileAvatar isOtherUser src={otherUserData?.avatar as string} />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
-            <DefaultAvatar width={'100%'} height={'100%'}/>
+            <DefaultAvatar width={'100%'} height={'100%'} />
           </View>
         )}
       </View>
@@ -174,12 +174,15 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { userId } = route.params;
 
-
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <ScrollView className="h-full ">
-        <OtherUserProfileComponent userId={userId} navigation={navigation} />
-      </ScrollView>
+      <FlatList
+        data={[]}
+        renderItem={() => <View></View>}
+        ListHeaderComponent={
+          <OtherUserProfileComponent userId={userId} navigation={navigation} />
+        }
+      />
     </SafeAreaView>
   );
 };

@@ -16,7 +16,7 @@ import NavButton from '../component/common/Buttons/NavButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 
 import ShareIcon from '../../../assets/svg/share.svg';
-import OtherUserProfileDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import OtherUserProfileChallengeDetailsScreen from './ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
 import { serviceGetFeed, serviceGetFeedUnregistered } from '../service/feed';
 
 import { useGetListFollowing } from '../hooks/useGetUser';
@@ -250,8 +250,8 @@ const HomeScreen = () => {
           />
 
           <HomeScreenStack.Screen
-            name="OtherUserProfileDetailsScreen"
-            component={OtherUserProfileDetailsScreen}
+            name="OtherUserProfileChallengeDetailsScreen"
+            component={OtherUserProfileChallengeDetailsScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => '',

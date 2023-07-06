@@ -55,3 +55,7 @@ export const deleteChallenge = (id: string) => {
 export const getChallengeByUserId = (userId: string) => {
   return http.get(`/challenge/${userId}`);
 };
+
+export const getChallengeParticipants = (challengeId: string) => {
+  return http.get(`/challenge/participant/all/${challengeId}`);
+};

@@ -162,6 +162,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
                   ? (challengeData.owner[0] as IUserData)
                   : userData
               }
+              isOtherUserProfile={isOtherUserProfile}
               itemProgressCard={item}
               challengeName={challengeData.goal}
               setShouldRefresh={setShouldRefresh}

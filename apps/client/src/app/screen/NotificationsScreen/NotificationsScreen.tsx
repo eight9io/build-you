@@ -16,7 +16,7 @@ import IconSearch from '../../component/common/IconSearch/IconSearch';
 import Notification from '../../component/Notification';
 import { useNotificationStore } from '../../store/notification';
 import OtherUserProfileScreen from '../ProfileScreen/OtherUser/OtherUserProfileScreen';
-import OtherUserProfileDetailsScreen from '../ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import OtherUserProfileChallengeDetailsScreen from '../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
 import Button from '../../component/common/Buttons/Button';
 import ShareIcon from '../../../../assets/svg/share.svg';
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
@@ -99,8 +99,8 @@ const NotificationsScreen = () => {
         })}
       />
       <NotificationsStack.Screen
-        name="OtherUserProfileDetailsScreen"
-        component={OtherUserProfileDetailsScreen}
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',

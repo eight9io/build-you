@@ -45,7 +45,7 @@ const Notifications = ({
   }, [isFocused]);
 
   return (
-    <SafeAreaView className="mb-24 flex-1 bg-[#F7F9FB]">
+    <SafeAreaView className="flex-1 bg-[#F7F9FB]">
       {/* <MainNavBar
         title={t('top_nav.noti')}
         navigation={navigation}

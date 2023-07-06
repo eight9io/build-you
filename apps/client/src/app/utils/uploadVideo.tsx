@@ -15,13 +15,11 @@ export const uploadNewVideo = async (video: string | undefined) => {
       type: `video/${type}`,
     } as any);
 
-    console.log('formData', formData);
     const response = await httpInstance.post('/user/video', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log('response', response.data);
     return response.data;
   } catch (e) {
     console.error('uploadNewVideo', e);

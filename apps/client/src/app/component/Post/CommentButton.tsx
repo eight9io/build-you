@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 
 import CommentSvg from './asset/comment.svg';
 import { getProgressComments } from '../../service/progress';
+import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 interface ICommentButtonProps {
   progressId: string;
@@ -37,8 +38,11 @@ const CommentButton: FC<ICommentButtonProps> = ({
     try {
       const response = await getProgressComments(progressId);
       if (response.status === 200) setNumberOfComments(response.data.length);
-    } catch (error) {
-      console.log(error);
+    } catch (_) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Something went wrong. Please try again later.',
+      });
     }
   };
   const handleNavigationToComment = () => {

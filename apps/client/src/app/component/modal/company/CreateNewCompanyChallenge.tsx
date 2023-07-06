@@ -77,6 +77,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
       image: '',
     },
     resolver: yupResolver(CreateCompanyChallengeValidationSchema()),
+    reValidateMode: 'onChange',
   });
 
   const onSubmit = async (data: ICreateCompanyChallenge) => {
@@ -84,7 +85,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
     setErrorMessage('');
 
     try {
-      const { image, ...rest } = data; // Images upload will be handle separately
+      const { image, ...rest } = data; // Images upload will be handled separately
       const payload = {
         ...rest,
         achievementTime: data.achievementTime as Date,
@@ -100,7 +101,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             },
             image
           )) as AxiosResponse;
-
           if (challengeImageResponse.status === 200 || 201) {
             setIsRequestSuccess(true);
             setIsShowModal(true);
@@ -117,7 +117,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
         setIsShowModal(true);
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage(t('errorMessage:500') || '');
     }
     setIsLoading(false);
@@ -316,10 +315,10 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                           t('new_challenge_screen.max_people_placeholder') || ''
                         }
                         placeholderTextColor={'#6C6E76'}
-                        onChangeText={onChange}
+                        onChangeText={(number) => onChange(+number)}
                         onBlur={onBlur}
                         value={value ? value.toString() : ''}
-                        keyboardType="numeric"
+                        keyboardType="number-pad"
                         className={clsx(
                           errors.goal && 'border-1 border-red-500'
                         )}
@@ -353,6 +352,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                   ) : null}
                 </View>
               </View>
+              <View className="h-20" />
             </ScrollView>
           </View>
         </KeyboardAwareScrollView>

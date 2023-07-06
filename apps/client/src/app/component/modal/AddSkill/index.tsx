@@ -14,6 +14,7 @@ import AddEmojiButton from '../../common/Buttons/AddEmojiButton';
 import AddEmojiModal from '../AddEmoji';
 import Close from '../../../component/asset/close.svg';
 import Button from '../../common/Buttons/Button';
+import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 interface IAddSkillModallProps {
   setUserAddSkill: (skills: any) => void;
@@ -75,14 +76,16 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
         skill,
       })
       .then((res) => {
-        console.log(res.data);
         skillToSave = res.data;
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((_) => {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message: 'Something went wrong. Please try again later.',
+        });
       });
 
-      setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
+    setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
     selectedEmoji && setSelectedEmoji(null);
     reset();
     onClose();
@@ -102,7 +105,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
+      <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
         <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
           <AddEmojiModal
             isVisible={showEmojiModal}

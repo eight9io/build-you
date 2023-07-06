@@ -8,7 +8,6 @@ import { getProgressComments, getProgressLikes } from '../../service/progress';
 
 import IconDot from './asset/dot.svg';
 
-import Card from '../common/Card';
 import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
 import PostAvatar from '../common/Avatar/PostAvatar';

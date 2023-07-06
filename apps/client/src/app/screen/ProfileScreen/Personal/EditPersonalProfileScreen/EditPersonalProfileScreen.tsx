@@ -118,8 +118,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-  console.log("🚀 ~ file: EditPersonalProfileScreen.tsx:117 ~ EditPersonalProfileScreen ~ userData:", userData)
+
   useGetUserData();
+
   const {
     control,
     handleSubmit,

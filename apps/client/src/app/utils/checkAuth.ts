@@ -37,8 +37,9 @@ export const checkAccessTokenLocal = async (setLogined: any) => {
     } else {
       setLogined(false);
     }
-  } catch (error) {
-    console.log(error);
+  } catch (_) {
+    removeAuthTokensLocalOnLogout();
+    setLogined(false);
   }
 };
 

@@ -11,16 +11,22 @@ import {
   deleteProgressLike,
   getProgressLikes,
 } from '../../service/progress';
-import { useUserProfileStore } from '../../store/user-data';
 
 import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 interface ILikeButtonProps {
-  progressId?: string;
   navigation?: any;
+  progressId?: string;
+  isFocused?: boolean;
+  currentUserId: string | undefined;
 }
 
-const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
+const LikeButton: FC<ILikeButtonProps> = ({
+  isFocused = false,
+  navigation,
+  progressId,
+  currentUserId,
+}) => {
   const { getAccessToken } = useAuthStore();
   const { t } = useTranslation();
 
@@ -28,35 +34,51 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
   const [isLikedByCurrentUser, setIsLikedByCurrentUser] =
     useState<boolean>(false);
 
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [tempLikes, setTempLikes] = React.useState(numberOfLikes);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [tempLikes, setTempLikes] = useState(numberOfLikes);
   const [shouldOptimisticUpdate, setShouldOptimisticUpdate] =
-    React.useState(false);
+    useState<boolean>(false);
+  const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
 
   const isToken = getAccessToken();
-  const { getUserProfile } = useUserProfileStore();
-  const userData = getUserProfile();
 
   const loadProgressLikes = async () => {
-    if (!progressId) return;
+    if (!progressId || !currentUserId) return;
     try {
       const response = await getProgressLikes(progressId);
       if (response.status === 200) {
-        setNumberOfLikes(response.data.length);
-        const userId = userData?.id;
-        const isLiked = response.data.some((like) => like.user === userId);
+        setNumberOfLikes(() => response.data.length);
+        const isLiked = response.data.some(
+          (like) => like.user === currentUserId
+        );
         setIsLikedByCurrentUser(isLiked);
       }
+      setIsFirstLoad(false);
     } catch (error) {
-      console.log(error);
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          'Something went wrong when getting likes. Please try again later.',
+      });
     }
   };
+
+  useEffect(() => {
+    if (!isFocused || isFirstLoad) return;
+    if (shouldOptimisticUpdate) {
+      setShouldOptimisticUpdate(false);
+      return;
+    }
+    (async () => {
+      await loadProgressLikes();
+    })();
+  }, [isFocused]);
 
   useEffect(() => {
     (async () => {
       await loadProgressLikes();
     })();
-  }, [progressId]);
+  }, [progressId, currentUserId]);
 
   useEffect(() => {
     setTempLikes(numberOfLikes);
@@ -90,7 +112,6 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
             (t('error_general_message') as string) || 'Something went wrong',
           button: 'OK',
         });
-        console.log(err);
       });
   };
 

@@ -33,6 +33,8 @@ interface IChallengeVideoProps {
 
 interface IFeedPostCardProps {
   itemFeedPostCard: IFeedPostProps;
+  userId?: string;
+  isFocused?: boolean;
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
@@ -118,6 +120,8 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
 
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   itemFeedPostCard: { id, caption, user, image, video, updatedAt, challenge },
+  userId,
+  isFocused,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getAccessToken } = useAuthStore();
@@ -208,10 +212,15 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           )}
 
           <View className="mt-4 flex-row">
-            <LikeButton progressId={id} />
+            <LikeButton
+              progressId={id}
+              currentUserId={userId}
+              isFocused={isFocused}
+            />
             <CommentButton
               navigationToComment={navigateToProgressComment}
               progressId={id}
+              isFocused={isFocused}
             />
           </View>
         </View>

@@ -23,6 +23,8 @@ import { useGetListFollowing } from '../hooks/useGetUser';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 import { useAuthStore } from '../store/auth-store';
+import { useUserProfileStore } from '../store/user-data';
+import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,6 +37,10 @@ export const HomeFeed = () => {
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
 
   useGetListFollowing();
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+
+  const isFocused = useIsFocused();
 
   const getInitialFeeds = async () => {
     await serviceGetFeed({
@@ -48,7 +54,6 @@ export const HomeFeed = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         GlobalDialogController.showModal({
           title: 'Error',
           message:
@@ -83,15 +88,23 @@ export const HomeFeed = () => {
   return (
     <SafeAreaView className={clsx('bg-white')}>
       <View className={clsx('h-full w-full bg-gray-50')}>
-        <FlatList
-          data={feedData}
-          renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
-          keyExtractor={(item) => item.id as unknown as string}
-          onEndReached={getNewFeed}
-          onEndReachedThreshold={0.7}
-          onRefresh={handleScroll}
-          refreshing={isRefreshing}
-        />
+        {userData && (
+          <FlatList
+            data={feedData}
+            renderItem={({ item }) => (
+              <FeedPostCard
+                itemFeedPostCard={item}
+                userId={userData.id}
+                isFocused={isFocused}
+              />
+            )}
+            keyExtractor={(item) => item.id as unknown as string}
+            onEndReached={getNewFeed}
+            onEndReachedThreshold={0.7}
+            onRefresh={handleScroll}
+            refreshing={isRefreshing}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -114,7 +127,6 @@ export const HomeFeedUnregister = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         GlobalDialogController.showModal({
           title: 'Error',
           message:
@@ -145,7 +157,6 @@ export const HomeFeedUnregister = () => {
     await getInitialFeeds();
     setIsRefreshing(false);
   };
-  console.log('feedData', feedData);
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
@@ -212,9 +223,7 @@ const HomeScreen = () => {
                   withIcon
                   icon={
                     <IconSearch
-                      onPress={() =>
-                        navigation.navigate('MainSearchScreen')
-                      }
+                      onPress={() => navigation.navigate('MainSearchScreen')}
                     />
                   }
                 />
@@ -235,16 +244,6 @@ const HomeScreen = () => {
                   withBackIcon
                 />
               ),
-              // headerRight: () => {
-              //   return (
-              //     <View>
-              //       <Button
-              //         Icon={<ShareIcon />}
-              //         onPress={() => console.log('press share')}
-              //       />
-              //     </View>
-              //   );
-              // },
             })}
           />
 

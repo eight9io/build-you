@@ -24,6 +24,7 @@ import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/Prog
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 import { useAuthStore } from '../store/auth-store';
 import { useUserProfileStore } from '../store/user-data';
+import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -38,6 +39,8 @@ export const HomeFeed = () => {
   useGetListFollowing();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
+
+  const isFocused = useIsFocused();
 
   const getInitialFeeds = async () => {
     await serviceGetFeed({
@@ -89,7 +92,11 @@ export const HomeFeed = () => {
           <FlatList
             data={feedData}
             renderItem={({ item }) => (
-              <FeedPostCard itemFeedPostCard={item} userId={userData.id} />
+              <FeedPostCard
+                itemFeedPostCard={item}
+                userId={userData.id}
+                isFocused={isFocused}
+              />
             )}
             keyExtractor={(item) => item.id as unknown as string}
             onEndReached={getNewFeed}

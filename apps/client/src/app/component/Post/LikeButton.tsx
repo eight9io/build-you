@@ -11,17 +11,18 @@ import {
   deleteProgressLike,
   getProgressLikes,
 } from '../../service/progress';
-import { useUserProfileStore } from '../../store/user-data';
 
 import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 interface ILikeButtonProps {
-  progressId?: string;
   navigation?: any;
+  progressId?: string;
+  isFocused?: boolean;
   currentUserId: string | undefined;
 }
 
 const LikeButton: FC<ILikeButtonProps> = ({
+  isFocused = false,
   navigation,
   progressId,
   currentUserId,
@@ -33,9 +34,11 @@ const LikeButton: FC<ILikeButtonProps> = ({
   const [isLikedByCurrentUser, setIsLikedByCurrentUser] =
     useState<boolean>(false);
 
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [tempLikes, setTempLikes] = useState(numberOfLikes);
-  const [shouldOptimisticUpdate, setShouldOptimisticUpdate] = useState(false);
+  const [shouldOptimisticUpdate, setShouldOptimisticUpdate] =
+    useState<boolean>(false);
+  const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
 
   const isToken = getAccessToken();
 
@@ -44,12 +47,13 @@ const LikeButton: FC<ILikeButtonProps> = ({
     try {
       const response = await getProgressLikes(progressId);
       if (response.status === 200) {
-        setNumberOfLikes(response.data.length);
+        setNumberOfLikes(() => response.data.length);
         const isLiked = response.data.some(
           (like) => like.user === currentUserId
         );
         setIsLikedByCurrentUser(isLiked);
       }
+      setIsFirstLoad(false);
     } catch (error) {
       GlobalDialogController.showModal({
         title: 'Error',
@@ -58,6 +62,17 @@ const LikeButton: FC<ILikeButtonProps> = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (!isFocused || isFirstLoad) return;
+    if (shouldOptimisticUpdate) {
+      setShouldOptimisticUpdate(false);
+      return;
+    }
+    (async () => {
+      await loadProgressLikes();
+    })();
+  }, [isFocused]);
 
   useEffect(() => {
     (async () => {

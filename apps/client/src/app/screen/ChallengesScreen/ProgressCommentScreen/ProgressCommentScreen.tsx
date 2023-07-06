@@ -200,7 +200,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       {!progressCommentScreenLoading && (
         <KeyboardAvoidingView
           keyboardVerticalOffset={Platform.OS === 'ios' ? 115 : 0}
-          behavior="padding"
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           className="relative flex-1"
         >
           <View className="flex-1">

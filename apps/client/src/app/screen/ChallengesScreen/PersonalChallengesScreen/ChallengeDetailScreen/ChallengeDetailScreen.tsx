@@ -48,7 +48,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   }, [index]);
 
   return (
-    <View className="flex h-full flex-col bg-white py-2 pb-16">
+    <View className="flex h-full flex-col bg-white py-2">
       <View className="px-4">
         <View className="flex flex-row items-center  gap-2 pt-2">
           <CheckCircle fill={statusColor} />

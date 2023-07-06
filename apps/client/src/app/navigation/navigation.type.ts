@@ -42,7 +42,7 @@ export type RootStackParamList = {
   CompanyChallengesScreen: undefined;
   CompanyChallengeDetailScreen: {
     challengeId: string;
-  }
+  };
   CreateCompanyChallengeScreen: undefined;
 
   ProgressCommentScreen: {
@@ -67,7 +67,7 @@ export type RootStackParamList = {
     isFollower?: boolean;
   };
 
-  OtherUserProfileDetailsScreen: {
+  OtherUserProfileChallengeDetailsScreen: {
     challengeId: string;
   };
 

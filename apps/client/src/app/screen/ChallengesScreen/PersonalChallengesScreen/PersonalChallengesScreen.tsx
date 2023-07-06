@@ -24,7 +24,7 @@ import OtherUserProfileScreen from '../../ProfileScreen/OtherUser/OtherUserProfi
 import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
-import OtherUserProfileDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
 import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const PersonalChallengesStack =

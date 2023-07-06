@@ -23,6 +23,7 @@ import { useGetListFollowing } from '../hooks/useGetUser';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 import { useAuthStore } from '../store/auth-store';
+import { useUserProfileStore } from '../store/user-data';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,6 +36,8 @@ export const HomeFeed = () => {
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
 
   useGetListFollowing();
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
 
   const getInitialFeeds = async () => {
     await serviceGetFeed({
@@ -82,15 +85,19 @@ export const HomeFeed = () => {
   return (
     <SafeAreaView className={clsx('bg-white')}>
       <View className={clsx('h-full w-full bg-gray-50')}>
-        <FlatList
-          data={feedData}
-          renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
-          keyExtractor={(item) => item.id as unknown as string}
-          onEndReached={getNewFeed}
-          onEndReachedThreshold={0.7}
-          onRefresh={handleScroll}
-          refreshing={isRefreshing}
-        />
+        {userData && (
+          <FlatList
+            data={feedData}
+            renderItem={({ item }) => (
+              <FeedPostCard itemFeedPostCard={item} userId={userData.id} />
+            )}
+            keyExtractor={(item) => item.id as unknown as string}
+            onEndReached={getNewFeed}
+            onEndReachedThreshold={0.7}
+            onRefresh={handleScroll}
+            refreshing={isRefreshing}
+          />
+        )}
         <View className="h-16" />
       </View>
     </SafeAreaView>
@@ -211,9 +218,7 @@ const HomeScreen = () => {
                   withIcon
                   icon={
                     <IconSearch
-                      onPress={() =>
-                        navigation.navigate('MainSearchScreen')
-                      }
+                      onPress={() => navigation.navigate('MainSearchScreen')}
                     />
                   }
                 />
@@ -233,7 +238,7 @@ const HomeScreen = () => {
                   onPress={() => navigation.goBack()}
                   withBackIcon
                 />
-              )
+              ),
             })}
           />
 

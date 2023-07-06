@@ -18,9 +18,14 @@ import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 interface ILikeButtonProps {
   progressId?: string;
   navigation?: any;
+  userId: string;
 }
 
-const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
+const LikeButton: FC<ILikeButtonProps> = ({
+  navigation,
+  progressId,
+  userId,
+}) => {
   const { getAccessToken } = useAuthStore();
   const { t } = useTranslation();
 
@@ -28,22 +33,18 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
   const [isLikedByCurrentUser, setIsLikedByCurrentUser] =
     useState<boolean>(false);
 
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [tempLikes, setTempLikes] = React.useState(numberOfLikes);
-  const [shouldOptimisticUpdate, setShouldOptimisticUpdate] =
-    React.useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [tempLikes, setTempLikes] = useState(numberOfLikes);
+  const [shouldOptimisticUpdate, setShouldOptimisticUpdate] = useState(false);
 
   const isToken = getAccessToken();
-  const { getUserProfile } = useUserProfileStore();
-  const userData = getUserProfile();
 
   const loadProgressLikes = async () => {
-    if (!progressId) return;
+    if (!progressId || !userId) return;
     try {
       const response = await getProgressLikes(progressId);
       if (response.status === 200) {
         setNumberOfLikes(response.data.length);
-        const userId = userData?.id;
         const isLiked = response.data.some((like) => like.user === userId);
         setIsLikedByCurrentUser(isLiked);
       }
@@ -60,7 +61,7 @@ const LikeButton: FC<ILikeButtonProps> = ({ navigation, progressId }) => {
     (async () => {
       await loadProgressLikes();
     })();
-  }, [progressId]);
+  }, [progressId, userId]);
 
   useEffect(() => {
     setTempLikes(numberOfLikes);

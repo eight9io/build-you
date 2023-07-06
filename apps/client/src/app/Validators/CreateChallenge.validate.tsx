@@ -62,6 +62,7 @@ export const CreateCompanyChallengeValidationSchema = () => {
 
     maximumPeople: yup
       .number()
+      .min(2, t('new_challenge_screen.min_people_required') as string)
       .required(t('new_challenge_screen.max_people_required') as string),
   });
 };

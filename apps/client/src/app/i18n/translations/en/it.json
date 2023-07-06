@@ -226,6 +226,7 @@
     "time_to_reach_goal_required": "Please select the time",
     "image_required": "Please upload an image",
     "max_people_required": "Please select the maximum number of people",
+    "min_people_required": "Minimum number of people is 2",
     "is_public_required": "Please select challenge privacy"
   },
   "new_progress_modal": {

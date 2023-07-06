@@ -8,7 +8,6 @@ import { getProgressComments, getProgressLikes } from '../../service/progress';
 
 import IconDot from './asset/dot.svg';
 
-import Card from '../common/Card';
 import LikeButton from './LikeButton';
 import CommentButton from './CommentButton';
 import PostAvatar from '../common/Avatar/PostAvatar';
@@ -16,6 +15,7 @@ import ImageSwiper from '../common/ImageSwiper';
 import { getTimeDiffToNow } from '../../utils/time';
 import { getSeperateImageUrls } from '../../utils/image';
 import VideoPlayer from '../common/VideoPlayer';
+import { useUserProfileStore } from '../../store/user-data';
 
 interface IChallengeProgressCardProps {
   progress: IProgressChallenge;
@@ -41,6 +41,8 @@ const ChallengeProgressCardForComment: React.FC<
 }) => {
   const [otherData, setOtherData] = useState<any>();
   ownerId && useGetOtherUserData(ownerId, setOtherData);
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
 
   return (
     <View className="mb-1 flex-1">
@@ -83,7 +85,7 @@ const ChallengeProgressCardForComment: React.FC<
           </View>
         )}
         <View className="mt-4 flex-row">
-          <LikeButton progressId={id} />
+          <LikeButton progressId={id} currentUserId={currentUser?.id} />
           <CommentButton
             isViewOnly={true}
             progressId={id}

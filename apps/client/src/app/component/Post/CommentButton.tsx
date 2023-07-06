@@ -4,9 +4,11 @@ import { clsx } from 'clsx';
 
 import CommentSvg from './asset/comment.svg';
 import { getProgressComments } from '../../service/progress';
+import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
 interface ICommentButtonProps {
   progressId: string;
+  isFocused?: boolean;
   isViewOnly?: boolean;
   navigationToComment?: () => void;
   shouldRefreshComments?: boolean;
@@ -14,11 +16,20 @@ interface ICommentButtonProps {
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
+  isFocused = false,
   isViewOnly = false,
   navigationToComment,
   shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
+  useEffect(() => {
+    if (!isFocused) return;
+    (async () => {
+      await loadProgressComments();
+    })();
+  }
+  , [isFocused]);
+
   useEffect(() => {
     if (!progressId) return;
     (async () => {
@@ -37,8 +48,11 @@ const CommentButton: FC<ICommentButtonProps> = ({
     try {
       const response = await getProgressComments(progressId);
       if (response.status === 200) setNumberOfComments(response.data.length);
-    } catch (error) {
-      console.log(error);
+    } catch (_) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Something went wrong. Please try again later.',
+      });
     }
   };
   const handleNavigationToComment = () => {

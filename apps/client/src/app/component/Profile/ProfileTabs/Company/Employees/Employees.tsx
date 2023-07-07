@@ -18,8 +18,12 @@ import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.ty
 
 import ConfirmDialog from '../../../../common/Dialog/ConfirmDialog';
 import GlobalDialogController from '../../../../common/Dialog/GlobalDialogController';
+import Loading from '../../../../common/Loading';
 import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
-import { serviceRemoveEmployee } from 'apps/client/src/app/service/company';
+import {
+  serviceAddEmployee,
+  serviceRemoveEmployee,
+} from 'apps/client/src/app/service/company';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 
 interface IEmployeesItemProps {
@@ -30,7 +34,9 @@ interface IEmployeesItemProps {
   setIsShowModal: (value: boolean) => void;
   isShowModal: boolean;
 }
-
+interface IEmployeeProps {
+  employeeList?: any;
+}
 const EmployeesItem: FC<IEmployeesItemProps> = ({
   item,
   isCompany,
@@ -41,13 +47,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
   removeEmployee,
 }) => {
   const { t } = useTranslation();
-  let newUrl = item.avatar;
-  if (newUrl && !newUrl.startsWith('http')) {
-    newUrl = `https://buildyou-front.stg.startegois.com${newUrl}`;
-  }
-  if (newUrl?.includes(';')) {
-    newUrl = newUrl.split(';')[0];
-  }
+
   return (
     <View>
       <ConfirmDialog
@@ -75,7 +75,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
               source={require('../../../../asset/avatar-load.png')}
             />
             <Image
-              source={{ uri: newUrl }}
+              source={{ uri: item.avatar }}
               className="h-10 w-10 rounded-full"
             />
           </View>
@@ -97,7 +97,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
   );
 };
 
-export const EmployeesTab: FC = ({}) => {
+export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getEmployeeList, setEmployeeList } = useEmployeeListStore();
@@ -124,7 +124,7 @@ export const EmployeesTab: FC = ({}) => {
 
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className="pb-4 pt-2 ">
+      <View className=" relative mr-2 px-4 pb-4 pt-4 ">
         <View className=" mt-4 h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}
@@ -193,7 +193,7 @@ export const EmployeesTab: FC = ({}) => {
       {employeeList.length == 0 && !userProfile?.companyAccount && (
         <View className="align-center mt-[150px] items-center justify-center ">
           <Text className="text-lg text-gray-400 ">
-            {t('company_profile_screen.no_challenge')}
+            {t('empty_employee.content_1')}
           </Text>
         </View>
       )}

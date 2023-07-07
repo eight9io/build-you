@@ -175,7 +175,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     setShowOccupationPicker(false);
   };
   const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
-  console.log(111, errors, arrayMyHardSkills);
   useEffect(() => {
     if (userData?.hardSkill) {
       const hardSkill = userData?.hardSkill.map((item) => {

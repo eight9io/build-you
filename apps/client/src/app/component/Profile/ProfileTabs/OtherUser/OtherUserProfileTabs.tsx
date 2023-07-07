@@ -9,11 +9,10 @@ import Skills from '../Users/Skills';
 import ChallengesTab from './Challenges/ChallengesTab';
 import { IUserData } from '../../../../types/user';
 import Biography from '../Users/Biography/Biography';
-import EmployeesTab from '../Company/Employees/Employees';
+
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
-import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
-import { use } from 'i18next';
+import EmployeesCompany from './EmployeesCompany';
 
 interface IOtherUserProfileTabsProps {
   otherUserData: IUserData | null;
@@ -64,7 +63,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                 !isCompanyAccount ? (
                   <Skills skills={otherUserData?.softSkill} key="1" />
                 ) : (
-                  <EmployeesTab key="1" />
+                  <EmployeesCompany key="1" employeeList={employeeList} />
                 ),
                 <ChallengesTab
                   isCompanyAccount={isCompanyAccount}

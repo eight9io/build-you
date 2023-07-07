@@ -24,7 +24,7 @@ interface IOtherUserProfileChallengeDetailsScreenProps {
     'OtherUserProfileChallengeDetailsScreen',
     {
       challengeId: string;
-      isCompanyAccount: boolean | undefined;
+      isCompanyAccount?: boolean | undefined;
     }
   >;
 }

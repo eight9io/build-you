@@ -11,13 +11,15 @@ import Employees from './Employees/Employees';
 import ChallengesTab from '../OtherUser/Challenges/ChallengesTab';
 
 import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
-import { useFollowingListStore, useUserProfileStore } from '../../../../store/user-data';
+import {
+  useFollowingListStore,
+  useUserProfileStore,
+} from '../../../../store/user-data';
 import Biography from '../Users/Biography/Biography';
 import { useIsFocused } from '@react-navigation/native';
 import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 import GlobalDialogController from '../../../common/Dialog/GlobalDialogController';
-
 
 const CompanyProfileTabs = () => {
   const { t } = useTranslation();
@@ -25,23 +27,24 @@ const CompanyProfileTabs = () => {
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const userId = userProfile?.id;
-  const { getFollowingList } = useFollowingListStore()
-  const [followerList, setFollowerList] = useState([])
-  const [employeeList, setEmployeeList] = useState([])
-
+  const { getFollowingList } = useFollowingListStore();
+  const [followerList, setFollowerList] = useState([]);
+  const [employeeList, setEmployeeList] = useState([]);
 
   const isFocused = useIsFocused();
   useEffect(() => {
-    if (!userProfile?.id || !isFocused) return
+    if (!userProfile?.id || !isFocused) return;
 
     const getFollowerList = async () => {
-      const { data: followerList } = await serviceGetListFollower(userProfile?.id);
+      const { data: followerList } = await serviceGetListFollower(
+        userProfile?.id
+      );
       setFollowerList(followerList);
     };
     try {
       fetchListEmployee(userProfile?.id, (res: any) => {
-        return setEmployeeList(res)
-      })
+        return setEmployeeList(res);
+      });
       getFollowerList();
     } catch (error) {
       GlobalDialogController.showModal({
@@ -49,10 +52,8 @@ const CompanyProfileTabs = () => {
         message: t('errorMessage:500') as string,
       });
     }
-
-
-  }, [isFocused, userProfile?.id])
-  const followingList = getFollowingList()
+  }, [isFocused, userProfile?.id]);
+  const followingList = getFollowingList();
   if (!userId) return null;
   const titles = [
     t('profile_screen_tabs.biography'),
@@ -70,8 +71,8 @@ const CompanyProfileTabs = () => {
           <Biography key="0" userProfile={userProfile} />,
           <Followers followers={followerList} key="1" />,
           <Following following={followingList} key="2" />,
-          <Employees key='3' employeeList={employeeList} />,
-          <ChallengesTab userId={userId} key='4' />,
+          <Employees key="3" employeeList={employeeList} />,
+          <ChallengesTab userId={userId} key="4" isCompanyAccount />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"

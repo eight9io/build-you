@@ -13,7 +13,6 @@ import Biography from './Biography/Biography';
 import Skills from './Skills';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
-import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
 import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 import { IUserData } from '../../../../types/user';
 import { useIsFocused } from '@react-navigation/native';

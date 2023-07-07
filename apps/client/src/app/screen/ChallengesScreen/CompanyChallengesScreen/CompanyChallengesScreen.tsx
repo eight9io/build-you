@@ -119,7 +119,7 @@ const CompanyChallenges = ({
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
-                  isCompany={userData?.companyAccount ? true : false}
+                  isCompanyAccount={userData?.companyAccount ? true : false}
                 />
               )}
               keyExtractor={(item) => item.id}

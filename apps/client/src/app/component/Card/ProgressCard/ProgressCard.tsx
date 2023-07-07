@@ -158,17 +158,19 @@ const ProgressCard: FC<IProgressCardProps> = ({
           />
         )}
       </View>
-      <Text className=" text-md mb-3 font-normal leading-5">
-        {itemProgressCard?.caption}
-      </Text>
+      {itemProgressCard?.caption && (
+        <Text className=" text-md mb-1 font-normal leading-5">
+          {itemProgressCard?.caption}
+        </Text>
+      )}
       {extractedImageUrls && (
-        <View className="aspect-square w-full">
+        <View className="aspect-square w-full mt-2">
           <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
       )}
       {itemProgressCard?.video && <VideoPlayer src={itemProgressCard.video} />}
 
-      <View className="mt-4 flex-row">
+      <View className="mt-3 flex-row">
         <LikeButton
           progressId={itemProgressCard.id}
           currentUserId={currentUser?.id}

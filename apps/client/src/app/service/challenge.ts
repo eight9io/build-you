@@ -59,3 +59,27 @@ export const getChallengeByUserId = (userId: string) => {
 export const getChallengeParticipants = (challengeId: string) => {
   return http.get(`/challenge/participant/all/${challengeId}`);
 };
+
+export const getChallengeParticipantsByChallengeId = (challengeId: string) => {
+  return http.get(`/challenge/participant/all/${challengeId}`);
+};
+
+export const serviceAddChallengeParticipant = (
+  challengeId: string,
+  userId: string
+) => {
+  return http.post(`/challenge/participant/add`, {
+    challenge: challengeId,
+    user: userId,
+  });
+};
+
+export const serviceRemoveChallengeParticipant = (
+  challengeId: string,
+  userId: string
+) => {
+  return http.post(`/challenge/participant/remove`, {
+    challenge: challengeId,
+    user: userId,
+  });
+}

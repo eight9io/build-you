@@ -274,7 +274,7 @@ const CompanyChallengeDetailScreen = ({
         confirmButtonLabel="Got it"
         onConfirm={() => {
           setIsDeleteSuccess(false);
-          navigation.navigate('PersonalChallengesScreen');
+          navigation.navigate('CompanyChallengesScreen');
         }}
       />
       <ConfirmDialog

@@ -28,6 +28,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
+  const isCompanyAccount = otherUserData?.companyAccount;
 
   useEffect(() => {
     if (!otherUserData?.id) return;
@@ -59,12 +60,16 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
               titles={titles}
               children={[
                 <Biography userProfile={otherUserData} key="0" />,
-                !otherUserData?.companyAccount ? (
+                !isCompanyAccount ? (
                   <Skills skills={otherUserData?.softSkill} key="1" />
                 ) : (
                   <EmployeesTab key="1" employeeList={employeeList} />
                 ),
-                <ChallengesTab userId={otherUserData.id} key="2" />,
+                <ChallengesTab
+                  isCompanyAccount={isCompanyAccount}
+                  userId={otherUserData.id}
+                  key="2"
+                />,
               ]}
               defaultTabClassName="text-gray-dark"
             />

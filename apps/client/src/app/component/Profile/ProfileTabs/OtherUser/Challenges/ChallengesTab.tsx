@@ -12,10 +12,12 @@ import GolbalDialogController from '../../../../common/Dialog/GlobalDialogContro
 interface IChallengesTabProps {
   userId: string | null | undefined;
   isCurrentUserInCompany?: boolean;
+  isCompanyAccount: boolean | undefined | null;
 }
 
 const ChallengesTab: FC<IChallengesTabProps> = ({
   userId,
+  isCompanyAccount = false,
   isCurrentUserInCompany = false,
 }) => {
   const { t } = useTranslation();
@@ -59,6 +61,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   const handleNavigateToChallengeDetail = (challengeId: string) => {
     navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
       challengeId,
+      isCompanyAccount: isCompanyAccount ? true : false,
     });
   };
 
@@ -71,6 +74,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
           renderItem={({ item }: { item: IChallenge }) => (
             <ChallengeCard
               item={item}
+              isCompanyAccount={isCompanyAccount}
               isFromOtherUser
               imageSrc={`${item.image}`}
               handlePress={() => handleNavigateToChallengeDetail(item.id)}

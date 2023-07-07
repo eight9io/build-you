@@ -170,7 +170,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       });
       return;
     }
-    navigation.navigate('OtherUserProfileDetailsScreen', {
+    navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
       challengeId: challenge?.id,
     });
   };

@@ -29,6 +29,7 @@ import { useIsFocused } from '@react-navigation/native';
 import httpInstance from '../../../utils/http';
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
 import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
+import { sortChallengeByStatus } from '../../../utils/common';
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -84,13 +85,7 @@ const CompanyChallenges = ({
     const fetchCompanyChallenges = async () => {
       try {
         const res = await httpInstance.get(`/challenge/${userData?.id}`);
-        res.data.sort((a: IChallenge, b: IChallenge) => {
-          return (
-            new Date(b.achievementTime).getTime() -
-            new Date(a.achievementTime).getTime()
-          );
-        });
-        setCompanyChallengesList(res.data);
+        setCompanyChallengesList(sortChallengeByStatus(res));
         setTimeout(() => {
           setIsLoading(false);
           setIsError(false);
@@ -107,7 +102,7 @@ const CompanyChallenges = ({
     <SafeAreaView className={clsx('flex-1 bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && !isError && (
-        <View className={clsx('h-full w-full flex-1 bg-gray-50 pb-24')}>
+        <View className={clsx('h-full w-full flex-1 bg-gray-50')}>
           {companyChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
@@ -119,7 +114,7 @@ const CompanyChallenges = ({
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
-                  isCompany={userData?.companyAccount ? true : false}
+                  isCompanyAccount={userData?.companyAccount ? true : false}
                 />
               )}
               keyExtractor={(item) => item.id}

@@ -127,7 +127,9 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
       {!isOtherUser && (
         <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
           <View
-            className={clsx('absolute bottom-[-40px] right-0 rounded-full')}
+            className={clsx(
+              'bg-primary-default absolute bottom-[-40px] right-0 h-7 w-7 items-center justify-center rounded-full'
+            )}
           >
             <IconUploadAvatar />
           </View>

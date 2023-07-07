@@ -39,6 +39,7 @@ interface IProgressCardProps {
   };
   challengeName: string;
   userData: IUserData | null;
+  isOtherUserProfile?: boolean;
   setProgressIndexToUpdate?: any;
   isChallengeCompleted?: boolean;
   itemProgressCard: IProgressChallenge;
@@ -54,6 +55,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   itemProgressCard,
   setIsShowEditModal,
   setProgressIndexToUpdate,
+  isOtherUserProfile = false,
   isChallengeCompleted = false,
 }) => {
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
@@ -103,7 +105,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);
 
-
   const handleConfirmDeleteChallengeProgress = async () => {
     setIsShowDeleteModal(false); // Close the delete confirm modal
     setErrorMessage('');
@@ -150,23 +151,30 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </View>
-        <PopUpMenu
-          options={progressOptions}
-          isDisabled={isChallengeCompleted || itemProgressCard?.first}
-        />
+        {!isOtherUserProfile && (
+          <PopUpMenu
+            options={progressOptions}
+            isDisabled={isChallengeCompleted || itemProgressCard?.first}
+          />
+        )}
       </View>
-      <Text className=" text-md mb-3 font-normal leading-5">
-        {itemProgressCard?.caption}
-      </Text>
+      {itemProgressCard?.caption && (
+        <Text className=" text-md mb-1 font-normal leading-5">
+          {itemProgressCard?.caption}
+        </Text>
+      )}
       {extractedImageUrls && (
-        <View className="aspect-square w-full">
+        <View className="aspect-square w-full mt-2">
           <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
       )}
       {itemProgressCard?.video && <VideoPlayer src={itemProgressCard.video} />}
 
-      <View className="mt-4 flex-row">
-        <LikeButton progressId={itemProgressCard.id} currentUserId={currentUser?.id}/>
+      <View className="mt-3 flex-row">
+        <LikeButton
+          progressId={itemProgressCard.id}
+          currentUserId={currentUser?.id}
+        />
         <CommentButton
           navigationToComment={handleNavigationToComment}
           progressId={itemProgressCard.id}

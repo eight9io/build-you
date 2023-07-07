@@ -24,8 +24,9 @@ import OtherUserProfileScreen from '../../ProfileScreen/OtherUser/OtherUserProfi
 import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
-import OtherUserProfileDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileDetailsScreen';
+import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
 import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
+import { sortChallengeByStatus } from '../../../utils/common';
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -80,13 +81,7 @@ const PersonalChallenges = ({
     const fetchData = async () => {
       try {
         const res = await httpInstance.get(`/challenge/${userData?.id}`);
-        res.data.sort((a: IChallenge, b: IChallenge) => {
-          return (
-            new Date(b.achievementTime).getTime() -
-            new Date(a.achievementTime).getTime()
-          );
-        });
-        setPersonalChallengesList(res.data);
+        setPersonalChallengesList(sortChallengeByStatus(res));
         setTimeout(() => {
           setIsLoading(false);
         }, 500);

@@ -18,12 +18,8 @@ import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.ty
 
 import ConfirmDialog from '../../../../common/Dialog/ConfirmDialog';
 import GlobalDialogController from '../../../../common/Dialog/GlobalDialogController';
-import Loading from '../../../../common/Loading';
 import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
-import {
-  serviceAddEmployee,
-  serviceRemoveEmployee,
-} from 'apps/client/src/app/service/company';
+import { serviceRemoveEmployee } from 'apps/client/src/app/service/company';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 
 interface IEmployeesItemProps {
@@ -45,7 +41,13 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
   removeEmployee,
 }) => {
   const { t } = useTranslation();
-
+  let newUrl = item.avatar;
+  if (newUrl && !newUrl.startsWith('http')) {
+    newUrl = `https://buildyou-front.stg.startegois.com${newUrl}`;
+  }
+  if (newUrl?.includes(';')) {
+    newUrl = newUrl.split(';')[0];
+  }
   return (
     <View>
       <ConfirmDialog
@@ -73,7 +75,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
               source={require('../../../../asset/avatar-load.png')}
             />
             <Image
-              source={{ uri: item.avatar }}
+              source={{ uri: newUrl }}
               className="h-10 w-10 rounded-full"
             />
           </View>
@@ -122,7 +124,7 @@ export const EmployeesTab: FC = ({}) => {
 
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className=" relative mr-2 px-4 pb-4 pt-4 ">
+      <View className="pb-4 pt-2 ">
         <View className=" mt-4 h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}

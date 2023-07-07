@@ -18,7 +18,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import OtherUserProfileScreen from '../OtherUser/OtherUserProfileScreen';
-import OtherUserProfileDetailsScreen from '../OtherUser/OtherUserProfileDetailsScreen';
+import OtherUserProfileChallengeDetailsScreen from '../OtherUser/OtherUserProfileChallengeDetailsScreen';
 import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
@@ -111,8 +111,8 @@ const PersonalProfileScreen = () => {
         })}
       />
       <ProfileStack.Screen
-        name="OtherUserProfileDetailsScreen"
-        component={OtherUserProfileDetailsScreen}
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => '',

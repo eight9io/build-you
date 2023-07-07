@@ -69,6 +69,7 @@ export type RootStackParamList = {
 
   OtherUserProfileChallengeDetailsScreen: {
     challengeId: string;
+    isCompanyAccount?: boolean;
   };
 
   MainSearchScreen: undefined;

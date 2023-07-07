@@ -5,7 +5,11 @@ import i18n from '../../../../i18n/i18n';
 import { IChallenge } from 'apps/client/src/app/types/challenge';
 import { getChallengeStatusColor } from '../../../../utils/common';
 import { useUserProfileStore } from '../../../../store/user-data';
-import { getChallengeParticipants } from '../../../../service/challenge';
+import {
+  getChallengeParticipants,
+  serviceAddChallengeParticipant,
+  serviceRemoveChallengeParticipant,
+} from '../../../../service/challenge';
 
 import ParticipantsTab from './ParticipantsTab';
 import TabView from '../../../../component/common/Tab/TabView';
@@ -15,6 +19,7 @@ import DescriptionTab from '../../PersonalChallengesScreen/ChallengeDetailScreen
 import CheckCircle from './assets/check_circle.svg';
 
 import Button from '../../../../component/common/Buttons/Button';
+import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
 
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -62,16 +67,34 @@ export const ChallengeCompanyDetailScreen: FC<
     fetchParticipants();
   }, [challengeId]);
 
-  const handleJoinChallenge = () => {
-    setIsJoined(true);
+  const handleJoinChallenge = async () => {
+    if (!currentUser?.id || !challengeId) return;
+    try {
+      await serviceAddChallengeParticipant(challengeId, currentUser?.id);
+      setIsJoined(true);
+    } catch (err) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Something went wrong. Please try again later!',
+      });
+    }
   };
 
-  const handleLeaveChallenge = () => {
-    setIsJoined(false);
+  const handleLeaveChallenge = async () => {
+    if (!currentUser?.id || !challengeId) return;
+    try {
+      await serviceRemoveChallengeParticipant(challengeId, currentUser?.id);
+      setIsJoined(false);
+    } catch (err) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Something went wrong. Please try again later!',
+      });
+    }
   };
 
   return (
-    <View className="flex h-full flex-col bg-white py-6">
+    <View className="flex h-full flex-col bg-white pt-6">
       <View className="flex flex-row items-center justify-between px-4">
         <View className="flex flex-row items-center  gap-2 pt-2">
           <CheckCircle fill={statusColor} />
@@ -81,21 +104,23 @@ export const ChallengeCompanyDetailScreen: FC<
             </Text>
           </View>
         </View>
-        <View className="h-9">
-          <Button
-            isDisabled={owner[0].id === currentUser?.id}
-            containerClassName="bg-primary-default flex items-center justify-center px-5"
-            textClassName="text-center text-md font-semibold text-white "
-            disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
-            disabledTextClassName="text-center text-md font-semibold text-gray-medium"
-            title={
-              isJoined
-                ? i18n.t('challenge_detail_screen.leave')
-                : i18n.t('challenge_detail_screen.join')
-            }
-            onPress={isJoined ? handleJoinChallenge : handleLeaveChallenge}
-          />
-        </View>
+        {owner[0].id !== currentUser?.id && (
+          <View className="h-9">
+            <Button
+              isDisabled={false}
+              containerClassName="bg-primary-default flex items-center justify-center px-5"
+              textClassName="text-center text-md font-semibold text-white "
+              disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
+              disabledTextClassName="text-center text-md font-semibold text-gray-medium"
+              title={
+                isJoined
+                  ? i18n.t('challenge_detail_screen.leave')
+                  : i18n.t('challenge_detail_screen.join')
+              }
+              onPress={isJoined ? handleJoinChallenge : handleLeaveChallenge}
+            />
+          </View>
+        )}
       </View>
 
       <View className="mt-3 flex flex-1">

@@ -13,11 +13,14 @@ export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
     })
 
     .catch((err) => {
-      GlobalDialogController.showModal({
-        title: 'Error',
-        message: t('errorMessage:500') as string,
-      });
-      if (err.response.status == 404) setFollowingList([])
+      if (err.response.status == 404) { setFollowingList([]) } else {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message: t('errorMessage:500') as string,
+        });
+
+      }
+
     });
 
 

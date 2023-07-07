@@ -69,7 +69,15 @@ export const TabView: FC<ITabViewProps> = ({
         </ScrollView>
       </View>
       <View className="bg-gray-veryLight flex-1">
-        {children[activeTabIndex]}
+        {children.map((item, index) => {
+          return (
+            <View
+              className={`${index == activeTabIndex ? 'flex-1' : 'hidden'}`}
+            >
+              {item}
+            </View>
+          );
+        })}
       </View>
     </View>
   );

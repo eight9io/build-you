@@ -89,6 +89,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
+    console.log(challengeId, currentUser?.id);
+
     try {
       await serviceAddChallengeParticipant(challengeId, currentUser?.id);
       setIsJoined(true);
@@ -121,7 +123,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         renderItem={() => <View></View>}
         ListHeaderComponent={
           <View className="flex h-full flex-col bg-white pt-6">
-            <View className="flex flex-row items-center justify-between px-4">
+            <View className="flex flex-row items-center justify-between px-4 pb-3">
               <View className="flex flex-row items-center  gap-2 pt-2">
                 <View>
                   <Text className="text-basic text-xl font-medium leading-5">

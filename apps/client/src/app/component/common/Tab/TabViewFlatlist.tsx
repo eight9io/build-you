@@ -44,7 +44,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   return (
-    <View className="flex-1 h-full ">
+    <View className="h-full flex-1 ">
       <View className="bg-white">
         <FlatList
           horizontal
@@ -71,7 +71,17 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
           }}
         />
       </View>
-      <View className="flex-1  ">{children[activeTabIndex]}</View>
+      <View className="flex-1">
+        {children.map((item, index) => {
+          return (
+            <View
+              className={`${index == activeTabIndex ? 'flex-1' : 'hidden'}`}
+            >
+              {item}
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 };

@@ -256,27 +256,6 @@ export const RootNavigation = () => {
                 ),
               })}
             />
-            <RootStack.Screen
-              name="MainSearchScreen"
-              component={MainSearchScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => (
-                  <Text className="text-lg font-semibold">Search User</Text>
-                ),
-                headerSearchBarOptions: {
-                  hideNavigationBar: false,
-                },
-
-                headerLeft: () => (
-                  <NavButton
-                    text={t('button.back') as string}
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
           </>
         )}
         {logined && !isCompleteProfile && isCompleteProfile !== null && (

@@ -3,7 +3,7 @@ export interface IUserData {
   email: string;
   name: string;
   surname: string;
-  birth: string;
+  birth?: string;
   role?: string;
   occupation?: {
     id: string;
@@ -11,13 +11,14 @@ export interface IUserData {
   };
   bio?: string;
   video?: string;
-  company?: {
+  employeeOf?: {
     id: string;
     piva: string;
     email: string;
     ragioneSociale: string;
     creditiTotali: number;
     creditiDisponibili: number;
+    name: string;
   };
   status?: string;
   avatar?: string;
@@ -25,6 +26,7 @@ export interface IUserData {
   softSkill?: any[];
   cover?: string;
   companyAccount?: boolean | null;
+  isShowCompany?: boolean | null;
 }
 
 export interface IHardSkillProps {

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
 import { IUserData } from 'apps/client/src/app/types/user';
+import clsx from 'clsx';
 
 interface IFollowersProps {
   followers: IUserData[];
@@ -35,11 +36,18 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
                 }
                 className="mb-5 flex-row items-center gap-3"
               >
-                <Image
-                  source={{ uri: item.avatar }}
-                  contentFit="cover"
-                  className="h-10 w-10 rounded-full"
-                />
+                <View className="relative">
+                  <Image
+                    className={clsx(
+                      'absolute left-0  top-0 h-10 w-10  rounded-full'
+                    )}
+                    source={require('../asset/avatar-load.png')}
+                  />
+                  <Image
+                    source={{ uri: item.avatar }}
+                    className="h-10 w-10 rounded-full"
+                  />
+                </View>
                 <Text className="text-basic-black text-base font-semibold">
                   {item.name} {item.surname}
                 </Text>
@@ -50,7 +58,7 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
         />
       )}
       {followers.length == 0 && (
-        <View className=" flex-1 items-center justify-center h-full">
+        <View className=" h-full flex-1 items-center justify-center">
           <Empty />
           <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
             {t('empty_followers')}

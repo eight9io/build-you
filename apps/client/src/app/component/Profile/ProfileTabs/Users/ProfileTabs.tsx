@@ -14,7 +14,6 @@ import Skills from './Skills';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
 import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
-import { IUserData } from '../../../../types/user';
 import { useIsFocused } from '@react-navigation/native';
 
 const ProfileTabs: FC = () => {
@@ -45,7 +44,7 @@ const ProfileTabs: FC = () => {
   ];
 
   return (
-    <View className={clsx('w-full  flex-1 bg-gray-50   ')}>
+    <View className={clsx('  w-full flex-1 bg-gray-50  ')}>
       <TabViewFlatlist
         titles={titles}
         children={[

@@ -48,7 +48,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
     followingList &&
     followingList.find((item) => item.id === otherUserData?.id);
   const [isShowModalUnfollow, setIsShowModalUnfollow] = useState(false);
-  const handleFllowClicked = async () => {
+  const handleFollowClicked = async () => {
     try {
       await serviceFollow(otherUserData?.id);
       fetchNewFollowingData(userProfile?.id, (res: any) =>
@@ -105,7 +105,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
             title={t('button.follow')}
             containerClassName="px-11 py-2"
             textClassName="text-base"
-            onPress={handleFllowClicked}
+            onPress={handleFollowClicked}
           />
         ) : (
           <OutlineButton

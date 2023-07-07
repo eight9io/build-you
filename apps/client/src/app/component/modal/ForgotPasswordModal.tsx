@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import Header from '../common/Header';
 import NavButton from '../common/Buttons/NavButton';
 import { useTranslation } from 'react-i18next';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { Controller, useForm } from 'react-hook-form';
 import { ResetPasswordValidationSchema } from '../../Validators/ResetPassword.validate';
@@ -112,6 +113,8 @@ export default function ForgotPasswordModal({
         <KeyboardAwareScrollView>
           <View className="h-full pt-5">
             <SafeAreaView>
+              {isLoading && <Spinner visible={isLoading} />}
+
               <View className="flex-column h-full justify-between bg-white px-6  pb-14">
                 <View>
                   <View className="flex-column items-center  ">
@@ -217,12 +220,6 @@ export default function ForgotPasswordModal({
             </SafeAreaView>
           </View>
         </KeyboardAwareScrollView>
-        {isLoading && (
-          <Loading
-            containerClassName="absolute top-0 left-0"
-            text={t('change_password.changing') as string}
-          />
-        )}
       </View>
     </Modal>
   );

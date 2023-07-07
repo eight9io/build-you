@@ -3,23 +3,23 @@ import { Image } from 'expo-image';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
-import TextInput from '../../component/common/Inputs/TextInput';
 import { CheckBox } from '@rneui/themed';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RegisterValidationSchema } from '../../Validators/Register.validate';
-import Button from '../../component/common/Buttons/Button';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import { RegisterValidationSchema } from '../../Validators/Register.validate';
+import { serviceRegister } from '../../service/auth';
+import { err_server, errorMessage } from '../../utils/statusCode';
+
+import Button from '../../component/common/Buttons/Button';
+import TextInput from '../../component/common/Inputs/TextInput';
+import ErrorText from '../../component/common/ErrorText';
 import PolicyModal from '../../component/modal/PolicyModal';
 
 import IconEyeOn from './asset/icon-eye.svg';
 import IconEyeOff from './asset/eye-off.svg';
-import ErrorText from '../../component/common/ErrorText';
 
-import { serviceRegister } from '../../service/auth';
-import Loading from '../../component/common/Loading';
-import { err_server, errorMessage } from '../../utils/statusCode';
-import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 type FormData = {
   email: string;
   password: string;
@@ -80,6 +80,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   return (
     <SafeAreaView className=" h-full bg-white ">
       <KeyboardAwareScrollView>
+        {isLoading && <Spinner visible={isLoading} />}
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">
@@ -240,12 +241,6 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
           />
         </View>
       </KeyboardAwareScrollView>
-      {isLoading && (
-        <Loading
-          containerClassName="absolute top-0 left-0 h-full"
-          text={t('register_screen.creating') as string}
-        />
-      )}
     </SafeAreaView>
   );
 }

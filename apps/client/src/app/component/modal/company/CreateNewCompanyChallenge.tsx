@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { useNav } from '../../../navigation/navigation.type';
 import { ICreateCompanyChallenge } from '../../../types/challenge';
@@ -29,6 +30,7 @@ import {
 } from '../../../service/challenge';
 import { AxiosResponse } from 'axios';
 import httpInstance from '../../../utils/http';
+import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, 'achievementTime'> {
@@ -83,7 +85,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   const onSubmit = async (data: ICreateCompanyChallenge) => {
     setIsLoading(true);
     setErrorMessage('');
-
     try {
       const { image, ...rest } = data; // Images upload will be handled separately
       const payload = {
@@ -104,6 +105,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
           if (challengeImageResponse.status === 200 || 201) {
             setIsRequestSuccess(true);
             setIsShowModal(true);
+            setIsLoading(false);
             return;
           }
           setIsRequestSuccess(false);
@@ -111,15 +113,22 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
           httpInstance.delete(
             `/challenge/delete/${challengeCreateResponse.data.id}`
           );
-          setErrorMessage(t('errorMessage:500') || '');
+          GlobalDialogController.showModal({
+            title: 'Error',
+            message: t('errorMessage:500') || '',
+          });
         }
+        setIsLoading(false);
         setIsRequestSuccess(true);
         setIsShowModal(true);
       }
     } catch (error) {
-      setErrorMessage(t('errorMessage:500') || '');
+      setIsLoading(false);
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') || '',
+      });
     }
-    setIsLoading(false);
   };
 
   const handleImagesSelected = (images: string[]) => {
@@ -157,6 +166,8 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView className="flex flex-col bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
+
         <ConfirmDialog
           title={isRequestSuccess ? 'Success' : 'Error'}
           description={

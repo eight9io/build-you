@@ -3,22 +3,26 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Header from '../common/Header';
-import CloseIcon from '../asset/close.svg';
-import TextInput from '../common/Inputs/TextInput';
-import dayjs from '../../utils/date.util';
-import CalendarIcon from '../asset/calendar.svg';
-import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ErrorText from '../common/ErrorText';
-import { IChallenge, IEditChallenge } from '../../types/challenge';
+
 import { useNav } from '../../navigation/navigation.type';
-import Loading from '../common/Loading';
+import { IChallenge, IEditChallenge } from '../../types/challenge';
 import { EditChallengeValidationSchema } from '../../Validators/EditChallenge.validate';
-import { ScrollView } from 'react-native-gesture-handler';
-import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+
 import useModal from '../../hooks/useModal';
+import dayjs from '../../utils/date.util';
+
+import Header from '../common/Header';
+import ErrorText from '../common/ErrorText';
+import TextInput from '../common/Inputs/TextInput';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 import { updateChallenge } from '../../service/challenge';
+import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+
+import CloseIcon from '../asset/close.svg';
+import CalendarIcon from '../asset/calendar.svg';
+
 interface IEditChallengeModalProps {
   challenge: IChallenge;
   visible: boolean;
@@ -106,6 +110,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       visible={visible}
     >
       <SafeAreaView className="flex-1">
+        {isLoading && <Spinner visible={isLoading} />}
+
         <View className="px-4 py-4">
           <Header
             title={t('edit_challenge_screen.title') || ''}
@@ -251,7 +257,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
         onClosed={() => handleCloseConfirmModal(challenge.id)}
         closeButtonLabel={t('close') || ''}
       />
-      {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
     </Modal>
   );
 };

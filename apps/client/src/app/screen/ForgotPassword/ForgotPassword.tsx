@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
+import Spinner from 'react-native-loading-spinner-overlay';
 import TextInput from '../../component/common/Inputs/TextInput';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,7 +15,6 @@ import ErrorText from '../../component/common/ErrorText';
 import ForgotPasswordModal from '../../component/modal/ForgotPasswordModal';
 import { ForgotPasswordValidationSchema } from '../../Validators/ForgotPassword.validate';
 import { ForgotPasswordForm } from '../../types/auth';
-import Loading from '../../component/common/Loading';
 import { serviceForgotPassword } from '../../service/auth';
 import { err_server, errorMessage } from '../../utils/statusCode';
 
@@ -66,6 +66,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
 
   return (
     <SafeAreaView className=" h-full bg-white ">
+      {isLoading && <Spinner visible={isLoading} />}
       <View className=" h-full bg-white ">
         <ScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">
@@ -143,12 +144,6 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
             )}
           </View>
         </ScrollView>
-        {isLoading && (
-          <Loading
-            containerClassName="absolute top-0 left-0"
-            text={t('forgot_password.sub_title') as string}
-          />
-        )}
       </View>
     </SafeAreaView>
   );

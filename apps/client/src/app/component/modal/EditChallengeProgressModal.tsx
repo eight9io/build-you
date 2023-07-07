@@ -3,20 +3,24 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+import { IUpdateProgress } from '../../types/progress';
+import { IProgressChallenge } from '../../types/challenge';
+import { EditProgressValidationSchema } from '../../Validators/EditProgress.validate';
+
+import useModal from '../../hooks/useModal';
+import { updateProgress } from '../../service/progress';
 
 import Header from '../common/Header';
 import ImageSwiper from '../common/ImageSwiper';
-import Loading from '../common/Loading';
-import { IProgressChallenge } from '../../types/challenge';
 import VideoPlayer from '../common/VideoPlayer';
-import CloseIcon from '../asset/close.svg';
 import TextInput from '../common/Inputs/TextInput';
 import ErrorText from '../common/ErrorText';
-import { EditProgressValidationSchema } from '../../Validators/EditProgress.validate';
-import useModal from '../../hooks/useModal';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
-import { updateProgress } from '../../service/progress';
-import { IUpdateProgress } from '../../types/progress';
+
+import CloseIcon from '../asset/close.svg';
+
 interface IEditChallengeProgressModalProps {
   progress: IProgressChallenge;
   isVisible: boolean;
@@ -85,6 +89,8 @@ export const EditChallengeProgressModal: FC<
       statusBarTranslucent={isLoading}
     >
       <SafeAreaView className=" bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
+
         <View className="mx-4 flex h-full flex-col rounded-t-xl bg-white">
           <Header
             title={t('challenge_detail_screen.edit_progress') || ''}
@@ -143,7 +149,6 @@ export const EditChallengeProgressModal: FC<
           closeButtonLabel={t('close') || ''}
         />
       </SafeAreaView>
-      {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
     </Modal>
   );
 };

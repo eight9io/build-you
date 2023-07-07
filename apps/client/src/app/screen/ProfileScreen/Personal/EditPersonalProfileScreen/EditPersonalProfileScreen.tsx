@@ -1,36 +1,32 @@
 import React, { FC, useEffect, useState } from 'react';
+import clsx from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 import { IHardSkill, IHardSkillProps } from '../../../../types/user';
 
-import Warning from '../../../../component/asset/warning.svg';
-import TextInput from '../../../../component/common/Inputs/TextInput';
-
-import PencilEditSvg from '../../../../component/asset/pencil-edit.svg';
-import Button from '../../../../component/common/Buttons/Button';
-import CalendarIcon from './asset/calendar-icon.svg';
 import dayjs from '../../../../utils/date.util';
-import SelectPicker from '../../../../component/common/Pickers/SelectPicker';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
-import { useUserProfileStore } from '../../../../store/user-data';
-import { useGetUserData } from '../../../../hooks/useGetUser';
-import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkills';
-import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
-import httpInstance from '../../../../utils/http';
-import Loading from '../../../../component/common/Loading';
+
 import {
   serviceGetListOccupation,
   serviceUpdateMyProfile,
 } from '../../../../service/profile';
+import { useGetUserData } from '../../../../hooks/useGetUser';
+import { useUserProfileStore } from '../../../../store/user-data';
+
+import Warning from '../../../../component/asset/warning.svg';
+import TextInput from '../../../../component/common/Inputs/TextInput';
+import PencilEditSvg from '../../../../component/asset/pencil-edit.svg';
+import Button from '../../../../component/common/Buttons/Button';
+import SelectPicker from '../../../../component/common/Pickers/SelectPicker';
+import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
+import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkills';
+import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import { IOccupation } from 'apps/client/src/app/types/auth';
 import CustomSwitch from 'apps/client/src/app/component/common/Switch';
@@ -38,9 +34,9 @@ import VideoPicker from 'apps/client/src/app/component/common/VideoPicker';
 import { IUploadMediaWithId } from 'apps/client/src/app/types/media';
 import { uploadNewVideo } from 'apps/client/src/app/utils/uploadVideo';
 import { VideoWithPlayButton } from 'apps/client/src/app/component/Profile/ProfileTabs/Users/Biography/Biography';
-import clsx from 'clsx';
-import { useCompleteProfileStore } from 'apps/client/src/app/store/complete-user-profile';
-import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
+
+import CalendarIcon from './asset/calendar-icon.svg';
+
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
@@ -455,10 +451,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           )}
         </View>
       </KeyboardAwareScrollView>
-
-      {isLoading && (
-        <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
-      )}
     </SafeAreaView>
   );
 };

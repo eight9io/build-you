@@ -12,10 +12,13 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 import { useUserProfileStore } from '../../store/user-data';
 import { IUploadMediaWithId } from '../../types/media';
 import { getRandomId } from '../../utils/common';
 import { CreateProgressValidationSchema } from '../../Validators/CreateProgress.validate';
+
 import Header from '../common/Header';
 import Button from '../common/Buttons/Button';
 import ImagePicker from '../common/ImagePicker';
@@ -30,7 +33,6 @@ import {
   updateProgressVideo,
 } from '../../service/progress';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
-import Loading from '../common/Loading';
 import ErrorText from '../common/ErrorText';
 
 interface IAddNewChallengeProgressModalProps {
@@ -213,6 +215,7 @@ export const AddNewChallengeProgressModal: FC<
       className="h-full"
     >
       <SafeAreaView className="flex-1 bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
         <KeyboardAwareScrollView
           contentContainerStyle={{
             flex: 1,
@@ -319,7 +322,6 @@ export const AddNewChallengeProgressModal: FC<
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </SafeAreaView>
     </Modal>
   );

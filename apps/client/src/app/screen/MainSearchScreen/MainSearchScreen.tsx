@@ -13,6 +13,7 @@ import {
   SafeAreaView,
   Platform,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Image } from 'expo-image';
 
@@ -27,7 +28,9 @@ import { RootStackParamList } from '../../navigation/navigation.type';
 const MainSearchScreen = () => {
   const [isSearchLoadinging, setIsSearchLoading] = useState<boolean>(false);
   const [searchText, setSearchText] = useState('');
-  const [searchResults, setSearchResults] = useState<ISearchUserData[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    ISearchUserData[] | undefined
+  >(undefined);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
@@ -68,6 +71,7 @@ const MainSearchScreen = () => {
         focus: true,
         shouldShowHintSearchIcon: true,
         hideNavigationBar: false,
+        tintColor: '#FF7B1C',
       },
 
       headerLeft: () => (
@@ -88,7 +92,7 @@ const MainSearchScreen = () => {
         setSearchResults(results);
       });
     } else {
-      setSearchResults([]);
+      setSearchResults(undefined);
     }
   }, [debouncedSearchQuery]);
 
@@ -105,46 +109,64 @@ const MainSearchScreen = () => {
 
   return (
     <SafeAreaView className="h-full flex-1 bg-white">
-      {searchResults.length > 0 && !isSearchLoadinging && (
-        <View className="flex-1">
-          <FlatList
-            data={searchResults}
-            className="flex flex-col bg-white"
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                key={item.id}
-                activeOpacity={0.8}
-                onPress={() => navigateToUserDetail(item.id)}
-                className="flex flex-row items-center bg-white px-5 py-3"
-              >
-                <View className="relative">
-                  {!item.avatar && (
-                    <Image
-                      className={clsx('h-12 w-12 rounded-full')}
-                      source={require('../../common/image/avatar-load.png')}
-                    />
-                  )}
-                  {item?.avatar && (
-                    <Image
-                      source={{ uri: item.avatar }}
-                      className="h-12 w-12 rounded-full"
-                    />
-                  )}
-                </View>
-                <Text className="text-basic-black pl-4 text-base font-semibold">
-                  {item.name}
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <View className="flex flex-1">
+          {searchResults && searchResults.length > 0 && !isSearchLoadinging && (
+            <View className="flex-1">
+              <FlatList
+                data={searchResults}
+                className="flex flex-col bg-white"
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    activeOpacity={0.8}
+                    onPress={() => navigateToUserDetail(item.id)}
+                    className="flex flex-row items-center bg-white px-5 py-3"
+                  >
+                    <View className="relative">
+                      {!item.avatar && (
+                        <Image
+                          className={clsx('h-12 w-12 rounded-full')}
+                          source={require('../../common/image/avatar-load.png')}
+                        />
+                      )}
+                      {item?.avatar && (
+                        <Image
+                          source={{ uri: item.avatar }}
+                          className="h-12 w-12 rounded-full"
+                        />
+                      )}
+                    </View>
+                    <Text className="text-basic-black pl-4 text-base font-semibold">
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
+          )}
+          {searchResults &&
+            searchResults.length === 0 &&
+            !isSearchLoadinging && (
+              <View className="flex flex-1 items-center pt-6">
+                <Text className="text-lg font-semibold text-gray-600">
+                  {t('search_screen.no_result')}
                 </Text>
-              </TouchableOpacity>
+              </View>
             )}
-            keyExtractor={(item) => item.id}
-          />
+
+          {isSearchLoadinging && (
+            <View className="flex flex-1 items-center justify-center">
+              <ActivityIndicator size="large" />
+            </View>
+          )}
         </View>
-      )}
-      {isSearchLoadinging && (
-        <View className="flex flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
-      )}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

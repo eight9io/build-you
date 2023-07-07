@@ -79,24 +79,23 @@ export const VideoWithPlayButton = ({
           <PlayButton />
         </TouchableOpacity>
       )}
-      {isLoading ? (
+      {isLoading && (
         <View className="bg-black-light absolute h-full w-full items-center justify-center rounded-xl  opacity-60 ">
           <ActivityIndicator animating color="#FFFFFF" size="large" />
         </View>
-      ) : null}
+      )}
     </View>
   );
 };
 
 const Biography = ({ userProfile }: IBiographyProps) => {
-
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;
   const videoSrc = userProfile?.video;
 
   return (
-    <ScrollView className='w-full px-4 '>
-      <View className="justify-content: space-between pt-4 mb-[100px] w-full ">
+    <ScrollView className="w-full px-4 ">
+      <View className="justify-content: space-between mb-[100px] w-full pt-4 ">
         {videoSrc && videoSrc !== null && (
           <View className={clsx(' flex flex-col ')}>
             <View className={clsx('py-6')}>
@@ -107,9 +106,9 @@ const Biography = ({ userProfile }: IBiographyProps) => {
         <Text className={clsx('text-h6 text-gray-dark')}>
           {bio ? bio : 'No biography yet'}
         </Text>
-        {hardSkill && <View className="align-center mt-3 flex-row flex-wrap  ">
-          {
-            hardSkill.map((content, index) => {
+        {hardSkill && (
+          <View className="align-center mt-3 flex-row flex-wrap  ">
+            {hardSkill.map((content, index) => {
               return (
                 <Button
                   containerClassName="border-gray-light ml-1 border-[1px] mx-2 my-1.5  h-[48px] flex-none px-5"
@@ -119,7 +118,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 />
               );
             })}
-        </View>}
+          </View>
+        )}
       </View>
     </ScrollView>
   );

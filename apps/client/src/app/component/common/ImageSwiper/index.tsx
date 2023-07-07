@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Image } from 'expo-image';
 import Swiper from 'react-native-swiper';
 
@@ -8,12 +8,26 @@ interface IImageSwiperProps {
 }
 
 const ImageItem = ({ imageSrc }: { imageSrc: string }) => {
+  const [isImageLoading, setIsImageLoading] = React.useState<boolean>(true);
+
+  const onLoadEnd = () => {
+    setTimeout(() => {
+      setIsImageLoading(false);
+    }, 300);
+  };
+
   return (
-    <View className="">
+    <View className="relative w-full">
       <Image
         source={{ uri: imageSrc }}
         className="aspect-square w-full rounded-xl"
+        onLoadEnd={onLoadEnd}
       />
+      {isImageLoading && (
+        <View className="absolute left-0 top-0 h-full w-full flex-row items-center justify-center">
+          <ActivityIndicator size="large" />
+        </View>
+      )}
     </View>
   );
 };

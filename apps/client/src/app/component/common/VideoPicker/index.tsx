@@ -80,7 +80,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       handleShowPermissionRequiredModal();
       return;
     }
-    
+
     // No permissions request is necessary for launching the image library
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,

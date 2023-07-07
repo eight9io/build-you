@@ -27,7 +27,10 @@ import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkil
 import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 import httpInstance from '../../../../utils/http';
 import Loading from '../../../../component/common/Loading';
-import { serviceGetListOccupation, serviceUpdateMyProfile } from '../../../../service/profile';
+import {
+  serviceGetListOccupation,
+  serviceUpdateMyProfile,
+} from '../../../../service/profile';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import { IOccupation } from 'apps/client/src/app/types/auth';
 import CustomSwitch from 'apps/client/src/app/component/common/Switch';
@@ -51,7 +54,6 @@ interface IHardSkillSectionProps {
 const HardSkillSection: FC<IHardSkillSectionProps> = ({
   setOpenModal,
   hardSkill,
-
 }) => {
   const { t } = useTranslation();
   const handleOpenEditHardSkillModal = () => {
@@ -59,7 +61,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
   };
   return (
     <View className="flex flex-col items-start justify-start ">
-      <View className="flex-row justify-between items-center w-full">
+      <View className="w-full flex-row items-center justify-between">
         <Text className="text-primary-default pr-2 text-base font-semibold">
           Hard skills
         </Text>
@@ -85,26 +87,28 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
             })}
         </View>
       </View>
-      {hardSkill.length < 3 && <View className="flex flex-row pt-2">
-        <Warning />
-        <Text className="pl-1 text-sm font-normal text-red-500">
-          {t('form_onboarding.screen_3.error') as string}
-        </Text>
-      </View>}
+      {hardSkill.length < 3 && (
+        <View className="flex flex-row pt-2">
+          <Warning />
+          <Text className="pl-1 text-sm font-normal text-red-500">
+            {t('form_onboarding.screen_3.error') as string}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
 
 const EditPersonalProfileScreen = ({ navigation }: any) => {
+  const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
 
-  const [occupationList, setOccupationList] = useState<IOccupation[]>([])
   useEffect(() => {
     const getOccupationList = async () => {
       const { data } = await serviceGetListOccupation();
       setOccupationList(data);
     };
     getOccupationList();
-  }, [])
+  }, []);
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [showOccupationPicker, setShowOccupationPicker] = useState(false);
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
@@ -112,15 +116,14 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   >();
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(false)
-  const [isErrDialog, setIsErrDialog] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isErrDialog, setIsErrDialog] = useState(false);
   const { t } = useTranslation();
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-
   useGetUserData();
-
+  const [isShowCompany, setIsShowCompany] = useState(false);
   const {
     control,
     handleSubmit,
@@ -134,17 +137,20 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     occupation: string;
     bio: string;
     hardSkill: IHardSkillProps[];
+    isShowCompany: boolean;
   }>({
     defaultValues: {
       name: userData?.name || '',
       surname: userData?.surname || '',
       birth: userData?.birth || undefined,
-      occupation: userData?.occupation?.name || 'Developer',
+      occupation: userData?.occupation?.name || '',
       bio: userData?.bio || '',
       hardSkill: userData?.hardSkill || [],
+      isShowCompany: userData?.isShowCompany || false,
     },
     resolver: yupResolver(EditProfileValidators()),
   });
+
   const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
   const removeVideo = () => {
     uploadNewVideo('');
@@ -169,6 +175,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     setShowOccupationPicker(false);
   };
   const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
+  console.log(111, errors, arrayMyHardSkills);
   useEffect(() => {
     if (userData?.hardSkill) {
       const hardSkill = userData?.hardSkill.map((item) => {
@@ -177,13 +184,19 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           id: item.skill.id,
         };
       });
+
       setArrayMyHardSkills(hardSkill);
     }
+    if (userData?.isShowCompany) {
+      setIsShowCompany(userData?.isShowCompany);
+    }
   }, [userData?.hardSkill]);
-  const { setVideo } = useCompleteProfileStore();
+
   const onSubmit = async (data: any) => {
-    const IdOccupation = occupationList.find((item) => item.name === data.occupation)?.id
-    setIsLoading(true)
+    const IdOccupation = occupationList.find(
+      (item) => item.name === data.occupation
+    )?.id;
+    setIsLoading(true);
     try {
       await Promise.all([
         uploadNewVideo(pickedVideo[0]?.uri),
@@ -193,33 +206,25 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           bio: data.bio,
           birth: data.birth,
           occupation: IdOccupation,
-          hardSkill: arrayMyHardSkills
-        })
-
-      ])
-      setIsLoading(false)
-      navigation.navigate('Profile')
+          hardSkill: arrayMyHardSkills,
+          isShowCompany: isShowCompany,
+        }),
+      ]);
+      setIsLoading(false);
+      navigation.navigate('Profile');
     } catch (error) {
-      setIsLoading(false)
-      setIsErrDialog(true)
+      setIsLoading(false);
+      setIsErrDialog(true);
     }
-
-
-
-
   };
 
   return (
     <SafeAreaView className="h-full bg-white">
-
-
-      <KeyboardAwareScrollView >
+      <KeyboardAwareScrollView>
         <View className="  h-full rounded-t-xl bg-white ">
           <ConfirmDialog
             title={t('dialog.err_title_update_profile') as string}
-            description={
-              t('dialog.err_update_profile') as string
-            }
+            description={t('dialog.err_update_profile') as string}
             isVisible={isErrDialog}
             onClosed={() => setIsErrDialog(false)}
             closeButtonLabel={t('close') || ''}
@@ -230,6 +235,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
             onClose={() => setIsShowAddHardSkillModal(false)}
             setArrayMyHardSkills={setArrayMyHardSkills}
             arrayMyHardSkills={arrayMyHardSkills}
+            setValue={setValue}
           />
           <DateTimePicker2
             shouldMinus16Years
@@ -242,7 +248,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           />
 
           <SelectPicker
-            title='Occupation'
+            title="Occupation"
             show={showOccupationPicker}
             data={occupationList}
             selectedIndex={selectedOccupationIndex}
@@ -372,14 +378,17 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                 />
               </View>
 
-              <View >
+              <View>
                 <Text className="text-primary-default py-4 text-base font-semibold">
                   {t('video_profile')}
                 </Text>
                 {userData?.video && pickedVideo.length === 0 && (
                   <View className={clsx(' flex flex-col ')}>
-                    <View >
-                      <VideoWithPlayButton src={userData?.video} heightVideo={138} />
+                    <View>
+                      <VideoWithPlayButton
+                        src={userData?.video}
+                        heightVideo={138}
+                      />
                     </View>
                   </View>
                 )}
@@ -405,7 +414,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                         value={value}
                         multiline={true}
                         numberOfLines={4}
-                      // className="h-32"
+                        // className="h-32"
                       />
                     </View>
                   )}
@@ -417,15 +426,25 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                 hardSkill={arrayMyHardSkills || []}
                 setArrayMyHardSkills={setArrayMyHardSkills}
               />
-              <Text className="text-primary-default pt-4 text-base font-semibold">
-                {t('work_place')}
-              </Text>
-              <View className="flex flex-row items-center justify-between pt-2">
-                <Text className="text-base font-light">
-                  {t('show_company')}
-                </Text>
-                <CustomSwitch textDisable="" textEnable="" />
-              </View>
+
+              {userData?.employeeOf && (
+                <>
+                  <Text className="text-primary-default pt-4 text-base font-semibold">
+                    {t('work_place')}
+                  </Text>
+                  <View className="flex flex-row items-center justify-between pt-2">
+                    <Text className="text-base font-light">
+                      {t('show_company')}
+                    </Text>
+                    <CustomSwitch
+                      textDisable=""
+                      textEnable=""
+                      onValueChange={setIsShowCompany}
+                      value={isShowCompany}
+                    />
+                  </View>
+                </>
+              )}
 
               <Button
                 title="Update"
@@ -435,7 +454,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               />
             </View>
           )}
-
         </View>
       </KeyboardAwareScrollView>
 
@@ -443,7 +461,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
         <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
       )}
     </SafeAreaView>
-
   );
 };
 

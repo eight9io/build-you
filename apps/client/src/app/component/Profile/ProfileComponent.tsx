@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 
-
 import CoverImage from './CoverImage/CoverImage';
 
 import { OutlineButton } from '../common/Buttons/Button';
@@ -13,6 +12,7 @@ import ProfileAvatar from '../common/Avatar/ProfileAvatar/ProfileAvatar';
 import { IUserData } from '../../types/user';
 import { useUserProfileStore } from '../../store/user-data';
 import ProfileTabs from './ProfileTabs/Users/ProfileTabs';
+import IconCompany from './ProfileTabs/common/asset/company.svg';
 
 export interface ITopSectionProfileProps {
   navigation: any;
@@ -29,7 +29,7 @@ export interface IProfileComponentProps {
 export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
   navigation,
   userData,
-  setIsLoading
+  setIsLoading,
 }) => {
   const { t } = useTranslation();
   const handleClicked = () => {
@@ -43,7 +43,10 @@ export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
 
   return (
     <View className={clsx('relative z-10')}>
-      <CoverImage src={userData?.cover as string} setIsLoadingCover={setIsLoading} />
+      <CoverImage
+        src={userData?.cover as string}
+        setIsLoadingCover={setIsLoading}
+      />
 
       <View className={clsx('absolute bottom-[-40px] left-0 ml-4')}>
         <ProfileAvatar
@@ -69,17 +72,26 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   setIsLoading,
 }) => {
   return (
-    <View className={clsx('relative h-full flex-1 flex-col bg-white w-full')}>
+    <View className={clsx('relative h-full w-full flex-1 flex-col bg-white')}>
       <TopSectionProfile
         navigation={navigation}
         userData={userData}
         setIsLoading={setIsLoading}
       />
-      <View className={clsx('mb-3 px-4 pt-12')}>
+      <View className={clsx(' px-4 pt-12')}>
         <Text className={clsx('text-[26px] font-medium')}>
           {userData?.name} {userData?.surname}
         </Text>
       </View>
+      {userData?.isShowCompany && userData?.employeeOf?.name && (
+        <View className={clsx('my-4 flex-row gap-2 px-4 pt-1')}>
+          <IconCompany />
+
+          <Text className={clsx(' text-[14px]  font-medium ')}>
+            {userData?.employeeOf?.name}
+          </Text>
+        </View>
+      )}
       <ProfileTabs />
     </View>
   );

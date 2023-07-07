@@ -34,7 +34,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({ item, isCompany }) => {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={() => {}}
-      className="mb-5 mr-5 flex-row items-center justify-between gap-3"
+      className="mb-5 px-1 flex-row items-center justify-between gap-3"
     >
       <View className="flex flex-row items-center justify-center">
         <Image
@@ -63,7 +63,7 @@ export const EmployeesTab: FC<IEmployeesTabProps> = ({ employeeList }) => {
   const userProfile = getUserProfile();
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className="mr-2 px-4 pb-4 pt-4 ">
+      <View className="pb-4 pt-2 ">
         <View className=" mt-4 h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}
@@ -82,24 +82,26 @@ export const EmployeesTab: FC<IEmployeesTabProps> = ({ employeeList }) => {
   };
 
   return (
-    <View className="flex-1 p-5">
-      {employeeList.length > 0 && (
-        <FlatList
-          data={employeeList}
-          ListHeaderComponent={
-            userProfile?.companyAccount ? (
-              <AddNewChallengeEmployeesButton />
-            ) : null
-          }
-          renderItem={({ item }) => (
-            <EmployeesItem
-              item={item}
-              isCompany={userProfile?.companyAccount}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      )}
+    <View className="flex-1">
+      <View className='px-4'>
+        {employeeList.length > 0 && (
+          <FlatList
+            data={employeeList}
+            ListHeaderComponent={
+              userProfile?.companyAccount ? (
+                <AddNewChallengeEmployeesButton />
+              ) : null
+            }
+            renderItem={({ item }) => (
+              <EmployeesItem
+                item={item}
+                isCompany={userProfile?.companyAccount}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        )}
+      </View>
       {employeeList.length == 0 && userProfile?.companyAccount && (
         <>
           <AddNewChallengeEmployeesButton />

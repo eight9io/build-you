@@ -18,6 +18,8 @@ import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 import BackSvg from '../asset/back.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Video } from 'expo-av';
+import LikeButtonUnregister from './LikeButtonUnregister';
+import CommentButtonUnregister from './CommentButtonUnregister';
 
 interface IChallengeImageProps {
   name: string;
@@ -126,6 +128,114 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
         </View>
       </View>
     </TouchableOpacity>
+  );
+};
+
+export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
+  itemFeedPostCard: { id, caption, user, image, video, updatedAt, challenge },
+}) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { getAccessToken } = useAuthStore();
+
+  const isToken = getAccessToken();
+  const { t } = useTranslation();
+
+  const navigateToUserProfile = () => {
+    if (!user?.id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_general_message') ||
+          'Something went wrong. Please try again later!',
+      });
+      return;
+    }
+    navigation.navigate('OtherUserProfileScreen', { userId: user?.id });
+  };
+
+  const navigateToProgressComment = () => {
+    if (!user?.id || !id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_general_message') ||
+          'Something went wrong. Please try again later!',
+      });
+      return;
+    }
+
+    navigation.navigate('ProgressCommentScreen', {
+      progressId: id,
+      ownerId: user?.id,
+      challengeName: 'Climbing Mont Blanc',
+    });
+  };
+
+  const navigateToChallengeDetail = () => {
+    if (!challenge?.id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('error_general_message') ||
+          'Something went wrong. Please try again later!',
+      });
+      return;
+    }
+    navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
+      challengeId: challenge?.id,
+    });
+  };
+
+  return (
+    <View className="relative w-full">
+      <View className="relative mb-1">
+        <View className="bg-gray-50 p-5">
+          <TouchableOpacity
+            className="mb-3 flex-row justify-between"
+            onPress={navigateToUserProfile}
+          >
+            <View className="flex-row">
+              <PostAvatar src={user?.avatar} onPress={navigateToUserProfile} />
+              <View className="ml-2">
+                <Text className="text-h6 font-bold">
+                  {user?.name} {user?.surname}
+                </Text>
+                <Text className="text-gray-dark text-xs font-light ">
+                  {getTimeDiffToNow(updatedAt)}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
+          {image && (
+            <ChallengeImage
+              name={challenge?.goal}
+              image={image as string}
+              onPress={navigateToChallengeDetail}
+            />
+          )}
+          {video && (
+            <ChallengeVideo
+              name={challenge?.goal}
+              video={video as string}
+              onPress={navigateToChallengeDetail}
+            />
+          )}
+
+          <View className="mt-4 flex-row">
+            <LikeButtonUnregister />
+            <CommentButtonUnregister />
+          </View>
+        </View>
+        <View className="bg-gray-light h-2 w-full" />
+      </View>
+      {!isToken && (
+        <TouchableOpacity
+          className=" absolute left-0 top-0 z-10 h-full w-full "
+          onPress={() => navigation.navigate('LoginScreen')}
+        ></TouchableOpacity>
+      )}
+    </View>
   );
 };
 

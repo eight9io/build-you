@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useEffect } from 'react';
-import { View, FlatList, SafeAreaView } from 'react-native';
+import { View, FlatList, SafeAreaView, Text } from 'react-native';
 import clsx from 'clsx';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { t, use } from 'i18next';
@@ -20,11 +20,11 @@ import OtherUserProfileChallengeDetailsScreen from './ProfileScreen/OtherUser/Ot
 import { serviceGetFeed, serviceGetFeedUnregistered } from '../service/feed';
 
 import { useGetListFollowing } from '../hooks/useGetUser';
-import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 import { useAuthStore } from '../store/auth-store';
 import { useUserProfileStore } from '../store/user-data';
 import { useIsFocused } from '@react-navigation/native';
+import MainSearchScreen from './MainSearchScreen/MainSearchScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -175,6 +175,14 @@ export const HomeFeedUnregister = () => {
   );
 };
 
+export const previousRouteName = (navigation) => {
+  let navRoutes = navigation.dangerouslyGetParent().state.routes;
+  if (navRoutes.length >= 2) {
+    return navRoutes[navRoutes.length - 2].routeName;
+  }
+  return navigation.state.routeName;
+};
+
 const HomeScreen = () => {
   const { getAccessToken } = useAuthStore();
 
@@ -232,6 +240,27 @@ const HomeScreen = () => {
           />
 
           <HomeScreenStack.Screen
+            name="MainSearchScreen"
+            component={MainSearchScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <Text className="text-lg font-semibold">Search User</Text>
+              ),
+              headerSearchBarOptions: {
+                hideNavigationBar: false,
+              },
+              headerLeft: () => (
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
+
+          <HomeScreenStack.Screen
             name="OtherUserProfileScreen"
             component={OtherUserProfileScreen}
             options={({ navigation }) => ({
@@ -240,7 +269,18 @@ const HomeScreen = () => {
               headerLeft: (props) => (
                 <NavButton
                   text={t('button.back') as string}
-                  onPress={() => navigation.goBack()}
+                  onPress={() => {
+                    const routes = navigation.getState()?.routes;
+                    const prevRoute = routes[routes.length - 2]; // -2 because -1 is the current route
+                    if (prevRoute.name === 'MainSearchScreen') {
+                      navigation.getParent()?.setOptions({
+                        tabBarStyle: {
+                          display: 'none',
+                        },
+                      });
+                    }
+                    navigation.goBack();
+                  }}
                   withBackIcon
                 />
               ),

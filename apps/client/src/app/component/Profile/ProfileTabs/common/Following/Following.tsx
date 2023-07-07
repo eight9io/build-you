@@ -16,7 +16,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="-mr-2 mb-[100px] flex-1 px-4 ">
+    <View className="mb-[100px] flex-1 px-4 ">
       {following && following.length > 0 && (
         <FlatList
           className="pt-4"
@@ -44,7 +44,6 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
                   />
                   <Image
                     source={{ uri: item.avatar }}
-                    resizeMode="cover"
                     className="h-10 w-10 rounded-full"
                   />
                 </View>

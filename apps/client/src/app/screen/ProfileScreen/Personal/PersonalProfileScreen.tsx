@@ -56,7 +56,7 @@ const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (
-    <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50 w-full ">
+    <SafeAreaView className="justify-content: space-between h-full w-full flex-1 bg-gray-50 ">
       <View className="h-full ">
         <ProfileComponent
           userData={userData}
@@ -108,10 +108,9 @@ const PersonalProfileScreen = () => {
               withBackIcon
             />
           ),
-
         })}
       />
-         <ProfileStack.Screen
+      <ProfileStack.Screen
         name="OtherUserProfileDetailsScreen"
         component={OtherUserProfileDetailsScreen}
         options={({ navigation }) => ({
@@ -136,7 +135,6 @@ const PersonalProfileScreen = () => {
           },
         })}
       />
-
     </ProfileStack.Navigator>
   );
 };

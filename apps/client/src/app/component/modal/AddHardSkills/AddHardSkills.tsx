@@ -22,6 +22,7 @@ interface IAddSkillModallProps {
   onClose: () => void;
   setArrayMyHardSkills: (skills: any) => void;
   arrayMyHardSkills: IHardSkill[];
+  setValue: any;
 }
 
 const NUMBER_OF_SKILL_REQUIRED = 3;
@@ -32,6 +33,7 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
   onClose,
   setArrayMyHardSkills,
   arrayMyHardSkills,
+  setValue,
 }) => {
   const { t } = useTranslation();
 
@@ -101,6 +103,7 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
 
     if (isNumberOfSkills) {
       await setArrayMyHardSkills(selectedCompetencedSkill);
+      await setValue('hardSkill', selectedCompetencedSkill);
       onClose();
     }
   };

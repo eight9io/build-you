@@ -48,7 +48,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
     followingList &&
     followingList.find((item) => item.id === otherUserData?.id);
   const [isShowModalUnfollow, setIsShowModalUnfollow] = useState(false);
-  const handleFllowClicked = async () => {
+  const handleFollowClicked = async () => {
     try {
       await serviceFollow(otherUserData?.id);
       fetchNewFollowingData(userProfile?.id, (res: any) =>
@@ -95,7 +95,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
           <ProfileAvatar isOtherUser src={otherUserData?.avatar as string} />
         ) : (
           <View className={clsx('h-[101px] w-[101px] rounded-full bg-white')}>
-            <DefaultAvatar width={'100%'} height={'100%'}/>
+            <DefaultAvatar width={'100%'} height={'100%'} />
           </View>
         )}
       </View>
@@ -105,7 +105,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
             title={t('button.follow')}
             containerClassName="px-11 py-2"
             textClassName="text-base"
-            onPress={handleFllowClicked}
+            onPress={handleFollowClicked}
           />
         ) : (
           <OutlineButton
@@ -173,7 +173,6 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { userId } = route.params;
-
 
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">

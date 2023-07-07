@@ -58,5 +58,8 @@ export interface IChallenge {
   achievementTime: Date;
   image?: string | null;
   status?: string;
+  public?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
   progress?: IProgressChallenge[];
 }

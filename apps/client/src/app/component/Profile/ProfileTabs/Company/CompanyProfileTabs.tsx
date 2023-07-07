@@ -39,8 +39,6 @@ const CompanyProfileTabs = () => {
   const { getFollowingList } = useFollowingListStore();
   const [followerList, setFollowerList] = useState([]);
   const [employeeList, setEmployeeList] = useState([]);
-  const [isShowModal, setIsShowModal] = useState(false);
-  const [isShowModalAdd, setIsShowModalAdd] = useState(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -82,7 +80,7 @@ const CompanyProfileTabs = () => {
           <Followers followers={followerList} key="1" />,
           <Following following={followingList} key="2" />,
           <Employees key="3" />,
-          <ChallengesTab userId={userId} key="4" />,
+          <ChallengesTab userId={userId} key="4" isCompanyAccount />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"

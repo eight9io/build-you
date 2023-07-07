@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, SafeAreaView, Text, ScrollView } from 'react-native';
+import { View, SafeAreaView, Text, ScrollView, FlatList } from 'react-native';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -176,9 +176,13 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
 
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <ScrollView className="h-full ">
-        <OtherUserProfileComponent userId={userId} navigation={navigation} />
-      </ScrollView>
+      <FlatList
+        data={[]}
+        renderItem={() => <View></View>}
+        ListHeaderComponent={
+          <OtherUserProfileComponent userId={userId} navigation={navigation} />
+        }
+      />
     </SafeAreaView>
   );
 };

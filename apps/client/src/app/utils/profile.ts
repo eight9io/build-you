@@ -7,33 +7,34 @@ import { useUserProfileStore } from "../store/user-data";
 
 
 export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
-    const a = serviceGetListFollowing(id)
-        .then((res) => {
-            setFollowingList(res.data)
-        })
+  const a = serviceGetListFollowing(id)
+    .then((res) => {
+      setFollowingList(res.data)
+    })
 
-        .catch((err) => {
-            GlobalDialogController.showModal({
-                title: 'Error',
-                message: t('errorMessage:500') as string,
-            });
-            if (err.response.status == 404) setFollowingList([])
-        });
+    .catch((err) => {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+      if (err.response.status == 404) setFollowingList([])
+    });
+
 
 };
-// ===== company ==== 
+// ===== company ====
 export const fetchListEmployee = (id: any, setEmployeeList: any) => {
-    serviceGetEmployeeList(id)
-        .then((res) => {
-            setEmployeeList(res.data)
-        })
-        .catch((err) => {
-            if (err.response.status == 404) setEmployeeList([])
-            GlobalDialogController.showModal({
-                title: 'Error',
-                message: t('errorMessage:500') as string,
-            });
-        });
+  serviceGetEmployeeList(id)
+    .then((res) => {
+      setEmployeeList(res.data)
+    })
+    .catch((err) => {
+      if (err.response.status == 404) setEmployeeList([])
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+    });
+
 
 };
-

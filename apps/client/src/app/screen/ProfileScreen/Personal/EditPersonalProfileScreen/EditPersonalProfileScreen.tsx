@@ -221,7 +221,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView className="h-full bg-white">
       <KeyboardAwareScrollView>
-        <View className="  h-full rounded-t-xl bg-white ">
+        <View className="mb-4 flex-1 rounded-t-xl bg-white">
           <ConfirmDialog
             title={t('dialog.err_title_update_profile') as string}
             description={t('dialog.err_update_profile') as string}
@@ -379,7 +379,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               </View>
 
               <View>
-                <Text className="text-primary-default py-4 text-base font-semibold">
+                <Text className="text-primary-default text-md py-4 font-semibold">
                   {t('video_profile')}
                 </Text>
                 {userData?.video && pickedVideo.length === 0 && (

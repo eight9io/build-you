@@ -1,5 +1,6 @@
 import queryString from 'query-string';
 import dayjs from './date.util';
+import { IChallenge } from '../types/challenge';
 export const getRandomId = () => Math.random().toString(36).slice(2, 11);
 
 export const getUrlParam = (url: string, param: string) => {
@@ -18,7 +19,7 @@ export const sortArrayByCreatedAt = (
 ) => {
   return array.sort((a, b) => {
     if (!dayjs(a[key]).isValid() || !dayjs(b[key]).isValid()) {
-        throw new Error('Invalid date');
+      throw new Error('Invalid date');
     }
     const dateA = dayjs(a[key]).toDate();
     const dateB = dayjs(b[key]).toDate();
@@ -30,4 +31,29 @@ export const sortArrayByCreatedAt = (
 
 export const isObjectEmpty = (obj: any) => {
   return Object.keys(obj).length === 0;
-}
+};
+
+export const sortChallengeByStatus = (res: any) => {
+  if (!res?.data) {
+    return [];
+  }
+  const closedChallenges = res.data
+    .filter((challenge: IChallenge) => challenge.status === 'closed')
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(b.achievementTime).getTime() -
+        new Date(a.achievementTime).getTime()
+      );
+    });
+
+  const openChallenges = res.data
+    .filter((challenge: IChallenge) => challenge.status === 'open')
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(b.achievementTime).getTime() -
+        new Date(a.achievementTime).getTime()
+      );
+    });
+
+  return [...openChallenges, ...closedChallenges];
+};

@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { Image } from 'expo-image';
 
@@ -23,14 +25,33 @@ import clsx from 'clsx';
 import { RootStackParamList } from '../../navigation/navigation.type';
 
 const MainSearchScreen = () => {
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearchLoadinging, setIsSearchLoading] = useState<boolean>(false);
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState<ISearchUserData[]>([]);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
+  const isAndroid = Platform.OS === 'android';
 
   const debouncedSearchQuery = useDebounce(searchText, 500); // Adjust the delay as needed
+
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        display: 'none',
+        backgroundColor: '#FFFFFF',
+      },
+    });
+    return () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          height: isAndroid ? 68 : 102,
+          paddingBottom: isAndroid ? 0 : 30,
+        },
+      });
+    };
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -61,9 +82,9 @@ const MainSearchScreen = () => {
 
   useEffect(() => {
     if (debouncedSearchQuery) {
-      setIsSearching(true);
+      setIsSearchLoading(true);
       servieGetUserOnSearch(debouncedSearchQuery).then((results) => {
-        setIsSearching(false);
+        setIsSearchLoading(false);
         setSearchResults(results);
       });
     } else {
@@ -72,20 +93,20 @@ const MainSearchScreen = () => {
   }, [debouncedSearchQuery]);
 
   const navigateToUserDetail = (userId: string) => {
-    const pushAction = StackActions.push('HomeScreen', {
-      screen: 'Feed',
-      params: {
-        screen: 'OtherUserProfileScreen',
-        params: { userId },
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        backgroundColor: '#FFFFFF',
+        height: isAndroid ? 68 : 102,
+        paddingBottom: isAndroid ? 0 : 30,
       },
     });
-    navigation.dispatch(pushAction);
+    navigation.navigate('OtherUserProfileScreen', { userId });
   };
 
   return (
-    <SafeAreaView className='bg-white flex-1'>
-      {searchResults.length > 0 && (
-        <View className='flex-1'>
+    <SafeAreaView className="h-full flex-1 bg-white">
+      {searchResults.length > 0 && !isSearchLoadinging && (
+        <View className="flex-1">
           <FlatList
             data={searchResults}
             className="flex flex-col bg-white"
@@ -117,6 +138,11 @@ const MainSearchScreen = () => {
             )}
             keyExtractor={(item) => item.id}
           />
+        </View>
+      )}
+      {isSearchLoadinging && (
+        <View className="flex flex-1 items-center justify-center">
+          <ActivityIndicator size="large" />
         </View>
       )}
     </SafeAreaView>

@@ -11,7 +11,7 @@ import BackSvg from '../../asset/back.svg';
 
 interface IChallengeCardProps {
   item: IChallenge;
-  isCompany?: boolean;
+  isCompanyAccount?: boolean | undefined | null;
   imageSrc: string | null | undefined;
   navigation?: any;
   handlePress?: () => void;
@@ -30,25 +30,22 @@ const CompanyTag = () => {
 const ChallengeCard: React.FC<IChallengeCardProps> = ({
   item,
   imageSrc,
-  isCompany,
+  isCompanyAccount,
   navigation,
   handlePress,
   isFromOtherUser = false,
 }) => {
-
-
   const [loading, setLoading] = useState<boolean>(true);
   const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
   const onPress = () => {
     // handlePress or navigation
     if (navigation) {
-      if (isCompany) {
+      if (isCompanyAccount) {
         return navigation.navigate('CompanyChallengeDetailScreen', {
           challengeId: item.id,
-        })
-      }
-      else if (isFromOtherUser) {
-        navigation.navigate('OtherUserProfileDetailsScreen', {
+        });
+      } else if (isFromOtherUser) {
+        navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
           challengeId: item.id,
         });
         return;
@@ -68,7 +65,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
       className={clsx('border-gray-80 mb-5 w-full rounded-xl border bg-white')}
     >
       <View className={clsx('relative w-full')}>
-        {isCompany && (
+        {isCompanyAccount && (
           <View className={clsx('absolute top-6 z-10 flex w-full items-end')}>
             <CompanyTag />
           </View>

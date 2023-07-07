@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
@@ -31,9 +31,9 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         headerShown: false,
         headerTitleAlign: 'center',
         tabBarStyle: {
-          position: 'absolute',
           backgroundColor: '#FFFFFF',
-          height: 100,
+          height: Platform.OS === 'android' ? 68 : 102,
+          paddingBottom: Platform.OS === 'android' ? 0 : 30,
         },
         headerRightContainerStyle: {
           paddingRight: 10,
@@ -64,7 +64,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
               <FeedSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar pt-1.5 text-xs font-semibold',
                   focused && 'text-primary-default'
                 )}
               >
@@ -93,7 +93,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
               <ChallengesSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar pt-1.5 text-xs font-semibold',
                   focused && 'text-primary-default'
                 )}
               >
@@ -122,7 +122,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
               <CreateSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar pt-1.5 text-xs font-semibold',
                   focused && 'text-primary-default'
                 )}
               >
@@ -151,7 +151,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
               <AlertSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar pt-1.5 text-xs font-semibold',
                   focused && 'text-primary-default'
                 )}
               >
@@ -180,7 +180,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
               <ProfileSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
               <Text
                 className={clsx(
-                  'text-gray-bottomBar text-md pt-1.5',
+                  'text-gray-bottomBar pt-1.5 text-xs font-semibold',
                   focused && 'text-primary-default'
                 )}
               >

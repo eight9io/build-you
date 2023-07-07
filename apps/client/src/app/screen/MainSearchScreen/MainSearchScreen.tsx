@@ -39,6 +39,7 @@ const MainSearchScreen = () => {
     navigation.getParent()?.setOptions({
       tabBarStyle: {
         display: 'none',
+        backgroundColor: '#FFFFFF',
       },
     });
     return () => {
@@ -103,7 +104,7 @@ const MainSearchScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="h-full flex-1 bg-white">
       {searchResults.length > 0 && !isSearchLoadinging && (
         <View className="flex-1">
           <FlatList

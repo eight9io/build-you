@@ -73,6 +73,7 @@ export const TabView: FC<ITabViewProps> = ({
           return (
             <View
               className={`${index == activeTabIndex ? 'flex-1' : 'hidden'}`}
+              key={index}
             >
               {item}
             </View>

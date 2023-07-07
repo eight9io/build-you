@@ -11,7 +11,9 @@ import OtherUserProfileScreen from './ProfileScreen/OtherUser/OtherUserProfileSc
 
 import AppTitle from '../component/common/AppTitle';
 import Button from '../component/common/Buttons/Button';
-import FeedPostCard from '../component/Post/FeedPostCard';
+import FeedPostCard, {
+  FeedPostCardUnregister,
+} from '../component/Post/FeedPostCard';
 import NavButton from '../component/common/Buttons/NavButton';
 import IconSearch from '../component/common/IconSearch/IconSearch';
 
@@ -163,7 +165,9 @@ export const HomeFeedUnregister = () => {
       <View className={clsx('h-full w-full bg-gray-50')}>
         <FlatList
           data={feedData}
-          renderItem={({ item }) => <FeedPostCard itemFeedPostCard={item} />}
+          renderItem={({ item }) => (
+            <FeedPostCardUnregister itemFeedPostCard={item} />
+          )}
           keyExtractor={(item) => item.id as unknown as string}
           onEndReached={getNewFeed}
           onEndReachedThreshold={0.7}

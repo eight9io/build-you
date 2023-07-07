@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React, { FC } from 'react';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,7 @@ interface IFeedPostCardProps {
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
+  const [isImageLoading, setIsImageLoading] = React.useState<boolean>(true);
   let newUrl = image;
 
   if (newUrl && !newUrl.startsWith('http')) {
@@ -57,7 +58,17 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
           <Image
             className={clsx('aspect-square w-full rounded-t-xl')}
             source={{ uri: newUrl }}
+            onLoadEnd={() => setIsImageLoading(false)}
           />
+        )}
+        {isImageLoading && (
+          <View
+            className={clsx(
+              'absolute left-0 top-0 h-full w-full flex-row items-center justify-center'
+            )}
+          >
+            <ActivityIndicator size="large" />
+          </View>
         )}
         <View
           className={clsx(

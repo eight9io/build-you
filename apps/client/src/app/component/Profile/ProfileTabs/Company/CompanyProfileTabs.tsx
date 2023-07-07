@@ -17,9 +17,18 @@ import {
 } from '../../../../store/user-data';
 import Biography from '../Users/Biography/Biography';
 import { useIsFocused } from '@react-navigation/native';
-import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
+
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 import GlobalDialogController from '../../../common/Dialog/GlobalDialogController';
+import {
+  serviceAddEmployee,
+  serviceRemoveEmployee,
+} from 'apps/client/src/app/service/company';
+import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
+
+import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
+import { useGetListFollowing } from 'apps/client/src/app/hooks/useGetUser';
+import { useGetListEmployee } from 'apps/client/src/app/hooks/useGetCompany';
 
 const CompanyProfileTabs = () => {
   const { t } = useTranslation();
@@ -30,8 +39,8 @@ const CompanyProfileTabs = () => {
   const { getFollowingList } = useFollowingListStore();
   const [followerList, setFollowerList] = useState([]);
   const [employeeList, setEmployeeList] = useState([]);
-
   const isFocused = useIsFocused();
+
   useEffect(() => {
     if (!userProfile?.id || !isFocused) return;
 
@@ -42,9 +51,6 @@ const CompanyProfileTabs = () => {
       setFollowerList(followerList);
     };
     try {
-      fetchListEmployee(userProfile?.id, (res: any) => {
-        return setEmployeeList(res);
-      });
       getFollowerList();
     } catch (error) {
       GlobalDialogController.showModal({
@@ -53,6 +59,8 @@ const CompanyProfileTabs = () => {
       });
     }
   }, [isFocused, userProfile?.id]);
+  useGetListEmployee();
+
   const followingList = getFollowingList();
   if (!userId) return null;
   const titles = [
@@ -71,7 +79,7 @@ const CompanyProfileTabs = () => {
           <Biography key="0" userProfile={userProfile} />,
           <Followers followers={followerList} key="1" />,
           <Following following={followingList} key="2" />,
-          <Employees key="3" employeeList={employeeList} />,
+          <Employees key="3" />,
           <ChallengesTab userId={userId} key="4" isCompanyAccount />,
         ]}
         activeTabClassName=""

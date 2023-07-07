@@ -296,9 +296,14 @@
       "title": "Unfollow this account",
       "description": "You are going to unfollow this account"
     },
+    "remove_user": {
+      "title": "Do you want to remove this employee from the company?",
+      "description": "You cannot undo this action"
+    },
     "cancel": "Cancel",
     "delete": "Delete",
     "unfollow": "Unfollow",
+    "remove": "Remove",
     "your_goal_required": "Please set your goal",
     "benefits_required": "Please list the benefits",
     "reasons_required": "Please indicate the reasons",
@@ -308,6 +313,7 @@
     "err_title_update_img": "Can’t update your image",
     "err_title_update_profile": "Can’t update your profile",
     "err_update_profile": "Something went wrong. Please try again later",
+    "err_add_employee": "The user is already part of the company",
     "open_settings": "Open settings",
     "alert_title": "Alert"
   },

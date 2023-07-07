@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { serviceAddEmployee } from '../../../service/company';
-
 import { AddNewEmployeeValidationSchema } from '../../../Validators/validators';
 
 import Header from '../../common/Header';
@@ -14,6 +12,9 @@ import TextInput from '../../common/Inputs/TextInput';
 import Close from '../../../component/asset/close.svg';
 import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
 import { useUserProfileStore } from '../../../store/user-data';
+import { serviceAddEmployee } from '../../../service/company';
+import { fetchListEmployee } from '../../../utils/profile';
+import { useEmployeeListStore } from '../../../store/company-data';
 
 interface IAddNewEmployeeModalProps {
   isVisible: boolean;
@@ -24,11 +25,14 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
   isVisible,
   onClose,
 }) => {
+  const { t } = useTranslation();
+
   const [isSuccessDialogVisible, setIsSuccessDialogVisible] =
     useState<boolean>(false);
-  const [isErrorDialogVisible, setIsErrorDialogVisible] =
-    useState<boolean>(false);
-  const { t } = useTranslation();
+  const [isErrorDialogVisible, setIsErrorDialogVisible] = useState({
+    isShow: false,
+    description: t('error_general_message') as string,
+  });
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -45,23 +49,29 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
   });
 
   // add company id
+  const { getEmployeeList, setEmployeeList } = useEmployeeListStore();
   const onSubmit = (data: any) => {
     if (!userData?.id) {
-      setIsErrorDialogVisible(true);
+      setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });
       return;
     }
-    const dataToSend = {
-      user: data.email,
-      companyMobile: userData?.id,
-    };
-    serviceAddEmployee(dataToSend)
+
+    serviceAddEmployee(data.email, userData?.id)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsSuccessDialogVisible(true);
         }
       })
       .catch((err) => {
-        setIsErrorDialogVisible(true);
+        if (err.response.status == 400) {
+          setIsErrorDialogVisible({
+            ...isErrorDialogVisible,
+            isShow: true,
+            description: t('dialog.err_add_employee') as string,
+          });
+          return;
+        }
+        setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });
       });
   };
 
@@ -75,7 +85,10 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
         title={t('success') as string}
         description={'Employee added successfully'}
         isVisible={isSuccessDialogVisible}
-        onClosed={() => {
+        onClosed={async () => {
+          await fetchListEmployee(userData?.id, (res: any) =>
+            setEmployeeList(res)
+          );
           setIsSuccessDialogVisible(false);
           onClose();
         }}
@@ -83,10 +96,10 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
       />
       <ConfirmDialog
         title={t('error') as string}
-        description={t('error_general_message') as string}
-        isVisible={isErrorDialogVisible}
+        description={isErrorDialogVisible.description}
+        isVisible={isErrorDialogVisible.isShow}
         onClosed={() => {
-          setIsErrorDialogVisible(false);
+          setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: false });
           onClose();
         }}
         closeButtonLabel={t('close') || ''}

@@ -1,26 +1,31 @@
-import { View, Text, Modal, SafeAreaView, ScrollView } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { FC, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm, Controller, set } from 'react-hook-form';
-import Header from '../common/Header';
-import ImagePicker from '../common/ImagePicker';
-import CloseIcon from '../asset/close.svg';
-import TextInput from '../common/Inputs/TextInput';
-import dayjs from '../../utils/date.util';
-import CalendarIcon from '../asset/calendar.svg';
-import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { CreateChallengeValidationSchema } from '../../Validators/CreateChallenge.validate';
-import ErrorText from '../common/ErrorText';
-import { ICreateChallenge } from '../../types/challenge';
-import { createChallenge, updateChallengeImage } from '../../service/challenge';
-import { useNav } from '../../navigation/navigation.type';
-import Loading from '../common/Loading';
 import clsx from 'clsx';
+import { FC, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import { View, Text, Modal, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useTranslation } from 'react-i18next';
+import { useForm, Controller } from 'react-hook-form';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { ICreateChallenge } from '../../types/challenge';
+import { useNav } from '../../navigation/navigation.type';
+import { CreateChallengeValidationSchema } from '../../Validators/CreateChallenge.validate';
+
+import dayjs from '../../utils/date.util';
 import httpInstance from '../../utils/http';
+import { createChallenge, updateChallengeImage } from '../../service/challenge';
+
+import Header from '../common/Header';
+import ErrorText from '../common/ErrorText';
+import ImagePicker from '../common/ImagePicker';
+import TextInput from '../common/Inputs/TextInput';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
+
+import CalendarIcon from '../asset/calendar.svg';
+import CloseIcon from '../asset/close.svg';
+
 interface ICreateChallengeModalProps {
   onClose: () => void;
 }
@@ -154,6 +159,8 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView className="flex-1 bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
+
         <KeyboardAwareScrollView>
           <ConfirmDialog
             title={isRequestSuccess ? 'Success' : 'Error'}
@@ -324,7 +331,6 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {isLoading && <Loading containerClassName="absolute top-0 left-0" />}
       </SafeAreaView>
     </Modal>
   );

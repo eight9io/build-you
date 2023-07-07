@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { IHardSkill, IHardSkillProps } from '../../../../types/user';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+import { useGetUserData } from '../../../../hooks/useGetUser';
+import { useUserProfileStore } from '../../../../store/user-data';
+import { serviceUpdateMyProfile } from '../../../../service/profile';
+
 import Warning from '../../../../component/asset/warning.svg';
 import TextInput from '../../../../component/common/Inputs/TextInput';
-
 import Button from '../../../../component/common/Buttons/Button';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
-import { useUserProfileStore } from '../../../../store/user-data';
-import { useGetUserData } from '../../../../hooks/useGetUser';
-import Loading from '../../../../component/common/Loading';
-import { serviceUpdateMyProfile } from '../../../../service/profile';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 
 const EditPersonalProfileScreen = ({ navigation }: any) => {
@@ -66,6 +67,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
+      {isLoading && <Spinner visible={isLoading} />}
+
       <View className="  h-full rounded-t-xl bg-white ">
         <ConfirmDialog
           title={t('dialog.err_title_update_profile') as string}
@@ -75,7 +78,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           closeButtonLabel={t('close') || ''}
         />
         {userData && (
-
           <KeyboardAwareScrollView className=" h-full w-full px-4 pt-8 ">
             <View>
               <Controller
@@ -133,9 +135,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               onPress={handleSubmit(onSubmit)}
             />
           </KeyboardAwareScrollView>
-        )}
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
         )}
       </View>
     </SafeAreaView>

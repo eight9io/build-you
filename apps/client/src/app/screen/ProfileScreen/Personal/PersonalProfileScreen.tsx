@@ -5,6 +5,7 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { useUserProfileStore } from '../../../store/user-data';
 
@@ -57,15 +58,14 @@ const Profile: React.FC<IProfileProps> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <SafeAreaView className="justify-content: space-between h-full w-full flex-1 bg-gray-50 ">
+      {isLoading && <Spinner visible={isLoading} />}
+
       <View className="h-full ">
         <ProfileComponent
           userData={userData}
           navigation={navigation}
           setIsLoading={setIsLoading}
         />
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
-        )}
       </View>
     </SafeAreaView>
   );

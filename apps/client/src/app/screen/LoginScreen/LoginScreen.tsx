@@ -11,8 +11,8 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import Loading from '../../component/common/Loading';
 import ErrorText from '../../component/common/ErrorText';
 import Button from '../../component/common/Buttons/Button';
 import TextInput from '../../component/common/Inputs/TextInput';
@@ -75,6 +75,7 @@ export default function Login({
     serviceLogin(data)
       .then((res) => {
         if (res.status == 201) {
+          setIsLoading(false);
           setAccessToken(res?.data.authorization || null);
           setRefreshToken(res?.data.refresh || null);
           addAuthTokensLocalOnLogin(
@@ -97,7 +98,8 @@ export default function Login({
   const [isLoading, setIsLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView className="relative h-full bg-white ">
+    <SafeAreaView className="relative h-full flex-1 bg-white">
+      {isLoading && <Spinner visible={isLoading} />}
       <View className="relative h-full bg-white ">
         <KeyboardAwareScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">
@@ -222,10 +224,6 @@ export default function Login({
             </View>
           </View>
         </KeyboardAwareScrollView>
-
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 h-full" />
-        )}
       </View>
     </SafeAreaView>
   );

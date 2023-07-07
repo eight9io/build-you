@@ -6,13 +6,13 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import CompanyComponent from '../../../component/Profile/Company/CompanyProfileComponent';
 import AppTitle from '../../../component/common/AppTitle';
 import ButtonWithIcon from '../../../component/common/Buttons/ButtonWithIcon';
-import Loading from '../../../component/common/Loading';
 import { useIsFocused } from '@react-navigation/native';
 import { serviceGetMyProfile } from '../../../service/auth';
 import { useUserProfileStore } from '../../../store/user-data';
@@ -54,15 +54,13 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
+      {isLoading && <Spinner visible={isLoading} />}
       <View className="h-full ">
         <CompanyComponent
           userData={userData}
           navigation={navigation}
           setIsLoading={setIsLoading}
         />
-        {isLoading && (
-          <Loading containerClassName="absolute top-0 left-0 z-10 h-full " />
-        )}
       </View>
     </SafeAreaView>
   );

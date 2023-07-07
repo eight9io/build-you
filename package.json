@@ -74,6 +74,7 @@
     "react-native-emoji-selector": "^0.2.0",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^15.0.1",
     "react-native-pager-view": "6.1.2",

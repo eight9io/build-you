@@ -11,7 +11,7 @@ export interface IUserData {
   };
   bio?: string;
   video?: string;
-  employeeOf?: {
+  employeeof?: {
     id: string;
     piva: string;
     email: string;

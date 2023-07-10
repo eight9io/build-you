@@ -16,6 +16,7 @@ export interface IFeedPostProps {
     name: string;
     surname: string;
     avatar: string;
+    companyAccount?: boolean;
   };
   challenge: {
     id: string;

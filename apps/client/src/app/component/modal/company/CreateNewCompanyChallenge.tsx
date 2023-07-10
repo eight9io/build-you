@@ -343,7 +343,11 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
                 </View>
 
                 <View className="flex flex-col justify-start pt-5">
-                  <CustomSwitch textDisable="Private" textEnable="Public" />
+                  <CustomSwitch
+                    textDisable="Private"
+                    textEnable="Public"
+                    setValue={setValue}
+                  />
                   <Text className="text-gray-dark pt-2 text-sm font-normal leading-4 ">
                     Everyone can join your public challenge while only user from
                     your company can join your private challenge.

@@ -6,6 +6,7 @@ interface ICustomSwitchProps {
   textEnable?: string;
   textDisable?: string;
   value?: boolean;
+  setValue?: any;
 }
 
 const CustomSwitch: FC<ICustomSwitchProps> = ({
@@ -13,9 +14,13 @@ const CustomSwitch: FC<ICustomSwitchProps> = ({
   textEnable,
   textDisable,
   value,
+  setValue,
 }) => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+    setValue && setValue('public', !isEnabled);
+  };
 
   return (
     <View className="flex flex-row items-center">

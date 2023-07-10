@@ -139,6 +139,7 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
 
   const isToken = getAccessToken();
   const { t } = useTranslation();
+  const isCompanyAccount = user.companyAccount;
 
   const navigateToUserProfile = () => {
     if (!user?.id) {
@@ -183,6 +184,7 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
     }
     navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
       challengeId: challenge?.id,
+      isCompanyAccount: isCompanyAccount ? true : false,
     });
   };
 

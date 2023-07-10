@@ -23,8 +23,9 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
 }) => {
   const { t } = useTranslation();
   const [employeeList, setEmployeeList] = useState([]);
-  const [isCurrentUserInCompany, setIsCurrentUserInCompany] =
-    useState<boolean>(false);
+  const [isCurrentUserInCompany, setIsCurrentUserInCompany] = useState<
+    boolean | null
+  >(null);
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
@@ -33,8 +34,13 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
   useEffect(() => {
     if (!otherUserData?.id) return;
     fetchListEmployee(otherUserData?.id, (res: any) => {
-      if (res?.find((item: any) => item.id === userProfile?.id)) {
+      if (
+        !!res?.find((item: any) => item?.employeeof?.id === userProfile?.id) ||
+        otherUserData?.id === userProfile?.id
+      ) {
         setIsCurrentUserInCompany(true);
+      } else {
+        setIsCurrentUserInCompany(false);
       }
       return setEmployeeList(res);
     });
@@ -67,6 +73,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                 ),
                 <ChallengesTab
                   isCompanyAccount={isCompanyAccount}
+                  isCurrentUserInCompany={isCurrentUserInCompany}
                   userId={otherUserData.id}
                   key="2"
                 />,

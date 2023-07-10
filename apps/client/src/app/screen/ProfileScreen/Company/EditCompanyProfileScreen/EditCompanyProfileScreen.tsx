@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import { IHardSkill, IHardSkillProps } from '../../../../types/user';
 
 import { useGetUserData } from '../../../../hooks/useGetUser';
 import { useUserProfileStore } from '../../../../store/user-data';
@@ -15,10 +13,10 @@ import { serviceUpdateMyProfile } from '../../../../service/profile';
 import Warning from '../../../../component/asset/warning.svg';
 import TextInput from '../../../../component/common/Inputs/TextInput';
 import Button from '../../../../component/common/Buttons/Button';
-import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
+import { EditCompanyProfileValidators } from '../../../../Validators/EditProfile.validate';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 
-const EditPersonalProfileScreen = ({ navigation }: any) => {
+const EditCompanyProfileScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isErrDialog, setIsErrDialog] = useState(false);
   const { t } = useTranslation();
@@ -34,17 +32,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     formState: { errors },
   } = useForm<{
     name: string;
-    surname: string;
-    birth: Date | undefined | string;
-    occupation: string;
     bio: string;
-    hardSkill: IHardSkillProps[];
   }>({
     defaultValues: {
       name: userData?.name || '',
       bio: userData?.bio || '',
     },
-    resolver: yupResolver(EditProfileValidators()),
+    resolver: yupResolver(EditCompanyProfileValidators()),
   });
 
   const onSubmit = (data: any) => {
@@ -56,7 +50,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       .then(async (res) => {
         if (res.status === 200) {
           setIsLoading(false);
-          navigation.navigate('Profile');
+          navigation.navigate('CompanyProfileScreen');
         }
       })
       .catch((err) => {
@@ -141,4 +135,4 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   );
 };
 
-export default EditPersonalProfileScreen;
+export default EditCompanyProfileScreen;

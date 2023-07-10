@@ -20,10 +20,14 @@ import PersonalChallengesNavigator from '../../screen/ChallengesScreen/PersonalC
 import CompanyChallengesScreen from '../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen';
 
 import FeedSvg from './asset/feed.svg';
+import FeedFillSvg from './asset/feed-fill.svg';
 import CreateSvg from './asset/create.svg';
+import CreateFillSvg from './asset/create-fill.svg';
 import ChallengesSvg from './asset/challenges.svg';
 import ProfileSvg from './asset/profile.svg';
+import ProfileFillSvg from './asset/profile-fill.svg';
 import NotificationIcon from './asset/noti.svg';
+import NotificationFillIcon from './asset/noti-fill.svg';
 import NewNotificationIcon from '../asset/new-notification-icon.svg';
 import { useGetUserData } from '../../hooks/useGetUser';
 import { useUserProfileStore } from '../../store/user-data';
@@ -82,7 +86,11 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
 
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
-              <FeedSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
+              {focused ? (
+                <FeedFillSvg fill={'#FF7B1C'} />
+              ) : (
+                <FeedSvg fill={'#6C6E76'} />
+              )}
               <Text
                 className={clsx(
                   'text-gray-bottomBar pt-1.5 text-xs font-semibold',
@@ -130,7 +138,11 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View className={clsx('flex flex-col items-center justify-center')}>
-              <CreateSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
+              {focused ? (
+                <CreateFillSvg fill={'#FF7B1C'} />
+              ) : (
+                <CreateSvg fill={'#6C6E76'} />
+              )}
               <Text
                 className={clsx(
                   'text-gray-bottomBar pt-1.5 text-xs font-semibold',
@@ -152,8 +164,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             <View className={clsx('flex flex-col items-center justify-center')}>
               {hasNewNotification ? (
                 <NewNotificationIcon fill={'#6C6E76'} />
+              ) : focused ? (
+                <NotificationFillIcon fill={'#FF7B1C'} />
               ) : (
-                <NotificationIcon fill={focused ? '#FF7B1C' : '#6C6E76'} />
+                <NotificationIcon fill={'#6C6E76'} />
               )}
               <Text
                 className={clsx(
@@ -177,7 +191,11 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               <View
                 className={clsx('flex flex-col items-center justify-center')}
               >
-                <ProfileSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
+                {focused ? (
+                  <ProfileFillSvg fill={'#FF7B1C'} />
+                ) : (
+                  <ProfileSvg fill={'#6C6E76'} />
+                )}
                 <Text
                   className={clsx(
                     'text-gray-bottomBar pt-1.5 text-xs font-semibold',
@@ -200,7 +218,11 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               <View
                 className={clsx('flex flex-col items-center justify-center')}
               >
-                <ProfileSvg fill={focused ? '#FF7B1C' : '#6C6E76'} />
+                {focused ? (
+                  <ProfileFillSvg fill={'#FF7B1C'} />
+                ) : (
+                  <ProfileSvg fill={'#6C6E76'} />
+                )}
                 <Text
                   className={clsx(
                     'text-gray-bottomBar pt-1.5 text-xs font-semibold',

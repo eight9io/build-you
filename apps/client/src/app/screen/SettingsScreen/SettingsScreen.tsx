@@ -4,9 +4,8 @@ import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-na
 import { useTranslation } from 'react-i18next';
 
 import { RootStackParamList } from '../../navigation/navigation.type';
-import { removeAuthTokensLocalOnLogout } from '../../utils/checkAuth';
+import { logout, removeAuthTokensLocalOnLogout } from '../../utils/checkAuth';
 import { useAuthStore } from '../../store/auth-store';
-
 
 import NavBarInnerScreen from '../../component/NavBar/NavBarInnerScreen';
 import Button from '../../component/common/Buttons/Button';
@@ -17,6 +16,8 @@ import NavButton from '../../component/common/Buttons/NavButton';
 import Settings from '../../component/Settings';
 import PersonalInformationScreen from '../PersonalInformations/PersonalInformationScreen';
 import DeleteAccountScreen from '../PersonalInformations/DeleteAccountScreen';
+import GlobalDialogController from '../../component/common/Dialog/GlobalDialogController';
+import { useNotificationStore } from '../../store/notification';
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
   navigation: SetingsScreenNavigationProp;
@@ -28,15 +29,26 @@ export type SetingsScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
-  const { setAccessToken, getAccessToken } = useAuthStore();
+  const { setAccessToken } = useAuthStore();
   const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+  const { revokePushToken } = useNotificationStore();
+
 
   const { t } = useTranslation();
 
-  const handleLogout = () => {
-    removeAuthTokensLocalOnLogout();
-    setIsCompleteProfileStore(null);
-    setAccessToken(null);
+  const handleLogout = async () => {
+    try {
+      await revokePushToken();
+      await removeAuthTokensLocalOnLogout();
+      setIsCompleteProfileStore(null);
+      setAccessToken(null);
+    } catch (error) {
+      console.log('error: ', error);
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+    }
   };
 
   return (

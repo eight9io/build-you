@@ -14,5 +14,6 @@
   "err_password":"Password is incorrect, Please try again",
 
   "500": "Internal error. Please try again later.",
-  "401": "Unauthorized."
+  "401": "Unauthorized.",
+  "cannot_register_notification": "Cannot turn on notification. Please try again later."
 }

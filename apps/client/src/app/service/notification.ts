@@ -1,10 +1,11 @@
-import { AxiosResponse } from 'axios';
-import * as Device from 'expo-device';
 import httpInstance from '../utils/http';
+import { IPushNotificationToken } from '../types/notification';
 
-export const serviceRegisterNotifiForDevice = async (deviceToken: string) => {
-  const response: AxiosResponse = await httpInstance.post(
-    `notification/push/${deviceToken}`
+export const updateNotificationToken = async (
+  payload: IPushNotificationToken
+) => {
+  return httpInstance.post(
+    `notification/push/${payload.notificationToken}`,
+    payload
   );
-  return response.data;
 };

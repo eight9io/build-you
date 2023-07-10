@@ -1,4 +1,4 @@
-import { NOTIFICATION_TYPES } from "../common/enum";
+import { NOTIFICATION_TOKEN_DEVICE_TYPE, NOTIFICATION_TOKEN_STATUS, NOTIFICATION_TYPES } from "../common/enum";
 import { IUserData } from "./user";
 
 export interface INotificationPayload { // Interface for the data that is sent from the FCM or APN
@@ -16,4 +16,10 @@ export interface INotification {
     type: NOTIFICATION_TYPES;
     createdAt: string;
     challengeName?: string
+}
+
+export interface IPushNotificationToken {
+    notificationToken: string;
+    status: NOTIFICATION_TOKEN_STATUS;
+    deviceType: NOTIFICATION_TOKEN_DEVICE_TYPE;
 }

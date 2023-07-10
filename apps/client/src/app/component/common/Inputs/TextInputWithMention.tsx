@@ -83,15 +83,19 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
                   className="mb-5 flex-row items-center gap-3"
                 >
                   <View className="relative">
-                    <Image
-                      className={clsx('h-10 w-10 rounded-full')}
-                      source={require('./assets/avatar-load.png')}
-                    />
-                    <Image
-                      source={{ uri: item.avatar }}
-                      resizeMode="cover"
-                      className="h-10 w-10 rounded-full"
-                    />
+                    {!item?.avatar && (
+                      <Image
+                        className={clsx('h-10 w-10 rounded-full')}
+                        source={require('./assets/avatar-load.png')}
+                      />
+                    )}
+                    {item?.avatar && (
+                      <Image
+                        source={{ uri: item.avatar }}
+                        resizeMode="cover"
+                        className="h-10 w-10 rounded-full"
+                      />
+                    )}
                   </View>
                   <Text className="text-basic-black text-base font-semibold">
                     {item.name}

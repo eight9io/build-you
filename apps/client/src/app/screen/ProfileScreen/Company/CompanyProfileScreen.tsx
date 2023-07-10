@@ -18,6 +18,10 @@ import { serviceGetMyProfile } from '../../../service/auth';
 import { useUserProfileStore } from '../../../store/user-data';
 import OtherUserProfileScreen from '../OtherUser/OtherUserProfileScreen';
 import NavButton from '../../../component/common/Buttons/NavButton';
+import OtherUserProfileChallengeDetailsScreen from '../OtherUser/OtherUserProfileChallengeDetailsScreen';
+import Button from '../../../component/common/Buttons/Button';
+
+import ShareIcon from '../../../../../assets/svg/share.svg';
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -104,6 +108,31 @@ const CompanyProfileScreen = () => {
               withBackIcon
             />
           ),
+        })}
+      />
+      <CompanyStack.Screen
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
         })}
       />
     </CompanyStack.Navigator>

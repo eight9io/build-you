@@ -18,6 +18,7 @@ import ProgressTab from '../../ChallengesScreen/PersonalChallengesScreen/Challen
 import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 import Button from '../../../component/common/Buttons/Button';
 import { useUserProfileStore } from '../../../store/user-data';
+import ParticipantsTab from '../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab';
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -34,6 +35,12 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
   i18n.t('challenge_detail_screen.description'),
 ];
 
+const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
+  i18n.t('challenge_detail_screen.progress'),
+  i18n.t('challenge_detail_screen.description'),
+  i18n.t('challenge_detail_screen.participants'),
+];
+
 const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
@@ -44,7 +51,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   );
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
-  const [isJoined, setIsJoined] = useState<boolean>(false);
+  const [isJoined, setIsJoined] = useState<boolean | null>(null);
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -74,6 +81,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             )
           ) {
             setIsJoined(true);
+          } else {
+            setIsJoined(false);
           }
         } catch (err) {
           GlobalDialogController.showModal({
@@ -85,15 +94,22 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       getChallengeParticipants();
     }
     getChallengeData();
-  }, [challengeId]);
+    if (shouldRefresh) {
+      setShouldRefresh(false);
+    }
+  }, [challengeId, shouldRefresh]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
-    console.log(challengeId, currentUser?.id);
 
     try {
-      await serviceAddChallengeParticipant(challengeId, currentUser?.id);
+      await serviceAddChallengeParticipant(challengeId);
+      GlobalDialogController.showModal({
+        title: 'Success',
+        message: 'You have joined the challenge!',
+      });
       setIsJoined(true);
+      setShouldRefresh(true);
     } catch (err) {
       GlobalDialogController.showModal({
         title: 'Error',
@@ -105,13 +121,26 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const handleLeaveChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
     try {
-      await serviceRemoveChallengeParticipant(challengeId, currentUser?.id);
+      await serviceRemoveChallengeParticipant(challengeId);
+      GlobalDialogController.showModal({
+        title: 'Success',
+        message: 'You have left the challenge!',
+      });
       setIsJoined(false);
+      setShouldRefresh(true);
     } catch (err) {
       GlobalDialogController.showModal({
         title: 'Error',
         message: 'Something went wrong. Please try again later!',
       });
+    }
+  };
+
+  const handleJoinLeaveChallenge = async () => {
+    if (isJoined) {
+      await handleLeaveChallenge();
+    } else {
+      await handleJoinChallenge();
     }
   };
 
@@ -122,38 +151,44 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         className={clsx('h-full bg-gray-50')}
         renderItem={() => <View></View>}
         ListHeaderComponent={
-          <View className="flex h-full flex-col bg-white pt-6">
+          <View className="flex h-full flex-col bg-white pt-4">
             <View className="flex flex-row items-center justify-between px-4 pb-3">
-              <View className="flex flex-row items-center  gap-2 pt-2">
+              <View className="flex flex-row items-center gap-2 pt-2">
                 <View>
                   <Text className="text-basic text-xl font-medium leading-5">
                     {challengeData?.goal}
                   </Text>
                 </View>
               </View>
-              {isCompanyAccount && (
+              {isCompanyAccount && isJoined != null && (
                 <View className="h-9">
                   <Button
                     isDisabled={false}
-                    containerClassName="bg-primary-default flex items-center justify-center px-5"
-                    textClassName="text-center text-md font-semibold text-white "
-                    disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
-                    disabledTextClassName="text-center text-md font-semibold text-gray-medium"
+                    containerClassName={
+                      isJoined
+                        ? 'border border-gray-dark flex items-center justify-center px-5'
+                        : 'bg-primary-default flex items-center justify-center px-5'
+                    }
+                    textClassName={`text-center text-md font-semibold ${
+                      isJoined ? 'text-gray-dark' : 'text-white'
+                    } `}
                     title={
                       isJoined
                         ? i18n.t('challenge_detail_screen.leave')
                         : i18n.t('challenge_detail_screen.join')
                     }
-                    onPress={
-                      isJoined ? handleLeaveChallenge : handleJoinChallenge
-                    }
+                    onPress={handleJoinLeaveChallenge}
                   />
                 </View>
               )}
             </View>
 
             <TabView
-              titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+              titles={
+                isCompanyAccount
+                  ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
+                  : CHALLENGE_TABS_TITLE_TRANSLATION
+              }
               activeTabIndex={index}
               setActiveTabIndex={setIndex}
             >
@@ -164,6 +199,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
                 setShouldRefresh={setShouldRefresh}
               />
               <DescriptionTab challengeData={challengeData} />
+              {isCompanyAccount && (
+                <ParticipantsTab participant={participantList} />
+              )}
             </TabView>
           </View>
         }

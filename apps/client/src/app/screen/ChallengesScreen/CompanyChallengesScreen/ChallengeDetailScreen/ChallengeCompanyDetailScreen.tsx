@@ -48,11 +48,6 @@ export const ChallengeCompanyDetailScreen: FC<
   const currentUser = getUserProfile();
 
   useEffect(() => {
-    // refresh when user switch tab
-    setShouldRefresh(true);
-  }, [index]);
-
-  useEffect(() => {
     const fetchParticipants = async () => {
       const response = await getChallengeParticipants(challengeId);
       setParticipantList(response.data);
@@ -70,7 +65,11 @@ export const ChallengeCompanyDetailScreen: FC<
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
     try {
-      await serviceAddChallengeParticipant(challengeId, currentUser?.id);
+      await serviceAddChallengeParticipant(challengeId);
+      GlobalDialogController.showModal({
+        title: 'Success',
+        message: 'You have joined the challenge!',
+      });
       setIsJoined(true);
     } catch (err) {
       GlobalDialogController.showModal({
@@ -83,7 +82,11 @@ export const ChallengeCompanyDetailScreen: FC<
   const handleLeaveChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
     try {
-      await serviceRemoveChallengeParticipant(challengeId, currentUser?.id);
+      await serviceRemoveChallengeParticipant(challengeId);
+      GlobalDialogController.showModal({
+        title: 'Success',
+        message: 'You have left the challenge!',
+      });
       setIsJoined(false);
     } catch (err) {
       GlobalDialogController.showModal({
@@ -108,7 +111,11 @@ export const ChallengeCompanyDetailScreen: FC<
           <View className="h-9">
             <Button
               isDisabled={false}
-              containerClassName="bg-primary-default flex items-center justify-center px-5"
+              containerClassName={
+                isJoined
+                  ? 'bg-primary-default flex items-center justify-center px-5'
+                  : 'bg-primary-default flex items-center justify-center px-5'
+              }
               textClassName="text-center text-md font-semibold text-white "
               disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
               disabledTextClassName="text-center text-md font-semibold text-gray-medium"

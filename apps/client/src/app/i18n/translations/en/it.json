@@ -351,5 +351,8 @@
   "image_picker": {
     "image_permission_required": "Permission denied. Please enable it your phone settings."
   },
-  "search_screen.no_result": "No user found"
+  "search_screen.no_result": "No user found",
+  "edit_company_profile_screen": {
+    "first_name_required": "Please fill in your first name."
+  }
 }

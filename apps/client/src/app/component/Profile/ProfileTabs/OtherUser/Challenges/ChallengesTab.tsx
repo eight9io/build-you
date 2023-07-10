@@ -1,7 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 
 import { getChallengeByUserId } from '../../../../../service/challenge';
 import { IChallenge } from '../../../../../types/challenge';
@@ -25,7 +29,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
     IChallenge[]
   >([]);
   const [isLoading, setIsLoading] = React.useState(false);
-
+  const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [userId]);
+  }, [userId, isFocused]);
 
   if (!userId) {
     return (

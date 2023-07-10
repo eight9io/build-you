@@ -63,15 +63,18 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
         }
       })
       .catch((err) => {
+        setIsErrorDialogVisible({
+          ...isErrorDialogVisible,
+          isShow: true,
+          description: t('error_general_message') as string,
+        });
         if (err.response.status == 400) {
           setIsErrorDialogVisible({
             ...isErrorDialogVisible,
             isShow: true,
             description: t('dialog.err_add_employee') as string,
           });
-          return;
         }
-        setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });
       });
   };
 

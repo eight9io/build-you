@@ -32,3 +32,15 @@ export const EditProfileValidators = () => {
 };
 
 export const OnboardingScreen4Validators = () => {};
+
+export const EditCompanyProfileValidators = () => {
+  const { t } = useTranslation();
+
+  return yup.object().shape({
+    name: yup
+      .string()
+      .trim()
+      .required(t('edit_company_profile_screen.first_name_required') as string),
+    bio: yup.string(),
+  });
+};

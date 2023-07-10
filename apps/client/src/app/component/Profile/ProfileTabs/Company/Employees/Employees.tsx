@@ -30,9 +30,7 @@ interface IEmployeesItemProps {
   item: any;
   isCompany?: boolean | null;
   navigation: any;
-  removeEmployee: (id: any) => void;
-  setIsShowModal: (value: boolean) => void;
-  isShowModal: boolean;
+  setIsShowModal: any;
 }
 interface IEmployeeProps {
   employeeList?: any;
@@ -41,24 +39,10 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
   item,
   isCompany,
   navigation,
-  isShowModal,
   setIsShowModal,
-
-  removeEmployee,
 }) => {
-  const { t } = useTranslation();
-
   return (
     <View>
-      <ConfirmDialog
-        title={t('dialog.remove_user.title') || ''}
-        description={t('dialog.remove_user.description') || ''}
-        isVisible={isShowModal}
-        onClosed={() => setIsShowModal(false)}
-        closeButtonLabel={t('dialog.cancel') || ''}
-        confirmButtonLabel={t('dialog.remove') || ''}
-        onConfirm={() => removeEmployee(item.id)}
-      />
       <View className=" mr-3 flex-row items-center justify-between  ">
         <TouchableOpacity
           activeOpacity={0.8}
@@ -88,7 +72,7 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
           <View>
             <Button
               Icon={<BinIcon fill={'black'} />}
-              onPress={() => setIsShowModal(true)}
+              onPress={() => setIsShowModal({ isShow: true, id: item.id })}
             />
           </View>
         )}
@@ -104,7 +88,10 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   const employeeList = getEmployeeList();
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
-  const [isShowModalRemove, setIsShowModalRemove] = useState(false);
+  const [isShowModalRemove, setIsShowModalRemove] = useState({
+    isShow: false,
+    id: '',
+  });
   const [isShowModalAdd, setIsShowModalAdd] = useState(false);
   const removeEmployee = async (employeeId: any) => {
     serviceRemoveEmployee(employeeId, userProfile?.id)
@@ -118,7 +105,7 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
         });
       })
       .finally(() => {
-        setIsShowModalRemove(false);
+        setIsShowModalRemove({ isShow: false, id: '' });
       });
   };
 
@@ -157,15 +144,22 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
               item={item}
               isCompany={userProfile?.companyAccount}
               navigation={navigation}
-              removeEmployee={removeEmployee}
-              isShowModal={isShowModalRemove}
               setIsShowModal={setIsShowModalRemove}
             />
           )}
           contentContainerStyle={{ paddingBottom: 300 }}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id}
         />
       )}
+      <ConfirmDialog
+        title={t('dialog.remove_user.title') || ''}
+        description={t('dialog.remove_user.description') || ''}
+        isVisible={isShowModalRemove.isShow}
+        onClosed={() => setIsShowModalRemove({ isShow: false, id: '' })}
+        closeButtonLabel={t('dialog.cancel') || ''}
+        confirmButtonLabel={t('dialog.remove') || ''}
+        onConfirm={() => removeEmployee(isShowModalRemove.id)}
+      />
       {employeeList.length == 0 && userProfile?.companyAccount && (
         <>
           <AddNewChallengeEmployeesButton />
@@ -180,7 +174,7 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
                 {t('empty_employee.content_1')}
               </Text>
               <Text className={clsx('text-center text-lg text-[#6C6E76]')}>
-                {t('empty_employee.content_2')}
+                {t('empty_employee.content_2')}{' '}
                 <Text className={clsx('text-primary-default')}>
                   {t('empty_employee.content_3')}{' '}
                 </Text>

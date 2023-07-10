@@ -20,7 +20,10 @@
       "bundleIdentifier": "it.buildyou.buildyou",
       "associatedDomains": ["applinks:it.buildyou.buildyou"],
       "buildNumber": "6",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -1,15 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  NavigationContainer,
-  NavigationContainerRef,
-  useNavigation,
-} from '@react-navigation/native';
-import {
-  NativeStackNavigationProp,
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack';
-import { Text } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
@@ -50,6 +42,8 @@ import {
   registerForPushNotificationsAsync,
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
+import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
+import { AxiosError } from 'axios';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
@@ -72,7 +66,8 @@ export const RootNavigation = () => {
   const { setAccessToken, getAccessToken } = useAuthStore();
   const { setIsCompleteProfileStore, getIsCompleteProfileStore } =
     useIsCompleteProfileStore();
-  const { setPushToken, setHasNewNotification } = useNotificationStore();
+  const { setPushToken, setHasNewNotification, pushToken } =
+    useNotificationStore();
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
   const navigationRef =
@@ -105,8 +100,10 @@ export const RootNavigation = () => {
 
   useEffect(() => {
     // Only init notification when user logined and complete profile
-    if (logined && isCompleteProfile && navigationRef?.current)
-      initNotification(navigationRef.current);
+    (async () => {
+      if (logined && isCompleteProfile && navigationRef?.current)
+        await initNotification(navigationRef.current);
+    })();
     return () => {
       // cleanup the listener and task registry
       if (notificationListener.current)
@@ -115,7 +112,6 @@ export const RootNavigation = () => {
         );
       if (responseListener.current)
         Notifications.removeNotificationSubscription(responseListener.current);
-      Notifications.unregisterTaskAsync(BACKGROUND_NOTIFICATION_TASK);
     };
   }, [logined, isCompleteProfile, navigationRef]);
 
@@ -131,17 +127,27 @@ export const RootNavigation = () => {
     }
   }, [isMainAppLoading, isCompleteProfile]);
 
-  const initNotification = (
+  const initNotification = async (
     navigation: NavigationContainerRef<RootStackParamList>
   ) => {
-    if (!Device.isDevice) return;
+    if (!Device.isDevice || pushToken) return;
 
     // register task to run whenever is received while the app is in the background
-    Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+    await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
-    registerForPushNotificationsAsync().then((token) => {
-      if (token) setPushToken(token);
-    });
+    const token = await registerForPushNotificationsAsync();
+    if (token) {
+      try {
+        await setPushToken(token);
+      } catch (error: AxiosError | any) {
+        console.log('error: ', error.response);
+        if (error.response.status === 403) return;
+        GlobalDialogController.showModal({
+          title: 'Alert',
+          message: t('errorMessage:cannot_register_notification') as string,
+        });
+      }
+    }
 
     // listener triggered whenever a notification is received while the app is in the foreground
     Notifications.addNotificationReceivedListener((notification) => {

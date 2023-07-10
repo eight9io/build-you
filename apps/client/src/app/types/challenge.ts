@@ -40,19 +40,22 @@ export interface IProgressChallenge {
   createdAt: string;
   likes?: any[];
   comments?: any[];
-  first?: boolean; 
+  first?: boolean;
+}
+
+export interface IChallengeOwner {
+  id: string;
+  avatar: string;
+  name: string;
+  surname: string;
+  companyAccount?: boolean;
 }
 
 export interface IChallenge {
   id: string;
   goal: string;
   name: string;
-  owner: {
-    id: string;
-    avatar: string;
-    name: string;
-    surname: string;
-  }[];
+  owner: IChallengeOwner | IChallengeOwner[];
   benefits: string;
   reasons: string;
   achievementTime: Date;

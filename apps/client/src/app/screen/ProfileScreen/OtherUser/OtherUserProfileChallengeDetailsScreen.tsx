@@ -49,6 +49,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
+  const [challengeOwner, setChallengeOwner] = useState<any>(null);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
   const [isJoined, setIsJoined] = useState<boolean | null>(null);
@@ -61,6 +62,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       try {
         const response = await getChallengeById(challengeId);
         setChallengeData(response.data);
+        setChallengeOwner(response.data?.owner[0]);
       } catch (err) {
         GlobalDialogController.showModal({
           title: 'Error',
@@ -144,6 +146,13 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     }
   };
 
+  const shouldRenderJoinButton =
+    challengeOwner &&
+    currentUser &&
+    isCompanyAccount &&
+    challengeOwner.id !== currentUser.id &&
+    isJoined != null;
+
   return (
     <SafeAreaView>
       <FlatList
@@ -153,14 +162,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         ListHeaderComponent={
           <View className="flex h-full flex-col bg-white pt-4">
             <View className="flex flex-row items-center justify-between px-4 pb-3">
-              <View className="flex flex-row items-center gap-2 pt-2">
-                <View>
-                  <Text className="text-basic text-xl font-medium leading-5">
-                    {challengeData?.goal}
-                  </Text>
-                </View>
+              <View className="flex w-80 flex-row items-center gap-2 pt-2">
+                <Text className="text-basic text-xl font-medium leading-5">
+                  {challengeData?.goal}
+                </Text>
               </View>
-              {isCompanyAccount && isJoined != null && (
+              {shouldRenderJoinButton && (
                 <View className="h-9">
                   <Button
                     isDisabled={false}
@@ -193,6 +200,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               setActiveTabIndex={setIndex}
             >
               <ProgressTab
+                isJoined={isJoined}
                 isOtherUserProfile
                 challengeData={challengeData}
                 shouldRefresh={shouldRefresh}

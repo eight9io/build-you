@@ -121,9 +121,6 @@ export const RootNavigation = () => {
         await SplashScreen.hideAsync();
       };
       hideSplashScreen();
-      // setTimeout(() => {
-      //   hideSplashScreen();
-      // }, 700);
     }
   }, [isMainAppLoading, isCompleteProfile]);
 

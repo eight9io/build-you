@@ -76,20 +76,21 @@ const PersonalChallenges = ({
 
   const isFocused = useIsFocused();
 
+  const fetchData = async () => {
+    try {
+      const res = await httpInstance.get(`/challenge/all/${userData?.id}`);
+      setPersonalChallengesList(sortChallengeByStatus(res));
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    } catch (err) {
+      setIsFetchingError(true);
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isFocused) return;
-    const fetchData = async () => {
-      try {
-        const res = await httpInstance.get(`/challenge/${userData?.id}`);
-        setPersonalChallengesList(sortChallengeByStatus(res));
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
-      } catch (err) {
-        setIsFetchingError(true);
-        setIsLoading(false);
-      }
-    };
     fetchData();
   }, [isFocused]);
 
@@ -113,6 +114,8 @@ const PersonalChallenges = ({
               )}
               keyExtractor={(item) => item.id}
               ListFooterComponent={<View className="h-20" />}
+              refreshing={isLoading}
+              onRefresh={fetchData}
             />
           )}
         </View>

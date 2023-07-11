@@ -83,7 +83,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       const res = await updateChallenge(challenge.id, {
         ...data,
       });
-      if (res.status === 200) {
+      if (res.status === 200 || res.status === 201) {
         openConfirmModal();
       } else {
         setErrorMessage(t('errorMessage:500') || '');

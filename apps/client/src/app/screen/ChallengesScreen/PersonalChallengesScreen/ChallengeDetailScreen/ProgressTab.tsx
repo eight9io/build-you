@@ -2,7 +2,11 @@ import { View, Text, ScrollView, FlatList } from 'react-native';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IChallenge, IProgressChallenge } from '../../../../types/challenge';
+import {
+  IChallenge,
+  IChallengeOwner,
+  IProgressChallenge,
+} from '../../../../types/challenge';
 import { useUserProfileStore } from '../../../../store/user-data';
 
 import AddIcon from '../../../../component/asset/add.svg';
@@ -19,11 +23,13 @@ import { IUserData } from 'apps/client/src/app/types/user';
 interface IProgressTabProps {
   shouldRefresh: boolean;
   challengeData: IChallenge;
+  isJoined?: boolean;
   isOtherUserProfile?: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ProgressTab: FC<IProgressTabProps> = ({
+  isJoined = false,
   shouldRefresh,
   challengeData,
   setShouldRefresh,
@@ -85,7 +91,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             }
           );
 
-          setLocalProgressData(progressDataLocal);
+        setLocalProgressData(progressDataLocal);
       });
       setShouldRefetch(false);
       setTimeout(() => {
@@ -152,13 +158,15 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
-            !isOtherUserProfile ? <AddNewChallengeProgressButton /> : null
+            !isOtherUserProfile || isJoined ? (
+              <AddNewChallengeProgressButton />
+            ) : null
           }
           renderItem={({ item, index }) => (
             <ProgressCard
               userData={
                 isOtherUserProfile
-                  ? (challengeData.owner[0] as IUserData)
+                  ? ((challengeData.owner as IChallengeOwner[])[0] as IUserData)
                   : userData
               }
               isOtherUserProfile={isOtherUserProfile}
@@ -166,7 +174,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               challengeName={challengeData.goal}
               setShouldRefresh={setShouldRefresh}
               setIsShowEditModal={setIsShowEditModal}
-              challengeOwner={challengeData?.owner[0]}
+              challengeOwner={(challengeData.owner as IChallengeOwner[])[0]}
               isChallengeCompleted={challengeData.status === 'closed'}
               setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />

@@ -102,11 +102,13 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             'flex flex-row items-center justify-between px-4 py-3'
           )}
         >
-          <View className={clsx('flex w-64 flex-row items-center')}>
+          <View className={clsx('flex-1 flex-row items-center')}>
             <CheckCircle fill={getChallengeStatusColor(item.status)} />
-            <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
-              {item?.goal}
-            </Text>
+            <View className='flex-1'>
+              <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
+                {item?.goal}
+              </Text>
+            </View>
           </View>
           <View className={clsx('w-10 flex items-end')}>
             <BackSvg />

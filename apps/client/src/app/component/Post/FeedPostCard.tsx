@@ -293,6 +293,13 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       });
       return;
     }
+    if (user?.companyAccount) {
+      navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
+        challengeId: challenge?.id,
+        isCompanyAccount: true,
+      });
+      return;
+    }
     navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
       challengeId: challenge?.id,
     });

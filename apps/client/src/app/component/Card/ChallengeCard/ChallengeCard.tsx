@@ -41,7 +41,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   isFromOtherUser = false,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
   const companyName = (item?.owner as IChallengeOwner)?.name;
 
   const onPress = () => {
@@ -77,7 +76,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             <CompanyTag companyName={companyName} />
           </View>
         )}
-        {imageSrc && !imageLoadingError && (
+        {imageSrc && (
           <Image
             className={clsx('aspect-square w-full rounded-t-xl')}
             source={{ uri: imageSrc }}
@@ -85,16 +84,15 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             onLoadEnd={() => setLoading(false)}
             onError={(err) => {
               setLoading(false);
-              setImageLoadingError(true);
             }}
           />
         )}
-        {imageLoadingError && (
+        {!imageSrc && (
           <View className={clsx('aspect-square w-full rounded-t-xl')}>
             <Image
               className={clsx('aspect-square w-full rounded-t-xl')}
               source={{
-                uri: `https://picsum.photos/200/300.webp?random=${item.id}`,
+                uri: `https://picsum.photos/400/600.webp?random=${item.id}`,
               }}
             />
           </View>
@@ -112,7 +110,9 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
               </Text>
             </View>
           </View>
-          <BackSvg />
+          <View className={clsx('w-10 flex items-end')}>
+            <BackSvg />
+          </View>
         </View>
       </View>
     </TouchableOpacity>

@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FC, useEffect, useState } from 'react';
 import i18n from '../../../../i18n/i18n';
 
-import { IChallenge } from 'apps/client/src/app/types/challenge';
+import { IChallenge, IChallengeOwner } from 'apps/client/src/app/types/challenge';
 import { getChallengeStatusColor } from '../../../../utils/common';
 import { useUserProfileStore } from '../../../../store/user-data';
 import {
@@ -107,7 +107,7 @@ export const ChallengeCompanyDetailScreen: FC<
             </Text>
           </View>
         </View>
-        {owner[0].id !== currentUser?.id && (
+        {(owner as IChallengeOwner[])[0].id !== currentUser?.id && (
           <View className="h-9">
             <Button
               isDisabled={false}

@@ -49,6 +49,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
+  const [challengeOwner, setChallengeOwner] = useState<any>(null);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
   const [isJoined, setIsJoined] = useState<boolean | null>(null);
@@ -61,6 +62,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       try {
         const response = await getChallengeById(challengeId);
         setChallengeData(response.data);
+        setChallengeOwner(response.data?.owner[0]);
       } catch (err) {
         GlobalDialogController.showModal({
           title: 'Error',
@@ -144,6 +146,13 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     }
   };
 
+  const shouldRenderJoinButton =
+    challengeOwner &&
+    currentUser &&
+    isCompanyAccount &&
+    challengeOwner.id !== currentUser.id &&
+    isJoined != null;
+
   return (
     <SafeAreaView>
       <View className="flex h-full flex-col bg-white pt-4">
@@ -188,6 +197,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
+            isJoined={isJoined}
             isOtherUserProfile
             challengeData={challengeData}
             shouldRefresh={shouldRefresh}

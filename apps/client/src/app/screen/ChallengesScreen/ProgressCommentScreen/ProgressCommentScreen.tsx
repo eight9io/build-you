@@ -104,7 +104,7 @@ const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
 };
 
 const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
-  const { progressId, ownerId, challengeName } = route.params;
+  const { progressId, ownerId } = route.params;
   const { t } = useTranslation();
   const [progressCommentScreenLoading, setProgressCommentScreenLoading] =
     useState<boolean>(true);
@@ -120,9 +120,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     const loadProgressData = async () => {
       try {
         const response = await getProgressById(progressId);
-        if (response.status === 200) {
-          setProgressData(response.data);
-        }
+        setProgressData(response.data);
       } catch (error) {
         GlobalDialogController.showModal({
           title: 'Error',
@@ -144,14 +142,12 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const loadProgressComments = async () => {
     try {
       const response = await getProgressComments(progressId);
-      if (response.status === 200) {
-        const sortedComments = sortArrayByCreatedAt(
-          response.data,
-          'createdAt',
-          'desc'
-        );
-        setComments(sortedComments);
-      }
+      const sortedComments = sortArrayByCreatedAt(
+        response.data,
+        'createdAt',
+        'desc'
+      );
+      setComments(sortedComments);
       setTimeout(() => {
         setProgressCommentScreenLoading(false);
       }, 600);

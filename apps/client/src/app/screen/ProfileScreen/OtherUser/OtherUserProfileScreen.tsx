@@ -3,7 +3,7 @@ import { View, SafeAreaView, Text, ScrollView, FlatList } from 'react-native';
 import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-
+import IconCompany from './asset/company.svg';
 import { IUserData } from '../../../types/user';
 
 import { RootStackParamList } from '../../../navigation/navigation.type';
@@ -152,7 +152,7 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
     }, 2000);
   }
   return (
-    <View className={clsx('relative mb-24 h-full flex-1 flex-col ')}>
+    <View className={clsx('relative mb-24 h-full flex-1 flex-col bg-white')}>
       {otherUserData && (
         <View>
           <TopSectionOtherProfile otherUserData={otherUserData} />
@@ -161,6 +161,15 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
               {otherUserData?.name} {otherUserData?.surname}
             </Text>
           </View>
+          {otherUserData?.isShowCompany && otherUserData?.employeeOf?.name && (
+            <View className={clsx('my-4 flex-row gap-2 px-4 pt-1')}>
+              <IconCompany />
+
+              <Text className={clsx(' text-[14px]  font-medium ')}>
+                {otherUserData?.employeeOf?.name}
+              </Text>
+            </View>
+          )}
           <OtherUserProfileTabs otherUserData={otherUserData} />
         </View>
       )}

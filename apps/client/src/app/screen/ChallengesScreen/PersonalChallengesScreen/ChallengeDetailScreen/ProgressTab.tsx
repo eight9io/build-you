@@ -23,7 +23,7 @@ import { IUserData } from 'apps/client/src/app/types/user';
 interface IProgressTabProps {
   shouldRefresh: boolean;
   challengeData: IChallenge;
-  isJoined?: boolean;
+  isJoined?: boolean | null;
   isOtherUserProfile?: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -164,11 +164,12 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           }
           renderItem={({ item, index }) => (
             <ProgressCard
-              userData={
-                isOtherUserProfile
-                  ? ((challengeData.owner as IChallengeOwner[])[0] as IUserData)
-                  : userData
-              }
+              userData={item.owner}
+              // userData={
+              //   isOtherUserProfile
+              //     ? ((challengeData.owner as IChallengeOwner[])[0] as IUserData)
+              //     : userData
+              // }
               isOtherUserProfile={isOtherUserProfile}
               itemProgressCard={item}
               challengeName={challengeData.goal}

@@ -1,3 +1,5 @@
+import { IUserData } from "./user";
+
 export interface ICreateChallenge {
   goal: string;
   benefits: string;
@@ -41,6 +43,7 @@ export interface IProgressChallenge {
   likes?: any[];
   comments?: any[];
   first?: boolean;
+  owner: IUserData | null;
 }
 
 export interface IChallengeOwner {

@@ -72,7 +72,7 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
 const renderValue = (value: string, partTypes: PartType[]) => {
   const { parts } = parseValue(value, partTypes);
   return (
-    <View className="flex w-full flex-row flex-wrap items-center">
+    <View className="flex w-full flex-col flex-wrap items-start">
       {parts.map(renderPart)}
     </View>
   );

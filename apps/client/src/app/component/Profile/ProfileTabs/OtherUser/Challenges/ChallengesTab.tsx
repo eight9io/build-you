@@ -87,8 +87,9 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
           keyExtractor={(item) => item.id}
         />
       )}
+
       {otherUserChallenge.length === 0 && !isLoading && (
-        <View className=" h-full flex-1 items-center justify-center pt-4">
+        <View className=" h-full w-full flex-1 items-center justify-center pt-44">
           <Text className="text-lg text-gray-400 ">
             {t('company_profile_screen.no_challenge')}
           </Text>

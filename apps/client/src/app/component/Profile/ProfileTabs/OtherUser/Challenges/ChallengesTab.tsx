@@ -29,6 +29,10 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   const [otherUserChallenge, setOtherUserChallenge] = React.useState<
     IChallenge[]
   >([]);
+  console.log(
+    '🚀 ~ file: ChallengesTab.tsx:30 ~ otherUserChallenge:',
+    otherUserChallenge
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

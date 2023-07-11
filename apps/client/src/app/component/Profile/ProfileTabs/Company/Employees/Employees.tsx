@@ -111,8 +111,8 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
 
   const AddNewChallengeEmployeesButton = () => {
     return (
-      <View className=" relative mr-2 px-4 pb-4 pt-4 ">
-        <View className=" mt-4 h-12">
+      <View className="relative px-2 pb-4 pt-4 ">
+        <View className="h-12">
           <Button
             title={t('challenge_detail_screen.add_new_employees') as string}
             containerClassName="bg-primary-default"

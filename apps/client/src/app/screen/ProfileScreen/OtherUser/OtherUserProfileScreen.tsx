@@ -43,6 +43,8 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
   const { getFollowingList, setFollowingList } = useFollowingListStore();
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
+  const isOtherUser = otherUserData?.id !== userProfile?.id;
+
   const followingList = getFollowingList();
   const isFollowing =
     followingList &&
@@ -99,23 +101,25 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
           </View>
         )}
       </View>
-      <View className={clsx('absolute bottom-[-25px] right-4 ')}>
-        {!isFollowing ? (
-          <OutlineButton
-            title={t('button.follow')}
-            containerClassName="px-11 py-2"
-            textClassName="text-base"
-            onPress={handleFollowClicked}
-          />
-        ) : (
-          <OutlineButton
-            title={t('button.unfollow')}
-            containerClassName="px-11 py-2  border-[#6C6E76]"
-            textClassName="text-base text-[#6C6E76]"
-            onPress={() => setIsShowModalUnfollow(true)}
-          />
-        )}
-      </View>
+      {isOtherUser && (
+        <View className={clsx('absolute bottom-[-25px] right-4 ')}>
+          {!isFollowing ? (
+            <OutlineButton
+              title={t('button.follow')}
+              containerClassName="px-11 py-2"
+              textClassName="text-base"
+              onPress={handleFollowClicked}
+            />
+          ) : (
+            <OutlineButton
+              title={t('button.unfollow')}
+              containerClassName="px-11 py-2  border-[#6C6E76]"
+              textClassName="text-base text-[#6C6E76]"
+              onPress={() => setIsShowModalUnfollow(true)}
+            />
+          )}
+        </View>
+      )}
     </View>
   );
 };

@@ -24,6 +24,7 @@ import { servieGetUserOnSearch } from '../../service/search';
 
 import clsx from 'clsx';
 import { RootStackParamList } from '../../navigation/navigation.type';
+import { useUserProfileStore } from '../../store/user-data';
 
 const MainSearchScreen = () => {
   const [isSearchLoadinging, setIsSearchLoading] = useState<boolean>(false);
@@ -37,6 +38,8 @@ const MainSearchScreen = () => {
   const isAndroid = Platform.OS === 'android';
 
   const debouncedSearchQuery = useDebounce(searchText, 500); // Adjust the delay as needed
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
 
   useEffect(() => {
     navigation.getParent()?.setOptions({
@@ -104,6 +107,15 @@ const MainSearchScreen = () => {
         paddingBottom: isAndroid ? 0 : 30,
       },
     });
+    if (userData?.id === userId) {
+      navigation.navigate('HomeScreen', {
+        screen: 'Company Profile',
+        params: {
+          screen: 'PersonalProfileScreen',
+        },
+      });
+      return;
+    }
     navigation.navigate('OtherUserProfileScreen', { userId });
   };
 

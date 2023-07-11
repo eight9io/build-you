@@ -108,7 +108,10 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
       // Create a challenge without image
       const challengeCreateResponse = await createChallenge(payload);
       // If challenge created successfully, upload image
-      if (challengeCreateResponse.status === 200 || 201) {
+      if (
+        challengeCreateResponse.status === 200 ||
+        challengeCreateResponse.status === 201
+      ) {
         setNewChallengeId(challengeCreateResponse.data.id);
         if (image) {
           const challengeImageResponse = (await updateChallengeImage(
@@ -118,9 +121,13 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             image
           )) as AxiosResponse;
 
-          if (challengeImageResponse.status === 200 || 201) {
+          if (
+            challengeImageResponse.status === 200 ||
+            challengeCreateResponse.status === 201
+          ) {
             setIsRequestSuccess(true);
             setIsShowModal(true);
+            setIsLoading(false);
             return;
           }
           setIsRequestSuccess(false);

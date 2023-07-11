@@ -155,65 +155,60 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   return (
     <SafeAreaView>
-      <FlatList
-        data={[]}
-        className={clsx('h-full bg-gray-50')}
-        renderItem={() => <View></View>}
-        ListHeaderComponent={
-          <View className="flex h-full flex-col bg-white pt-4">
-            <View className="flex flex-row items-center justify-between px-4 pb-3">
-              <View className="flex w-80 flex-row items-center gap-2 pt-2">
-                <Text className="text-basic text-xl font-medium leading-5">
-                  {challengeData?.goal}
-                </Text>
-              </View>
-              {shouldRenderJoinButton && (
-                <View className="h-9">
-                  <Button
-                    isDisabled={false}
-                    containerClassName={
-                      isJoined
-                        ? 'border border-gray-dark flex items-center justify-center px-5'
-                        : 'bg-primary-default flex items-center justify-center px-5'
-                    }
-                    textClassName={`text-center text-md font-semibold ${
-                      isJoined ? 'text-gray-dark' : 'text-white'
-                    } `}
-                    title={
-                      isJoined
-                        ? i18n.t('challenge_detail_screen.leave')
-                        : i18n.t('challenge_detail_screen.join')
-                    }
-                    onPress={handleJoinLeaveChallenge}
-                  />
-                </View>
-              )}
+      <View className="flex h-full flex-col bg-white pt-4">
+        <View className="flex flex-row items-center justify-between px-4 pb-3">
+          <View className="flex-1 flex-row items-center gap-2 pt-2">
+            <View>
+              <Text className="text-basic text-xl font-medium leading-5">
+                {challengeData?.goal}
+              </Text>
             </View>
-
-            <TabView
-              titles={
-                isCompanyAccount
-                  ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
-                  : CHALLENGE_TABS_TITLE_TRANSLATION
-              }
-              activeTabIndex={index}
-              setActiveTabIndex={setIndex}
-            >
-              <ProgressTab
-                isJoined={isJoined}
-                isOtherUserProfile
-                challengeData={challengeData}
-                shouldRefresh={shouldRefresh}
-                setShouldRefresh={setShouldRefresh}
-              />
-              <DescriptionTab challengeData={challengeData} />
-              {isCompanyAccount && (
-                <ParticipantsTab participant={participantList} />
-              )}
-            </TabView>
           </View>
-        }
-      />
+          {isCompanyAccount && isJoined != null && (
+            <View className="h-9">
+              <Button
+                isDisabled={false}
+                containerClassName={
+                  isJoined
+                    ? 'border border-gray-dark flex items-center justify-center px-5'
+                    : 'bg-primary-default flex items-center justify-center px-5'
+                }
+                textClassName={`text-center text-md font-semibold ${
+                  isJoined ? 'text-gray-dark' : 'text-white'
+                } `}
+                title={
+                  isJoined
+                    ? i18n.t('challenge_detail_screen.leave')
+                    : i18n.t('challenge_detail_screen.join')
+                }
+                onPress={handleJoinLeaveChallenge}
+              />
+            </View>
+          )}
+        </View>
+
+        <TabView
+          titles={
+            isCompanyAccount
+              ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
+              : CHALLENGE_TABS_TITLE_TRANSLATION
+          }
+          activeTabIndex={index}
+          setActiveTabIndex={setIndex}
+        >
+          <ProgressTab
+            isJoined={isJoined}
+            isOtherUserProfile
+            challengeData={challengeData}
+            shouldRefresh={shouldRefresh}
+            setShouldRefresh={setShouldRefresh}
+          />
+          <DescriptionTab challengeData={challengeData} />
+          {isCompanyAccount && (
+            <ParticipantsTab participant={participantList} />
+          )}
+        </TabView>
+      </View>
     </SafeAreaView>
   );
 };

@@ -46,13 +46,20 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
     });
   }, [otherUserData?.id]);
 
-  const titles = [
-    t('profile_screen_tabs.biography'),
-    !otherUserData?.companyAccount
-      ? t('profile_screen_tabs.skills')
-      : t('profile_screen_tabs.employees'),
-    t('profile_screen_tabs.challenges'),
-  ];
+  const titles = isCurrentUserInCompany
+    ? [
+        t('profile_screen_tabs.biography'),
+        !otherUserData?.companyAccount
+          ? t('profile_screen_tabs.skills')
+          : t('profile_screen_tabs.employees'),
+      ]
+    : [
+        t('profile_screen_tabs.biography'),
+        !otherUserData?.companyAccount
+          ? t('profile_screen_tabs.skills')
+          : t('profile_screen_tabs.employees'),
+        t('profile_screen_tabs.challenges'),
+      ];
 
   return (
     <FlatList
@@ -71,12 +78,14 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                 ) : (
                   <EmployeesCompany key="1" employeeList={employeeList} />
                 ),
-                <ChallengesTab
-                  isCompanyAccount={isCompanyAccount}
-                  isCurrentUserInCompany={isCurrentUserInCompany}
-                  userId={otherUserData.id}
-                  key="2"
-                />,
+                !isCurrentUserInCompany && (
+                  <ChallengesTab
+                    isCompanyAccount={isCompanyAccount}
+                    isCurrentUserInCompany={isCurrentUserInCompany}
+                    userId={otherUserData.id}
+                    key="2"
+                  />
+                ),
               ]}
               defaultTabClassName="text-gray-dark"
             />

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
@@ -33,6 +33,7 @@ interface ISingleCommentProps {
 }
 const renderPart = (part: Part, index: number, navigataion: any) => {
   // Mention type part
+  const [isDisabled, setDisabled] = useState<boolean>(false);
   if (part?.partType && isMentionPartType(part.partType)) {
     const { t } = useTranslation();
 
@@ -48,7 +49,14 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
         });
         return;
       }
-      // navigation.navigate('OtherUserProfileScreen', { userId: userId });
+      // prevent double click
+      if (isDisabled) {
+        return;
+      }
+      setDisabled(true);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 300);
       const pushAction = StackActions.push('HomeScreen', {
         screen: 'Feed',
         params: {
@@ -93,6 +101,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
   comment,
   onDeleteCommentSuccess,
 }) => {
+  const [isDisabled, setDisabled] = useState<boolean>(false);
   const { userProfile } = useUserProfileStore();
   const { t } = useTranslation();
 
@@ -138,6 +147,14 @@ const SingleComment: FC<ISingleCommentProps> = ({
         <TouchableOpacity
           className={clsx('flex flex-row')}
           onPress={() => {
+            // prevent double click
+            if (isDisabled) {
+              return;
+            }
+            setDisabled(true);
+            setTimeout(() => {
+              setDisabled(false);
+            }, 300);
             const pushAction = StackActions.push('HomeScreen', {
               screen: 'Feed',
               params: {

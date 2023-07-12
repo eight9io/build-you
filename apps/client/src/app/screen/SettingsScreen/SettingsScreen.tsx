@@ -39,16 +39,17 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await revokePushToken();
-      await removeAuthTokensLocalOnLogout();
-      setIsCompleteProfileStore(null);
-      setAccessToken(null);
-    } catch (error) {
-      console.log('error: ', error);
-      GlobalDialogController.showModal({
-        title: 'Error',
-        message: t('errorMessage:500') as string,
-      });
+    } catch (error: any) {
+      console.log('error: ', error.response.status);
+      if(error.response.status !== 403) // User may try to revoke the inactive token => Ignore this error
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message: t('errorMessage:500') as string,
+        });
     }
+    await removeAuthTokensLocalOnLogout();
+    setIsCompleteProfileStore(null);
+    setAccessToken(null);
   };
 
   return (

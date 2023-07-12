@@ -99,16 +99,16 @@ export const ChallengeCompanyDetailScreen: FC<
   return (
     <View className="flex h-full flex-col bg-white pt-4">
       <View className="flex flex-row items-center justify-between px-4">
-        <View className="flex flex-row items-center gap-2 pb-2 pt-4">
+        <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
           <CheckCircle fill={statusColor} />
           <View className='flex-1'>
-            <Text className="text-basic text-xl font-medium leading-5">
+            <Text className="text-2xl font-semibold">
               {goal}
             </Text>
           </View>
         </View>
         {(owner as IChallengeOwner[])[0].id !== currentUser?.id && (
-          <View className="h-9">
+          <View className="ml-2 h-9">
             <Button
               isDisabled={false}
               containerClassName={

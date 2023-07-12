@@ -49,6 +49,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
+  const [isChallengeCompleted, setIsChallengeCompleted] = useState<
+    boolean | null
+  >(null);
   const [challengeOwner, setChallengeOwner] = useState<any>(null);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
@@ -62,6 +65,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       try {
         const response = await getChallengeById(challengeId);
         setChallengeData(response.data);
+        setIsChallengeCompleted(response.data?.status === 'closed');
         setChallengeOwner(response.data?.owner[0]);
       } catch (err) {
         GlobalDialogController.showModal({
@@ -158,33 +162,46 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       <View className="flex h-full flex-col bg-white pt-4">
         <View className="flex flex-row items-center justify-between px-4 pb-3">
           <View className="flex-1 flex-row items-center pt-2">
-            <View className='flex-1'>
+            <View className="flex-1">
               <Text className="text-2xl font-semibold">
                 {challengeData?.goal}
               </Text>
             </View>
           </View>
-          {shouldRenderJoinButton && (
-            <View className="ml-2 h-9">
-              <Button
-                isDisabled={false}
-                containerClassName={
-                  isJoined
-                    ? 'border border-gray-dark flex items-center justify-center px-5'
-                    : 'bg-primary-default flex items-center justify-center px-5'
-                }
-                textClassName={`text-center text-md font-semibold ${
-                  isJoined ? 'text-gray-dark' : 'text-white'
-                } `}
-                title={
-                  isJoined
-                    ? i18n.t('challenge_detail_screen.leave')
-                    : i18n.t('challenge_detail_screen.join')
-                }
-                onPress={handleJoinLeaveChallenge}
-              />
-            </View>
-          )}
+          {isChallengeCompleted != null &&
+            !isChallengeCompleted &&
+            shouldRenderJoinButton && (
+              <View className="ml-2 h-9">
+                <Button
+                  isDisabled={false}
+                  containerClassName={
+                    isJoined
+                      ? 'border border-gray-dark flex items-center justify-center px-5'
+                      : 'bg-primary-default flex items-center justify-center px-5'
+                  }
+                  textClassName={`text-center text-md font-semibold ${
+                    isJoined ? 'text-gray-dark' : 'text-white'
+                  } `}
+                  title={
+                    isJoined
+                      ? i18n.t('challenge_detail_screen.leave')
+                      : i18n.t('challenge_detail_screen.join')
+                  }
+                  onPress={handleJoinLeaveChallenge}
+                />
+              </View>
+            )}
+          {isChallengeCompleted != null &&
+            isChallengeCompleted &&
+            shouldRenderJoinButton && (
+              <View className="ml-2 h-9">
+                <Button
+                  containerClassName="border border-gray-dark flex items-center justify-center px-5"
+                  textClassName={`text-center text-md font-semibold text-gray-dark `}
+                  title={i18n.t('challenge_detail_screen.completed')}
+                />
+              </View>
+            )}
         </View>
 
         <TabView

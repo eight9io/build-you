@@ -168,6 +168,60 @@ const PersonalChallengesNavigator = () => {
           ),
         })}
       />
+
+      <PersonalChallengesStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => {
+                const routes = navigation.getState()?.routes;
+                const prevRoute = routes[routes.length - 2]; // -2 because -1 is the current route
+                if (prevRoute?.name === 'MainSearchScreen') {
+                  navigation.getParent()?.setOptions({
+                    tabBarStyle: {
+                      display: 'none',
+                      backgroundColor: '#FFFFFF',
+                    },
+                  });
+                }
+                navigation.goBack();
+              }}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <PersonalChallengesStack.Screen
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
     </PersonalChallengesStack.Navigator>
   );
 };

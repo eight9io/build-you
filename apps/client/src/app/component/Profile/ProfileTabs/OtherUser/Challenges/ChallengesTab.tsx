@@ -3,6 +3,7 @@ import { View, Text, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
   NavigationProp,
+  StackActions,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
@@ -63,10 +64,11 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   }
 
   const handleNavigateToChallengeDetail = (challengeId: string) => {
-    navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
+    const pushAction = StackActions.push('OtherUserProfileChallengeDetailsScreen', {
       challengeId,
       isCompanyAccount: isCompanyAccount ? true : false,
     });
+    navigation.dispatch(pushAction);
   };
 
   return (

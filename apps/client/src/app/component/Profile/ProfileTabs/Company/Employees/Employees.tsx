@@ -30,12 +30,12 @@ interface IEmployeesItemProps {
   item: any;
   isCompany?: boolean | null;
   navigation: any;
-  setIsShowModal: any;
+  setIsShowModal?: any;
 }
 interface IEmployeeProps {
   employeeList?: any;
 }
-const EmployeesItem: FC<IEmployeesItemProps> = ({
+export const EmployeesItem: FC<IEmployeesItemProps> = ({
   item,
   isCompany,
   navigation,
@@ -47,7 +47,11 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() =>
-            navigation.navigate('OtherUserProfileScreen', {
+            // navigation.navigate('OtherUserProfileScreen', {
+            //   userId: item.id,
+            // })
+            // use push
+            navigation.push('OtherUserProfileScreen', {
               userId: item.id,
             })
           }
@@ -72,7 +76,9 @@ const EmployeesItem: FC<IEmployeesItemProps> = ({
           <View>
             <Button
               Icon={<BinIcon fill={'black'} />}
-              onPress={() => setIsShowModal({ isShow: true, id: item.id })}
+              onPress={() =>
+                setIsShowModal && setIsShowModal({ isShow: true, id: item.id })
+              }
             />
           </View>
         )}

@@ -21,7 +21,11 @@ import GlobalDialogController from '../Dialog/GlobalDialogController';
 
 import PopUpMenu from '../PopUpMenu';
 import PostAvatar from '../Avatar/PostAvatar/index';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import { RootStackParamList } from '../../../navigation/navigation.type';
 interface ISingleCommentProps {
   comment: IProgressComment;
@@ -44,7 +48,15 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
         });
         return;
       }
-      navigation.navigate('OtherUserProfileScreen', { userId: userId });
+      // navigation.navigate('OtherUserProfileScreen', { userId: userId });
+      const pushAction = StackActions.push('HomeScreen', {
+        screen: 'Feed',
+        params: {
+          screen: 'OtherUserProfileScreen',
+          params: { userId: userId },
+        },
+      });
+      navigation.dispatch(pushAction);
     };
     return (
       <Text
@@ -84,6 +96,8 @@ const SingleComment: FC<ISingleCommentProps> = ({
   const { userProfile } = useUserProfileStore();
   const { t } = useTranslation();
 
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const handleDeleteComment = async () => {
     try {
       const res = await deleteProgressComment(comment.id);
@@ -121,7 +135,19 @@ const SingleComment: FC<ISingleCommentProps> = ({
           'bg-gray-veryLight mb-3 flex w-full flex-row justify-between'
         )}
       >
-        <View className={clsx('flex flex-row')}>
+        <TouchableOpacity
+          className={clsx('flex flex-row')}
+          onPress={() => {
+            const pushAction = StackActions.push('HomeScreen', {
+              screen: 'Feed',
+              params: {
+                screen: 'OtherUserProfileScreen',
+                params: { userId: comment.user },
+              },
+            });
+            navigation.dispatch(pushAction);
+          }}
+        >
           <PostAvatar
             src={
               userProfile && userProfile.id === comment.user
@@ -144,7 +170,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
               {dayjs(comment.createdAt).fromNow()}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {userProfile && userProfile.id === comment.user && (
           <PopUpMenu

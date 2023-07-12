@@ -84,7 +84,7 @@ const CompanyChallenges = ({
     if (!isFocused) return;
     const fetchCompanyChallenges = async () => {
       try {
-        const res = await httpInstance.get(`/challenge/${userData?.id}`);
+        const res = await httpInstance.get(`/challenge/all/${userData?.id}`);
         setCompanyChallengesList(sortChallengeByStatus(res));
         setTimeout(() => {
           setIsLoading(false);

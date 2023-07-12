@@ -7,7 +7,9 @@ import { RootStackParamList } from '../navigation/navigation.type';
 import { INotification, INotificationPayload } from '../types/notification';
 import { NOTIFICATION_TYPES } from '../common/enum';
 
-export const registerForPushNotificationsAsync = async () => {
+export const registerForPushNotificationsAsync = async (
+  setPushToken: (value: string) => Promise<void>
+) => {
   let token;
 
   if (Device.isDevice) {
@@ -30,6 +32,10 @@ export const registerForPushNotificationsAsync = async () => {
     // This token is used to send notifications to the device directly through APNS or FCM
     // token = (await Notifications.getDevicePushTokenAsync()).data;
     console.log('Expo Push Token: ', token);
+    alert(token);
+    if (token) {
+      await setPushToken(token);
+    }
   } else {
     alert('Must use physical device for Push Notifications');
   }
@@ -46,21 +52,16 @@ export const registerForPushNotificationsAsync = async () => {
   return token;
 };
 
-export const handleNewNotification = async (notificationObject: any) => {
-  try {
-    const newNotification = {
-      id: notificationObject.messageId,
-      date: notificationObject.sentTime,
-      title: notificationObject.data.title,
-      body: notificationObject.data.message,
-      data: JSON.parse(notificationObject.data.body),
-    };
-    // add the code to do what you need with the received notification  and, e.g., set badge number on app icon
-    console.log(newNotification);
-    await Notifications.setBadgeCountAsync(1);
-  } catch (error) {
-    console.error(error);
-  }
+export const notificationPermissionIsAllowed = async (): Promise<boolean> => {
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    return existingStatus === 'granted';
+  } else throw new Error('Must use physical device for Push Notifications');
+};
+
+export const handleBackgroundNotification = async (data: any) => {
+  await increaseBadgeCount();
 };
 
 export const handleTapOnIncomingNotification = async (
@@ -137,10 +138,10 @@ export const handleTapOnNotification = async (
         //     isFollower: true,
         //   },
         // });
-      navigation.navigate('OtherUserProfileScreen', {
-        userId: 'd6dcdf47-76d3-480f-af2f-a392065ef845',
-        isFollower: true,
-      });
+        navigation.navigate('OtherUserProfileScreen', {
+          userId: 'd6dcdf47-76d3-480f-af2f-a392065ef845',
+          isFollower: true,
+        });
       // {
       //   const pushAction = StackActions.push('OtherUserProfileScreen', {
       //     userId: 'd6dcdf47-76d3-480f-af2f-a392065ef845',
@@ -173,4 +174,16 @@ export const getNotificationContent = (
       return `has started following you`;
       break;
   }
+};
+
+export const increaseBadgeCount = async () => {
+  const currentBadgeCount = await Notifications.getBadgeCountAsync();
+  console.log('currentBadgeCount: ', currentBadgeCount);
+  await Notifications.setBadgeCountAsync(currentBadgeCount + 1);
+};
+
+export const clearNotifications = async () => {
+  // Dismiss all notification trays and reset badge count
+  await Notifications.dismissAllNotificationsAsync();
+  await Notifications.setBadgeCountAsync(0);
 };

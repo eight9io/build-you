@@ -32,7 +32,6 @@ export const registerForPushNotificationsAsync = async (
     // This token is used to send notifications to the device directly through APNS or FCM
     // token = (await Notifications.getDevicePushTokenAsync()).data;
     console.log('Expo Push Token: ', token);
-    alert(token);
     if (token) {
       await setPushToken(token);
     }

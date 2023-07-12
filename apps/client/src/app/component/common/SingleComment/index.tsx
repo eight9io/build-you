@@ -27,7 +27,6 @@ interface ISingleCommentProps {
   comment: IProgressComment;
   onDeleteCommentSuccess: () => void;
 }
-
 const renderPart = (part: Part, index: number, navigataion: any) => {
   // Mention type part
   if (part?.partType && isMentionPartType(part.partType)) {
@@ -73,7 +72,7 @@ const renderValue = (value: string, partTypes: PartType[]) => {
   const { parts } = parseValue(value, partTypes);
   return (
     <View className="flex w-full flex-col flex-wrap items-start">
-      {parts.map(renderPart)}
+      <Text>{parts.map(renderPart)}</Text>
     </View>
   );
 };
@@ -159,6 +158,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
           />
         )}
       </View>
+
       {renderValue(comment.comment, [
         {
           trigger: '@',

@@ -8,6 +8,7 @@ import { getChallengeStatusColor } from '../../../utils/common';
 
 import CheckCircle from '../../asset/check_circle.svg';
 import BackSvg from '../../asset/back.svg';
+import { isArray } from 'util';
 
 interface IChallengeCardProps {
   item: IChallenge;
@@ -18,9 +19,14 @@ interface IChallengeCardProps {
   isFromOtherUser?: boolean;
 }
 
-const CompanyTag = ({ companyName }: { companyName: string }) => {
-  if (companyName?.length > 10) {
-    companyName = companyName.slice(0, 10) + '...';
+const CompanyTag = ({
+  companyName,
+}: {
+  companyName: string | false | undefined;
+}) => {
+  if (!companyName) return null;
+  if (companyName?.length > 13) {
+    companyName = companyName.slice(0, 13) + '...';
   }
   return (
     <View className="bg-primary-default flex h-8 w-2/5 flex-row items-center rounded-l-md">
@@ -41,7 +47,10 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   isFromOtherUser = false,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const companyName = (item?.owner as IChallengeOwner)?.name;
+  const challengeOwner = Array.isArray(item?.owner)
+    ? item?.owner[0]
+    : item?.owner;
+  const companyName = challengeOwner.companyAccount && challengeOwner?.name;
 
   const onPress = () => {
     // handlePress or navigation
@@ -71,7 +80,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
       className={clsx('border-gray-80 mb-5 w-full rounded-xl border bg-white')}
     >
       <View className={clsx('relative w-full')}>
-        {isCompanyAccount && (
+        {(isCompanyAccount || companyName) && (
           <View className={clsx('absolute top-6 z-10 flex w-full items-end')}>
             <CompanyTag companyName={companyName} />
           </View>
@@ -104,13 +113,13 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
         >
           <View className={clsx('flex-1 flex-row items-center')}>
             <CheckCircle fill={getChallengeStatusColor(item.status)} />
-            <View className='flex-1'>
+            <View className="flex-1">
               <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
                 {item?.goal}
               </Text>
             </View>
           </View>
-          <View className={clsx('w-10 flex items-end')}>
+          <View className={clsx('flex w-10 items-end')}>
             <BackSvg />
           </View>
         </View>

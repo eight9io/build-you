@@ -157,15 +157,15 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     <SafeAreaView>
       <View className="flex h-full flex-col bg-white pt-4">
         <View className="flex flex-row items-center justify-between px-4 pb-3">
-          <View className="flex-1 flex-row items-center gap-2 pt-2">
-            <View>
-              <Text className="text-basic text-xl font-medium leading-5">
+          <View className="flex-1 flex-row items-center pt-2">
+            <View className='flex-1'>
+              <Text className="text-2xl font-semibold">
                 {challengeData?.goal}
               </Text>
             </View>
           </View>
           {isCompanyAccount && isJoined != null && (
-            <View className="h-9">
+            <View className="ml-2 h-9">
               <Button
                 isDisabled={false}
                 containerClassName={

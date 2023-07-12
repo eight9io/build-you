@@ -164,7 +164,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               </Text>
             </View>
           </View>
-          {isCompanyAccount && isJoined != null && (
+          {shouldRenderJoinButton && (
             <View className="ml-2 h-9">
               <Button
                 isDisabled={false}

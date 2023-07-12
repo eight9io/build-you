@@ -154,23 +154,6 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
     navigation.navigate('OtherUserProfileScreen', { userId: user?.id });
   };
 
-  const navigateToProgressComment = () => {
-    if (!user?.id || !id) {
-      GlobalDialogController.showModal({
-        title: 'Error',
-        message:
-          t('error_general_message') ||
-          'Something went wrong. Please try again later!',
-      });
-      return;
-    }
-
-    navigation.navigate('ProgressCommentScreen', {
-      progressId: id,
-      ownerId: user?.id,
-      challengeName: 'Climbing Mont Blanc',
-    });
-  };
 
   const navigateToChallengeDetail = () => {
     if (!challenge?.id) {

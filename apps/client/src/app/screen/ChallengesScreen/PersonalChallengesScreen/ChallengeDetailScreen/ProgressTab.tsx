@@ -100,9 +100,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     }
   }, [shouldRefetch, isFocused]);
 
-  const { getUserProfile } = useUserProfileStore();
-  const userData = getUserProfile();
-
   const handleEditProgress = () => {
     setShouldRefresh(true);
   };

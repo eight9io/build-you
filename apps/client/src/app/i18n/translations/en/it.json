@@ -25,6 +25,7 @@
   "challenge_detail_screen.add_new_employees": "Add new employees",
   "challenge_detail_screen.join": "Join",
   "challenge_detail_screen.leave": "Leave",
+  "challenge_detail_screen.completed": "Completed",
   "challenge_detail_screen.no_progress_yet": "No progress yet",
   "challenge_detail_screen.not_participants": "No participants at the moment ",
   "bottom_nav": {

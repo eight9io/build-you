@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useState, FC, useEffect } from 'react';
 import {
   NavigationProp,
@@ -135,7 +135,19 @@ const ProgressCard: FC<IProgressCardProps> = ({
   return (
     <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
-        <View className="flex flex-row">
+        <TouchableOpacity
+          className="flex flex-row"
+          onPress={() => {
+            if (!userData?.id) return;
+            // navigation.push('OtherUserProfileScreen', {
+            //   userId: userData?.id,
+            // });
+            const pushAction = StackActions.push('OtherUserProfileScreen', {
+              userId: userData?.id,
+            });
+            navigation.dispatch(pushAction);
+          }}
+        >
           <ProgressCardAvatar src={userData?.avatar} />
           <View className="ml-2">
             <Text
@@ -157,7 +169,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
               )}
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
         {!isOtherUserProfile && isProgressOwner && (
           <PopUpMenu
             options={progressOptions}

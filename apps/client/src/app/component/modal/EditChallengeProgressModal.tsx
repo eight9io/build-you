@@ -127,9 +127,9 @@ export const EditChallengeProgressModal: FC<
               <ErrorText message={errors.caption.message} />
             ) : null}
           </View>
-          {progress.image ? (
+          {progress?.image ? (
             <View className="mt-5 aspect-square w-full">
-              <ImageSwiper imageSrc={progress.image} />
+              <ImageSwiper imageSrc={progress?.image.replace(';', '') || ''} />
             </View>
           ) : progress.video ? (
             <View className="mt-5 aspect-square w-full">

@@ -65,6 +65,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const timeDiff = getTimeDiffToNow(itemProgressCard.createdAt);
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+  const currentUserId = currentUser?.id;
 
   const {
     isVisible: isAckModalVisible,
@@ -129,14 +130,20 @@ const ProgressCard: FC<IProgressCardProps> = ({
     handleDeleteProgressSuccess(); // Navigate to the challenge progresses screen => delete it and refresh the list
   };
 
+  const isProgressOwner = userData && userData?.id === currentUserId;
+
   return (
     <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
         <View className="flex flex-row">
           <ProgressCardAvatar src={userData?.avatar} />
           <View className="ml-2">
-            <Text className="text-h6 font-bold">
-              {userData?.name} {userData?.surname}{' '}
+            <Text
+              className={`text-h6 font-bold ${
+                isProgressOwner ? 'text-primary-default' : 'text-black'
+              }`}
+            >
+              {userData?.name} {userData?.surname}
             </Text>
             <View className="flex flex-row items-center">
               <Text className="text-gray-dark text-xs font-light ">
@@ -151,7 +158,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </View>
-        {!isOtherUserProfile && (
+        {!isOtherUserProfile && isProgressOwner && (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}
@@ -164,7 +171,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
         </Text>
       )}
       {extractedImageUrls && (
-        <View className="aspect-square w-full mt-2">
+        <View className="mt-2 aspect-square w-full">
           <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
       )}

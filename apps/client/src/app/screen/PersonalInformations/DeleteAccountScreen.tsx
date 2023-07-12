@@ -20,6 +20,7 @@ import { logout, removeAuthTokensLocalOnLogout } from '../../utils/checkAuth';
 import { useAuthStore } from '../../store/auth-store';
 import { useIsCompleteProfileStore } from '../../store/is-complete-profile';
 import { useNotificationStore } from '../../store/notification';
+import GlobalDialogController from '../../component/common/Dialog/GlobalDialogController';
 
 export default function DeleteAccountScreen({ navigation }: any) {
   const { setAccessToken } = useAuthStore();
@@ -81,7 +82,16 @@ export default function DeleteAccountScreen({ navigation }: any) {
     try {
       // Revoke push token before deleting account
       await revokePushToken();
-
+    } catch (error: any) {
+      console.log('error: ', error.response.status);
+      if (error.response.status !== 403)
+        // User may try to revoke the inactive token => Ignore this error
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message: t('errorMessage:500') as string,
+        });
+    }
+    try {
       const res = await serviceDeleteAccount(userData?.id);
       if (res.status == 200) {
         await handleLogOut();

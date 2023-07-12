@@ -188,6 +188,7 @@ const CompanyChallengeDetailScreen = ({
   );
 
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
 
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
@@ -214,6 +215,7 @@ const CompanyChallengeDetailScreen = ({
 
   useEffect(() => {
     if (!challengeId && !shouldRefresh) return;
+    if (isFirstLoad) setIsFirstLoad(false);
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
@@ -221,7 +223,7 @@ const CompanyChallengeDetailScreen = ({
   }, [challengeId, shouldRefresh]);
 
   useEffect(() => {
-    if (!isFocused) return;
+    if (!isFocused || isFirstLoad) return;
     setShouldRefresh(true);
   }, [isFocused]);
 

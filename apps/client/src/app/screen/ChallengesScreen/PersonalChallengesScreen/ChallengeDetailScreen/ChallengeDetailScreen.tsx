@@ -31,10 +31,6 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { goal } = challengeData;
   const statusColor = getChallengeStatusColor(challengeData?.status);
 
-  useEffect(() => {
-    // refresh when user switch tab
-    setShouldRefresh(true);
-  }, [index]);
 
   return (
     <View className="flex h-full flex-col bg-white py-2">

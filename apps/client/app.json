@@ -4,7 +4,7 @@
     "slug": "build-you",
     "version": "1.2.0",
     "orientation": "portrait",
-    "icon": "./src/app/common/IOS-light/AppIcon.appiconset/Buildyou-icon-1024.png",
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
@@ -27,8 +27,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "it.buildyou.buildyou",
       "permissions": [

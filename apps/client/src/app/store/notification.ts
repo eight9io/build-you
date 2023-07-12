@@ -1,12 +1,14 @@
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
-import { updateNotificationToken } from '../service/notification';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import { updateNotificationToken } from '../service/notification';
 import {
   NOTIFICATION_TOKEN_DEVICE_TYPE,
   NOTIFICATION_TOKEN_STATUS,
 } from '../common/enum';
+import { clearNotifications } from '../utils/notification.util';
 
 export interface NotificationStore {
   pushToken?: string;
@@ -53,8 +55,12 @@ export const useNotificationStore = create<NotificationStore>()(
         });
         set({ pushToken: undefined });
       },
-      setHasNewNotification: (value) => {
+      setHasNewNotification: async (value) => {
         set({ hasNewNotification: value });
+        if (!value) {
+          // Dismiss all notification trays and reset badge count
+          await clearNotifications();
+        }
       },
       getHasNewNotification: () => get().hasNewNotification,
     }),

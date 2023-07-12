@@ -68,7 +68,6 @@ const CompanyProfileTabs = () => {
     t('profile_screen_tabs.followers'),
     t('profile_screen_tabs.following'),
     t('profile_screen_tabs.employees'),
-    t('profile_screen_tabs.challenges'),
   ];
 
   return (
@@ -80,12 +79,6 @@ const CompanyProfileTabs = () => {
           <Followers followers={followerList} key="1" />,
           <Following following={followingList} key="2" />,
           <Employees key="3" />,
-          <ChallengesTab
-            userId={userId}
-            key="4"
-            isCompanyAccount
-            isCurrentUserInCompany
-          />,
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"

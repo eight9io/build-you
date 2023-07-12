@@ -7,6 +7,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as TaskManager from 'expo-task-manager';
+import { AxiosError } from 'axios';
+import { AppState } from 'react-native';
 import { RootStackParamList } from './navigation.type';
 
 import Header from '../component/common/Header';
@@ -37,13 +39,14 @@ import { useIsCompleteProfileStore } from '../store/is-complete-profile';
 import BottomNavBarWithoutLogin from '../component/BottomNavBar/BottomNavBarWithoutLogin';
 import GlobalDialog from '../component/common/Dialog/GlobalDialog';
 import {
-  handleNewNotification,
+  handleBackgroundNotification,
   handleTapOnIncomingNotification,
+  increaseBadgeCount,
+  notificationPermissionIsAllowed,
   registerForPushNotificationsAsync,
 } from '../utils/notification.util';
 import { useNotificationStore } from '../store/notification';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
-import { AxiosError } from 'axios';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
@@ -51,10 +54,18 @@ const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: true, // Set to true to display notifications in foreground, issue: https://github.com/expo/expo/issues/20351
+    // On Android, setting `shouldPlaySound: false` will result in the drop-down notification alert **not** showing, no matter what the priority is.
+    // This setting will also override any channel-specific sounds you may have configured.
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
+TaskManager.defineTask(
+  BACKGROUND_NOTIFICATION_TASK,
+  async ({ data, error, executionInfo }) => {
+    await handleBackgroundNotification(data);
+  }
+);
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -62,20 +73,21 @@ SplashScreen.preventAutoHideAsync();
 export const RootNavigation = () => {
   const { t } = useTranslation();
   const [isMainAppLoading, setIsMainAppLoading] = useState<boolean>(true);
-
+  const appState = useRef(AppState.currentState);
   const { setAccessToken, getAccessToken } = useAuthStore();
   const { setIsCompleteProfileStore, getIsCompleteProfileStore } =
     useIsCompleteProfileStore();
-  const { setPushToken, setHasNewNotification, pushToken } =
-    useNotificationStore();
+  const {
+    setPushToken,
+    setHasNewNotification,
+    pushToken,
+    revokePushToken,
+    getPushToken,
+  } = useNotificationStore();
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
   const navigationRef =
     useRef<NavigationContainerRef<RootStackParamList>>(null);
-  TaskManager.defineTask(
-    BACKGROUND_NOTIFICATION_TASK,
-    ({ data, error, executionInfo }) => handleNewNotification(data.notification)
-  );
 
   const logined = getAccessToken();
 
@@ -97,6 +109,47 @@ export const RootNavigation = () => {
       setIsMainAppLoading(false);
     }
   }, [logined]);
+
+  // Handle notification permission change
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async (nextAppState) => {
+        if (
+          appState.current.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+          // App has come to the foreground => Check notification permission in case user change it in the setting
+          const notificationIsPermitted =
+            await notificationPermissionIsAllowed();
+          const currentPushToken = getPushToken(); // Ensure to get the latest push token in case state is not updated yet
+          if (!notificationIsPermitted && currentPushToken) {
+            // Case user turn off notification in the setting then back to the app => revoke push token
+            await revokePushToken();
+          } else if (notificationIsPermitted && !currentPushToken) {
+            // Case user turn on notification in the setting then back to the app => register push token
+            try {
+              await registerForPushNotificationsAsync(setPushToken);
+            } catch (error: AxiosError | any) {
+              console.log('error: ', error.response);
+              if (error.response.status !== 403)
+                GlobalDialogController.showModal({
+                  title: 'Alert',
+                  message: t(
+                    'errorMessage:cannot_register_notification'
+                  ) as string,
+                });
+            }
+          }
+        }
+        appState.current = nextAppState;
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     // Only init notification when user logined and complete profile
@@ -127,36 +180,41 @@ export const RootNavigation = () => {
   const initNotification = async (
     navigation: NavigationContainerRef<RootStackParamList>
   ) => {
-    if (!Device.isDevice || pushToken) return;
+    if (!Device.isDevice) return;
 
-    // register task to run whenever is received while the app is in the background
-    await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
-
-    const token = await registerForPushNotificationsAsync();
-    if (token) {
+    if (!pushToken) {
       try {
-        await setPushToken(token);
+        // register task to run whenever is received while the app is in the background
+        await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+      } catch (error) {
+        console.log('error: ', error);
+      }
+
+      try {
+        await registerForPushNotificationsAsync(setPushToken);
       } catch (error: AxiosError | any) {
         console.log('error: ', error.response);
-        if (error.response.status === 403) return;
-        GlobalDialogController.showModal({
-          title: 'Alert',
-          message: t('errorMessage:cannot_register_notification') as string,
-        });
+        if (error.response.status !== 403)
+          GlobalDialogController.showModal({
+            title: 'Alert',
+            message: t('errorMessage:cannot_register_notification') as string,
+          });
       }
     }
-
     // listener triggered whenever a notification is received while the app is in the foreground
-    Notifications.addNotificationReceivedListener((notification) => {
-      console.log('notification: ', notification.request.content.data);
-      setHasNewNotification(true);
-    });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener(async (notification) => {
+        console.log('notification: ', notification.request.content.data);
+        await increaseBadgeCount();
+        setHasNewNotification(true);
+      });
 
     // listener triggered whenever a user taps on a notification
-    Notifications.addNotificationResponseReceivedListener((response) => {
-      handleTapOnIncomingNotification(response, navigation);
-      setHasNewNotification(false); // reset the new notification flag
-    });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        handleTapOnIncomingNotification(response, navigation);
+        setHasNewNotification(false); // reset the new notification flag
+      });
   };
 
   return (

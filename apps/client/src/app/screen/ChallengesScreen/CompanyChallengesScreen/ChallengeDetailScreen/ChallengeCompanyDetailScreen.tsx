@@ -2,7 +2,10 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FC, useEffect, useState } from 'react';
 import i18n from '../../../../i18n/i18n';
 
-import { IChallenge, IChallengeOwner } from 'apps/client/src/app/types/challenge';
+import {
+  IChallenge,
+  IChallengeOwner,
+} from 'apps/client/src/app/types/challenge';
 import { getChallengeStatusColor } from '../../../../utils/common';
 import { useUserProfileStore } from '../../../../store/user-data';
 import {
@@ -96,15 +99,21 @@ export const ChallengeCompanyDetailScreen: FC<
     }
   };
 
+  const handleJoinLeaveChallenge = async () => {
+    if (isJoined) {
+      await handleLeaveChallenge();
+    } else {
+      await handleJoinChallenge();
+    }
+  };
+
   return (
     <View className="flex h-full flex-col bg-white pt-4">
       <View className="flex flex-row items-center justify-between px-4">
         <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
           <CheckCircle fill={statusColor} />
-          <View className='flex-1'>
-            <Text className="text-2xl font-semibold">
-              {goal}
-            </Text>
+          <View className="flex-1">
+            <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
         </View>
         {(owner as IChallengeOwner[])[0].id !== currentUser?.id && (
@@ -113,10 +122,12 @@ export const ChallengeCompanyDetailScreen: FC<
               isDisabled={false}
               containerClassName={
                 isJoined
-                  ? 'bg-primary-default flex items-center justify-center px-5'
+                  ? 'border border-gray-dark flex items-center justify-center px-5'
                   : 'bg-primary-default flex items-center justify-center px-5'
               }
-              textClassName="text-center text-md font-semibold text-white "
+              textClassName={`text-center text-md font-semibold ${
+                isJoined ? 'text-gray-dark' : 'text-white'
+              } `}
               disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
               disabledTextClassName="text-center text-md font-semibold text-gray-medium"
               title={
@@ -124,7 +135,7 @@ export const ChallengeCompanyDetailScreen: FC<
                   ? i18n.t('challenge_detail_screen.leave')
                   : i18n.t('challenge_detail_screen.join')
               }
-              onPress={isJoined ? handleJoinChallenge : handleLeaveChallenge}
+              onPress={handleJoinLeaveChallenge}
             />
           </View>
         )}

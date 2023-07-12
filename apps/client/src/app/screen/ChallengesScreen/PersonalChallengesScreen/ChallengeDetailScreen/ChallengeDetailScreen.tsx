@@ -10,39 +10,113 @@ import { FC, useEffect, useState } from 'react';
 import CheckCircle from './assets/check_circle.svg';
 
 import { getChallengeStatusColor } from '../../../../utils/common';
+import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import Button from 'apps/client/src/app/component/common/Buttons/Button';
+import {
+  serviceAddChallengeParticipant,
+  serviceRemoveChallengeParticipant,
+} from 'apps/client/src/app/service/challenge';
+import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldRefresh: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
+const CHALLENGE_TABS_TITLE_TRANSLATION = [
+  i18n.t('challenge_detail_screen.progress'),
+  i18n.t('challenge_detail_screen.description'),
+];
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
   shouldRefresh,
   setShouldRefresh,
 }) => {
-  const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    i18n.t('challenge_detail_screen.progress'),
-    i18n.t('challenge_detail_screen.description'),
-  ];
-
   const [index, setIndex] = useState(0);
-  const { goal } = challengeData;
+  const [isJoined, setIsJoined] = useState<boolean>(true);
+  const { goal, id: challengeId } = challengeData;
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  const challengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData?.owner;
+
   const statusColor = getChallengeStatusColor(challengeData?.status);
 
+  const handleJoinChallenge = async () => {
+    if (!currentUser?.id || !challengeId) return;
+    try {
+      await serviceAddChallengeParticipant(challengeId);
+      GlobalDialogController.showModal({
+        title: 'Success',
+        message: 'You have joined the challenge!',
+      });
+      setIsJoined(true);
+    } catch (err) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Something went wrong. Please try again later!',
+      });
+    }
+  };
+
+  const handleLeaveChallenge = async () => {
+    if (!currentUser?.id || !challengeId) return;
+    try {
+      await serviceRemoveChallengeParticipant(challengeId);
+      GlobalDialogController.showModal({
+        title: 'Success',
+        message: 'You have left the challenge!',
+      });
+      setIsJoined(false);
+    } catch (err) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: 'Something went wrong. Please try again later!',
+      });
+    }
+  };
+
+  const handleJoinLeaveChallenge = async () => {
+    if (isJoined) {
+      await handleLeaveChallenge();
+    } else {
+      await handleJoinChallenge();
+    }
+  };
 
   return (
     <View className="flex h-full flex-col bg-white py-2">
-      <View className="px-4">
-        <View className="flex flex-row items-center gap-4 pb-2 pt-4">
+      <View className="flex flex-row items-center justify-between px-4">
+        <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
           <CheckCircle fill={statusColor} />
           <View className="flex-1">
-            <Text className="text-2xl font-semibold">
-              {goal}
-            </Text>
+            <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
         </View>
+        {challengeOwner?.id !== currentUser?.id && (
+          <View className="ml-2 h-9">
+            <Button
+              isDisabled={false}
+              containerClassName={
+                isJoined
+                  ? 'border border-gray-dark flex items-center justify-center px-5 text-gray-dark'
+                  : 'bg-primary-default flex items-center justify-center px-5'
+              }
+              textClassName={`text-center text-md font-semibold ${
+                isJoined ? 'text-gray-dark' : 'text-white'
+              } `}
+              title={
+                isJoined
+                  ? i18n.t('challenge_detail_screen.leave')
+                  : i18n.t('challenge_detail_screen.join')
+              }
+              onPress={handleJoinLeaveChallenge}
+            />
+          </View>
+        )}
       </View>
 
       <View className="mt-2 flex flex-1">

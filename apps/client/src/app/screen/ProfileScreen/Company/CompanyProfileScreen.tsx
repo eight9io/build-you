@@ -90,7 +90,7 @@ const CompanyProfileScreen = () => {
           headerRight: (props) => (
             <ButtonWithIcon
               icon="setting"
-              onPress={() => navigation.push('SettingsScreen')}
+              onPress={() => navigation.push('SettingsScreenRoot')}
             />
           ),
         })}

@@ -282,7 +282,7 @@ export const RootNavigation = () => {
             />
 
             <RootStack.Screen
-              name="SettingsScreen"
+              name="SettingsScreenRoot"
               component={SettingsScreen}
             />
 

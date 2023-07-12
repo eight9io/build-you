@@ -41,8 +41,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       <View className="px-4">
         <View className="flex flex-row items-center gap-4 pb-2 pt-4">
           <CheckCircle fill={statusColor} />
-          <View>
-            <Text className="text-basic w-80 text-xl font-medium leading-5">
+          <View className="flex-1">
+            <Text className="text-2xl font-semibold">
               {goal}
             </Text>
           </View>

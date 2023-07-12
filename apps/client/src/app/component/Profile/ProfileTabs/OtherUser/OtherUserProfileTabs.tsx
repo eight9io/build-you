@@ -13,6 +13,7 @@ import Biography from '../Users/Biography/Biography';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
 import EmployeesCompany from './EmployeesCompany';
+import SkeletonLoadingCommon from '../../../common/SkeletonLoadings/SkeletonLoadingCommon';
 
 interface IOtherUserProfileTabsProps {
   otherUserData: IUserData | null;
@@ -26,6 +27,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
   const [isCurrentUserInCompany, setIsCurrentUserInCompany] = useState<
     boolean | null
   >(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
@@ -44,6 +46,9 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
       }
       return setEmployeeList(res);
     });
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
   }, [otherUserData?.id]);
 
   const titles = isCurrentUserInCompany
@@ -62,42 +67,47 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
       ];
 
   return (
-    <FlatList
-      data={[]}
-      className={clsx('h-full flex-1 bg-gray-50')}
-      renderItem={() => <View></View>}
-      ListHeaderComponent={
-        <>
-          {otherUserData !== null && (
-            <TabViewFlatlist
-              titles={titles}
-              children={[
-                <Biography userProfile={otherUserData} key="0" />,
-                !isCompanyAccount ? (
-                  <Skills skills={otherUserData?.softSkill} key="1" />
-                ) : (
-                  <EmployeesCompany key="1" employeeList={employeeList} />
-                ),
-                !isCurrentUserInCompany && (
-                  <ChallengesTab
-                    isCompanyAccount={isCompanyAccount}
-                    isCurrentUserInCompany={isCurrentUserInCompany}
-                    userId={otherUserData.id}
-                    key="2"
-                  />
-                ),
-              ]}
-              defaultTabClassName="text-gray-dark"
-            />
-          )}
-          {otherUserData === null && (
-            <View className={clsx('flex-1  bg-gray-50')}>
-              <Text className={clsx('text-gray-dark')}>Loading...</Text>
-            </View>
-          )}
-        </>
-      }
-    />
+    <>
+      {isLoading && <SkeletonLoadingCommon />}
+      {!isLoading && (
+        <FlatList
+          data={[]}
+          className={clsx('h-full flex-1 bg-gray-50')}
+          renderItem={() => <View></View>}
+          ListHeaderComponent={
+            <>
+              {otherUserData !== null && isCurrentUserInCompany !== null && (
+                <TabViewFlatlist
+                  titles={titles}
+                  children={[
+                    <Biography userProfile={otherUserData} key="0" />,
+                    !isCompanyAccount ? (
+                      <Skills skills={otherUserData?.softSkill} key="1" />
+                    ) : (
+                      <EmployeesCompany key="1" employeeList={employeeList} />
+                    ),
+                    !isCurrentUserInCompany && (
+                      <ChallengesTab
+                        isCompanyAccount={isCompanyAccount}
+                        isCurrentUserInCompany={isCurrentUserInCompany}
+                        userId={otherUserData.id}
+                        key="2"
+                      />
+                    ),
+                  ]}
+                  defaultTabClassName="text-gray-dark"
+                />
+              )}
+              {otherUserData === null && (
+                <View className={clsx('flex-1  bg-gray-50')}>
+                  <Text className={clsx('text-gray-dark')}>Loading...</Text>
+                </View>
+              )}
+            </>
+          }
+        />
+      )}
+    </>
   );
 };
 

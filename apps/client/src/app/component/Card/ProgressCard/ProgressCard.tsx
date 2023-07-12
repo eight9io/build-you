@@ -97,7 +97,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
     const pushAction = StackActions.push('ProgressCommentScreen', {
       progressId: itemProgressCard.id,
-      ownerId: challengeOwner.id,
+      ownerId: userData && userData.id,
       challengeName: challengeName || '',
     });
 

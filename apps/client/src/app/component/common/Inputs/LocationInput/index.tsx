@@ -51,7 +51,6 @@ const LocationInput: React.FC<ILocationInputProps> = ({
         setRequireLocationModalVisible(true);
       }
     }
-    
   };
 
   const fetchNearbyLocations = async (isLoadMore?: boolean) => {

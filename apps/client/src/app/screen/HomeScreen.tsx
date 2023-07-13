@@ -35,6 +35,7 @@ import MainSearchScreen from './MainSearchScreen/MainSearchScreen';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { IFeedPostProps } from '../types/common';
+import CompanyChallengeDetailScreen from './ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -345,6 +346,22 @@ const HomeScreen = ({ navigation, route }: BottomTabScreenProps<any>) => {
                 );
               },
             })}
+          />
+
+          <HomeScreenStack.Screen
+            name="CompanyChallengeDetailScreen"
+            component={CompanyChallengeDetailScreen}
+            options={{
+              headerShown: true,
+              headerTitle: () => '',
+              headerLeft: (props) => (
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            }}
           />
 
           <HomeScreenStack.Screen

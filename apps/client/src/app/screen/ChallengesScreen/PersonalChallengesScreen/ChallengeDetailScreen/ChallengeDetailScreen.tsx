@@ -47,11 +47,22 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     fetchParticipants();
   }, [challengeId]);
 
-  const isChallengeCompleted = challengeData.status === 'closed';
-
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
+
+  const isCurrentUserParticipant = challengeData?.participants?.find(
+    (participant) => participant.id === currentUser?.id
+  );
+
+  const challengeStatus =
+    challengeOwner.id === currentUser?.id
+      ? challengeData.status
+      : isCurrentUserParticipant?.challengeStatus;
+
+  const isChallengeCompleted =
+    challengeStatus === 'done' || challengeStatus === 'closed';
+
   const CHALLENGE_TABS_TITLE_TRANSLATION =
     participantList && challengeOwner?.id !== currentUser?.id
       ? [
@@ -63,7 +74,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           i18n.t('challenge_detail_screen.progress'),
           i18n.t('challenge_detail_screen.description'),
         ];
-  const statusColor = getChallengeStatusColor(challengeData?.status);
+  const statusColor = getChallengeStatusColor(challengeStatus);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;

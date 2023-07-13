@@ -17,6 +17,7 @@ import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/Perso
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
 
 import ChallengeCard from '../../../component/Card/ChallengeCard/ChallengeCard';
+import CurrentUserChallengeCard from '../../../component/Card/ChallengeCard/CurrentUserChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import IconSearch from '../../../component/common/IconSearch/IconSearch';
@@ -106,7 +107,7 @@ const PersonalChallenges = ({
               className="px-4 pt-4"
               data={personalChallengesList}
               renderItem={({ item }: { item: IChallenge }) => (
-                <ChallengeCard
+                <CurrentUserChallengeCard
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}

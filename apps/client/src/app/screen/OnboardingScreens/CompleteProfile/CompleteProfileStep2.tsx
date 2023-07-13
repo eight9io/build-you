@@ -83,7 +83,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
                     onChangeText={onChange}
                     value={value}
                     multiline={true}
-                    className='h-40 '
+                    className="h-40 "
                   />
                 </View>
               )}

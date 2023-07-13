@@ -40,14 +40,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   >();
 
   const { setProfile } = useCompleteProfileStore();
-  const [occupationList, setOccupationList] = useState<IOccupation[]>([])
+  const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
   useEffect(() => {
     const getOccupationList = async () => {
       const { data } = await serviceGetListOccupation();
       setOccupationList(data);
     };
     getOccupationList();
-  }, [])
+  }, []);
   const {
     control,
     handleSubmit,
@@ -91,7 +91,9 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   };
 
   const handleSubmitForm = (data: any) => {
-    const IdOccupation = occupationList.find((item) => item.name === data.occupation)?.id
+    const IdOccupation = occupationList.find(
+      (item) => item.name === data.occupation
+    )?.id;
     setProfile({ ...data, occupation: IdOccupation });
     navigation.navigate('CompleteProfileStep2Screen');
   };
@@ -110,7 +112,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       />
 
       <SelectPicker
-        title='Occupation'
+        title="Occupation"
         show={showOccupationPicker}
         data={occupationList}
         selectedIndex={selectedOccupationIndex}

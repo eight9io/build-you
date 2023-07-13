@@ -70,7 +70,23 @@ export const RightPersonalChallengeDetailOptions: FC<
     setIsChallengeAlreadyCompletedDialogVisible,
   ] = useState<boolean>(false);
 
-  const isChallengeCompleted = challengeData?.status === 'closed';
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  const challengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData?.owner;
+
+  const isCurrentUserParticipant = challengeData?.participants?.find(
+    (participant) => participant.id === currentUser?.id
+  );
+
+  const challengeStatus =
+    challengeOwner?.id === currentUser?.id
+      ? challengeData?.status
+      : isCurrentUserParticipant?.challengeStatus;
+  const isChallengeCompleted =
+    challengeStatus === 'done' || challengeStatus === 'closed';
 
   // when sharing is available, we can share the image
   const onShare = async () => {

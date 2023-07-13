@@ -37,6 +37,7 @@ interface IFeedPostCardProps {
   itemFeedPostCard: IFeedPostProps;
   userId?: string;
   isFocused?: boolean;
+  navigation?: any;
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
@@ -82,7 +83,6 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
               {name}
             </Text>
           </View>
-          <View></View>
           <View className="">
             <BackSvg />
           </View>
@@ -121,7 +121,6 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
               {name}
             </Text>
           </View>
-          <View></View>
           <View className="">
             <BackSvg />
           </View>
@@ -153,7 +152,6 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
     }
     navigation.navigate('OtherUserProfileScreen', { userId: user?.id });
   };
-
 
   const navigateToChallengeDetail = () => {
     if (!challenge?.id) {
@@ -228,19 +226,14 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   itemFeedPostCard: { id, caption, user, image, video, updatedAt, challenge },
   userId,
   isFocused,
+  navigation,
 }) => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { getAccessToken } = useAuthStore();
-
-  const isToken = getAccessToken();
-  const { t } = useTranslation();
 
   const navigateToUserProfile = () => {
     if (!user?.id) {
       GlobalDialogController.showModal({
         title: 'Error',
         message:
-          t('error_general_message') ||
           'Something went wrong. Please try again later!',
       });
       return;
@@ -253,7 +246,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       GlobalDialogController.showModal({
         title: 'Error',
         message:
-          t('error_general_message') ||
           'Something went wrong. Please try again later!',
       });
       return;
@@ -271,7 +263,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       GlobalDialogController.showModal({
         title: 'Error',
         message:
-          t('error_general_message') ||
           'Something went wrong. Please try again later!',
       });
       return;
@@ -339,12 +330,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
         </View>
         <View className="bg-gray-light h-2 w-full" />
       </View>
-      {!isToken && (
-        <TouchableOpacity
-          className=" absolute left-0 top-0 z-10 h-full w-full "
-          onPress={() => navigation.navigate('LoginScreen')}
-        ></TouchableOpacity>
-      )}
     </View>
   );
 };

@@ -165,14 +165,6 @@ const SingleComment: FC<ISingleCommentProps> = ({
             // });
             // navigation.dispatch(pushAction);
 
-            // navigation.navigate('HomeScreen', {
-            //   screen: 'Feed',
-            //   params: {
-            //     screen: 'OtherUserProfileScreen',
-            //     params: { userId: comment.user },
-            //   },
-            // });
-            console.log('comment.user', comment.user);
             navigation.navigate('OtherUserProfileScreen', {
               userId: comment.user,
             });

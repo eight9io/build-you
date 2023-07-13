@@ -1,10 +1,8 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect } from 'react';
 import { View, FlatList, SafeAreaView, Text, Platform } from 'react-native';
 import clsx from 'clsx';
-import {
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { t } from 'i18next';
 
 import { RootStackParamList } from '../navigation/navigation.type';
@@ -29,11 +27,14 @@ import { useAuthStore } from '../store/auth-store';
 import { useUserProfileStore } from '../store/user-data';
 import {
   getFocusedRouteNameFromRoute,
+  NavigationProp,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import MainSearchScreen from './MainSearchScreen/MainSearchScreen';
 import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { IFeedPostProps } from '../types/common';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -48,13 +49,12 @@ export const HomeFeed = () => {
   useGetListFollowing();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-
-  const isFocused = useIsFocused();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const getInitialFeeds = async () => {
     await serviceGetFeed({
       page: 1,
-      take: 5,
+      take: 8,
     })
       .then((res) => {
         if (res.data?.data) {
@@ -77,9 +77,10 @@ export const HomeFeed = () => {
   }, []);
 
   const getNewFeed = async () => {
+    console.log('getNewFeed');
     await serviceGetFeed({
       page: feedPage + 1,
-      take: 5,
+      take: 8,
     }).then((res) => {
       if (res?.data?.data) {
         setFeedData((prev: any) => [...prev, ...res.data.data]);
@@ -94,22 +95,25 @@ export const HomeFeed = () => {
     setIsRefreshing(false);
   };
 
+  const renderPost = useCallback(({ item }: { item: IFeedPostProps }) => {
+    return <FeedPostCard itemFeedPostCard={item} navigation={navigation} />;
+  }, []);
+
+  const keyExtractor = useCallback(
+    (item: IFeedPostProps) => item.id as unknown as string,
+    []
+  );
+
   return (
     <SafeAreaView className={clsx('bg-white')}>
       <View className={clsx('h-full w-full bg-gray-50')}>
         {userData && (
           <FlatList
             data={feedData}
-            renderItem={({ item }) => (
-              <FeedPostCard
-                itemFeedPostCard={item}
-                userId={userData.id}
-                isFocused={isFocused}
-              />
-            )}
-            keyExtractor={(item) => item.id as unknown as string}
+            renderItem={renderPost}
+            keyExtractor={keyExtractor}
             onEndReached={getNewFeed}
-            onEndReachedThreshold={0.7}
+            onEndReachedThreshold={3}
             onRefresh={handleScroll}
             refreshing={isRefreshing}
           />
@@ -177,7 +181,7 @@ export const HomeFeedUnregister = () => {
           )}
           keyExtractor={(item) => item.id as unknown as string}
           onEndReached={getNewFeed}
-          onEndReachedThreshold={0.7}
+          onEndReachedThreshold={3}
           onRefresh={handleScroll}
           refreshing={isRefreshing}
         />
@@ -186,10 +190,7 @@ export const HomeFeedUnregister = () => {
   );
 };
 
-const HomeScreen = ({
-  navigation,
-  route,
-}: BottomTabScreenProps<any>) => {
+const HomeScreen = ({ navigation, route }: BottomTabScreenProps<any>) => {
   const { getAccessToken } = useAuthStore();
 
   const logined = getAccessToken();

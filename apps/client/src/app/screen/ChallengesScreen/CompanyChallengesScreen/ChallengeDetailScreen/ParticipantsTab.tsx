@@ -38,15 +38,15 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
               >
                 <View className="relative">
                   <Image
-                    className={clsx(
-                      'absolute left-0  top-0 h-10 w-10  rounded-full'
-                    )}
+                    className="h-10 w-10 rounded-full"
                     source={require('../../../../common/image/avatar-load.png')}
                   />
                   {item?.avatar && (
                     <Image
                       source={{ uri: item.avatar.trim() }}
-                      className="h-10 w-10 rounded-full"
+                      className={clsx(
+                        'absolute left-0  top-0 h-10 w-10  rounded-full'
+                      )}
                     />
                   )}
                 </View>

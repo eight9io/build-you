@@ -44,9 +44,7 @@ export const updateChallenge = (id: string, data: IEditChallenge) => {
 };
 
 export const completeChallenge = (challengeId: string) => {
-  return http.put(`/challenge/update/${challengeId}`, {
-    status: 'closed',
-  });
+  return http.put(`/challenge/done/${challengeId}`);
 };
 
 export const deleteChallenge = (id: string) => {

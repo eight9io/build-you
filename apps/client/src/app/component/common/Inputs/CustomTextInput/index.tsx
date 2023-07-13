@@ -45,7 +45,7 @@ const CustomTextInput: React.FC<ICustomTextInputProps> = ({
                   placeholderClassName
                 )}
                 multiline
-                textAlignVertical='top'
+                textAlignVertical="top"
               />
               {maxChar && (
                 <Text className="text-gray-dark pt-1 text-sm font-normal">

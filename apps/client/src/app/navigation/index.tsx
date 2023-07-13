@@ -259,13 +259,6 @@ export const RootNavigation = () => {
                 headerShown: false,
               }}
             />
-            <RootStack.Screen
-              name="CompanyChallengeDetailScreen"
-              component={CompanyChallengeDetailScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
 
             <RootStack.Screen
               name="SettingsScreenRoot"

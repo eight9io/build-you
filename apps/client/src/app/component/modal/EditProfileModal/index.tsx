@@ -201,7 +201,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             }}
           />
           <SelectPicker
-            title='Occupation'
+            title="Occupation"
             show={showOccupationPicker}
             data={MOCK_OCCUPATION_SELECT}
             selectedIndex={selectedOccupationIndex}

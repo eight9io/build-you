@@ -83,7 +83,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
               isCompanyAccount={isCompanyAccount}
               isFromOtherUser
               imageSrc={`${item.image}`}
-              handlePress={() => handleNavigateToChallengeDetail(item.id)}
+              navigation={navigation}
             />
           )}
           keyExtractor={(item) => item.id}

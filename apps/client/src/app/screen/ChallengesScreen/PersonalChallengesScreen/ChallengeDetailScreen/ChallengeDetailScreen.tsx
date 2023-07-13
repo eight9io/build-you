@@ -21,6 +21,7 @@ import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldRefresh: boolean;
+  setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const CHALLENGE_TABS_TITLE_TRANSLATION = [
@@ -31,6 +32,7 @@ const CHALLENGE_TABS_TITLE_TRANSLATION = [
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
   shouldRefresh,
+  setIsJoinedLocal,
   setShouldRefresh,
 }) => {
   const [index, setIndex] = useState(0);
@@ -38,6 +40,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+
+  const isChallengeCompleted = challengeData.status === 'closed';
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
@@ -54,6 +58,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
         message: 'You have joined the challenge!',
       });
       setIsJoined(true);
+      setIsJoinedLocal && setIsJoinedLocal(true);
     } catch (err) {
       GlobalDialogController.showModal({
         title: 'Error',
@@ -71,6 +76,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
         message: 'You have left the challenge!',
       });
       setIsJoined(false);
+      setIsJoinedLocal && setIsJoinedLocal(false);
     } catch (err) {
       GlobalDialogController.showModal({
         title: 'Error',
@@ -96,7 +102,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
         </View>
-        {challengeOwner?.id !== currentUser?.id && (
+        {challengeOwner?.id !== currentUser?.id && !isChallengeCompleted && (
           <View className="ml-2 h-9">
             <Button
               isDisabled={false}
@@ -117,6 +123,15 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             />
           </View>
         )}
+        {isChallengeCompleted && (
+          <View className="ml-2 h-9">
+            <Button
+              containerClassName="border border-gray-dark flex items-center justify-center px-5"
+              textClassName={`text-center text-md font-semibold text-gray-dark `}
+              title={i18n.t('challenge_detail_screen.completed')}
+            />
+          </View>
+        )}
       </View>
 
       <View className="mt-2 flex flex-1">
@@ -126,6 +141,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
+            isJoined={isJoined}
             shouldRefresh={shouldRefresh}
             challengeData={challengeData}
             setShouldRefresh={setShouldRefresh}

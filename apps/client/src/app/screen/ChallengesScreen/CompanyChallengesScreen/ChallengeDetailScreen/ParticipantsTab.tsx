@@ -43,10 +43,12 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
                     )}
                     source={require('../../../../common/image/avatar-load.png')}
                   />
-                  <Image
-                    source={{ uri: item.avatar.trim() }}
-                    className="h-10 w-10 rounded-full"
-                  />
+                  {item?.avatar && (
+                    <Image
+                      source={{ uri: item.avatar.trim() }}
+                      className="h-10 w-10 rounded-full"
+                    />
+                  )}
                 </View>
                 <Text className="text-basic-black text-base font-semibold">
                   {item.name}

@@ -42,10 +42,12 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
                     )}
                     source={require('../asset/avatar-load.png')}
                   />
-                  <Image
-                    source={{ uri: item.avatar }}
-                    className="h-10 w-10 rounded-full"
-                  />
+                  {item?.avatar && (
+                    <Image
+                      source={{ uri: item.avatar }}
+                      className="h-10 w-10 rounded-full"
+                    />
+                  )}
                 </View>
                 <Text className="text-basic-black text-base font-semibold">
                   {item.name} {item.surname}

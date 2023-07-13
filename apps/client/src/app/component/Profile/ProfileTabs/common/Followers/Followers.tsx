@@ -38,15 +38,15 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
               >
                 <View className="relative">
                   <Image
-                    className={clsx(
-                      'absolute left-0  top-0 h-10 w-10  rounded-full'
-                    )}
+                    className="h-10 w-10 rounded-full"
                     source={require('../asset/avatar-load.png')}
                   />
                   {item?.avatar && (
                     <Image
-                      source={{ uri: item?.avatar }}
-                      className="h-10 w-10 rounded-full"
+                      source={{ uri: item.avatar.trim() }}
+                      className={clsx(
+                        'absolute left-0  top-0 h-10 w-10  rounded-full'
+                      )}
                     />
                   )}
                 </View>

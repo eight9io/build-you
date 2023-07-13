@@ -26,6 +26,7 @@ import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
 import TaskAltIconGray from './assets/task-alt-gray.svg';
+import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
 
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
@@ -38,9 +39,11 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 
 interface IRightPersonalChallengeDetailOptionsProps {
   challengeData: IChallenge | undefined;
-  onEditChallengeBtnPress: () => void;
+  onEditChallengeBtnPress?: () => void;
+  shouldRenderEditAndDeleteBtns?: boolean;
+  shouldRenderCompleteBtn?: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsDeleteChallengeDialogVisible: React.Dispatch<
+  setIsDeleteChallengeDialogVisible?: React.Dispatch<
     React.SetStateAction<boolean>
   >;
 }
@@ -51,6 +54,8 @@ export const RightPersonalChallengeDetailOptions: FC<
   challengeData,
   setShouldRefresh,
   onEditChallengeBtnPress,
+  shouldRenderCompleteBtn = true,
+  shouldRenderEditAndDeleteBtns = true,
   setIsDeleteChallengeDialogVisible,
 }) => {
   const [isSharing, setIsSharing] = React.useState(false);
@@ -149,30 +154,36 @@ export const RightPersonalChallengeDetailOptions: FC<
         />
       )}
       <View className="-mt-1 flex flex-row items-center">
-        <TouchableOpacity
-          onPress={onCheckChallengeCompleted}
-          disabled={isChallengeCompleted}
-        >
-          {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
-        </TouchableOpacity>
+        {shouldRenderCompleteBtn && (
+          <TouchableOpacity
+            onPress={onCheckChallengeCompleted}
+            disabled={isChallengeCompleted}
+          >
+            {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
+          </TouchableOpacity>
+        )}
         <View className="pl-4 pr-2">
           <Button Icon={<ShareIcon />} onPress={onShare} />
         </View>
 
-        <PopUpMenu
-          iconColor="#FF7B1D"
-          isDisabled={isChallengeCompleted}
-          options={[
-            {
-              text: 'Edit',
-              onPress: onEditChallengeBtnPress,
-            },
-            {
-              text: 'Delete',
-              onPress: () => setIsDeleteChallengeDialogVisible(true),
-            },
-          ]}
-        />
+        {shouldRenderEditAndDeleteBtns &&
+          onEditChallengeBtnPress &&
+          setIsDeleteChallengeDialogVisible && (
+            <PopUpMenu
+              iconColor="#FF7B1D"
+              isDisabled={isChallengeCompleted}
+              options={[
+                {
+                  text: 'Edit',
+                  onPress: onEditChallengeBtnPress,
+                },
+                {
+                  text: 'Delete',
+                  onPress: () => setIsDeleteChallengeDialogVisible(true),
+                },
+              ]}
+            />
+          )}
       </View>
     </View>
   );
@@ -198,10 +209,18 @@ const PersonalChallengeDetailScreen = ({
     useState<boolean>(false);
   const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
+  const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
 
   const challengeId = route?.params?.challengeId;
 
   const isFocused = useIsFocused();
+
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  const challengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData?.owner;
 
   useEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -209,13 +228,15 @@ const PersonalChallengeDetailScreen = ({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
           challengeData={challengeData}
+          shouldRenderEditAndDeleteBtns={challengeOwner?.id === currentUser?.id}
+          shouldRenderCompleteBtn={isJoinedLocal}
           setShouldRefresh={setShouldRefresh}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
           setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
       ),
     });
-  }, [challengeData]);
+  }, [challengeData, isJoinedLocal]);
 
   useEffect(() => {
     if (!challengeId && !shouldRefresh) return;
@@ -297,6 +318,7 @@ const PersonalChallengeDetailScreen = ({
           <ChallengeDetailScreen
             challengeData={challengeData}
             shouldRefresh={shouldRefresh}
+            setIsJoinedLocal={setIsJoinedLocal}
             setShouldRefresh={setShouldRefresh}
           />
           <EditChallengeModal

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Controller, set, useForm } from 'react-hook-form';
-import { Route } from '@react-navigation/native';
+import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 
 import { IProgressComment } from '../../../types/progress';
 import { IProgressChallenge } from '../../../types/challenge';
@@ -32,6 +32,7 @@ import GlobalDialogController from '../../../component/common/Dialog/GlobalDialo
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import TextInputWithMention from '../../../component/common/Inputs/TextInputWithMention';
 import { useUserProfileStore } from '../../../store/user-data';
+import { RootStackParamList } from '../../../navigation/navigation.type';
 
 interface IProgressCommentScreenProps {
   route: Route<

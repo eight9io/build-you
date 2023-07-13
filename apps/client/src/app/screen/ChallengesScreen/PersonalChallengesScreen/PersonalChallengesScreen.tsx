@@ -25,8 +25,8 @@ import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
 import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
-import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 import { sortChallengeByStatus } from '../../../utils/common';
+import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -220,6 +220,22 @@ const PersonalChallengesNavigator = () => {
               </View>
             );
           },
+        })}
+      />
+
+      <PersonalChallengesStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
         })}
       />
     </PersonalChallengesStack.Navigator>

@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect } from 'react';
-import { View, FlatList, SafeAreaView, Text } from 'react-native';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { View, FlatList, SafeAreaView, Text, Platform } from 'react-native';
 import clsx from 'clsx';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { t, use } from 'i18next';
+import {
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+import { t } from 'i18next';
 
 import { RootStackParamList } from '../navigation/navigation.type';
 
@@ -25,8 +27,13 @@ import { useGetListFollowing } from '../hooks/useGetUser';
 import GlobalDialogController from '../component/common/Dialog/GlobalDialogController';
 import { useAuthStore } from '../store/auth-store';
 import { useUserProfileStore } from '../store/user-data';
-import { useIsFocused } from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  useIsFocused,
+} from '@react-navigation/native';
 import MainSearchScreen from './MainSearchScreen/MainSearchScreen';
+import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -179,10 +186,39 @@ export const HomeFeedUnregister = () => {
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({
+  navigation,
+  route,
+}: BottomTabScreenProps<any>) => {
   const { getAccessToken } = useAuthStore();
 
   const logined = getAccessToken();
+  const showBottomNavBar = () => {
+    navigation.setOptions({
+      tabBarStyle: {
+        display: 'flex',
+        backgroundColor: '#FFFFFF',
+        height: Platform.OS === 'android' ? 68 : 102,
+        paddingBottom: Platform.OS === 'android' ? 0 : 30,
+      },
+    });
+  };
+  const hideBottomNavBar = () => {
+    navigation.setOptions({
+      tabBarStyle: {
+        display: 'none',
+        backgroundColor: '#FFFFFF',
+      },
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (getFocusedRouteNameFromRoute(route) === 'ProgressCommentScreen') {
+      hideBottomNavBar();
+    } else {
+      showBottomNavBar();
+    }
+  }, [getFocusedRouteNameFromRoute(route)]);
 
   return (
     <HomeScreenStack.Navigator
@@ -307,6 +343,22 @@ const HomeScreen = () => {
                   </View>
                 );
               },
+            })}
+          />
+
+          <HomeScreenStack.Screen
+            name="ProgressCommentScreen"
+            component={ProgressCommentScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => '',
+              headerLeft: (props) => (
+                <NavButton
+                  text={t('button.back') as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
             })}
           />
         </>

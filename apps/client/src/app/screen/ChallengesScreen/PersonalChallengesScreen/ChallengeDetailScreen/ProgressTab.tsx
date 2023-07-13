@@ -138,7 +138,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setIsShowEditModal(false); // Close the edit modal
     handleEditProgress(); // Navigate to the challenge progresses screen to refresh the list
   };
-
   return (
     <View className="h-full flex-1">
       {progressIndexToUpdate > -1 && (
@@ -155,9 +154,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
-            !isOtherUserProfile || isJoined ? (
-              <AddNewChallengeProgressButton />
-            ) : null
+            isJoined ? <AddNewChallengeProgressButton /> : null
           }
           renderItem={({ item, index }) => (
             <ProgressCard

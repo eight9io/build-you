@@ -60,6 +60,13 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           challengeId: item.id,
         });
       } else if (isFromOtherUser) {
+        if (companyName) {
+          navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
+            challengeId: item.id,
+            isCompanyAccount: true,
+          });
+          return;
+        }
         navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
           challengeId: item.id,
         });

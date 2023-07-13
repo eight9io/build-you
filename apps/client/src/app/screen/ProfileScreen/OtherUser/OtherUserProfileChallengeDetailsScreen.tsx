@@ -1,10 +1,12 @@
-import { Route } from '@react-navigation/native';
+import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
 import { View, Text, Platform, SafeAreaView, FlatList } from 'react-native';
 import clsx from 'clsx';
 
 import i18n from '../../../i18n/i18n';
 import { IChallenge } from '../../../types/challenge';
+import { RootStackParamList } from '../../../navigation/navigation.type';
+import { useUserProfileStore } from '../../../store/user-data';
 
 import {
   getChallengeById,
@@ -12,13 +14,16 @@ import {
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from '../../../service/challenge';
-import { TabView } from '../../../component/common/Tab/TabView';
-import DescriptionTab from '../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab';
-import ProgressTab from '../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab';
-import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
+
 import Button from '../../../component/common/Buttons/Button';
-import { useUserProfileStore } from '../../../store/user-data';
+import { TabView } from '../../../component/common/Tab/TabView';
+import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
+import ProgressTab from '../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab';
+import DescriptionTab from '../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab';
 import ParticipantsTab from '../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab';
+import { RightPersonalChallengeDetailOptions } from '../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
+
+import ShareIcon from '../../../../../assets/svg/share.svg';
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -59,6 +64,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const getChallengeData = async () => {
@@ -104,6 +110,33 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       setShouldRefresh(false);
     }
   }, [challengeId, shouldRefresh]);
+
+  useEffect(() => {
+    if (isJoined) {
+      navigation.setOptions({
+        headerRight: () => (
+          <RightPersonalChallengeDetailOptions
+            challengeData={challengeData}
+            setShouldRefresh={setShouldRefresh}
+            shouldRenderEditAndDeleteBtns={false}
+          />
+        ),
+      });
+    } else {
+      navigation.setOptions({
+        headerRight: () => {
+          return (
+            <View>
+              <Button
+                Icon={<ShareIcon />}
+                onPress={() => console.log('press share')}
+              />
+            </View>
+          );
+        },
+      });
+    }
+  }, [isJoined]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;

@@ -13,10 +13,12 @@ import { getChallengeStatusColor } from '../../../../utils/common';
 import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
 import Button from 'apps/client/src/app/component/common/Buttons/Button';
 import {
+  getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from 'apps/client/src/app/service/challenge';
 import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
+import ParticipantsTab from '../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab';
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -24,10 +26,6 @@ interface IChallengeDetailScreenProps {
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const CHALLENGE_TABS_TITLE_TRANSLATION = [
-  i18n.t('challenge_detail_screen.progress'),
-  i18n.t('challenge_detail_screen.description'),
-];
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
@@ -40,13 +38,31 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+  const [participantList, setParticipantList] = useState([]);
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      const response = await getChallengeParticipants(challengeId);
+      setParticipantList(response.data);
+    };
+    fetchParticipants();
+  }, [challengeId]);
 
   const isChallengeCompleted = challengeData.status === 'closed';
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
-
+  const CHALLENGE_TABS_TITLE_TRANSLATION =
+    participantList && challengeOwner?.id !== currentUser?.id
+      ? [
+          i18n.t('challenge_detail_screen.progress'),
+          i18n.t('challenge_detail_screen.description'),
+          i18n.t('challenge_detail_screen.participants'),
+        ]
+      : [
+          i18n.t('challenge_detail_screen.progress'),
+          i18n.t('challenge_detail_screen.description'),
+        ];
   const statusColor = getChallengeStatusColor(challengeData?.status);
 
   const handleJoinChallenge = async () => {
@@ -147,6 +163,9 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             setShouldRefresh={setShouldRefresh}
           />
           <DescriptionTab challengeData={challengeData} />
+          {participantList && challengeOwner?.id !== currentUser?.id && (
+            <ParticipantsTab participant={participantList} />
+          )}
         </TabView>
       </View>
     </View>

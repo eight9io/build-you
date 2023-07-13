@@ -53,7 +53,7 @@ export const useGetOtherUserData = (
 
   useEffect(() => {
     fetchingUserData();
-  }, []);
+  }, [userId]);
 };
 
 export const useGetListFollowing = () => {

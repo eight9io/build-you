@@ -48,6 +48,7 @@ export const HomeFeed = () => {
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
 
   useGetListFollowing();
+  const isFocused = useIsFocused();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -96,32 +97,23 @@ export const HomeFeed = () => {
     setIsRefreshing(false);
   };
 
-  const renderPost = useCallback(({ item }: { item: IFeedPostProps }) => {
-    return (
-      <FeedPostCard
-        itemFeedPostCard={item}
-        navigation={navigation}
-        userId={userData?.id}
-      />
-    );
-  }, []);
-
-  const keyExtractor = useCallback(
-    (item: IFeedPostProps) => item.id as unknown as string,
-    []
-  );
-
   return (
     <SafeAreaView className={clsx('bg-white')}>
       <View className={clsx('h-full w-full bg-gray-50')}>
         {userData && (
           <FlatList
             data={feedData}
-            renderItem={renderPost}
-            keyExtractor={keyExtractor}
+            renderItem={({ item }) => (
+              <FeedPostCard
+                itemFeedPostCard={item}
+                userId={userData.id}
+                isFocused={isFocused}
+                navigation={navigation}
+              />
+            )}
+            keyExtractor={(item) => item.id as unknown as string}
             onEndReached={getNewFeed}
-            onEndReachedThreshold={3}
-            maxToRenderPerBatch={4}
+            onEndReachedThreshold={0.7}
             onRefresh={handleScroll}
             refreshing={isRefreshing}
           />

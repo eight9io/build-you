@@ -36,7 +36,7 @@ export const isObjectEmpty = (obj: any) => {
   return Object.keys(obj).length === 0;
 };
 
-export const sortChallengeByStatus = (res: any) => {
+export const sortChallengeByStatusFromResponse = (res: any) => {
   if (!res?.data) {
     return [];
   }
@@ -49,7 +49,10 @@ export const sortChallengeByStatus = (res: any) => {
   res.data = uniqueData;
 
   const closedChallenges = res.data
-    .filter((challenge: IChallenge) => challenge.status === 'closed')
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === 'closed' || challenge.status === 'done'
+    )
     .sort((a: IChallenge, b: IChallenge) => {
       return (
         new Date(b.achievementTime).getTime() -
@@ -58,7 +61,49 @@ export const sortChallengeByStatus = (res: any) => {
     });
 
   const openChallenges = res.data
-    .filter((challenge: IChallenge) => challenge.status === 'open')
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === 'open' || challenge.status === 'progress'
+    )
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(b.achievementTime).getTime() -
+        new Date(a.achievementTime).getTime()
+      );
+    });
+
+  return [...openChallenges, ...closedChallenges];
+};
+
+export const sortChallengeByStatus = (challengeList: any) => {
+  if (!challengeList) {
+    return [];
+  }
+  challengeList = challengeList.flat();
+  // remove duplicate data by id
+  const uniqueData = challengeList.filter(
+    (challenge: IChallenge, index: number, self: IChallenge[]) =>
+      index === self.findIndex((t) => t.id === challenge.id)
+  );
+  challengeList = uniqueData;
+
+  const closedChallenges = challengeList
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === 'closed' || challenge.status === 'done'
+    )
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(b.achievementTime).getTime() -
+        new Date(a.achievementTime).getTime()
+      );
+    });
+
+  const openChallenges = challengeList
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === 'open' || challenge.status === 'progress'
+    )
     .sort((a: IChallenge, b: IChallenge) => {
       return (
         new Date(b.achievementTime).getTime() -

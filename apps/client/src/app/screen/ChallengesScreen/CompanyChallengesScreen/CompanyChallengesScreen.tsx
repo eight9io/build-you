@@ -20,7 +20,7 @@ import { useUserProfileStore } from '../../../store/user-data';
 import { useIsFocused } from '@react-navigation/native';
 import httpInstance from '../../../utils/http';
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
-import { sortChallengeByStatus } from '../../../utils/common';
+import { sortChallengeByStatusFromResponse } from '../../../utils/common';
 import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 import OtherUserProfileScreen from '../../ProfileScreen/OtherUser/OtherUserProfileScreen';
 import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
@@ -80,7 +80,7 @@ const CompanyChallenges = ({
     const fetchCompanyChallenges = async () => {
       try {
         const res = await httpInstance.get(`/challenge/all/${userData?.id}`);
-        setCompanyChallengesList(sortChallengeByStatus(res));
+        setCompanyChallengesList(sortChallengeByStatusFromResponse(res));
         setTimeout(() => {
           setIsLoading(false);
           setIsError(false);

@@ -160,12 +160,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           }
           renderItem={({ item, index }) => (
             <ProgressCard
+              isJoined={isJoined}
               userData={item.owner}
-              // userData={
-              //   isOtherUserProfile
-              //     ? ((challengeData.owner as IChallengeOwner[])[0] as IUserData)
-              //     : userData
-              // }
               isOtherUserProfile={isOtherUserProfile}
               itemProgressCard={item}
               challengeName={challengeData.goal}
@@ -176,7 +172,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />
           )}
-          // contentContainerStyle={{ paddingBottom: 300 }}
+          contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
       {!progressLoading && localProgressData?.length == 0 && (

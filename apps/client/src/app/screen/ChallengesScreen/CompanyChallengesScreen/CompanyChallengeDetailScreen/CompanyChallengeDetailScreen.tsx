@@ -75,6 +75,8 @@ export const RightCompanyChallengeDetailOptions: FC<
     (participant) => participant.id === currentUser?.id
   );
 
+  const isCurrentUserOwner = challengeOwner?.id === currentUser?.id;
+
   const challengeStatus =
     challengeOwner?.id === currentUser?.id
       ? challengeData?.status
@@ -177,20 +179,22 @@ export const RightCompanyChallengeDetailOptions: FC<
           <Button Icon={<ShareIcon />} onPress={onShare} />
         </View>
 
-        <PopUpMenu
-          iconColor="#FF7B1D"
-          isDisabled={isChallengeCompleted}
-          options={[
-            {
-              text: 'Edit',
-              onPress: onEditChallengeBtnPress,
-            },
-            {
-              text: 'Delete',
-              onPress: () => setIsDeleteChallengeDialogVisible(true),
-            },
-          ]}
-        />
+        {isCurrentUserOwner && (
+          <PopUpMenu
+            iconColor="#FF7B1D"
+            isDisabled={isChallengeCompleted}
+            options={[
+              {
+                text: 'Edit',
+                onPress: onEditChallengeBtnPress,
+              },
+              {
+                text: 'Delete',
+                onPress: () => setIsDeleteChallengeDialogVisible(true),
+              },
+            ]}
+          />
+        )}
       </View>
     </View>
   );

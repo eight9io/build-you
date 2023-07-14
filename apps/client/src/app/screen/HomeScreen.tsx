@@ -115,6 +115,7 @@ export const HomeFeed = () => {
             keyExtractor={keyExtractor}
             onEndReached={getNewFeed}
             onEndReachedThreshold={3}
+            maxToRenderPerBatch={4}
             onRefresh={handleScroll}
             refreshing={isRefreshing}
           />

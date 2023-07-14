@@ -81,7 +81,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         });
       }
     };
-    if (isCompanyAccount) {
+    if (isCompanyAccount || challengeOwner?.id !== currentUser?.id) {
       const getChallengeParticipants = async () => {
         try {
           const response = await getChallengeParticipantsByChallengeId(
@@ -240,7 +240,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
         <TabView
           titles={
-            isCompanyAccount
+            isCompanyAccount || challengeOwner?.id !== currentUser?.id
               ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
               : CHALLENGE_TABS_TITLE_TRANSLATION
           }
@@ -255,7 +255,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             setShouldRefresh={setShouldRefresh}
           />
           <DescriptionTab challengeData={challengeData} />
-          {isCompanyAccount && (
+          {(isCompanyAccount || challengeOwner?.id !== currentUser?.id) && (
             <ParticipantsTab participant={participantList} />
           )}
         </TabView>

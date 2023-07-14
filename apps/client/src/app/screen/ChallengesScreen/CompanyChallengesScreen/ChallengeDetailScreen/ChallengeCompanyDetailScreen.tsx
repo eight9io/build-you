@@ -33,7 +33,7 @@ interface ICompanyChallengeDetailScreenProps {
 export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
-  const [isJoined, setIsJoined] = useState(false);
+  const [isJoined, setIsJoined] = useState(true);
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
     i18n.t('challenge_detail_screen.progress'),
     i18n.t('challenge_detail_screen.description'),
@@ -47,24 +47,7 @@ export const ChallengeCompanyDetailScreen: FC<
 
   const currentUser = getUserProfile();
 
-  // const participantList = challengeData?.participants || [];
-  const [participantList, setParticipantList] = useState(
-    challengeData?.participants || []
-  );
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const response = await getChallengeParticipants(challengeId);
-      setParticipantList(response.data);
-      if (
-        response.data.find(
-          (participant: any) => participant.id === currentUser?.id
-        )
-      ) {
-        setIsJoined(true);
-      }
-    };
-    fetchParticipants();
-  }, [challengeId, isJoined]);
+  const participantList = challengeData?.participants || [];
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;

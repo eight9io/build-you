@@ -180,16 +180,6 @@ const PersonalChallengesNavigator = () => {
             <NavButton
               text={t('button.back') as string}
               onPress={() => {
-                const routes = navigation.getState()?.routes;
-                const prevRoute = routes[routes.length - 2]; // -2 because -1 is the current route
-                if (prevRoute?.name === 'MainSearchScreen') {
-                  navigation.getParent()?.setOptions({
-                    tabBarStyle: {
-                      display: 'none',
-                      backgroundColor: '#FFFFFF',
-                    },
-                  });
-                }
                 navigation.goBack();
               }}
               withBackIcon

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import {
@@ -11,6 +11,7 @@ import Animated, {
   FadeOutDown,
   Layout,
 } from 'react-native-reanimated';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import HomeScreen from '../../screen/HomeScreen';
 import NotificationsScreen from '../../screen/NotificationsScreen/NotificationsScreen';
@@ -36,12 +37,15 @@ import { useNotificationStore } from '../../store/notification';
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;
 
-interface IBottomNavBarProps {}
+interface IBottomNavBarProps { }
+
+const SCREENS_TO_HIDE_TAB_BAR = ['ProgressCommentScreen', 'MainSearchScreen'];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
   const isAndroid = Platform.OS === 'android';
   useGetUserData();
+  const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
 
   const { getUserProfile } = useUserProfileStore();
   const { getHasNewNotification } = useNotificationStore();
@@ -57,13 +61,24 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         headerTitleAlign: 'center',
 
         tabBarStyle: {
+          display: shouldHideTabBar ? 'none' : 'flex',
           backgroundColor: '#FFFFFF',
           height: isAndroid ? 68 : 102,
           paddingBottom: isAndroid ? 0 : 30,
+          position: 'absolute', // Fix tab bar showing as grey bar but no content during the show/hide process. Reference: https://stackoverflow.com/a/76670272
         },
         headerRightContainerStyle: {
           paddingRight: 10,
         },
+      }}
+      screenListeners={({ route }) => {
+        const routeName = getFocusedRouteNameFromRoute(route);
+        if (routeName && SCREENS_TO_HIDE_TAB_BAR.includes(routeName)) {
+          setShouldHideTabBar(true);
+        } else {
+          setShouldHideTabBar(false);
+        }
+        return {};
       }}
       tabBar={(props) => (
         <Animated.View

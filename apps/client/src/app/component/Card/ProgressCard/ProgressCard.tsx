@@ -38,6 +38,7 @@ interface IProgressCardProps {
     surname: string;
   };
   challengeName: string;
+  isJoined?: boolean | null;
   userData: IUserData | null;
   isOtherUserProfile?: boolean;
   setProgressIndexToUpdate?: any;
@@ -49,6 +50,7 @@ interface IProgressCardProps {
 
 const ProgressCard: FC<IProgressCardProps> = ({
   userData,
+  isJoined = false,
   challengeName,
   challengeOwner,
   setShouldRefresh,
@@ -170,7 +172,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        {!isOtherUserProfile && isProgressOwner && (
+        {!isOtherUserProfile && isProgressOwner && isJoined && (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}

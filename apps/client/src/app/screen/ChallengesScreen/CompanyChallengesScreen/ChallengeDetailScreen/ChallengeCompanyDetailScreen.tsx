@@ -60,7 +60,7 @@ export const ChallengeCompanyDetailScreen: FC<
   const challengeStatus =
     challengeOwner.id === currentUser?.id
       ? challengeData.status
-      : isCurrentUserParticipant?.challengeStatus;
+      : isJoined ? isCurrentUserParticipant?.challengeStatus : challengeData.status;
 
   const isChallengeCompleted =
     challengeStatus === 'done' || challengeStatus === 'closed';
@@ -113,6 +113,7 @@ export const ChallengeCompanyDetailScreen: FC<
     } else {
       await handleJoinChallenge();
     }
+    setShouldRefresh(true);
   };
 
   return (
@@ -165,6 +166,7 @@ export const ChallengeCompanyDetailScreen: FC<
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
+            isJoined={isJoined}
             shouldRefresh={shouldRefresh}
             challengeData={challengeData}
             setShouldRefresh={setShouldRefresh}

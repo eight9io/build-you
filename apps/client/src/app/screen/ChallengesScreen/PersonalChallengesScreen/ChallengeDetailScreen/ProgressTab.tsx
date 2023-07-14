@@ -139,6 +139,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setIsShowEditModal(false); // Close the edit modal
     handleEditProgress(); // Navigate to the challenge progresses screen to refresh the list
   };
+
   return (
     <View className="h-full flex-1">
       {progressIndexToUpdate > -1 && (

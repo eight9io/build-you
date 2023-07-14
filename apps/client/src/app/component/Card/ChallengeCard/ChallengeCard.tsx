@@ -61,7 +61,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   );
 
   const challengeStatus =
-    challengeOwner.id === currentUser?.id
+    challengeOwner.id === currentUser?.id || !isCurrentUserParticipant
       ? item.status
       : isCurrentUserParticipant?.challengeStatus;
 

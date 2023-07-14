@@ -9,6 +9,7 @@ export const getUrlParam = (url: string, param: string) => {
 };
 
 export const getChallengeStatusColor = (status: string | undefined) => {
+  if (!status) return '#C5C8D2';
   if (status === 'progress') return '#C5C8D2';
   if (status === 'done') return '#20D231';
   return status !== 'open' ? '#20D231' : '#C5C8D2';

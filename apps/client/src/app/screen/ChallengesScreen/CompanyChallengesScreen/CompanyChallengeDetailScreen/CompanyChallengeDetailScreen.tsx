@@ -36,6 +36,7 @@ type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 interface IRightCompanyChallengeDetailOptionsProps {
   challengeData: IChallenge | undefined;
   onEditChallengeBtnPress: () => void;
+  shouldRefresh: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteChallengeDialogVisible: React.Dispatch<
     React.SetStateAction<boolean>
@@ -46,6 +47,7 @@ export const RightCompanyChallengeDetailOptions: FC<
   IRightCompanyChallengeDetailOptionsProps
 > = ({
   challengeData,
+  shouldRefresh,
   setShouldRefresh,
   onEditChallengeBtnPress,
   setIsDeleteChallengeDialogVisible,
@@ -69,14 +71,14 @@ export const RightCompanyChallengeDetailOptions: FC<
     ? challengeData?.owner[0]
     : challengeData?.owner;
 
-  const isCurrentUserParticipant = challengeData?.participants?.find(
+  const currentUserInParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
   );
 
   const challengeStatus =
     challengeOwner?.id === currentUser?.id
       ? challengeData?.status
-      : isCurrentUserParticipant?.challengeStatus;
+      : currentUserInParticipant?.challengeStatus;
   const isChallengeCompleted =
     challengeStatus === 'done' || challengeStatus === 'closed';
 
@@ -162,12 +164,15 @@ export const RightCompanyChallengeDetailOptions: FC<
         />
       )}
       <View className="-mt-1 flex flex-row items-center">
-        <TouchableOpacity
-          onPress={onCheckChallengeCompleted}
-          disabled={isChallengeCompleted}
-        >
-          {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
-        </TouchableOpacity>
+        {(!!currentUserInParticipant ||
+          challengeOwner?.id === currentUser?.id) && (
+          <TouchableOpacity
+            onPress={onCheckChallengeCompleted}
+            disabled={isChallengeCompleted}
+          >
+            {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
+          </TouchableOpacity>
+        )}
         <View className="pl-4 pr-2">
           <Button Icon={<ShareIcon />} onPress={onShare} />
         </View>
@@ -221,6 +226,7 @@ const CompanyChallengeDetailScreen = ({
     navigation.setOptions({
       headerRight: () => (
         <RightCompanyChallengeDetailOptions
+          shouldRefresh={shouldRefresh}
           challengeData={challengeData}
           setShouldRefresh={setShouldRefresh}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}

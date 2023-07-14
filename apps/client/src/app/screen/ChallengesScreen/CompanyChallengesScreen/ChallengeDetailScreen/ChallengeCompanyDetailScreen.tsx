@@ -33,7 +33,7 @@ interface ICompanyChallengeDetailScreenProps {
 export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
-  const [isJoined, setIsJoined] = useState(true);
+  const [isJoined, setIsJoined] = useState(false);
   const [participantList, setParticipantList] = useState([]);
 
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
@@ -63,7 +63,7 @@ export const ChallengeCompanyDetailScreen: FC<
       }
     };
     fetchParticipants();
-  }, [challengeId]);
+  }, [challengeId, isJoined]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;

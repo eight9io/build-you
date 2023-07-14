@@ -45,7 +45,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       setParticipantList(response.data);
     };
     fetchParticipants();
-  }, [challengeId]);
+  }, [challengeId, isJoined]);
 
   const isChallengeCompleted = challengeData.status === 'closed';
 

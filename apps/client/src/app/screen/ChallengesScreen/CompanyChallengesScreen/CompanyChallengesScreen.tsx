@@ -1,13 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Button,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import { SafeAreaView, View, Text, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -17,18 +10,21 @@ import {
 import { RootStackParamList } from '../../../navigation/navigation.type';
 
 import CompanyChallengeDetailScreen from './CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
-
+import ShareIcon from '../../../../../assets/svg/share.svg';
 import ChallengeCard from '../../../component/Card/ChallengeCard/ChallengeCard';
 import { t } from 'i18next';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
-import IconSearch from '../../../component/common/IconSearch/IconSearch';
 import { IChallenge } from '../../../types/challenge';
 import { useUserProfileStore } from '../../../store/user-data';
 import { useIsFocused } from '@react-navigation/native';
 import httpInstance from '../../../utils/http';
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
 import { sortChallengeByStatus } from '../../../utils/common';
+import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
+import OtherUserProfileScreen from '../../ProfileScreen/OtherUser/OtherUserProfileScreen';
+import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
+import Button from '../../../component/common/Buttons/Button';
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -162,6 +158,66 @@ const CompanyChallengesScreen = () => {
           headerLeft: (props) => (
             <NavButton
               text={t('top_nav.challenges') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CompanyChallengesStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => {
+                navigation.goBack();
+              }}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CompanyChallengesStack.Screen
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log('press share')}
+                />
+              </View>
+            );
+          },
+        })}
+      />
+
+      <CompanyChallengesStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
               onPress={() => navigation.goBack()}
               withBackIcon
             />

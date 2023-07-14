@@ -42,24 +42,6 @@ const MainSearchScreen = () => {
   const userData = getUserProfile();
 
   useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: 'none',
-        backgroundColor: '#FFFFFF',
-      },
-    });
-    return () => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          height: isAndroid ? 68 : 102,
-          paddingBottom: isAndroid ? 0 : 30,
-        },
-      });
-    };
-  }, []);
-
-  useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       headerTitle: () => (
@@ -100,13 +82,6 @@ const MainSearchScreen = () => {
   }, [debouncedSearchQuery]);
 
   const navigateToUserDetail = (userId: string) => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        backgroundColor: '#FFFFFF',
-        height: isAndroid ? 68 : 102,
-        paddingBottom: isAndroid ? 0 : 30,
-      },
-    });
     if (userData?.id === userId) {
       navigation.navigate('HomeScreen', {
         screen: 'Company Profile',

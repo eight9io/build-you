@@ -17,7 +17,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className={clsx('mb-32 flex-1 px-4 pt-4')}>
+    <View className={clsx('flex-1 px-4 pt-4')}>
       {participant.length > 0 && (
         <FlatList
           data={participant}

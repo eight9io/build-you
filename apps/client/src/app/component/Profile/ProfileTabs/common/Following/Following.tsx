@@ -16,7 +16,7 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="mb-[100px] flex-1 px-4 ">
+    <View className=" flex-1  px-4 ">
       {following && following.length > 0 && (
         <FlatList
           className="pt-4"

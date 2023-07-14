@@ -37,7 +37,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
     if (!otherUserData?.id) return;
     fetchListEmployee(otherUserData?.id, (res: any) => {
       if (
-        !!res?.find((item: any) => item?.employeeof?.id === userProfile?.id) ||
+        !!res?.find((item: any) => item?.id === userProfile?.id) ||
         otherUserData?.id === userProfile?.id
       ) {
         setIsCurrentUserInCompany(true);
@@ -57,6 +57,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
         !otherUserData?.companyAccount
           ? t('profile_screen_tabs.skills')
           : t('profile_screen_tabs.employees'),
+        t('profile_screen_tabs.challenges'),
       ]
     : [
         t('profile_screen_tabs.biography'),
@@ -86,14 +87,12 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                     ) : (
                       <EmployeesCompany key="1" employeeList={employeeList} />
                     ),
-                    !isCurrentUserInCompany && (
-                      <ChallengesTab
-                        isCompanyAccount={isCompanyAccount}
-                        isCurrentUserInCompany={isCurrentUserInCompany}
-                        userId={otherUserData.id}
-                        key="2"
-                      />
-                    ),
+                    <ChallengesTab
+                      isCompanyAccount={isCompanyAccount}
+                      isCurrentUserInCompany={isCurrentUserInCompany}
+                      userId={otherUserData.id}
+                      key="2"
+                    />,
                   ]}
                   defaultTabClassName="text-gray-dark"
                 />

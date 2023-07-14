@@ -26,7 +26,7 @@ import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
 import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
-import { sortChallengeByStatus } from '../../../utils/common';
+import { sortChallengeByStatusFromResponse } from '../../../utils/common';
 import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const PersonalChallengesStack =
@@ -80,7 +80,7 @@ const PersonalChallenges = ({
   const fetchData = async () => {
     try {
       const res = await httpInstance.get(`/challenge/all/${userData?.id}`);
-      setPersonalChallengesList(sortChallengeByStatus(res));
+      setPersonalChallengesList(sortChallengeByStatusFromResponse(res));
       setTimeout(() => {
         setIsLoading(false);
       }, 500);

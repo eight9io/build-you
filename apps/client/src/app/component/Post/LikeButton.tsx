@@ -46,13 +46,9 @@ const LikeButton: FC<ILikeButtonProps> = ({
     if (!progressId || !currentUserId) return;
     try {
       const response = await getProgressLikes(progressId);
-      if (response.status === 200) {
-        setNumberOfLikes(() => response.data.length);
-        const isLiked = response.data.some(
-          (like) => like.user === currentUserId
-        );
-        setIsLikedByCurrentUser(isLiked);
-      }
+      setNumberOfLikes(response.data.length);
+      const isLiked = response.data.some((like) => like.user === currentUserId);
+      setIsLikedByCurrentUser(isLiked);
       setIsFirstLoad(false);
     } catch (error) {
       // GlobalDialogController.showModal({

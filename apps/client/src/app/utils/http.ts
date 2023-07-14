@@ -29,6 +29,7 @@ httpInstance.interceptors.response.use(
     return res;
   },
   function (error) {
+    console.log('error', error.config);
     return new Promise(async (resolve, reject) => {
       const status = error.response ? error.response.status : null;
       if ([401].includes(status)) {

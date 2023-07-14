@@ -27,6 +27,7 @@ export interface IUserData {
   cover?: string;
   companyAccount?: boolean | null;
   isShowCompany?: boolean | null;
+  challengeStatus?: string;
 }
 
 export interface IHardSkillProps {

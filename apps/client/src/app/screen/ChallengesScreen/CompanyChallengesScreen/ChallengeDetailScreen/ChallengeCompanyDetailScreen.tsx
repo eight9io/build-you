@@ -34,8 +34,6 @@ export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
   const [isJoined, setIsJoined] = useState(false);
-  const [participantList, setParticipantList] = useState([]);
-
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
     i18n.t('challenge_detail_screen.progress'),
     i18n.t('challenge_detail_screen.description'),
@@ -44,12 +42,15 @@ export const ChallengeCompanyDetailScreen: FC<
 
   const [index, setIndex] = useState(0);
   const { goal, id: challengeId, owner } = challengeData;
-  const statusColor = getChallengeStatusColor(challengeData?.status);
 
   const { getUserProfile } = useUserProfileStore();
 
   const currentUser = getUserProfile();
 
+  // const participantList = challengeData?.participants || [];
+  const [participantList, setParticipantList] = useState(
+    challengeData?.participants || []
+  );
   useEffect(() => {
     const fetchParticipants = async () => {
       const response = await getChallengeParticipants(challengeId);
@@ -64,6 +65,30 @@ export const ChallengeCompanyDetailScreen: FC<
     };
     fetchParticipants();
   }, [challengeId, isJoined]);
+  const challengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData?.owner;
+
+  const isCurrentUserOwner = challengeOwner?.id === currentUser?.id;
+  const isCurrentUserParticipant = participantList?.find(
+    (participant: any) => participant.id === currentUser?.id
+  );
+
+  const challengeStatus =
+    challengeOwner.id === currentUser?.id
+      ? challengeData.status
+      : isCurrentUserParticipant?.challengeStatus;
+
+  const isChallengeCompleted =
+    challengeStatus === 'done' || challengeStatus === 'closed';
+
+  useEffect(() => {
+    if (isCurrentUserOwner) {
+      setIsJoined(true);
+    } else {
+      setIsJoined(!!isCurrentUserParticipant);
+    }
+  }, [isCurrentUserOwner, isCurrentUserParticipant]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
@@ -111,12 +136,12 @@ export const ChallengeCompanyDetailScreen: FC<
     <View className="flex h-full flex-col bg-white pt-4">
       <View className="flex flex-row items-center justify-between px-4">
         <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
-          <CheckCircle fill={statusColor} />
+          <CheckCircle fill={getChallengeStatusColor(challengeStatus)} />
           <View className="flex-1">
             <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
         </View>
-        {(owner as IChallengeOwner[])[0].id !== currentUser?.id && (
+        {!isCurrentUserOwner && !isChallengeCompleted && (
           <View className="ml-2 h-9">
             <Button
               isDisabled={false}
@@ -139,6 +164,15 @@ export const ChallengeCompanyDetailScreen: FC<
             />
           </View>
         )}
+        {isChallengeCompleted && (
+          <View className="ml-2 h-9">
+            <Button
+              containerClassName="border border-gray-dark flex items-center justify-center px-5"
+              textClassName={`text-center text-md font-semibold text-gray-dark `}
+              title={i18n.t('challenge_detail_screen.completed')}
+            />
+          </View>
+        )}
       </View>
 
       <View className="mt-3 flex flex-1">
@@ -153,7 +187,7 @@ export const ChallengeCompanyDetailScreen: FC<
             setShouldRefresh={setShouldRefresh}
           />
           <DescriptionTab challengeData={challengeData} />
-          <ParticipantsTab participant={participantList} />
+          <ParticipantsTab participant={participantList as any} />
         </TabView>
       </View>
     </View>

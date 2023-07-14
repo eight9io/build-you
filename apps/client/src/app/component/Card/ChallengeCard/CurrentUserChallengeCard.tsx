@@ -8,44 +8,19 @@ import { getChallengeStatusColor } from '../../../utils/common';
 
 import CheckCircle from '../../asset/check_circle.svg';
 import BackSvg from '../../asset/back.svg';
-import { isArray } from 'util';
+import { CompanyTag } from './ChallengeCard';
 import { useUserProfileStore } from '../../../store/user-data';
 
-interface IChallengeCardProps {
+interface ICurrentUserChallengeCardProps {
   item: IChallenge;
-  isCompanyAccount?: boolean | undefined | null;
   imageSrc: string | null | undefined;
   navigation?: any;
-  handlePress?: () => void;
-  isFromOtherUser?: boolean;
 }
 
-export const CompanyTag = ({
-  companyName,
-}: {
-  companyName: string | false | undefined;
-}) => {
-  if (!companyName) return null;
-  if (companyName?.length > 13) {
-    companyName = companyName.slice(0, 13) + '...';
-  }
-  return (
-    <View className="bg-primary-default flex h-8 w-2/5 flex-row items-center rounded-l-md">
-      <View className="mx-2 h-[20px] w-[20px] rounded-full bg-gray-200 py-1"></View>
-      <Text className="text-md font-normal text-white">
-        {companyName || 'Company'}
-      </Text>
-    </View>
-  );
-};
-
-const ChallengeCard: React.FC<IChallengeCardProps> = ({
+const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   item,
   imageSrc,
-  isCompanyAccount,
   navigation,
-  handlePress,
-  isFromOtherUser = false,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const challengeOwner = Array.isArray(item?.owner)
@@ -56,6 +31,16 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
 
+  const onPress = () => {
+    // handlePress or navigation
+    if (navigation) {
+      navigation.navigate('PersonalChallengeDetailScreen', {
+        challengeId: item.id,
+      });
+      return;
+    }
+  };
+  // find participants status with current user
   const isCurrentUserParticipant = item?.participants?.find(
     (participant) => participant.id === currentUser?.id
   );
@@ -65,34 +50,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
       ? item.status
       : isCurrentUserParticipant?.challengeStatus;
 
-  const onPress = () => {
-    // handlePress or navigation
-    if (navigation) {
-      if (isCompanyAccount) {
-        return navigation.navigate('CompanyChallengeDetailScreen', {
-          challengeId: item.id,
-        });
-      } else if (isFromOtherUser) {
-        if (companyName) {
-          navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
-            challengeId: item.id,
-            isCompanyAccount: true,
-          });
-          return;
-        }
-        navigation.navigate('OtherUserProfileChallengeDetailsScreen', {
-          challengeId: item.id,
-        });
-        return;
-      }
-      navigation.navigate('PersonalChallengeDetailScreen', {
-        challengeId: item.id,
-      });
-      return;
-    }
-    if (handlePress) handlePress();
-  };
-
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -100,7 +57,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
       className={clsx('border-gray-80 mb-5 w-full rounded-xl border bg-white')}
     >
       <View className={clsx('relative w-full')}>
-        {(isCompanyAccount || companyName) && (
+        {companyName && (
           <View className={clsx('absolute top-6 z-10 flex w-full items-end')}>
             <CompanyTag companyName={companyName} />
           </View>
@@ -148,4 +105,4 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   );
 };
 
-export default ChallengeCard;
+export default CurrentUserChallengeCard;

@@ -67,6 +67,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
+    if (!challengeId) return;
     const getChallengeData = async () => {
       try {
         const response = await getChallengeById(challengeId);

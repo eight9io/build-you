@@ -28,7 +28,6 @@ import { useUserProfileStore } from '../../../store/user-data';
 import { useIsFocused } from '@react-navigation/native';
 import httpInstance from '../../../utils/http';
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
-import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 import { sortChallengeByStatus } from '../../../utils/common';
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();

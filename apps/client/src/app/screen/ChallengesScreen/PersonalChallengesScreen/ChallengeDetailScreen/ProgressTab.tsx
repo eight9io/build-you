@@ -73,6 +73,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   }, [challengeData]);
 
   useEffect(() => {
+    if (!challengeData?.id) return;
     if (shouldRefetch || shouldRefresh || isFocused) {
       setProgressLoading(true);
 

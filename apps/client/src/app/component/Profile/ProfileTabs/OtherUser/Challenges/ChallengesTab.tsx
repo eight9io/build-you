@@ -40,6 +40,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
     getChallengeByUserId(userId)
       .then((res) => {
         if (!isCurrentUserInCompany) {
+          res.data = res.data.flat()
           res.data = res.data.filter((item: any) => item?.public);
         }
         setOtherUserChallenge(sortChallengeByStatus(res));
@@ -62,14 +63,6 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       </View>
     );
   }
-
-  const handleNavigateToChallengeDetail = (challengeId: string) => {
-    const pushAction = StackActions.push('OtherUserProfileChallengeDetailsScreen', {
-      challengeId,
-      isCompanyAccount: isCompanyAccount ? true : false,
-    });
-    navigation.dispatch(pushAction);
-  };
 
   return (
     <View className="h-full  px-4">

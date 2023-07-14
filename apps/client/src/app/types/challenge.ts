@@ -68,4 +68,5 @@ export interface IChallenge {
   createdAt?: Date;
   updatedAt?: Date;
   progress?: IProgressChallenge[];
+  participants?: IUserData[];
 }

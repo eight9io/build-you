@@ -9,6 +9,8 @@ export const getUrlParam = (url: string, param: string) => {
 };
 
 export const getChallengeStatusColor = (status: string | undefined) => {
+  if (status === 'progress') return '#C5C8D2';
+  if (status === 'done') return '#20D231';
   return status !== 'open' ? '#20D231' : '#C5C8D2';
 };
 
@@ -37,6 +39,14 @@ export const sortChallengeByStatus = (res: any) => {
   if (!res?.data) {
     return [];
   }
+  res.data = res.data.flat();
+  // remove duplicate data by id
+  const uniqueData = res.data.filter(
+    (challenge: IChallenge, index: number, self: IChallenge[]) =>
+      index === self.findIndex((t) => t.id === challenge.id)
+  );
+  res.data = uniqueData;
+
   const closedChallenges = res.data
     .filter((challenge: IChallenge) => challenge.status === 'closed')
     .sort((a: IChallenge, b: IChallenge) => {

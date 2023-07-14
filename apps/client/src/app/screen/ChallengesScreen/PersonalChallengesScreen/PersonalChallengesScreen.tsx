@@ -17,6 +17,7 @@ import PersonalChallengeDetailScreen from './PersonalChallengeDetailScreen/Perso
 import SkeletonLoadingChallengesScreen from '../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen';
 
 import ChallengeCard from '../../../component/Card/ChallengeCard/ChallengeCard';
+import CurrentUserChallengeCard from '../../../component/Card/ChallengeCard/CurrentUserChallengeCard';
 import AppTitle from '../../../component/common/AppTitle';
 import NavButton from '../../../component/common/Buttons/NavButton';
 import IconSearch from '../../../component/common/IconSearch/IconSearch';
@@ -25,8 +26,8 @@ import Button from '../../../component/common/Buttons/Button';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
 import OtherUserProfileChallengeDetailsScreen from '../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
-import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 import { sortChallengeByStatus } from '../../../utils/common';
+import ProgressCommentScreen from '../ProgressCommentScreen/ProgressCommentScreen';
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -106,7 +107,7 @@ const PersonalChallenges = ({
               className="px-4 pt-4"
               data={personalChallengesList}
               renderItem={({ item }: { item: IChallenge }) => (
-                <ChallengeCard
+                <CurrentUserChallengeCard
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
@@ -220,6 +221,22 @@ const PersonalChallengesNavigator = () => {
               </View>
             );
           },
+        })}
+      />
+
+      <PersonalChallengesStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => '',
+          headerLeft: (props) => (
+            <NavButton
+              text={t('button.back') as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
         })}
       />
     </PersonalChallengesStack.Navigator>

@@ -55,11 +55,13 @@ const LikeButton: FC<ILikeButtonProps> = ({
       }
       setIsFirstLoad(false);
     } catch (error) {
-      GlobalDialogController.showModal({
-        title: 'Error',
-        message:
-          'Something went wrong when getting likes. Please try again later.',
-      });
+      // GlobalDialogController.showModal({
+      //   title: 'Error',
+      //   message:
+      //     'Something went wrong when getting likes. Please try again later.',
+      // });
+      setNumberOfLikes(0);
+      setIsLikedByCurrentUser(false);
     }
   };
 

@@ -26,6 +26,7 @@ import TaskAltIcon from './assets/task-alt.svg';
 import TaskAltIconGray from './assets/task-alt-gray.svg';
 // import ChallengeDetailScreen from '../../PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import ChallengeCompanyDetailScreen from '../ChallengeDetailScreen/ChallengeCompanyDetailScreen';
+import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -61,7 +62,23 @@ export const RightCompanyChallengeDetailOptions: FC<
     setIsChallengeAlreadyCompletedDialogVisible,
   ] = useState<boolean>(false);
 
-  const isChallengeCompleted = challengeData?.status === 'closed';
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  const challengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData?.owner;
+
+  const isCurrentUserParticipant = challengeData?.participants?.find(
+    (participant) => participant.id === currentUser?.id
+  );
+
+  const challengeStatus =
+    challengeOwner?.id === currentUser?.id
+      ? challengeData?.status
+      : isCurrentUserParticipant?.challengeStatus;
+  const isChallengeCompleted =
+    challengeStatus === 'done' || challengeStatus === 'closed';
 
   // when sharing is available, we can share the image
   const onShare = async () => {

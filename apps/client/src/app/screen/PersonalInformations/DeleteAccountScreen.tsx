@@ -1,12 +1,18 @@
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import clsx from 'clsx'
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import IconEyeOff from './asset/eye-off.svg';
 
 import IconEyeOn from './asset/icon-eye.svg';
-import { Controller, useForm } from 'react-hook-form'
-import TextInput from '../../component/common/Inputs/TextInput'
+import { Controller, useForm } from 'react-hook-form';
+import TextInput from '../../component/common/Inputs/TextInput';
 import ErrorText from '../../component/common/ErrorText';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidationSchema } from '../../Validators/Login.validate';

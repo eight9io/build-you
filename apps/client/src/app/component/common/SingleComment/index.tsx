@@ -30,6 +30,7 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 interface ISingleCommentProps {
   comment: IProgressComment;
   onDeleteCommentSuccess: () => void;
+  returnBottomTabBar?: () => void;
 }
 const renderPart = (part: Part, index: number, navigataion: any) => {
   // Mention type part
@@ -155,14 +156,18 @@ const SingleComment: FC<ISingleCommentProps> = ({
             setTimeout(() => {
               setDisabled(false);
             }, 300);
-            const pushAction = StackActions.push('HomeScreen', {
-              screen: 'Feed',
-              params: {
-                screen: 'OtherUserProfileScreen',
-                params: { userId: comment.user },
-              },
+            // const pushAction = StackActions.push('HomeScreen', {
+            //   screen: 'Feed',
+            //   params: {
+            //     screen: 'OtherUserProfileScreen',
+            //     params: { userId: comment.user },
+            //   },
+            // });
+            // navigation.dispatch(pushAction);
+
+            navigation.navigate('OtherUserProfileScreen', {
+              userId: comment.user,
             });
-            navigation.dispatch(pushAction);
           }}
         >
           <PostAvatar

@@ -97,7 +97,13 @@ export const HomeFeed = () => {
   };
 
   const renderPost = useCallback(({ item }: { item: IFeedPostProps }) => {
-    return <FeedPostCard itemFeedPostCard={item} navigation={navigation} />;
+    return (
+      <FeedPostCard
+        itemFeedPostCard={item}
+        navigation={navigation}
+        userId={userData?.id}
+      />
+    );
   }, []);
 
   const keyExtractor = useCallback(
@@ -115,6 +121,7 @@ export const HomeFeed = () => {
             keyExtractor={keyExtractor}
             onEndReached={getNewFeed}
             onEndReachedThreshold={3}
+            maxToRenderPerBatch={4}
             onRefresh={handleScroll}
             refreshing={isRefreshing}
           />

@@ -228,13 +228,11 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   isFocused,
   navigation,
 }) => {
-
   const navigateToUserProfile = () => {
     if (!user?.id) {
       GlobalDialogController.showModal({
         title: 'Error',
-        message:
-          'Something went wrong. Please try again later!',
+        message: 'Something went wrong. Please try again later!',
       });
       return;
     }
@@ -245,8 +243,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
     if (!user?.id || !id) {
       GlobalDialogController.showModal({
         title: 'Error',
-        message:
-          'Something went wrong. Please try again later!',
+        message: 'Something went wrong. Please try again later!',
       });
       return;
     }
@@ -262,8 +259,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
     if (!challenge?.id) {
       GlobalDialogController.showModal({
         title: 'Error',
-        message:
-          'Something went wrong. Please try again later!',
+        message: 'Something went wrong. Please try again later!',
       });
       return;
     }
@@ -284,7 +280,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       <View className="relative mb-1">
         <View className="bg-gray-50 p-5">
           <TouchableOpacity
-            className="mb-3 flex-row justify-between"
+            className="mb-4 flex-row justify-between"
             onPress={navigateToUserProfile}
           >
             <View className="flex-row">
@@ -299,7 +295,11 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
               </View>
             </View>
           </TouchableOpacity>
-          <Text className=" text-md mb-3 font-normal leading-5">{caption}</Text>
+          {caption && (
+            <Text className=" text-md mb-3 font-normal leading-5">
+              {caption}
+            </Text>
+          )}
           {image && (
             <ChallengeImage
               name={challenge?.goal}

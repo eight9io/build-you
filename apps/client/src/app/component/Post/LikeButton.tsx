@@ -83,6 +83,12 @@ const LikeButton: FC<ILikeButtonProps> = ({
   }, [progressId, currentUserId]);
 
   useEffect(() => {
+    (async () => {
+      await loadProgressLikes();
+    })();
+  }, []);
+
+  useEffect(() => {
     setTempLikes(numberOfLikes);
   }, [numberOfLikes]);
 

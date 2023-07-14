@@ -58,12 +58,8 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
       setTimeout(() => {
         setDisabled(false);
       }, 300);
-      const pushAction = StackActions.push('HomeScreen', {
-        screen: 'Feed',
-        params: {
-          screen: 'OtherUserProfileScreen',
-          params: { userId: userId },
-        },
+      const pushAction = StackActions.push('OtherUserProfileScreen', {
+        userId,
       });
       navigation.dispatch(pushAction);
     };
@@ -156,18 +152,10 @@ const SingleComment: FC<ISingleCommentProps> = ({
             setTimeout(() => {
               setDisabled(false);
             }, 300);
-            // const pushAction = StackActions.push('HomeScreen', {
-            //   screen: 'Feed',
-            //   params: {
-            //     screen: 'OtherUserProfileScreen',
-            //     params: { userId: comment.user },
-            //   },
-            // });
-            // navigation.dispatch(pushAction);
-
-            navigation.navigate('OtherUserProfileScreen', {
+            const pushAction = StackActions.push('OtherUserProfileScreen', {
               userId: comment.user,
             });
+            navigation.dispatch(pushAction);
           }}
         >
           <PostAvatar

@@ -14,7 +14,7 @@ export interface INotification {
     progressId?: string;
     newFollowerId?: string;
     type: NOTIFICATION_TYPES;
-    createdAt: string;
+    createdAt: Date;
     challengeName?: string
 }
 
@@ -22,4 +22,12 @@ export interface IPushNotificationToken {
     notificationToken: string;
     status: NOTIFICATION_TOKEN_STATUS;
     deviceType: NOTIFICATION_TOKEN_DEVICE_TYPE;
+}
+
+export interface INotificationResponse {
+  // Raw payload response from API
+  title: NOTIFICATION_TYPES;
+  body: string;
+  createdAt: Date;
+  createdBy: string;
 }

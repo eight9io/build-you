@@ -4,7 +4,11 @@ import { Platform } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavigationContainerRef, StackActions } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/navigation.type';
-import { INotification, INotificationPayload } from '../types/notification';
+import {
+  INotification,
+  INotificationPayload,
+  INotificationResponse,
+} from '../types/notification';
 import { NOTIFICATION_TYPES } from '../common/enum';
 
 export const registerForPushNotificationsAsync = async (
@@ -103,52 +107,31 @@ export const handleTapOnNotification = async (
   notification: INotification,
   navigation: NativeStackNavigationProp<RootStackParamList>
 ) => {
-  console.log('notification: ', notification);
   switch (notification.type) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
       if (notification.progressId)
-        // ProgressCommentScreen is a screen inside a nested stack navigator
         navigation.navigate('ProgressCommentScreen', {
           progressId: '63eb8bc8-ea3b-4568-87da-f2b76aafaf51',
         });
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
       if (notification.progressId)
-        // ProgressCommentScreen is a screen inside a nested stack navigator
         navigation.navigate('ProgressCommentScreen', {
           progressId: notification.progressId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_MENTION:
       if (notification.progressId)
-        // ProgressCommentScreen is a screen inside a nested stack navigator
         navigation.navigate('ProgressCommentScreen', {
           progressId: notification.progressId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
       if (notification.user.id)
-        // ProgressCommentScreen is a screen inside a nested stack navigator
-
-        // navigation.navigate('Profile', {
-        //   screen: 'OtherUserProfileScreen',
-        //   params: {
-        //     userId: 'd6dcdf47-76d3-480f-af2f-a392065ef845',
-        //     isFollower: true,
-        //   },
-        // });
         navigation.navigate('OtherUserProfileScreen', {
-          userId: 'd6dcdf47-76d3-480f-af2f-a392065ef845',
+          userId: notification.user.id,
           isFollower: true,
         });
-      // {
-      //   const pushAction = StackActions.push('OtherUserProfileScreen', {
-      //     userId: 'd6dcdf47-76d3-480f-af2f-a392065ef845',
-      //     isFollower: true,
-      //   });
-      //   navigation.dispatch(pushAction);
-      //  }
-
       break;
   }
 };
@@ -185,4 +168,33 @@ export const clearNotifications = async () => {
   // Dismiss all notification trays and reset badge count
   await Notifications.dismissAllNotificationsAsync();
   await Notifications.setBadgeCountAsync(0);
+};
+
+export const mapNotificationResponses = (
+  responses: INotificationResponse[]
+): INotification[] => {
+  return responses.map((response) => {
+    const extractUserInfoRegex = /@\[([^\(]+)\(([^)]+)\)/;
+    const match = response.body.match(extractUserInfoRegex);
+    let username = '';
+    let userId = '';
+    if (match) {
+      username = match[1];
+      userId = match[2];
+    } else {
+      console.log('No match found');
+      throw new Error('Something went wrong');
+    }
+    return {
+      id: '',
+      type: response.title,
+      user: {
+        id: userId,
+        name: username,
+        avatar: 'https://picsum.photos/200',
+      },
+      createdAt: response.createdAt,
+      isRead: false,
+    };
+  });
 };

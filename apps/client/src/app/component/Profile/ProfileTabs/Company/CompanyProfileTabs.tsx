@@ -8,9 +8,7 @@ import clsx from 'clsx';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
 import Employees from './Employees/Employees';
-import ChallengesTab from '../OtherUser/Challenges/ChallengesTab';
 
-import { MOCK_FOLLOW_USERS } from '../../../../mock-data/follow';
 import {
   useFollowingListStore,
   useUserProfileStore,
@@ -26,7 +24,6 @@ import {
 } from 'apps/client/src/app/service/company';
 import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 
-import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
 import { useGetListFollowing } from 'apps/client/src/app/hooks/useGetUser';
 import { useGetListEmployee } from 'apps/client/src/app/hooks/useGetCompany';
 

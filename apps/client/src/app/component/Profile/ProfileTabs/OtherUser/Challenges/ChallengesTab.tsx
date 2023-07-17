@@ -19,12 +19,14 @@ import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
 interface IChallengesTabProps {
   userId: string | null | undefined;
   isCurrentUserInCompany?: boolean | null;
+  isCurrentUserInSameCompanyWithViewingUser?: boolean | null;
   isCompanyAccount: boolean | undefined | null;
 }
 
 const ChallengesTab: FC<IChallengesTabProps> = ({
   userId,
   isCompanyAccount = false,
+  isCurrentUserInSameCompanyWithViewingUser = false,
   isCurrentUserInCompany = null,
 }) => {
   const { t } = useTranslation();
@@ -49,13 +51,14 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
           challengeList = challengeList.filter((item: any) => item?.public);
         }
         // if current user is company, add back the challenge that is not public when the owner is the current user
-        // TODO: edge case: if the user is in the same company as the current user, the challenge will be shown
         challengeList = challengeList.concat(
           originalChallengeList.filter(
             (item: any) => !item?.public && item?.owner?.id === userProfile?.id
           )
         );
-
+        if (isCurrentUserInSameCompanyWithViewingUser) {
+          challengeList = originalChallengeList;
+        }
         setOtherUserChallenge(sortChallengeByStatus(challengeList));
       })
       .catch((err) => {

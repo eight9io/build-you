@@ -13,12 +13,14 @@ import { clearNotifications } from '../utils/notification.util';
 export interface NotificationStore {
   pushToken?: string;
   hasNewNotification: boolean;
+  _hasHydrated: boolean;
 
   setPushToken: (value: string) => Promise<void>;
   getPushToken: () => string | undefined;
   revokePushToken: () => Promise<void>;
   setHasNewNotification: (value: boolean) => void;
   getHasNewNotification: () => boolean;
+  setHasHydrated: (value: boolean) => void;
 }
 
 // Use persist to store data in local storage
@@ -28,8 +30,8 @@ export const useNotificationStore = create<NotificationStore>()(
     (set, get) => ({
       pushToken: undefined,
       hasNewNotification: false,
+      _hasHydrated: false,
       setPushToken: async (value) => {
-        set({ pushToken: value });
         // update notification token to server
         const res = await updateNotificationToken({
           notificationToken: value,
@@ -39,6 +41,7 @@ export const useNotificationStore = create<NotificationStore>()(
               ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
               : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
         });
+        if (res.status === 200 || res.status === 201) set({ pushToken: value });
       },
       getPushToken: () => get().pushToken,
       revokePushToken: async () => {
@@ -53,7 +56,8 @@ export const useNotificationStore = create<NotificationStore>()(
               ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
               : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
         });
-        set({ pushToken: undefined });
+        if (res.status === 200 || res.status === 201)
+          set({ pushToken: undefined });
       },
       setHasNewNotification: async (value) => {
         set({ hasNewNotification: value });
@@ -63,10 +67,19 @@ export const useNotificationStore = create<NotificationStore>()(
         }
       },
       getHasNewNotification: () => get().hasNewNotification,
+      setHasHydrated: (value: boolean) => {
+        set({
+          _hasHydrated: value,
+        });
+      },
     }),
     {
       name: 'notification-storage',
       storage: createJSONStorage(() => AsyncStorage), // Use AsyncStorage to store data
+      onRehydrateStorage: () => (state) => {
+        console.log('state: ', state);
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

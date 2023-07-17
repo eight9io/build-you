@@ -64,7 +64,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     challengeStatus === 'done' || challengeStatus === 'closed';
 
   const CHALLENGE_TABS_TITLE_TRANSLATION =
-    participantList && challengeOwner?.id !== currentUser?.id
+    participantList && challengeOwner?.companyAccount
       ? [
           i18n.t('challenge_detail_screen.progress'),
           i18n.t('challenge_detail_screen.description'),
@@ -174,7 +174,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             setShouldRefresh={setShouldRefresh}
           />
           <DescriptionTab challengeData={challengeData} />
-          {participantList && challengeOwner?.id !== currentUser?.id && (
+          {participantList && challengeOwner?.companyAccount && (
             <ParticipantsTab participant={participantList} />
           )}
         </TabView>

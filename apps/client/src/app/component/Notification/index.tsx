@@ -7,7 +7,7 @@ import { INotification } from '../../types/notification';
 import { getNotifications } from '../../service/notification';
 import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 import SkeletonLoadingCommon from '../common/SkeletonLoadings/SkeletonLoadingCommon';
-import EmptyNotification from '../../component/asset/empty.svg';
+import EmptyNotification from '../../component/asset/empty-notification.svg';
 interface INotificationProps {
   title?: string;
 }
@@ -63,7 +63,7 @@ const Notification: React.FC<INotificationProps> = ({ title }) => {
         <>
           <View className="flex-1 items-center justify-center">
             <EmptyNotification />
-            <Text className="text-gray-dark font-regular text-base">
+            <Text className="text-gray-dark font-regular text-center text-base">
               {t('notification_screen.no_notification')}
             </Text>
           </View>

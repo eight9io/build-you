@@ -27,11 +27,25 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
   const [isCurrentUserInCompany, setIsCurrentUserInCompany] = useState<
     boolean | null
   >(null);
+  const [
+    isCurrentUserInSameCompanyWithViewingUser,
+    setIsCurrentUserInSameCompanyWithViewingUser,
+  ] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const otherUserCompany = otherUserData?.employeeOf;
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const isCompanyAccount = otherUserData?.companyAccount;
+
+  useEffect(() => {
+    if (otherUserCompany?.id === userProfile?.employeeOf?.id) {
+      setIsCurrentUserInSameCompanyWithViewingUser(true);
+    } else {
+      setIsCurrentUserInSameCompanyWithViewingUser(false);
+    }
+  }, [otherUserCompany?.id, userProfile?.employeeOf?.id]);
 
   useEffect(() => {
     if (!otherUserData?.id) return;
@@ -67,6 +81,8 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
         t('profile_screen_tabs.challenges'),
       ];
 
+  console.log(isCurrentUserInSameCompanyWithViewingUser);
+
   return (
     <>
       {isLoading && <SkeletonLoadingCommon />}
@@ -88,6 +104,9 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                       <EmployeesCompany key="1" employeeList={employeeList} />
                     ),
                     <ChallengesTab
+                      isCurrentUserInSameCompanyWithViewingUser={
+                        isCurrentUserInSameCompanyWithViewingUser
+                      }
                       isCompanyAccount={isCompanyAccount}
                       isCurrentUserInCompany={isCurrentUserInCompany}
                       userId={otherUserData.id}

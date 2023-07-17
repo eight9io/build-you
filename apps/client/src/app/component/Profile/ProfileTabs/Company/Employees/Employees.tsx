@@ -8,7 +8,6 @@ import AddIcon from '../../../../asset/add.svg';
 import BinIcon from '../../../../asset/bin.svg';
 
 import AddNewEmployeeModal from '../../../../modal/company/AddNewEmployeeModal';
-import { MOCK_FOLLOW_USERS } from '../../../../../mock-data/follow';
 import { IUserData } from 'apps/client/src/app/types/user';
 import Empty from '../../../../asset/emptyFollow.svg';
 import clsx from 'clsx';
@@ -18,7 +17,6 @@ import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.ty
 
 import ConfirmDialog from '../../../../common/Dialog/ConfirmDialog';
 import GlobalDialogController from '../../../../common/Dialog/GlobalDialogController';
-import Loading from '../../../../common/Loading';
 import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
 import {
   serviceAddEmployee,

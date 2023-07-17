@@ -240,7 +240,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
         <TabView
           titles={
-            isCompanyAccount || challengeOwner?.id !== currentUser?.id
+            isCompanyAccount || challengeOwner?.companyAccount
               ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
               : CHALLENGE_TABS_TITLE_TRANSLATION
           }
@@ -255,7 +255,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             setShouldRefresh={setShouldRefresh}
           />
           <DescriptionTab challengeData={challengeData} />
-          {(isCompanyAccount || challengeOwner?.id !== currentUser?.id) && (
+          {(isCompanyAccount || challengeOwner?.companyAccount) && (
             <ParticipantsTab participant={participantList} />
           )}
         </TabView>

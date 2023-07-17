@@ -13,6 +13,7 @@ import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import Button from '../../../../common/Buttons/Button';
 import PlayButton from './asset/play-button.svg';
 import { IUserData } from 'apps/client/src/app/types/user';
+import { useTranslation } from 'react-i18next';
 interface IBiographyProps {
   userProfile: IUserData | null;
 }
@@ -91,7 +92,9 @@ export const VideoWithPlayButton = ({
 const Biography = ({ userProfile }: IBiographyProps) => {
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;
+  const occupation = userProfile?.occupation;
   const videoSrc = userProfile?.video;
+  const { t } = useTranslation();
 
   return (
     <ScrollView className="w-full px-4 ">
@@ -119,6 +122,16 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               );
             })}
           </View>
+        )}
+        {occupation && (
+          <Text className="mt-3">
+            <Text className={clsx('text-md text-gray-dark  font-semibold')}>
+              {occupation && t('form_onboarding.screen_1.occupation')}:&nbsp;
+            </Text>
+            <Text className={clsx('text-md text-gray-dark')}>
+              {occupation?.name}
+            </Text>
+          </Text>
         )}
       </View>
     </ScrollView>

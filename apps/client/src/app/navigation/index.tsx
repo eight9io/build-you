@@ -77,6 +77,7 @@ export const RootNavigation = () => {
   const { setIsCompleteProfileStore, getIsCompleteProfileStore } =
     useIsCompleteProfileStore();
   const {
+     _hasHydrated: notificationStoreHasHydrated,
     setPushToken,
     setHasNewNotification,
     pushToken,
@@ -114,14 +115,19 @@ export const RootNavigation = () => {
     const subscription = AppState.addEventListener(
       'change',
       async (nextAppState) => {
+        // Get the latest states because of closure
+        const hasLogined = getAccessToken();
+        const hasCompletedProfile = getIsCompleteProfileStore();
+        const currentPushToken = getPushToken();
         if (
+          hasLogined &&
+          hasCompletedProfile &&
           appState.current.match(/inactive|background/) &&
           nextAppState === 'active'
         ) {
           // App has come to the foreground => Check notification permission in case user change it in the setting
           const notificationIsPermitted =
             await notificationPermissionIsAllowed();
-          const currentPushToken = getPushToken(); // Ensure to get the latest push token in case state is not updated yet
           if (!notificationIsPermitted && currentPushToken) {
             // Case user turn off notification in the setting then back to the app => revoke push token
             await revokePushToken();
@@ -168,13 +174,18 @@ export const RootNavigation = () => {
   }, [logined, isCompleteProfile, navigationRef]);
 
   useEffect(() => {
-    if (!isMainAppLoading && isCompleteProfile !== null && logined !== null) {
+    if (
+      !isMainAppLoading &&
+      isCompleteProfile !== null &&
+      logined !== null &&
+      notificationStoreHasHydrated
+    ) {
       const hideSplashScreen = async () => {
         await SplashScreen.hideAsync();
       };
       hideSplashScreen();
     }
-  }, [isMainAppLoading, isCompleteProfile]);
+  }, [isMainAppLoading, isCompleteProfile, notificationStoreHasHydrated]);
 
   const initNotification = async (
     navigation: NavigationContainerRef<RootStackParamList>

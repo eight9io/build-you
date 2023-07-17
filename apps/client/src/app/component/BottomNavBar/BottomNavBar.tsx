@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   BottomTabBar,
   createBottomTabNavigator,
+  useBottomTabBarHeight,
 } from '@react-navigation/bottom-tabs';
 import { View, Text, Platform } from 'react-native';
 import Animated, {
@@ -59,7 +60,6 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         tabBarShowLabel: false,
         headerShown: true,
         headerTitleAlign: 'center',
-
         tabBarStyle: {
           display: shouldHideTabBar ? 'none' : 'flex',
           backgroundColor: '#FFFFFF',
@@ -86,7 +86,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           exiting={FadeOutDown}
           layout={Layout.duration(200)}
           style={{
-            backgroundColor: '#FFFFFF',
+            display: shouldHideTabBar ? 'none' : 'flex',
+            height: isAndroid ? 68 : 102,
+            paddingBottom: isAndroid ? 0 : 30,
+            position: 'relative', // Make sure all the screen is above the tab bar and not be hidden by it
           }}
         >
           <BottomTabBar {...props} />

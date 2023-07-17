@@ -357,6 +357,6 @@
     "first_name_required": "Please fill in your first name."
   },
   "notification_screen": {
-    "no_notification": "You have no notifications"
+    "no_notification": "You have no notifications at the moment"
   }
 }

@@ -25,8 +25,10 @@ import ParticipantsTab from '../../ChallengesScreen/CompanyChallengesScreen/Chal
 import { RightPersonalChallengeDetailOptions } from '../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
+import CheckCircle from '../../../../../assets/svg/check_circle.svg';
 import ConfirmDialog from '../../../component/common/Dialog/ConfirmDialog';
 import EditChallengeModal from '../../../component/modal/EditChallengeModal';
+import { getChallengeStatusColor } from '../../../utils/common';
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -52,7 +54,7 @@ const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
 const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
-  const { challengeId, isCompanyAccount } = route.params;
+  const { challengeId, isCompanyAccount: isCompany } = route.params;
   const [index, setIndex] = useState<number>(0);
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
@@ -81,6 +83,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     (participant) => participant.id === currentUser?.id
   );
 
+  const isCompanyAccount = isCompany || challengeOwner?.companyAccount;
+
   const challengeStatus =
     challengeOwner?.id === currentUser?.id
       ? challengeData?.status
@@ -88,8 +92,14 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       ? isCurrentUserParticipant?.challengeStatus
       : challengeData.status;
 
-  const isChallengeCompleted =
-    challengeStatus === 'done' || challengeStatus === 'closed';
+  const isChallengeCompleted = challengeOwner?.id
+    ? challengeStatus === 'done' || challengeStatus === 'closed'
+    : null;
+
+  const statusColor = getChallengeStatusColor(
+    challengeStatus,
+    challengeData?.status
+  );
 
   useEffect(() => {
     if (!challengeId) return;
@@ -227,7 +237,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const shouldRenderJoinButton =
-    (isCompanyAccount &&
+    (currentUser?.id !== challengeOwner?.id &&
+      isCompanyAccount &&
       (challengeData?.public ||
         isJoined != null ||
         (challengeOwner &&
@@ -296,7 +307,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       />
       <View className="flex h-full flex-col bg-white pt-4">
         <View className="flex flex-row items-center justify-between px-4 pb-3">
-          <View className="flex-1 flex-row items-center pt-2">
+          <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
+            <CheckCircle fill={statusColor} />
             <View className="flex-1">
               <Text className="text-2xl font-semibold">
                 {challengeData?.goal}
@@ -338,12 +350,14 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               </View>
             )}
         </View>
-        <EditChallengeModal
-          visible={isEditChallengeModalVisible}
-          onClose={handleEditChallengeModalClose}
-          onConfirm={handleEditChallengeModalConfirm}
-          challenge={challengeData}
-        />
+        {challengeData?.id && (
+          <EditChallengeModal
+            visible={isEditChallengeModalVisible}
+            onClose={handleEditChallengeModalClose}
+            onConfirm={handleEditChallengeModalConfirm}
+            challenge={challengeData}
+          />
+        )}
 
         <TabView
           titles={

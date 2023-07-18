@@ -132,11 +132,15 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       try {
         const response = await getProgressById(progressId);
         const challengeResponse = await getChallengeById(challengeId);
+        console.log('challengeResponse', challengeResponse.data.public);
         const owner = Array.isArray(challengeResponse.data.owner)
           ? challengeResponse.data.owner[0]
           : challengeResponse.data.owner;
 
-        if (owner?.companyAccount && challengeId) {
+        const isChallengePublic = challengeResponse.data?.public;
+        const shouldRetrictEmployeeList =
+          owner?.companyAccount && challengeId && isChallengePublic;
+        if (shouldRetrictEmployeeList) {
           const companyEmployeesResponse = await serviceGetEmployeeList(
             owner?.id
           );

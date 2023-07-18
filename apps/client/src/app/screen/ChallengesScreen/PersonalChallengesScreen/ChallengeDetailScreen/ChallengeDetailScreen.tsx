@@ -56,9 +56,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   );
 
   const challengeStatus =
-    challengeOwner.id === currentUser?.id
-      ? challengeData.status
-      : isCurrentUserParticipant?.challengeStatus;
+    challengeOwner?.id === currentUser?.id
+      ? challengeData?.status
+      : isCurrentUserParticipant
+      ? isCurrentUserParticipant?.challengeStatus
+      : challengeData.status;
 
   const isChallengeCompleted =
     challengeStatus === 'done' || challengeStatus === 'closed';
@@ -74,7 +76,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           i18n.t('challenge_detail_screen.progress'),
           i18n.t('challenge_detail_screen.description'),
         ];
-  const statusColor = getChallengeStatusColor(challengeStatus);
+  const statusColor = getChallengeStatusColor(
+    challengeStatus,
+    challengeData?.status
+  );
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
@@ -169,6 +174,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
         >
           <ProgressTab
             isJoined={isJoined}
+            isChallengeCompleted={isChallengeCompleted}
             shouldRefresh={shouldRefresh}
             challengeData={challengeData}
             setShouldRefresh={setShouldRefresh}

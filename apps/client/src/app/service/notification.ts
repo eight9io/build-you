@@ -15,3 +15,9 @@ export const getNotifications =  async (): Promise<INotification[]> => {
   const res = await httpInstance.get('/notification/all');
   return mapNotificationResponses(res.data);
 };
+
+export const setNotificationIsRead = (notificationIds: string[]) => {
+  return httpInstance.put('/notification/isRead', {
+    id: notificationIds,
+  });
+};

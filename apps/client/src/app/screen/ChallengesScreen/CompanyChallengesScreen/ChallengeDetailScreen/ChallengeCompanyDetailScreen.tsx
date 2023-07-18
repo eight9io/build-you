@@ -33,10 +33,6 @@ interface ICompanyChallengeDetailScreenProps {
 export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
-  console.log(
-    '🚀 ~ file: ChallengeCompanyDetailScreen.tsx:36 ~ challengeData:',
-    challengeData?.owner
-  );
   const [isJoined, setIsJoined] = useState(true);
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
     i18n.t('challenge_detail_screen.progress'),

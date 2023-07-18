@@ -14,6 +14,7 @@ import { NavigationProp, Route, useNavigation } from '@react-navigation/native';
 
 import { IProgressComment } from '../../../types/progress';
 import { IProgressChallenge } from '../../../types/challenge';
+import { IEmployeeDataProps } from '../../../types/common';
 
 import {
   createProgressComment,
@@ -33,6 +34,8 @@ import GlobalDialogController from '../../../component/common/Dialog/GlobalDialo
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import TextInputWithMention from '../../../component/common/Inputs/TextInputWithMention';
 import { useUserProfileStore } from '../../../store/user-data';
+import { getChallengeById } from '../../../service/challenge';
+import { serviceGetEmployeeList } from '../../../service/company';
 
 interface IProgressCommentScreenProps {
   route: Route<
@@ -41,15 +44,20 @@ interface IProgressCommentScreenProps {
       progressId: string;
       ownerId?: string;
       challengeName?: string;
+      challengeId: string;
     }
   >;
 }
 
 interface ICommentInputProps {
   handleOnSubmit: (comment: string) => void;
+  companyEmployees?: IEmployeeDataProps[];
 }
 
-const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
+const CommentInput: FC<ICommentInputProps> = ({
+  handleOnSubmit,
+  companyEmployees,
+}) => {
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
 
@@ -88,6 +96,7 @@ const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
                 placeholder={
                   t('progress_comment_screen.comment_input_placeholder') || ''
                 }
+                companyEmployees={companyEmployees}
                 placeholderTextColor={'#C5C8D2'}
                 rightIcon={value !== '' && <SendIcon />}
                 onChange={onChange}
@@ -105,7 +114,7 @@ const CommentInput: FC<ICommentInputProps> = ({ handleOnSubmit }) => {
 };
 
 const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
-  const { progressId, ownerId } = route.params;
+  const { progressId, ownerId, challengeId } = route.params;
   const { t } = useTranslation();
   const [progressCommentScreenLoading, setProgressCommentScreenLoading] =
     useState<boolean>(true);
@@ -115,12 +124,25 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const [progressData, setProgressData] = useState<IProgressChallenge>(
     {} as IProgressChallenge
   );
+  const [companyEmployees, setCompanyEmployees] = useState<any[]>([]);
 
   useEffect(() => {
     if (!progressId) return;
     const loadProgressData = async () => {
       try {
         const response = await getProgressById(progressId);
+        const challengeResponse = await getChallengeById(challengeId);
+        const owner = Array.isArray(challengeResponse.data.owner)
+          ? challengeResponse.data.owner[0]
+          : challengeResponse.data.owner;
+
+        if (owner?.companyAccount && challengeId) {
+          const companyEmployeesResponse = await serviceGetEmployeeList(
+            owner?.id
+          );
+          setCompanyEmployees(companyEmployeesResponse.data);
+        }
+
         setProgressData(response.data);
       } catch (error) {
         GlobalDialogController.showModal({
@@ -233,7 +255,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
             />
           </View>
           <View className={` bottom-0 w-full`}>
-            <CommentInput handleOnSubmit={handleSubmit} />
+            <CommentInput
+              handleOnSubmit={handleSubmit}
+              companyEmployees={companyEmployees}
+            />
           </View>
         </KeyboardAvoidingView>
       )}

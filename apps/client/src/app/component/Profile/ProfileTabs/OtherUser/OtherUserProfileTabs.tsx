@@ -84,8 +84,6 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
         t('profile_screen_tabs.challenges'),
       ];
 
-  console.log(isCurrentUserInSameCompanyWithViewingUser);
-
   return (
     <>
       {isLoading && <SkeletonLoadingCommon />}

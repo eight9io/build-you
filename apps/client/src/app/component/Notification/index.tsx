@@ -10,39 +10,18 @@ import SkeletonLoadingCommon from '../common/SkeletonLoadings/SkeletonLoadingCom
 import EmptyNotification from '../../component/asset/empty-notification.svg';
 interface INotificationProps {
   title?: string;
+  notifications: INotification[];
+  isRefreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-const Notification: React.FC<INotificationProps> = ({ title }) => {
+const Notification: React.FC<INotificationProps> = ({
+  title,
+  notifications,
+  isRefreshing,
+  onRefresh,
+}) => {
   const { t } = useTranslation();
-  const [notifications, setNotifications] = useState<INotification[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getNotifications();
-        setNotifications(data);
-      } catch (error) {
-        GlobalDialogController.showModal({
-          title: 'Error',
-          message:
-            t('errorMessage:500') ||
-            'Something went wrong. Please try again later!',
-          button: 'OK',
-        });
-        console.error(error);
-      }
-      setIsLoading(false);
-    };
-    fetchNotifications();
-  }, []);
-
-  if (isLoading)
-    return (
-      <View className="flex-1">
-        <SkeletonLoadingCommon />
-      </View>
-    );
 
   return (
     <View className="mt-4 flex-1">
@@ -58,6 +37,8 @@ const Notification: React.FC<INotificationProps> = ({ title }) => {
             return <NotiItem notification={item} key={index} />;
           }}
           keyExtractor={(item) => item.createdAt.toString()} // TODO: change to id
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
         />
       ) : (
         <>

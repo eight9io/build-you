@@ -47,6 +47,7 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
       setIsSearching(true);
       servieGetUserOnSearch(debouncedSearchQuery).then((results) => {
         setIsSearching(false);
+        console.log('results', results)
         setSearchResults(results);
       });
     } else {

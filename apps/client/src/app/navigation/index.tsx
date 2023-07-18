@@ -20,7 +20,6 @@ import IntroScreen from '../screen/IntroScreen/IntroScreen';
 import SettingsScreen from '../screen/SettingsScreen/SettingsScreen';
 import CompleteProfileScreen from '../screen/OnboardingScreens/CompleteProfile/CompleteProfile';
 import PersonalProfileScreenLoading from '../screen/ProfileScreen/Personal/PersonalProfileScreenLoading';
-import ProgressCommentScreen from '../screen/ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen';
 import EditCompanyProfileScreen from '../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen';
 import EditPersonalProfileScreen from '../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen';
 import CreateChallengeScreen from '../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen';

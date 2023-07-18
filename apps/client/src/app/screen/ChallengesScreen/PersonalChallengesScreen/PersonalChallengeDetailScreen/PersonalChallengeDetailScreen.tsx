@@ -40,7 +40,7 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 interface IRightPersonalChallengeDetailOptionsProps {
   challengeData: IChallenge | undefined;
   onEditChallengeBtnPress?: () => void;
-  shouldRenderEditAndDeleteBtns?: boolean;
+  shouldRenderEditAndDeleteBtns?: boolean | null;
   shouldRenderCompleteBtn?: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteChallengeDialogVisible?: React.Dispatch<

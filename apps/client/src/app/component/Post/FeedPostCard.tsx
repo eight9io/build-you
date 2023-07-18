@@ -278,7 +278,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
     <View className="relative w-full">
       <View className="relative mb-1">
         <View className="bg-gray-50 p-5">
-          <TouchableOpacity
+          <TouchableOpacity 
             className="mb-4 flex-row justify-between"
             onPress={navigateToUserProfile}
           >

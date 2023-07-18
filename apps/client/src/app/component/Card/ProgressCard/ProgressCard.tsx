@@ -188,7 +188,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
         </Text>
       )}
       {extractedImageUrls && (
-        <View className="mt-2 aspect-square w-full">
+        <View className="mt-2 aspect-square w-full rounded-xl">
           <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
       )}

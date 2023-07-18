@@ -84,7 +84,7 @@ const MainSearchScreen = () => {
   const navigateToUserDetail = (userId: string) => {
     if (userData?.id === userId) {
       navigation.navigate('HomeScreen', {
-        screen: 'Company Profile',
+        screen: 'Profile',
         params: {
           screen: 'PersonalProfileScreen',
         },

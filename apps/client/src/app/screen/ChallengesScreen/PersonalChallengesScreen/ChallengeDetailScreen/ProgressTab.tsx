@@ -25,7 +25,7 @@ interface IProgressTabProps {
   challengeData: IChallenge;
   isJoined?: boolean | null;
   isOtherUserProfile?: boolean;
-  isChallengeCompleted?: boolean;
+  isChallengeCompleted?: boolean | null;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

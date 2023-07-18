@@ -21,6 +21,7 @@ import {
   getProgressById,
 } from '../../../service/progress';
 import { sortArrayByCreatedAt } from '../../../utils/common';
+import { useEmployeeListStore } from '../../../store/company-data';
 
 import ChallengeProgressCardForComment from '../../../component/Post/ChallengeProgressCard';
 import SingleComment from '../../../component/common/SingleComment';
@@ -32,7 +33,6 @@ import GlobalDialogController from '../../../component/common/Dialog/GlobalDialo
 import SkeletonLoadingCommon from '../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import TextInputWithMention from '../../../component/common/Inputs/TextInputWithMention';
 import { useUserProfileStore } from '../../../store/user-data';
-import { RootStackParamList } from '../../../navigation/navigation.type';
 
 interface IProgressCommentScreenProps {
   route: Route<

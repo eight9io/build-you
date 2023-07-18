@@ -35,7 +35,6 @@ const CompanyProfileTabs = () => {
   const userId = userProfile?.id;
   const { getFollowingList } = useFollowingListStore();
   const [followerList, setFollowerList] = useState([]);
-  const [employeeList, setEmployeeList] = useState([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {

@@ -14,3 +14,8 @@ export enum NOTIFICATION_TOKEN_DEVICE_TYPE {
   ANDROID = 'Android',
   IOS = 'iOS',
 };
+
+export enum SORT_ORDER {
+  ASC = 'asc',
+  DESC = 'desc',
+};

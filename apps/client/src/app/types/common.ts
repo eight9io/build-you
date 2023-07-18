@@ -24,3 +24,21 @@ export interface IFeedPostProps {
   };
   first: boolean;
 }
+
+export interface IEmployeeDataProps {
+  avatar: string;
+  bio: string;
+  companyAccount: boolean;
+  cover: string;
+  email: string;
+  employeeof: {
+    id: string;
+    name: string;
+  };
+  id: string;
+  isShowCompany: boolean;
+  name: string;
+  role: string;
+  surname: string;
+  video: string;
+}

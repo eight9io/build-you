@@ -168,6 +168,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               userData={item.owner}
               isOtherUserProfile={isOtherUserProfile}
               itemProgressCard={item}
+              challengeId={challengeData.id}
               challengeName={challengeData.goal}
               setShouldRefresh={setShouldRefresh}
               setIsShowEditModal={setIsShowEditModal}

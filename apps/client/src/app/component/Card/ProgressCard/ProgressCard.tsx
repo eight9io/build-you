@@ -38,6 +38,7 @@ interface IProgressCardProps {
     surname: string;
   };
   challengeName: string;
+  challengeId: string;
   isJoined?: boolean | null;
   userData: IUserData | null;
   isOtherUserProfile?: boolean;
@@ -51,6 +52,7 @@ interface IProgressCardProps {
 const ProgressCard: FC<IProgressCardProps> = ({
   userData,
   isJoined = false,
+  challengeId,
   challengeName,
   challengeOwner,
   setShouldRefresh,
@@ -101,6 +103,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
       progressId: itemProgressCard.id,
       ownerId: userData && userData.id,
       challengeName: challengeName || '',
+      challengeId: challengeId,
     });
 
     navigation.dispatch(pushAction);

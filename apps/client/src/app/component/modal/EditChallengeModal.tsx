@@ -22,6 +22,7 @@ import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimeP
 
 import CloseIcon from '../asset/close.svg';
 import CalendarIcon from '../asset/calendar.svg';
+import GlobalToastController from '../common/Toast/GlobalToastController';
 
 interface IEditChallengeModalProps {
   challenge: IChallenge;
@@ -84,7 +85,16 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
         ...data,
       });
       if (res.status === 200 || res.status === 201) {
-        openConfirmModal();
+        GlobalToastController.showModal({
+          message:
+            t('toast.delete_employee_success') ||
+            'Employee deleted successfully!',
+        });
+        // closeConfirmModal();
+        onConfirm();
+        navigation.navigate('PersonalChallengeDetailScreen', {
+          challengeId: challenge.id,
+        });
       } else {
         setErrorMessage(t('errorMessage:500') || '');
       }

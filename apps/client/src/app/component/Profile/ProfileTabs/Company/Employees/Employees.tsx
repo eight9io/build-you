@@ -23,6 +23,7 @@ import {
   serviceRemoveEmployee,
 } from 'apps/client/src/app/service/company';
 import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
+import GlobalToastController from '../../../../common/Toast/GlobalToastController';
 
 interface IEmployeesItemProps {
   item: any;
@@ -39,7 +40,6 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
   isCompany,
   navigation,
   setIsShowModal,
-  userId,
 }) => {
   return (
     <View>
@@ -88,10 +88,9 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
 };
 export const EmployeesItemOtherCompany: FC<IEmployeesItemProps> = ({
   item,
-  isCompany,
+
   navigation,
   setIsShowModal,
-  userId,
 }) => {
   return (
     <View>
@@ -141,8 +140,15 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   const [isShowModalAdd, setIsShowModalAdd] = useState(false);
   const removeEmployee = async (employeeId: any) => {
     serviceRemoveEmployee(employeeId, userProfile?.id)
-      .then((response) => {
-        fetchListEmployee(userProfile?.id, (res: any) => setEmployeeList(res));
+      .then(async (response) => {
+        await fetchListEmployee(userProfile?.id, (res: any) =>
+          setEmployeeList(res)
+        );
+        GlobalToastController.showModal({
+          message:
+            t('toast.delete_employee_success') ||
+            'Employee deleted successfully!',
+        });
       })
       .catch((err) => {
         GlobalDialogController.showModal({

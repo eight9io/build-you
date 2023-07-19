@@ -323,7 +323,12 @@
   "toast": {
     "joined_success": "You have joined the challenge!",
     "leave_success": "You have left the challenge!",
-    "delete_success": "Delete comment success!"
+    "delete_success": "Delete comment success!",
+    "add_employee_success": "Employee added successfully! ",
+    "delete_employee_success": "Employee deleted successfully! ",
+    "reset_password_success": "Reset password successfully! ",
+    "create_challenge_success": "Your challenge has been created successfully ",
+    "create_progress_success": "Your progress has been created successfully "
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

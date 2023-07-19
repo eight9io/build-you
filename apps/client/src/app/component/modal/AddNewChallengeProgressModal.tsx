@@ -34,6 +34,7 @@ import {
 } from '../../service/progress';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 import ErrorText from '../common/ErrorText';
+import GlobalToastController from '../common/Toast/GlobalToastController';
 
 interface IAddNewChallengeProgressModalProps {
   challengeId: string;
@@ -170,8 +171,14 @@ export const AddNewChallengeProgressModal: FC<
         await updateProgressImage(progressId, selectedMedia)
           .then((res) => {
             if (res.status === 200 || 201) {
-              setIsRequestSuccess(true);
-              setIsShowModal(true);
+              // setIsRequestSuccess(true);
+              // setIsShowModal(true);
+              handleCloseModal();
+              GlobalToastController.showModal({
+                message:
+                  t('toast.create_progress_success') ||
+                  'Your progress has been created successfully!',
+              });
             }
           })
           .catch((_) => {
@@ -183,8 +190,15 @@ export const AddNewChallengeProgressModal: FC<
         await updateProgressVideo(progressId, selectedVideo[0])
           .then((res) => {
             if (res.status === 200 || 201) {
-              setIsRequestSuccess(true);
-              setIsShowModal(true);
+              // setIsRequestSuccess(true);
+              // setIsShowModal(true);
+
+              handleCloseModal();
+              GlobalToastController.showModal({
+                message:
+                  t('toast.create_progress_success') ||
+                  'Your progress has been created successfully!',
+              });
             }
           })
           .catch((_) => {

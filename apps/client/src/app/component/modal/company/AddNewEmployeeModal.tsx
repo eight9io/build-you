@@ -15,6 +15,7 @@ import { useUserProfileStore } from '../../../store/user-data';
 import { serviceAddEmployee } from '../../../service/company';
 import { fetchListEmployee } from '../../../utils/profile';
 import { useEmployeeListStore } from '../../../store/company-data';
+import GlobalToastController from '../../common/Toast/GlobalToastController';
 
 interface IAddNewEmployeeModalProps {
   isVisible: boolean;
@@ -57,9 +58,16 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
     }
 
     serviceAddEmployee(data.email, userData?.id)
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 200 || res.status === 201) {
-          setIsSuccessDialogVisible(true);
+          await fetchListEmployee(userData?.id, (res: any) =>
+            setEmployeeList(res)
+          );
+          GlobalToastController.showModal({
+            message:
+              t('toast.add_employee_success') || 'Employee added successfully!',
+          });
+          onClose();
         }
       })
       .catch((err) => {
@@ -84,19 +92,6 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <ConfirmDialog
-        title={t('success') as string}
-        description={'Employee added successfully'}
-        isVisible={isSuccessDialogVisible}
-        onClosed={async () => {
-          await fetchListEmployee(userData?.id, (res: any) =>
-            setEmployeeList(res)
-          );
-          setIsSuccessDialogVisible(false);
-          onClose();
-        }}
-        closeButtonLabel={t('close') || ''}
-      />
       <ConfirmDialog
         title={t('error') as string}
         description={isErrorDialogVisible.description}

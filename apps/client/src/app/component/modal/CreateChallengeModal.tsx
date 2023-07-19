@@ -25,6 +25,7 @@ import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimeP
 
 import CalendarIcon from '../asset/calendar.svg';
 import CloseIcon from '../asset/close.svg';
+import GlobalToastController from '../common/Toast/GlobalToastController';
 
 interface ICreateChallengeModalProps {
   onClose: () => void;
@@ -125,8 +126,22 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             challengeImageResponse.status === 200 ||
             challengeCreateResponse.status === 201
           ) {
-            setIsRequestSuccess(true);
-            setIsShowModal(true);
+            navigation.navigate('HomeScreen', {
+              screen: 'Challenges',
+              params: {
+                screen: 'PersonalChallengeDetailScreen',
+                params: {
+                  challengeId: newChallengeId,
+                },
+              },
+            });
+            GlobalToastController.showModal({
+              message:
+                t('toast.create_challenge_success') ||
+                'Employee deleted successfully!',
+            });
+            // setIsRequestSuccess(true);
+            // setIsShowModal(true);
             setIsLoading(false);
             return;
           }
@@ -139,6 +154,11 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
         }
         setIsRequestSuccess(true);
         setIsShowModal(true);
+        // GlobalToastController.showModal({
+        //   message:
+        //     t('toast.create_challenge_success') ||
+        //     'Employee deleted successfully!',
+        // });
       }
     } catch (error) {
       setErrorMessage(t('errorMessage:500') || '');

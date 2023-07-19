@@ -27,6 +27,9 @@ import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
 import TaskAltIconGray from './assets/task-alt-gray.svg';
 import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import { use } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const image = Asset.fromModule(
   require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
@@ -221,6 +224,7 @@ const PersonalChallengeDetailScreen = ({
   route: any;
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
+  const { t } = useTranslation();
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
@@ -232,7 +236,6 @@ const PersonalChallengeDetailScreen = ({
 
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
-  const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
 
@@ -295,8 +298,13 @@ const PersonalChallengeDetailScreen = ({
       .then((res) => {
         if (res.status === 200) {
           setIsDeleteChallengeDialogVisible(false);
+          GlobalToastController.showModal({
+            message:
+              t('toast.create_challenge_success') ||
+              'Employee deleted successfully!',
+          });
           setTimeout(() => {
-            setIsDeleteSuccess(true);
+            navigation.navigate('PersonalChallengesScreen');
           }, 600);
         }
       })
@@ -317,17 +325,6 @@ const PersonalChallengeDetailScreen = ({
         closeButtonLabel="Cancel"
         onConfirm={handleDeleteChallenge}
         onClosed={() => setIsDeleteChallengeDialogVisible(false)}
-      />
-
-      <ConfirmDialog
-        isVisible={isDeleteSuccess}
-        title="Challenge Deleted"
-        description="Challenge has been deleted successfully."
-        confirmButtonLabel="Got it"
-        onConfirm={() => {
-          setIsDeleteSuccess(false);
-          navigation.navigate('PersonalChallengesScreen');
-        }}
       />
       <ConfirmDialog
         isVisible={isDeleteError}

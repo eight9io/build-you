@@ -25,6 +25,8 @@ import ParticipantsTab from '../../ChallengesScreen/CompanyChallengesScreen/Chal
 import { RightPersonalChallengeDetailOptions } from '../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen';
 
 import ShareIcon from '../../../../../assets/svg/share.svg';
+import GlobalToastController from '../../../component/common/Toast/GlobalToastController';
+import { useTranslation } from 'react-i18next';
 import CheckCircle from '../../../../../assets/svg/check_circle.svg';
 import ConfirmDialog from '../../../component/common/Dialog/ConfirmDialog';
 import EditChallengeModal from '../../../component/modal/EditChallengeModal';
@@ -78,6 +80,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { t } = useTranslation();
 
   const isCurrentUserParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
@@ -192,9 +195,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
     try {
       await serviceAddChallengeParticipant(challengeId);
-      GlobalDialogController.showModal({
-        title: 'Success',
-        message: 'You have joined the challenge!',
+      GlobalToastController.showModal({
+        message: t('toast.joined_success') || 'You have joined the challenge!',
       });
       setIsJoined(true);
       setShouldRefresh(true);
@@ -210,9 +212,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     if (!currentUser?.id || !challengeId) return;
     try {
       await serviceRemoveChallengeParticipant(challengeId);
-      GlobalDialogController.showModal({
-        title: 'Success',
-        message: 'You have left the challenge!',
+      GlobalToastController.showModal({
+        message: t('toast.leave_success') || 'You have left the challenge!',
       });
       setIsJoined(false);
       setShouldRefresh(true);

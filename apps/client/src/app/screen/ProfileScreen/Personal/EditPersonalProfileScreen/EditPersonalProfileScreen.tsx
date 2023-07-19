@@ -36,6 +36,7 @@ import { uploadNewVideo } from 'apps/client/src/app/utils/uploadVideo';
 import { VideoWithPlayButton } from 'apps/client/src/app/component/Profile/ProfileTabs/Users/Biography/Biography';
 
 import CalendarIcon from './asset/calendar-icon.svg';
+import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -206,6 +207,11 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
         }),
       ]);
       setIsLoading(false);
+      GlobalToastController.showModal({
+        message:
+          t('dialog.update_profile_success') ||
+          'Your profile update successfully!',
+      });
       navigation.navigate('Profile');
     } catch (error) {
       setIsLoading(false);

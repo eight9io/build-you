@@ -314,10 +314,16 @@
     "err_title_delete_account": "Can’t delete your account",
     "err_title_update_img": "Can’t update your image",
     "err_title_update_profile": "Can’t update your profile",
+    "update_profile_success": "Your profile update successfully !",
     "err_update_profile": "Something went wrong. Please try again later",
     "err_add_employee": "The user is already part of the company",
     "open_settings": "Open settings",
     "alert_title": "Alert"
+  },
+  "toast": {
+    "joined_success": "You have joined the challenge!",
+    "leave_success": "You have left the challenge!",
+    "delete_success": "Delete comment success!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

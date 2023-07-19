@@ -45,7 +45,7 @@ const Toast = () => {
   const handleHideToast = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 500,
+      duration: 700,
       useNativeDriver: true,
     }).start(() => {
       setToastVisible(false);
@@ -56,7 +56,7 @@ const Toast = () => {
     if (toastVisible) {
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 500,
+        duration: 700,
         useNativeDriver: true,
       }).start();
 
@@ -68,19 +68,19 @@ const Toast = () => {
   if (!toastVisible) return null;
 
   return (
-    <View style={[styles.toastContainer]}>
+    <Animated.View style={[styles.toastContainer, { opacity: fadeAnim }]}>
       <Text className="text-h6  mt-3 text-white">{message}</Text>
       <TouchableOpacity onPress={handleHideToast}>
         <IconClose />
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   toastContainer: {
     position: 'absolute',
-    bottom: 80,
+    bottom: 120,
     left: 20,
     right: 20,
     backgroundColor: '#24252B',

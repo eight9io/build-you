@@ -77,7 +77,6 @@ export const useNotificationStore = create<NotificationStore>()(
       name: 'notification-storage',
       storage: createJSONStorage(() => AsyncStorage), // Use AsyncStorage to store data
       onRehydrateStorage: () => (state) => {
-        console.log('state: ', state);
         state?.setHasHydrated(true);
       },
     }

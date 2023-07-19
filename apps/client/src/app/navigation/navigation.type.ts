@@ -50,6 +50,7 @@ export type RootStackParamList = {
     progressId: string;
     ownerId?: string;
     challengeName?: string;
+    challengeId: string;
   };
 
   ProfileScreenLoading: undefined;

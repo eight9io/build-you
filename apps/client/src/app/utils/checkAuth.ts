@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import httpInstance, { setAuthTokenToHttpHeader } from './http';
 import { useAuthStore } from '../store/auth-store';
 import { useIsCompleteProfileStore } from '../store/is-complete-profile';
+import { useNotificationStore } from '../store/notification';
 
 interface IToken {
   exp: number;
@@ -44,6 +45,12 @@ export const checkAccessTokenLocal = async (setLogined: any) => {
 };
 
 export const removeAuthTokensLocalOnLogout = async () => {
+  try {
+    // Revoke push token before deleting account
+    await useNotificationStore.getState().revokePushToken();
+  } catch (error: any) {
+    console.error('error: ', error.response.status);
+  }
   try {
     await AsyncStorage.removeItem('@auth_token');
     await AsyncStorage.removeItem('@refresh_token');

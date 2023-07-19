@@ -25,6 +25,7 @@ interface IProgressTabProps {
   challengeData: IChallenge;
   isJoined?: boolean | null;
   isOtherUserProfile?: boolean;
+  isChallengeCompleted?: boolean | null;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -33,6 +34,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   shouldRefresh,
   challengeData,
   setShouldRefresh,
+  isChallengeCompleted = false,
   isOtherUserProfile = false,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -156,7 +158,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
-            isJoined ? <AddNewChallengeProgressButton /> : null
+            isJoined && !isChallengeCompleted ? (
+              <AddNewChallengeProgressButton />
+            ) : null
           }
           renderItem={({ item, index }) => (
             <ProgressCard
@@ -164,6 +168,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               userData={item.owner}
               isOtherUserProfile={isOtherUserProfile}
               itemProgressCard={item}
+              challengeId={challengeData.id}
               challengeName={challengeData.goal}
               setShouldRefresh={setShouldRefresh}
               setIsShowEditModal={setIsShowEditModal}

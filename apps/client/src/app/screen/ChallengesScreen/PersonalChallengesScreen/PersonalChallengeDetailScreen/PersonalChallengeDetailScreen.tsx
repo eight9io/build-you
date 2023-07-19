@@ -40,7 +40,7 @@ type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
 interface IRightPersonalChallengeDetailOptionsProps {
   challengeData: IChallenge | undefined;
   onEditChallengeBtnPress?: () => void;
-  shouldRenderEditAndDeleteBtns?: boolean;
+  shouldRenderEditAndDeleteBtns?: boolean | null;
   shouldRenderCompleteBtn?: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteChallengeDialogVisible?: React.Dispatch<
@@ -69,6 +69,9 @@ export const RightPersonalChallengeDetailOptions: FC<
     isChallengeAlreadyCompletedDialogVisible,
     setIsChallengeAlreadyCompletedDialogVisible,
   ] = useState<boolean>(false);
+  const [isChallengeCompleted, setIsChallengeCompleted] = useState<
+    boolean | null
+  >(null);
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -85,8 +88,13 @@ export const RightPersonalChallengeDetailOptions: FC<
     challengeOwner?.id === currentUser?.id
       ? challengeData?.status
       : isCurrentUserParticipant?.challengeStatus;
-  const isChallengeCompleted =
-    challengeStatus === 'done' || challengeStatus === 'closed';
+
+  useEffect(() => {
+    if (!challengeData) return;
+    setIsChallengeCompleted(
+      challengeStatus === 'done' || challengeStatus === 'closed'
+    );
+  }, [challengeData]);
 
   // when sharing is available, we can share the image
   const onShare = async () => {
@@ -115,6 +123,7 @@ export const RightPersonalChallengeDetailOptions: FC<
     completeChallenge(challengeData.id)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
+          setIsChallengeCompleted(true);
           setIsCompletedChallengeDialogVisible(false);
           setTimeout(() => {
             setIsCompletedChallengeSuccess(true);
@@ -173,7 +182,7 @@ export const RightPersonalChallengeDetailOptions: FC<
         {shouldRenderCompleteBtn && (
           <TouchableOpacity
             onPress={onCheckChallengeCompleted}
-            disabled={isChallengeCompleted}
+            disabled={!!isChallengeCompleted}
           >
             {isChallengeCompleted ? <TaskAltIconGray /> : <TaskAltIcon />}
           </TouchableOpacity>
@@ -187,7 +196,7 @@ export const RightPersonalChallengeDetailOptions: FC<
           setIsDeleteChallengeDialogVisible && (
             <PopUpMenu
               iconColor="#FF7B1D"
-              isDisabled={isChallengeCompleted}
+              isDisabled={!!isChallengeCompleted}
               options={[
                 {
                   text: 'Edit',

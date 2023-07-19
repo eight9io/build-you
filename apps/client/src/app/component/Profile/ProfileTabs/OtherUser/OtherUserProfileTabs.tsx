@@ -33,19 +33,22 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
   ] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const otherUserCompany = otherUserData?.employeeOf;
+  const otherUserCompanyEmployeeOf = otherUserData?.employeeOf;
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const isCompanyAccount = otherUserData?.companyAccount;
 
   useEffect(() => {
-    if (otherUserCompany?.id === userProfile?.employeeOf?.id) {
+    if (
+      otherUserCompanyEmployeeOf?.id === userProfile?.employeeOf?.id &&
+      otherUserCompanyEmployeeOf?.id != null
+    ) {
       setIsCurrentUserInSameCompanyWithViewingUser(true);
     } else {
       setIsCurrentUserInSameCompanyWithViewingUser(false);
     }
-  }, [otherUserCompany?.id, userProfile?.employeeOf?.id]);
+  }, [otherUserCompanyEmployeeOf?.id, userProfile?.employeeOf?.id]);
 
   useEffect(() => {
     if (!otherUserData?.id) return;
@@ -80,8 +83,6 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
           : t('profile_screen_tabs.employees'),
         t('profile_screen_tabs.challenges'),
       ];
-
-  console.log(isCurrentUserInSameCompanyWithViewingUser);
 
   return (
     <>

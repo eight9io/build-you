@@ -48,12 +48,15 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
         let challengeList = res.data.flat();
         const originalChallengeList = res.data.flat();
         if (!isCurrentUserInCompany) {
-          challengeList = challengeList.filter((item: any) => item?.public);
+          challengeList = challengeList.filter(
+            (item: any) => item?.public == true
+          );
         }
         // if current user is company, add back the challenge that is not public when the owner is the current user
         challengeList = challengeList.concat(
           originalChallengeList.filter(
-            (item: any) => !item?.public && item?.owner?.id === userProfile?.id
+            (item: any) =>
+              item?.public == false && item?.owner?.id === userProfile?.id
           )
         );
         if (isCurrentUserInSameCompanyWithViewingUser) {

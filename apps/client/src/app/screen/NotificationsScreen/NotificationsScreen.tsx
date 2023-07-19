@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, View, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +19,10 @@ import OtherUserProfileScreen from '../ProfileScreen/OtherUser/OtherUserProfileS
 import OtherUserProfileChallengeDetailsScreen from '../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen';
 import Button from '../../component/common/Buttons/Button';
 import ShareIcon from '../../../../assets/svg/share.svg';
+import { INotification } from '../../types/notification';
+import { getNotifications } from '../../service/notification';
+import GlobalDialogController from '../../component/common/Dialog/GlobalDialogController';
+import SkeletonLoadingCommon from '../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
 type NotificationsScreenNavigationProp = NativeStackNavigationProp<
@@ -35,6 +39,9 @@ const Notifications = ({
   const isFocused = useIsFocused();
   const { getHasNewNotification, setHasNewNotification } =
     useNotificationStore();
+  const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -44,6 +51,43 @@ const Notifications = ({
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      await fetchNotifications();
+      setIsLoading(false);
+    })();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const data = await getNotifications();
+      setNotifications(data);
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message:
+          t('errorMessage:500') ||
+          'Something went wrong. Please try again later!',
+        button: 'OK',
+      });
+      console.error(error);
+    }
+  };
+
+  const handleScrollToRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchNotifications();
+    setIsRefreshing(false);
+  };
+
+  if (isLoading)
+    return (
+      <View className="flex-1">
+        <SkeletonLoadingCommon />
+      </View>
+    );
+
   return (
     <SafeAreaView className="flex-1 bg-[#F7F9FB]">
       {/* <MainNavBar
@@ -52,7 +96,11 @@ const Notifications = ({
         withSearch
       /> */}
 
-      <Notification />
+      <Notification
+        notifications={notifications}
+        isRefreshing={isRefreshing}
+        onRefresh={handleScrollToRefresh}
+      />
     </SafeAreaView>
   );
 };

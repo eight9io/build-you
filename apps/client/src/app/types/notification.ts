@@ -26,8 +26,11 @@ export interface IPushNotificationToken {
 
 export interface INotificationResponse {
   // Raw payload response from API
+  id: string;
+  user: Pick<IUserData, 'id' | 'name' | 'surname' | 'avatar'>;
   title: NOTIFICATION_TYPES;
   body: string;
   createdAt: Date;
   createdBy: string;
+  isRead: boolean;
 }

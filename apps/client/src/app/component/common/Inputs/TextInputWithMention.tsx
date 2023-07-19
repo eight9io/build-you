@@ -19,6 +19,7 @@ import { ISearchUserData } from '../../../types/user';
 
 import { servieGetUserOnSearch } from '../../../service/search';
 import { useDebounce } from '../../../hooks/useDebounce';
+import { IEmployeeDataProps } from '../../../types/common';
 
 interface ITextInputWithMentionProps extends MentionInputProps {
   reset?: any;
@@ -27,16 +28,19 @@ interface ITextInputWithMentionProps extends MentionInputProps {
   onPress?: () => void;
   multiline?: boolean;
   onRightIconPress?: () => void;
+  companyEmployees: IEmployeeDataProps[] | undefined;
 }
 
 interface IUserSuggestionProps extends MentionSuggestionsProps {
   commentInputHeight: number;
+  companyEmployees: IEmployeeDataProps[] | undefined;
 }
 
 const renderSuggestions: FC<IUserSuggestionProps> = ({
   commentInputHeight,
   keyword,
   onSuggestionPress,
+  companyEmployees: companyEmployees,
 }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<ISearchUserData[]>([]);
@@ -45,6 +49,14 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
   useEffect(() => {
     if (debouncedSearchQuery) {
       setIsSearching(true);
+      if (companyEmployees && companyEmployees?.length > 0) {
+        const searchResults = companyEmployees.filter((item) =>
+          item.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        );
+        setIsSearching(false);
+        setSearchResults(searchResults);
+        return;
+      }
       servieGetUserOnSearch(debouncedSearchQuery).then((results) => {
         setIsSearching(false);
         setSearchResults(results);
@@ -118,6 +130,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
     multiline,
     onChange,
     inputRef,
+    companyEmployees,
     ...inputProps
   } = props;
   const [textInputHeight, setTextInputHeight] = useState(0);
@@ -143,6 +156,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
                       renderSuggestions({
                         ...props,
                         commentInputHeight: textInputHeight,
+                        companyEmployees: companyEmployees,
                       }),
                     // TO-DO: Add custom style for the mention text
                     textStyle: {
@@ -186,6 +200,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
                       renderSuggestions({
                         ...props,
                         commentInputHeight: textInputHeight,
+                        companyEmployees: companyEmployees,
                       }),
                     // TO-DO: Add custom style for the mention text
                     textStyle: {

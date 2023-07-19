@@ -43,9 +43,8 @@ interface IFeedDataProps {}
 
 export const HomeFeed = () => {
   const [feedData, setFeedData] = React.useState<any>([]);
-  const [feedPage, setFeedPage] = React.useState<number>(1);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
+  let feedPage = 1;
 
   useGetListFollowing();
   const isFocused = useIsFocused();
@@ -61,7 +60,6 @@ export const HomeFeed = () => {
       .then((res) => {
         if (res.data?.data) {
           setFeedData(res.data.data);
-          setFeedPage(1);
         }
       })
       .catch((err) => {
@@ -85,9 +83,18 @@ export const HomeFeed = () => {
       take: 8,
     }).then((res) => {
       if (res?.data?.data) {
-        setFeedData((prev: any) => [...prev, ...res.data.data]);
+        const newResDataIds = res.data.data.map((item: IFeedPostProps) => {
+          return item.id;
+        });
+        // remove duplicate data in response
+        const newResData = res.data.data.filter(
+          (item: IFeedPostProps, index: number) => {
+            return newResDataIds.indexOf(item.id) === index;
+          }
+        );
+        setFeedData((prev: any) => [...prev, ...newResData]);
       }
-      setFeedPage((prev) => prev + 1);
+      feedPage += 1;
     });
   };
 
@@ -97,27 +104,30 @@ export const HomeFeed = () => {
     setIsRefreshing(false);
   };
 
+  const renderItem = ({ item }: { item: any }) => (
+    <FeedPostCard
+      itemFeedPostCard={item}
+      userId={userData?.id}
+      isFocused={isFocused}
+      navigation={navigation}
+    />
+  );
+
   return (
     <SafeAreaView className={clsx('bg-white')}>
       <View className={clsx('h-full w-full bg-gray-50')}>
-        {userData && (
-          <FlatList
-            data={feedData}
-            renderItem={({ item }) => (
-              <FeedPostCard
-                itemFeedPostCard={item}
-                userId={userData.id}
-                isFocused={isFocused}
-                navigation={navigation}
-              />
-            )}
-            keyExtractor={(item) => item.id as unknown as string}
-            onEndReached={getNewFeed}
-            onEndReachedThreshold={0.7}
-            onRefresh={handleScroll}
-            refreshing={isRefreshing}
-          />
-        )}
+        <FlatList
+          data={feedData}
+          renderItem={renderItem}
+          keyExtractor={(item, index) =>
+            `${item.id}${index}` as unknown as string
+          }
+          onEndReached={getNewFeed}
+          onEndReachedThreshold={0.5}
+          onRefresh={handleScroll}
+          refreshing={isRefreshing}
+          ListFooterComponent={<View className="h-16" />}
+        />
       </View>
     </SafeAreaView>
   );
@@ -181,7 +191,7 @@ export const HomeFeedUnregister = () => {
           )}
           keyExtractor={(item) => item.id as unknown as string}
           onEndReached={getNewFeed}
-          onEndReachedThreshold={3}
+          onEndReachedThreshold={0.5}
           onRefresh={handleScroll}
           refreshing={isRefreshing}
         />

@@ -49,6 +49,13 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   const isFocused = useIsFocused();
 
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+  const challengeOwner: IChallengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData.owner;
+  const isCurrentUserOwnerOfChallenge = userData?.id === challengeOwner?.id;
+
   const { t } = useTranslation();
   useEffect(() => {
     const progressData =
@@ -158,7 +165,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
-            isJoined && !isChallengeCompleted ? (
+            (isJoined || isCurrentUserOwnerOfChallenge) && !isChallengeCompleted ? (
               <AddNewChallengeProgressButton />
             ) : null
           }

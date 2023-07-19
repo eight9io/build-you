@@ -159,6 +159,8 @@ export const AddNewChallengeProgressModal: FC<
     };
 
     const createProgressResponse = await createProgress(payload);
+
+    console.log(createProgressResponse)
     if (
       (createProgressResponse.status === 200 || 201) &&
       selectedMedia.length > 0

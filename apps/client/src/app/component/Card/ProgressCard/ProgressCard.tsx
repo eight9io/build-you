@@ -141,7 +141,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
     <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
         <TouchableOpacity
-          className="flex flex-row"
+          className="flex flex-1 flex-row"
           onPress={() => {
             if (!userData?.id) return;
             // navigation.push('OtherUserProfileScreen', {
@@ -154,7 +154,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
           }}
         >
           <ProgressCardAvatar src={userData?.avatar} />
-          <View className="ml-2">
+          <View className="ml-2 flex-1">
             <Text
               className={`text-h6 font-bold ${
                 isProgressOwner ? 'text-primary-default' : 'text-black'
@@ -175,7 +175,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        {!isOtherUserProfile && isProgressOwner && isJoined && (
+        {((!isOtherUserProfile && isJoined) || isProgressOwner) && (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}

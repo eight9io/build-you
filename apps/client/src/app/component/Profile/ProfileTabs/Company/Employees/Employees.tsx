@@ -29,6 +29,7 @@ interface IEmployeesItemProps {
   isCompany?: boolean | null;
   navigation: any;
   setIsShowModal?: any;
+  userId?: string;
 }
 interface IEmployeeProps {
   employeeList?: any;
@@ -38,6 +39,7 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
   isCompany,
   navigation,
   setIsShowModal,
+  userId,
 }) => {
   return (
     <View>
@@ -84,7 +86,47 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
     </View>
   );
 };
-
+export const EmployeesItemOtherCompany: FC<IEmployeesItemProps> = ({
+  item,
+  isCompany,
+  navigation,
+  setIsShowModal,
+  userId,
+}) => {
+  return (
+    <View>
+      <View className=" mr-3 flex-row items-center justify-between  ">
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() =>
+            // navigation.navigate('OtherUserProfileScreen', {
+            //   userId: item.id,
+            // })
+            // use push
+            navigation.push('OtherUserProfileScreen', {
+              userId: item.id,
+            })
+          }
+          className="mb-5 mr-5 flex-row items-center justify-between gap-3 "
+        >
+          <View className="relative">
+            <Image
+              className={clsx('absolute left-0  top-0 h-10 w-10  rounded-full')}
+              source={require('../../../../asset/avatar-load.png')}
+            />
+            <Image
+              source={{ uri: item.avatar }}
+              className="h-10 w-10 rounded-full"
+            />
+          </View>
+          <Text className="text-basic-black text-base font-semibold">
+            {item.name} {item.surname}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

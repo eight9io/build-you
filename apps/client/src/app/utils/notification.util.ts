@@ -9,7 +9,8 @@ import {
   INotificationPayload,
   INotificationResponse,
 } from '../types/notification';
-import { NOTIFICATION_TYPES } from '../common/enum';
+import { NOTIFICATION_TYPES, SORT_ORDER } from '../common/enum';
+import { setNotificationIsRead } from '../service/notification';
 
 export const registerForPushNotificationsAsync = async (
   setPushToken: (value: string) => Promise<void>
@@ -107,31 +108,46 @@ export const handleTapOnNotification = async (
   notification: INotification,
   navigation: NativeStackNavigationProp<RootStackParamList>
 ) => {
+  const handleNavigation = async (
+    screen: string,
+    notification: INotification
+  ) => {
+    try {
+      switch (screen) {
+        case 'ProgressCommentScreen':
+          if (notification.progressId)
+            navigation.navigate('ProgressCommentScreen', {
+              progressId: notification.progressId,
+            });
+          break;
+        case 'OtherUserProfileScreen':
+          if (notification.user.id)
+            navigation.navigate('OtherUserProfileScreen', {
+              userId: notification.user.id,
+              isFollower: true,
+            });
+          break;
+      }
+      if (!notification.isRead) {
+        await setNotificationIsRead([notification.id.toString()]);
+      }
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  };
+
   switch (notification.type) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
-      if (notification.progressId)
-        navigation.navigate('ProgressCommentScreen', {
-          progressId: '63eb8bc8-ea3b-4568-87da-f2b76aafaf51',
-        });
+      handleNavigation('ProgressCommentScreen', notification);
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      if (notification.progressId)
-        navigation.navigate('ProgressCommentScreen', {
-          progressId: notification.progressId,
-        });
+      handleNavigation('ProgressCommentScreen', notification);
       break;
     case NOTIFICATION_TYPES.NEW_MENTION:
-      if (notification.progressId)
-        navigation.navigate('ProgressCommentScreen', {
-          progressId: notification.progressId,
-        });
+      handleNavigation('ProgressCommentScreen', notification);
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      if (notification.user.id)
-        navigation.navigate('OtherUserProfileScreen', {
-          userId: notification.user.id,
-          isFollower: true,
-        });
+      handleNavigation('OtherUserProfileScreen', notification);
       break;
   }
 };
@@ -173,28 +189,40 @@ export const clearNotifications = async () => {
 export const mapNotificationResponses = (
   responses: INotificationResponse[]
 ): INotification[] => {
-  return responses.map((response) => {
-    const extractUserInfoRegex = /@\[([^\(]+)\(([^)]+)\)/;
-    const match = response.body.match(extractUserInfoRegex);
-    let username = '';
-    let userId = '';
-    if (match) {
-      username = match[1];
-      userId = match[2];
-    } else {
-      console.log('No match found');
-      throw new Error('Something went wrong');
-    }
+  const transformedData = responses.map((response) => {
+    // const extractUserInfoRegex = /@\[([^\(]+)\(([^)]+)\)/;
+    // const match = response.body.match(extractUserInfoRegex);
+    // let username = '';
+    // let userId = '';
+    // if (match) {
+    //   username = match[1];
+    //   userId = match[2];
+    // } else {
+    //   console.log('No match found');
+    //   throw new Error('Something went wrong');
+    // }
     return {
-      id: '',
+      id: response.id,
       type: response.title,
       user: {
-        id: userId,
-        name: username,
+        id: response.user.id,
+        name: `${response.user.name} ${response.user.surname}`,
         avatar: 'https://picsum.photos/200',
       },
       createdAt: response.createdAt,
-      isRead: false,
+      isRead: response.isRead,
     };
+  });
+
+  return sortNotificationsByDate(transformedData, SORT_ORDER.ASC);
+};
+
+export const sortNotificationsByDate = (notifications: INotification[], order: SORT_ORDER) => {
+  if (order === SORT_ORDER.ASC)
+    return notifications.sort((a, b) => {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    });
+  return notifications.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 };

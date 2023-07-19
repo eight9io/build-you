@@ -251,6 +251,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
     navigation.navigate('ProgressCommentScreen', {
       progressId: id,
       ownerId: user?.id,
+      challengeId: challenge?.id,
     });
   };
 

@@ -73,23 +73,15 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
             }}
           />
         )}
-        {!imageSrc && (
-          <View className={clsx('aspect-square w-full rounded-t-xl')}>
-            <Image
-              className={clsx('aspect-square w-full rounded-t-xl')}
-              source={{
-                uri: `https://picsum.photos/400/600.webp?random=${item.id}`,
-              }}
-            />
-          </View>
-        )}
         <View
           className={clsx(
             'flex flex-row items-center justify-between px-4 py-3'
           )}
         >
           <View className={clsx('flex-1 flex-row items-center')}>
-            <CheckCircle fill={getChallengeStatusColor(challengeStatus)} />
+            <CheckCircle
+              fill={getChallengeStatusColor(challengeStatus, item.status)}
+            />
             <View className="flex-1">
               <Text className={clsx('text-h6 pl-2 font-semibold leading-6')}>
                 {item?.goal}

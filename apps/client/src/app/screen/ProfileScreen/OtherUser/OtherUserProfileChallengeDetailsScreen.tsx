@@ -9,6 +9,7 @@ import { RootStackParamList } from '../../../navigation/navigation.type';
 import { useUserProfileStore } from '../../../store/user-data';
 
 import {
+  deleteChallenge,
   getChallengeById,
   getChallengeParticipantsByChallengeId,
   serviceAddChallengeParticipant,
@@ -26,6 +27,10 @@ import { RightPersonalChallengeDetailOptions } from '../../ChallengesScreen/Pers
 import ShareIcon from '../../../../../assets/svg/share.svg';
 import GlobalToastController from '../../../component/common/Toast/GlobalToastController';
 import { useTranslation } from 'react-i18next';
+import CheckCircle from '../../../../../assets/svg/check_circle.svg';
+import ConfirmDialog from '../../../component/common/Dialog/ConfirmDialog';
+import EditChallengeModal from '../../../component/modal/EditChallengeModal';
+import { getChallengeStatusColor } from '../../../utils/common';
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -51,31 +56,95 @@ const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
 const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
-  const { challengeId, isCompanyAccount } = route.params;
+  const { challengeId, isCompanyAccount: isCompany } = route.params;
   const [index, setIndex] = useState<number>(0);
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
-  const [isChallengeCompleted, setIsChallengeCompleted] = useState<
-    boolean | null
-  >(null);
+
   const [challengeOwner, setChallengeOwner] = useState<any>(null);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
+  const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
+    useState<boolean>(false);
+
+  const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
+    useState<boolean>(false);
   const [isJoined, setIsJoined] = useState<boolean | null>(null);
+  const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
+  const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
+
+  const [isCurrentUserOwnerOfChallenge, setIsCurrentUserOwnerOfChallenge] =
+    useState<boolean | null>(null);
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
+
+  const isCurrentUserParticipant = challengeData?.participants?.find(
+    (participant) => participant.id === currentUser?.id
+  );
+
+  const isCompanyAccount = isCompany || challengeOwner?.companyAccount;
+
+  const challengeStatus =
+    challengeOwner?.id === currentUser?.id
+      ? challengeData?.status
+      : isCurrentUserParticipant
+      ? isCurrentUserParticipant?.challengeStatus
+      : challengeData.status;
+
+  const isChallengeCompleted = challengeOwner?.id
+    ? challengeStatus === 'done' || challengeStatus === 'closed'
+    : null;
+
+  const statusColor = getChallengeStatusColor(
+    challengeStatus,
+    challengeData?.status
+  );
+
   useEffect(() => {
     if (!challengeId) return;
     const getChallengeData = async () => {
       try {
         const response = await getChallengeById(challengeId);
         setChallengeData(response.data);
-        setIsChallengeCompleted(response.data?.status === 'closed');
-        setChallengeOwner(response.data?.owner[0]);
+
+        const owner = Array.isArray(response.data?.owner)
+          ? response.data?.owner[0]
+          : response.data?.owner;
+        setChallengeOwner(owner);
+        setIsCurrentUserOwnerOfChallenge(owner?.id === currentUser?.id);
+        if (isCompanyAccount || owner?.companyAccount) {
+          const getChallengeParticipants = async () => {
+            try {
+              const response = await getChallengeParticipantsByChallengeId(
+                challengeId
+              );
+              setParticipantList(response.data);
+              if (owner?.id === currentUser?.id) {
+                setIsJoined(true);
+                return;
+              }
+              if (
+                response.data.find(
+                  (participant: any) => participant.id === currentUser?.id
+                )
+              ) {
+                setIsJoined(true);
+              } else {
+                setIsJoined(false);
+              }
+            } catch (err) {
+              GlobalDialogController.showModal({
+                title: 'Error',
+                message: 'Something went wrong. Please try again later!',
+              });
+            }
+          };
+          getChallengeParticipants();
+        }
       } catch (err) {
         GlobalDialogController.showModal({
           title: 'Error',
@@ -83,31 +152,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         });
       }
     };
-    if (isCompanyAccount || challengeOwner?.id !== currentUser?.id) {
-      const getChallengeParticipants = async () => {
-        try {
-          const response = await getChallengeParticipantsByChallengeId(
-            challengeId
-          );
-          setParticipantList(response.data);
-          if (
-            response.data.find(
-              (participant: any) => participant.id === currentUser?.id
-            )
-          ) {
-            setIsJoined(true);
-          } else {
-            setIsJoined(false);
-          }
-        } catch (err) {
-          GlobalDialogController.showModal({
-            title: 'Error',
-            message: 'Something went wrong. Please try again later!',
-          });
-        }
-      };
-      getChallengeParticipants();
-    }
+
     getChallengeData();
     if (shouldRefresh) {
       setShouldRefresh(false);
@@ -115,13 +160,17 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   }, [challengeId, shouldRefresh]);
 
   useEffect(() => {
-    if (isJoined) {
+    if (isJoined || isCurrentUserOwnerOfChallenge) {
       navigation.setOptions({
         headerRight: () => (
           <RightPersonalChallengeDetailOptions
             challengeData={challengeData}
+            shouldRenderEditAndDeleteBtns={isCurrentUserOwnerOfChallenge}
             setShouldRefresh={setShouldRefresh}
-            shouldRenderEditAndDeleteBtns={false}
+            onEditChallengeBtnPress={handleEditChallengeBtnPress}
+            setIsDeleteChallengeDialogVisible={
+              setIsDeleteChallengeDialogVisible
+            }
           />
         ),
       });
@@ -139,7 +188,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         },
       });
     }
-  }, [isJoined]);
+  }, [isJoined, isCurrentUserOwnerOfChallenge]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
@@ -184,18 +233,83 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     }
   };
 
+  const handleEditChallengeBtnPress = () => {
+    setIsEditChallengeModalVisible(true);
+  };
+
   const shouldRenderJoinButton =
-    challengeOwner &&
-    currentUser &&
-    isCompanyAccount &&
-    challengeOwner.id !== currentUser.id &&
-    isJoined != null;
+    (currentUser?.id !== challengeOwner?.id &&
+      isCompanyAccount &&
+      (challengeData?.public ||
+        isJoined != null ||
+        (challengeOwner &&
+          currentUser &&
+          challengeOwner.id !== currentUser.id &&
+          isJoined != null))) ||
+    (!isCompanyAccount && isCurrentUserParticipant);
+
+  const handleDeleteChallenge = () => {
+    if (!challengeData) return;
+    deleteChallenge(challengeData.id)
+      .then((res) => {
+        if (res.status === 200) {
+          setIsDeleteChallengeDialogVisible(false);
+          setTimeout(() => {
+            setIsDeleteSuccess(true);
+          }, 600);
+        }
+      })
+      .catch((err) => {
+        setIsDeleteChallengeDialogVisible(false);
+        setTimeout(() => {
+          setIsDeleteError(true);
+        }, 600);
+      });
+  };
+
+  const handleEditChallengeModalClose = () => {
+    setIsEditChallengeModalVisible(false);
+  };
+
+  const handleEditChallengeModalConfirm = () => {
+    setShouldRefresh(true);
+    setIsEditChallengeModalVisible(false);
+  };
 
   return (
     <SafeAreaView>
+      <ConfirmDialog
+        isVisible={isDeleteChallengeDialogVisible}
+        title="Delete Challenge"
+        description="Are you sure you want to delete this challenge?"
+        confirmButtonLabel="Delete"
+        closeButtonLabel="Cancel"
+        onConfirm={handleDeleteChallenge}
+        onClosed={() => setIsDeleteChallengeDialogVisible(false)}
+      />
+      <ConfirmDialog
+        isVisible={isDeleteSuccess}
+        title="Challenge Deleted"
+        description="Challenge has been deleted successfully."
+        confirmButtonLabel="Got it"
+        onConfirm={() => {
+          setIsDeleteSuccess(false);
+          navigation.goBack();
+        }}
+      />
+      <ConfirmDialog
+        isVisible={isDeleteError}
+        title="Something went wrong"
+        description="Please try again later."
+        confirmButtonLabel="Close"
+        onConfirm={() => {
+          setIsDeleteError(false);
+        }}
+      />
       <View className="flex h-full flex-col bg-white pt-4">
         <View className="flex flex-row items-center justify-between px-4 pb-3">
-          <View className="flex-1 flex-row items-center pt-2">
+          <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
+            <CheckCircle fill={statusColor} />
             <View className="flex-1">
               <Text className="text-2xl font-semibold">
                 {challengeData?.goal}
@@ -237,6 +351,14 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               </View>
             )}
         </View>
+        {challengeData?.id && (
+          <EditChallengeModal
+            visible={isEditChallengeModalVisible}
+            onClose={handleEditChallengeModalClose}
+            onConfirm={handleEditChallengeModalConfirm}
+            challenge={challengeData}
+          />
+        )}
 
         <TabView
           titles={
@@ -253,6 +375,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             challengeData={challengeData}
             shouldRefresh={shouldRefresh}
             setShouldRefresh={setShouldRefresh}
+            isChallengeCompleted={isChallengeCompleted}
           />
           <DescriptionTab challengeData={challengeData} />
           {(isCompanyAccount || challengeOwner?.companyAccount) && (

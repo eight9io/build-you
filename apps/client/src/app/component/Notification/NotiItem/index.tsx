@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { View, Text, TouchableOpacity } from 'react-native';
 
@@ -16,6 +16,8 @@ const NotiItem: React.FC<INotiItemProps> = ({
   notification,
 }) => {
   const navigation = useNav();
+  const [isRead, setIsRead] = useState<boolean>(notification.isRead);
+
   let content = '';
   if (notification.type === NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING)
     content = getNotificationContent(notification.type, {
@@ -26,9 +28,12 @@ const NotiItem: React.FC<INotiItemProps> = ({
     <TouchableOpacity
       className={clsx(
         'bg-primary-100 border-b-gray-medium flex-row items-center border-b-[1px] p-4',
-        notification.isRead && 'bg-white'
+        isRead && 'bg-white'
       )}
-      onPress={() => handleTapOnNotification(notification, navigation)}
+      onPress={async () => {
+        await handleTapOnNotification(notification, navigation);
+        setIsRead(true);
+      }}
     >
       <NotiAvatar
         src={notification.user.avatar}

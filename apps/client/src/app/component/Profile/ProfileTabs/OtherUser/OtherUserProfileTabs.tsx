@@ -37,7 +37,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
-  const isCompanyAccount = otherUserData?.companyAccount;
+  const isViewingUserCompanyAccount = otherUserData?.companyAccount;
 
   useEffect(() => {
     if (
@@ -99,7 +99,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                   titles={titles}
                   children={[
                     <Biography userProfile={otherUserData} key="0" />,
-                    !isCompanyAccount ? (
+                    !isViewingUserCompanyAccount ? (
                       <Skills skills={otherUserData?.softSkill} key="1" />
                     ) : (
                       <EmployeesCompany key="1" employeeList={employeeList} />
@@ -108,7 +108,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                       isCurrentUserInSameCompanyWithViewingUser={
                         isCurrentUserInSameCompanyWithViewingUser
                       }
-                      isCompanyAccount={isCompanyAccount}
+                      isCompanyAccount={isViewingUserCompanyAccount}
                       isCurrentUserInCompany={isCurrentUserInCompany}
                       userId={otherUserData.id}
                       key="2"

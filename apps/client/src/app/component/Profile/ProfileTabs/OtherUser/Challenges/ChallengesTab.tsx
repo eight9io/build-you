@@ -47,9 +47,11 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       .then((res) => {
         let challengeList = res.data.flat();
         const originalChallengeList = res.data.flat();
+
+        console.log('challengeList', originalChallengeList);
         if (!isCurrentUserInCompany) {
           challengeList = challengeList.filter(
-            (item: any) => item?.public == true
+            (item: any) => item?.public == true || item?.public == null
           );
         }
         // if current user is company, add back the challenge that is not public when the owner is the current user
@@ -84,10 +86,10 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   }
 
   return (
-    <View className="h-full  px-4">
+    <View className="h-full px-6">
       {otherUserChallenge.length > 0 && (
         <FlatList
-          className="px-4 pt-4"
+          className=" pt-4"
           data={otherUserChallenge}
           renderItem={({ item }: { item: IChallenge }) => (
             <ChallengeCard

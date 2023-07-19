@@ -27,6 +27,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { RootStackParamList } from '../../../navigation/navigation.type';
+import GlobalToastController from '../Toast/GlobalToastController';
 interface ISingleCommentProps {
   comment: IProgressComment;
   onDeleteCommentSuccess: () => void;
@@ -109,12 +110,8 @@ const SingleComment: FC<ISingleCommentProps> = ({
       const res = await deleteProgressComment(comment.id);
       if (res.status === 200) {
         // Reload comments
-        GlobalDialogController.showModal({
-          title: 'Success',
-          message:
-            t('progress_comment_screen.delete_comment_success') ||
-            'Delete comment success!',
-          button: 'OK',
+        GlobalToastController.showModal({
+          message: t('toast.delete_success') || 'Delete comment success!',
         });
         onDeleteCommentSuccess();
       }

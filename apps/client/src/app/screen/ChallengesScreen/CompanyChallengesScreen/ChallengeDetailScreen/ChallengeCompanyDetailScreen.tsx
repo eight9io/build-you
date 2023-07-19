@@ -23,6 +23,8 @@ import CheckCircle from './assets/check_circle.svg';
 
 import Button from '../../../../component/common/Buttons/Button';
 import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
+import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import { useTranslation } from 'react-i18next';
 
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -33,6 +35,7 @@ interface ICompanyChallengeDetailScreenProps {
 export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
+  const { t } = useTranslation();
   const [isJoined, setIsJoined] = useState(true);
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
     i18n.t('challenge_detail_screen.progress'),
@@ -79,9 +82,8 @@ export const ChallengeCompanyDetailScreen: FC<
     if (!currentUser?.id || !challengeId) return;
     try {
       await serviceAddChallengeParticipant(challengeId);
-      GlobalDialogController.showModal({
-        title: 'Success',
-        message: 'You have joined the challenge!',
+      GlobalToastController.showModal({
+        message: t('toast.joined_success') || 'You have joined the challenge!',
       });
       setIsJoined(true);
     } catch (err) {
@@ -96,9 +98,8 @@ export const ChallengeCompanyDetailScreen: FC<
     if (!currentUser?.id || !challengeId) return;
     try {
       await serviceRemoveChallengeParticipant(challengeId);
-      GlobalDialogController.showModal({
-        title: 'Success',
-        message: 'You have left the challenge!',
+      GlobalToastController.showModal({
+        message: t('toast.leave_success') || 'You have left the challenge!',
       });
       setIsJoined(false);
     } catch (err) {

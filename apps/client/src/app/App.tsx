@@ -10,7 +10,7 @@ import {
 } from '@expo-google-fonts/open-sans';
 
 import './i18n/i18n';
-
+import Toast from './component/common/Toast/Toast';
 
 export const App = () => {
   const [fontLoaded] = useFonts({
@@ -27,6 +27,7 @@ export const App = () => {
 
   return (
     <MenuProvider>
+      <Toast />
       <RootNavigation />
     </MenuProvider>
   );

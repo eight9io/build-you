@@ -113,6 +113,7 @@ const CompanyChallenges = ({
                 />
               )}
               keyExtractor={(item) => item.id}
+              ListFooterComponent={<View className="h-20" />}
             />
           )}
         </View>

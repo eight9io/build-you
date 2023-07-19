@@ -135,11 +135,11 @@ const SingleComment: FC<ISingleCommentProps> = ({
     >
       <View
         className={clsx(
-          'bg-gray-veryLight mb-3 flex w-full flex-row justify-between'
+          'bg-gray-veryLight mb-3 flex w-full flex-1 flex-row justify-between'
         )}
       >
         <TouchableOpacity
-          className={clsx('flex flex-row')}
+          className={clsx('flex flex-1 flex-row')}
           onPress={() => {
             // prevent double click
             if (isDisabled) {

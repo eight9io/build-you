@@ -327,8 +327,11 @@
     "add_employee_success": "Employee added successfully! ",
     "delete_employee_success": "Employee deleted successfully! ",
     "reset_password_success": "Reset password successfully! ",
-    "create_challenge_success": "Your challenge has been created successfully ",
-    "create_progress_success": "Your progress has been created successfully "
+    "create_challenge_success": "Your challenge has been created successfully !",
+    "edit_challenge_success": "Your progress has been edited successfully ! ",
+    "create_progress_success": "Your progress has been created successfully !",
+    "completed_challenge_success": "Challenge has been completed successfully !",
+    "delete_challenge_success": "Deleted Challenge successfully !"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

@@ -56,10 +56,7 @@ export const RootNavigation = () => {
   const {
      _hasHydrated: notificationStoreHasHydrated,
     setPushToken,
-    setHasNewNotification,
     pushToken,
-    revokePushToken,
-    getPushToken,
   } = useNotificationStore();
   const navigationRef =
     useRef<NavigationContainerRef<RootStackParamList>>(null);

@@ -1,5 +1,7 @@
 import * as Device from 'expo-device';
 import notifee, {
+  AndroidImportance,
+  AndroidVisibility,
   AuthorizationStatus,
   EventType,
   Notification,
@@ -25,6 +27,12 @@ export const registerForPushNotificationsAsync = async (
   let token;
   if (Device.isDevice) {
     const settings = await notifee.requestPermission();
+    // Create a channel (required for Android)
+    // const channelId = await notifee.createChannel({
+    //   id: 'default',
+    //   name: 'Default Channel',
+    //   importance: AndroidImportance.HIGH,
+    // });
     if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
       // Register the device with FCM
       await messaging().registerDeviceForRemoteMessages();
@@ -71,6 +79,7 @@ export const addNotificationListener = async (
 
   // Listen to foreground events
   notifee.onForegroundEvent(async ({ type, detail }) => {
+    console.log('detail: ', detail);
     switch (type) {
       case EventType.PRESS: // User pressed on the notification
         if (detail.notification) {
@@ -129,8 +138,6 @@ export const handleTapOnIncomingNotification = async (
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
       if (payload.new_follower_id)
       {
-        console.log('payload: ', payload);
-
         navigation.navigate('OtherUserProfileScreen', {
           userId: payload.new_follower_id,
           isFollower: true,
@@ -143,11 +150,12 @@ export const handleTapOnIncomingNotification = async (
 export const handleTapOnNotification = async (
   notification: INotification,
   navigation: NativeStackNavigationProp<RootStackParamList>
-) => {
+  ) => {
+  console.log('notification: ', notification);
   const handleNavigation = async (
     screen: string,
     notification: INotification
-  ) => {
+    ) => {
     try {
       switch (screen) {
         case 'ProgressCommentScreen':
@@ -173,6 +181,7 @@ export const handleTapOnNotification = async (
     }
   };
 
+  console.log('notification: ', notification);
   switch (notification.type) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
       handleNavigation('ProgressCommentScreen', notification);
@@ -250,7 +259,7 @@ export const mapNotificationResponses = (
     };
   });
 
-  return sortNotificationsByDate(transformedData, SORT_ORDER.ASC);
+  return sortNotificationsByDate(transformedData, SORT_ORDER.DESC);
 };
 
 export const sortNotificationsByDate = (

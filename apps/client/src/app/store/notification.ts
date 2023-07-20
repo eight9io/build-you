@@ -37,9 +37,9 @@ export const useNotificationStore = create<NotificationStore>()(
           notificationToken: value,
           status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
           deviceType:
-            Platform.OS === 'android'
-              ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-              : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+          Platform.OS === 'android'
+          ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+          : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
         });
         if (res.status === 200 || res.status === 201) set({ pushToken: value });
       },

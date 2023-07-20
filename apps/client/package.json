@@ -58,7 +58,20 @@
     "react-native-reanimated": "*",
     "react-native-screens": "*",
     "@react-native-async-storage/async-storage": "*",
-    "jwt-decode": "*"
+    "jwt-decode": "*",
+    "expo-image": "*",
+    "util": "*",
+    "expo-location": "*",
+    "react-native-controlled-mentions": "*",
+    "react-native-keyboard-aware-scroll-view": "*",
+    "react-native-loading-spinner-overlay": "*",
+    "expo-notifications": "*",
+    "expo-device": "*",
+    "expo-task-manager": "*",
+    "@expo/vector-icons": "*",
+    "@notifee/react-native": "*",
+    "@react-native-firebase/app": "*",
+    "@react-native-firebase/messaging": "*"
   },
   "scripts": {
     "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps client && npx nx ensure-symlink client",

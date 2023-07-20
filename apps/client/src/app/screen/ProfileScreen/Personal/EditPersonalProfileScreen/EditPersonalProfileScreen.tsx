@@ -26,7 +26,6 @@ import SelectPicker from '../../../../component/common/Pickers/SelectPicker';
 import { EditProfileValidators } from '../../../../Validators/EditProfile.validate';
 import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkills';
 import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
-
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import { IOccupation } from 'apps/client/src/app/types/auth';
 import CustomSwitch from 'apps/client/src/app/component/common/Switch';
@@ -222,7 +221,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView className="h-full bg-white">
       <KeyboardAwareScrollView>
-        <View className="mb-4 flex-1 rounded-t-xl bg-white">
+        <View className="  h-full rounded-t-xl bg-white ">
           <ConfirmDialog
             title={t('dialog.err_title_update_profile') as string}
             description={t('dialog.err_update_profile') as string}

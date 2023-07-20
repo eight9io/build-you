@@ -29,6 +29,7 @@ import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 import IconDot from './asset/dot.svg';
 import { useUserProfileStore } from '../../../store/user-data';
+import GlobalToastController from '../../common/Toast/GlobalToastController';
 
 interface IProgressCardProps {
   challengeOwner: {
@@ -117,7 +118,13 @@ const ProgressCard: FC<IProgressCardProps> = ({
     try {
       const res = await deleteProgress(itemProgressCard.id);
       if (res.status === 200) {
-        openAckModal();
+        // openAckModal();
+
+        GlobalToastController.showModal({
+          message: t('delete_progress.delete_success') as string,
+        });
+        handleCloseAckModal();
+        // clo
       } else {
         setErrorMessage(t('errorMessage:500') || '');
       }

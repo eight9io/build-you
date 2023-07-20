@@ -61,6 +61,7 @@ export const RightPersonalChallengeDetailOptions: FC<
   shouldRenderEditAndDeleteBtns = true,
   setIsDeleteChallengeDialogVisible,
 }) => {
+  const { t } = useTranslation();
   const [isSharing, setIsSharing] = React.useState(false);
   const [
     isCompletedChallengeDialogVisible,
@@ -128,10 +129,16 @@ export const RightPersonalChallengeDetailOptions: FC<
         if (res.status === 200 || res.status === 201) {
           setIsChallengeCompleted(true);
           setIsCompletedChallengeDialogVisible(false);
-          setTimeout(() => {
-            setIsCompletedChallengeSuccess(true);
-            setShouldRefresh(true);
-          }, 600);
+          setShouldRefresh(true);
+          GlobalToastController.showModal({
+            message:
+              t('toast.completed_challenge_success') ||
+              'Challenge has been completed successfully !',
+          });
+          // setTimeout(() => {
+          //   setIsCompletedChallengeSuccess(true);
+          //   setShouldRefresh(true);
+          // }, 600);
         }
       })
       .catch((err) => {
@@ -300,8 +307,8 @@ const PersonalChallengeDetailScreen = ({
           setIsDeleteChallengeDialogVisible(false);
           GlobalToastController.showModal({
             message:
-              t('toast.create_challenge_success') ||
-              'Employee deleted successfully!',
+              t('toast.delete_challenge_success') ||
+              'Deleted Challenge successfully !',
           });
           setTimeout(() => {
             navigation.navigate('PersonalChallengesScreen');

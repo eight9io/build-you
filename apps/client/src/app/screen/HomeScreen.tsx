@@ -64,18 +64,6 @@ export const HomeFeed = () => {
     setIsRefreshing(false);
   };
 
-  const renderItem = useCallback(
-    ({ item }: { item: any }) => (
-      <FeedPostCard
-        itemFeedPostCard={item}
-        userId={userData?.id}
-        isFocused={isFocused}
-        navigation={navigation}
-      />
-    ),
-    [isFocused]
-  );
-
   const keyExtractor = useCallback(
     (item: any, index: number) => `${item.id}${index}` as unknown as string,
     []
@@ -126,6 +114,18 @@ export const HomeFeed = () => {
       setFeedPage((prev) => prev + 1);
     });
   };
+
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => (
+      <FeedPostCard
+        itemFeedPostCard={item}
+        userId={userData?.id}
+        isFocused={isFocused}
+        navigation={navigation}
+      />
+    ),
+    [isFocused]
+  );
 
   return (
     <SafeAreaView className={clsx('bg-white')}>

@@ -169,6 +169,7 @@ export const ChallengeCompanyDetailScreen: FC<
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
+            isOtherUserProfile={challengeOwner.id !== currentUser?.id}
             isJoined={isJoined}
             shouldRefresh={shouldRefresh}
             challengeData={challengeData}

@@ -5,6 +5,7 @@ export interface INotificationPayload { // Interface for the data that is sent f
     notification_type: string;
     post_id?: string;
     new_follower_id?: string;
+    challenge_id?: string;
 }
 
 export interface INotification {
@@ -12,6 +13,7 @@ export interface INotification {
     user: Pick<IUserData, 'id' | 'name' | 'avatar'>;
     isRead: boolean;
     progressId?: string;
+    challengeId?: string;
     newFollowerId?: string;
     type: NOTIFICATION_TYPES;
     createdAt: Date;

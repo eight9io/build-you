@@ -87,8 +87,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       if (res.status === 200 || res.status === 201) {
         GlobalToastController.showModal({
           message:
-            t('toast.delete_employee_success') ||
-            'Employee deleted successfully!',
+            t('toast.edit_challenge_success') ||
+            'Your edit has been created successfully ! ',
         });
         // closeConfirmModal();
         onConfirm();

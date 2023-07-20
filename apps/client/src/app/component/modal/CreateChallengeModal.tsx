@@ -138,7 +138,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             GlobalToastController.showModal({
               message:
                 t('toast.create_challenge_success') ||
-                'Employee deleted successfully!',
+                'Your challenge has been created successfully !',
             });
             // setIsRequestSuccess(true);
             // setIsShowModal(true);

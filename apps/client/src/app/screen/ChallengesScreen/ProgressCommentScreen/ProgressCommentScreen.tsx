@@ -140,7 +140,8 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         const isChallengePublic = challengeResponse.data?.public;
         setIsChallengePublic(isChallengePublic);
         const shouldRetrictEmployeeList =
-          owner?.companyAccount && challengeId && isChallengePublic;
+          owner?.companyAccount && !isChallengePublic;
+
         if (shouldRetrictEmployeeList) {
           const companyEmployeesResponse = await serviceGetEmployeeList(
             owner?.id

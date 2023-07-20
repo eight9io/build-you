@@ -27,7 +27,7 @@ const Button: FC<IButtonProps> = ({
     <TouchableOpacity
       activeOpacity={0.8}
       className={clsx(
-        'mr-1 h-12 flex-1 rounded-full',
+        'h-12 flex-1 rounded-full',
         isDisabled ? disabledContainerClassName : containerClassName
       )}
       onPress={onPress}

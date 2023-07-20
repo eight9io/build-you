@@ -48,7 +48,6 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
         let challengeList = res.data.flat();
         const originalChallengeList = res.data.flat();
 
-        console.log('challengeList', originalChallengeList);
         if (!isCurrentUserInCompany) {
           challengeList = challengeList.filter(
             (item: any) => item?.public == true || item?.public == null

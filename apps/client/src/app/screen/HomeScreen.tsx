@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useEffect, useLayoutEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { View, FlatList, SafeAreaView, Text, Platform } from 'react-native';
 import clsx from 'clsx';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -42,9 +47,10 @@ const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 interface IFeedDataProps {}
 
 export const HomeFeed = () => {
-  const [feedData, setFeedData] = React.useState<any>([]);
-  const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
-  let feedPage = 1;
+  const [feedPage, setFeedPage] = useState<number>(1);
+  const [feedData, setFeedData] = useState<any>([]);
+  const [dataSource, setDataSource] = useState<[]>([]); //Contains limited number of data
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useGetListFollowing();
   const isFocused = useIsFocused();
@@ -52,10 +58,33 @@ export const HomeFeed = () => {
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const handleScroll = async () => {
+    setIsRefreshing(true);
+    await getInitialFeeds();
+    setIsRefreshing(false);
+  };
+
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => (
+      <FeedPostCard
+        itemFeedPostCard={item}
+        userId={userData?.id}
+        isFocused={isFocused}
+        navigation={navigation}
+      />
+    ),
+    [isFocused]
+  );
+
+  const keyExtractor = useCallback(
+    (item: any, index: number) => `${item.id}${index}` as unknown as string,
+    []
+  );
+
   const getInitialFeeds = async () => {
     await serviceGetFeed({
       page: 1,
-      take: 8,
+      take: 20,
     })
       .then((res) => {
         if (res.data?.data) {
@@ -80,7 +109,7 @@ export const HomeFeed = () => {
     console.log('getNewFeed');
     await serviceGetFeed({
       page: feedPage + 1,
-      take: 8,
+      take: 20,
     }).then((res) => {
       if (res?.data?.data) {
         const newResDataIds = res.data.data.map((item: IFeedPostProps) => {
@@ -94,24 +123,9 @@ export const HomeFeed = () => {
         );
         setFeedData((prev: any) => [...prev, ...newResData]);
       }
-      feedPage += 1;
+      setFeedPage((prev) => prev + 1);
     });
   };
-
-  const handleScroll = async () => {
-    setIsRefreshing(true);
-    await getInitialFeeds();
-    setIsRefreshing(false);
-  };
-
-  const renderItem = ({ item }: { item: any }) => (
-    <FeedPostCard
-      itemFeedPostCard={item}
-      userId={userData?.id}
-      isFocused={isFocused}
-      navigation={navigation}
-    />
-  );
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
@@ -119,11 +133,9 @@ export const HomeFeed = () => {
         <FlatList
           data={feedData}
           renderItem={renderItem}
-          keyExtractor={(item, index) =>
-            `${item.id}${index}` as unknown as string
-          }
+          keyExtractor={keyExtractor}
           onEndReached={getNewFeed}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={3}
           onRefresh={handleScroll}
           refreshing={isRefreshing}
           ListFooterComponent={<View className="h-16" />}
@@ -134,9 +146,9 @@ export const HomeFeed = () => {
 };
 
 export const HomeFeedUnregister = () => {
-  const [feedData, setFeedData] = React.useState<any>([]);
-  const [feedPage, setFeedPage] = React.useState<number>(1);
-  const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
+  const [feedData, setFeedData] = useState<any>([]);
+  const [feedPage, setFeedPage] = useState<number>(1);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const getInitialFeeds = async () => {
     await serviceGetFeedUnregistered({

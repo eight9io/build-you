@@ -315,7 +315,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             />
           )}
 
-          <View className="mt-4 flex-row">
+          <View className="mt-2 flex flex-row ">
             <LikeButton
               progressId={id}
               currentUserId={userId}

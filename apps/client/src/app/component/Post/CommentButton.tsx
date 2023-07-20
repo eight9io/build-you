@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { clsx } from 'clsx';
 
 import CommentSvg from './asset/comment.svg';
 import { getProgressComments } from '../../service/progress';
 import GlobalDialogController from '../common/Dialog/GlobalDialogController';
+import { debounce } from '../../hooks/useDebounce';
 
 interface ICommentButtonProps {
   progressId: string;
@@ -27,8 +28,7 @@ const CommentButton: FC<ICommentButtonProps> = ({
     (async () => {
       await loadProgressComments();
     })();
-  }
-  , [isFocused]);
+  }, [isFocused]);
 
   useEffect(() => {
     if (!progressId) return;
@@ -55,22 +55,26 @@ const CommentButton: FC<ICommentButtonProps> = ({
       });
     }
   };
-  const handleNavigationToComment = () => {
+  const handleNavigationToComment = debounce(() => {
     !isViewOnly && navigationToComment && navigationToComment();
-  };
+  }, 300);
+
   return (
-    <TouchableOpacity
+    <TouchableHighlight
       activeOpacity={0.8}
+      underlayColor="#C5C8D2"
       onPress={handleNavigationToComment}
-      className={clsx('ml-4')}
+      className="ml-2 h-8 px-2 rounded-md"
     >
-      <View className={clsx('flex-row items-center justify-center gap-2')}>
+      <View
+        className={clsx('flex-1 flex-row items-center justify-center gap-2')}
+      >
         <CommentSvg />
         <Text className={clsx('text-gray-dark text-md font-normal ')}>
           {numberOfComments} comment{numberOfComments > 1 && 's'}
         </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

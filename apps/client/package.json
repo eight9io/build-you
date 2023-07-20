@@ -71,7 +71,9 @@
     "@expo/vector-icons": "*",
     "@notifee/react-native": "*",
     "@react-native-firebase/app": "*",
-    "@react-native-firebase/messaging": "*"
+    "@react-native-firebase/messaging": "*",
+    "babel-plugin-transform-inline-environment-variables": "*",
+    "babel-preset-expo": "*"
   },
   "scripts": {
     "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps client && npx nx ensure-symlink client",
@@ -80,6 +82,8 @@
     "ios": "expo run:ios"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "babel-plugin-transform-inline-environment-variables": "*",
+    "babel-preset-expo": "*"
   }
 }

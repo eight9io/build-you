@@ -107,7 +107,9 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             onClose();
             navigation.navigate('Challenges', {
               screen: 'PersonalChallengeDetailScreen',
-              params: { challengeId: newChallengeId as string },
+              params: {
+                challengeId: challengeCreateResponse.data.id as string,
+              },
             });
             GlobalToastController.showModal({
               message:

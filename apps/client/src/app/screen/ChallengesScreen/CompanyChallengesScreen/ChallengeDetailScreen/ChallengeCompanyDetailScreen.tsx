@@ -123,7 +123,12 @@ export const ChallengeCompanyDetailScreen: FC<
     <View className="flex h-full flex-col bg-white pt-4">
       <View className="flex flex-row items-center justify-between px-4">
         <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
-          <CheckCircle fill={getChallengeStatusColor(challengeStatus)} />
+          <CheckCircle
+            fill={getChallengeStatusColor(
+              challengeStatus,
+              challengeData.status
+            )}
+          />
           <View className="flex-1">
             <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
@@ -169,11 +174,12 @@ export const ChallengeCompanyDetailScreen: FC<
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
-            isOtherUserProfile={challengeOwner.id !== currentUser?.id}
             isJoined={isJoined}
             shouldRefresh={shouldRefresh}
             challengeData={challengeData}
             setShouldRefresh={setShouldRefresh}
+            isChallengeCompleted={isChallengeCompleted}
+            isOtherUserProfile={challengeOwner.id !== currentUser?.id}
           />
           <DescriptionTab challengeData={challengeData} />
           <ParticipantsTab participant={participantList as any} />

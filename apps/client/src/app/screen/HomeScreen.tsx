@@ -129,7 +129,7 @@ export const HomeFeed = () => {
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View className={clsx('h-full w-full bg-gray-50')}>
+      <View className={clsx('h-full w-full bg-gray-50 pb-[70px]')}>
         <FlatList
           data={feedData}
           renderItem={renderItem}
@@ -138,7 +138,6 @@ export const HomeFeed = () => {
           onEndReachedThreshold={3}
           onRefresh={handleScroll}
           refreshing={isRefreshing}
-          ListFooterComponent={<View className="h-16" />}
         />
       </View>
     </SafeAreaView>

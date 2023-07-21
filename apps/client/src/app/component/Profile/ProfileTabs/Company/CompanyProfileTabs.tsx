@@ -18,9 +18,9 @@ import { useIsFocused } from '@react-navigation/native';
 
 import GlobalDialogController from '../../../common/Dialog/GlobalDialogController';
 
-import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
+import { serviceGetListFollower } from '../../../../service/profile';
 
-import { useGetListEmployee } from 'apps/client/src/app/hooks/useGetCompany';
+import { useGetListEmployee } from '../../../../hooks/useGetCompany';
 
 const CompanyProfileTabs = () => {
   const { t } = useTranslation();

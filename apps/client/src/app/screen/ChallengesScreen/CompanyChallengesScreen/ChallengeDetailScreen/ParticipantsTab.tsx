@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import Empty from './assets/emptyFollow.svg';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { RootStackParamList } from '../../../../navigation/navigation.type';
 interface IParticipantsTabProps {
   participant?: {
     id: string | number;

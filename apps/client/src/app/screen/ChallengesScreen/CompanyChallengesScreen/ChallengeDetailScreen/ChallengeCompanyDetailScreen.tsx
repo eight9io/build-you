@@ -2,14 +2,10 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FC, useEffect, useState } from 'react';
 import i18n from '../../../../i18n/i18n';
 
-import {
-  IChallenge,
-  IChallengeOwner,
-} from 'apps/client/src/app/types/challenge';
+import { IChallenge } from '../../../../types/challenge';
 import { getChallengeStatusColor } from '../../../../utils/common';
 import { useUserProfileStore } from '../../../../store/user-data';
 import {
-  getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from '../../../../service/challenge';
@@ -22,8 +18,8 @@ import DescriptionTab from '../../PersonalChallengesScreen/ChallengeDetailScreen
 import CheckCircle from './assets/check_circle.svg';
 
 import Button from '../../../../component/common/Buttons/Button';
-import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
-import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import GlobalDialogController from '../../../../component/common/Dialog/GlobalDialogController';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 import { useTranslation } from 'react-i18next';
 
 interface ICompanyChallengeDetailScreenProps {

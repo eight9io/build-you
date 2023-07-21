@@ -10,8 +10,8 @@ import ChallengesTab from './Challenges/ChallengesTab';
 import { IUserData } from '../../../../types/user';
 import Biography from '../Users/Biography/Biography';
 
-import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { fetchListEmployee } from '../../../../utils/profile';
+import { useUserProfileStore } from '../../../../store/user-data';
 import EmployeesCompany from './EmployeesCompany';
 import SkeletonLoadingCommon from '../../../common/SkeletonLoadings/SkeletonLoadingCommon';
 

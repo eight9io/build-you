@@ -18,7 +18,6 @@ import httpInstance from '../../../../utils/http';
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import EditChallengeProgressModal from '../../../../component/modal/EditChallengeProgressModal';
 import { useIsFocused } from '@react-navigation/native';
-import { IUserData } from 'apps/client/src/app/types/user';
 
 interface IProgressTabProps {
   shouldRefresh: boolean;

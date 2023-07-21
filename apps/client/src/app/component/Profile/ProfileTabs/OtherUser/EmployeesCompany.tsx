@@ -1,13 +1,13 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { FC, useState } from 'react';
-import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 
 import { EmployeesItemOtherCompany } from '../Company/Employees/Employees';
 
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { Image } from 'expo-image';
+import { useUserProfileStore } from '../../../../store/user-data';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { RootStackParamList } from '../../../../navigation/navigation.type';
 
 interface IEmployeesTabProps {
   employeeList: any[];

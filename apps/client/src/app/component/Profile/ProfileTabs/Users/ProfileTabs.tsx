@@ -13,7 +13,7 @@ import Biography from './Biography/Biography';
 import Skills from './Skills';
 import Followers from '../common/Followers/Followers';
 import Following from '../common/Following/Following';
-import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
+import { serviceGetListFollower } from '../../../../service/profile';
 import { useIsFocused } from '@react-navigation/native';
 
 const ProfileTabs: FC = () => {

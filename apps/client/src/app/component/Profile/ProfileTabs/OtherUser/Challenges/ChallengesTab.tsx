@@ -13,8 +13,8 @@ import { IChallenge } from '../../../../../types/challenge';
 import ChallengeCard from '../../../../Card/ChallengeCard/ChallengeCard';
 import { RootStackParamList } from '../../../../../navigation/navigation.type';
 import GolbalDialogController from '../../../../common/Dialog/GlobalDialogController';
-import { sortChallengeByStatus } from 'apps/client/src/app/utils/common';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { sortChallengeByStatus } from '../../../../../utils/common';
+import { useUserProfileStore } from '../../../../../store/user-data';
 
 interface IChallengesTabProps {
   userId: string | null | undefined;

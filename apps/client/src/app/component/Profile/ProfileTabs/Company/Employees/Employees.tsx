@@ -8,21 +8,20 @@ import AddIcon from '../../../../asset/add.svg';
 import BinIcon from '../../../../asset/bin.svg';
 
 import AddNewEmployeeModal from '../../../../modal/company/AddNewEmployeeModal';
-import { IUserData } from 'apps/client/src/app/types/user';
 import Empty from '../../../../asset/emptyFollow.svg';
 import clsx from 'clsx';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { useUserProfileStore } from '../../../../../store/user-data';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { RootStackParamList } from '../../../../../navigation/navigation.type';
 
 import ConfirmDialog from '../../../../common/Dialog/ConfirmDialog';
 import GlobalDialogController from '../../../../common/Dialog/GlobalDialogController';
-import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
+import { useEmployeeListStore } from '../../../../../store/company-data';
 import {
   serviceAddEmployee,
   serviceRemoveEmployee,
-} from 'apps/client/src/app/service/company';
-import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
+} from '../../../../../service/company';
+import { fetchListEmployee } from '../../../../../utils/profile';
 import GlobalToastController from '../../../../common/Toast/GlobalToastController';
 
 interface IEmployeesItemProps {

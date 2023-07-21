@@ -26,13 +26,13 @@ import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
 import ShareIcon from './assets/share.svg';
 import TaskAltIcon from './assets/task-alt.svg';
 import TaskAltIconGray from './assets/task-alt-gray.svg';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
-import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import { useUserProfileStore } from '../../../../store/user-data';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 import { use } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 const image = Asset.fromModule(
-  require('apps/client/src/app/screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/assets/test.png')
+  require('./assets/test.png')
 );
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<

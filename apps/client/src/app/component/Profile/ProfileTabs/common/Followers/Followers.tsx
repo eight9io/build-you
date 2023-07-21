@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import Empty from '../asset/emptyFollow.svg';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { RootStackParamList } from '../../../../../navigation/navigation.type';
 import { IUserData } from 'apps/client/src/app/types/user';
 import clsx from 'clsx';
 

@@ -26,8 +26,8 @@ import TaskAltIcon from './assets/task-alt.svg';
 import TaskAltIconGray from './assets/task-alt-gray.svg';
 // import ChallengeDetailScreen from '../../PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import ChallengeCompanyDetailScreen from '../ChallengeDetailScreen/ChallengeCompanyDetailScreen';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
-import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import { useUserProfileStore } from '../../../../store/user-data';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 import { useTranslation } from 'react-i18next';
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<

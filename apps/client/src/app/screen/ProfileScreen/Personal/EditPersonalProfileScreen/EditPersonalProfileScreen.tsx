@@ -27,15 +27,15 @@ import { EditProfileValidators } from '../../../../Validators/EditProfile.valida
 import AddHardSkills from '../../../../component/modal/AddHardSkills/AddHardSkills';
 import DateTimePicker2 from '../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
-import { IOccupation } from 'apps/client/src/app/types/auth';
-import CustomSwitch from 'apps/client/src/app/component/common/Switch';
-import VideoPicker from 'apps/client/src/app/component/common/VideoPicker';
-import { IUploadMediaWithId } from 'apps/client/src/app/types/media';
-import { uploadNewVideo } from 'apps/client/src/app/utils/uploadVideo';
-import { VideoWithPlayButton } from 'apps/client/src/app/component/Profile/ProfileTabs/Users/Biography/Biography';
+import { IOccupation } from '../../../../types/auth';
+import CustomSwitch from '../../../../component/common/Switch';
+import VideoPicker from '../../../../component/common/VideoPicker';
+import { IUploadMediaWithId } from '../../../../types/media';
+import { uploadNewVideo } from '../../../../utils/uploadVideo';
+import { VideoWithPlayButton } from '../../../../component/Profile/ProfileTabs/Users/Biography/Biography';
 
 import CalendarIcon from './asset/calendar-icon.svg';
-import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;

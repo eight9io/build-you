@@ -23,6 +23,7 @@ import DateTimePicker2 from '../common/BottomSheet/DateTimePicker2.tsx/DateTimeP
 import CloseIcon from '../asset/close.svg';
 import CalendarIcon from '../asset/calendar.svg';
 import GlobalToastController from '../common/Toast/GlobalToastController';
+import { useChallengeUpdateStore } from '../../store/challenge-update-store';
 
 interface IEditChallengeModalProps {
   challenge: IChallenge;
@@ -47,6 +48,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
     openModal: openConfirmModal,
     closeModal: closeConfirmModal,
   } = useModal();
+
+  const { setChallengeUpdateDetails } = useChallengeUpdateStore();
 
   const {
     control,
@@ -81,23 +84,19 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const res = await updateChallenge(challenge.id, {
+      await updateChallenge(challenge.id, {
         ...data,
       });
-      if (res.status === 200 || res.status === 201) {
-        GlobalToastController.showModal({
-          message:
-            t('toast.edit_challenge_success') ||
-            'Your edit has been created successfully ! ',
-        });
-        // closeConfirmModal();
-        onConfirm();
-        navigation.navigate('PersonalChallengeDetailScreen', {
-          challengeId: challenge.id,
-        });
-      } else {
-        setErrorMessage(t('errorMessage:500') || '');
-      }
+      GlobalToastController.showModal({
+        message:
+          t('toast.edit_challenge_success') ||
+          'Your edit has been created successfully ! ',
+      });
+      setChallengeUpdateDetails({
+        challengeId: challenge.id,
+        goal: data.goal,
+      });
+      onConfirm();
     } catch (error) {
       setErrorMessage(t('errorMessage:500') || '');
     }

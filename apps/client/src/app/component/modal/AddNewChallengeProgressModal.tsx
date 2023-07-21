@@ -150,68 +150,72 @@ export const AddNewChallengeProgressModal: FC<
   }, [selectedMedia]);
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    if (!userProfile || !userProfile.id) return;
-    const payload = {
-      user: userProfile.id,
-      challenge: challengeId,
-      caption: data.caption,
-      location: data.location,
-    };
+    try {
+      setIsLoading(true);
+      if (!userProfile || !userProfile.id) return;
+      const payload = {
+        user: userProfile.id,
+        challenge: challengeId,
+        caption: data.caption,
+        location: data.location,
+      };
 
-    const createProgressResponse = await createProgress(payload);
+      const createProgressResponse = await createProgress(payload);
 
-    console.log(createProgressResponse)
-    if (
-      (createProgressResponse.status === 200 || 201) &&
-      selectedMedia.length > 0
-    ) {
-      const progressId = createProgressResponse.data.id;
-      if (isSelectedImage) {
-        await updateProgressImage(progressId, selectedMedia)
-          .then((res) => {
-            if (res.status === 200 || 201) {
-              // setIsRequestSuccess(true);
-              // setIsShowModal(true);
-              handleCloseModal();
-              GlobalToastController.showModal({
-                message:
-                  t('toast.create_progress_success') ||
-                  'Your progress has been created successfully!',
-              });
-            }
-          })
-          .catch((_) => {
-            setIsRequestSuccess(false);
-            setIsShowModal(true);
-            deleteProgress(progressId);
-          });
-      } else {
-        await updateProgressVideo(progressId, selectedVideo[0])
-          .then((res) => {
-            if (res.status === 200 || 201) {
-              // setIsRequestSuccess(true);
-              // setIsShowModal(true);
+      if (
+        (createProgressResponse.status === 200 || 201) &&
+        selectedMedia.length > 0
+      ) {
+        const progressId = createProgressResponse.data.id;
+        if (isSelectedImage) {
+          await updateProgressImage(progressId, selectedMedia)
+            .then((res) => {
+              if (res.status === 200 || 201) {
+                // setIsRequestSuccess(true);
+                // setIsShowModal(true);
+                handleCloseModal();
+                GlobalToastController.showModal({
+                  message:
+                    t('toast.create_progress_success') ||
+                    'Your progress has been created successfully!',
+                });
+              }
+            })
+            .catch((_) => {
+              setIsRequestSuccess(false);
+              setIsShowModal(true);
+              deleteProgress(progressId);
+            });
+        } else {
+          await updateProgressVideo(progressId, selectedVideo[0])
+            .then((res) => {
+              if (res.status === 200 || 201) {
+                // setIsRequestSuccess(true);
+                // setIsShowModal(true);
 
-              handleCloseModal();
-              GlobalToastController.showModal({
-                message:
-                  t('toast.create_progress_success') ||
-                  'Your progress has been created successfully!',
-              });
-            }
-          })
-          .catch((_) => {
-            setIsRequestSuccess(false);
-            setIsShowModal(true);
-            deleteProgress(progressId);
-          });
+                handleCloseModal();
+                GlobalToastController.showModal({
+                  message:
+                    t('toast.create_progress_success') ||
+                    'Your progress has been created successfully!',
+                });
+              }
+            })
+            .catch((_) => {
+              setIsRequestSuccess(false);
+              setIsShowModal(true);
+              deleteProgress(progressId);
+            });
+        }
+        setIsLoading(false);
+
+        return;
       }
-    } else {
+    } catch (error) {
       setIsRequestSuccess(false);
       setIsShowModal(true);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const screen = Dimensions.get('window');

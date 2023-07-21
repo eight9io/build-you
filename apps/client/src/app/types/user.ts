@@ -27,10 +27,7 @@ export interface IUserData {
   cover?: string;
   companyAccount?: boolean | null;
   isShowCompany?: boolean | null;
-<<<<<<< Updated upstream
   challengeStatus?: string;
-=======
->>>>>>> Stashed changes
 }
 
 export interface IHardSkillProps {

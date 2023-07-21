@@ -96,7 +96,7 @@ const PersonalChallenges = ({
   }, [isFocused]);
 
   return (
-    <SafeAreaView className={clsx('bg-white')}>
+    <SafeAreaView className={clsx('flex-1 bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && !isFetchingError && (
         <View className={clsx('h-full w-full flex-1 bg-gray-50 pb-[65px]')}>

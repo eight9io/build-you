@@ -20,6 +20,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Video } from 'expo-av';
 import LikeButtonUnregister from './LikeButtonUnregister';
 import CommentButtonUnregister from './CommentButtonUnregister';
+import { useChallengeUpdateStore } from '../../store/challenge-update-store';
 
 interface IChallengeImageProps {
   name: string;

@@ -41,6 +41,7 @@ import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/Prog
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { IFeedPostProps } from '../types/common';
 import CompanyChallengeDetailScreen from './ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
+import { useChallengeUpdateStore } from '../store/challenge-update-store';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -57,6 +58,8 @@ export const HomeFeed = () => {
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { getChallengeUpdateDetails } = useChallengeUpdateStore();
+  const challgeneUpdateDetails = getChallengeUpdateDetails();
 
   const handleScroll = async () => {
     setIsRefreshing(true);
@@ -89,12 +92,7 @@ export const HomeFeed = () => {
       });
   };
 
-  useEffect(() => {
-    getInitialFeeds();
-  }, []);
-
   const getNewFeed = async () => {
-    console.log('getNewFeed');
     await serviceGetFeed({
       page: feedPage + 1,
       take: 20,
@@ -114,6 +112,32 @@ export const HomeFeed = () => {
       setFeedPage((prev) => prev + 1);
     });
   };
+
+  useEffect(() => {
+    if (challgeneUpdateDetails) {
+      // update feedData according to challgeneUpdateDetails array
+      const newFeedData = feedData.map((item: any) => {
+        const index = challgeneUpdateDetails.findIndex(
+          (challenge: any) => challenge.challengeId === item.challenge.id
+        );
+        if (index !== -1) {
+          return {
+            ...item,
+            challenge: {
+              ...item.challenge,
+              goal: challgeneUpdateDetails[index].goal,
+            },
+          };
+        }
+        return item;
+      });
+      setFeedData(newFeedData);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    getInitialFeeds();
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (

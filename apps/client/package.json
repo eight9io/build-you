@@ -73,7 +73,8 @@
     "@react-native-firebase/app": "*",
     "@react-native-firebase/messaging": "*",
     "babel-plugin-transform-inline-environment-variables": "*",
-    "babel-preset-expo": "*"
+    "babel-preset-expo": "*",
+    "babel-plugin-inline-dotenv": "*"
   },
   "scripts": {
     "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps client && npx nx ensure-symlink client",
@@ -84,6 +85,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "babel-plugin-transform-inline-environment-variables": "*",
-    "babel-preset-expo": "*"
+    "babel-preset-expo": "*",
+    "babel-plugin-inline-dotenv": "*"
   }
 }

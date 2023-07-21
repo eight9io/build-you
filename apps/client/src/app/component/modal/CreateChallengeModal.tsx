@@ -131,7 +131,7 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
               params: {
                 screen: 'PersonalChallengeDetailScreen',
                 params: {
-                  challengeId: newChallengeId,
+                  challengeId: challengeCreateResponse.data.id,
                 },
               },
             });

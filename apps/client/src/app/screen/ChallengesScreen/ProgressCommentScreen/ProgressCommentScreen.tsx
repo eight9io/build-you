@@ -132,6 +132,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     const loadProgressData = async () => {
       try {
         const response = await getProgressById(progressId);
+        console.log('response', response.data);
         const challengeResponse = await getChallengeById(challengeId);
         const owner = Array.isArray(challengeResponse.data.owner)
           ? challengeResponse.data.owner[0]

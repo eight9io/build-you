@@ -37,6 +37,7 @@ interface IProgressCardProps {
     id: string;
     name: string;
     surname: string;
+    companyAccount?: boolean;
   };
   challengeName: string;
   challengeId: string;
@@ -71,6 +72,8 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const currentUserId = currentUser?.id;
+
+  const isChallengeOwnerCompanyAccount = challengeOwner?.companyAccount;
 
   const {
     isVisible: isAckModalVisible,
@@ -182,7 +185,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        {(isJoined && isProgressOwner) && (
+        {((isJoined && isProgressOwner) || (!isChallengeOwnerCompanyAccount && isProgressOwner))  && (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}

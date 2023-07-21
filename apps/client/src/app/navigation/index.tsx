@@ -1,12 +1,16 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import { useEffect, useRef, useState } from 'react';
-import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as TaskManager from 'expo-task-manager';
+import * as Linking from 'expo-linking';
 import { AxiosError } from 'axios';
 import { AppState } from 'react-native';
 import { RootStackParamList } from './navigation.type';
@@ -68,6 +72,8 @@ TaskManager.defineTask(
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
+const prefix = Linking.createURL('/');
+
 export const RootNavigation = () => {
   const { t } = useTranslation();
   const [isMainAppLoading, setIsMainAppLoading] = useState<boolean>(true);
@@ -91,6 +97,33 @@ export const RootNavigation = () => {
   const logined = getAccessToken();
 
   const isCompleteProfile: boolean | null = getIsCompleteProfileStore();
+
+  const linking = {
+    //If you are using universal links, you need to add your domain to the prefixes as well:
+    // prefixes: [Linking.createURL('/'), 'http://localhost:8081'],
+    prefixes: [prefix],
+    config: {
+      screens: {
+        NotFound: '*',
+        HomeScreen: {
+          path: 'home',
+          screens: {
+            OtherUserProfileChallengeDetailsScreen: {
+              path: 'other-user-profile-challenge-details/:id',
+              parse: {
+                id: (id: string) => navigationRef?.current?.navigate('HomeScreen', { screen: 'OtherUserProfileChallengeDetailsScreen', params: { id } }), 
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const url = Linking.useURL();
+  console.log(url);
+
+  // test cmd: npx uri-scheme open exp://127.0.0.1:8081/--/home/other-user-profile-challenge-details/123456 --ios
 
   useEffect(() => {
     checkAccessTokenLocal(setAccessToken);
@@ -227,7 +260,7 @@ export const RootNavigation = () => {
   };
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} linking={linking}>
       <GlobalDialog />
       <RootStack.Navigator
         screenOptions={{

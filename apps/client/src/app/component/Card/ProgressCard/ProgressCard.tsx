@@ -182,7 +182,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        {((!isOtherUserProfile && isJoined) || isProgressOwner) && (
+        {(isJoined && isProgressOwner) && (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}

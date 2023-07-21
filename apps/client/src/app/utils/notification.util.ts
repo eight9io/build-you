@@ -61,7 +61,7 @@ export const addNotificationListener = async (
   const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
     ) => {
-    console.log('message: ', message);
+    // console.log('message: ', message);
     if (message.notification)
       // Display notification on foreground
       await notifee.displayNotification({
@@ -69,17 +69,27 @@ export const addNotificationListener = async (
         body: message.notification.body,
         data: message.data
       });
+    await notifee.getBadgeCount();
+    await notifee.incrementBadgeCount();
+    useNotificationStore.getState().setHasNewNotification(true);
+  };
+
+  const onBackgroundMessageReceived = async (
+    message: FirebaseMessagingTypes.RemoteMessage
+  ) => {
+    // console.log('background: ', message);
+    await notifee.getBadgeCount();
     await notifee.incrementBadgeCount();
     useNotificationStore.getState().setHasNewNotification(true);
   };
 
   // Listen to messages from FCM
   messaging().onMessage(onMessageReceived);
-  messaging().setBackgroundMessageHandler(onMessageReceived);
+  messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
 
   // Listen to foreground events
   notifee.onForegroundEvent(async ({ type, detail }) => {
-    console.log('detail: ', detail);
+    // console.log('detail: ', detail);
     switch (type) {
       case EventType.PRESS: // User pressed on the notification
         if (detail.notification) {
@@ -113,7 +123,7 @@ export const handleTapOnIncomingNotification = async (
   any
   > as INotificationPayload;
   
-  switch (payload.notification_type) {
+  switch (payload.notificationType) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
       if (payload.post_id && payload.challenge_id)
         navigation.navigate('ProgressCommentScreen', {
@@ -136,10 +146,10 @@ export const handleTapOnIncomingNotification = async (
         });
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      if (payload.new_follower_id)
+      if (payload.followerId)
       {
         navigation.navigate('OtherUserProfileScreen', {
-          userId: payload.new_follower_id,
+          userId: payload.followerId,
           isFollower: true,
         });
         }
@@ -151,7 +161,7 @@ export const handleTapOnNotification = async (
   notification: INotification,
   navigation: NativeStackNavigationProp<RootStackParamList>
   ) => {
-  console.log('notification: ', notification);
+  // console.log('notification: ', notification);
   const handleNavigation = async (
     screen: string,
     notification: INotification
@@ -181,7 +191,7 @@ export const handleTapOnNotification = async (
     }
   };
 
-  console.log('notification: ', notification);
+  // console.log('notification: ', notification);
   switch (notification.type) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
       handleNavigation('ProgressCommentScreen', notification);

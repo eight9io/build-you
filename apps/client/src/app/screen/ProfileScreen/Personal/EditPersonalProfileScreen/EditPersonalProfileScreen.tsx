@@ -448,7 +448,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
               <Button
                 title="Update"
-                containerClassName=" bg-primary-default mt-10 mb-"
+                containerClassName="mb-4  bg-primary-default mt-10 mb-"
                 textClassName="text-white text-md leading-6"
                 onPress={handleSubmit(onSubmit)}
               />

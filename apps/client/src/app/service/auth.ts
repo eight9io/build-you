@@ -47,3 +47,15 @@ export const validateInAppToken = (token: string) => {
 export const serviceGetMyProfile = () => {
   return http.get('/user/me')
 };
+
+export const googleLogin = (token: string) => {
+  return http.get(`/auth/google/${token}`);
+};
+
+export const linkedInLogin = (token: string) => {
+  return http.get(`/auth/linkedin/${token}`);
+};
+
+export const appleLogin = (token: string) => {
+  return http.get(`/auth/aple/${token}`);
+};

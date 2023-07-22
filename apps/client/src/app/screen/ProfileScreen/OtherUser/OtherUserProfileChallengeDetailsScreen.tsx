@@ -31,6 +31,7 @@ import CheckCircle from '../../../../../assets/svg/check_circle.svg';
 import ConfirmDialog from '../../../component/common/Dialog/ConfirmDialog';
 import EditChallengeModal from '../../../component/modal/EditChallengeModal';
 import { getChallengeStatusColor } from '../../../utils/common';
+import { AxiosError } from 'axios';
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -200,7 +201,16 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       });
       setIsJoined(true);
       setShouldRefresh(true);
-    } catch (err) {
+    } catch (error: AxiosError | any) {
+      if (error?.response.status == 400) {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message:
+            t('dialog.err_max_join') ||
+            'You are already joined this challenge!',
+        });
+        return;
+      }
       GlobalDialogController.showModal({
         title: 'Error',
         message: 'Something went wrong. Please try again later!',

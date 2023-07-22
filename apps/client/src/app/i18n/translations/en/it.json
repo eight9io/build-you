@@ -318,7 +318,8 @@
     "err_update_profile": "Something went wrong. Please try again later",
     "err_add_employee": "The user is already part of the company",
     "open_settings": "Open settings",
-    "alert_title": "Alert"
+    "alert_title": "Alert",
+    "err_max_join": "The maximum number of participants for this challenge has been reached"
   },
   "toast": {
     "joined_success": "You have joined the challenge!",
@@ -328,7 +329,7 @@
     "delete_employee_success": "Employee deleted successfully! ",
     "reset_password_success": "Reset password successfully! ",
     "create_challenge_success": "Your challenge has been created successfully !",
-    "edit_challenge_success": "Your progress has been edited successfully ! ",
+    "edit_challenge_success": "Your challenge has been edited successfully ! ",
     "create_progress_success": "Your progress has been created successfully !",
     "completed_challenge_success": "Challenge has been completed successfully !",
     "delete_challenge_success": "Deleted Challenge successfully !"

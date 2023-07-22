@@ -2,9 +2,10 @@ import { NOTIFICATION_TOKEN_DEVICE_TYPE, NOTIFICATION_TOKEN_STATUS, NOTIFICATION
 import { IUserData } from "./user";
 
 export interface INotificationPayload { // Interface for the data that is sent from the FCM or APN
-    notification_type: string;
+    notificationType: string;
     post_id?: string;
-    new_follower_id?: string;
+    followerId?: string;
+    challenge_id?: string;
 }
 
 export interface INotification {
@@ -12,6 +13,7 @@ export interface INotification {
     user: Pick<IUserData, 'id' | 'name' | 'avatar'>;
     isRead: boolean;
     progressId?: string;
+    challengeId?: string;
     newFollowerId?: string;
     type: NOTIFICATION_TYPES;
     createdAt: Date;

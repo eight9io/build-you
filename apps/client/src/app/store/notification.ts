@@ -8,7 +8,7 @@ import {
   NOTIFICATION_TOKEN_DEVICE_TYPE,
   NOTIFICATION_TOKEN_STATUS,
 } from '../common/enum';
-import { clearNotifications } from '../utils/notification.util';
+import { clearAllNotifications } from '../utils/notification.util';
 
 export interface NotificationStore {
   pushToken?: string;
@@ -37,9 +37,9 @@ export const useNotificationStore = create<NotificationStore>()(
           notificationToken: value,
           status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
           deviceType:
-            Platform.OS === 'android'
-              ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-              : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+          Platform.OS === 'android'
+          ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+          : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
         });
         if (res.status === 200 || res.status === 201) set({ pushToken: value });
       },
@@ -63,7 +63,7 @@ export const useNotificationStore = create<NotificationStore>()(
         set({ hasNewNotification: value });
         if (!value) {
           // Dismiss all notification trays and reset badge count
-          await clearNotifications();
+          await clearAllNotifications();
         }
       },
       getHasNewNotification: () => get().hasNewNotification,

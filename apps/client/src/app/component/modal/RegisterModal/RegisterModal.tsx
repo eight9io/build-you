@@ -63,9 +63,9 @@ const RegisterModal = ({
               <LinkedInLoginButton
                 title={t('register_modal.linked') || 'Register with Linkedin'}
               />
-              <GoogleLoginButton
+              {/* <GoogleLoginButton
                 title={t('register_modal.google') || 'Register with Google'}
-              />
+              /> */}
               <Button
                 title={t('register_modal.register')}
                 containerClassName="border-primary-default flex-row border-[1px] m-2"

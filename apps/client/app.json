@@ -18,9 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
-      "associatedDomains": [
-        "applinks:it.buildyou.buildyou"
-      ],
+      "associatedDomains": ["applinks:it.buildyou.buildyou"],
       "buildNumber": "7",
       "supportsTablet": false,
       "infoPlist": {
@@ -28,7 +26,10 @@
           "remote-notification"
         ]
       },
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "entitlements": {
+        "com.apple.developer.applesignin": ["Default"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -58,7 +59,6 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
       ],
-      "expo-apple-authentication",
       [
         "expo-build-properties",
         {

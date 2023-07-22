@@ -20,6 +20,7 @@ import ErrorText from '../common/ErrorText';
 import ConfirmDialog from '../common/Dialog/ConfirmDialog';
 
 import CloseIcon from '../asset/close.svg';
+import GlobalToastController from '../common/Toast/GlobalToastController';
 
 interface IEditChallengeProgressModalProps {
   progress: IProgressChallenge;
@@ -67,7 +68,12 @@ export const EditChallengeProgressModal: FC<
         ...data,
       });
       if (res.status === 200) {
-        openConfirmModal();
+        // openConfirmModal();
+
+        handleCloseConfirmModal();
+        GlobalToastController.showModal({
+          message: t('edit_progress_modal.edit_success') as string,
+        });
       } else {
         setErrorMessage(t('errorMessage:500') || '');
       }

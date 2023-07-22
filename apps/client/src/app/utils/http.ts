@@ -8,7 +8,7 @@ import GlobalDialogController from '../component/common/Dialog/GlobalDialogContr
 
 const httpInstance = axios.create({
   timeout: 60000,
-  baseURL: process.env.API_URL,
+  baseURL: process.env.NX_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

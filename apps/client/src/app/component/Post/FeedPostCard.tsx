@@ -20,6 +20,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Video } from 'expo-av';
 import LikeButtonUnregister from './LikeButtonUnregister';
 import CommentButtonUnregister from './CommentButtonUnregister';
+import { useChallengeUpdateStore } from '../../store/challenge-update-store';
 
 interface IChallengeImageProps {
   name: string;
@@ -78,8 +79,8 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
             'relative flex  flex-row items-center justify-between px-4 py-3'
           )}
         >
-          <View className={clsx('flex w-11/12 flex-row items-center')}>
-            <Text className={clsx('text-h6 font-semibold leading-6')}>
+          <View className={clsx('flex w-11/12 flex-1 flex-row items-center')}>
+            <Text className={clsx('text-h6 flex-1 font-semibold leading-6')}>
               {name}
             </Text>
           </View>
@@ -116,8 +117,8 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
             'relative flex  flex-row items-center justify-between px-4 py-3'
           )}
         >
-          <View className={clsx('flex w-11/12 flex-row items-center')}>
-            <Text className={clsx('text-h6 font-semibold leading-6')}>
+          <View className={clsx('flex w-11/12 flex-1 flex-row items-center')}>
+            <Text className={clsx('text-h6 flex-1 font-semibold leading-6')}>
               {name}
             </Text>
           </View>
@@ -280,12 +281,12 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       <View className="relative mb-1">
         <View className="bg-gray-50 p-5">
           <TouchableOpacity
-            className="mb-4 flex-row justify-between"
+            className="mb-4 flex-row justify-between "
             onPress={navigateToUserProfile}
           >
-            <View className="flex-row">
+            <View className="flex-1 flex-row">
               <PostAvatar src={user?.avatar} onPress={navigateToUserProfile} />
-              <View className="ml-2">
+              <View className="ml-2 flex-1">
                 <Text className="text-h6 font-bold">
                   {user?.name} {user?.surname}
                 </Text>
@@ -315,7 +316,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             />
           )}
 
-          <View className="mt-4 flex-row">
+          <View className="mt-2 flex flex-row ">
             <LikeButton
               progressId={id}
               currentUserId={userId}

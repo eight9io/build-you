@@ -8,27 +8,28 @@ import AddIcon from '../../../../asset/add.svg';
 import BinIcon from '../../../../asset/bin.svg';
 
 import AddNewEmployeeModal from '../../../../modal/company/AddNewEmployeeModal';
-import { IUserData } from 'apps/client/src/app/types/user';
 import Empty from '../../../../asset/emptyFollow.svg';
 import clsx from 'clsx';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { useUserProfileStore } from '../../../../../store/user-data';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { RootStackParamList } from '../../../../../navigation/navigation.type';
 
 import ConfirmDialog from '../../../../common/Dialog/ConfirmDialog';
 import GlobalDialogController from '../../../../common/Dialog/GlobalDialogController';
-import { useEmployeeListStore } from 'apps/client/src/app/store/company-data';
+import { useEmployeeListStore } from '../../../../../store/company-data';
 import {
   serviceAddEmployee,
   serviceRemoveEmployee,
-} from 'apps/client/src/app/service/company';
-import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
+} from '../../../../../service/company';
+import { fetchListEmployee } from '../../../../../utils/profile';
+import GlobalToastController from '../../../../common/Toast/GlobalToastController';
 
 interface IEmployeesItemProps {
   item: any;
   isCompany?: boolean | null;
   navigation: any;
   setIsShowModal?: any;
+  userId?: string;
 }
 interface IEmployeeProps {
   employeeList?: any;
@@ -84,7 +85,46 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
     </View>
   );
 };
+export const EmployeesItemOtherCompany: FC<IEmployeesItemProps> = ({
+  item,
 
+  navigation,
+  setIsShowModal,
+}) => {
+  return (
+    <View>
+      <View className=" mr-3 flex-row items-center justify-between  ">
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() =>
+            // navigation.navigate('OtherUserProfileScreen', {
+            //   userId: item.id,
+            // })
+            // use push
+            navigation.push('OtherUserProfileScreen', {
+              userId: item.id,
+            })
+          }
+          className="mb-5 mr-5 flex-row items-center justify-between gap-3 "
+        >
+          <View className="relative">
+            <Image
+              className={clsx('absolute left-0  top-0 h-10 w-10  rounded-full')}
+              source={require('../../../../asset/avatar-load.png')}
+            />
+            <Image
+              source={{ uri: item.avatar }}
+              className="h-10 w-10 rounded-full"
+            />
+          </View>
+          <Text className="text-basic-black text-base font-semibold">
+            {item.name} {item.surname}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -99,8 +139,15 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   const [isShowModalAdd, setIsShowModalAdd] = useState(false);
   const removeEmployee = async (employeeId: any) => {
     serviceRemoveEmployee(employeeId, userProfile?.id)
-      .then((response) => {
-        fetchListEmployee(userProfile?.id, (res: any) => setEmployeeList(res));
+      .then(async (response) => {
+        await fetchListEmployee(userProfile?.id, (res: any) =>
+          setEmployeeList(res)
+        );
+        GlobalToastController.showModal({
+          message:
+            t('toast.delete_employee_success') ||
+            'Employee deleted successfully!',
+        });
       })
       .catch((err) => {
         GlobalDialogController.showModal({

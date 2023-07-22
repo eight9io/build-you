@@ -2,14 +2,10 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FC, useEffect, useState } from 'react';
 import i18n from '../../../../i18n/i18n';
 
-import {
-  IChallenge,
-  IChallengeOwner,
-} from 'apps/client/src/app/types/challenge';
+import { IChallenge } from '../../../../types/challenge';
 import { getChallengeStatusColor } from '../../../../utils/common';
 import { useUserProfileStore } from '../../../../store/user-data';
 import {
-  getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from '../../../../service/challenge';
@@ -22,8 +18,8 @@ import DescriptionTab from '../../PersonalChallengesScreen/ChallengeDetailScreen
 import CheckCircle from './assets/check_circle.svg';
 
 import Button from '../../../../component/common/Buttons/Button';
-import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
-import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import GlobalDialogController from '../../../../component/common/Dialog/GlobalDialogController';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 import { useTranslation } from 'react-i18next';
 
 interface ICompanyChallengeDetailScreenProps {
@@ -123,7 +119,12 @@ export const ChallengeCompanyDetailScreen: FC<
     <View className="flex h-full flex-col bg-white pt-4">
       <View className="flex flex-row items-center justify-between px-4">
         <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
-          <CheckCircle fill={getChallengeStatusColor(challengeStatus)} />
+          <CheckCircle
+            fill={getChallengeStatusColor(
+              challengeStatus,
+              challengeData.status
+            )}
+          />
           <View className="flex-1">
             <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
@@ -173,6 +174,8 @@ export const ChallengeCompanyDetailScreen: FC<
             shouldRefresh={shouldRefresh}
             challengeData={challengeData}
             setShouldRefresh={setShouldRefresh}
+            isChallengeCompleted={isChallengeCompleted}
+            isOtherUserProfile={challengeOwner.id !== currentUser?.id}
           />
           <DescriptionTab challengeData={challengeData} />
           <ParticipantsTab participant={participantList as any} />

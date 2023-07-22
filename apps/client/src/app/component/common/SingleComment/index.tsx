@@ -130,16 +130,16 @@ const SingleComment: FC<ISingleCommentProps> = ({
   return (
     <View
       className={clsx(
-        'mt-2 flex w-full flex-col items-start justify-between rounded-xl bg-[#FAFBFF] p-4'
+        'mt-2 flex flex-col items-start justify-between rounded-xl bg-[#FAFBFF] p-4'
       )}
     >
       <View
         className={clsx(
-          'bg-gray-veryLight mb-3 flex w-full flex-row justify-between'
+          'bg-gray-veryLight mb-3 flex flex-row items-center justify-between'
         )}
       >
         <TouchableOpacity
-          className={clsx('flex flex-row')}
+          className={clsx('flex flex-1 flex-row')}
           onPress={() => {
             // prevent double click
             if (isDisabled) {
@@ -162,7 +162,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
                 : comment.avatar?.trim()
             }
           />
-          <View className={clsx('ml-2')}>
+          <View className={clsx('ml-2 flex-1')}>
             <Text
               className={clsx(
                 'text-h6 font-bold',

@@ -125,21 +125,24 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     {} as IProgressChallenge
   );
   const [companyEmployees, setCompanyEmployees] = useState<any[]>([]);
+  const [isChallengePublic, setIsChallengePublic] = useState<boolean>(false);
 
   useEffect(() => {
     if (!progressId) return;
     const loadProgressData = async () => {
       try {
         const response = await getProgressById(progressId);
+        console.log('response', response.data);
         const challengeResponse = await getChallengeById(challengeId);
-        console.log('challengeResponse', challengeResponse.data.public);
         const owner = Array.isArray(challengeResponse.data.owner)
           ? challengeResponse.data.owner[0]
           : challengeResponse.data.owner;
 
         const isChallengePublic = challengeResponse.data?.public;
+        setIsChallengePublic(isChallengePublic);
         const shouldRetrictEmployeeList =
-          owner?.companyAccount && challengeId && isChallengePublic;
+          owner?.companyAccount && !isChallengePublic;
+
         if (shouldRetrictEmployeeList) {
           const companyEmployeesResponse = await serviceGetEmployeeList(
             owner?.id
@@ -261,7 +264,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
           <View className={` bottom-0 w-full`}>
             <CommentInput
               handleOnSubmit={handleSubmit}
-              companyEmployees={companyEmployees}
+              companyEmployees={isChallengePublic ? [] : companyEmployees}
             />
           </View>
         </KeyboardAvoidingView>

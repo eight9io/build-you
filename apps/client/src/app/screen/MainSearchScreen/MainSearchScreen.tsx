@@ -14,6 +14,7 @@ import {
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
+  ListRenderItem,
 } from 'react-native';
 import { Image } from 'expo-image';
 
@@ -94,6 +95,39 @@ const MainSearchScreen = () => {
     navigation.navigate('OtherUserProfileScreen', { userId });
   };
 
+  const renderItem: ListRenderItem<ISearchUserData> = ({
+    item,
+  }: {
+    item: ISearchUserData;
+  }) => {
+    return (
+      <TouchableOpacity
+        key={item.id}
+        activeOpacity={0.8}
+        onPress={() => navigateToUserDetail(item.id)}
+        className="flex items-center bg-white px-5 py-3"
+      >
+        <View className="relative flex flex-1 flex-row">
+          {!item.avatar && (
+            <Image
+              className={clsx('h-12 w-12 rounded-full')}
+              source={require('../../common/image/avatar-load.png')}
+            />
+          )}
+          {item?.avatar && (
+            <Image
+              source={{ uri: item.avatar }}
+              className="h-12 w-12 rounded-full"
+            />
+          )}
+          <Text className="text-basic-black flex-1 pl-4 text-base font-semibold">
+            {item.name}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView className="h-full flex-1 bg-white">
       <KeyboardAvoidingView
@@ -107,32 +141,7 @@ const MainSearchScreen = () => {
               <FlatList
                 data={searchResults}
                 className="flex flex-col bg-white"
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    activeOpacity={0.8}
-                    onPress={() => navigateToUserDetail(item.id)}
-                    className="flex flex-row items-center bg-white px-5 py-3"
-                  >
-                    <View className="relative">
-                      {!item.avatar && (
-                        <Image
-                          className={clsx('h-12 w-12 rounded-full')}
-                          source={require('../../common/image/avatar-load.png')}
-                        />
-                      )}
-                      {item?.avatar && (
-                        <Image
-                          source={{ uri: item.avatar }}
-                          className="h-12 w-12 rounded-full"
-                        />
-                      )}
-                    </View>
-                    <Text className="text-basic-black pl-4 text-base font-semibold">
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                )}
+                renderItem={renderItem}
                 keyExtractor={(item) => item.id}
               />
             </View>

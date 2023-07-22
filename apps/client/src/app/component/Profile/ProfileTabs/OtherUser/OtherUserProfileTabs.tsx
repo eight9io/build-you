@@ -10,8 +10,8 @@ import ChallengesTab from './Challenges/ChallengesTab';
 import { IUserData } from '../../../../types/user';
 import Biography from '../Users/Biography/Biography';
 
-import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { fetchListEmployee } from '../../../../utils/profile';
+import { useUserProfileStore } from '../../../../store/user-data';
 import EmployeesCompany from './EmployeesCompany';
 import SkeletonLoadingCommon from '../../../common/SkeletonLoadings/SkeletonLoadingCommon';
 
@@ -37,7 +37,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
-  const isCompanyAccount = otherUserData?.companyAccount;
+  const isViewingUserCompanyAccount = otherUserData?.companyAccount;
 
   useEffect(() => {
     if (
@@ -99,7 +99,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                   titles={titles}
                   children={[
                     <Biography userProfile={otherUserData} key="0" />,
-                    !isCompanyAccount ? (
+                    !isViewingUserCompanyAccount ? (
                       <Skills skills={otherUserData?.softSkill} key="1" />
                     ) : (
                       <EmployeesCompany key="1" employeeList={employeeList} />
@@ -108,7 +108,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                       isCurrentUserInSameCompanyWithViewingUser={
                         isCurrentUserInSameCompanyWithViewingUser
                       }
-                      isCompanyAccount={isCompanyAccount}
+                      isCompanyAccount={isViewingUserCompanyAccount}
                       isCurrentUserInCompany={isCurrentUserInCompany}
                       userId={otherUserData.id}
                       key="2"

@@ -16,16 +16,11 @@ import {
 import Biography from '../Users/Biography/Biography';
 import { useIsFocused } from '@react-navigation/native';
 
-import { fetchListEmployee } from 'apps/client/src/app/utils/profile';
 import GlobalDialogController from '../../../common/Dialog/GlobalDialogController';
-import {
-  serviceAddEmployee,
-  serviceRemoveEmployee,
-} from 'apps/client/src/app/service/company';
-import { serviceGetListFollower } from 'apps/client/src/app/service/profile';
 
-import { useGetListFollowing } from 'apps/client/src/app/hooks/useGetUser';
-import { useGetListEmployee } from 'apps/client/src/app/hooks/useGetCompany';
+import { serviceGetListFollower } from '../../../../service/profile';
+
+import { useGetListEmployee } from '../../../../hooks/useGetCompany';
 
 const CompanyProfileTabs = () => {
   const { t } = useTranslation();

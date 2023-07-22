@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ import {
   deleteProgressLike,
   getProgressLikes,
 } from '../../service/progress';
+import { debounce } from '../../hooks/useDebounce';
 
 import GlobalDialogController from '../common/Dialog/GlobalDialogController';
 
@@ -119,8 +120,15 @@ const LikeButton: FC<ILikeButtonProps> = ({
       });
   };
 
+  const debouncedHandleLike = debounce(handleLike, 300); // Change the debounce delay as needed (in milliseconds)
+
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={handleLike}>
+    <TouchableHighlight
+      activeOpacity={0.8}
+      underlayColor="#C5C8D2"
+      onPress={debouncedHandleLike}
+      className="h-8 px-2 rounded-md"
+    >
       <View
         className={clsx('flex-1 flex-row items-center justify-center gap-2')}
       >
@@ -133,7 +141,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
             : `${numberOfLikes} ${numberOfLikes > 1 ? 'likes' : 'like'}`}
         </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

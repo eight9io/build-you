@@ -23,6 +23,7 @@ import { INotification } from '../../types/notification';
 import { getNotifications } from '../../service/notification';
 import GlobalDialogController from '../../component/common/Dialog/GlobalDialogController';
 import SkeletonLoadingCommon from '../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
+import { mapNotificationResponses } from '../../utils/notification.util';
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
 type NotificationsScreenNavigationProp = NativeStackNavigationProp<
@@ -61,8 +62,8 @@ const Notifications = ({
 
   const fetchNotifications = async () => {
     try {
-      const data = await getNotifications();
-      setNotifications(data);
+      const res = await getNotifications();
+      setNotifications(mapNotificationResponses(res.data));
     } catch (error) {
       GlobalDialogController.showModal({
         title: 'Error',

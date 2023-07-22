@@ -1,6 +1,6 @@
 import httpInstance from '../utils/http';
-import { INotification, IPushNotificationToken } from '../types/notification';
-import { mapNotificationResponses } from '../utils/notification.util';
+import { IPushNotificationToken } from '../types/notification';
+// import { mapNotificationResponses } from '../utils/notification.util';
 
 export const updateNotificationToken = async (
   payload: IPushNotificationToken
@@ -11,9 +11,10 @@ export const updateNotificationToken = async (
   );
 };
 
-export const getNotifications =  async (): Promise<INotification[]> => {
+export const getNotifications = async () => {
   const res = await httpInstance.get('/notification/all');
-  return mapNotificationResponses(res.data);
+  return res;
+  // return mapNotificationResponses(res.data);
 };
 
 export const setNotificationIsRead = (notificationIds: string[]) => {

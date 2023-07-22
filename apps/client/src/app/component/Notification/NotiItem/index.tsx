@@ -4,17 +4,19 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 import NotiAvatar from '../../common/Avatar/NotiAvatar';
 import { NOTIFICATION_TYPES } from '../../../common/enum';
-import { getNotificationContent, handleTapOnNotification } from '../../../utils/notification.util';
+import {
+  getNotificationContent,
+  handleTapOnNotification,
+} from '../../../utils/notification.util';
 import { INotification } from '../../../types/notification';
 import dayjs from '../../../utils/date.util';
 import { useNav } from '../../../navigation/navigation.type';
+import { setNotificationIsRead } from '../../../service/notification';
 interface INotiItemProps {
   notification: INotification;
 }
 
-const NotiItem: React.FC<INotiItemProps> = ({
-  notification,
-}) => {
+const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
   const navigation = useNav();
   const [isRead, setIsRead] = useState<boolean>(notification.isRead);
 
@@ -32,6 +34,9 @@ const NotiItem: React.FC<INotiItemProps> = ({
       )}
       onPress={async () => {
         await handleTapOnNotification(notification, navigation);
+        if (!notification.isRead) {
+          await setNotificationIsRead([notification.id.toString()]);
+        }
         setIsRead(true);
       }}
     >

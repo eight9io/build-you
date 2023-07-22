@@ -2,7 +2,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { NavigationContainerRef, StackActions } from '@react-navigation/native';
+import { NavigationContainerRef } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/navigation.type';
 import {
   INotification,
@@ -10,7 +10,7 @@ import {
   INotificationResponse,
 } from '../types/notification';
 import { NOTIFICATION_TYPES, SORT_ORDER } from '../common/enum';
-import { setNotificationIsRead } from '../service/notification';
+// import { setNotificationIsRead } from '../service/notification';
 
 export const registerForPushNotificationsAsync = async (
   setPushToken: (value: string) => Promise<void>
@@ -128,9 +128,9 @@ export const handleTapOnNotification = async (
             });
           break;
       }
-      if (!notification.isRead) {
-        await setNotificationIsRead([notification.id.toString()]);
-      }
+      // if (!notification.isRead) {
+      //   await setNotificationIsRead([notification.id.toString()]);
+      // }
     } catch (error) {
       console.log('error: ', error);
     }
@@ -217,7 +217,10 @@ export const mapNotificationResponses = (
   return sortNotificationsByDate(transformedData, SORT_ORDER.ASC);
 };
 
-export const sortNotificationsByDate = (notifications: INotification[], order: SORT_ORDER) => {
+export const sortNotificationsByDate = (
+  notifications: INotification[],
+  order: SORT_ORDER
+) => {
   if (order === SORT_ORDER.ASC)
     return notifications.sort((a, b) => {
       return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();

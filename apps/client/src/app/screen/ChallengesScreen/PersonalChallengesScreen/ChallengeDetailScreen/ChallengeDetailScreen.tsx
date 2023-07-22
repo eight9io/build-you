@@ -21,6 +21,7 @@ import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/
 import ParticipantsTab from '../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab';
 import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
 import { useTranslation } from 'react-i18next';
+import { AxiosError } from 'axios';
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -93,7 +94,16 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       });
       setIsJoined(true);
       setIsJoinedLocal && setIsJoinedLocal(true);
-    } catch (err) {
+    } catch (error: AxiosError | any) {
+      if (error?.response.status == 400) {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message:
+            t('dialog.err_max_join') ||
+            'You are already joined this challenge!',
+        });
+        return;
+      }
       GlobalDialogController.showModal({
         title: 'Error',
         message: 'Something went wrong. Please try again later!',

@@ -82,11 +82,7 @@ const CompleteProfileScreen4 = ({
 }: {
   navigation: CompleteProfileScreenNavigationProp;
 }) => {
-  return (
-    <CompleteProfile
-      component={() => <CompleteProfileStep4 navigation={navigation} />}
-    />
-  );
+  return <CompleteProfileStep4 navigation={navigation} />;
 };
 
 const CompleteProfileFinishScreen = ({

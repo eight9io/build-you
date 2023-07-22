@@ -1,6 +1,14 @@
-import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-import { Platform } from 'react-native';
+import notifee, {
+  AndroidImportance,
+  AndroidVisibility,
+  AuthorizationStatus,
+  EventType,
+  Notification,
+} from '@notifee/react-native';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavigationContainerRef, StackActions } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/navigation.type';
@@ -11,95 +19,140 @@ import {
 } from '../types/notification';
 import { NOTIFICATION_TYPES, SORT_ORDER } from '../common/enum';
 import { setNotificationIsRead } from '../service/notification';
+import { useNotificationStore } from '../store/notification';
 
 export const registerForPushNotificationsAsync = async (
   setPushToken: (value: string) => Promise<void>
 ) => {
   let token;
-
   if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
+    const settings = await notifee.requestPermission();
+    // Create a channel (required for Android)
+    // const channelId = await notifee.createChannel({
+    //   id: 'default',
+    //   name: 'Default Channel',
+    //   importance: AndroidImportance.HIGH,
+    // });
+    if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
+      // Register the device with FCM
+      await messaging().registerDeviceForRemoteMessages();
+
+      // Get the device push token
+      token = await messaging().getToken();
+      console.log('push token: ', token);
+
+      if (token) {
+        await setPushToken(token);
+      }
+    } else {
       // Ignore when user doesn't grant permission
       return;
-    }
-
-    // This token is used to send notifications to the device through Expo Notification Service.
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    // TO DO: send the token to the server to save it for later use
-
-    // This token is used to send notifications to the device directly through APNS or FCM
-    // token = (await Notifications.getDevicePushTokenAsync()).data;
-    console.log('Expo Push Token: ', token);
-    if (token) {
-      await setPushToken(token);
     }
   } else {
     alert('Must use physical device for Push Notifications');
   }
 
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
   return token;
+};
+
+export const addNotificationListener = async (
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  const onMessageReceived = async (
+    message: FirebaseMessagingTypes.RemoteMessage
+    ) => {
+    // console.log('message: ', message);
+    if (message.notification)
+      // Display notification on foreground
+      await notifee.displayNotification({
+        title: message.notification.title,
+        body: message.notification.body,
+        data: message.data
+      });
+    await notifee.getBadgeCount();
+    await notifee.incrementBadgeCount();
+    useNotificationStore.getState().setHasNewNotification(true);
+  };
+
+  const onBackgroundMessageReceived = async (
+    message: FirebaseMessagingTypes.RemoteMessage
+  ) => {
+    // console.log('background: ', message);
+    await notifee.getBadgeCount();
+    await notifee.incrementBadgeCount();
+    useNotificationStore.getState().setHasNewNotification(true);
+  };
+
+  // Listen to messages from FCM
+  messaging().onMessage(onMessageReceived);
+  messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
+
+  // Listen to foreground events
+  notifee.onForegroundEvent(async ({ type, detail }) => {
+    // console.log('detail: ', detail);
+    switch (type) {
+      case EventType.PRESS: // User pressed on the notification
+        if (detail.notification) {
+          await handleTapOnIncomingNotification(
+            detail.notification,
+            navigation
+          );
+          if (detail.notification.id)
+            // Clear the notification from the notification tray and decrement the badge count
+            await clearNotification(detail.notification.id);
+          useNotificationStore.getState().setHasNewNotification(false); // reset the new notification flag
+        }
+        break;
+    }
+  });
 };
 
 export const notificationPermissionIsAllowed = async (): Promise<boolean> => {
   if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    return existingStatus === 'granted';
+    const settings = await notifee.requestPermission();
+    return settings.authorizationStatus === AuthorizationStatus.AUTHORIZED;
   } else throw new Error('Must use physical device for Push Notifications');
 };
 
-export const handleBackgroundNotification = async (data: any) => {
-  await increaseBadgeCount();
-};
-
 export const handleTapOnIncomingNotification = async (
-  notificationResponse: Notifications.NotificationResponse,
+  notification: Notification,
   navigation: NavigationContainerRef<RootStackParamList>
 ) => {
-  const { notification } = notificationResponse;
-  const payload = notification.request.content.data as INotificationPayload;
-
-  switch (payload.notification_type) {
+  const payload = notification.data as Record<
+  string,
+  any
+  > as INotificationPayload;
+  
+  switch (payload.notificationType) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
-      if (payload.post_id)
+      if (payload.post_id && payload.challenge_id)
         navigation.navigate('ProgressCommentScreen', {
           progressId: payload.post_id,
+          challengeId: payload.challenge_id,
         });
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      if (payload.post_id)
+      if (payload.post_id && payload.challenge_id)
         navigation.navigate('ProgressCommentScreen', {
           progressId: payload.post_id,
+          challengeId: payload.challenge_id,
         });
       break;
     case NOTIFICATION_TYPES.NEW_MENTION:
-      if (payload.post_id)
+      if (payload.post_id && payload.challenge_id)
         navigation.navigate('ProgressCommentScreen', {
           progressId: payload.post_id,
+          challengeId: payload.challenge_id,
         });
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      if (payload.new_follower_id)
+      if (payload.followerId)
+      {
         navigation.navigate('OtherUserProfileScreen', {
-          userId: payload.new_follower_id,
+          userId: payload.followerId,
           isFollower: true,
         });
+        }
       break;
   }
 };
@@ -107,17 +160,19 @@ export const handleTapOnIncomingNotification = async (
 export const handleTapOnNotification = async (
   notification: INotification,
   navigation: NativeStackNavigationProp<RootStackParamList>
-) => {
+  ) => {
+  // console.log('notification: ', notification);
   const handleNavigation = async (
     screen: string,
     notification: INotification
-  ) => {
+    ) => {
     try {
       switch (screen) {
         case 'ProgressCommentScreen':
-          if (notification.progressId)
+          if (notification.progressId && notification.challengeId)
             navigation.navigate('ProgressCommentScreen', {
               progressId: notification.progressId,
+              challengeId: notification.challengeId,
             });
           break;
         case 'OtherUserProfileScreen':
@@ -136,6 +191,7 @@ export const handleTapOnNotification = async (
     }
   };
 
+  // console.log('notification: ', notification);
   switch (notification.type) {
     case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
       handleNavigation('ProgressCommentScreen', notification);
@@ -174,16 +230,15 @@ export const getNotificationContent = (
   }
 };
 
-export const increaseBadgeCount = async () => {
-  const currentBadgeCount = await Notifications.getBadgeCountAsync();
-  console.log('currentBadgeCount: ', currentBadgeCount);
-  await Notifications.setBadgeCountAsync(currentBadgeCount + 1);
+export const clearAllNotifications = async () => {
+  // Dismiss all notification trays and reset badge count
+  await notifee.cancelAllNotifications();
+  await notifee.setBadgeCount(0);
 };
 
-export const clearNotifications = async () => {
-  // Dismiss all notification trays and reset badge count
-  await Notifications.dismissAllNotificationsAsync();
-  await Notifications.setBadgeCountAsync(0);
+export const clearNotification = async (notificationId: string) => {
+  await notifee.decrementBadgeCount();
+  await notifee.cancelNotification(notificationId);
 };
 
 export const mapNotificationResponses = (
@@ -214,10 +269,13 @@ export const mapNotificationResponses = (
     };
   });
 
-  return sortNotificationsByDate(transformedData, SORT_ORDER.ASC);
+  return sortNotificationsByDate(transformedData, SORT_ORDER.DESC);
 };
 
-export const sortNotificationsByDate = (notifications: INotification[], order: SORT_ORDER) => {
+export const sortNotificationsByDate = (
+  notifications: INotification[],
+  order: SORT_ORDER
+) => {
   if (order === SORT_ORDER.ASC)
     return notifications.sort((a, b) => {
       return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();

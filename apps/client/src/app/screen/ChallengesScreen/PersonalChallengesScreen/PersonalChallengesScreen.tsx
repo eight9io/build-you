@@ -96,10 +96,10 @@ const PersonalChallenges = ({
   }, [isFocused]);
 
   return (
-    <SafeAreaView className={clsx('bg-white')}>
+    <SafeAreaView className={clsx('flex-1 bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && !isFetchingError && (
-        <View className={clsx('h-full w-full bg-gray-50')}>
+        <View className={clsx('h-full w-full flex-1 bg-gray-50 pb-[65px]')}>
           {personalChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
@@ -114,7 +114,7 @@ const PersonalChallenges = ({
                 />
               )}
               keyExtractor={(item) => item.id}
-              ListFooterComponent={<View className="h-20" />}
+              ListFooterComponent={<View className="h-4" />}
               refreshing={isLoading}
               onRefresh={fetchData}
             />

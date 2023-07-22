@@ -18,3 +18,12 @@ export const useDebounce = (value: string | undefined, delay: number) => {
 
   return debouncedValue;
 };
+
+export const debounce = (func: Function, delay: number) => {
+  let timer: NodeJS.Timeout;
+  return function (this: any, ...args: any[]) {
+    const context = this;
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(context, args), delay);
+  };
+};

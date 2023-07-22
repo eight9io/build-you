@@ -29,6 +29,7 @@ import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 import IconDot from './asset/dot.svg';
 import { useUserProfileStore } from '../../../store/user-data';
+import GlobalToastController from '../../common/Toast/GlobalToastController';
 
 interface IProgressCardProps {
   challengeOwner: {
@@ -36,6 +37,7 @@ interface IProgressCardProps {
     id: string;
     name: string;
     surname: string;
+    companyAccount?: boolean;
   };
   challengeName: string;
   challengeId: string;
@@ -70,6 +72,8 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const currentUserId = currentUser?.id;
+
+  const isChallengeOwnerCompanyAccount = challengeOwner?.companyAccount;
 
   const {
     isVisible: isAckModalVisible,
@@ -117,7 +121,13 @@ const ProgressCard: FC<IProgressCardProps> = ({
     try {
       const res = await deleteProgress(itemProgressCard.id);
       if (res.status === 200) {
-        openAckModal();
+        // openAckModal();
+
+        GlobalToastController.showModal({
+          message: t('delete_progress.delete_success') as string,
+        });
+        handleCloseAckModal();
+        // clo
       } else {
         setErrorMessage(t('errorMessage:500') || '');
       }
@@ -141,7 +151,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
     <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
         <TouchableOpacity
-          className="flex flex-row"
+          className="flex flex-1 flex-row"
           onPress={() => {
             if (!userData?.id) return;
             // navigation.push('OtherUserProfileScreen', {
@@ -154,7 +164,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
           }}
         >
           <ProgressCardAvatar src={userData?.avatar} />
-          <View className="ml-2">
+          <View className="ml-2 flex-1">
             <Text
               className={`text-h6 font-bold ${
                 isProgressOwner ? 'text-primary-default' : 'text-black'
@@ -175,7 +185,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        {!isOtherUserProfile && isProgressOwner && isJoined && (
+        {((isJoined && isProgressOwner) || (!isChallengeOwnerCompanyAccount && isProgressOwner))  && (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}

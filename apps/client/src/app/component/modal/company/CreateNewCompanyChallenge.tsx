@@ -31,6 +31,7 @@ import {
 import { AxiosResponse } from 'axios';
 import httpInstance from '../../../utils/http';
 import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
+import GlobalToastController from '../../common/Toast/GlobalToastController';
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, 'achievementTime'> {
@@ -103,8 +104,21 @@ export const CreateChallengeModal: FC<ICreateChallengeModalProps> = ({
             image
           )) as AxiosResponse;
           if (challengeImageResponse.status === 200 || 201) {
-            setIsRequestSuccess(true);
-            setIsShowModal(true);
+            onClose();
+            navigation.navigate('Challenges', {
+              screen: 'PersonalChallengeDetailScreen',
+              params: {
+                challengeId: challengeCreateResponse.data.id as string,
+              },
+            });
+            GlobalToastController.showModal({
+              message:
+                t('toast.create_challenge_success') ||
+                'Your challenge has been created successfully !',
+            });
+
+            // setIsRequestSuccess(true);
+            // setIsShowModal(true);
             setIsLoading(false);
             return;
           }

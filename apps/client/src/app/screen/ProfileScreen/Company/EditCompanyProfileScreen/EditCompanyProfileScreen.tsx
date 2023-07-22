@@ -15,6 +15,7 @@ import TextInput from '../../../../component/common/Inputs/TextInput';
 import Button from '../../../../component/common/Buttons/Button';
 import { EditCompanyProfileValidators } from '../../../../Validators/EditProfile.validate';
 import ConfirmDialog from '../../../../component/common/Dialog/ConfirmDialog';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 
 const EditCompanyProfileScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +51,11 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
       .then(async (res) => {
         if (res.status === 200) {
           setIsLoading(false);
+          GlobalToastController.showModal({
+            message:
+              t('dialog.update_profile_success') ||
+              'Your profile update successfully!',
+          });
           navigation.navigate('CompanyProfileScreen');
         }
       })

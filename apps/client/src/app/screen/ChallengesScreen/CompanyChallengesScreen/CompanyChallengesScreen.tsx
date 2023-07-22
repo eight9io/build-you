@@ -75,21 +75,22 @@ const CompanyChallenges = ({
 
   const isFocused = useIsFocused();
 
+  const fetchCompanyChallenges = async () => {
+    try {
+      const res = await httpInstance.get(`/challenge/all/${userData?.id}`);
+      setCompanyChallengesList(sortChallengeByStatusFromResponse(res));
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsError(false);
+      }, 500);
+    } catch (error) {
+      setIsLoading(false);
+      setIsError(true);
+    }
+  };
+
   useEffect(() => {
     if (!isFocused) return;
-    const fetchCompanyChallenges = async () => {
-      try {
-        const res = await httpInstance.get(`/challenge/all/${userData?.id}`);
-        setCompanyChallengesList(sortChallengeByStatusFromResponse(res));
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsError(false);
-        }, 500);
-      } catch (error) {
-        setIsLoading(false);
-        setIsError(true);
-      }
-    };
     fetchCompanyChallenges();
   }, [isFocused]);
 
@@ -97,7 +98,7 @@ const CompanyChallenges = ({
     <SafeAreaView className={clsx('flex-1 bg-white')}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && !isError && (
-        <View className={clsx('h-full w-full flex-1 bg-gray-50')}>
+        <View className={clsx('h-full w-full flex-1 bg-gray-50 pb-[65px]')}>
           {companyChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
@@ -113,6 +114,9 @@ const CompanyChallenges = ({
                 />
               )}
               keyExtractor={(item) => item.id}
+              ListFooterComponent={<View className="h-4" />}
+              refreshing={isLoading}
+              onRefresh={fetchCompanyChallenges}
             />
           )}
         </View>

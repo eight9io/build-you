@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 
-import { IChallenge } from 'apps/client/src/app/types/challenge';
+import { IChallenge } from '../../../../types/challenge';
 import i18n from '../../../../i18n/i18n';
 import TabView from '../../../../component/common/Tab/TabView';
 import DescriptionTab from './DescriptionTab';
@@ -10,16 +10,16 @@ import { FC, useEffect, useState } from 'react';
 import CheckCircle from './assets/check_circle.svg';
 
 import { getChallengeStatusColor } from '../../../../utils/common';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
-import Button from 'apps/client/src/app/component/common/Buttons/Button';
+import { useUserProfileStore } from '../../../../store/user-data';
+import Button from '../../../../component/common/Buttons/Button';
 import {
   getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
-} from 'apps/client/src/app/service/challenge';
-import GlobalDialogController from 'apps/client/src/app/component/common/Dialog/GlobalDialogController';
+} from '../../../../service/challenge';
+import GlobalDialogController from '../../../../component/common/Dialog/GlobalDialogController';
 import ParticipantsTab from '../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab';
-import GlobalToastController from 'apps/client/src/app/component/common/Toast/GlobalToastController';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
 import { useTranslation } from 'react-i18next';
 
 interface IChallengeDetailScreenProps {

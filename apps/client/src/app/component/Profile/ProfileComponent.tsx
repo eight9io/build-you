@@ -84,7 +84,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
         </Text>
       </View>
       {userData?.isShowCompany && userData?.employeeOf?.name && (
-        <View className={clsx('my-4 flex-row gap-2 px-4 pt-1')}>
+        <View className={clsx(' mb-3 flex-row gap-2 px-4')}>
           <IconCompany />
 
           <Text className={clsx(' text-[14px]  font-medium ')}>

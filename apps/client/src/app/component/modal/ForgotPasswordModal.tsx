@@ -21,10 +21,10 @@ import ErrorText from '../common/ErrorText';
 import TextInput from '../common/Inputs/TextInput';
 import IconEyeOn from './asset/icon-eye.svg';
 import IconEyeOff from './asset/eye-off.svg';
-import Loading from '../common/Loading';
 import { serviceChangePassword } from '../../service/auth';
 import { err_server, errorMessage } from '../../utils/statusCode';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import GlobalToastController from '../common/Toast/GlobalToastController';
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -73,6 +73,11 @@ export default function ForgotPasswordModal({
     })
       .then((res) => {
         if (res.status == 201) {
+          GlobalToastController.showModal({
+            message:
+              t('toast.reset_password_success') ||
+              'Reset password successfully!',
+          });
           setTimeout(() => {
             navigation.navigate('LoginScreen');
           }, 1500);

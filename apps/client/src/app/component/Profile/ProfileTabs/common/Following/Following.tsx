@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Image } from 'expo-image';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from 'apps/client/src/app/navigation/navigation.type';
+import { RootStackParamList } from '../../../../../navigation/navigation.type';
 
 import Empty from '../asset/emptyFollow.svg';
 import { useTranslation } from 'react-i18next';

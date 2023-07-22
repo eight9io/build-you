@@ -26,7 +26,9 @@ import TaskAltIcon from './assets/task-alt.svg';
 import TaskAltIconGray from './assets/task-alt-gray.svg';
 // import ChallengeDetailScreen from '../../PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import ChallengeCompanyDetailScreen from '../ChallengeDetailScreen/ChallengeCompanyDetailScreen';
-import { useUserProfileStore } from 'apps/client/src/app/store/user-data';
+import { useUserProfileStore } from '../../../../store/user-data';
+import GlobalToastController from '../../../../component/common/Toast/GlobalToastController';
+import { useTranslation } from 'react-i18next';
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -52,6 +54,7 @@ export const RightCompanyChallengeDetailOptions: FC<
   onEditChallengeBtnPress,
   setIsDeleteChallengeDialogVisible,
 }) => {
+  const { t } = useTranslation();
   const [isSharing, setIsSharing] = React.useState(false);
   const [
     isCompletedChallengeDialogVisible,
@@ -112,10 +115,12 @@ export const RightCompanyChallengeDetailOptions: FC<
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsCompletedChallengeDialogVisible(false);
-          setTimeout(() => {
-            setIsCompletedChallengeSuccess(true);
-            setShouldRefresh(true);
-          }, 600);
+          setShouldRefresh(true);
+          GlobalToastController.showModal({
+            message:
+              t('toast.completed_challenge_success') ||
+              'Challenge has been completed successfully !',
+          });
         }
       })
       .catch((err) => {
@@ -207,6 +212,7 @@ const CompanyChallengeDetailScreen = ({
   route: any;
   navigation: CompanyChallengeDetailScreenNavigationProp;
 }) => {
+  const { t } = useTranslation();
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
@@ -272,9 +278,17 @@ const CompanyChallengeDetailScreen = ({
       .then((res) => {
         if (res.status === 200) {
           setIsDeleteChallengeDialogVisible(false);
-          setTimeout(() => {
-            setIsDeleteSuccess(true);
-          }, 600);
+
+          GlobalToastController.showModal({
+            message:
+              t('toast.delete_challenge_success') ||
+              'Deleted Challenge successfully ! ',
+          });
+          navigation.navigate('CompanyChallengesScreen');
+
+          // setTimeout(() => {
+          //   setIsDeleteSuccess(true);
+          // }, 600);
         }
       })
       .catch((err) => {

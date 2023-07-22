@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useEffect, useLayoutEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { View, FlatList, SafeAreaView, Text, Platform } from 'react-native';
 import clsx from 'clsx';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -36,32 +41,45 @@ import ProgressCommentScreen from './ChallengesScreen/ProgressCommentScreen/Prog
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { IFeedPostProps } from '../types/common';
 import CompanyChallengeDetailScreen from './ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen';
+import { useChallengeUpdateStore } from '../store/challenge-update-store';
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
 interface IFeedDataProps {}
 
 export const HomeFeed = () => {
-  const [feedData, setFeedData] = React.useState<any>([]);
-  const [feedPage, setFeedPage] = React.useState<number>(1);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
+  const [feedPage, setFeedPage] = useState<number>(1);
+  const [feedData, setFeedData] = useState<any>([]);
+  const [dataSource, setDataSource] = useState<[]>([]); //Contains limited number of data
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useGetListFollowing();
   const isFocused = useIsFocused();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { getChallengeUpdateDetails } = useChallengeUpdateStore();
+  const challgeneUpdateDetails = getChallengeUpdateDetails();
+
+  const handleScroll = async () => {
+    setIsRefreshing(true);
+    await getInitialFeeds();
+    setIsRefreshing(false);
+  };
+
+  const keyExtractor = useCallback(
+    (item: any, index: number) => `${item.id}${index}` as unknown as string,
+    []
+  );
 
   const getInitialFeeds = async () => {
     await serviceGetFeed({
       page: 1,
-      take: 8,
+      take: 20,
     })
       .then((res) => {
         if (res.data?.data) {
           setFeedData(res.data.data);
-          setFeedPage(1);
         }
       })
       .catch((err) => {
@@ -74,59 +92,86 @@ export const HomeFeed = () => {
       });
   };
 
-  useEffect(() => {
-    getInitialFeeds();
-  }, []);
-
   const getNewFeed = async () => {
-    console.log('getNewFeed');
     await serviceGetFeed({
       page: feedPage + 1,
-      take: 8,
+      take: 20,
     }).then((res) => {
       if (res?.data?.data) {
-        setFeedData((prev: any) => [...prev, ...res.data.data]);
+        const newResDataIds = res.data.data.map((item: IFeedPostProps) => {
+          return item.id;
+        });
+        // remove duplicate data in response
+        const newResData = res.data.data.filter(
+          (item: IFeedPostProps, index: number) => {
+            return newResDataIds.indexOf(item.id) === index;
+          }
+        );
+        setFeedData((prev: any) => [...prev, ...newResData]);
       }
       setFeedPage((prev) => prev + 1);
     });
   };
 
-  const handleScroll = async () => {
-    setIsRefreshing(true);
-    await getInitialFeeds();
-    setIsRefreshing(false);
-  };
+  useEffect(() => {
+    if (challgeneUpdateDetails) {
+      // update feedData according to challgeneUpdateDetails array
+      const newFeedData = feedData.map((item: any) => {
+        const index = challgeneUpdateDetails.findIndex(
+          (challenge: any) => challenge.challengeId === item.challenge.id
+        );
+        if (index !== -1) {
+          return {
+            ...item,
+            challenge: {
+              ...item.challenge,
+              goal: challgeneUpdateDetails[index].goal,
+            },
+          };
+        }
+        return item;
+      });
+      setFeedData(newFeedData);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    getInitialFeeds();
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => (
+      <FeedPostCard
+        itemFeedPostCard={item}
+        userId={userData?.id}
+        isFocused={isFocused}
+        navigation={navigation}
+      />
+    ),
+    [isFocused]
+  );
 
   return (
     <SafeAreaView className={clsx('bg-white')}>
-      <View className={clsx('h-full w-full bg-gray-50')}>
-        {userData && (
-          <FlatList
-            data={feedData}
-            renderItem={({ item }) => (
-              <FeedPostCard
-                itemFeedPostCard={item}
-                userId={userData.id}
-                isFocused={isFocused}
-                navigation={navigation}
-              />
-            )}
-            keyExtractor={(item) => item.id as unknown as string}
-            onEndReached={getNewFeed}
-            onEndReachedThreshold={0.7}
-            onRefresh={handleScroll}
-            refreshing={isRefreshing}
-          />
-        )}
+      <View className={clsx('h-full w-full bg-gray-50 pb-[70px]')}>
+        <FlatList
+          data={feedData}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReached={getNewFeed}
+          onEndReachedThreshold={3}
+          onRefresh={handleScroll}
+          refreshing={isRefreshing}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
 export const HomeFeedUnregister = () => {
-  const [feedData, setFeedData] = React.useState<any>([]);
-  const [feedPage, setFeedPage] = React.useState<number>(1);
-  const [isRefreshing, setIsRefreshing] = React.useState<boolean>(false);
+  const [feedData, setFeedData] = useState<any>([]);
+  const [feedPage, setFeedPage] = useState<number>(1);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const getInitialFeeds = async () => {
     await serviceGetFeedUnregistered({
@@ -181,7 +226,7 @@ export const HomeFeedUnregister = () => {
           )}
           keyExtractor={(item) => item.id as unknown as string}
           onEndReached={getNewFeed}
-          onEndReachedThreshold={3}
+          onEndReachedThreshold={0.5}
           onRefresh={handleScroll}
           refreshing={isRefreshing}
         />

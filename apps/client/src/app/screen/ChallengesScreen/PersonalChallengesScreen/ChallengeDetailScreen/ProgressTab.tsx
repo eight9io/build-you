@@ -18,7 +18,6 @@ import httpInstance from '../../../../utils/http';
 import SkeletonLoadingCommon from '../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon';
 import EditChallengeProgressModal from '../../../../component/modal/EditChallengeProgressModal';
 import { useIsFocused } from '@react-navigation/native';
-import { IUserData } from 'apps/client/src/app/types/user';
 
 interface IProgressTabProps {
   shouldRefresh: boolean;
@@ -48,6 +47,13 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [isShowEditModal, setIsShowEditModal] = useState(false);
 
   const isFocused = useIsFocused();
+
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+  const challengeOwner: IChallengeOwner = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData.owner;
+  const isCurrentUserOwnerOfChallenge = userData?.id === challengeOwner?.id;
 
   const { t } = useTranslation();
   useEffect(() => {
@@ -158,7 +164,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
-            isJoined && !isChallengeCompleted ? (
+            (isJoined || isCurrentUserOwnerOfChallenge) && !isChallengeCompleted ? (
               <AddNewChallengeProgressButton />
             ) : null
           }

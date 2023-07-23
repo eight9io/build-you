@@ -6,19 +6,18 @@ import {
   Platform,
 } from "react-native";
 import { Image } from "expo-image";
-
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-native-loading-spinner-overlay";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import ErrorText from "../../component/common/ErrorText";
 import Button from "../../component/common/Buttons/Button";
 import TextInput from "../../component/common/Inputs/TextInput";
 import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
-import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
 
 import { LoginForm } from "../../types/auth";
 
@@ -28,13 +27,6 @@ import { err_server, errorMessage } from "../../utils/statusCode";
 
 import { useAuthStore } from "../../store/auth-store";
 import { addAuthTokensLocalOnLogin } from "../../utils/checkAuth";
-
-import IconApple from "./asset/Apple.svg";
-import IconEyeOff from "./asset/eye-off.svg";
-import IconGoogle from "./asset/Google.svg";
-import IconEyeOn from "./asset/icon-eye.svg";
-import IconLinkedIn from "./asset/LinkedIn.svg";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { setAuthTokenToHttpHeader } from "../../utils/http";
@@ -59,7 +51,6 @@ export default function Login({
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<LoginForm>({
     defaultValues: {
       user: "",
@@ -72,29 +63,31 @@ export default function Login({
   const { setAccessToken, setRefreshToken } = useAuthStore();
 
   const onSubmit = async (data: LoginForm) => {
-    setIsLoading(true);
-    serviceLogin(data)
-      .then((res) => {
-        if (res.status == 201) {
-          setIsLoading(false);
-          setAccessToken(res?.data.authorization || null);
-          setRefreshToken(res?.data.refresh || null);
-          addAuthTokensLocalOnLogin(
-            res?.data.authorization || null,
-            res?.data.refresh || null,
-            setAuthTokenToHttpHeader
-          );
-          setErrMessage("");
-        } else {
-          setErrMessage(err_server);
-        }
-      })
-      .catch((error) => {
-        setErrMessage(errorMessage(error, "err_login") as string);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    console.log(process.env.NX_API_URL);
+    // setIsLoading(true);
+    // serviceLogin(data)
+    //   .then((res) => {
+    //     if (res.status == 201) {
+    //       setIsLoading(false);
+    //       setAccessToken(res?.data.authorization || null);
+    //       setRefreshToken(res?.data.refresh || null);
+    //       addAuthTokensLocalOnLogin(
+    //         res?.data.authorization || null,
+    //         res?.data.refresh || null,
+    //         setAuthTokenToHttpHeader
+    //       );
+    //       setErrMessage("");
+    //     } else {
+    //       setErrMessage(err_server);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(JSON.stringify(error));
+    //     // setErrMessage(errorMessage(error, "err_login") as string);
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -116,7 +109,6 @@ export default function Login({
               <View className="flex-row">
                 {Platform.OS === "ios" ? <AppleLoginButton /> : null}
                 <LinkedInLoginButton />
-                {/* <GoogleLoginButton /> */}
               </View>
               <View className="mt-5 flex-row items-center justify-center px-6">
                 <View className="h-[0.5px] w-[50%] bg-black-default"></View>
@@ -163,7 +155,7 @@ export default function Login({
                                       }
                                       className=" mt-[2px]"
                                     >
-                                      <IconEyeOn />
+                                      <Ionicons name="eye-outline" size={24} />
                                     </TouchableOpacity>
                                   ) : (
                                     <TouchableOpacity
@@ -172,7 +164,10 @@ export default function Login({
                                       }
                                       className=" mt-[2px]"
                                     >
-                                      <IconEyeOff />
+                                      <Ionicons
+                                        name="eye-off-outline"
+                                        size={24}
+                                      />
                                     </TouchableOpacity>
                                   ))
                                 }
@@ -220,7 +215,10 @@ export default function Login({
                   containerClassName="bg-primary-default flex-none px-1 "
                   textClassName="line-[30px] text-center text-md font-medium text-white"
                   title={t("login_screen.login")}
-                  onPress={handleSubmit(onSubmit)}
+                  onPress={() => {
+                    console.log(process.env.NX_API_URL);
+                  }}
+                  // onPress={handleSubmit(onSubmit)}
                 />
               </View>
             </View>

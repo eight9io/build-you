@@ -13,7 +13,7 @@ const httpInstance = axios.create({
   },
 });
 
-const handleError = (error: any) => console.log(error);
+// const handleError = (error: any) => console.log(error);
 
 export const setAuthTokenToHttpHeader = (token: string | null) => {
   if (token) {

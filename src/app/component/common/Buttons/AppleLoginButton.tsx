@@ -1,8 +1,9 @@
+import { FC } from "react";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { useTranslation } from "react-i18next";
-import { FC } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 import Button from "../../common/Buttons/Button";
-import IconApple from "./asset/Apple.svg";
 import { appleLogin } from "../../../service/auth";
 import { useAuthStore } from "../../../store/auth-store";
 import { addAuthTokensLocalOnLogin } from "../../../utils/checkAuth";
@@ -65,7 +66,7 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({ title }) => {
       title={title}
       containerClassName="bg-black-default flex-row  items-center justify-center m-2"
       textClassName="text-white ml-2 text-base font-bold"
-      Icon={<IconApple />}
+      Icon={<Ionicons name="logo-apple" size={24} color="#FFF" />}
       onPress={handleAppleLogin}
     />
   );

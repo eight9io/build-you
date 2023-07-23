@@ -1,7 +1,8 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { FC, useEffect } from "react";
 import Button from "./Button";
-import IconGoogle from "./asset/Google.svg";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 import { googleLogin } from "../../../service/auth";
 import GlobalDialogController from "../Dialog/GlobalDialogController";
 import { useAuthStore } from "../../../store/auth-store";
@@ -52,7 +53,7 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title }) => {
       title={title}
       containerClassName="bg-sky-default  flex-row  items-center justify-center m-2"
       textClassName="text-white ml-2 text-base font-bold"
-      Icon={<IconGoogle />}
+      Icon={<Ionicons name="logo-google" size={24} color="#FFF" />}
       onPress={handleGoogleBtnClicked}
     />
   );

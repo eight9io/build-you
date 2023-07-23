@@ -1,10 +1,4 @@
-import {
-  ChangePasswordForm,
-  ForgotPasswordForm,
-  LoginForm,
-  RegisterForm,
-} from "../types/auth";
-import axios from "axios";
+import { ChangePasswordForm, LoginForm, RegisterForm } from "../types/auth";
 
 import http from "../utils/http";
 import { LINKEDIN_LOGIN } from "../common/constants";

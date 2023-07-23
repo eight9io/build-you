@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -17,24 +17,22 @@ import httpInstance from "../../../../utils/http";
 
 import SkeletonLoadingCommon from "../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import EditChallengeProgressModal from "../../../../component/modal/EditChallengeProgressModal";
-import { useIsFocused } from "@react-navigation/native";
+// import { useIsFocused } from "@react-navigation/native";
 
 interface IProgressTabProps {
-  shouldRefresh: boolean;
   challengeData: IChallenge;
   isJoined?: boolean | null;
   isOtherUserProfile?: boolean;
   isChallengeCompleted?: boolean | null;
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: React.Dispatch<React.SetStateAction<void>>;
 }
 
 export const ProgressTab: FC<IProgressTabProps> = ({
   isJoined = false,
-  shouldRefresh,
   challengeData,
-  setShouldRefresh,
   isChallengeCompleted = false,
   isOtherUserProfile = false,
+  refresh,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<
@@ -42,11 +40,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   >([]);
   const [progressIndexToUpdate, setProgressIndexToUpdate] =
     useState<number>(-1);
-  const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
+  // const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
 
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -56,6 +54,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const isCurrentUserOwnerOfChallenge = userData?.id === challengeOwner?.id;
 
   const { t } = useTranslation();
+
   useEffect(() => {
     const progressData =
       challengeData?.progress &&
@@ -74,43 +73,39 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           progress.likes = [];
         });
     });
-    setLocalProgressData(progressData as IProgressChallenge[]);
+    setLocalProgressData(progressData);
     setTimeout(() => {
       setProgressLoading(false);
     }, 800);
-  }, [challengeData]);
+  }, []);
 
-  useEffect(() => {
-    if (!challengeData?.id) return;
-    if (shouldRefetch || shouldRefresh || isFocused) {
-      setProgressLoading(true);
+  const refetch = () => {
+    setProgressLoading(true);
+    httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
+      const progressDataLocal =
+        res.data?.progress &&
+        res.data?.progress.sort(
+          (
+            a: { createdAt: string | number | Date },
+            b: { createdAt: string | number | Date }
+          ) => {
+            return (
+              // TODO use dayjs.diff
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          }
+        );
 
-      httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
-        const progressDataLocal =
-          res.data?.progress &&
-          res.data?.progress.sort(
-            (
-              a: { createdAt: string | number | Date },
-              b: { createdAt: string | number | Date }
-            ) => {
-              return (
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-              );
-            }
-          );
-
-        setLocalProgressData(progressDataLocal);
-      });
-      setShouldRefetch(false);
+      setLocalProgressData(progressDataLocal);
       setTimeout(() => {
         setProgressLoading(false);
-      }, 800);
-    }
-  }, [shouldRefetch, isFocused]);
+      }, 300);
+    });
+  };
 
   const handleEditProgress = () => {
-    setShouldRefresh(true);
+    // setShouldRefresh(true);
+    refresh();
   };
 
   const AddNewChallengeProgressButton = () => {
@@ -133,7 +128,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           />
           <AddNewChallengeProgressModal
             setProgressLoading={setProgressLoading}
-            setShouldRefetch={setShouldRefetch}
+            refetch={refetch}
             challengeId={challengeData.id}
             isVisible={isModalVisible}
             onClose={() => setIsModalVisible(false)}

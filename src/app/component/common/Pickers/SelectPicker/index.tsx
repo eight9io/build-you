@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useRef } from "react";
+import { FC, useEffect, useState } from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 import clsx from "clsx";
 import Modal from "react-native-modal";
@@ -27,15 +27,6 @@ const SelectPicker: FC<ISelectPickerProps> = ({
   onLoadMore,
 }) => {
   const [selected, setSelected] = useState<number>(0);
-  // const flatListRef = useRef<FlatList>(null);
-  // useEffect(() => {
-  //   if (selectedIndex) {
-  //     flatListRef.current?.scrollToIndex({
-  //       index: selectedIndex || 0,
-  //       animated: true,
-  //     });
-  //   }
-  // }, []);
 
   useEffect(() => {
     setSelected(selectedIndex || 0);

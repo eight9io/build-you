@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, Platform } from "react-native";
 import clsx from "clsx";
@@ -14,10 +14,8 @@ import AppTitle from "../common/AppTitle";
 import IconSearch from "../common/IconSearch/IconSearch";
 import NavButton from "../common/Buttons/NavButton";
 import Login from "../../screen/LoginScreen/LoginScreen";
-import React from "react";
 
 const Tab = createBottomTabNavigator();
-const EmptyPage = () => null;
 
 interface IBottomNavBarProps {}
 
@@ -48,7 +46,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         component={HomeScreen}
         options={({ navigation }) => ({
           headerTitle: () => <AppTitle title={t("your_feed.header")} />,
-          headerRight: (props) => (
+          headerRight: () => (
             <NavButton
               withIcon
               icon={
@@ -81,7 +79,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
           headerShown: true,
           headerTitle: () => <AppTitle title={t("login_screen.login")} />,
 
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.navigate("IntroScreen")}
@@ -110,7 +108,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
           headerShown: true,
           headerTitle: () => <AppTitle title={t("login_screen.login")} />,
 
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.navigate("IntroScreen")}
@@ -139,7 +137,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
           headerShown: true,
           headerTitle: () => <AppTitle title={t("login_screen.login")} />,
 
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.navigate("IntroScreen")}
@@ -168,7 +166,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
           headerShown: true,
           headerTitle: () => <AppTitle title={t("login_screen.login")} />,
 
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.navigate("IntroScreen")}

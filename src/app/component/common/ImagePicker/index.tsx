@@ -1,4 +1,4 @@
-import { useState, FC, useEffect } from "react";
+import { useState, FC } from "react";
 import { View, TouchableOpacity, Text, Linking } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
@@ -9,7 +9,6 @@ import { getImageFromUserDevice } from "../../../utils/uploadUserImage";
 import Close from "../../asset/close.svg";
 import Button from "../Buttons/Button";
 import ConfirmDialog from "../Dialog/ConfirmDialog";
-import GlobalDialogController from "../Dialog/GlobalDialogController";
 
 interface IImagePickerProps {
   images?: string[];

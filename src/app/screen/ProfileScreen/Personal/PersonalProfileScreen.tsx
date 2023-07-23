@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, FlatList, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
   createNativeStackNavigator,
@@ -14,9 +14,6 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 import ProfileComponent from "../../../component/Profile/ProfileComponent";
 import AppTitle from "../../../component/common/AppTitle";
 import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
-import Loading from "../../../component/common/Loading";
-import { useIsFocused } from "@react-navigation/native";
-import { serviceGetMyProfile } from "../../../service/auth";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
@@ -36,24 +33,8 @@ interface IProfileProps {
 }
 
 const Profile: React.FC<IProfileProps> = ({ navigation }) => {
-  const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
-    useState<boolean>(true);
-  const isFocused = useIsFocused();
-  const { setUserProfile, getUserProfile } = useUserProfileStore();
-  useEffect(() => {
-    if (!isFocused) return;
-    if (shouldNotLoadOnFirstFocus) {
-      setShouldNotLoadOnFirstFocus(false);
-      return;
-    }
-    serviceGetMyProfile()
-      .then((res) => {
-        setUserProfile(res.data);
-      })
-      .catch((err) => {
-        console.error("err", err);
-      });
-  }, [isFocused]);
+  const { getUserProfile } = useUserProfileStore();
+
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (

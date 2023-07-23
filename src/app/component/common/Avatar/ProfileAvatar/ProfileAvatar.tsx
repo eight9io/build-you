@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -25,10 +25,6 @@ interface IProfileAvatarProps {
   setIsLoadingAvatar?: (value: boolean) => void;
   isOtherUser?: boolean;
 }
-
-// function removeAvatarPrefix(str: string) {
-//   return str.replace(/^avatar: /, '');
-// }
 
 const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   src,

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Dimensions, Animated, Platform } from "react-native";
+import { StyleSheet, View, Dimensions, Animated } from "react-native";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const SkeletonLoadingChallengesScreen = () => {
   const circleAnimatedValue = new Animated.Value(0);
@@ -25,6 +25,7 @@ const SkeletonLoadingChallengesScreen = () => {
     outputRange: [-100, width],
   });
 
+  // TODO use tailwind
   return (
     <View style={styles.container}>
       <View className="flex flex-col justify-between p-4">
@@ -54,7 +55,7 @@ const SkeletonLoadingChallengesScreen = () => {
                 opacity: 0.5,
                 transform: [{ translateX: translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
           <View
             style={{
@@ -73,9 +74,9 @@ const SkeletonLoadingChallengesScreen = () => {
                 height: "100%",
                 backgroundColor: "#E8E9F1",
                 opacity: 0.5,
-                transform: [{ translateX: translateX }],
+                transform: [{ translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
         </View>
         <View
@@ -103,9 +104,9 @@ const SkeletonLoadingChallengesScreen = () => {
                 height: "100%",
                 backgroundColor: "#E8E9F1",
                 opacity: 0.5,
-                transform: [{ translateX: translateX }],
+                transform: [{ translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
           <View
             style={{
@@ -124,9 +125,9 @@ const SkeletonLoadingChallengesScreen = () => {
                 height: "100%",
                 backgroundColor: "#E8E9F1",
                 opacity: 0.5,
-                transform: [{ translateX: translateX }],
+                transform: [{ translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
         </View>
       </View>

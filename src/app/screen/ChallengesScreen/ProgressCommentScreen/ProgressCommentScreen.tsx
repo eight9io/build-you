@@ -22,7 +22,6 @@ import {
   getProgressById,
 } from "../../../service/progress";
 import { sortArrayByCreatedAt } from "../../../utils/common";
-import { useEmployeeListStore } from "../../../store/company-data";
 
 import ChallengeProgressCardForComment from "../../../component/Post/ChallengeProgressCard";
 import SingleComment from "../../../component/common/SingleComment";
@@ -161,12 +160,6 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       }
     };
     loadProgressData();
-  }, [progressId]);
-
-  useEffect(() => {
-    (async () => {
-      await loadProgressComments();
-    })();
   }, []);
 
   const loadProgressComments = async () => {
@@ -190,6 +183,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       });
     }
   };
+
+  useEffect(() => {
+    loadProgressComments();
+  }, []);
 
   const handleRefreshComments = async () => {
     setShouldRefreshComments(true);

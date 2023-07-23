@@ -3,8 +3,8 @@ import { View, Text, FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
   NavigationProp,
-  StackActions,
-  useIsFocused,
+  // StackActions,
+  // useIsFocused,
   useNavigation,
 } from "@react-navigation/native";
 
@@ -34,7 +34,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
     IChallenge[]
   >([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const { getUserProfile } = useUserProfileStore();
@@ -44,6 +44,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
     if (!userId || isCurrentUserInCompany == null) return;
     setIsLoading(true);
     getChallengeByUserId(userId)
+      // TODO add typescript
       .then((res) => {
         let challengeList = res.data.flat();
         const originalChallengeList = res.data.flat();
@@ -65,7 +66,8 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
         }
         setOtherUserChallenge(sortChallengeByStatus(challengeList));
       })
-      .catch((err) => {
+      .catch(() => {
+        // TODO add translation
         GolbalDialogController.showModal({
           title: "Error",
           message: "Something went wrong. Please try again later.",
@@ -74,7 +76,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [userId, isCurrentUserInCompany, isFocused]);
+  }, []);
 
   if (!userId) {
     return (

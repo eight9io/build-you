@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
@@ -14,15 +14,10 @@ interface INotiAvatarProps {
 }
 
 const NotiAvatar: React.FC<INotiAvatarProps> = ({
-  size = "medium",
   src,
-  alt,
   typeOfNoti,
   onPress,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
   const imageSourceFromAssets =
     typeOfNoti === NOTIFICATION_TYPES.NEW_COMMENT ||
     typeOfNoti === NOTIFICATION_TYPES.NEW_MENTION

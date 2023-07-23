@@ -9,13 +9,11 @@ export const useGetListEmployee = () => {
   const { setEmployeeList } = useEmployeeListStore();
   const fetchEmployeeData = async () => {
     if (!userProfile?.id) return null;
-    await serviceGetEmployeeList(userProfile?.id)
-      .then((res) => {
-        setEmployeeList(res.data);
-      })
-      .catch((err) => {});
+    await serviceGetEmployeeList(userProfile?.id).then((res) => {
+      setEmployeeList(res.data);
+    });
   };
   useEffect(() => {
     fetchEmployeeData();
-  }, [userProfile?.id]);
+  }, []);
 };

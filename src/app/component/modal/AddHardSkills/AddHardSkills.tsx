@@ -1,19 +1,19 @@
 import { View, Text, Modal, ScrollView } from "react-native";
 import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
 
 import httpInstance from "../../../utils/http";
 
-import { IHardSkill, IHardSkillProps } from "../../../types/user";
+import { IHardSkill } from "../../../types/user";
 
 import Header from "../../common/Header";
-import InlineTextInput from "../../common/Inputs/InlineTextInput";
-import AddEmojiButton from "../../common/Buttons/AddEmojiButton";
-import AddEmojiModal from "../AddEmoji";
+// import InlineTextInput from "../../common/Inputs/InlineTextInput";
+// import AddEmojiButton from "../../common/Buttons/AddEmojiButton";
+// import AddEmojiModal from "../AddEmoji";
+import clsx from "clsx";
 import Close from "../../../component/asset/close.svg";
 import Button from "../../common/Buttons/Button";
-import clsx from "clsx";
+
 import AddSkillModal from "../AddSkill";
 
 interface IAddSkillModallProps {
@@ -28,7 +28,6 @@ interface IAddSkillModallProps {
 const NUMBER_OF_SKILL_REQUIRED = 3;
 const MAX_NUMBER_OF_SKILL = 10;
 export const AddHardSkills: FC<IAddSkillModallProps> = ({
-  setIsShowAddHardSkillModal,
   isVisible,
   onClose,
   setArrayMyHardSkills,
@@ -92,12 +91,14 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
     );
   };
 
+  // TODO: This might cause render loop, please rewrite
   useEffect(() => {
     if (userAddSkill.length > 0) {
       setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);
       setUserAddSkill([]);
     }
   }, [userAddSkill]);
+
   const changeHardSkill = async () => {
     const isNumberOfSkills = await checkNumberOfSkills();
 

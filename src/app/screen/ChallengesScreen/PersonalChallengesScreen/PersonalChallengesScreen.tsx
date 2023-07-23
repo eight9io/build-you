@@ -6,7 +6,7 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { useIsFocused } from "@react-navigation/native";
+// import { useIsFocused } from "@react-navigation/native";
 
 import httpInstance from "../../../utils/http";
 import { IChallenge } from "../../../types/challenge";
@@ -16,11 +16,9 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 import PersonalChallengeDetailScreen from "./PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
 
-import ChallengeCard from "../../../component/Card/ChallengeCard/ChallengeCard";
 import CurrentUserChallengeCard from "../../../component/Card/ChallengeCard/CurrentUserChallengeCard";
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
-import IconSearch from "../../../component/common/IconSearch/IconSearch";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import Button from "../../../component/common/Buttons/Button";
 
@@ -75,7 +73,7 @@ const PersonalChallenges = ({
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
 
   const fetchData = async () => {
     try {
@@ -90,10 +88,10 @@ const PersonalChallenges = ({
     }
   };
 
-  useEffect(() => {
-    if (!isFocused) return;
-    fetchData();
-  }, [isFocused]);
+  // useEffect(() => {
+  //   if (!isFocused) return;
+  //   fetchData();
+  // }, [isFocused]);
 
   return (
     <SafeAreaView className={clsx("flex-1 bg-white")}>
@@ -150,7 +148,7 @@ const PersonalChallengesNavigator = () => {
       <PersonalChallengesStack.Screen
         name="PersonalChallengesScreen"
         component={PersonalChallenges}
-        options={({ navigation }) => ({
+        options={() => ({
           headerTitle: () => <AppTitle title={t("top_nav.challenges")} />,
         })}
       />
@@ -160,7 +158,7 @@ const PersonalChallengesNavigator = () => {
         component={PersonalChallengeDetailScreen}
         options={({ navigation }) => ({
           headerTitle: () => "",
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("top_nav.challenges") as string}
               onPress={() => navigation.navigate("PersonalChallengesScreen")}
@@ -176,7 +174,7 @@ const PersonalChallengesNavigator = () => {
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => "",
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => {
@@ -194,7 +192,7 @@ const PersonalChallengesNavigator = () => {
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => "",
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}
@@ -220,7 +218,7 @@ const PersonalChallengesNavigator = () => {
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => "",
-          headerLeft: (props) => (
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}

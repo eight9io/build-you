@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import { FC, ReactNode, createRef, useEffect, useRef, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import {
   Text,
   View,
   TouchableOpacity,
   Platform,
   Image,
-  FlatList,
   ScrollView,
 } from "react-native";
 import { MentionInput } from "react-native-controlled-mentions";

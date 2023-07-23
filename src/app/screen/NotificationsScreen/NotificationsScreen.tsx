@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { SafeAreaView, View, ScrollView } from "react-native";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { SafeAreaView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -25,16 +25,12 @@ import GlobalDialogController from "../../component/common/Dialog/GlobalDialogCo
 import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
-type NotificationsScreenNavigationProp = NativeStackNavigationProp<
+export type NotificationsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "NotificationsScreen"
 >;
 
-const Notifications = ({
-  navigation,
-}: {
-  navigation: NotificationsScreenNavigationProp;
-}) => {
+const Notifications = () => {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
   const { getHasNewNotification, setHasNewNotification } =
@@ -43,7 +39,7 @@ const Notifications = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isFocused) {
       const hasNewNotification = getHasNewNotification();
       // Remove new notification icon (if any) when user enter this screen
@@ -52,11 +48,8 @@ const Notifications = ({
   }, [isFocused]);
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      await fetchNotifications();
-      setIsLoading(false);
-    })();
+    setIsLoading(true);
+    fetchNotifications().finally(() => setIsLoading(false));
   }, []);
 
   const fetchNotifications = async () => {

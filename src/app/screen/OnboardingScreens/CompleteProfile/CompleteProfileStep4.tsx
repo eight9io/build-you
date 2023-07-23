@@ -12,7 +12,6 @@ import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import DropDownPicker from "react-native-dropdown-picker";
 import Checkbox from "expo-checkbox";
-import { Ionicons } from "@expo/vector-icons";
 
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
 import { useUserProfileStore } from "../../../store/user-store";

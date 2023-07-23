@@ -24,9 +24,9 @@ const ProfileTabs: FC = () => {
 
   const [followerList, setFollowerList] = useState([]);
 
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
   useEffect(() => {
-    if (!userProfile?.id || !isFocused) return;
+    if (!userProfile?.id) return;
     const getFollowerList = async () => {
       const { data: followerList } = await serviceGetListFollower(
         userProfile?.id
@@ -34,7 +34,8 @@ const ProfileTabs: FC = () => {
       setFollowerList(followerList);
     };
     getFollowerList();
-  }, [isFocused]);
+  }, []);
+
   const followingList = getFollowingList();
   const titles = [
     t("profile_screen_tabs.biography"),

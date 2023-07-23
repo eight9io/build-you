@@ -5,7 +5,6 @@ import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Spinner from "react-native-loading-spinner-overlay";
 
 import { IHardSkill, IHardSkillProps } from "../../../../types/user";
 
@@ -119,7 +118,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   useGetUserData();
-  const [isShowCompany, setIsShowCompany] = useState(false);
+  // const [isShowCompany, setIsShowCompany] = useState(false);
   const {
     control,
     handleSubmit,
@@ -144,6 +143,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       hardSkill: userData?.hardSkill || [],
       isShowCompany: userData?.isShowCompany || false,
     },
+    // TODO fix typescript
     resolver: yupResolver(EditProfileValidators()),
   });
 
@@ -182,9 +182,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
       setArrayMyHardSkills(hardSkill);
     }
-    if (userData?.isShowCompany) {
-      setIsShowCompany(userData?.isShowCompany);
-    }
+    // if (userData?.isShowCompany) {
+    //   setIsShowCompany(userData?.isShowCompany);
+    // }
   }, [userData?.hardSkill]);
 
   const onSubmit = async (data: any) => {
@@ -439,8 +439,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                     <CustomSwitch
                       textDisable=""
                       textEnable=""
-                      onValueChange={setIsShowCompany}
-                      value={isShowCompany}
+                      onValueChange={() => {
+                        console.log("TODO update isShowCompany API");
+                      }}
+                      value={userData?.isShowCompany}
                     />
                   </View>
                 </>

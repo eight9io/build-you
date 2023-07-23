@@ -1,10 +1,9 @@
 import { View, Text } from "react-native";
-import React, { FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { IProgressChallenge } from "../../types/challenge";
 
 import { useGetOtherUserData } from "../../hooks/useGetUser";
-import { getProgressComments, getProgressLikes } from "../../service/progress";
 
 import IconDot from "./asset/dot.svg";
 
@@ -13,7 +12,6 @@ import CommentButton from "./CommentButton";
 import PostAvatar from "../common/Avatar/PostAvatar";
 import ImageSwiper from "../common/ImageSwiper";
 import { getTimeDiffToNow } from "../../utils/time";
-import { getSeperateImageUrls } from "../../utils/image";
 import VideoPlayer from "../common/VideoPlayer";
 import { useUserProfileStore } from "../../store/user-store";
 

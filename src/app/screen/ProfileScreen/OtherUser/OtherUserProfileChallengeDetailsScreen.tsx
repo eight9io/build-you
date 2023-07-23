@@ -1,7 +1,6 @@
 import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
-import React, { FC, useEffect, useState } from "react";
-import { View, Text, Platform, SafeAreaView, FlatList } from "react-native";
-import clsx from "clsx";
+import React, { FC, useLayoutEffect, useEffect, useState } from "react";
+import { View, Text, SafeAreaView } from "react-native";
 
 import i18n from "../../../i18n/i18n";
 import { IChallenge } from "../../../types/challenge";
@@ -64,7 +63,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   );
 
   const [challengeOwner, setChallengeOwner] = useState<any>(null);
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  // const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
@@ -105,69 +104,67 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     challengeData?.status
   );
 
+  const getChallengeData = async () => {
+    try {
+      const response = await getChallengeById(challengeId);
+      setChallengeData(response.data);
+
+      const owner = Array.isArray(response.data?.owner)
+        ? response.data?.owner[0]
+        : response.data?.owner;
+      setChallengeOwner(owner);
+      setIsCurrentUserOwnerOfChallenge(owner?.id === currentUser?.id);
+      if (isCompanyAccount || owner?.companyAccount) {
+        const getChallengeParticipants = async () => {
+          try {
+            const response = await getChallengeParticipantsByChallengeId(
+              challengeId
+            );
+            setParticipantList(response.data);
+            if (owner?.id === currentUser?.id) {
+              setIsJoined(true);
+              return;
+            }
+            if (
+              response.data.find(
+                (participant: any) => participant.id === currentUser?.id
+              )
+            ) {
+              setIsJoined(true);
+            } else {
+              setIsJoined(false);
+            }
+          } catch (err) {
+            GlobalDialogController.showModal({
+              title: "Error",
+              message: "Something went wrong. Please try again later!",
+            });
+          }
+        };
+        getChallengeParticipants();
+      }
+    } catch (err) {
+      GlobalDialogController.showModal({
+        title: "Error",
+        message: "Something went wrong. Please try again later!",
+      });
+    }
+  };
+
   useEffect(() => {
     if (!challengeId) return;
-    const getChallengeData = async () => {
-      try {
-        const response = await getChallengeById(challengeId);
-        setChallengeData(response.data);
-
-        const owner = Array.isArray(response.data?.owner)
-          ? response.data?.owner[0]
-          : response.data?.owner;
-        setChallengeOwner(owner);
-        setIsCurrentUserOwnerOfChallenge(owner?.id === currentUser?.id);
-        if (isCompanyAccount || owner?.companyAccount) {
-          const getChallengeParticipants = async () => {
-            try {
-              const response = await getChallengeParticipantsByChallengeId(
-                challengeId
-              );
-              setParticipantList(response.data);
-              if (owner?.id === currentUser?.id) {
-                setIsJoined(true);
-                return;
-              }
-              if (
-                response.data.find(
-                  (participant: any) => participant.id === currentUser?.id
-                )
-              ) {
-                setIsJoined(true);
-              } else {
-                setIsJoined(false);
-              }
-            } catch (err) {
-              GlobalDialogController.showModal({
-                title: "Error",
-                message: "Something went wrong. Please try again later!",
-              });
-            }
-          };
-          getChallengeParticipants();
-        }
-      } catch (err) {
-        GlobalDialogController.showModal({
-          title: "Error",
-          message: "Something went wrong. Please try again later!",
-        });
-      }
-    };
 
     getChallengeData();
-    if (shouldRefresh) {
-      setShouldRefresh(false);
-    }
-  }, [challengeId, shouldRefresh]);
+  }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isJoined || isCurrentUserOwnerOfChallenge) {
       navigation.setOptions({
         headerRight: () => (
           <RightPersonalChallengeDetailOptions
             challengeData={challengeData}
             shouldRenderEditAndDeleteBtns={isCurrentUserOwnerOfChallenge}
-            setShouldRefresh={setShouldRefresh}
+            refresh={getChallengeData}
             onEditChallengeBtnPress={handleEditChallengeBtnPress}
             setIsDeleteChallengeDialogVisible={
               setIsDeleteChallengeDialogVisible
@@ -189,7 +186,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         },
       });
     }
-  }, [isJoined, isCurrentUserOwnerOfChallenge]);
+  }, [isJoined]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
@@ -200,7 +197,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         message: t("toast.joined_success") || "You have joined the challenge!",
       });
       setIsJoined(true);
-      setShouldRefresh(true);
+      // setShouldRefresh(true);
+      getChallengeData();
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
@@ -226,7 +224,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         message: t("toast.leave_success") || "You have left the challenge!",
       });
       setIsJoined(false);
-      setShouldRefresh(true);
+      getChallengeData();
     } catch (err) {
       GlobalDialogController.showModal({
         title: "Error",
@@ -282,7 +280,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const handleEditChallengeModalConfirm = () => {
-    setShouldRefresh(true);
     setIsEditChallengeModalVisible(false);
   };
 
@@ -383,8 +380,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             isJoined={isJoined}
             isOtherUserProfile
             challengeData={challengeData}
-            shouldRefresh={shouldRefresh}
-            setShouldRefresh={setShouldRefresh}
+            refresh={getChallengeData}
             isChallengeCompleted={isChallengeCompleted}
           />
           <DescriptionTab challengeData={challengeData} />

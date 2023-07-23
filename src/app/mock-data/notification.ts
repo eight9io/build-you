@@ -1,0 +1,180 @@
+import { NOTIFICATION_TYPES } from "../common/enum";
+import { INotification } from "../types/notification";
+
+export const MOCK_NOTIFICATION: INotification[] = [
+  {
+    id: "1",
+    user: {
+      id: "user1",
+      name: "John Doe",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    progressId: "progress1",
+    type: NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING,
+    createdAt: "2023-07-01T09:00:00Z",
+  },
+  {
+    id: "2",
+    user: {
+      id: "user2",
+      name: "Jane Smith",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    newFollowerId: "follower1",
+    type: NOTIFICATION_TYPES.NEW_FOLLOWER,
+    createdAt: "2023-07-02T14:30:00Z",
+  },
+  {
+    id: "3",
+    user: {
+      id: "user3",
+      name: "Alice Johnson",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    type: NOTIFICATION_TYPES.NEW_COMMENT,
+    createdAt: "2023-07-03T20:15:00Z",
+  },
+  {
+    id: "4",
+    user: {
+      id: "user4",
+      name: "Bob Anderson",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    newFollowerId: "follower2",
+    type: NOTIFICATION_TYPES.NEW_FOLLOWER,
+    createdAt: "2023-07-04T11:45:00Z",
+  },
+  {
+    id: "5",
+    user: {
+      id: "user5",
+      name: "Emily Thompson",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    progressId: "progress2",
+    type: NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING,
+    createdAt: "2023-07-05T16:30:00Z",
+  },
+  {
+    id: "6",
+    user: {
+      id: "user6",
+      name: "Michael Davis",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    type: NOTIFICATION_TYPES.NEW_COMMENT,
+    createdAt: "2023-07-06T09:45:00Z",
+  },
+  {
+    id: "7",
+    user: {
+      id: "user7",
+      name: "Sarah Wilson",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    newFollowerId: "follower3",
+    type: NOTIFICATION_TYPES.NEW_FOLLOWER,
+    createdAt: "2023-07-07T17:20:00Z",
+  },
+  {
+    id: "8",
+    user: {
+      id: "user8",
+      name: "Thomas Lee",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    progressId: "progress3",
+    type: NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING,
+    createdAt: "2023-07-08T10:10:00Z",
+  },
+  {
+    id: "9",
+    user: {
+      id: "user9",
+      name: "Olivia Adams",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    type: NOTIFICATION_TYPES.NEW_MENTION,
+    createdAt: "2023-07-09T14:55:00Z",
+  },
+  {
+    id: "10",
+    user: {
+      id: "user10",
+      name: "Daniel Moore",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    newFollowerId: "follower4",
+    type: NOTIFICATION_TYPES.NEW_FOLLOWER,
+    createdAt: "2023-07-10T20:05:00Z",
+  },
+  {
+    id: "11",
+    user: {
+      id: "user11",
+      name: "Sophia Turner",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    progressId: "progress4",
+    type: NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING,
+    createdAt: "2023-07-11T11:30:00Z",
+  },
+  {
+    id: "12",
+    user: {
+      id: "user12",
+      name: "Matthew Hill",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    type: NOTIFICATION_TYPES.NEW_COMMENT,
+    createdAt: "2023-07-12T15:20:00Z",
+  },
+  {
+    id: "13",
+    user: {
+      id: "user13",
+      name: "Ava Turner",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    newFollowerId: "follower5",
+    type: NOTIFICATION_TYPES.NEW_FOLLOWER,
+    createdAt: "2023-07-13T19:40:00Z",
+  },
+  {
+    id: "14",
+    user: {
+      id: "user14",
+      name: "Henry Foster",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: true,
+    progressId: "progress5",
+    type: NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING,
+    createdAt: "2023-07-14T12:15:00Z",
+  },
+  {
+    id: "15",
+    user: {
+      id: "user15",
+      name: "Lily Mitchell",
+      avatar: "https://picsum.photos/200",
+    },
+    isRead: false,
+    type: NOTIFICATION_TYPES.NEW_COMMENT,
+    createdAt: "2023-07-15T18:00:00Z",
+  },
+];

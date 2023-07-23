@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "182046676611",
+    "project_id": "build-you-e9",
+    "storage_bucket": "build-you-e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182046676611:android:bc0444243aa048207e6db6",
+        "android_client_info": {
+          "package_name": "it.buildyou.buildyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182046676611-gf04sld3qookv7m2rut7hko6p9733gse.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.buildyou.buildyou",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "182046676611-ktf38segf669tnktle7glhi7v373gbkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.buildyou.buildyou",
+            "certificate_hash": "a3e6dae8e4c878eb3db9f301aba1ba11af2b885c"
+          }
+        },
+        {
+          "client_id": "182046676611-kjnvhpd4t3hu5g3an7fets5todbobi4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdWoRr1ZHIsZKcFNR9zlFpLCu0d8rrKfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182046676611-08hpuq5u8s965q3ll1bbg1nut9uri4p1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "182046676611-uguei0ko32e2i9cobbcicfd9pjsj89ru.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "it.buildyou.buildyou"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

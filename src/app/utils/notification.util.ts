@@ -16,30 +16,43 @@ import {
   INotificationResponse,
 } from "../types/notification";
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
+import { UseBoundStore, StoreApi } from "zustand";
+import { NotificationStore } from "../store/notification";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
+    throw new Error("simulator");
   }
 
   const settings = await notifee.requestPermission();
   if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
     await messaging().registerDeviceForRemoteMessages();
-
     // Get the device push token
     const token = await messaging().getToken();
+    console.log(token);
 
-    console.log("push token: ", token);
     return token;
   } else {
     // Ignore when user doesn't grant permission
-    return;
+    // return;
+    throw new Error("user do not grant permission");
   }
+};
+
+export const unregisterForPushNotificationsAsync = async () => {
+  if (!Device.isDevice) {
+    console.log("Must use physical device for Push Notifications");
+    throw new Error("simulator");
+  }
+  const token = await messaging().getToken();
+  await messaging().unregisterDeviceForRemoteMessages();
+  return token;
 };
 
 export const addNotificationListener = async (
   navigation: NavigationContainerRef<RootStackParamList>,
-  useNotificationStore: any
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
   const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
@@ -88,13 +101,6 @@ export const addNotificationListener = async (
         break;
     }
   });
-};
-
-export const notificationPermissionIsAllowed = async (): Promise<boolean> => {
-  if (Device.isDevice) {
-    const settings = await notifee.requestPermission();
-    return settings.authorizationStatus === AuthorizationStatus.AUTHORIZED;
-  } else throw new Error("Must use physical device for Push Notifications");
 };
 
 export const handleTapOnIncomingNotification = async (

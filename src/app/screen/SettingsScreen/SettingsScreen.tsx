@@ -17,8 +17,6 @@ import NavButton from "../../component/common/Buttons/NavButton";
 import Settings from "../../component/Settings";
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen";
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
-// import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
-import { useNotificationStore } from "../../store/notification";
 import { useUserProfileStore } from "../../store/user-store";
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -33,17 +31,12 @@ export type SetingsScreenNavigationProp = NativeStackNavigationProp<
 const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const { logout } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
-  const { revokePushToken } = useNotificationStore();
 
   const { t } = useTranslation();
 
   const handleLogout = async () => {
     logout();
     userProfileStoreOnLogout();
-    revokePushToken();
-    // await removeAuthTokensLocalOnLogout();
-    // setIsCompleteProfileStore(null);
-    // setAccessToken(null);
   };
 
   return (

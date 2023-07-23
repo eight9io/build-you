@@ -19,16 +19,14 @@ import Button from "../../component/common/Buttons/Button";
 import TextInput from "../../component/common/Inputs/TextInput";
 import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
-
 import { LoginForm } from "../../types/auth";
-
 import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { errorMessage } from "../../utils/statusCode";
-
 import { useAuthStore } from "../../store/auth-store";
-
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RootStackParamList } from "../../navigation/navigation.type";
+import { setupInterceptor } from "../../utils/refreshToken.util";
+import { useUserProfileStore } from "../../store/user-store";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -55,13 +53,18 @@ export default function Login() {
     reValidateMode: "onChange",
     mode: "onSubmit",
   });
-  const { asyncLoginEmailPassword } = useAuthStore();
+  const { asyncLoginEmailPassword, getRefreshToken, logout } = useAuthStore();
+  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
 
   const onSubmit = async (payload: LoginForm) => {
     setIsLoading(true);
     try {
       await asyncLoginEmailPassword(payload);
-      setIsLoading(false); // Important
+      setupInterceptor(getRefreshToken, () => {
+        logout();
+        userProfileStoreOnLogout();
+      });
+      setIsLoading(false); // Important to not crashing app with duplicate modal
     } catch (error) {
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);

@@ -17,7 +17,7 @@ import {
 } from "../types/notification";
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
-import { NotificationStore } from "../store/notification";
+import { NotificationStore } from "../store/notification-store";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {

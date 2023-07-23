@@ -1,13 +1,9 @@
 import axios from "axios";
-import {
-  checkRefreshTokenLocalValidation,
-  logout,
-  removeAuthTokensLocalOnLogout,
-} from "./checkAuth";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-import { useAuthStore } from "../store/auth-store";
-import { useIsCompleteProfileStore } from "../store/is-complete-profile";
-import { useNotificationStore } from "../store/notification";
+// import { checkRefreshTokenLocalValidation, logout } from "./checkAuth";
+// import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+// import { useAuthStore } from "../store/auth-store";
+// import { useIsCompleteProfileStore } from "../store/is-complete-profile";
+// import { useNotificationStore } from "../store/notification";
 
 const httpInstance = axios.create({
   timeout: 60000,
@@ -38,43 +34,43 @@ httpInstance.interceptors.response.use(
         const originalRequest = error.config;
         if (!originalRequest._retry) {
           originalRequest._retry = true;
-          const newAuthToken = await checkRefreshTokenLocalValidation();
-          console.log("newAuthToken", newAuthToken);
-          if (!newAuthToken) {
-            console.log("token is not valid");
-            reject("token is not valid");
-          } else {
-            setAuthTokenToHttpHeader(newAuthToken);
-            originalRequest.headers["Authorization"] = `Bearer ${newAuthToken}`;
-            // call new request with new token
-            try {
-              console.log("call new request with new token");
-              const res = await httpInstance(originalRequest);
-              resolve(res);
-            } catch (error) {
-              handleError(error);
-            }
-          }
-        } else {
-          GlobalDialogController.showModal({
-            title: "Error",
-            message: "Session expires. Please login again",
-            button: "OK",
-          });
-          logout(
-            useAuthStore,
-            useIsCompleteProfileStore,
-            useNotificationStore,
-            setAuthTokenToHttpHeader
-          );
-          reject("token is not valid");
+          // const newAuthToken = await checkRefreshTokenLocalValidation();
+          // console.log("newAuthToken", newAuthToken);
+          //   if (!newAuthToken) {
+          //     console.log("token is not valid");
+          //     reject("token is not valid");
+          //   } else {
+          //     setAuthTokenToHttpHeader(newAuthToken);
+          //     originalRequest.headers["Authorization"] = `Bearer ${newAuthToken}`;
+          //     // call new request with new token
+          //     try {
+          //       console.log("call new request with new token");
+          //       const res = await httpInstance(originalRequest);
+          //       resolve(res);
+          //     } catch (error) {
+          //       handleError(error);
+          //     }
+          //   }
+          // } else {
+          // GlobalDialogController.showModal({
+          //   title: "Error",
+          //   message: "Session expires. Please login again",
+          //   button: "OK",
+          // });
+          // logout(
+          //   useAuthStore,
+          //   useIsCompleteProfileStore,
+          //   useNotificationStore,
+          //   setAuthTokenToHttpHeader
+          // );
+          // reject("token is not valid");
         }
       } else if ([500, 501, 502, 503].includes(status)) {
-        GlobalDialogController.showModal({
-          title: "Error",
-          message: "Something went wrong",
-          button: "OK",
-        });
+        // GlobalDialogController.showModal({
+        //   title: "Error",
+        //   message: "Something went wrong",
+        //   button: "OK",
+        // });
         reject("Server error");
       }
       reject(error);

@@ -11,6 +11,7 @@ export const getTimeDiffToNow = (createdAt: string) => {
   const hoursElapsed = Math.floor(minutesElapsed / 60);
   const daysElapsed = Math.floor(hoursElapsed / 24);
 
+  // TODO: use i18n
   if (daysElapsed >= 7) {
     return createdDate.toLocaleDateString(); // Returns the formatted date if it's more than 7 days ago
   } else if (daysElapsed >= 1) {

@@ -80,6 +80,7 @@ export type RootStackParamList = {
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =
   RouteProp<RootStackParamList, RouteName>;
 
+// TODO: move this into seperate to avoid cycle dependcy when importing type
 export const useNav = () => {
   return useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 };

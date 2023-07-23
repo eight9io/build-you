@@ -37,6 +37,7 @@ import { useNotificationStore } from "../store/notification";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import { setAuthTokenToHttpHeader, setupInterceptor } from "../utils/http";
 import { useUserProfileStore } from "../store/user-store";
+import NavigatorService from "../utils/navigationController";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -114,7 +115,11 @@ export const RootNavigation = () => {
   // };
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={(navigation: NavigationContainerRef<RootStackParamList>) => {
+        NavigatorService.setContainer(navigation);
+      }}
+    >
       <GlobalDialog />
       <RootStack.Navigator
         screenOptions={{

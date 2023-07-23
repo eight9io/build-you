@@ -1,12 +1,24 @@
 import { AxiosResponse } from "axios";
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { ILoginResponse, LoginForm } from "../types/auth";
 import { serviceLogin } from "../service/auth";
-// import { registerForPushNotificationsAsync } from "../utils/notification.util";
+import {
+  addNotificationListener,
+  registerForPushNotificationsAsync,
+  unregisterForPushNotificationsAsync,
+} from "../utils/notification.util";
 import { useUserProfileStore } from "./user-store";
 import { setAuthTokenToHttpHeader } from "../utils/http";
+import {
+  NOTIFICATION_TOKEN_DEVICE_TYPE,
+  NOTIFICATION_TOKEN_STATUS,
+} from "../common/enum";
+import { updateNotificationToken } from "../service/notification";
+import { useNotificationStore } from "./notification";
+import NavigationService from "../utils/navigationController";
 
 export interface LoginStore {
   accessToken: string | null;
@@ -30,9 +42,46 @@ export interface LoginStore {
 const watchLogin = (config) => (set, get, api) =>
   config(
     (args) => {
-      // console.log("  applying", args);
+      if (typeof args.accessToken === "string") {
+        const oldState = get();
+        if (typeof oldState.accessToken === "string") {
+          return; // Refresh Token, no need update push token
+        }
+        registerForPushNotificationsAsync()
+          .then((token) => {
+            const navigation = NavigationService.getContainer();
+            addNotificationListener(navigation, useNotificationStore);
+            updateNotificationToken({
+              notificationToken: token,
+              status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
+              deviceType:
+                Platform.OS === "android"
+                  ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+                  : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+            });
+          })
+          .catch(() => {
+            console.log("Ignore Push Notification");
+          });
+      }
+      if (args.accessToken === null) {
+        unregisterForPushNotificationsAsync()
+          .then((token) => {
+            console.log(token);
+            updateNotificationToken({
+              notificationToken: token,
+              status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
+              deviceType:
+                Platform.OS === "android"
+                  ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+                  : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+            });
+          })
+          .catch(() => {
+            console.log("Ignore Push Notification");
+          });
+      }
       set(args);
-      // console.log("  new state", get());
     },
     get,
     api
@@ -40,7 +89,7 @@ const watchLogin = (config) => (set, get, api) =>
 
 export const useAuthStore = create<LoginStore>()(
   persist(
-    (set, get) => ({
+    watchLogin((set, get) => ({
       accessToken: null,
       refreshToken: null,
       _hasHydrated: false,
@@ -85,9 +134,9 @@ export const useAuthStore = create<LoginStore>()(
           _hasHydrated: true,
         });
       },
-    }),
+    })),
     {
-      name: "auth-storage-1",
+      name: "auth-storage",
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated();

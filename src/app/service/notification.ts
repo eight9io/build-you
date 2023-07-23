@@ -5,7 +5,7 @@ import { mapNotificationResponses } from "../utils/notification.util";
 export const updateNotificationToken = async (
   payload: IPushNotificationToken
 ) => {
-  return httpInstance.post(
+  return await httpInstance.post(
     `notification/push/${payload.notificationToken}`,
     payload
   );

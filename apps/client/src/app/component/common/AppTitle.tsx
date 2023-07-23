@@ -1,15 +1,21 @@
 import { FC } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import clsx from 'clsx';
+import NavButton from './Buttons/NavButton';
+import { useTranslation } from 'react-i18next';
 
 interface IAppTitleProps {
   title: string;
   textClassName?: string;
 }
 
-export const AppTitle: FC<IAppTitleProps> = ({ title, textClassName }) => {
+export const AppTitle = (
+  { title, textClassName }: IAppTitleProps,
+  { navigation }: { navigation: any }
+) => {
+  const { t } = useTranslation();
   return (
-    <Text className={clsx('text-lg font-semibold', textClassName)}>
+    <Text className={clsx(' text-lg font-semibold', textClassName)}>
       {title}
     </Text>
   );

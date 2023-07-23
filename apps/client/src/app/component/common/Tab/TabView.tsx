@@ -14,6 +14,8 @@ interface ITabViewProps {
   children: ReactNode[];
   activeTabClassName?: string;
   defaultTabClassName?: string;
+  activeTabIndex: number;
+  setActiveTabIndex: (index: number) => void;
 }
 
 const TabTitle: FC<ITabTitleProps> = ({
@@ -40,11 +42,11 @@ export const TabView: FC<ITabViewProps> = ({
   children,
   activeTabClassName,
   defaultTabClassName,
+  activeTabIndex,
+  setActiveTabIndex,
 }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-
   return (
-    <View className="flex flex-col h-full">
+    <View className="flex h-full flex-1 flex-col">
       <View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="mx-4 flex flex-row">
@@ -66,7 +68,18 @@ export const TabView: FC<ITabViewProps> = ({
           </View>
         </ScrollView>
       </View>
-      <View className=' flex-1 bg-gray-veryLight'>{children[activeTabIndex]}</View>
+      <View className="bg-gray-veryLight flex-1">
+        {children.map((item, index) => {
+          return (
+            <View
+              className={`${index == activeTabIndex ? 'flex-1' : 'hidden'}`}
+              key={index}
+            >
+              {item}
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 };

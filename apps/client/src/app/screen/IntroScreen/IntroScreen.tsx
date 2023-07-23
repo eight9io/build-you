@@ -1,28 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Modal,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
+
 import { useTranslation } from 'react-i18next';
 import Swiper from 'react-native-swiper';
 import Button from '../../component/common/Buttons/Button';
 
-import LoginModal from '../../component/modal/LoginModal';
-import NavButton from '../../component/common/Buttons/NavButton';
-import { useCompleteProfileStore } from '../../store/complete-profile';
+import RegisterModal from '../../component/modal/RegisterModal/RegisterModal';
 
-export const LoginScreen = ({ navigation, route }: any) => {
-  const { getProfile } = useCompleteProfileStore();
-  console.log(
-    '🚀 ~ file: index.tsx:22 ~ LoginScreen ~ getProfile:',
-    getProfile()
-  );
+export const IntroScreen = ({ navigation, route }: any) => {
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
@@ -30,7 +16,6 @@ export const LoginScreen = ({ navigation, route }: any) => {
       setModalVisible(route?.params?.setModal);
     }
   }, [route?.params?.setModal]);
-  console.log(route?.params?.setModal);
 
   return (
     <View className="justify-content: space-between flex-1">
@@ -38,12 +23,12 @@ export const LoginScreen = ({ navigation, route }: any) => {
         <Image
           className="z-10 h-[100%] w-[100%] rounded-xl"
           source={require('./asset/banner.png')}
-          resizeMode="cover"
+          contentFit="cover"
         />
         <Image
           className="position: absolute bottom-7 left-[34%] z-20"
           source={require('./asset/logo.png')}
-          resizeMode="cover"
+          contentFit="cover"
         />
         <View className="position: absolute top-3 h-[100%] w-[100%] rounded-xl bg-[#FF7B1C] opacity-40" />
         <View className="position: absolute top-5 h-[100%] w-[100%] rounded-xl bg-[#FFA41B] opacity-30" />
@@ -55,13 +40,13 @@ export const LoginScreen = ({ navigation, route }: any) => {
 
         <View className="h-[120px]">
           <Swiper className="justify-center">
-            <Text className="line-[22.4px] text-center text-[16px] font-normal">
+            <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t('login_screen.description')}
             </Text>
-            <Text className="line-[22.4px] text-center text-[16px] font-normal">
+            <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t('login_screen.description')}
             </Text>
-            <Text className="line-[22.4px] text-center text-[16px] font-normal">
+            <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t('login_screen.description')}
             </Text>
           </Swiper>
@@ -82,13 +67,15 @@ export const LoginScreen = ({ navigation, route }: any) => {
           />
         </View>
 
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('HomeScreenWithoutLogin')}
+        >
           <Text className="text-[#90969E]">
             {t('login_screen.explore_no_account')}
           </Text>
         </TouchableOpacity>
 
-        <LoginModal
+        <RegisterModal
           navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
@@ -98,4 +85,4 @@ export const LoginScreen = ({ navigation, route }: any) => {
   );
 };
 
-export default LoginScreen;
+export default IntroScreen;

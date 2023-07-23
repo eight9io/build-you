@@ -24,19 +24,20 @@ export default function PolicyModal({
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      // transparent={true}
       visible={modalVisible}
       presentationStyle="pageSheet"
     >
       <ScrollView>
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View className=" ml-4 ">
             <Header
               title="Privacy policy..."
               leftBtn={
                 <NavButton
                   text={t('button.back') as string}
                   onPress={() => setModalVisible(false)}
+                  withBackIcon
                 />
               }
             />
@@ -70,41 +71,5 @@ const styles = StyleSheet.create({
     height: '100%',
 
     marginTop: 22,
-  },
-  modalView: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    paddingTop: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    flex: 1,
-    flexDirection: 'column',
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
   },
 });

@@ -26,6 +26,7 @@ const Step = ({ currentStep }: any) => {
               ,
               currentStep === index + 1 ? ' w-6' : 'w-1.5',
             ])}
+            key={index}
           />
         ))}
       </View>

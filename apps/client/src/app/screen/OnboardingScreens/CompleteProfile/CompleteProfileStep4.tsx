@@ -7,24 +7,26 @@ import {
 } from 'react-native';
 
 import clsx from 'clsx';
-import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
 
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
+import { useUserProfileStore } from '../../../store/user-data';
+
+import { useGetUserData } from '../../../hooks/useGetUser';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
 import Button from '../../../component/common/Buttons/Button';
-import NavButton from '../../../component/common/Buttons/NavButton';
-import Header from '../../../component/common/Header';
 
 import CheckedSvg from './asset/checked.svg';
 import UncheckedSvg from './asset/uncheck.svg';
-import WarningSvg from './asset/warning.svg';
+import WarningSvg from '../../../component/asset/warning.svg';
 
-import httpInstance, { setAuthToken } from '../../../utils/http';
+import httpInstance from '../../../utils/http';
+import { uploadNewVideo } from '../../../utils/uploadVideo';
+import GlobalDialogController from '../../../component/common/Dialog/GlobalDialogController';
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -53,13 +55,14 @@ interface IRenderSoftSkillProgress {
 
 const NUMBER_OF_SKILL_REQUIRED = 3;
 const MAX_PROGRESS_VALUE = 5;
+const VALUES_ARRAY = Array.from(Array(MAX_PROGRESS_VALUE).keys());
 
 const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   item,
   changeSkillValue,
   skillValueError,
 }) => {
-  const randomId = Math.random().toString();
+  // const randomId = Math.random().toString();
   return (
     <View className="flex w-full flex-col">
       <View className="flex w-full flex-row items-center justify-between">
@@ -69,10 +72,10 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
           </Text>
         </View>
         <View className="flex flex-1 flex-row  justify-end">
-          {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
+          {VALUES_ARRAY.map((_, index) => (
             <TouchableOpacity
               className="pr-4"
-              key={`${randomId}${index}`}
+              key={index.toString()}
               onPress={() => changeSkillValue(item?.label, index + 1)}
             >
               {index < item?.value ? (
@@ -101,11 +104,10 @@ const renderSelectedSoftSkill = (
   changeSkillValue: any,
   skillValueError: boolean
 ) => {
-  const randomId = Math.random().toString();
   return (
     <View className="flex flex-col flex-wrap">
       {selectedCompetencedSkill.map((item, index) => (
-        <View className="pb-6" key={`${randomId}${index}`}>
+        <View className="pb-6" key={index.toString()}>
           {renderSoftSkillProgress({ item, changeSkillValue, skillValueError })}
         </View>
       ))}
@@ -155,6 +157,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     []
   );
 
+  useGetUserData();
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+
   useEffect(() => {
     const fetchSkills = async () => {
       try {
@@ -162,6 +168,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         setFetchedSoftSkills(
           convertFetchedSoftSkillToSkillProps(response.data)
         );
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -201,29 +208,45 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     return true;
   };
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     setOpenDropdown(false);
     setSoftSkills(selectedCompetencedSkill);
     const profile = getProfile();
     if (!checkSoftSkillRequired() || !checkAllSkillValueGreaterThanZero())
       return;
-    // setAuthToken( );
     const softSkills = convertSelectedToSoftSkillProps(
       selectedCompetencedSkill
     );
-    httpInstance
-      .put('/user/update/ffe72529-b651-467d-85f0-ef4a28628bf8', {
-        ...profile,
-        softSkills: softSkills,
-      })
-      .then(() => {
-        console.log('success');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
-    navigation.navigate('CompleteProfileFinishScreen');
+    if (!userData?.id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+        button: 'OK',
+      });
+      return;
+    }
+    try {
+      await Promise.all([
+        uploadNewVideo(profile?.video),
+        httpInstance.put(`/user/update/${userData.id}`, {
+          name: profile?.name,
+          surname: profile?.surname,
+          birth: profile?.birth,
+          occupation: profile?.occupation,
+          bio: profile?.biography,
+          softSkill: softSkills,
+          hardSkill: profile.skills,
+          company: '',
+        }),
+      ]);
+      navigation.navigate('CompleteProfileFinishScreen');
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+    }
   };
 
   const addCompetencedSkill = (skill: IFormValueInput | undefined) => {
@@ -243,18 +266,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
   return (
     <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
-      <View className="relative flex h-full w-full flex-col items-center justify-start">
-        <Header
-          title="Complete profile"
-          leftBtn={
-            <NavButton
-              text="Back"
-              withBackIcon={true}
-              onPress={() => navigation.goBack()}
-            />
-          }
-        />
-        <View className="pt-4">
+      <View className="relative flex h-full w-full flex-col items-center justify-start bg-white">
+        <View>
           <StepOfSteps step={4} totalSteps={4} />
         </View>
         <View className="flex w-[282px] flex-col items-center justify-center py-6 ">
@@ -276,7 +289,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
             <DropDownPicker
               open={openDropdown}
               value={value}
-              items={fetchedSoftSkills}
+              items={fetchedSoftSkills.map(({ label }) => ({
+                label,
+                value: label,
+              }))}
               setOpen={setOpenDropdown}
               setValue={setValue}
               setItems={setFetchedSoftSkills}
@@ -295,6 +311,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               containerStyle={{
                 width: '100%',
                 backgroundColor: '#fafafa',
+                zIndex: 10,
               }}
               dropDownContainerStyle={{
                 backgroundColor: '#fafafa',
@@ -303,40 +320,44 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 borderRadius: 8,
                 maxHeight: 300,
                 overflow: 'scroll',
+                zIndex: 10,
               }}
               theme="LIGHT"
               multiple={true}
               mode="SIMPLE"
               badgeDotColors={['#e76f51']}
-              renderListItem={({ item, isSelected, onPress }) => {
+              renderListItem={({ item, isSelected }) => {
                 const isSkillAlreadySelected = selectedCompetencedSkill.find(
                   (selected) => selected.label === item.label
                 );
                 return (
-                  <TouchableOpacity
-                    onPress={() => addCompetencedSkill(item as IFormValueInput)}
-                  >
-                    <View
-                      className={clsx(
-                        'flex-row items-center justify-start px-4 py-3',
-                        {
-                          'bg-gray-light': isSelected,
-                        }
-                      )}
+                  <View key={item.label}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        addCompetencedSkill(item as IFormValueInput)
+                      }
                     >
-                      <Checkbox
-                        value={!!isSkillAlreadySelected}
-                        onValueChange={onPress}
-                        color={isSelected ? '#4630EB' : undefined}
-                      />
-                      <Text
-                        key={item.label}
-                        className="text-black-default text-h6 pl-3 font-medium leading-6"
+                      <View
+                        className={clsx(
+                          'flex-row items-center justify-start px-4 py-3',
+                          {
+                            'bg-gray-light': isSelected,
+                          }
+                        )}
                       >
-                        {item.label}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+                        <Checkbox
+                          value={!!isSkillAlreadySelected}
+                          onValueChange={() =>
+                            addCompetencedSkill(item as IFormValueInput)
+                          }
+                          color={isSelected ? '#4630EB' : undefined}
+                        />
+                        <Text className="text-black-default text-h6 pl-3 font-medium leading-6">
+                          {item.label}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 );
               }}
             />

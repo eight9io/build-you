@@ -1,49 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import clsx from 'clsx';
+import DefaultAvatar from '../../../asset/default-avatar.svg';
 
 interface IPostAvatarProps {
-  src: string;
+  src: string | null | undefined;
   alt?: string;
   onPress?: () => void;
 }
 
-const PostAvatar: React.FC<IPostAvatarProps> = ({
-  src,
-  alt,
-  onPress,
-}) => {
+const PostAvatar: React.FC<IPostAvatarProps> = ({ src, alt, onPress }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [imageSource, setImageSource] = useState<{}>({});
+  const [newAvatarUrl, setNewAvatarUrl] = useState<string | null | undefined>(
+    null
+  );
 
   useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await fetch(src);
-        const imageData = await response.blob();
-        setImageSource({ uri: URL.createObjectURL(imageData) });
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        setError(true);
-        setLoading(false);
-      }
-    };
-
-    fetchImage();
+    let url: string | null | undefined;
+    if (src && !src.startsWith('http')) {
+      url = `https://buildyou-front.stg.startegois.com${src}`;
+    } else {
+      url = src;
+    }
+    setNewAvatarUrl(url);
   }, [src]);
+
 
   return (
     <View className={clsx('flex flex-row items-center')}>
-      <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
+      {newAvatarUrl && (
         <View className={clsx('relative')}>
           <Image
+            key={`${newAvatarUrl}`}
             className={clsx('h-[32px] w-[32px] rounded-full')}
-            source={imageSource}
+            source={{
+              uri: newAvatarUrl,
+            }}
+            onLoadStart={() => setLoading(true)}
+            onLoadEnd={() => setLoading(false)}
+            onError={(err) => {
+              setLoading(false);
+              setError(true);
+            }}
           />
         </View>
-      </TouchableOpacity>
+      )}
+      {!newAvatarUrl && (
+        <View className={clsx('z-10 h-[32px] w-[32px] rounded-full  bg-white')}>
+          <DefaultAvatar />
+        </View>
+      )}
     </View>
   );
 };

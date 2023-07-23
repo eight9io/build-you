@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import React from 'react'
-import { TouchableOpacity, Image, View, Text } from 'react-native';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import SearchSvg from './asset/search.svg';
 import SettingsSvg from './asset/settings.svg';
 
@@ -9,22 +9,17 @@ interface IButtonWithIconProps {
   onPress?: () => void;
 }
 
-const ButtonWithIcon:React.FC<IButtonWithIconProps> = ({
-  icon,
-  onPress,
-}) => {
-  const ImageSourceFromAssets = icon === 'search' ? <SearchSvg /> : <SettingsSvg />;
+const ButtonWithIcon: React.FC<IButtonWithIconProps> = ({ icon, onPress }) => {
+  const ImageSourceFromAssets =
+    icon === 'search' ? <SearchSvg /> : <SettingsSvg />;
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={onPress}
-    >
-      <View className='flex flex-row items-center'>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
+      <View className="flex flex-row items-center">
         {ImageSourceFromAssets}
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 export default ButtonWithIcon;

@@ -44,8 +44,8 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   return (
-    <View className="flex-1">
-      <View>
+    <View className="h-full flex-1 ">
+      <View className="bg-white">
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -60,14 +60,29 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
                 isActive={index === activeTabIndex}
                 activeTabClassName={activeTabClassName}
                 defaultTabClassName={defaultTabClassName}
+                key={index}
               />
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingHorizontal: 10, backgroundColor: 'white' }}
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+            backgroundColor: 'white',
+          }}
         />
       </View>
-      <View className="mt-4 flex-1 px-4">{children[activeTabIndex]}</View>
+      <View className="flex-1">
+        {children.map((item, index) => {
+          return (
+            <View
+              className={`${index == activeTabIndex ? 'flex-1' : 'hidden'}`}
+              key={index}
+            >
+              {item}
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 };

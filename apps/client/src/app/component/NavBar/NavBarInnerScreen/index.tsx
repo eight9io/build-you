@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 
 import clsx from 'clsx';
 
@@ -25,7 +25,7 @@ const NavBarInnerScreen: FC<INavBarInnerScreenProps> = ({
       )}
     >
       <View className={clsx('absolute left-0 top-1 flex items-center')}>
-        <NavButton onPress={backToPreviousScreen} />
+        <NavButton onPress={backToPreviousScreen} withBackIcon text="Back" />
       </View>
       <Text className={clsx('text-lg font-semibold')}>{title}</Text>
     </View>

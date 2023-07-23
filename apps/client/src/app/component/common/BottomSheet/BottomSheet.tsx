@@ -14,6 +14,7 @@ const BottomSheet2: FC<IBottomSheet2Props> = ({
   snapPoints,
   children,
 }) => {
+  const bottomSheetRef = React.useRef<BottomSheet>(null);
   const snapPointsDefault = useMemo(() => ['50%'], []);
   snapPoints = snapPoints || snapPointsDefault;
 
@@ -30,9 +31,11 @@ const BottomSheet2: FC<IBottomSheet2Props> = ({
     []
   );
 
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <BottomSheet
+        ref={bottomSheetRef}
         index={0}
         snapPoints={snapPoints}
         onClose={onClose}

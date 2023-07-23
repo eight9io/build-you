@@ -1,21 +1,18 @@
 import React, { FC, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
+import { uploadNewVideo } from '../../../utils/uploadVideo';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
-import SignupAvatar from '../../../component/common/Avatar/SignupAvatar';
 import TextInput from '../../../component/common/Inputs/TextInput';
-
 import Button from '../../../component/common/Buttons/Button';
+import VideoPicker from '../../../component/common/VideoPicker';
 
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
-import CustomTextInput from '../../../component/common/Inputs/CustomTextInput';
-import Header from '../../../component/common/Header';
-
-import NavButton from '../../../component/common/Buttons/NavButton';
-import VideoPicker from '../../../component/common/VideoPicker';
+import { IUploadMediaWithId } from '../../../types/media';
 
 interface CompleteProfileStep2Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -24,17 +21,14 @@ interface CompleteProfileStep2Props {
 const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   navigation,
 }) => {
-  const [pickedVideo, setPickedVideo] = useState<string[]>([]);
-  const [isSelectedImage, setIsSelectedImage] = useState<boolean>(false);
+  const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
 
-  const { setBiography } = useCompleteProfileStore();
+  const { setBiography, setVideo } = useCompleteProfileStore();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
-    getValues,
   } = useForm<{
     biography: string;
     video: string;
@@ -45,85 +39,72 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
     },
   });
 
+  const { setSoftSkills, getProfile } = useCompleteProfileStore();
   const handleSubmitForm = (data: any) => {
-    // keep data to store, add biography
-    setBiography(data.biography, data.video);
+    setBiography(data.biography);
+    if (pickedVideo[0]?.uri) {
+      setVideo(pickedVideo[0]?.uri);
+    }
     navigation.navigate('CompleteProfileStep3Screen');
   };
 
   const removeVideo = () => {
+    uploadNewVideo('');
     setPickedVideo([]);
   };
-  console.log(pickedVideo);
 
   return (
-    <View className="relative flex h-full w-full flex-col items-center justify-start">
-      <Header
-        title="Complete profile"
-        leftBtn={
-          <NavButton
-            text="Back"
-            withBackIcon={true}
-            onPress={() => navigation.navigate('CompleteProfileStep1Screen')}
-          />
-        }
-        rightBtn={
-          <NavButton
-            text="Skip"
-            withIcon={false}
-            onPress={() => navigation.navigate('CompleteProfileStep3Screen')}
-          />
-        }
-      />
-      <View className="pt-2">
-        <StepOfSteps step={2} totalSteps={4} />
-      </View>
-      <View className="flex w-64 flex-col items-center justify-center pt-6">
-        <Text className="text-black-default text-h4 text-center font-semibold leading-6">
-          Tell the others something about you
-        </Text>
-      </View>
-
-      {/* Form */}
-      <View className="mt-4 flex h-full w-full  rounded-t-xl ">
-        <View className="mt-4 flex flex-col px-5 ">
-          <Controller
-            control={control}
-            name="biography"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View className="flex flex-col">
-                <TextInput
-                  label="Biography"
-                  placeholder={'Enter your last name'}
-                  placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  multiline={true}
-                  numberOfLines={4}
-                  className="border-gray-medium bg-gray-veryLight ml-0 mt-0 flex h-36 w-full rounded-[10px] border px-3 py-3 text-base font-normal"
-                />
-              </View>
-            )}
-          />
-          <VideoPicker
-            setExternalVideo={setPickedVideo}
-            useBigImage={true}
-            removeVideo={removeVideo}
-          />
+    <View className="flex h-full w-full flex-col items-center justify-start">
+      <ScrollView className="w-full ">
+        <View className="pt-2">
+          <StepOfSteps step={2} totalSteps={4} />
         </View>
-      </View>
+        <View className="flex flex-col items-center justify-center  pt-6">
+          <View className="flex w-64 ">
+            <Text className="text-black-default text-h4 text-center font-semibold leading-6">
+              Tell the others something about you
+            </Text>
+          </View>
+        </View>
 
-      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
-        <View className="h-12">
+        {/* Form */}
+        <View className="mt-4 flex w-full flex-col px-5">
+          <View className="mt-4 flex flex-col ">
+            <Controller
+              control={control}
+              name="biography"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <View className="flex flex-col">
+                  <TextInput
+                    label="Biography"
+                    placeholder={'Your biography'}
+                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    multiline={true}
+                    className="h-40 "
+                  />
+                </View>
+              )}
+            />
+          </View>
+          <View className="mt-10">
+            <VideoPicker
+              setExternalVideo={setPickedVideo}
+              useBigImage={true}
+              removeVideo={removeVideo}
+            />
+          </View>
+
           <Button
             title="Next"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
+            containerClassName="h-12 w-full bg-primary-default my-5 "
+            textClassName="text-white text-md leading-6"
             onPress={handleSubmit(handleSubmitForm)}
           />
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

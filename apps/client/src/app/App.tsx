@@ -1,8 +1,5 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useState } from 'react';
 import RootNavigation from './navigation';
 import { MenuProvider } from 'react-native-popup-menu';
-import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
   OpenSans_300Light,
@@ -12,7 +9,8 @@ import {
   OpenSans_700Bold,
 } from '@expo-google-fonts/open-sans';
 
-import './i18n';
+import './i18n/i18n';
+import Toast from './component/common/Toast/Toast';
 
 export const App = () => {
   const [fontLoaded] = useFonts({
@@ -26,8 +24,10 @@ export const App = () => {
   if (!fontLoaded) {
     return null;
   }
+
   return (
     <MenuProvider>
+      <Toast />
       <RootNavigation />
     </MenuProvider>
   );

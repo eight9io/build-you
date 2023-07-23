@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
-import { setAuthTokenToHttpHeader } from "./http";
+// import { setAuthTokenToHttpHeader } from "./http";
 // import httpInstance, { setAuthTokenToHttpHeader } from "./http";
 // import { useAuthStore } from '../store/auth-store';
 // import { useIsCompleteProfileStore } from '../store/is-complete-profile';
@@ -141,7 +141,8 @@ export const logout = async (
 
 export const checkRefreshTokenLocalValidation = async (
   removeAuthTokensLocalOnLogout: () => void,
-  httpInstance: any
+  httpInstance: any,
+  setAuthTokenToHttpHeader: any
 ) => {
   try {
     const refreshTokenLocal = await AsyncStorage.getItem("@refresh_token");

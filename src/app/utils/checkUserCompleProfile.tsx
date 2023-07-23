@@ -1,5 +1,5 @@
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-import httpInstance, { setAuthTokenToHttpHeader } from "./http";
+// import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+// import httpInstance, { setAuthTokenToHttpHeader } from "./http";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const checkUserCompleProfileAndCompany = async (
@@ -11,7 +11,7 @@ export const checkUserCompleProfileAndCompany = async (
       setIsMainAppLoading(true);
       const authToken = await AsyncStorage.getItem("@auth_token");
       if (authToken) {
-        setAuthTokenToHttpHeader(authToken);
+        // setAuthTokenToHttpHeader(authToken);
       }
       await httpInstance.get("/user/me").then((res) => {
         if (res.data?.companyAccount === true) {
@@ -27,11 +27,11 @@ export const checkUserCompleProfileAndCompany = async (
       setIsMainAppLoading(false);
     } catch (error) {
       setIsMainAppLoading(false);
-      GlobalDialogController.showModal({
-        title: "Error",
-        message:
-          "Something went wrong when getting user data. Please try again later.",
-      });
+      // GlobalDialogController.showModal({
+      //   title: "Error",
+      //   message:
+      //     "Something went wrong when getting user data. Please try again later.",
+      // });
     }
   };
 

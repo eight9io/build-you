@@ -7,10 +7,11 @@ export const errorMessage = (error: any, type: string) => {
   const responseBody = error.response?.data;
   for (const key in OBJ_STATUS_CODE) {
     if (responseBody?.statusCode == key) {
-      return i18n.t(`errorMessage:${type}.${key}`) as string;
+      return i18n.t(`errorMessage:${type}.${key}`);
     } else {
-      return i18n.t("errorMessage:500") as string;
+      return i18n.t("errorMessage:500");
     }
   }
 };
-export const err_server = i18n.t("errorMessage:500") as string;
+
+export const err_server = i18n.t("errorMessage:500");

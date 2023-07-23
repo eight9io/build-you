@@ -1,7 +1,7 @@
 import * as ExpoImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
-import { serviceUpdateAvatar, serviceUpdateCover } from "../service/profile";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+// import { serviceUpdateAvatar, serviceUpdateCover } from "../service/profile";
+// import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 
 import { useTranslation } from "react-i18next";
 
@@ -51,14 +51,14 @@ export const uploadNewAvatar = async (image: string) => {
     type: "image/jpeg",
   } as any);
 
-  const response = serviceUpdateAvatar(formData)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return undefined;
-    });
-  return response;
+  // const response = serviceUpdateAvatar(formData)
+  //   .then((res) => {
+  //     return res.data;
+  //   })
+  //   .catch((err) => {
+  //     return undefined;
+  //   });
+  // return response;
 };
 
 // TODO: this one don't need utils, can stay inside service folder
@@ -71,19 +71,19 @@ export const uploadNewCover = async (image: string) => {
     type: "image/jpeg",
   } as any);
 
-  const response = serviceUpdateCover(formData)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((_) => {
-      GlobalDialogController.showModal({
-        title: "Error",
-        message: "Upload cover failed. Please try again later.",
-        button: "OK",
-      });
-      return undefined;
-    });
-  return response;
+  // const response = serviceUpdateCover(formData)
+  //   .then((res) => {
+  //     return res.data;
+  //   })
+  //   .catch((_) => {
+  //     GlobalDialogController.showModal({
+  //       title: "Error",
+  //       message: "Upload cover failed. Please try again later.",
+  //       button: "OK",
+  //     });
+  //     return undefined;
+  //   });
+  // return response;
 };
 
 export const getImageExtension = (uri: string) => {

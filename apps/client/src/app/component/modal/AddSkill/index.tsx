@@ -2,16 +2,19 @@ import { View, Text, Modal } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import EmojiSelector from 'react-native-emoji-selector';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+import httpInstance from '../../../utils/http';
+
+import { IHardSkillProps } from '../../../types/user';
 
 import Header from '../../common/Header';
 import InlineTextInput from '../../common/Inputs/InlineTextInput';
 import AddEmojiButton from '../../common/Buttons/AddEmojiButton';
 import AddEmojiModal from '../AddEmoji';
-
 import Close from '../../../component/asset/close.svg';
 import Button from '../../common/Buttons/Button';
-import WarningSvg from '../asset/warning.svg';
+import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
 
 interface IAddSkillModallProps {
   setUserAddSkill: (skills: any) => void;
@@ -39,7 +42,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      Skill: '',
+      Skill: null,
     },
   });
 
@@ -55,16 +58,34 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
     }
   }, [skillName]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!selectedEmoji) {
       setSelectEmojiError(true);
-      if (!skillName) {
-        setSkillNameError(true);
-      }
-      return;
     }
+    if (!skillName) {
+      setSkillNameError(true);
+    }
+    if (!selectedEmoji || !skillName) return;
+
     const skill = `${selectedEmoji} ${skillName}`;
-    setUserAddSkill((prev: string[]) => [...prev, skill]);
+
+    let skillToSave: IHardSkillProps | null = null;
+
+    await httpInstance
+      .post('/skill/hard/create', {
+        skill,
+      })
+      .then((res) => {
+        skillToSave = res.data;
+      })
+      .catch((_) => {
+        GlobalDialogController.showModal({
+          title: 'Error',
+          message: 'Something went wrong. Please try again later.',
+        });
+      });
+
+    setUserAddSkill((prev: IHardSkillProps[]) => [...prev, skillToSave]);
     selectedEmoji && setSelectedEmoji(null);
     reset();
     onClose();
@@ -73,6 +94,8 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
   const onCloseAddSkillModal = () => {
     onClose();
     setSelectedEmoji(null);
+    selectEmojiError && setSelectEmojiError(false);
+    skillNameError && setSkillNameError(false);
     reset();
   };
 
@@ -82,53 +105,55 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <View className="relative flex h-full flex-col rounded-t-xl bg-white pt-6">
-        <AddEmojiModal
-          isVisible={showEmojiModal}
-          onClose={onCloseEmojiModal}
-          setExternalSelectedEmoji={setSelectedEmoji}
-          setSelectEmojiError={setSelectEmojiError}
-        />
-        <Header
-          title="Add skill"
-          leftBtn={<Close fill={'black'} />}
-          onLeftBtnPress={onCloseAddSkillModal}
-        />
-        <View className="px-4">
-          <View className="py-4">
-            <Text className="text-gray-dark text-md">
-              Select the emoji and enter the skill name
-            </Text>
-          </View>
-
-          <View className="py-2">
-            <AddEmojiButton
-              selectedEmoji={selectedEmoji}
-              triggerFunction={() => setShowEmojiModal(true)}
-              selectEmojiError={selectEmojiError}
-            />
-          </View>
-          <View className="py-8">
-            <InlineTextInput
-              title="Skill"
-              containerClassName="pl-6"
-              placeholder="Enter your skill name"
-              control={control}
-              errors={errors}
-              showError={skillNameError}
-            />
-          </View>
-        </View>
-
-        <View className="absolute bottom-12 left-0 h-12 w-full px-4">
-          <Button
-            title="Save"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-            onPress={handleSave}
+      <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+        <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
+          <AddEmojiModal
+            isVisible={showEmojiModal}
+            onClose={onCloseEmojiModal}
+            setExternalSelectedEmoji={setSelectedEmoji}
+            setSelectEmojiError={setSelectEmojiError}
           />
+          <Header
+            title="Add skill"
+            leftBtn={<Close fill={'black'} />}
+            onLeftBtnPress={onCloseAddSkillModal}
+          />
+          <View className="px-4">
+            <View className="py-4">
+              <Text className="text-gray-dark text-md">
+                Select the emoji and enter the skill name
+              </Text>
+            </View>
+
+            <View className="py-2">
+              <AddEmojiButton
+                selectedEmoji={selectedEmoji}
+                triggerFunction={() => setShowEmojiModal(true)}
+                selectEmojiError={selectEmojiError}
+              />
+            </View>
+            <View className="py-8">
+              <InlineTextInput
+                title="Skill"
+                containerClassName="pl-6"
+                placeholder="Enter your skill name"
+                control={control}
+                errors={errors}
+                showError={skillNameError}
+              />
+            </View>
+          </View>
+
+          <View className="absolute bottom-12 left-0 h-12 w-full px-4">
+            <Button
+              title="Save"
+              containerClassName="bg-primary-default flex-1"
+              textClassName="text-white"
+              onPress={handleSave}
+            />
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </Modal>
   );
 };

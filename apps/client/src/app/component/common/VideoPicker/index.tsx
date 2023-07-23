@@ -1,19 +1,24 @@
 import React, { useState, useEffect, FC } from 'react';
-import { Image, View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Linking } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as VideoThumbnails from 'expo-video-thumbnails';
+import clsx from 'clsx';
+import { Image } from 'expo-image';
+
+import { IUploadMediaWithId } from '../../../types/media';
+
+import { getRandomId } from '../../../utils/common';
 
 import CameraIcon from './asset/camera-icon.svg';
-import { getRandomId } from '../../../utils/common';
-import clsx from 'clsx';
-
 import PlayButton from './asset/play-button.svg';
 import CloseButton from './asset/close-button.svg';
-
+import ConfirmDialog from '../Dialog/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
   useBigImage?: boolean;
-  setExternalVideo?: (video: any) => void;
+  setSelectedVideo?: (video: IUploadMediaWithId[]) => void;
+  setExternalVideo?: (video: IUploadMediaWithId[]) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   removeVideo?: () => void;
 }
@@ -22,11 +27,25 @@ const VideoPicker: FC<IVideoPickerProps> = ({
   isSelectedImage = false,
   useBigImage = false,
   setExternalVideo,
+  setSelectedVideo,
   setIsSelectedImage,
   removeVideo,
 }) => {
   const [pickedVideo, setPickedVideo] = useState<string[]>([]);
   const [thumbnailImage, setThumbnailImage] = useState<string>();
+  const { t } = useTranslation();
+  const [requirePermissionModal, setRequirePermissionModal] = useState(false);
+
+  const handleShowPermissionRequiredModal = () => {
+    setRequirePermissionModal(true);
+  };
+  const handleClosePermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+  };
+  const handleConfirmPermissionRequiredModal = () => {
+    setRequirePermissionModal(false);
+    Linking.openSettings();
+  };
 
   const generateThumbnail = async (video: string) => {
     try {
@@ -34,18 +53,19 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       if (setExternalVideo && setIsSelectedImage) {
         const id = getRandomId();
         setExternalVideo([{ id, uri }]);
+        setSelectedVideo && setSelectedVideo([{ id, uri: video }]);
         setIsSelectedImage(false);
         return;
       }
       if (setExternalVideo) {
         const id = getRandomId();
-        setExternalVideo([{ id, uri }]);
+        setExternalVideo([{ id, uri: video }]);
         setThumbnailImage(uri);
         return;
       }
       setThumbnailImage(uri);
     } catch (e) {
-      console.log(e);
+      console.error('generateThumbnail', e);
     }
   };
   useEffect(() => {
@@ -54,6 +74,13 @@ const VideoPicker: FC<IVideoPickerProps> = ({
   }, [pickedVideo]);
 
   const pickVideo = async () => {
+    const { status } =
+      await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      handleShowPermissionRequiredModal();
+      return;
+    }
+
     // No permissions request is necessary for launching the image library
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,
@@ -103,10 +130,10 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
       <TouchableOpacity
         onPress={pickVideo}
-        className="bg-gray-light mt-5 h-14 rounded-xl flex flex-row items-center justify-center "
+        className="bg-gray-light mt-5 flex h-14 flex-row items-center justify-center rounded-xl "
         disabled={!!isSelectedImage}
       >
-        <View className="rounded-xl flex flex-row items-center justify-center">
+        <View className="flex flex-row items-center justify-center rounded-xl">
           <CameraIcon fill={!isSelectedImage ? '#1C1B1F' : '#C5C8D2'} />
           <Text
             className={clsx(
@@ -118,6 +145,15 @@ const VideoPicker: FC<IVideoPickerProps> = ({
           </Text>
         </View>
       </TouchableOpacity>
+      <ConfirmDialog
+        title={t('dialog.alert_title') || ''}
+        description={t('image_picker.image_permission_required') || ''}
+        isVisible={requirePermissionModal}
+        onClosed={handleClosePermissionRequiredModal}
+        closeButtonLabel={t('close') || ''}
+        confirmButtonLabel={t('dialog.open_settings') || ''}
+        onConfirm={handleConfirmPermissionRequiredModal}
+      />
     </View>
   );
 };

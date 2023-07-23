@@ -1,40 +1,76 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 import AccorditionItem from './AccorditionItem';
 
-const Accordition = () => {
+interface IAccorditionProps {
+  navigation: any;
+}
+const Accordition = ({ navigation }: IAccorditionProps) => {
+  const { t } = useTranslation();
+
   return (
     <View>
-      <View className={clsx('flex flex-col pt-7')}>
+      <View className={clsx('flex flex-col pt-3')}>
         <View className={clsx('py-4')}>
-          <Text className={clsx('text-h4 font-medium')}>General Settings</Text>
+          <Text className={clsx('text-h4 font-medium')}>
+            {t('user_settings_screen.general_settings')}
+          </Text>
         </View>
         <View>
           <Text className={clsx('text-h6 font-normal leading-6')}>
-            Manage settings related to permissions, ads and other account
-            information.
+            {t('user_settings_screen.general_settings_description')}
           </Text>
         </View>
-        <AccorditionItem title='Cookie regulations' />
-        <AccorditionItem title='Preferences' />
-        <AccorditionItem title='Community Standards' />
-        <AccorditionItem title='Notifications' />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.general_settings_sections.cookie_regulation'
+          )}
+        />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.general_settings_sections.preferences'
+          )}
+        />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.general_settings_sections.community_standards'
+          )}
+        />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.general_settings_sections.notifications'
+          )}
+        />
       </View>
       <View className={clsx('flex flex-col pt-7')}>
         <View className={clsx('py-4')}>
-          <Text className={clsx('text-h4 font-medium')}>Accounts</Text>
+          <Text className={clsx('text-h4 font-medium')}>
+            {t('user_settings_screen.account')}
+          </Text>
         </View>
         <View>
           <Text className={clsx('text-h6 font-normal leading-6')}>
-            Manage settings related to permissions, ads and other account
-            information.
+            {t('user_settings_screen.account_settings_description')}
           </Text>
         </View>
-        <AccorditionItem title='Personal informations' />
-        <AccorditionItem title='Security and access' />
-        <AccorditionItem title='Condition of use' />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.account_settings_sections.personal_information'
+          )}
+          onPress={() => navigation.navigate("PersonalInformationScreen")} />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.account_settings_sections.security_and_access'
+          )}
+        />
+        <AccorditionItem
+          title={t(
+            'user_settings_screen.account_settings_sections.condition_of_use'
+          )}
+        />
       </View>
     </View>
   );

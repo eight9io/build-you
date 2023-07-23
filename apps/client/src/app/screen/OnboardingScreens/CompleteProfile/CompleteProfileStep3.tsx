@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import httpInstance from '../../../utils/http';
 
-import { useCompleteProfileStore } from '../../../store/complete-profile';
+import { useCompleteProfileStore } from '../../../store/complete-user-profile';
+
+import { IHardSkillProps } from '../../../types/user';
 
 import StepOfSteps from '../../../component/common/StepofSteps';
 import Button from '../../../component/common/Buttons/Button';
 import { CompleteProfileScreenNavigationProp } from './CompleteProfile';
-import NavButton from '../../../component/common/Buttons/NavButton';
-import Header from '../../../component/common/Header';
 import AddSkillModal from '../../../component/modal/AddSkill';
 
 interface CompleteProfileStep3Props {
@@ -24,11 +24,14 @@ interface MyObject {
 }
 
 const NUMBER_OF_SKILL_REQUIRED = 3;
+const MAX_NUMBER_OF_SKILL = 10;
 
 const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   navigation,
 }) => {
-  const [fetchedHardSkills, setFetchedHardSkills] = useState<string[]>([]);
+  const [fetchedHardSkills, setFetchedHardSkills] = useState<IHardSkillProps[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -43,127 +46,93 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   }, []);
 
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
-    string[]
+    IHardSkillProps[]
   >([]);
   const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
   const [isShowAddSkillModal, setIsShowAddSkillModal] =
     useState<boolean>(false);
-  const [userAddSkill, setUserAddSkill] = useState<string[]>([]);
-  const [arraySkills, setArraySkills] = useState<string[]>([]);
+  const [userAddSkill, setUserAddSkill] = useState<IHardSkillProps[]>([]);
 
   const { t } = useTranslation();
   const { setSkills } = useCompleteProfileStore();
 
   useEffect(() => {
-    const arraySkill = () => {
-      const array = [];
-      const ojb: MyObject = t('modal_skill.arraySkill', {
-        returnObjects: true,
-      });
-      for (const key in ojb) {
-        array.push(ojb[key]);
-      }
-      return array;
-    };
-    setArraySkills(arraySkill);
-  }, []);
-
-  useEffect(() => {
     if (userAddSkill.length > 0) {
-      setArraySkills((prev) => [...prev, ...userAddSkill]);
+      setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);
       setUserAddSkill([]);
     }
   }, [userAddSkill]);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    getValues,
-  } = useForm<{
-    firstName: string;
-    lastName: string;
-    birthday: Date;
-    occupation: string;
-  }>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      birthday: new Date(),
-      occupation: '',
-    },
-  });
-
-  const handleSubmitForm = (data: any) => {
-    // TODO: Handle validate form with yup and remove required in form
-    console.log(data);
-  };
-
-  const addCompetenceSkill = (skill: string) => {
-    if (!selectedCompetencedSkill.includes(skill)) {
+  const addCompetenceSkill = (skill: IHardSkillProps) => {
+    if (
+      selectedCompetencedSkill.length >= MAX_NUMBER_OF_SKILL &&
+      !selectedCompetencedSkill.find((item) => item.id === skill.id)
+    ) {
+      setNumberOfSkillError(true);
+      return;
+    }
+    if (!selectedCompetencedSkill.find((item) => item.id === skill.id)) {
       setSelectedCompetencedSkill((prev) => [...prev, skill]);
     } else {
       setSelectedCompetencedSkill((prev) =>
-        prev.filter((item) => item !== skill)
+        prev.filter((item) => item.id !== skill.id)
       );
     }
   };
 
   const checkNumberOfSkills = () => {
-    if (selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED) {
+    if (
+      selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length > MAX_NUMBER_OF_SKILL
+    ) {
       setNumberOfSkillError(true);
       return false;
     }
     setNumberOfSkillError(false);
     setSkills(selectedCompetencedSkill);
-    return selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED;
+    return (
+      selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length <= MAX_NUMBER_OF_SKILL
+    );
   };
 
   useEffect(() => {
-    if (selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED) {
+    if (
+      selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length <= MAX_NUMBER_OF_SKILL
+    ) {
       setNumberOfSkillError(false);
       return;
     }
   }, [selectedCompetencedSkill]);
 
   return (
-    <View className="flex h-full w-full flex-col items-center justify-start">
+    <View className="relative flex h-full w-full flex-col items-center justify-start">
       <AddSkillModal
         setUserAddSkill={setUserAddSkill}
         isVisible={isShowAddSkillModal}
         onClose={() => setIsShowAddSkillModal(false)}
       />
-      <Header
-        title="Complete profile"
-        leftBtn={
-          <NavButton
-            text="Back"
-            withBackIcon={true}
-            onPress={() => navigation.goBack()}
-          />
-        }
-      />
-      <View className="pt-4">
-        <StepOfSteps step={3} totalSteps={4} />
-      </View>
-      <View className="flex w-[282px] flex-col items-center justify-center py-6 ">
-        <Text className="text-black-default text-h4 text-center font-semibold leading-6">
-          How do you define yourself as competent?
-        </Text>
-        <Text className="text-gray-dark pt-2 text-center text-lg font-normal leading-5">
-          Choose at least 3 and up to a maximum of 10 hard skills to better tell
-          the community about yourself
-        </Text>
-      </View>
+      <ScrollView showsVerticalScrollIndicator>
+        <View>
+          <StepOfSteps step={3} totalSteps={4} />
+        </View>
+        <View className=" px-4 py-6 ">
+          <Text className="text-black-default text-h4 text-center font-semibold leading-6">
+            How do you define yourself as competent?
+          </Text>
+          <Text className="text-gray-dark pt-2 text-center text-lg font-normal leading-6">
+            Choose at least 3 and up to a maximum of 10 hard skills to better
+            tell the community about yourself
+          </Text>
+        </View>
 
-      <ScrollView showsVerticalScrollIndicator style={{ marginVertical: 40 }}>
-        <View className="h-full w-full flex-col justify-between">
-          <View className="align-center w-full flex-row flex-wrap justify-center">
-            {arraySkills.map((item, index) => (
+        <View className="w-full flex-col justify-between ">
+          <View className="w-full flex-row flex-wrap items-center justify-center">
+            {fetchedHardSkills.map((item, index) => (
               <Button
                 key={index}
-                title={item}
+                title={item.skill}
                 onPress={() => addCompetenceSkill(item)}
                 textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
                 containerClassName={clsx(
@@ -184,26 +153,21 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             onPress={() => setIsShowAddSkillModal(true)}
           />
           {numberOfSkillError && (
-            <Text className="pt-3 text-center text-sm font-normal leading-5 text-red-500">
-              Please select at least 3 skills
+            <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
+              Please select at least 3 skills and maximum of 10 skills
             </Text>
           )}
         </View>
+        <Button
+          title="Next"
+          containerClassName="flex-1 bg-primary-default my-5 mx-5"
+          textClassName="text-white text-md leading-6"
+          onPress={() =>
+            checkNumberOfSkills() &&
+            navigation.navigate('CompleteProfileStep4Screen')
+          }
+        />
       </ScrollView>
-
-      <View className="absolute bottom-0 left-0 h-16 w-full bg-white px-4">
-        <View className="h-12">
-          <Button
-            title="Next"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-            onPress={() =>
-              checkNumberOfSkills() &&
-              navigation.navigate('CompleteProfileStep4Screen')
-            }
-          />
-        </View>
-      </View>
     </View>
   );
 };

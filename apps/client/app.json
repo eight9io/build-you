@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Client",
-    "slug": "client",
-    "version": "1.0.0",
+    "name": "BuildYou",
+    "slug": "build-you",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.jpg",
+      "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
@@ -15,29 +15,34 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.buildyoutest.client",
-      "associatedDomains": ["applinks:com.buildyoutest.client"],
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "bundleIdentifier": "it.buildyou.buildyou",
+      "associatedDomains": ["applinks:buildyou-back.stg.startegois.com"],
+      "buildNumber": "7",
+      "supportsTablet": false,
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/adaptive-icon.png"
       },
-      "package": "com.buildyoutest.client"
+      "package": "it.buildyou.buildyou",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ],
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "userInterfaceStyle": "automatic",
-    "scheme": "com.buildyoutest.client",
-    "extra": {
-      "eas": {
-        "projectId": "fbbb7954-7ea7-4351-951c-fb3150b55b3d"
-      }
-    },
+    "scheme": "it.buildyou.buildyou",
     "plugins": [
       [
         "expo-av",
@@ -45,6 +50,7 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
       ],
+      "expo-apple-authentication",
       [
         "expo-build-properties",
         {
@@ -52,7 +58,18 @@
             "deploymentTarget": "13.0"
           }
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "77d6f55d-333d-4f73-b0ac-53deee609202"
+      }
+    }
   }
 }

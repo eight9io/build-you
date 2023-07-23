@@ -1,47 +1,92 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useState, FC, useEffect } from 'react';
+import {
+  NavigationProp,
+  useNavigation,
+  StackActions,
+} from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
-import clsx from 'clsx';
+import { IUserData } from '../../../types/user';
+import { IProgressChallenge } from '../../../types/challenge';
+import { RootStackParamList } from '../../../navigation/navigation.type';
 
-import Card from '../../common/Card';
-import IconLike from './asset/like.svg';
-import IconComment from './asset/comment.svg';
-import IconDot from './asset/dot.svg';
-import ProgressCardAvatar from '../../common/Avatar/PostAvatar';
 import PopUpMenu from '../../common/PopUpMenu';
 import ImageSwiper from '../../common/ImageSwiper';
+import VideoPlayer from '../../common/VideoPlayer';
+import ProgressCardAvatar from '../../common/Avatar/PostAvatar';
 
 import EditChallengeProgressModal from '../../modal/EditChallengeProgressModal';
 import ConfirmDialog from '../../common/Dialog/ConfirmDialog';
+import LikeButton from '../../Post/LikeButton';
+import CommentButton from '../../Post/CommentButton';
+
+import useModal from '../../../hooks/useModal';
+import { deleteProgress } from '../../../service/progress';
+import { getTimeDiffToNow } from '../../../utils/time';
+import { getSeperateImageUrls } from '../../../utils/image';
+import GlobalDialogController from '../../common/Dialog/GlobalDialogController';
+
+import IconDot from './asset/dot.svg';
+import { useUserProfileStore } from '../../../store/user-data';
+import GlobalToastController from '../../common/Toast/GlobalToastController';
 
 interface IProgressCardProps {
-  itemProgressCard: {
-    id: number;
-    name: string;
-    time: string;
-    stt: string;
-    place?: string;
-    card: {
-      image: string;
-      title: string;
-      builder: string;
-    };
-    like: number;
-    comment: number;
+  challengeOwner: {
     avatar: string;
+    id: string;
+    name: string;
+    surname: string;
+    companyAccount?: boolean;
   };
+  challengeName: string;
+  challengeId: string;
+  isJoined?: boolean | null;
+  userData: IUserData | null;
+  isOtherUserProfile?: boolean;
+  setProgressIndexToUpdate?: any;
+  isChallengeCompleted?: boolean;
+  itemProgressCard: IProgressChallenge;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsShowEditModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ProgressCard: React.FC<IProgressCardProps> = ({
-  itemProgressCard: { name, time, place, stt, card, like, comment, avatar },
+const ProgressCard: FC<IProgressCardProps> = ({
+  userData,
+  isJoined = false,
+  challengeId,
+  challengeName,
+  challengeOwner,
+  setShouldRefresh,
+  itemProgressCard,
+  setIsShowEditModal,
+  setProgressIndexToUpdate,
+  isOtherUserProfile = false,
+  isChallengeCompleted = false,
 }) => {
-  const [isShowEditModal, setIsShowEditModal] = React.useState(false);
-  const [isShowDeleteModal, setIsShowDeleteModal] = React.useState(false);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const timeDiff = getTimeDiffToNow(itemProgressCard.createdAt);
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const currentUserId = currentUser?.id;
+
+  const isChallengeOwnerCompanyAccount = challengeOwner?.companyAccount;
+
+  const {
+    isVisible: isAckModalVisible,
+    openModal: openAckModal,
+    closeModal: closeAckModal,
+  } = useModal();
 
   const progressOptions = [
     {
       text: 'Edit',
-      onPress: () => setIsShowEditModal(true),
+      onPress: () => {
+        setIsShowEditModal(true), setProgressIndexToUpdate();
+      },
     },
     {
       text: 'Delete',
@@ -49,57 +94,147 @@ const ProgressCard: React.FC<IProgressCardProps> = ({
     },
   ];
 
-  return (
-    <View className="mb-1 flex-1 bg-gray-50 p-5 ">
-      <EditChallengeProgressModal
-        imageSrc={card.image}
-        isVisible={isShowEditModal}
-        onClose={() => setIsShowEditModal(false)}
-      />
+  const handleNavigationToComment = () => {
+    if (!itemProgressCard?.id || !challengeOwner?.id) {
+      GlobalDialogController.showModal({
+        title: 'Error',
+        message: t('errorMessage:500') as string,
+      });
+      return;
+    }
 
-      <ConfirmDialog
-        isVisible={isShowDeleteModal}
-        onClosed={() => setIsShowDeleteModal(false)}
-      />
+    const pushAction = StackActions.push('ProgressCommentScreen', {
+      progressId: itemProgressCard.id,
+      ownerId: userData && userData.id,
+      challengeName: challengeName || '',
+      challengeId: challengeId,
+    });
+
+    navigation.dispatch(pushAction);
+  };
+
+  const extractedImageUrls = getSeperateImageUrls(itemProgressCard?.image);
+
+  const handleConfirmDeleteChallengeProgress = async () => {
+    setIsShowDeleteModal(false); // Close the delete confirm modal
+    setErrorMessage('');
+    try {
+      const res = await deleteProgress(itemProgressCard.id);
+      if (res.status === 200) {
+        // openAckModal();
+
+        GlobalToastController.showModal({
+          message: t('delete_progress.delete_success') as string,
+        });
+        handleCloseAckModal();
+        // clo
+      } else {
+        setErrorMessage(t('errorMessage:500') || '');
+      }
+    } catch (error) {
+      setErrorMessage(t('errorMessage:500') || '');
+    }
+  };
+
+  const handleDeleteProgressSuccess = () => {
+    setShouldRefresh(true);
+  };
+
+  const handleCloseAckModal = () => {
+    closeAckModal();
+    handleDeleteProgressSuccess(); // Navigate to the challenge progresses screen => delete it and refresh the list
+  };
+
+  const isProgressOwner = userData && userData?.id === currentUserId;
+
+  return (
+    <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
-        <View className="flex flex-row">
-          <ProgressCardAvatar src="https://picsum.photos/200/300" />
-          <View className="ml-2">
-            <Text className="text-h6 font-bold">{name}</Text>
+        <TouchableOpacity
+          className="flex flex-1 flex-row"
+          onPress={() => {
+            if (!userData?.id) return;
+            // navigation.push('OtherUserProfileScreen', {
+            //   userId: userData?.id,
+            // });
+            const pushAction = StackActions.push('OtherUserProfileScreen', {
+              userId: userData?.id,
+            });
+            navigation.dispatch(pushAction);
+          }}
+        >
+          <ProgressCardAvatar src={userData?.avatar} />
+          <View className="ml-2 flex-1">
+            <Text
+              className={`text-h6 font-bold ${
+                isProgressOwner ? 'text-primary-default' : 'text-black'
+              }`}
+            >
+              {userData?.name} {userData?.surname}
+            </Text>
             <View className="flex flex-row items-center">
               <Text className="text-gray-dark text-xs font-light ">
-                {time}
-                {'  '}
+                {timeDiff}{' '}
               </Text>
-              <IconDot fill={'#7D7E80'} />
-              <Text className="text-gray-dark text-xs font-light ">
-                {'  '}123 Amanda Street
-              </Text>
+
+              {itemProgressCard?.location && (
+                <Text className="text-gray-dark text-xs font-light ">
+                  <IconDot fill={'#7D7E80'} /> {itemProgressCard?.location}
+                </Text>
+              )}
             </View>
           </View>
-        </View>
-        <PopUpMenu options={progressOptions} />
+        </TouchableOpacity>
+        {((isJoined && isProgressOwner) || (!isChallengeOwnerCompanyAccount && isProgressOwner))  && (
+          <PopUpMenu
+            options={progressOptions}
+            isDisabled={isChallengeCompleted || itemProgressCard?.first}
+          />
+        )}
       </View>
-      <Text className=" text-md mb-3 font-normal leading-5">{stt}</Text>
+      {itemProgressCard?.caption && (
+        <Text className=" text-md mb-1 font-normal leading-5">
+          {itemProgressCard?.caption}
+        </Text>
+      )}
+      {extractedImageUrls && (
+        <View className="mt-2 aspect-square w-full rounded-xl">
+          <ImageSwiper imageSrc={extractedImageUrls} />
+        </View>
+      )}
+      {itemProgressCard?.video && <VideoPlayer src={itemProgressCard.video} />}
 
-      <View className="">
-        <ImageSwiper imageSrc={card.image} />
+      <View className="mt-3 flex-row">
+        <LikeButton
+          progressId={itemProgressCard.id}
+          currentUserId={currentUser?.id}
+        />
+        <CommentButton
+          navigationToComment={handleNavigationToComment}
+          progressId={itemProgressCard.id}
+        />
       </View>
 
-      <View className="mt-4 flex-row ">
-        <View className="flex-row items-center gap-2">
-          <IconLike />
-          <Text className="text-gray-dark text-md font-normal ">
-            {like} likes
-          </Text>
-        </View>
-        <View className="ml-8 flex-row items-center ">
-          <IconComment />
-          <Text className="text-gray-dark text-md ml-2 font-normal ">
-            {comment} comments
-          </Text>
-        </View>
-      </View>
+      <ConfirmDialog
+        title={(!errorMessage ? t('success') : t('error')) || ''}
+        description={
+          (!errorMessage
+            ? t('delete_progress.delete_success')
+            : t('errorMessage:500')) || ''
+        }
+        isVisible={isAckModalVisible}
+        onClosed={handleCloseAckModal}
+        closeButtonLabel={t('close') || ''}
+      />
+      <ConfirmDialog
+        isVisible={isShowDeleteModal}
+        onConfirm={handleConfirmDeleteChallengeProgress}
+        onClosed={() => setIsShowDeleteModal(false)}
+        title={t('dialog.delete_progress.title') as string}
+        confirmButtonLabel="Delete"
+        closeButtonLabel="Cancel"
+        description={t('dialog.delete_progress.description') as string}
+      />
     </View>
   );
 };

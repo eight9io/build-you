@@ -1,30 +1,57 @@
-import React from 'react';
-import clsx from 'clsx';
-import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import NotiItem from './NotiItem';
-
-interface INotificaitonProps {
-  title: string;
-  notificationItems?: any[];
-  isPrevious?: boolean;
+import { INotification } from '../../types/notification';
+import { getNotifications } from '../../service/notification';
+import GlobalDialogController from '../common/Dialog/GlobalDialogController';
+import SkeletonLoadingCommon from '../common/SkeletonLoadings/SkeletonLoadingCommon';
+import EmptyNotification from '../../component/asset/empty-notification.svg';
+interface INotificationProps {
+  title?: string;
+  notifications: INotification[];
+  isRefreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-const Notificaiton: React.FC<INotificaitonProps> = ({
+const Notification: React.FC<INotificationProps> = ({
   title,
-  notificationItems,
-  isPrevious = false,
+  notifications,
+  isRefreshing,
+  onRefresh,
 }) => {
+  const { t } = useTranslation();
+
   return (
-    <View className='flex flex-col'>
-      <View className='px-6 py-4 bg-gray-100'>
-        <Text className='text-lg font-medium'>{title}</Text>
-      </View>
-      <NotiItem typeOfNoti='comment' isPrevious={isPrevious}/>
-      <NotiItem typeOfNoti='follow' isPrevious={isPrevious}/>
-      <NotiItem typeOfNoti='comment' isPrevious={isPrevious}/>
+    <View className="mt-4 flex-1">
+      {title ? (
+        <View className="px-6 py-4">
+          <Text className="text-lg font-medium">{title}</Text>
+        </View>
+      ) : null}
+      {notifications.length > 0 ? (
+        <FlatList
+          data={notifications}
+          renderItem={({ item, index }) => {
+            return <NotiItem notification={item} key={index} />;
+          }}
+          keyExtractor={(item) => item.createdAt.toString()} // TODO: change to id
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+        />
+      ) : (
+        <>
+          <View className="flex-1 items-center justify-center">
+            <EmptyNotification />
+            <Text className="text-gray-dark font-regular text-center text-base">
+              {t('notification_screen.no_notification')}
+            </Text>
+          </View>
+        </>
+      )}
     </View>
   );
 };
 
-export default Notificaiton;
+export default Notification;

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 
 import clsx from 'clsx';
 import TextInput from '../TextInput';
-import WarningSvg from './asset/warning.svg';
+import WarningSvg from '../../../asset/warning.svg';
 
 interface IInlineTextInputProps {
   title: string;

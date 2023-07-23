@@ -1,16 +1,23 @@
 import {
   View,
-  Text,
   Modal,
   SafeAreaView,
-  TextInput,
-  Image,
   Dimensions,
   ScaledSize,
+  Platform,
 } from 'react-native';
-import React, { FC, useState, useEffect, ReactNode } from 'react';
+import { Image } from 'expo-image';
+import React, { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+import { useUserProfileStore } from '../../store/user-data';
+import { IUploadMediaWithId } from '../../types/media';
+import { getRandomId } from '../../utils/common';
+import { CreateProgressValidationSchema } from '../../Validators/CreateProgress.validate';
 
 import Header from '../common/Header';
 import Button from '../common/Buttons/Button';
@@ -18,30 +25,42 @@ import ImagePicker from '../common/ImagePicker';
 import VideoPicker from '../common/VideoPicker';
 import LocationInput from '../common/Inputs/LocationInput';
 import CustomTextInput from '../common/Inputs/CustomTextInput';
-
-import { IUploadMediaWithId } from '../../types/media';
-
 import Close from '../../component/asset/close.svg';
+import {
+  createProgress,
+  deleteProgress,
+  updateProgressImage,
+  updateProgressVideo,
+} from '../../service/progress';
+import ConfirmDialog from '../common/Dialog/ConfirmDialog';
+import ErrorText from '../common/ErrorText';
+import GlobalToastController from '../common/Toast/GlobalToastController';
 
 interface IAddNewChallengeProgressModalProps {
+  challengeId: string;
   isVisible: boolean;
   onClose: () => void;
+  setShouldRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  setProgressLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IRenderSelectedMediaProps {
   screen: ScaledSize;
   selectedMedia: IUploadMediaWithId[];
   setSelectedMedia: (prev: IUploadMediaWithId[]) => void;
+  onRemoveItem?: (medias: IUploadMediaWithId[]) => void;
 }
 
 const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
   screen,
   selectedMedia,
   setSelectedMedia,
+  onRemoveItem,
 }) => {
   const handleRemoveItem = (id: string) => {
     const filteredMedia = selectedMedia.filter((media) => media.id !== id);
     setSelectedMedia(filteredMedia);
+    onRemoveItem && onRemoveItem(filteredMedia);
   };
 
   // px-5 + gap-2 + gap-2 = 56
@@ -70,94 +89,259 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
         ))}
     </View>
   );
-  ``;
 };
 
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
-> = ({ isVisible, onClose }) => {
+> = ({
+  setProgressLoading,
+  setShouldRefetch,
+  challengeId,
+  isVisible,
+  onClose,
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<IUploadMediaWithId[]>([]);
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
+    null
+  );
+  const [shouldDisableAddImage, setShouldDisableAddImage] =
+    useState<boolean>(false);
+
+  const { getUserProfile } = useUserProfileStore();
+  const userProfile = getUserProfile();
 
   const { t } = useTranslation();
   const {
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
+    setValue,
+    setError,
+    formState: { errors, isDirty },
+  } = useForm<{
+    challenge: string;
+    caption: string;
+    location: string;
+    media?: any;
+  }>({
     defaultValues: {
-      goalName: '',
-      uploadMedia: '',
+      challenge: '',
+      caption: '',
       location: '',
+      media: undefined,
     },
+    resolver: yupResolver(CreateProgressValidationSchema()),
+    reValidateMode: 'onChange',
   });
 
   useEffect(() => {
     if (selectedMedia.length === 0) {
       setIsSelectedImage(null);
+      setShouldDisableAddImage(false);
+      return;
+    } else if (selectedMedia.length >= 3) {
+      setShouldDisableAddImage(true);
+    } else if (selectedMedia.length < 3) {
+      setShouldDisableAddImage(false);
     }
   }, [selectedMedia]);
 
-  const onSubmit = (data: any) => console.log(data);
-  // TODO: handle change CREATE text color when input is entered
+  const onSubmit = async (data: any) => {
+    try {
+      setIsLoading(true);
+      if (!userProfile || !userProfile.id) return;
+      const payload = {
+        user: userProfile.id,
+        challenge: challengeId,
+        caption: data.caption,
+        location: data.location,
+      };
+
+      const createProgressResponse = await createProgress(payload);
+
+      if (
+        (createProgressResponse.status === 200 || 201) &&
+        selectedMedia.length > 0
+      ) {
+        const progressId = createProgressResponse.data.id;
+        if (isSelectedImage) {
+          await updateProgressImage(progressId, selectedMedia)
+            .then((res) => {
+              if (res.status === 200 || 201) {
+                // setIsRequestSuccess(true);
+                // setIsShowModal(true);
+                handleCloseModal();
+                GlobalToastController.showModal({
+                  message:
+                    t('toast.create_progress_success') ||
+                    'Your progress has been created successfully!',
+                });
+              }
+            })
+            .catch((_) => {
+              setIsRequestSuccess(false);
+              setIsShowModal(true);
+              deleteProgress(progressId);
+            });
+        } else {
+          await updateProgressVideo(progressId, selectedVideo[0])
+            .then((res) => {
+              if (res.status === 200 || 201) {
+                // setIsRequestSuccess(true);
+                // setIsShowModal(true);
+
+                handleCloseModal();
+                GlobalToastController.showModal({
+                  message:
+                    t('toast.create_progress_success') ||
+                    'Your progress has been created successfully!',
+                });
+              }
+            })
+            .catch((_) => {
+              setIsRequestSuccess(false);
+              setIsShowModal(true);
+              deleteProgress(progressId);
+            });
+        }
+        setIsLoading(false);
+
+        return;
+      }
+    } catch (error) {
+      setIsRequestSuccess(false);
+      setIsShowModal(true);
+      setIsLoading(false);
+    }
+  };
 
   const screen = Dimensions.get('window');
+
+  const handleCloseModal = () => {
+    setIsShowModal(false);
+    onClose();
+    setProgressLoading(true);
+    setShouldRefetch(true);
+  };
 
   return (
     <Modal
       animationType="slide"
       presentationStyle="pageSheet"
       visible={isVisible}
+      className="h-full"
     >
-      <SafeAreaView className="bg-white">
-        <View className="mt-4 flex h-full  rounded-t-xl bg-white">
-          <View className="mt-6">
+      <SafeAreaView className="flex-1 bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flex: 1,
+          }}
+        >
+          <ConfirmDialog
+            title={isRequestSuccess ? 'Success' : 'Error'}
+            description={
+              isRequestSuccess
+                ? 'Your progress has been created successfully'
+                : 'Something went wrong. Please try again later.'
+            }
+            isVisible={isShowModal}
+            onClosed={handleCloseModal}
+            closeButtonLabel="Got it"
+          />
+          <View className="mx-4  h-full rounded-t-xl">
             <Header
-              title="New challenge"
-              rightBtn="CREATE"
+              title={t('challenge_detail_screen.new_progress') as string}
+              rightBtn={
+                t('challenge_detail_screen.new_progress_post') as string
+              }
               leftBtn="Cancel"
               onLeftBtnPress={onClose}
-            />
-          </View>
-
-          <View className="flex flex-col justify-between px-5 pt-4">
-            <CustomTextInput
-              title="Caption"
-              placeholderClassName="h-32"
-              placeholder="What do you achieve?"
-              control={control}
+              onRightBtnPress={handleSubmit(onSubmit)}
+              containerStyle={Platform.OS === 'ios' ? 'mt-5' : 'mt-0'}
             />
 
-            {selectedMedia && (
-              <RenderSelectedMedia
-                screen={screen}
-                selectedMedia={selectedMedia}
-                setSelectedMedia={setSelectedMedia}
+            <View className="flex flex-col justify-between pt-4">
+              <CustomTextInput
+                title="Caption"
+                placeholderClassName="h-32"
+                placeholder="What do you achieve?"
+                control={control}
+                errors={errors.caption}
               />
-            )}
 
-            <View className="">
-              <ImagePicker
-                setExternalImages={setSelectedMedia}
-                allowsMultipleSelection
-                isSelectedImage={isSelectedImage}
-                setIsSelectedImage={setIsSelectedImage}
-              />
-            </View>
+              {selectedMedia && (
+                <RenderSelectedMedia
+                  screen={screen}
+                  selectedMedia={selectedMedia}
+                  setSelectedMedia={setSelectedMedia}
+                  onRemoveItem={(medias) => {
+                    if (!medias.length) {
+                      setError('media', {
+                        message: 'Please upload images or video',
+                        type: 'required',
+                      });
+                    }
+                  }}
+                />
+              )}
 
-            <View className="">
-              <VideoPicker
-                setExternalVideo={setSelectedMedia}
-                isSelectedImage={isSelectedImage}
-                setIsSelectedImage={setIsSelectedImage}
-              />
-            </View>
+              <View>
+                <View className="">
+                  <ImagePicker
+                    onImagesSelected={(images) => {
+                      setSelectedMedia((prev: IUploadMediaWithId[]) => {
+                        const imagesSelected: IUploadMediaWithId[] = images.map(
+                          (uri) => {
+                            const id = getRandomId();
+                            setValue('media', uri, { shouldValidate: true });
+                            return {
+                              id,
+                              uri: uri,
+                            };
+                          }
+                        );
 
-            <View className="pt-4">
-              <LocationInput control={control} />
+                        if (prev.length + imagesSelected.length > 3) {
+                          return prev;
+                        }
+                        return [...prev, ...imagesSelected];
+                      });
+                    }}
+                    allowsMultipleSelection
+                    isSelectedImage={isSelectedImage}
+                    setIsSelectedImage={setIsSelectedImage}
+                    isDisabled={shouldDisableAddImage}
+                  />
+                </View>
+
+                <View className="flex flex-col">
+                  <VideoPicker
+                    setExternalVideo={(video) => {
+                      setSelectedMedia(video);
+                      setValue('media', video, { shouldValidate: true });
+                    }}
+                    setSelectedVideo={setSelectedVideo}
+                    isSelectedImage={isSelectedImage}
+                    setIsSelectedImage={setIsSelectedImage}
+                  />
+                </View>
+                {errors?.media && <ErrorText message={errors.media.message} />}
+              </View>
+
+              <View className="flex flex-col pt-4">
+                <LocationInput
+                  control={control}
+                  errors={errors.location}
+                  setFormValue={setValue}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Modal>
   );

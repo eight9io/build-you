@@ -1,5 +1,5 @@
-import { View, Text, Modal, Dimensions } from "react-native";
-import React, { FC, useEffect, useState } from "react";
+import { View, Text, Modal } from "react-native";
+import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 

@@ -9,17 +9,15 @@ interface IVideoPlayerProps {
   src?: string;
 }
 const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
-  const videoPlayer = React.useRef(null);
+  const videoPlayer = React.useRef<Video>(null);
   const [status, setStatus] = React.useState<AVPlaybackStatus>(
     {} as AVPlaybackStatus
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
 
   useEffect(() => {
-    if (status && status.isLoaded) {
-      if (status.isPlaying) {
-        setIsVideoPlayed(true);
-      }
+    if (status && status.isLoaded && status.isPlaying) {
+      setIsVideoPlayed(true);
     }
   }, [status]);
   //expo video doesn't support tailwind
@@ -29,7 +27,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
     >
       {!src && (
         <Video
-          ref={videoPlayer}
+          ref={(r) => (videoPlayer.current = r)}
           source={{
             uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
           }}
@@ -65,7 +63,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
         <TouchableOpacity
           className={clsx("absolute translate-x-1/2 translate-y-1/2")}
           onPress={() => {
-            (videoPlayer.current as any)?.playAsync();
+            videoPlayer.current?.playAsync();
           }}
         >
           <PlayButton />

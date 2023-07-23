@@ -34,18 +34,16 @@ export const VideoWithPlayButton = ({
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
-    if (status && status.isLoaded) {
-      if (status.isPlaying) {
-        setIsVideoPlayed(true);
-      }
+    if (status && status.isLoaded && status.isPlaying) {
+      setIsVideoPlayed(true);
     }
   }, [status]);
   //expo video doesn't support tailwind
   return (
     <View
-      className={clsx(
+      className={
         "relative flex flex-col items-center justify-center rounded-xl  bg-gray-200"
-      )}
+      }
     >
       {src && (
         <Video

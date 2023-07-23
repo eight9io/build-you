@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { useState, FC, useEffect } from "react";
+import { useState, FC } from "react";
 import {
   NavigationProp,
   useNavigation,
@@ -16,7 +16,6 @@ import ImageSwiper from "../../common/ImageSwiper";
 import VideoPlayer from "../../common/VideoPlayer";
 import ProgressCardAvatar from "../../common/Avatar/PostAvatar";
 
-import EditChallengeProgressModal from "../../modal/EditChallengeProgressModal";
 import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
 import LikeButton from "../../Post/LikeButton";
 import CommentButton from "../../Post/CommentButton";
@@ -61,7 +60,6 @@ const ProgressCard: FC<IProgressCardProps> = ({
   itemProgressCard,
   setIsShowEditModal,
   setProgressIndexToUpdate,
-  isOtherUserProfile = false,
   isChallengeCompleted = false,
 }) => {
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);

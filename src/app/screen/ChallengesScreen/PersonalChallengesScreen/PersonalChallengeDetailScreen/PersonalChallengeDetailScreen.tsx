@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
 
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useIsFocused, useFocusEffect } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+// import { useIsFocused } from "@react-navigation/native";
 
 import httpInstance from "../../../../utils/http";
 import {
@@ -28,8 +29,6 @@ import TaskAltIcon from "./assets/task-alt.svg";
 import TaskAltIconGray from "./assets/task-alt-gray.svg";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { use } from "i18next";
-import { useTranslation } from "react-i18next";
 
 const image = Asset.fromModule(require("./assets/test.png"));
 
@@ -43,7 +42,7 @@ interface IRightPersonalChallengeDetailOptionsProps {
   onEditChallengeBtnPress?: () => void;
   shouldRenderEditAndDeleteBtns?: boolean | null;
   shouldRenderCompleteBtn?: boolean;
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDeleteChallengeDialogVisible?: React.Dispatch<
     React.SetStateAction<boolean>
   >;
@@ -53,7 +52,7 @@ export const RightPersonalChallengeDetailOptions: FC<
   IRightPersonalChallengeDetailOptionsProps
 > = ({
   challengeData,
-  setShouldRefresh,
+  refresh,
   onEditChallengeBtnPress,
   shouldRenderCompleteBtn = true,
   shouldRenderEditAndDeleteBtns = true,
@@ -127,7 +126,7 @@ export const RightPersonalChallengeDetailOptions: FC<
         if (res.status === 200 || res.status === 201) {
           setIsChallengeCompleted(true);
           setIsCompletedChallengeDialogVisible(false);
-          setShouldRefresh(true);
+          refresh();
           GlobalToastController.showModal({
             message:
               t("toast.completed_challenge_success") ||
@@ -235,18 +234,12 @@ const PersonalChallengeDetailScreen = ({
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
     undefined
   );
-  const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
-
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
-
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
 
   const challengeId = route?.params?.challengeId;
-
-  const isFocused = useIsFocused();
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -255,7 +248,7 @@ const PersonalChallengeDetailScreen = ({
     ? challengeData?.owner[0]
     : challengeData?.owner;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
     navigation.setOptions({
       headerRight: () => (
@@ -263,7 +256,7 @@ const PersonalChallengeDetailScreen = ({
           challengeData={challengeData}
           shouldRenderEditAndDeleteBtns={challengeOwner?.id === currentUser?.id}
           shouldRenderCompleteBtn={isJoinedLocal}
-          setShouldRefresh={setShouldRefresh}
+          refresh={refresh}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
           setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
@@ -271,19 +264,15 @@ const PersonalChallengeDetailScreen = ({
     });
   }, [challengeData, isJoinedLocal]);
 
-  useEffect(() => {
-    if (!challengeId && !shouldRefresh) return;
-    if (isFirstLoad) setIsFirstLoad(false);
+  const refresh = () => {
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-    setShouldRefresh(false);
-  }, [challengeId, shouldRefresh]);
+  };
 
   useEffect(() => {
-    if (!isFocused || isFirstLoad) return;
-    setShouldRefresh(true);
-  }, [isFocused]);
+    refresh();
+  }, []);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -293,7 +282,7 @@ const PersonalChallengeDetailScreen = ({
   };
 
   const handleEditChallengeModalConfirm = () => {
-    setShouldRefresh(true);
+    refresh();
     setIsEditChallengeModalVisible(false);
   };
 
@@ -344,7 +333,7 @@ const PersonalChallengeDetailScreen = ({
         <>
           <ChallengeDetailScreen
             challengeData={challengeData}
-            shouldRefresh={shouldRefresh}
+            refresh={refresh}
             setIsJoinedLocal={setIsJoinedLocal}
             setShouldRefresh={setShouldRefresh}
           />

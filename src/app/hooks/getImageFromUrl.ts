@@ -36,7 +36,7 @@ export const getImageFromUrl = (
     };
 
     fetchImage();
-  }, [url]);
+  }, []);
 
   return [imageSource, loading, error];
 };

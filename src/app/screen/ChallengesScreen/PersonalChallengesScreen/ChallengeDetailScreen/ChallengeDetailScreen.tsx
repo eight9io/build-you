@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+import { AxiosError } from "axios";
+import { FC, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 
 import { IChallenge } from "../../../../types/challenge";
@@ -5,7 +8,6 @@ import i18n from "../../../../i18n/i18n";
 import TabView from "../../../../component/common/Tab/TabView";
 import DescriptionTab from "./DescriptionTab";
 import ProgressTab from "./ProgressTab";
-import { FC, useEffect, useState } from "react";
 
 import CheckCircle from "./assets/check_circle.svg";
 
@@ -20,21 +22,18 @@ import {
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
-  shouldRefresh: boolean;
+
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: React.Dispatch<React.SetStateAction<void>>;
 }
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
-  shouldRefresh,
   setIsJoinedLocal,
-  setShouldRefresh,
+  refresh,
 }) => {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
@@ -43,13 +42,14 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const [participantList, setParticipantList] = useState([]);
+
+  const fetchParticipants = async () => {
+    const response = await getChallengeParticipants(challengeId);
+    setParticipantList(response.data);
+  };
   useEffect(() => {
-    const fetchParticipants = async () => {
-      const response = await getChallengeParticipants(challengeId);
-      setParticipantList(response.data);
-    };
     fetchParticipants();
-  }, [challengeId, isJoined]);
+  }, []);
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
@@ -94,6 +94,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       });
       setIsJoined(true);
       setIsJoinedLocal && setIsJoinedLocal(true);
+      fetchParticipants();
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
@@ -120,6 +121,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       });
       setIsJoined(false);
       setIsJoinedLocal && setIsJoinedLocal(false);
+      fetchParticipants();
     } catch (err) {
       GlobalDialogController.showModal({
         title: "Error",
@@ -186,9 +188,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           <ProgressTab
             isJoined={isJoined}
             isChallengeCompleted={isChallengeCompleted}
-            shouldRefresh={shouldRefresh}
             challengeData={challengeData}
-            setShouldRefresh={setShouldRefresh}
+            refresh={refresh}
           />
           <DescriptionTab challengeData={challengeData} />
           {participantList && challengeOwner?.companyAccount && (

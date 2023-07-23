@@ -1,9 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
 
-import { Asset } from "expo-asset";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 
@@ -229,9 +226,9 @@ const CompanyChallengeDetailScreen = ({
 
   const challengeId = route?.params?.challengeId;
 
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
     navigation.setOptions({
       headerRight: () => (
@@ -252,13 +249,13 @@ const CompanyChallengeDetailScreen = ({
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-    setShouldRefresh(false);
-  }, [challengeId, shouldRefresh]);
+    // setShouldRefresh(false);
+  }, []);
 
-  useEffect(() => {
-    if (!isFocused || isFirstLoad) return;
-    setShouldRefresh(true);
-  }, [isFocused]);
+  // useEffect(() => {
+  //   if (!isFocused || isFirstLoad) return;
+  //   setShouldRefresh(true);
+  // }, []);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);

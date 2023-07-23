@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
+import { View, Text, TouchableHighlight } from "react-native";
 import { clsx } from "clsx";
 
 import CommentSvg from "./asset/comment.svg";
 import { getProgressComments } from "../../service/progress";
-import GlobalDialogController from "../common/Dialog/GlobalDialogController";
+// import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 import { debounce } from "../../hooks/useDebounce";
 
 interface ICommentButtonProps {
@@ -17,42 +17,48 @@ interface ICommentButtonProps {
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
-  isFocused = false,
+  // isFocused = false,
   isViewOnly = false,
   navigationToComment,
-  shouldRefreshComments = false,
+  // shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
-  useEffect(() => {
-    if (!isFocused) return;
-    (async () => {
-      await loadProgressComments();
-    })();
-  }, [isFocused]);
 
+  // TODO use focus only on root screen, not on component
   useEffect(() => {
-    if (!progressId) return;
-    (async () => {
-      await loadProgressComments();
-    })();
-  }, [progressId]);
+    // if (!isFocused) return;
+    loadProgressComments();
+    // (async () => {
+    //   await loadProgressComments();
+    // })();
+  }, []);
 
-  useEffect(() => {
-    if (!shouldRefreshComments) return;
-    (async () => {
-      await loadProgressComments();
-    })();
-  }, [shouldRefreshComments]);
+  // TODO seems a useless hook
+  // useEffect(() => {
+  //   if (!progressId) return;
+  //   (async () => {
+  //     await loadProgressComments();
+  //   })();
+  // }, [progressId]);
+
+  // TODO seems a useless hook
+  // useEffect(() => {
+  //   if (!shouldRefreshComments) return;
+  //   (async () => {
+  //     await loadProgressComments();
+  //   })();
+  // }, [shouldRefreshComments]);
 
   const loadProgressComments = async () => {
     try {
       const response = await getProgressComments(progressId);
       if (response.status === 200) setNumberOfComments(response.data.length);
     } catch (_) {
-      GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later.",
-      });
+      // TODO this could lead to multiple modal showing that crash app
+      // GlobalDialogController.showModal({
+      //   title: "Error",
+      //   message: "Something went wrong. Please try again later.",
+      // });
     }
   };
   const handleNavigationToComment = debounce(() => {

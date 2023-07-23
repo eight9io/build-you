@@ -62,29 +62,33 @@ const LikeButton: FC<ILikeButtonProps> = ({
     }
   };
 
+  // TODO focused should only use on root screen, not in component
   useEffect(() => {
-    if (!isFocused || isFirstLoad) return;
-    if (shouldOptimisticUpdate) {
-      setShouldOptimisticUpdate(false);
-      return;
-    }
-    (async () => {
-      await loadProgressLikes();
-    })();
-  }, [isFocused]);
-
-  useEffect(() => {
-    (async () => {
-      await loadProgressLikes();
-    })();
-  }, [progressId, currentUserId]);
-
-  useEffect(() => {
-    (async () => {
-      await loadProgressLikes();
-    })();
+    // if (!isFocused || isFirstLoad) return;
+    // if (shouldOptimisticUpdate) {
+    //   setShouldOptimisticUpdate(false);
+    //   return;
+    // }
+    // (async () => {
+    //   await loadProgressLikes();
+    // })();
+    loadProgressLikes();
   }, []);
 
+  // TODO seems useless hook
+  // useEffect(() => {
+  //   (async () => {
+  //     await loadProgressLikes();
+  //   })();
+  // }, [progressId, currentUserId]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     await loadProgressLikes();
+  //   })();
+  // }, []);
+
+  // TODO for optimistic like just update the state and consider using https://www.npmjs.com/package/@chris.troutner/retry-queue for api call
   useEffect(() => {
     setTempLikes(numberOfLikes);
   }, [numberOfLikes]);
@@ -95,7 +99,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
       return navigation.navigate("LoginScreen");
     }
     if (isLikedByCurrentUser) {
-      deleteProgressLike(progressId).then((res) => {
+      deleteProgressLike(progressId).then(() => {
         setShouldOptimisticUpdate(true);
         setIsLikedByCurrentUser && setIsLikedByCurrentUser(false);
         setIsLiked(false);
@@ -104,7 +108,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
       return;
     }
     createProgressLike(progressId)
-      .then((res) => {
+      .then(() => {
         setShouldOptimisticUpdate(true);
         setIsLikedByCurrentUser && setIsLikedByCurrentUser(true);
         setIsLiked(true);

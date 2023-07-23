@@ -13,7 +13,6 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 import CompanyComponent from "../../../component/Profile/Company/CompanyProfileComponent";
 import AppTitle from "../../../component/common/AppTitle";
 import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
-import { useIsFocused } from "@react-navigation/native";
 import { serviceGetMyProfile } from "../../../service/auth";
 import { useUserProfileStore } from "../../../store/user-store";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
@@ -38,10 +37,8 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
   const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
     useState<boolean>(true);
 
-  const isFocused = useIsFocused();
   const { setUserProfile, getUserProfile } = useUserProfileStore();
   useEffect(() => {
-    if (!isFocused) return;
     if (shouldNotLoadOnFirstFocus) {
       setShouldNotLoadOnFirstFocus(false);
       return;
@@ -53,7 +50,7 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
       .catch((err) => {
         console.error("err", err);
       });
-  }, [isFocused]);
+  }, []);
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (

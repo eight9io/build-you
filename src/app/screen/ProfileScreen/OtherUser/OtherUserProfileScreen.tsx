@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
-import { View, SafeAreaView, Text, ScrollView, FlatList } from "react-native";
+import React, { FC, useState } from "react";
+import { View, SafeAreaView, Text, FlatList } from "react-native";
 import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";

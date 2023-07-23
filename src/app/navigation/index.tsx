@@ -68,6 +68,8 @@ export const RootNavigation = () => {
         Promise.all([initUserProfile()]).finally(() =>
           setTimeout(SplashScreen.hideAsync, 300)
         );
+      } else {
+        SplashScreen.hideAsync();
       }
     }
   }, [authStoreHydrated]);

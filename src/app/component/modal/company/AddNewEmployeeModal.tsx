@@ -1,5 +1,5 @@
 import { View, Modal } from "react-native";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,8 +28,6 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const [isSuccessDialogVisible, setIsSuccessDialogVisible] =
-    useState<boolean>(false);
   const [isErrorDialogVisible, setIsErrorDialogVisible] = useState({
     isShow: false,
     description: t("error_general_message") as string,
@@ -50,7 +48,7 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
   });
 
   // add company id
-  const { getEmployeeList, setEmployeeList } = useEmployeeListStore();
+  const { setEmployeeList } = useEmployeeListStore();
   const onSubmit = (data: any) => {
     if (!userData?.id) {
       setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });

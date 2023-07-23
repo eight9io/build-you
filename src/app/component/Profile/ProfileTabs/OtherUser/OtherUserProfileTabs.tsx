@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { FlatList, ScrollView, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
@@ -48,10 +48,11 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
     } else {
       setIsCurrentUserInSameCompanyWithViewingUser(false);
     }
-  }, [otherUserCompanyEmployeeOf?.id, userProfile?.employeeOf?.id]);
+  }, []);
 
   useEffect(() => {
     if (!otherUserData?.id) return;
+    //TODO add typescript
     fetchListEmployee(otherUserData?.id, (res: any) => {
       if (
         !!res?.find((item: any) => item?.id === userProfile?.id) ||
@@ -66,7 +67,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
     setTimeout(() => {
       setIsLoading(false);
     }, 300);
-  }, [otherUserData?.id]);
+  }, []);
 
   const titles = isCurrentUserInCompany
     ? [

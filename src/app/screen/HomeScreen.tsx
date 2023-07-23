@@ -1,11 +1,6 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
-import { View, FlatList, SafeAreaView, Text, Platform } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { View, FlatList, SafeAreaView, Text } from "react-native";
 import clsx from "clsx";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { t } from "i18next";
@@ -31,7 +26,6 @@ import GlobalDialogController from "../component/common/Dialog/GlobalDialogContr
 import { useAuthStore } from "../store/auth-store";
 import { useUserProfileStore } from "../store/user-store";
 import {
-  getFocusedRouteNameFromRoute,
   NavigationProp,
   useIsFocused,
   useNavigation,
@@ -45,16 +39,13 @@ import { useChallengeUpdateStore } from "../store/challenge-update-store";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
-interface IFeedDataProps {}
-
 export const HomeFeed = () => {
   const [feedPage, setFeedPage] = useState<number>(1);
   const [feedData, setFeedData] = useState<any>([]);
-  const [dataSource, setDataSource] = useState<[]>([]); //Contains limited number of data
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useGetListFollowing();
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -133,7 +124,7 @@ export const HomeFeed = () => {
       });
       setFeedData(newFeedData);
     }
-  }, [isFocused]);
+  }, []);
 
   useEffect(() => {
     getInitialFeeds();
@@ -144,11 +135,11 @@ export const HomeFeed = () => {
       <FeedPostCard
         itemFeedPostCard={item}
         userId={userData?.id}
-        isFocused={isFocused}
+        isFocused={true}
         navigation={navigation}
       />
     ),
-    [isFocused]
+    []
   );
 
   return (

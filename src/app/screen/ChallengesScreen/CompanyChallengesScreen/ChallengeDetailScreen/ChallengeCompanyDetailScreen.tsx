@@ -1,5 +1,7 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import { FC, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { AxiosError } from "axios";
 import i18n from "../../../../i18n/i18n";
 
 import { IChallenge } from "../../../../types/challenge";
@@ -20,8 +22,6 @@ import CheckCircle from "./assets/check_circle.svg";
 import Button from "../../../../component/common/Buttons/Button";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
 
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -33,7 +33,7 @@ export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
   const { t } = useTranslation();
-  const [isJoined, setIsJoined] = useState(true);
+  // const [isJoined, setIsJoined] = useState(true);
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
     i18n.t("challenge_detail_screen.progress"),
     i18n.t("challenge_detail_screen.description"),
@@ -57,23 +57,17 @@ export const ChallengeCompanyDetailScreen: FC<
     (participant: any) => participant.id === currentUser?.id
   );
 
+  const [isJoined, setIsJoined] = useState(
+    isCurrentUserOwner || !!isCurrentUserParticipant
+  );
   const challengeStatus =
     challengeOwner.id === currentUser?.id
       ? challengeData.status
       : isJoined
       ? isCurrentUserParticipant?.challengeStatus
       : challengeData.status;
-
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
-
-  useEffect(() => {
-    if (isCurrentUserOwner) {
-      setIsJoined(true);
-    } else {
-      setIsJoined(!!isCurrentUserParticipant);
-    }
-  }, [isCurrentUserOwner, isCurrentUserParticipant]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;

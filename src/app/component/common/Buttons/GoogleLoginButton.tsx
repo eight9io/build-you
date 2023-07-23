@@ -21,7 +21,7 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title }) => {
     GoogleSignin.configure();
   }, []);
 
-  // Rewrite this similar to login email / password
+  // TODO Rewrite this similar to login email / password
   const handleGoogleBtnClicked = async () => {
     // try {
     //   const userInfo = await GoogleSignin.signIn();

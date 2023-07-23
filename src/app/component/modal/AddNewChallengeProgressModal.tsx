@@ -40,7 +40,7 @@ interface IAddNewChallengeProgressModalProps {
   challengeId: string;
   isVisible: boolean;
   onClose: () => void;
-  setShouldRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: React.Dispatch<React.SetStateAction<boolean>>;
   setProgressLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -93,13 +93,7 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
 
 export const AddNewChallengeProgressModal: FC<
   IAddNewChallengeProgressModalProps
-> = ({
-  setProgressLoading,
-  setShouldRefetch,
-  challengeId,
-  isVisible,
-  onClose,
-}) => {
+> = ({ setProgressLoading, refetch, challengeId, isVisible, onClose }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedMedia, setSelectedMedia] = useState<IUploadMediaWithId[]>([]);
   const [isSelectedImage, setIsSelectedImage] = useState<boolean | null>(null);
@@ -120,17 +114,17 @@ export const AddNewChallengeProgressModal: FC<
     handleSubmit,
     setValue,
     setError,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<{
     challenge: string;
-    caption: string;
     location: string;
-    media?: any;
+    caption: string;
+    media: any;
   }>({
     defaultValues: {
       challenge: "",
-      caption: "",
       location: "",
+      caption: "",
       media: undefined,
     },
     resolver: yupResolver(CreateProgressValidationSchema()),
@@ -224,7 +218,7 @@ export const AddNewChallengeProgressModal: FC<
     setIsShowModal(false);
     onClose();
     setProgressLoading(true);
-    setShouldRefetch(true);
+    refetch(true);
   };
 
   return (

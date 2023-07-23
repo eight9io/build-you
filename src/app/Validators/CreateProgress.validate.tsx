@@ -5,6 +5,8 @@ export const CreateProgressValidationSchema = () => {
   const { t } = useTranslation();
 
   return yup.object().shape({
+    challenge: yup.string().trim(),
+    location: yup.string().trim(),
     caption: yup
       .string()
       .trim()

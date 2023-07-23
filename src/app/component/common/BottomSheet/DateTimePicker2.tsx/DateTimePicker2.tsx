@@ -1,6 +1,6 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { Platform, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import BottomSheet2 from "../BottomSheet";

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Dimensions, Animated, Platform } from "react-native";
+import { StyleSheet, View, Dimensions, Animated } from "react-native";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const SkeletonLoadingCommon = () => {
   const circleAnimatedValue = new Animated.Value(0);
@@ -25,6 +25,7 @@ const SkeletonLoadingCommon = () => {
     outputRange: [-100, width],
   });
 
+  // TODO use tailwind
   return (
     <View style={styles.container}>
       <View className="flex flex-col justify-between p-4">
@@ -54,7 +55,7 @@ const SkeletonLoadingCommon = () => {
                 opacity: 0.5,
                 transform: [{ translateX: translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
           <View
             style={{
@@ -75,7 +76,7 @@ const SkeletonLoadingCommon = () => {
                 opacity: 0.5,
                 transform: [{ translateX: translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
         </View>
         <View
@@ -105,7 +106,7 @@ const SkeletonLoadingCommon = () => {
                 opacity: 0.5,
                 transform: [{ translateX: translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
           <View
             style={{
@@ -126,7 +127,7 @@ const SkeletonLoadingCommon = () => {
                 opacity: 0.5,
                 transform: [{ translateX: translateX }],
               }}
-            ></Animated.View>
+            />
           </View>
         </View>
       </View>

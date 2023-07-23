@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import { Image } from "expo-image";
 import clsx from "clsx";
 import DefaultAvatar from "../../../asset/default-avatar.svg";
@@ -10,13 +10,16 @@ interface IPostAvatarProps {
   onPress?: () => void;
 }
 
-const PostAvatar: React.FC<IPostAvatarProps> = ({ src, alt, onPress }) => {
+const PostAvatar: React.FC<IPostAvatarProps> = ({ src }) => {
+  // TODO useless state
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+
   const [newAvatarUrl, setNewAvatarUrl] = useState<string | null | undefined>(
     null
   );
 
+  // TODO convert to useMemo
   useEffect(() => {
     let url: string | null | undefined;
     if (src && !src.startsWith("http")) {

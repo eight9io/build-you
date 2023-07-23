@@ -12,6 +12,6 @@ export const LINKEDIN_LOGIN = {
 export const GOOGLE_MAP_API = {
   BASE_URL: "https://maps.googleapis.com",
   NEARBY_SEARCH_ENDPOINT: "/maps/api/place/nearbysearch/json",
-  API_KEY: process.env.NX_GOOGLE_MAP_API_KEY || "",
+  API_KEY: process.env.EXPO_GOOGLE_MAP_API_KEY || "",
   DEFAULT_RADIUS: 1500, // unit: meters
 };

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { serviceGetEmployeeList } from "../service/company";
 import { useAuthStore } from "../store/auth-store";
 import { useEmployeeListStore } from "../store/company-data";
-import { useUserProfileStore } from "../store/user-data";
+import { useUserProfileStore } from "../store/user-store";
 
 export const useGetListEmployee = () => {
   const { getUserProfile } = useUserProfileStore();

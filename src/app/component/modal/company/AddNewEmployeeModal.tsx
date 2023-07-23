@@ -11,7 +11,7 @@ import ErrorText from "../../common/ErrorText";
 import TextInput from "../../common/Inputs/TextInput";
 import Close from "../../../component/asset/close.svg";
 import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 import { serviceAddEmployee } from "../../../service/company";
 import { fetchListEmployee } from "../../../utils/profile";
 import { useEmployeeListStore } from "../../../store/company-data";

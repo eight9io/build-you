@@ -1,19 +1,16 @@
 import axios from "axios";
-// import { checkRefreshTokenLocalValidation, logout } from "./checkAuth";
-// import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-// import { useAuthStore } from "../store/auth-store";
-// import { useIsCompleteProfileStore } from "../store/is-complete-profile";
-// import { useNotificationStore } from "../store/notification";
+import { EXPO_API_URL } from "@env";
+import jwt_decode from "jwt-decode";
+import { ILoginResponse, IToken } from "../types/auth";
+import { IGlobalDialogProps } from "../types/globalDialog";
 
 const httpInstance = axios.create({
   timeout: 60000,
-  baseURL: process.env.NX_API_URL,
+  baseURL: EXPO_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
-// const handleError = (error: any) => console.log(error);
 
 export const setAuthTokenToHttpHeader = (token: string | null) => {
   if (token) {
@@ -23,59 +20,79 @@ export const setAuthTokenToHttpHeader = (token: string | null) => {
   }
 };
 
-httpInstance.interceptors.response.use(
-  function (res) {
-    return res;
-  },
-  function (error) {
-    return new Promise(async (resolve, reject) => {
-      const status = error.response ? error.response.status : null;
-      if ([401].includes(status)) {
-        const originalRequest = error.config;
-        if (!originalRequest._retry) {
+export function setupInterceptor(
+  refreshToken: string,
+  showModal: (notification: IGlobalDialogProps) => void,
+  onRefreshFail: () => void
+) {
+  httpInstance.interceptors.response.use(
+    function (res) {
+      return res;
+    },
+    function (error) {
+      return new Promise(async (resolve, reject) => {
+        const status = error.response ? error.response.status : null;
+        if ([401].includes(status)) {
+          const originalRequest = error.config;
+          if (originalRequest._retry) {
+            onRefreshFail();
+            return showModal({
+              title: "Error",
+              message: "Session expires. Please login again",
+              button: "OK",
+            });
+          }
+
           originalRequest._retry = true;
-          // const newAuthToken = await checkRefreshTokenLocalValidation();
-          // console.log("newAuthToken", newAuthToken);
-          //   if (!newAuthToken) {
-          //     console.log("token is not valid");
-          //     reject("token is not valid");
-          //   } else {
-          //     setAuthTokenToHttpHeader(newAuthToken);
-          //     originalRequest.headers["Authorization"] = `Bearer ${newAuthToken}`;
-          //     // call new request with new token
-          //     try {
-          //       console.log("call new request with new token");
-          //       const res = await httpInstance(originalRequest);
-          //       resolve(res);
-          //     } catch (error) {
-          //       handleError(error);
-          //     }
-          //   }
-          // } else {
-          // GlobalDialogController.showModal({
-          //   title: "Error",
-          //   message: "Session expires. Please login again",
-          //   button: "OK",
-          // });
-          // logout(
-          //   useAuthStore,
-          //   useIsCompleteProfileStore,
-          //   useNotificationStore,
-          //   setAuthTokenToHttpHeader
-          // );
-          // reject("token is not valid");
+          if (!refreshToken) {
+            onRefreshFail();
+            reject(error);
+          }
+
+          const decodedRefreshToken = jwt_decode<IToken>(refreshToken);
+          const currentTime = Date.now() / 1000;
+          if (decodedRefreshToken?.exp < currentTime) {
+            // TODO: clear store
+            return undefined;
+          }
+
+          const newTokens = await httpInstance.post<ILoginResponse>(
+            "/auth/refresh",
+            {
+              token: refreshToken,
+            }
+          );
+
+          if (newTokens.status !== 201) {
+            reject(error);
+          } else {
+            // TODO update new token and retry
+            try {
+              console.log("refresh");
+              setAuthTokenToHttpHeader(newTokens.data.authorization);
+              const res = await httpInstance(originalRequest);
+              resolve(res);
+            } catch (error) {
+              reject(error);
+              // showModal({
+              //   title: "Error",
+              //   message: "Session expires. Please login again",
+              //   button: "OK",
+              // });
+            }
+          }
+        } else if ([500, 501, 502, 503].includes(status)) {
+          showModal({
+            title: "Error",
+            message: "Something went wrong",
+            button: "OK",
+          });
+          reject("Server error");
         }
-      } else if ([500, 501, 502, 503].includes(status)) {
-        // GlobalDialogController.showModal({
-        //   title: "Error",
-        //   message: "Something went wrong",
-        //   button: "OK",
-        // });
-        reject("Server error");
-      }
-      reject(error);
-    });
-  }
-);
+        reject(error);
+      });
+    }
+  );
+}
 
 export default httpInstance;

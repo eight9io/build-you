@@ -15,7 +15,7 @@ import ImageSwiper from "../common/ImageSwiper";
 import { getTimeDiffToNow } from "../../utils/time";
 import { getSeperateImageUrls } from "../../utils/image";
 import VideoPlayer from "../common/VideoPlayer";
-import { useUserProfileStore } from "../../store/user-data";
+import { useUserProfileStore } from "../../store/user-store";
 
 interface IChallengeProgressCardProps {
   progress: IProgressChallenge;

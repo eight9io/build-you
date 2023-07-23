@@ -1,10 +1,15 @@
-import { ChangePasswordForm, LoginForm, RegisterForm } from "../types/auth";
+import {
+  ChangePasswordForm,
+  ILoginResponse,
+  LoginForm,
+  RegisterForm,
+} from "../types/auth";
 
 import http from "../utils/http";
 import { LINKEDIN_LOGIN } from "../common/constants";
 
 export const serviceLogin = (data: LoginForm) => {
-  return http.post("/auth/login", data);
+  return http.post<ILoginResponse>("/auth/login", data);
 };
 export const serviceRegister = (data: RegisterForm) => {
   return http.post("/user/create", data);
@@ -19,9 +24,9 @@ export const getLinkedInAccessToken = (code: string) => {
     {
       grant_type: "authorization_code",
       code,
-      client_id: process.env.NX_LINKEDIN_CLIENT_ID,
-      client_secret: process.env.NX_LINKEDIN_CLIENT_SECRET,
-      redirect_uri: process.env.NX_LINKEDIN_REDIRECT_URI,
+      client_id: process.env.EXPO_LINKEDIN_CLIENT_ID,
+      client_secret: process.env.EXPO_LINKEDIN_CLIENT_SECRET,
+      redirect_uri: process.env.EXPO_LINKEDIN_REDIRECT_URI,
     },
     {
       headers: {

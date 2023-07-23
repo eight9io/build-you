@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -7,9 +6,6 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import * as SplashScreen from "expo-splash-screen";
-import * as Device from "expo-device";
-import { AxiosError } from "axios";
-import { AppState } from "react-native";
 import { RootStackParamList } from "./navigation.type";
 
 import Header from "../component/common/Header";
@@ -30,19 +26,17 @@ import Login from "../screen/LoginScreen/LoginScreen";
 import Register from "../screen/RegisterScreen/RegisterScreen";
 import ForgotPassword from "../screen/ForgotPassword/ForgotPassword";
 
-import { checkUserCompleProfileAndCompany } from "../utils/checkUserCompleProfile";
-import { checkAccessTokenLocal } from "../utils/checkAuth";
-
 import { useAuthStore } from "../store/auth-store";
-import { useIsCompleteProfileStore } from "../store/is-complete-profile";
 import BottomNavBarWithoutLogin from "../component/BottomNavBar/BottomNavBarWithoutLogin";
 import GlobalDialog from "../component/common/Dialog/GlobalDialog";
-import {
-  addNotificationListener,
-  registerForPushNotificationsAsync,
-} from "../utils/notification.util";
+// import {
+//   addNotificationListener,
+//   registerForPushNotificationsAsync,
+// } from "../utils/notification.util";
 import { useNotificationStore } from "../store/notification";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import { setAuthTokenToHttpHeader, setupInterceptor } from "../utils/http";
+import { useUserProfileStore } from "../store/user-store";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -51,81 +45,73 @@ SplashScreen.preventAutoHideAsync();
 
 export const RootNavigation = () => {
   const { t } = useTranslation();
-  const [isMainAppLoading, setIsMainAppLoading] = useState<boolean>(true);
-  const { setAccessToken, getAccessToken } = useAuthStore();
-  const { setIsCompleteProfileStore, getIsCompleteProfileStore } =
-    useIsCompleteProfileStore();
   const {
-    _hasHydrated: notificationStoreHasHydrated,
-    setPushToken,
-    pushToken,
-  } = useNotificationStore();
+    getAccessToken,
+    getRefreshToken,
+    logout,
+    _hasHydrated: authStoreHydrated,
+  } = useAuthStore();
+  const {
+    onAuthStoreRehydrated: initUserProfile,
+    checkIsCompleteProfileOrCompany,
+    onLogout: userProfileStoreOnLogout,
+  } = useUserProfileStore();
+
   const navigationRef =
     useRef<NavigationContainerRef<RootStackParamList>>(null);
 
-  const logined = getAccessToken();
+  const isLoggedin = getAccessToken();
+  const isCompleteProfile = checkIsCompleteProfileOrCompany();
 
-  const isCompleteProfile: boolean | null = getIsCompleteProfileStore();
-
-  useEffect(() => {
-    checkAccessTokenLocal(setAccessToken);
-  }, []);
-
-  useEffect(() => {
-    if (logined) {
-      setIsCompleteProfileStore(null);
-      checkUserCompleProfileAndCompany(
-        setIsCompleteProfileStore,
-        setIsMainAppLoading
-      );
-    } else if (!logined && logined !== null) {
-      setIsCompleteProfileStore(false);
-      setIsMainAppLoading(false);
-    }
-  }, [logined]);
+  // useEffect(() => {
+  //   // Only init notification when user logined and complete profile
+  //   (async () => {
+  //     if (logined && isCompleteProfile && navigationRef?.current)
+  //       await initNotification(navigationRef.current);
+  //   })();
+  // }, [logined, isCompleteProfile, navigationRef]);
 
   useEffect(() => {
-    // Only init notification when user logined and complete profile
-    (async () => {
-      if (logined && isCompleteProfile && navigationRef?.current)
-        await initNotification(navigationRef.current);
-    })();
-  }, [logined, isCompleteProfile, navigationRef]);
-
-  useEffect(() => {
-    if (
-      !isMainAppLoading &&
-      isCompleteProfile !== null &&
-      logined !== null &&
-      notificationStoreHasHydrated
-    ) {
-      const hideSplashScreen = async () => {
-        await SplashScreen.hideAsync();
-      };
-      hideSplashScreen();
-    }
-  }, [isMainAppLoading, isCompleteProfile, notificationStoreHasHydrated]);
-
-  const initNotification = async (
-    navigation: NavigationContainerRef<RootStackParamList>
-  ) => {
-    if (!Device.isDevice) return;
-
-    if (!pushToken) {
-      try {
-        await registerForPushNotificationsAsync(setPushToken);
-      } catch (error: AxiosError | any) {
-        console.log("error: ", error.response);
-        if (error.response.status !== 403)
-          GlobalDialogController.showModal({
-            title: "Alert",
-            message: t("errorMessage:cannot_register_notification") as string,
-          });
+    if (authStoreHydrated) {
+      if (isLoggedin) {
+        setupInterceptor(
+          getRefreshToken(),
+          GlobalDialogController.showModal,
+          () => {
+            logout();
+            userProfileStoreOnLogout();
+          }
+        );
+        setAuthTokenToHttpHeader(isLoggedin);
+        Promise.all([initUserProfile()]).finally(() =>
+          SplashScreen.hideAsync()
+        );
+      } else {
+        SplashScreen.hideAsync();
       }
     }
-    // Register notification listener
-    addNotificationListener(navigation, useNotificationStore);
-  };
+  }, [authStoreHydrated]);
+
+  // const initNotification = async (
+  //   navigation: NavigationContainerRef<RootStackParamList>
+  // ) => {
+  //   if (!Device.isDevice) return;
+
+  //   if (!pushToken) {
+  //     try {
+  //       await registerForPushNotificationsAsync(setPushToken);
+  //     } catch (error: AxiosError | any) {
+  //       console.log("error: ", error.response);
+  //       if (error.response.status !== 403)
+  //         GlobalDialogController.showModal({
+  //           title: "Alert",
+  //           message: t("errorMessage:cannot_register_notification") as string,
+  //         });
+  //     }
+  //   }
+  //   // Register notification listener
+  //   addNotificationListener(navigation, useNotificationStore);
+  // };
 
   return (
     <NavigationContainer ref={navigationRef}>
@@ -137,7 +123,7 @@ export const RootNavigation = () => {
           headerShown: false,
         }}
       >
-        {logined && isCompleteProfile && (
+        {isLoggedin && isCompleteProfile && (
           <>
             <RootStack.Screen
               name="HomeScreen"
@@ -207,7 +193,7 @@ export const RootNavigation = () => {
             />
           </>
         )}
-        {logined && !isCompleteProfile && isCompleteProfile !== null && (
+        {isLoggedin && !isCompleteProfile && isCompleteProfile !== null && (
           <>
             <RootStack.Screen
               name="CompleteProfileScreen"
@@ -219,7 +205,7 @@ export const RootNavigation = () => {
           </>
         )}
 
-        {logined && isCompleteProfile === null && (
+        {isLoggedin && isCompleteProfile === null && (
           <>
             <RootStack.Screen
               name="ProfileScreenLoading"
@@ -231,7 +217,7 @@ export const RootNavigation = () => {
           </>
         )}
 
-        {!logined && (
+        {!isLoggedin && (
           <>
             <RootStack.Screen
               name="IntroScreen"

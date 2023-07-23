@@ -7,7 +7,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useGetUserData } from "../../../../hooks/useGetUser";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 import { serviceUpdateMyProfile } from "../../../../service/profile";
 
 import Warning from "../../../../component/asset/warning.svg";

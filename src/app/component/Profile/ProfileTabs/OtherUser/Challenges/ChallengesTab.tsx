@@ -14,7 +14,7 @@ import ChallengeCard from "../../../../Card/ChallengeCard/ChallengeCard";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
 import GolbalDialogController from "../../../../common/Dialog/GlobalDialogController";
 import { sortChallengeByStatus } from "../../../../../utils/common";
-import { useUserProfileStore } from "../../../../../store/user-data";
+import { useUserProfileStore } from "../../../../../store/user-store";
 
 interface IChallengesTabProps {
   userId: string | null | undefined;

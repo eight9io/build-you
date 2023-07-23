@@ -6,6 +6,17 @@ module.exports = function (api) {
       "nativewind/babel",
       "transform-inline-environment-variables",
       ["react-native-reanimated/plugin"],
+      [
+        "dotenv-import",
+        {
+          moduleName: "@env",
+          path: ".env",
+          blocklist: null,
+          allowlist: null,
+          safe: false,
+          allowUndefined: false,
+        },
+      ],
     ],
   };
 };

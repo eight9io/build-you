@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import httpInstance from "../utils/http";
-import { useFollowingListStore, useUserProfileStore } from "../store/user-data";
+import {
+  useFollowingListStore,
+  useUserProfileStore,
+} from "../store/user-store";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { serviceGetOtherUserData } from "../service/user";

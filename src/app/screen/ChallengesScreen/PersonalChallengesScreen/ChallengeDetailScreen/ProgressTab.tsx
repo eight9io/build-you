@@ -7,7 +7,7 @@ import {
   IChallengeOwner,
   IProgressChallenge,
 } from "../../../../types/challenge";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 
 import AddIcon from "../../../../component/asset/add.svg";
 import Button from "../../../../component/common/Buttons/Button";

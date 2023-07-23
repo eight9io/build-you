@@ -21,7 +21,7 @@ import GlobalDialogController from "../../../component/common/Dialog/GlobalDialo
 import {
   useFollowingListStore,
   useUserProfileStore,
-} from "../../../store/user-data";
+} from "../../../store/user-store";
 import { serviceFollow, serviceUnfollow } from "../../../service/profile";
 import { useGetOtherUserData } from "../../../hooks/useGetUser";
 import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";

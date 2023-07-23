@@ -7,7 +7,7 @@ import {
 } from "@react-navigation/native-stack";
 import Spinner from "react-native-loading-spinner-overlay";
 
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 
 import { RootStackParamList } from "../../../navigation/navigation.type";
 

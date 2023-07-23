@@ -16,7 +16,7 @@ import TextInput from "../../component/common/Inputs/TextInput";
 import ErrorText from "../../component/common/ErrorText";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidationSchema } from "../../Validators/Login.validate";
-import { useUserProfileStore } from "../../store/user-data";
+import { useUserProfileStore } from "../../store/user-store";
 import Button from "../../component/common/Buttons/Button";
 import { LoginForm } from "../../types/auth";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
@@ -30,7 +30,7 @@ import GlobalDialogController from "../../component/common/Dialog/GlobalDialogCo
 
 export default function DeleteAccountScreen({ navigation }: any) {
   const { setAccessToken } = useAuthStore();
-  const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+  // const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
   const { revokePushToken } = useNotificationStore();
   const [hidePassword, setHidePassword] = useState(true);
   const [isShowModal, setIsShowModal] = useState({
@@ -101,7 +101,7 @@ export default function DeleteAccountScreen({ navigation }: any) {
 
   const handleLogOut = async () => {
     await removeAuthTokensLocalOnLogout();
-    setIsCompleteProfileStore(null);
+    // setIsCompleteProfileStore(null);
     setAccessToken(null);
   };
   return (

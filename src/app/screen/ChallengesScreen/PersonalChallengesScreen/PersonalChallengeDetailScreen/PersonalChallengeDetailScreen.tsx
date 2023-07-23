@@ -26,7 +26,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import ShareIcon from "./assets/share.svg";
 import TaskAltIcon from "./assets/task-alt.svg";
 import TaskAltIconGray from "./assets/task-alt-gray.svg";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { use } from "i18next";
 import { useTranslation } from "react-i18next";

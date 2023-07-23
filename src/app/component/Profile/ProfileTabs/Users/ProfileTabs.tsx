@@ -7,7 +7,7 @@ import clsx from "clsx";
 import {
   useFollowingListStore,
   useUserProfileStore,
-} from "../../../../store/user-data";
+} from "../../../../store/user-store";
 
 import Biography from "./Biography/Biography";
 import Skills from "./Skills";

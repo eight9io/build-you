@@ -10,7 +10,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 import httpInstance from "../../../utils/http";
 import { IChallenge } from "../../../types/challenge";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import PersonalChallengeDetailScreen from "./PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";

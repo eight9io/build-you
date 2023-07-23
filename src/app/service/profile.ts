@@ -1,3 +1,4 @@
+import { IUserData } from "../types/user";
 import http from "../utils/http";
 
 export const serviceUpdateMyProfile = (id: any, data: any) =>
@@ -29,5 +30,9 @@ export const serviceFollow = (idUser: any) =>
   http.post("/user/follow", {
     following: idUser,
   });
+
+export const serviceGetMe = () => {
+  return http.get<IUserData>("/user/me");
+};
 
 // ==== COMPANY  ======

@@ -19,7 +19,7 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const handleNavigationStateChange = async (event: any) => {
     const { url } = event;
-    const callbackUrl = process.env.NX_LINKEDIN_REDIRECT_URI;
+    const callbackUrl = process.env.EXPO_LINKEDIN_REDIRECT_URI;
     if (!url || !callbackUrl) return;
 
     if (url.startsWith(LINKEDIN_LOGIN.LOGIN_CANCEL_URL)) onLoginCancel();
@@ -54,7 +54,7 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
       >
         <WebView
           source={{
-            uri: `${LINKEDIN_LOGIN.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.NX_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.NX_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress`,
+            uri: `${LINKEDIN_LOGIN.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.EXPO_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.EXPO_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress`,
           }}
           contentMode="mobile"
           automaticallyAdjustContentInsets={false}

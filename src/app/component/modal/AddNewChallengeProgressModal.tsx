@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Spinner from "react-native-loading-spinner-overlay";
 
-import { useUserProfileStore } from "../../store/user-data";
+import { useUserProfileStore } from "../../store/user-store";
 import { IUploadMediaWithId } from "../../types/media";
 import { getRandomId } from "../../utils/common";
 import { CreateProgressValidationSchema } from "../../Validators/CreateProgress.validate";

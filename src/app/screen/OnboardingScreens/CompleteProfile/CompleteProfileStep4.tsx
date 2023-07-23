@@ -15,7 +15,7 @@ import Checkbox from "expo-checkbox";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 
 import { useGetUserData } from "../../../hooks/useGetUser";
 

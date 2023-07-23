@@ -15,7 +15,7 @@ import AppTitle from "../../../component/common/AppTitle";
 import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import { useIsFocused } from "@react-navigation/native";
 import { serviceGetMyProfile } from "../../../service/auth";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";

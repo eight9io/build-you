@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { EmployeesItemOtherCompany } from "../Company/Employees/Employees";
 
 import { Image } from "expo-image";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
 

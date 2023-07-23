@@ -1,9 +1,13 @@
 import React, { FC } from "react";
 import { View, Text } from "react-native";
-import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
+import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo.svg";
 import StarLogo from "../../../common/svg/auto_awesome.svg";
@@ -13,14 +17,15 @@ interface CompleteProfileFinishProps {
   navigation: CompleteProfileScreenNavigationProp;
 }
 
-const CompleteProfileFinish: FC<CompleteProfileFinishProps> = ({
-  navigation,
-}) => {
-  const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+const CompleteProfileFinish: FC<CompleteProfileFinishProps> = () => {
+  // const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const { t } = useTranslation();
 
   setTimeout(() => {
-    setIsCompleteProfileStore(true);
+    // setIsCompleteProfileStore(true);
+    navigation.navigate("HomeScreen");
   }, 2000);
 
   return (

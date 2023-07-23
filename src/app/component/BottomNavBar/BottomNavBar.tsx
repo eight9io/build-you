@@ -35,7 +35,7 @@ import NewNotificationIcon from "../asset/new-notification-icon.svg";
 
 import { useGetUserData } from "../../hooks/useGetUser";
 import { useUserProfileStore } from "../../store/user-store";
-import { useNotificationStore } from "../../store/notification";
+import { useNotificationStore } from "../../store/notification-store";
 
 const Tab = createBottomTabNavigator();
 const EmptyPage = () => null;

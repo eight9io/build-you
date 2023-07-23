@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import httpInstance from "../utils/http";
+import { useEffect } from "react";
 import {
   useFollowingListStore,
   useUserProfileStore,

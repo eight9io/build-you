@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { ImageSourcePropType } from "react-native";
-import { string } from "yup";
 
 export const getImageFromUrl = (
   url: string | null

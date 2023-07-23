@@ -14,7 +14,7 @@ import NavButton from "../../component/common/Buttons/NavButton";
 import IconSearch from "../../component/common/IconSearch/IconSearch";
 
 import Notification from "../../component/Notification";
-import { useNotificationStore } from "../../store/notification";
+import { useNotificationStore } from "../../store/notification-store";
 import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import Button from "../../component/common/Buttons/Button";
@@ -117,18 +117,18 @@ const NotificationsScreen = () => {
       <NotificationsStack.Screen
         name="NotificationsScreen"
         component={Notifications}
-        options={({ navigation }) => ({
+        options={() => ({
           headerTitle: () => <AppTitle title={t("top_nav.noti")} />,
-          // headerRight: (props) => (
-          //   <NavButton
-          //     withIcon
-          //     icon={
-          //       <IconSearch
-          //         onPress={() => console.log('NotificationsScreen Search')}
-          //       />
-          //     }
-          //   />
-          // ),
+          headerRight: (props) => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() => console.log("NotificationsScreen Search")}
+                />
+              }
+            />
+          ),
         })}
       />
       <NotificationsStack.Screen

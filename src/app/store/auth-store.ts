@@ -11,14 +11,17 @@ import {
   unregisterForPushNotificationsAsync,
 } from "../utils/notification.util";
 import { useUserProfileStore } from "./user-store";
-import { setAuthTokenToHttpHeader } from "../utils/http";
+import {
+  setAuthTokenToHttpHeader,
+  setupInterceptor,
+} from "../utils/refreshToken.util";
 import {
   NOTIFICATION_TOKEN_DEVICE_TYPE,
   NOTIFICATION_TOKEN_STATUS,
 } from "../common/enum";
 import { updateNotificationToken } from "../service/notification";
-import { useNotificationStore } from "./notification";
-import NavigationService from "../utils/navigationController";
+import { useNotificationStore } from "./notification-store";
+import NavigationService from "../utils/navigationService";
 
 export interface LoginStore {
   accessToken: string | null;
@@ -41,11 +44,11 @@ export interface LoginStore {
 
 const watchLogin = (config) => (set, get, api) =>
   config(
-    (args) => {
+    (args: LoginStore) => {
       if (typeof args.accessToken === "string") {
         const oldState = get();
         if (typeof oldState.accessToken === "string") {
-          return; // Refresh Token, no need update push token
+          return;
         }
         registerForPushNotificationsAsync()
           .then((token) => {

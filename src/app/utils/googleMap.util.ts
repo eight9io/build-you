@@ -1,5 +1,6 @@
 import { ISelectOption } from "../types/common";
 
+// TODO add typescript
 export const extractNearbyAddresses = (data: any) => {
   const { results, next_page_token } = data;
   const addresses: ISelectOption[] = results.map((location: any) => {

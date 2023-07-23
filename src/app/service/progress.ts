@@ -1,6 +1,5 @@
 import { AxiosResponse } from "axios";
 import httpInstance from "../utils/http";
-import { retryRequest } from "../utils/retryRequest";
 import {
   ICreateProgress,
   ICreateProgressComment,

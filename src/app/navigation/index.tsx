@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -25,19 +25,15 @@ import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChal
 import Login from "../screen/LoginScreen/LoginScreen";
 import Register from "../screen/RegisterScreen/RegisterScreen";
 import ForgotPassword from "../screen/ForgotPassword/ForgotPassword";
-
 import { useAuthStore } from "../store/auth-store";
 import BottomNavBarWithoutLogin from "../component/BottomNavBar/BottomNavBarWithoutLogin";
 import GlobalDialog from "../component/common/Dialog/GlobalDialog";
-// import {
-//   addNotificationListener,
-//   registerForPushNotificationsAsync,
-// } from "../utils/notification.util";
-import { useNotificationStore } from "../store/notification";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-import { setAuthTokenToHttpHeader, setupInterceptor } from "../utils/http";
 import { useUserProfileStore } from "../store/user-store";
-import NavigatorService from "../utils/navigationController";
+import NavigatorService from "../utils/navigationService";
+import {
+  setAuthTokenToHttpHeader,
+  setupInterceptor,
+} from "../utils/refreshToken.util";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -58,61 +54,23 @@ export const RootNavigation = () => {
     onLogout: userProfileStoreOnLogout,
   } = useUserProfileStore();
 
-  const navigationRef =
-    useRef<NavigationContainerRef<RootStackParamList>>(null);
-
   const isLoggedin = getAccessToken();
   const isCompleteProfile = checkIsCompleteProfileOrCompany();
-
-  // useEffect(() => {
-  //   // Only init notification when user logined and complete profile
-  //   (async () => {
-  //     if (logined && isCompleteProfile && navigationRef?.current)
-  //       await initNotification(navigationRef.current);
-  //   })();
-  // }, [logined, isCompleteProfile, navigationRef]);
 
   useEffect(() => {
     if (authStoreHydrated) {
       if (isLoggedin) {
-        setupInterceptor(
-          getRefreshToken(),
-          GlobalDialogController.showModal,
-          () => {
-            logout();
-            userProfileStoreOnLogout();
-          }
-        );
+        setupInterceptor(getRefreshToken, () => {
+          logout();
+          userProfileStoreOnLogout();
+        });
         setAuthTokenToHttpHeader(isLoggedin);
         Promise.all([initUserProfile()]).finally(() =>
-          SplashScreen.hideAsync()
+          setTimeout(SplashScreen.hideAsync, 300)
         );
-      } else {
-        SplashScreen.hideAsync();
       }
     }
   }, [authStoreHydrated]);
-
-  // const initNotification = async (
-  //   navigation: NavigationContainerRef<RootStackParamList>
-  // ) => {
-  //   if (!Device.isDevice) return;
-
-  //   if (!pushToken) {
-  //     try {
-  //       await registerForPushNotificationsAsync(setPushToken);
-  //     } catch (error: AxiosError | any) {
-  //       console.log("error: ", error.response);
-  //       if (error.response.status !== 403)
-  //         GlobalDialogController.showModal({
-  //           title: "Alert",
-  //           message: t("errorMessage:cannot_register_notification") as string,
-  //         });
-  //     }
-  //   }
-  //   // Register notification listener
-  //   addNotificationListener(navigation, useNotificationStore);
-  // };
 
   return (
     <NavigationContainer
@@ -140,7 +98,7 @@ export const RootNavigation = () => {
                     title={t("challenge_detail_screen.title") || undefined}
                   />
                 ),
-                headerLeft: (props) => {
+                headerLeft: () => {
                   return <NavButton />;
                 },
               }}
@@ -172,7 +130,7 @@ export const RootNavigation = () => {
               options={({ navigation }) => ({
                 headerShown: true,
                 headerTitle: () => <AppTitle title="Edit profile" />,
-                headerLeft: (props) => (
+                headerLeft: () => (
                   <NavButton
                     text="Back"
                     onPress={() => navigation.goBack()}
@@ -187,7 +145,7 @@ export const RootNavigation = () => {
               options={({ navigation }) => ({
                 headerShown: true,
                 headerTitle: () => <AppTitle title="Edit profile" />,
-                headerLeft: (props) => (
+                headerLeft: () => (
                   <NavButton
                     text="Back"
                     onPress={() => navigation.goBack()}
@@ -257,7 +215,7 @@ export const RootNavigation = () => {
                   <AppTitle title={t("register_screen.title")} />
                 ),
 
-                headerLeft: (props) => (
+                headerLeft: () => (
                   <NavButton
                     text={t("button.back") as string}
                     onPress={() =>
@@ -278,7 +236,7 @@ export const RootNavigation = () => {
                   <AppTitle title={t("forgot_password.title")} />
                 ),
 
-                headerLeft: (props) => (
+                headerLeft: () => (
                   <NavButton
                     text={t("button.back") as string}
                     onPress={() => navigation.navigate("LoginScreen")}
@@ -297,7 +255,7 @@ export const RootNavigation = () => {
                     title={t("challenge_detail_screen.title") || undefined}
                   />
                 ),
-                headerLeft: (props) => {
+                headerLeft: () => {
                   return <NavButton />;
                 },
               }}

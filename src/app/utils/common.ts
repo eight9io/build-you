@@ -36,10 +36,12 @@ export const sortArrayByCreatedAt = (
   });
 };
 
+// TODO use lodash isEmpty
 export const isObjectEmpty = (obj: any) => {
   return Object.keys(obj).length === 0;
 };
 
+// TODO add typescript
 export const sortChallengeByStatusFromResponse = (res: any) => {
   if (!res?.data) {
     return [];
@@ -79,12 +81,14 @@ export const sortChallengeByStatusFromResponse = (res: any) => {
   return [...openChallenges, ...closedChallenges];
 };
 
+// TODO add typescript
 export const sortChallengeByStatus = (challengeList: any) => {
   if (!challengeList) {
     return [];
   }
   challengeList = challengeList.flat();
   // remove duplicate data by id
+  // TODO rewrite openChallenges + closedChallenges and filter unique by only using 1 loop
   const uniqueData = challengeList.filter(
     (challenge: IChallenge, index: number, self: IChallenge[]) =>
       index === self.findIndex((t) => t.id === challenge.id)

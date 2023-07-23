@@ -22,11 +22,10 @@ import { LoginForm } from "../../types/auth";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { serviceLogin } from "../../service/auth";
 import { serviceDeleteAccount } from "../../service/profile";
-import { logout, removeAuthTokensLocalOnLogout } from "../../utils/checkAuth";
 import { useAuthStore } from "../../store/auth-store";
 
-export default function DeleteAccountScreen({ navigation }: any) {
-  const { setAccessToken } = useAuthStore();
+export default function DeleteAccountScreen() {
+  const { logout } = useAuthStore();
   const [hidePassword, setHidePassword] = useState(true);
   const [isShowModal, setIsShowModal] = useState({
     isModalDelete: false,
@@ -94,10 +93,8 @@ export default function DeleteAccountScreen({ navigation }: any) {
     }
   };
 
-  const handleLogOut = async () => {
-    await removeAuthTokensLocalOnLogout();
-    // setIsCompleteProfileStore(null);
-    setAccessToken(null);
+  const handleLogOut = () => {
+    logout();
   };
   return (
     <SafeAreaView className=" h-full w-full bg-white px-4 pt-3">

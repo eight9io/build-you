@@ -28,7 +28,7 @@ import { getSeperateImageUrls } from "../../../utils/image";
 import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 
 import IconDot from "./asset/dot.svg";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 interface IProgressCardProps {

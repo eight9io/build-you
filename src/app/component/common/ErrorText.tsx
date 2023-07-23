@@ -1,6 +1,7 @@
 import { Text, View } from "react-native";
 import React from "react";
 import clsx from "clsx";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import IconErr from "../asset/IconErr.svg";
 interface Props {
   message: any;
@@ -14,7 +15,7 @@ export default function ErrorText({ message, containerClassName }: Props) {
         containerClassName
       )}
     >
-      <IconErr />
+      <Ionicons name="alert-circle-outline" size={14} color="#FF4949" />
 
       <Text className={clsx(" ml-1  text-sm text-red-500")}>{message}</Text>
     </View>

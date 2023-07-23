@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
@@ -7,20 +7,19 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
-import { logout, removeAuthTokensLocalOnLogout } from "../../utils/checkAuth";
 import { useAuthStore } from "../../store/auth-store";
 
-import NavBarInnerScreen from "../../component/NavBar/NavBarInnerScreen";
+// import NavBarInnerScreen from "../../component/NavBar/NavBarInnerScreen";
 import Button from "../../component/common/Buttons/Button";
 import { ScrollView } from "react-native-gesture-handler";
-import { useIsCompleteProfileStore } from "../../store/is-complete-profile";
 import AppTitle from "../../component/common/AppTitle";
 import NavButton from "../../component/common/Buttons/NavButton";
 import Settings from "../../component/Settings";
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen";
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+// import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import { useNotificationStore } from "../../store/notification";
+import { useUserProfileStore } from "../../store/user-store";
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
   navigation: SetingsScreenNavigationProp;
@@ -32,16 +31,19 @@ export type SetingsScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
-  const { setAccessToken } = useAuthStore();
-  const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
+  const { logout } = useAuthStore();
+  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
   const { revokePushToken } = useNotificationStore();
 
   const { t } = useTranslation();
 
   const handleLogout = async () => {
-    await removeAuthTokensLocalOnLogout();
-    setIsCompleteProfileStore(null);
-    setAccessToken(null);
+    logout();
+    userProfileStoreOnLogout();
+    revokePushToken();
+    // await removeAuthTokensLocalOnLogout();
+    // setIsCompleteProfileStore(null);
+    // setAccessToken(null);
   };
 
   return (

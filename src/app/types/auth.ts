@@ -18,3 +18,14 @@ export interface IOccupation {
   id: string;
   name: string;
 }
+
+export interface ILoginResponse {
+  authorization: string;
+  refresh: string;
+}
+
+export interface IToken {
+  exp: number;
+  iat: number;
+  sub: string;
+}

@@ -10,7 +10,7 @@ import BinIcon from "../../../../asset/bin.svg";
 import AddNewEmployeeModal from "../../../../modal/company/AddNewEmployeeModal";
 import Empty from "../../../../asset/emptyFollow.svg";
 import clsx from "clsx";
-import { useUserProfileStore } from "../../../../../store/user-data";
+import { useUserProfileStore } from "../../../../../store/user-store";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
 

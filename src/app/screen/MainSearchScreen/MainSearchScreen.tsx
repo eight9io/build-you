@@ -25,7 +25,7 @@ import { servieGetUserOnSearch } from "../../service/search";
 
 import clsx from "clsx";
 import { RootStackParamList } from "../../navigation/navigation.type";
-import { useUserProfileStore } from "../../store/user-data";
+import { useUserProfileStore } from "../../store/user-store";
 
 const MainSearchScreen = () => {
   const [isSearchLoadinging, setIsSearchLoading] = useState<boolean>(false);

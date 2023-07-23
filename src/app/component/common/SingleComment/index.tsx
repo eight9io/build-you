@@ -6,14 +6,12 @@ import {
   Part,
   PartType,
   parseValue,
-  MentionInput,
-  replaceMentionValues,
   isMentionPartType,
 } from "react-native-controlled-mentions";
 
 import { IProgressComment } from "../../../types/progress";
 
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 
 import dayjs from "../../../utils/date.util";
 import { deleteProgressComment } from "../../../service/progress";

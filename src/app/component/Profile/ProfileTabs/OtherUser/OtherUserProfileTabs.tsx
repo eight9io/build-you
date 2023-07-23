@@ -11,7 +11,7 @@ import { IUserData } from "../../../../types/user";
 import Biography from "../Users/Biography/Biography";
 
 import { fetchListEmployee } from "../../../../utils/profile";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 import EmployeesCompany from "./EmployeesCompany";
 import SkeletonLoadingCommon from "../../../common/SkeletonLoadings/SkeletonLoadingCommon";
 

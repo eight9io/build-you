@@ -10,7 +10,7 @@ import { FC, useEffect, useState } from "react";
 import CheckCircle from "./assets/check_circle.svg";
 
 import { getChallengeStatusColor } from "../../../../utils/common";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 import Button from "../../../../component/common/Buttons/Button";
 import {
   getChallengeParticipants,

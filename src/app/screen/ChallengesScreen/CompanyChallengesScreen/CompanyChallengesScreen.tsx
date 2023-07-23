@@ -16,7 +16,7 @@ import { t } from "i18next";
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import { IChallenge } from "../../../types/challenge";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 import { useIsFocused } from "@react-navigation/native";
 import httpInstance from "../../../utils/http";
 import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";

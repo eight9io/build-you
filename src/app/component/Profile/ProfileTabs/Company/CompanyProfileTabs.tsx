@@ -12,7 +12,7 @@ import Employees from "./Employees/Employees";
 import {
   useFollowingListStore,
   useUserProfileStore,
-} from "../../../../store/user-data";
+} from "../../../../store/user-store";
 import Biography from "../Users/Biography/Biography";
 import { useIsFocused } from "@react-navigation/native";
 

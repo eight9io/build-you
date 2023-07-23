@@ -33,7 +33,7 @@ import PostAvatar from "../../../component/common/Avatar/PostAvatar";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
 import SkeletonLoadingCommon from "../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import TextInputWithMention from "../../../component/common/Inputs/TextInputWithMention";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 import { getChallengeById } from "../../../service/challenge";
 import { serviceGetEmployeeList } from "../../../service/company";
 

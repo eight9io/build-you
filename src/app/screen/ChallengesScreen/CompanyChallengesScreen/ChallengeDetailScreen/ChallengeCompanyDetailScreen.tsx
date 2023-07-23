@@ -4,7 +4,7 @@ import i18n from "../../../../i18n/i18n";
 
 import { IChallenge } from "../../../../types/challenge";
 import { getChallengeStatusColor } from "../../../../utils/common";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 import {
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,

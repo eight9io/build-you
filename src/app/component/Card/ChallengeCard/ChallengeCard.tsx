@@ -9,7 +9,7 @@ import { getChallengeStatusColor } from "../../../utils/common";
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
 import { isArray } from "util";
-import { useUserProfileStore } from "../../../store/user-data";
+import { useUserProfileStore } from "../../../store/user-store";
 
 interface IChallengeCardProps {
   item: IChallenge;

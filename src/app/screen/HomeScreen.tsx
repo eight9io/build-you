@@ -29,7 +29,7 @@ import { serviceGetFeed, serviceGetFeedUnregistered } from "../service/feed";
 import { useGetListFollowing } from "../hooks/useGetUser";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import { useAuthStore } from "../store/auth-store";
-import { useUserProfileStore } from "../store/user-data";
+import { useUserProfileStore } from "../store/user-store";
 import {
   getFocusedRouteNameFromRoute,
   NavigationProp,

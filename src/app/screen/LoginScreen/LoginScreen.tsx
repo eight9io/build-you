@@ -12,6 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-native-loading-spinner-overlay";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 import ErrorText from "../../component/common/ErrorText";
 import Button from "../../component/common/Buttons/Button";
@@ -22,29 +23,23 @@ import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginBut
 import { LoginForm } from "../../types/auth";
 
 import { LoginValidationSchema } from "../../Validators/Login.validate";
-import { serviceLogin } from "../../service/auth";
-import { err_server, errorMessage } from "../../utils/statusCode";
+import { errorMessage } from "../../utils/statusCode";
 
 import { useAuthStore } from "../../store/auth-store";
-import { addAuthTokensLocalOnLogin } from "../../utils/checkAuth";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { setAuthTokenToHttpHeader } from "../../utils/http";
+import { RootStackParamList } from "../../navigation/navigation.type";
 
-export default function Login({
-  navigation,
-  route,
-}: {
-  navigation: any;
-  route: any;
-}) {
+export default function Login() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       tabBarStyle: {
         display: "none",
       },
     });
-  }, [navigation]);
+  }, []);
   const { t } = useTranslation(["index", "errorMessage"]);
   const [errMessage, setErrMessage] = useState("");
   const {
@@ -53,41 +48,24 @@ export default function Login({
     formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
-      user: "",
-      password: "",
+      user: "hoanggia@gmail.com",
+      password: "Test1234",
     },
     resolver: yupResolver(LoginValidationSchema()),
     reValidateMode: "onChange",
     mode: "onSubmit",
   });
-  const { setAccessToken, setRefreshToken } = useAuthStore();
+  const { asyncLoginEmailPassword } = useAuthStore();
 
-  const onSubmit = async (data: LoginForm) => {
-    console.log(process.env.NX_API_URL);
-    // setIsLoading(true);
-    // serviceLogin(data)
-    //   .then((res) => {
-    //     if (res.status == 201) {
-    //       setIsLoading(false);
-    //       setAccessToken(res?.data.authorization || null);
-    //       setRefreshToken(res?.data.refresh || null);
-    //       addAuthTokensLocalOnLogin(
-    //         res?.data.authorization || null,
-    //         res?.data.refresh || null,
-    //         setAuthTokenToHttpHeader
-    //       );
-    //       setErrMessage("");
-    //     } else {
-    //       setErrMessage(err_server);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(JSON.stringify(error));
-    //     // setErrMessage(errorMessage(error, "err_login") as string);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+  const onSubmit = async (payload: LoginForm) => {
+    setIsLoading(true);
+    try {
+      await asyncLoginEmailPassword(payload);
+      setIsLoading(false); // Important
+    } catch (error) {
+      setErrMessage(errorMessage(error, "err_login"));
+      setIsLoading(false);
+    }
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -215,10 +193,7 @@ export default function Login({
                   containerClassName="bg-primary-default flex-none px-1 "
                   textClassName="line-[30px] text-center text-md font-medium text-white"
                   title={t("login_screen.login")}
-                  onPress={() => {
-                    console.log(process.env.NX_API_URL);
-                  }}
-                  // onPress={handleSubmit(onSubmit)}
+                  onPress={handleSubmit(onSubmit)}
                 />
               </View>
             </View>

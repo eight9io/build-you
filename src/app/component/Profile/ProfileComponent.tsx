@@ -10,7 +10,7 @@ import { OutlineButton } from "../common/Buttons/Button";
 import ProfileAvatar from "../common/Avatar/ProfileAvatar/ProfileAvatar";
 
 import { IUserData } from "../../types/user";
-import { useUserProfileStore } from "../../store/user-data";
+import { useUserProfileStore } from "../../store/user-store";
 import ProfileTabs from "./ProfileTabs/Users/ProfileTabs";
 import IconCompany from "./ProfileTabs/common/asset/company.svg";
 

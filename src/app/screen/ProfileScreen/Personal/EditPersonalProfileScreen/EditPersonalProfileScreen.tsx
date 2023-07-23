@@ -16,7 +16,7 @@ import {
   serviceUpdateMyProfile,
 } from "../../../../service/profile";
 import { useGetUserData } from "../../../../hooks/useGetUser";
-import { useUserProfileStore } from "../../../../store/user-data";
+import { useUserProfileStore } from "../../../../store/user-store";
 
 import Warning from "../../../../component/asset/warning.svg";
 import TextInput from "../../../../component/common/Inputs/TextInput";

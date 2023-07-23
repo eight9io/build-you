@@ -17,32 +17,24 @@ import {
 } from "../types/notification";
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 
-export const registerForPushNotificationsAsync = async (
-  setPushToken: (value: string) => Promise<void>
-) => {
-  let token;
-  if (Device.isDevice) {
-    const settings = await notifee.requestPermission();
-    if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
-      // Register the device with FCM
-      await messaging().registerDeviceForRemoteMessages();
-
-      // Get the device push token
-      token = await messaging().getToken();
-      console.log("push token: ", token);
-
-      if (token) {
-        await setPushToken(token);
-      }
-    } else {
-      // Ignore when user doesn't grant permission
-      return;
-    }
-  } else {
+export const registerForPushNotificationsAsync = async () => {
+  if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
   }
 
-  return token;
+  const settings = await notifee.requestPermission();
+  if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
+    await messaging().registerDeviceForRemoteMessages();
+
+    // Get the device push token
+    const token = await messaging().getToken();
+
+    console.log("push token: ", token);
+    return token;
+  } else {
+    // Ignore when user doesn't grant permission
+    return;
+  }
 };
 
 export const addNotificationListener = async (

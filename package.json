@@ -10,6 +10,7 @@
   "dependencies": {
     "@expo-google-fonts/open-sans": "^0.2.3",
     "@expo/metro-config": "0.7.1",
+    "@expo/vector-icons": "^13.0.0",
     "@gcou/react-native-linkedin": "^2.1.7",
     "@gorhom/bottom-sheet": "^4",
     "@hookform/resolvers": "^3.1.0",

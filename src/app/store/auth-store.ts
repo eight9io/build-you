@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { setAuthTokenToHttpHeader } from "../utils/http";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 export interface LoginStore {
   accessToken: string | null;
@@ -10,20 +11,28 @@ export interface LoginStore {
   getRefreshToken: () => string | null;
 }
 
-export const useAuthStore = create<LoginStore>((set, get) => ({
-  accessToken: null,
-  refreshToken: null,
+export const useAuthStore = create<LoginStore>()(
+  persist(
+    (set, get) => ({
+      accessToken: null,
+      refreshToken: null,
 
-  setAccessToken: (accessToken) => {
-    set({ accessToken });
-    setAuthTokenToHttpHeader(accessToken);
-  },
+      setAccessToken: (accessToken) => {
+        set({ accessToken });
+        // setAuthTokenToHttpHeader(accessToken);
+      },
 
-  setRefreshToken: (refreshToken) => {
-    set({ refreshToken });
-  },
+      setRefreshToken: (refreshToken) => {
+        set({ refreshToken });
+      },
 
-  getRefreshToken: () => get().refreshToken as any,
+      getRefreshToken: () => get().refreshToken,
 
-  getAccessToken: () => get().accessToken as any,
-}));
+      getAccessToken: () => get().accessToken,
+    }),
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

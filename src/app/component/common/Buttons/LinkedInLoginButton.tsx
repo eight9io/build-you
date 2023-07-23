@@ -1,7 +1,8 @@
-import { useTranslation } from "react-i18next";
-import Button from "./Button";
-import IconLinkedIn from "./asset/LinkedIn.svg";
 import { FC, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
+import Button from "./Button";
 import { getLinkedInAccessToken, linkedInLogin } from "../../../service/auth";
 import LinkedInModal from "../../modal/LinkedInModal";
 import GlobalDialogController from "../Dialog/GlobalDialogController";
@@ -59,7 +60,7 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({ title }) => {
         title={title}
         containerClassName="bg-sky-20 flex-row m-2"
         textClassName="text-white ml-2 text-base font-bold"
-        Icon={<IconLinkedIn />}
+        Icon={<Ionicons name="logo-linkedin" size={24} color="#FFF" />}
         onPress={handleLinkedInBtnClicked}
       />
       <LinkedInModal

@@ -9,9 +9,9 @@ export interface UserProfileStore {
 
   setUserProfile: (profile: IUserData | null) => void;
   getUserProfile: () => IUserData | null;
-  checkIsCompleteProfileOrCompany: () => boolean;
+  // checkIsCompleteProfileOrCompany: () => boolean;
 
-  onAuthStoreRehydrated: () => Promise<AxiosResponse<IUserData>>;
+  getUserProfileAsync: () => Promise<AxiosResponse<IUserData>>;
   onLogout: () => void;
 }
 
@@ -28,13 +28,8 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
     set({ userProfile: profile });
   },
   getUserProfile: () => get().userProfile,
-  checkIsCompleteProfileOrCompany: () => {
-    const profile = get().userProfile;
-    if (profile?.companyAccount) return true;
-    return !!profile?.birth;
-  },
 
-  onAuthStoreRehydrated: async () => {
+  getUserProfileAsync: async () => {
     try {
       const r = await serviceGetMe();
       set({
@@ -43,6 +38,7 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
       return r;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   },
 
@@ -58,3 +54,8 @@ export const useFollowingListStore = create<FollowingListStore>((set, get) => ({
   },
   getFollowingList: () => get().followingList,
 }));
+
+export const checkIsCompleteProfileOrCompany = (profile: IUserData) => {
+  if (profile?.companyAccount) return true;
+  return !!profile?.birth;
+};

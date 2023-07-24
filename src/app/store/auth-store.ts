@@ -10,11 +10,7 @@ import {
   registerForPushNotificationsAsync,
   unregisterForPushNotificationsAsync,
 } from "../utils/notification.util";
-import { useUserProfileStore } from "./user-store";
-import {
-  setAuthTokenToHttpHeader,
-  setupInterceptor,
-} from "../utils/refreshToken.util";
+import { setAuthTokenToHttpHeader } from "../utils/refreshToken.util";
 import {
   NOTIFICATION_TOKEN_DEVICE_TYPE,
   NOTIFICATION_TOKEN_STATUS,
@@ -112,8 +108,6 @@ export const useAuthStore = create<LoginStore>()(
       asyncLoginEmailPassword: async (payload) => {
         const r = await serviceLogin(payload);
         setAuthTokenToHttpHeader(r.data.authorization);
-        const { onAuthStoreRehydrated } = useUserProfileStore.getState();
-        await onAuthStoreRehydrated();
 
         setTimeout(
           () =>

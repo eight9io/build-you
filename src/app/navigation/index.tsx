@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -6,8 +6,11 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import * as SplashScreen from "expo-splash-screen";
-import { RootStackParamList } from "./navigation.type";
+import { CommonActions } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Text, TouchableOpacity } from "react-native";
 
+import { RootStackParamList } from "./navigation.type";
 import Header from "../component/common/Header";
 import AppTitle from "../component/common/AppTitle";
 import NavButton from "../component/common/Buttons/NavButton";
@@ -16,7 +19,6 @@ import BottomNavBar from "../component/BottomNavBar/BottomNavBar";
 import IntroScreen from "../screen/IntroScreen/IntroScreen";
 import SettingsScreen from "../screen/SettingsScreen/SettingsScreen";
 import CompleteProfileScreen from "../screen/OnboardingScreens/CompleteProfile/CompleteProfile";
-import PersonalProfileScreenLoading from "../screen/ProfileScreen/Personal/PersonalProfileScreenLoading";
 import EditCompanyProfileScreen from "../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen";
 import EditPersonalProfileScreen from "../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen";
 import CreateChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen";
@@ -28,7 +30,10 @@ import ForgotPassword from "../screen/ForgotPassword/ForgotPassword";
 import { useAuthStore } from "../store/auth-store";
 import BottomNavBarWithoutLogin from "../component/BottomNavBar/BottomNavBarWithoutLogin";
 import GlobalDialog from "../component/common/Dialog/GlobalDialog";
-import { useUserProfileStore } from "../store/user-store";
+import {
+  checkIsCompleteProfileOrCompany,
+  useUserProfileStore,
+} from "../store/user-store";
 import NavigatorService from "../utils/navigationService";
 import {
   setAuthTokenToHttpHeader,
@@ -37,7 +42,6 @@ import {
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-// Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export const RootNavigation = () => {
@@ -48,14 +52,11 @@ export const RootNavigation = () => {
     logout,
     _hasHydrated: authStoreHydrated,
   } = useAuthStore();
-  const {
-    onAuthStoreRehydrated: initUserProfile,
-    checkIsCompleteProfileOrCompany,
-    onLogout: userProfileStoreOnLogout,
-  } = useUserProfileStore();
+  const { getUserProfileAsync, onLogout: userProfileStoreOnLogout } =
+    useUserProfileStore();
 
+  const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>();
   const isLoggedin = getAccessToken();
-  const isCompleteProfile = checkIsCompleteProfileOrCompany();
 
   useEffect(() => {
     if (authStoreHydrated) {
@@ -65,8 +66,25 @@ export const RootNavigation = () => {
           userProfileStoreOnLogout();
         });
         setAuthTokenToHttpHeader(isLoggedin);
-        Promise.all([initUserProfile()]).finally(SplashScreen.hideAsync);
-        setTimeout(() => SplashScreen.hideAsync(), 2000);
+
+        getUserProfileAsync()
+          .then(({ data: profile }) => {
+            const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
+            const navigateToRoute = isCompleteProfile
+              ? "HomeScreen"
+              : "CompleteProfileScreen";
+
+            navigationRef.current.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: navigateToRoute }],
+              })
+            );
+            return profile;
+          })
+          .finally(() => {
+            setTimeout(() => SplashScreen.hideAsync(), 200);
+          });
       } else {
         SplashScreen.hideAsync();
       }
@@ -77,192 +95,179 @@ export const RootNavigation = () => {
     <NavigationContainer
       ref={(navigation: NavigationContainerRef<RootStackParamList>) => {
         NavigatorService.setContainer(navigation);
+        navigationRef.current = navigation;
       }}
     >
       <GlobalDialog />
       <RootStack.Navigator
+        initialRouteName="IntroScreen"
         screenOptions={{
           headerBackVisible: false,
           headerTitleAlign: "center",
           headerShown: false,
         }}
       >
-        {isLoggedin && isCompleteProfile && (
-          <>
-            <RootStack.Screen
-              name="HomeScreen"
-              component={BottomNavBar}
-              options={{
-                headerShown: false,
-                headerTitle: () => (
-                  <Header
-                    title={t("challenge_detail_screen.title") || undefined}
-                  />
-                ),
-                headerLeft: () => {
-                  return <NavButton />;
-                },
-              }}
-            />
-            <RootStack.Screen
-              name="CreateChallengeScreen"
-              component={CreateChallengeScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
+        <RootStack.Group>
+          <RootStack.Screen
+            name="IntroScreen"
+            component={IntroScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-            <RootStack.Screen
-              name="CreateCompanyChallengeScreen"
-              component={CreateCompanyChallengeScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
+          <RootStack.Screen
+            name="HomeScreen"
+            component={BottomNavBar}
+            options={{
+              headerShown: false,
+              headerTitle: () => (
+                <Header
+                  title={t("challenge_detail_screen.title") || undefined}
+                />
+              ),
+            }}
+          />
 
-            <RootStack.Screen
-              name="SettingsScreenRoot"
-              component={SettingsScreen}
-            />
+          <RootStack.Screen
+            name="SettingsScreenRoot"
+            component={SettingsScreen}
+          />
 
-            <RootStack.Screen
-              name="EditPersonalProfileScreen"
-              component={EditPersonalProfileScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => <AppTitle title="Edit profile" />,
-                headerLeft: () => (
-                  <NavButton
-                    text="Back"
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
-            <RootStack.Screen
-              name="EditCompanyProfileScreen"
-              component={EditCompanyProfileScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => <AppTitle title="Edit profile" />,
-                headerLeft: () => (
-                  <NavButton
-                    text="Back"
-                    onPress={() => navigation.goBack()}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
-          </>
-        )}
-        {isLoggedin && !isCompleteProfile && isCompleteProfile !== null && (
-          <>
-            <RootStack.Screen
-              name="CompleteProfileScreen"
-              component={CompleteProfileScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </>
-        )}
+          <RootStack.Screen
+            name="EditPersonalProfileScreen"
+            component={EditPersonalProfileScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => <AppTitle title="Edit profile" />,
+              headerLeft: () => (
+                <NavButton
+                  text="Back"
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="EditCompanyProfileScreen"
+            component={EditCompanyProfileScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => <AppTitle title="Edit profile" />,
+              headerLeft: () => (
+                <NavButton
+                  text="Back"
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
 
-        {isLoggedin && isCompleteProfile === null && (
-          <>
-            <RootStack.Screen
-              name="ProfileScreenLoading"
-              component={PersonalProfileScreenLoading}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </>
-        )}
+          <RootStack.Screen
+            name="CompleteProfileScreen"
+            component={CompleteProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <RootStack.Screen
+            name="HomeScreenWithoutLogin"
+            component={BottomNavBarWithoutLogin}
+            options={{
+              headerShown: false,
+              headerTitle: () => (
+                <Header
+                  title={t("challenge_detail_screen.title") || undefined}
+                />
+              ),
+              headerLeft: () => {
+                return <NavButton />;
+              },
+            }}
+          />
+        </RootStack.Group>
 
-        {!isLoggedin && (
-          <>
-            <RootStack.Screen
-              name="IntroScreen"
-              component={IntroScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <RootStack.Screen
-              name="LoginScreen"
-              component={Login}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => <AppTitle title={t("login_screen.login")} />,
+        <RootStack.Group screenOptions={{ presentation: "modal" }}>
+          <RootStack.Screen
+            name="LoginScreen"
+            component={Login}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => <AppTitle title={t("login_screen.login")} />,
 
-                headerLeft: (props) => (
-                  <NavButton
-                    text={t("button.back") as string}
-                    onPress={() => navigation.navigate("IntroScreen")}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
+              headerLeft: (props) => (
+                <NavButton
+                  text={t("button.back")}
+                  onPress={() => navigation.navigate("IntroScreen")}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="RegisterScreen"
+            component={Register}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("register_screen.title")} />
+              ),
 
-            <RootStack.Screen
-              name="RegisterScreen"
-              component={Register}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => (
-                  <AppTitle title={t("register_screen.title")} />
-                ),
+              headerLeft: () => (
+                <NavButton
+                  text={t("button.back")}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
 
-                headerLeft: () => (
-                  <NavButton
-                    text={t("button.back") as string}
-                    onPress={() =>
-                      navigation.navigate("IntroScreen", { setModal: true })
-                    }
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
+          <RootStack.Screen
+            name="ForgotPasswordScreen"
+            component={ForgotPassword}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("forgot_password.title")} />
+              ),
 
-            <RootStack.Screen
-              name="ForgotPasswordScreen"
-              component={ForgotPassword}
-              options={({ navigation }) => ({
-                headerShown: true,
-                headerTitle: () => (
-                  <AppTitle title={t("forgot_password.title")} />
-                ),
+              headerLeft: () => (
+                <NavButton
+                  text={t("button.back")}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
 
-                headerLeft: () => (
-                  <NavButton
-                    text={t("button.back") as string}
-                    onPress={() => navigation.navigate("LoginScreen")}
-                    withBackIcon
-                  />
-                ),
-              })}
-            />
-            <RootStack.Screen
-              name="HomeScreenWithoutLogin"
-              component={BottomNavBarWithoutLogin}
-              options={{
-                headerShown: false,
-                headerTitle: () => (
-                  <Header
-                    title={t("challenge_detail_screen.title") || undefined}
-                  />
-                ),
-                headerLeft: () => {
-                  return <NavButton />;
-                },
-              }}
-            />
-          </>
-        )}
+          <RootStack.Screen
+            name="CreateChallengeScreen"
+            component={CreateChallengeScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("new_challenge_screen.title") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+
+          <RootStack.Screen
+            name="CreateCompanyChallengeScreen"
+            component={CreateCompanyChallengeScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </RootStack.Group>
       </RootStack.Navigator>
     </NavigationContainer>
   );

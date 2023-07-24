@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
 
-import { IProgressChallenge } from "../../types/challenge";
+import { INumberOfCommentUpdate, IProgressChallenge } from "../../types/challenge";
 
 import { useGetOtherUserData } from "../../hooks/useGetUser";
 
@@ -18,7 +18,7 @@ import { useUserProfileStore } from "../../store/user-store";
 interface IChallengeProgressCardProps {
   progress: IProgressChallenge;
   ownerId?: string;
-  shouldRefreshComments?: boolean;
+  localCommentUpdate?: INumberOfCommentUpdate;
 }
 
 const ChallengeProgressCardForComment: React.FC<
@@ -35,7 +35,7 @@ const ChallengeProgressCardForComment: React.FC<
     location,
   },
   ownerId,
-  shouldRefreshComments,
+  localCommentUpdate,
 }) => {
   const [otherData, setOtherData] = useState<any>();
   ownerId && useGetOtherUserData(ownerId, setOtherData);
@@ -87,7 +87,7 @@ const ChallengeProgressCardForComment: React.FC<
           <CommentButton
             isViewOnly={true}
             progressId={id}
-            shouldRefreshComments={shouldRefreshComments}
+            localCommentUpdate={localCommentUpdate}
           />
         </View>
       </View>

@@ -35,6 +35,7 @@ import TextInputWithMention from "../../../component/common/Inputs/TextInputWith
 import { useUserProfileStore } from "../../../store/user-store";
 import { getChallengeById } from "../../../service/challenge";
 import { serviceGetEmployeeList } from "../../../service/company";
+import { useChallengeUpdateStore } from "../../../store/challenge-update-store";
 
 interface IProgressCommentScreenProps {
   route: Route<
@@ -126,6 +127,11 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const [companyEmployees, setCompanyEmployees] = useState<any[]>([]);
   const [isChallengePublic, setIsChallengePublic] = useState<boolean>(false);
 
+  const { setChallengeUpdateComment, getChallengeUpdateComment } =
+    useChallengeUpdateStore();
+
+  const numberOfCommentsLocal = getChallengeUpdateComment();
+
   useEffect(() => {
     if (!progressId) return;
     const loadProgressData = async () => {
@@ -189,6 +195,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
 
   const handleRefreshComments = async () => {
     setShouldRefreshComments(true);
+    setChallengeUpdateComment({
+      id: progressId,
+      numberOfComments: comments.length + 1,
+    });
     await loadProgressComments();
     setShouldRefreshComments(false);
   };
@@ -245,7 +255,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                   <ChallengeProgressCardForComment
                     progress={progressData}
                     ownerId={ownerId}
-                    shouldRefreshComments={shouldRefreshComments}
+                    localCommentUpdate={numberOfCommentsLocal}
                   />
                 </View>
               }

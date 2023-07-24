@@ -21,6 +21,10 @@ import { Video } from "expo-av";
 import LikeButtonUnregister from "./LikeButtonUnregister";
 import CommentButtonUnregister from "./CommentButtonUnregister";
 import { useChallengeUpdateStore } from "../../store/challenge-update-store";
+import {
+  INumberOfCommentUpdate,
+  INumberOfLikeUpdate,
+} from "../../types/challenge";
 
 interface IChallengeImageProps {
   name: string;
@@ -39,6 +43,8 @@ interface IFeedPostCardProps {
   userId?: string;
   isFocused?: boolean;
   navigation?: any;
+  challgeneUpdateLike?: INumberOfLikeUpdate;
+  challengeUpdateComment?: INumberOfCommentUpdate;
 }
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
@@ -228,6 +234,8 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   userId,
   isFocused,
   navigation,
+  challgeneUpdateLike,
+  challengeUpdateComment,
 }) => {
   const navigateToUserProfile = () => {
     if (!user?.id) {
@@ -321,10 +329,12 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
               progressId={id}
               currentUserId={userId}
               isFocused={isFocused}
+              localProgressLikes={challgeneUpdateLike}
             />
             <CommentButton
               navigationToComment={navigateToProgressComment}
               progressId={id}
+              localCommentUpdate={challengeUpdateComment}
             />
           </View>
         </View>

@@ -64,11 +64,12 @@ export function setupInterceptor(
               token: refreshToken,
             }
           );
-
+          console.log("newTokens", newTokens);
           if (newTokens.status !== 201) {
             reject(error); // throw so next check retry will force logout
           } else {
             try {
+              console.log("call original request with new token");
               setAuthTokenToHttpHeader(newTokens.data.authorization);
               originalRequest.headers["Authorization"] = `Bearer ${newTokens}`;
               const res = await httpInstance(originalRequest);

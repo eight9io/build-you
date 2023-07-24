@@ -10,7 +10,7 @@
     </array>
     <key>com.apple.developer.associated-domains</key>
     <array>
-      <string>applinks:it.buildyou.buildyou</string>
+      <string>applinks:app.uat.buildyou.it</string>
     </array>
   </dict>
 </plist>

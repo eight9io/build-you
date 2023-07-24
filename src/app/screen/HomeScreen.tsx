@@ -226,11 +226,7 @@ export const HomeFeedUnregister = () => {
   );
 };
 
-const HomeScreen = ({ navigation, route }: BottomTabScreenProps<any>) => {
-  const { getAccessToken } = useAuthStore();
-
-  const logined = getAccessToken();
-
+const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
   return (
     <HomeScreenStack.Navigator
       screenOptions={{
@@ -239,147 +235,141 @@ const HomeScreen = ({ navigation, route }: BottomTabScreenProps<any>) => {
         headerShown: false,
       }}
     >
-      {!logined && (
-        <HomeScreenStack.Screen
-          name="FeedScreenUnregister"
-          component={HomeFeedUnregister}
-          options={({ navigation }) => ({
-            headerShown: true,
-            headerTitle: () => <AppTitle title={t("your_feed.header")} />,
-            headerRight: (props) => (
-              <NavButton
-                withIcon
-                icon={
-                  <IconSearch
-                    onPress={() =>
-                      navigation.navigate("CompleteProfileStep3Screen")
-                    }
-                  />
-                }
-              />
-            ),
-          })}
-        />
-      )}
-      {logined && (
-        <>
-          <HomeScreenStack.Screen
-            name="FeedScreen"
-            component={HomeFeed}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => <AppTitle title={t("your_feed.header")} />,
-              headerRight: (props) => (
-                <NavButton
-                  withIcon
-                  icon={
-                    <IconSearch
-                      onPress={() => navigation.navigate("MainSearchScreen")}
-                    />
+      <HomeScreenStack.Screen
+        name="FeedScreenUnregister"
+        component={HomeFeedUnregister}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title={t("your_feed.header")} />,
+          headerRight: () => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() =>
+                    navigation.navigate("CompleteProfileStep3Screen")
                   }
                 />
-              ),
-            })}
-          />
-
-          <HomeScreenStack.Screen
-            name="MainSearchScreen"
-            component={MainSearchScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <Text className="text-lg font-semibold">Search User</Text>
-              ),
-              headerSearchBarOptions: {
-                hideNavigationBar: false,
-              },
-              headerLeft: () => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
+              }
+            />
+          ),
+        })}
+      />
+      <HomeScreenStack.Screen
+        name="FeedScreen"
+        component={HomeFeed}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title={t("your_feed.header")} />,
+          headerRight: (props) => (
+            <NavButton
+              withIcon
+              icon={
+                <IconSearch
+                  onPress={() => navigation.navigate("MainSearchScreen")}
                 />
-              ),
-            })}
-          />
+              }
+            />
+          ),
+        })}
+      />
 
-          <HomeScreenStack.Screen
-            name="OtherUserProfileScreen"
-            component={OtherUserProfileScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => "",
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                  withBackIcon
-                />
-              ),
-            })}
-          />
+      <HomeScreenStack.Screen
+        name="MainSearchScreen"
+        component={MainSearchScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <Text className="text-lg font-semibold">Search User</Text>
+          ),
+          headerSearchBarOptions: {
+            hideNavigationBar: false,
+          },
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
 
-          <HomeScreenStack.Screen
-            name="OtherUserProfileChallengeDetailsScreen"
-            component={OtherUserProfileChallengeDetailsScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => "",
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
-                />
-              ),
-              headerRight: () => {
-                return (
-                  <View>
-                    <Button
-                      Icon={<ShareIcon />}
-                      onPress={() => console.log("press share")}
-                    />
-                  </View>
-                );
-              },
-            })}
-          />
+      <HomeScreenStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => {
+                navigation.goBack();
+              }}
+              withBackIcon
+            />
+          ),
+        })}
+      />
 
-          <HomeScreenStack.Screen
-            name="CompanyChallengeDetailScreen"
-            component={CompanyChallengeDetailScreen}
-            options={{
-              headerShown: true,
-              headerTitle: () => "",
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
+      <HomeScreenStack.Screen
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+          headerRight: () => {
+            return (
+              <View>
+                <Button
+                  Icon={<ShareIcon />}
+                  onPress={() => console.log("press share")}
                 />
-              ),
-            }}
-          />
+              </View>
+            );
+          },
+        })}
+      />
 
-          <HomeScreenStack.Screen
-            name="ProgressCommentScreen"
-            component={ProgressCommentScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => "",
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
-                />
-              ),
-            })}
-          />
-        </>
-      )}
+      <HomeScreenStack.Screen
+        name="CompanyChallengeDetailScreen"
+        component={CompanyChallengeDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        }}
+      />
+
+      <HomeScreenStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
     </HomeScreenStack.Navigator>
   );
 };

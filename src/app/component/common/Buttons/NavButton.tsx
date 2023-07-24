@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
-// import BackIcon from "./asset/backIcon.svg";
+import BackIcon from "./asset/backIcon.svg";
 
 interface INavButtonProps {
   icon?: any;
@@ -26,7 +26,7 @@ const NavButton: FC<INavButtonProps> = ({
       className={clsx("flex flex-row items-center")}
       onPress={onPress}
     >
-      {/* {withBackIcon && <BackIcon />} */}
+      {withBackIcon && <BackIcon />}
       {withIcon && icon && icon}
       <Text
         className={clsx(

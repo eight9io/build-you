@@ -13,6 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-native-loading-spinner-overlay";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 
 import ErrorText from "../../component/common/ErrorText";
 import Button from "../../component/common/Buttons/Button";
@@ -26,7 +27,10 @@ import { useAuthStore } from "../../store/auth-store";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { setupInterceptor } from "../../utils/refreshToken.util";
-import { useUserProfileStore } from "../../store/user-store";
+import {
+  checkIsCompleteProfileOrCompany,
+  useUserProfileStore,
+} from "../../store/user-store";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -54,17 +58,31 @@ export default function Login() {
     mode: "onSubmit",
   });
   const { asyncLoginEmailPassword, getRefreshToken, logout } = useAuthStore();
-  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
+  const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
+    useUserProfileStore();
 
   const onSubmit = async (payload: LoginForm) => {
     setIsLoading(true);
     try {
-      await asyncLoginEmailPassword(payload);
+      const t = await asyncLoginEmailPassword(payload);
       setupInterceptor(getRefreshToken, () => {
         logout();
         userProfileStoreOnLogout();
       });
+
+      const { data: profile } = await getUserProfileAsync();
       setIsLoading(false); // Important to not crashing app with duplicate modal
+      const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
+      const navigateToRoute = isCompleteProfile
+        ? "HomeScreen"
+        : "CompleteProfileScreen";
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: navigateToRoute }],
+        })
+      );
     } catch (error) {
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);

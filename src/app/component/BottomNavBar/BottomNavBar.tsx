@@ -101,7 +101,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       <Tab.Screen
         name="Feed"
         component={HomeScreen}
-        options={({ navigation }) => ({
+        options={() => ({
           headerShown: false,
 
           tabBarIcon: ({ focused }) => (
@@ -147,7 +147,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Create Challenge"
-        component={EmptyPage}
+        component={() => undefined}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
@@ -158,11 +158,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View className={clsx("flex flex-col items-center justify-center")}>
-              {focused ? (
-                <CreateFillSvg fill={"#FF7B1C"} />
-              ) : (
-                <CreateSvg fill={"#6C6E76"} />
-              )}
+              <CreateSvg fill={"#6C6E76"} />
               <Text
                 className={clsx(
                   "pt-1.5 text-xs font-semibold text-gray-bottomBar",
@@ -201,61 +197,31 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           ),
         }}
       />
-      {!isCompany ? (
-        <Tab.Screen
-          name="Profile"
-          component={PersonalProfileScreen}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ focused }) => (
-              <View
-                className={clsx("flex flex-col items-center justify-center")}
-              >
-                {focused ? (
-                  <ProfileFillSvg fill={"#FF7B1C"} />
-                ) : (
-                  <ProfileSvg fill={"#6C6E76"} />
+
+      <Tab.Screen
+        name="Profile"
+        component={!isCompany ? PersonalProfileScreen : CompanyProfileScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View className={clsx("flex flex-col items-center justify-center")}>
+              {focused ? (
+                <ProfileFillSvg fill={"#FF7B1C"} />
+              ) : (
+                <ProfileSvg fill={"#6C6E76"} />
+              )}
+              <Text
+                className={clsx(
+                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
+                  focused && "text-primary-default"
                 )}
-                <Text
-                  className={clsx(
-                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                    focused && "text-primary-default"
-                  )}
-                >
-                  {t("bottom_nav.profile")}
-                </Text>
-              </View>
-            ),
-          }}
-        />
-      ) : (
-        <Tab.Screen
-          name="Profile"
-          component={CompanyProfileScreen}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ focused }) => (
-              <View
-                className={clsx("flex flex-col items-center justify-center")}
               >
-                {focused ? (
-                  <ProfileFillSvg fill={"#FF7B1C"} />
-                ) : (
-                  <ProfileSvg fill={"#6C6E76"} />
-                )}
-                <Text
-                  className={clsx(
-                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                    focused && "text-primary-default"
-                  )}
-                >
-                  {t("bottom_nav.profile")}
-                </Text>
-              </View>
-            ),
-          }}
-        />
-      )}
+                {t("bottom_nav.profile")}
+              </Text>
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

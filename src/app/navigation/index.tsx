@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 import { RootStackParamList } from "./navigation.type";
 import Header from "../component/common/Header";

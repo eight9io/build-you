@@ -8,6 +8,7 @@ import {
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import { CommonActions } from "@react-navigation/native";
 import IconEyeOff from "./asset/eye-off.svg";
 
 import IconEyeOn from "./asset/icon-eye.svg";
@@ -23,9 +24,13 @@ import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { serviceLogin } from "../../service/auth";
 import { serviceDeleteAccount } from "../../service/profile";
 import { useAuthStore } from "../../store/auth-store";
+import { useNav } from "../../navigation/navigation.type";
 
 export default function DeleteAccountScreen() {
   const { logout } = useAuthStore();
+  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
+  const navigation = useNav();
+
   const [hidePassword, setHidePassword] = useState(true);
   const [isShowModal, setIsShowModal] = useState({
     isModalDelete: false,
@@ -92,9 +97,16 @@ export default function DeleteAccountScreen() {
       });
     }
   };
-
   const handleLogOut = () => {
     logout();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "IntroScreen" }],
+      })
+    );
+    logout();
+    userProfileStoreOnLogout();
   };
   return (
     <SafeAreaView className=" h-full w-full bg-white px-4 pt-3">

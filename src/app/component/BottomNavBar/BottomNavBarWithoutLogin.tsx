@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, Platform } from "react-native";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-
 import HomeScreen from "../../screen/HomeScreen";
 import FeedSvg from "./asset/feed.svg";
 import CreateSvg from "./asset/create.svg";
@@ -13,11 +12,11 @@ import AlertSvg from "./asset/noti.svg";
 import AppTitle from "../common/AppTitle";
 import IconSearch from "../common/IconSearch/IconSearch";
 import NavButton from "../common/Buttons/NavButton";
-import Login from "../../screen/LoginScreen/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 
 interface IBottomNavBarProps {}
+const EmptyPage = () => null;
 
 const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
@@ -45,27 +44,26 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         name="Feed"
         component={HomeScreen}
         options={({ navigation }) => ({
+          headerShown: true,
           headerTitle: () => <AppTitle title={t("your_feed.header")} />,
           headerRight: () => (
             <NavButton
               withIcon
               icon={
                 <IconSearch
-                  onPress={() => navigation.navigate("LoginScreen")}
+                  onPress={() => {
+                    navigation.goBack();
+                    navigation.navigate("LoginScreen");
+                  }}
                 />
               }
             />
           ),
 
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: () => (
             <View className={clsx("flex flex-col items-center justify-center")}>
-              <FeedSvg fill={focused ? "#FF7B1C" : "#6C6E76"} />
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
+              <FeedSvg fill={"#FF7B1C"} />
+              <Text className="pt-1.5 text-xs font-semibold text-primary-default">
                 {t("bottom_nav.feed")}
               </Text>
             </View>
@@ -74,27 +72,18 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Challenges"
-        component={Login}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title={t("login_screen.login")} />,
-
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.navigate("IntroScreen")}
-              withBackIcon
-            />
-          ),
-          tabBarIcon: ({ focused }) => (
+        component={EmptyPage}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.goBack();
+            navigation.navigate("LoginScreen");
+          },
+        })}
+        options={() => ({
+          tabBarIcon: () => (
             <View className={clsx("flex flex-col items-center justify-center")}>
-              <ChallengesSvg fill={focused ? "#FF7B1C" : "#6C6E76"} />
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
+              <ChallengesSvg fill="#6C6E76" />
+              <Text className="pt-1.5 text-xs font-semibold text-gray-bottomBar">
                 {t("bottom_nav.challenges")}
               </Text>
             </View>
@@ -103,27 +92,18 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Create Challenge"
-        component={Login}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title={t("login_screen.login")} />,
-
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.navigate("IntroScreen")}
-              withBackIcon
-            />
-          ),
-          tabBarIcon: ({ focused }) => (
+        component={EmptyPage}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.goBack();
+            navigation.navigate("LoginScreen");
+          },
+        })}
+        options={() => ({
+          tabBarIcon: () => (
             <View className={clsx("flex flex-col items-center justify-center")}>
-              <CreateSvg fill={focused ? "#FF7B1C" : "#6C6E76"} />
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
+              <CreateSvg fill="#6C6E76" />
+              <Text className="pt-1.5 text-xs font-semibold text-gray-bottomBar">
                 {t("bottom_nav.create")}
               </Text>
             </View>
@@ -132,27 +112,18 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={Login}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title={t("login_screen.login")} />,
-
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.navigate("IntroScreen")}
-              withBackIcon
-            />
-          ),
-          tabBarIcon: ({ focused }) => (
+        component={EmptyPage}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.goBack();
+            navigation.navigate("LoginScreen");
+          },
+        })}
+        options={() => ({
+          tabBarIcon: () => (
             <View className={clsx("flex flex-col items-center justify-center")}>
-              <AlertSvg fill={focused ? "#FF7B1C" : "#6C6E76"} />
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
+              <AlertSvg fill="#6C6E76" />
+              <Text className="pt-1.5 text-xs font-semibold text-gray-bottomBar">
                 {t("bottom_nav.noti")}
               </Text>
             </View>
@@ -161,27 +132,18 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Login}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title={t("login_screen.login")} />,
-
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.navigate("IntroScreen")}
-              withBackIcon
-            />
-          ),
-          tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
-              <ProfileSvg fill={focused ? "#FF7B1C" : "#6C6E76"} />
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
+        component={EmptyPage}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.goBack();
+            navigation.navigate("LoginScreen");
+          },
+        })}
+        options={() => ({
+          tabBarIcon: () => (
+            <View className="flex flex-col items-center justify-center">
+              <ProfileSvg fill="#6C6E76" />
+              <Text className="pt-1.5 text-xs font-semibold text-gray-bottomBar">
                 {t("bottom_nav.profile")}
               </Text>
             </View>

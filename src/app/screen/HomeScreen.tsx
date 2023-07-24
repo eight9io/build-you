@@ -49,8 +49,11 @@ export const HomeFeed = () => {
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { getChallengeUpdateDetails, getChallengeUpdateLike, getChallengeUpdateComment } =
-    useChallengeUpdateStore();
+  const {
+    getChallengeUpdateDetails,
+    getChallengeUpdateLike,
+    getChallengeUpdateComment,
+  } = useChallengeUpdateStore();
   const challgeneUpdateDetails = getChallengeUpdateDetails();
   const challgeneUpdateLike = getChallengeUpdateLike();
   const challgeneUpdateComment = getChallengeUpdateComment();
@@ -245,22 +248,9 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
       <HomeScreenStack.Screen
         name="FeedScreenUnregister"
         component={HomeFeedUnregister}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title={t("your_feed.header")} />,
-          headerRight: () => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() =>
-                    navigation.navigate("CompleteProfileStep3Screen")
-                  }
-                />
-              }
-            />
-          ),
-        })}
+        options={{
+          headerShown: false,
+        }}
       />
       <HomeScreenStack.Screen
         name="FeedScreen"

@@ -4,15 +4,8 @@ import { useTranslation } from "react-i18next";
 import {
   BottomTabBar,
   createBottomTabNavigator,
-  useBottomTabBarHeight,
 } from "@react-navigation/bottom-tabs";
 import { View, Text, Platform } from "react-native";
-import Animated, {
-  FadeIn,
-  FadeInUp,
-  FadeOutDown,
-  Layout,
-} from "react-native-reanimated";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import HomeScreen from "../../screen/HomeScreen";
@@ -38,7 +31,6 @@ import { useUserProfileStore } from "../../store/user-store";
 import { useNotificationStore } from "../../store/notification-store";
 
 const Tab = createBottomTabNavigator();
-const EmptyPage = () => null;
 
 interface IBottomNavBarProps {}
 
@@ -82,21 +74,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         }
         return {};
       }}
-      tabBar={(props) => (
-        // <Animated.View
-        //   entering={FadeIn}
-        //   exiting={FadeOutDown}
-        //   layout={Layout.duration(200)}
-        //   style={{
-        //     display: shouldHideTabBar ? 'none' : 'flex',
-        //     height: isAndroid ? 68 : 102,
-        //     paddingBottom: isAndroid ? 0 : 30,
-        //     position: 'relative', // Make sure all the screen is above the tab bar and not be hidden by it
-        //   }}
-        // >
-        <BottomTabBar {...props} />
-        // </Animated.View>
-      )}
+      tabBar={(props) => <BottomTabBar {...props} />}
     >
       <Tab.Screen
         name="Feed"

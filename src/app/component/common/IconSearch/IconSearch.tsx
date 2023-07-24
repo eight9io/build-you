@@ -8,7 +8,7 @@ export const IconSearch: React.FC<ISearchIcon> = ({ onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View className="flex-row ">
-        {/* <SearchIcon /> */}
+        <SearchIcon />
         <Image source={SearchIcon} />
       </View>
     </TouchableOpacity>

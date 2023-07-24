@@ -5,11 +5,10 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
+import { CommonActions } from "@react-navigation/native";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useAuthStore } from "../../store/auth-store";
-
-// import NavBarInnerScreen from "../../component/NavBar/NavBarInnerScreen";
 import Button from "../../component/common/Buttons/Button";
 import { ScrollView } from "react-native-gesture-handler";
 import AppTitle from "../../component/common/AppTitle";
@@ -35,16 +34,18 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
 
   const handleLogout = async () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "IntroScreen" }],
+      })
+    );
     logout();
     userProfileStoreOnLogout();
   };
 
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white">
-      {/* <NavBarInnerScreen
-        title={t('user_settings_screen.title')}
-        navigation={navigation}
-      /> */}
       <ScrollView>
         <View className="flex flex-1 flex-col bg-gray-veryLight">
           <Settings navigation={navigation} />

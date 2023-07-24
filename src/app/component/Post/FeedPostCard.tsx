@@ -325,7 +325,6 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
             <CommentButton
               navigationToComment={navigateToProgressComment}
               progressId={id}
-              isFocused={isFocused}
             />
           </View>
         </View>

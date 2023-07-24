@@ -37,6 +37,8 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   // const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  console.log('isLoading', isLoading);
+
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
 

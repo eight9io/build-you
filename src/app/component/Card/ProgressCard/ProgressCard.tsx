@@ -29,6 +29,7 @@ import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 import IconDot from "./asset/dot.svg";
 import { useUserProfileStore } from "../../../store/user-store";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
+import { debounce } from "../../../hooks/useDebounce";
 
 interface IProgressCardProps {
   challengeOwner: {
@@ -145,21 +146,21 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const isProgressOwner = userData && userData?.id === currentUserId;
 
+  const navigateToOtherUserProfile = () => {
+    if (!userData?.id) return;
+    const pushAction = StackActions.push("OtherUserProfileScreen", {
+      userId: userData?.id,
+    });
+
+    navigation.dispatch(pushAction);
+  };
+
   return (
     <View className="mb-1 bg-gray-50 p-5 ">
       <View className="mb-3 flex flex-row items-center justify-between ">
         <TouchableOpacity
           className="flex flex-1 flex-row"
-          onPress={() => {
-            if (!userData?.id) return;
-            // navigation.push('OtherUserProfileScreen', {
-            //   userId: userData?.id,
-            // });
-            const pushAction = StackActions.push("OtherUserProfileScreen", {
-              userId: userData?.id,
-            });
-            navigation.dispatch(pushAction);
-          }}
+          onPress={() => debounce(navigateToOtherUserProfile, 400)()}
         >
           <ProgressCardAvatar src={userData?.avatar} />
           <View className="ml-2 flex-1">

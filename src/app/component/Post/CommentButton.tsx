@@ -9,7 +9,6 @@ import { debounce } from "../../hooks/useDebounce";
 
 interface ICommentButtonProps {
   progressId: string;
-  isFocused?: boolean;
   isViewOnly?: boolean;
   navigationToComment?: () => void;
   shouldRefreshComments?: boolean;
@@ -17,37 +16,15 @@ interface ICommentButtonProps {
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
-  // isFocused = false,
   isViewOnly = false,
   navigationToComment,
-  // shouldRefreshComments = false,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
 
-  // TODO use focus only on root screen, not on component
   useEffect(() => {
-    // if (!isFocused) return;
+    if (!progressId) return;
     loadProgressComments();
-    // (async () => {
-    //   await loadProgressComments();
-    // })();
-  }, []);
-
-  // TODO seems a useless hook
-  // useEffect(() => {
-  //   if (!progressId) return;
-  //   (async () => {
-  //     await loadProgressComments();
-  //   })();
-  // }, [progressId]);
-
-  // TODO seems a useless hook
-  // useEffect(() => {
-  //   if (!shouldRefreshComments) return;
-  //   (async () => {
-  //     await loadProgressComments();
-  //   })();
-  // }, [shouldRefreshComments]);
+  }, [progressId]);
 
   const loadProgressComments = async () => {
     try {

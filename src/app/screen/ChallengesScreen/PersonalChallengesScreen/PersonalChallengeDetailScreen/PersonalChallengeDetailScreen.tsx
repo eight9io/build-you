@@ -42,7 +42,7 @@ interface IRightPersonalChallengeDetailOptionsProps {
   onEditChallengeBtnPress?: () => void;
   shouldRenderEditAndDeleteBtns?: boolean | null;
   shouldRenderCompleteBtn?: boolean;
-  refresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: () => void;
   setIsDeleteChallengeDialogVisible?: React.Dispatch<
     React.SetStateAction<boolean>
   >;
@@ -335,7 +335,7 @@ const PersonalChallengeDetailScreen = ({
             challengeData={challengeData}
             refresh={refresh}
             setIsJoinedLocal={setIsJoinedLocal}
-            setShouldRefresh={setShouldRefresh}
+            // setShouldRefresh={setShouldRefresh}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

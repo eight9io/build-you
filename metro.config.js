@@ -9,6 +9,8 @@ module.exports = (() => {
     ...transformer,
     babelTransformerPath: require.resolve("react-native-svg-transformer"),
   };
+  config.transformer.minifierPath = require.resolve("metro-minify-esbuild");
+
   config.resolver = {
     ...resolver,
     assetExts: resolver.assetExts.filter((ext) => ext !== "svg"),

@@ -54,8 +54,6 @@ PODS:
     - ExpoModulesCore
   - ExpoVideoThumbnails (7.2.1):
     - ExpoModulesCore
-  - ExpoWebBrowser (12.1.1):
-    - ExpoModulesCore
   - EXSharing (11.2.2):
     - ExpoModulesCore
   - EXSplashScreen (0.18.2):
@@ -605,7 +603,6 @@ DEPENDENCIES:
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoRandom (from `../node_modules/expo-random/ios`)
   - ExpoVideoThumbnails (from `../node_modules/expo-video-thumbnails/ios`)
-  - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - EXSharing (from `../node_modules/expo-sharing/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXTaskManager (from `../node_modules/expo-task-manager/ios`)
@@ -732,8 +729,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-random/ios"
   ExpoVideoThumbnails:
     :path: "../node_modules/expo-video-thumbnails/ios"
-  ExpoWebBrowser:
-    :path: "../node_modules/expo-web-browser/ios"
   EXSharing:
     :path: "../node_modules/expo-sharing/ios"
   EXSplashScreen:
@@ -866,7 +861,6 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 653958063a301098b541ae4dfed1ac0b98db607b
   ExpoRandom: 2b8cb73f02f534b083a1f79b10b89ca0f0111b55
   ExpoVideoThumbnails: 0021303b614a89fcc5df8b59d9d37ddf14a7d4cf
-  ExpoWebBrowser: 033d34c478d9986da2f1679729041423837626e0
   EXSharing: 09839ace249f61bfa13c50c6a28256c31d260355
   EXSplashScreen: 0e0a9ba0cf7553094e93213099bd7b42e6e237e9
   EXTaskManager: f8257faa4c20acfc3f31e21ab82a62544d70db85

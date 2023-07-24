@@ -44,6 +44,7 @@ export default function Login() {
   }, []);
   const { t } = useTranslation(["index", "errorMessage"]);
   const [errMessage, setErrMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -89,7 +90,6 @@ export default function Login() {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   return (
     <SafeAreaView className="relative h-full flex-1 bg-white">

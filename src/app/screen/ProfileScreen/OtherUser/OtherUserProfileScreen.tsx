@@ -26,6 +26,7 @@ import { serviceFollow, serviceUnfollow } from "../../../service/profile";
 import { useGetOtherUserData } from "../../../hooks/useGetUser";
 import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
 import { fetchNewFollowingData } from "../../../utils/profile";
+import { AxiosError } from "axios";
 
 interface IOtherUserProfileComponentProps {
   userId: string | null | undefined;
@@ -56,7 +57,7 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       fetchNewFollowingData(userProfile?.id, (res: any) =>
         setFollowingList(res)
       );
-    } catch (error) {
+    } catch (error: AxiosError | any) {
       GlobalDialogController.showModal({
         title: "Error",
         message: t("errorMessage:500") as string,

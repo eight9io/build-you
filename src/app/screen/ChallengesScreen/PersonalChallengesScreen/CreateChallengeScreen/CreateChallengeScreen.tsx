@@ -8,7 +8,6 @@ import { useForm, Controller } from "react-hook-form";
 import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { ICreateChallenge } from "../../../../types/challenge";
 import { useNav } from "../../../../navigation/navigation.type";

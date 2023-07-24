@@ -22,7 +22,7 @@ import CompleteProfileScreen from "../screen/OnboardingScreens/CompleteProfile/C
 import EditCompanyProfileScreen from "../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen";
 import EditPersonalProfileScreen from "../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen";
 import CreateChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen";
-import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateCompanyChallengeScreen";
+import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
 
 import Login from "../screen/LoginScreen/LoginScreen";
 import Register from "../screen/RegisterScreen/RegisterScreen";
@@ -263,9 +263,17 @@ export const RootNavigation = () => {
           <RootStack.Screen
             name="CreateCompanyChallengeScreen"
             component={CreateCompanyChallengeScreen}
-            options={{
-              headerShown: false,
-            }}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("new_challenge_screen.title") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
           />
         </RootStack.Group>
       </RootStack.Navigator>

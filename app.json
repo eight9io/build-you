@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
-      "associatedDomains": ["applinks:it.buildyou.buildyou"],
+      "associatedDomains": ["applinks:app.uat.buildyou.it"],
       "buildNumber": "7",
       "supportsTablet": false,
       "infoPlist": {

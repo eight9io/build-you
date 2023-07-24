@@ -65,9 +65,8 @@ export const RootNavigation = () => {
           userProfileStoreOnLogout();
         });
         setAuthTokenToHttpHeader(isLoggedin);
-        Promise.all([initUserProfile()]).finally(() =>
-          setTimeout(SplashScreen.hideAsync, 300)
-        );
+        Promise.all([initUserProfile()]);
+        setTimeout(() => SplashScreen.hideAsync(), 500);
       } else {
         SplashScreen.hideAsync();
       }

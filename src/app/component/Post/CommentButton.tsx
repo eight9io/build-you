@@ -6,18 +6,20 @@ import CommentSvg from "./asset/comment.svg";
 import { getProgressComments } from "../../service/progress";
 // import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 import { debounce } from "../../hooks/useDebounce";
+import { INumberOfCommentUpdate } from "../../types/challenge";
 
 interface ICommentButtonProps {
   progressId: string;
   isViewOnly?: boolean;
   navigationToComment?: () => void;
-  shouldRefreshComments?: boolean;
+  localCommentUpdate?: INumberOfCommentUpdate;
 }
 
 const CommentButton: FC<ICommentButtonProps> = ({
   progressId,
   isViewOnly = false,
   navigationToComment,
+  localCommentUpdate,
 }) => {
   const [numberOfComments, setNumberOfComments] = useState(0);
 
@@ -53,9 +55,17 @@ const CommentButton: FC<ICommentButtonProps> = ({
         className={clsx("flex-1 flex-row items-center justify-center gap-2")}
       >
         <CommentSvg />
-        <Text className={clsx("text-md font-normal text-gray-dark ")}>
-          {numberOfComments} comment{numberOfComments > 1 && "s"}
-        </Text>
+        {!localCommentUpdate?.id && (
+          <Text className={clsx("text-md font-normal text-gray-dark ")}>
+            {numberOfComments} comment{numberOfComments > 1 && "s"}
+          </Text>
+        )}
+        {localCommentUpdate?.id && (
+          <Text className={clsx("text-md font-normal text-gray-dark ")}>
+            {localCommentUpdate.numberOfComments} comment
+            {localCommentUpdate.numberOfComments > 1 && "s"}
+          </Text>
+        )}
       </View>
     </TouchableHighlight>
   );

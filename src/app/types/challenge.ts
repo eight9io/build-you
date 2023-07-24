@@ -70,3 +70,14 @@ export interface IChallenge {
   progress?: IProgressChallenge[];
   participants?: IUserData[];
 }
+
+export interface INumberOfCommentUpdate {
+  id: string;
+  numberOfComments: number;
+}
+
+export interface INumberOfLikeUpdate {
+  id: string;
+  numberOfLikes: number;
+  isLikedByCurrentUser: boolean;
+}

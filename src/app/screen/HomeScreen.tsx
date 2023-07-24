@@ -49,8 +49,13 @@ export const HomeFeed = () => {
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { getChallengeUpdateDetails } = useChallengeUpdateStore();
+  const { getChallengeUpdateDetails, getChallengeUpdateLike, getChallengeUpdateComment } =
+    useChallengeUpdateStore();
   const challgeneUpdateDetails = getChallengeUpdateDetails();
+  const challgeneUpdateLike = getChallengeUpdateLike();
+  const challgeneUpdateComment = getChallengeUpdateComment();
+
+  const isFocused = useIsFocused();
 
   const handleScroll = async () => {
     setIsRefreshing(true);
@@ -105,7 +110,7 @@ export const HomeFeed = () => {
   };
 
   useEffect(() => {
-    if (challgeneUpdateDetails) {
+    if (challgeneUpdateDetails && challgeneUpdateDetails?.length > 0) {
       // update feedData according to challgeneUpdateDetails array
       const newFeedData = feedData.map((item: any) => {
         const index = challgeneUpdateDetails.findIndex(
@@ -124,7 +129,7 @@ export const HomeFeed = () => {
       });
       setFeedData(newFeedData);
     }
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     getInitialFeeds();
@@ -137,9 +142,11 @@ export const HomeFeed = () => {
         userId={userData?.id}
         isFocused={true}
         navigation={navigation}
+        challgeneUpdateLike={challgeneUpdateLike}
+        challengeUpdateComment={challgeneUpdateComment}
       />
     ),
-    []
+    [isFocused]
   );
 
   return (

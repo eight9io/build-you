@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import ThumbUp from "./asset/thumb_up.svg";
 import FilledThumbUP from "./asset/filled_thumb_up.svg";
 import { useAuthStore } from "../../store/auth-store";
+import { useChallengeUpdateStore } from "../../store/challenge-update-store";
+
 import {
   createProgressLike,
   deleteProgressLike,
@@ -14,11 +16,13 @@ import {
 import { debounce } from "../../hooks/useDebounce";
 
 import GlobalDialogController from "../common/Dialog/GlobalDialogController";
+import { INumberOfLikeUpdate } from "../../types/challenge";
 
 interface ILikeButtonProps {
   navigation?: any;
   progressId?: string;
   isFocused?: boolean;
+  localProgressLikes?: INumberOfLikeUpdate;
   currentUserId: string | undefined;
 }
 
@@ -26,6 +30,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
   navigation,
   progressId,
   currentUserId,
+  localProgressLikes,
 }) => {
   const { getAccessToken } = useAuthStore();
   const { t } = useTranslation();
@@ -38,9 +43,10 @@ const LikeButton: FC<ILikeButtonProps> = ({
   const [tempLikes, setTempLikes] = useState(numberOfLikes);
   const [shouldOptimisticUpdate, setShouldOptimisticUpdate] =
     useState<boolean>(false);
-  const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
 
   const isToken = getAccessToken();
+
+  const { setChallengeUpdateLike } = useChallengeUpdateStore();
 
   const loadProgressLikes = async () => {
     if (!progressId || !currentUserId) return;
@@ -49,13 +55,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
       setNumberOfLikes(response.data.length);
       const isLiked = response.data.some((like) => like.user === currentUserId);
       setIsLikedByCurrentUser(isLiked);
-      setIsFirstLoad(false);
     } catch (error) {
-      // GlobalDialogController.showModal({
-      //   title: 'Error',
-      //   message:
-      //     'Something went wrong when getting likes. Please try again later.',
-      // });
       setNumberOfLikes(0);
       setIsLikedByCurrentUser(false);
     }
@@ -65,6 +65,13 @@ const LikeButton: FC<ILikeButtonProps> = ({
     if (!progressId) return;
     loadProgressLikes();
   }, [progressId]);
+
+  useEffect(() => {
+    if (localProgressLikes?.id && localProgressLikes.id === progressId) {
+      setNumberOfLikes(localProgressLikes.numberOfLikes || 0);
+      setIsLikedByCurrentUser(localProgressLikes.isLikedByCurrentUser || false);
+    }
+  }, [localProgressLikes]);
 
   // TODO for optimistic like just update the state and consider using https://www.npmjs.com/package/@chris.troutner/retry-queue for api call
   useEffect(() => {
@@ -83,6 +90,11 @@ const LikeButton: FC<ILikeButtonProps> = ({
         setIsLiked(false);
         setTempLikes((prev) => prev - 1);
       });
+      setChallengeUpdateLike({
+        id: progressId,
+        numberOfLikes: tempLikes - 1,
+        isLikedByCurrentUser: false,
+      });
       return;
     }
     createProgressLike(progressId)
@@ -91,6 +103,11 @@ const LikeButton: FC<ILikeButtonProps> = ({
         setIsLikedByCurrentUser && setIsLikedByCurrentUser(true);
         setIsLiked(true);
         setTempLikes((prev) => prev + 1);
+        setChallengeUpdateLike({
+          id: progressId,
+          numberOfLikes: tempLikes + 1,
+          isLikedByCurrentUser: true,
+        });
       })
       .catch((err) => {
         GlobalDialogController.showModal({

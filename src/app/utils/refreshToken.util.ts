@@ -53,6 +53,7 @@ export function setupInterceptor(
           }
 
           const decodedRefreshToken = jwt_decode<IToken>(refreshToken);
+          console.log("decodedRefreshToken", decodedRefreshToken);
           const currentTime = Date.now() / 1000;
           if (decodedRefreshToken?.exp < currentTime) {
             reject(error); // throw so next check retry will force logout

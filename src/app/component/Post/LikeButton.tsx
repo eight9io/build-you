@@ -71,7 +71,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
       setNumberOfLikes(localProgressLikes.numberOfLikes || 0);
       setIsLikedByCurrentUser(localProgressLikes.isLikedByCurrentUser || false);
     }
-  }, [localProgressLikes]);
+  }, [localProgressLikes?.id, localProgressLikes?.numberOfLikes]);
 
   // TODO for optimistic like just update the state and consider using https://www.npmjs.com/package/@chris.troutner/retry-queue for api call
   useEffect(() => {
@@ -84,39 +84,28 @@ const LikeButton: FC<ILikeButtonProps> = ({
       return navigation.navigate("LoginScreen");
     }
     if (isLikedByCurrentUser) {
-      deleteProgressLike(progressId).then(() => {
-        setShouldOptimisticUpdate(true);
-        setIsLikedByCurrentUser && setIsLikedByCurrentUser(false);
-        setIsLiked(false);
-        setTempLikes((prev) => prev - 1);
-      });
+      setShouldOptimisticUpdate(true);
+      setIsLikedByCurrentUser && setIsLikedByCurrentUser(false);
+      setIsLiked(false);
+      setTempLikes((prev) => prev - 1);
       setChallengeUpdateLike({
         id: progressId,
         numberOfLikes: tempLikes - 1,
         isLikedByCurrentUser: false,
       });
+      deleteProgressLike(progressId);
       return;
     }
-    createProgressLike(progressId)
-      .then(() => {
-        setShouldOptimisticUpdate(true);
-        setIsLikedByCurrentUser && setIsLikedByCurrentUser(true);
-        setIsLiked(true);
-        setTempLikes((prev) => prev + 1);
-        setChallengeUpdateLike({
-          id: progressId,
-          numberOfLikes: tempLikes + 1,
-          isLikedByCurrentUser: true,
-        });
-      })
-      .catch((err) => {
-        GlobalDialogController.showModal({
-          title: "Error",
-          message:
-            (t("error_general_message") as string) || "Something went wrong",
-          button: "OK",
-        });
-      });
+    setShouldOptimisticUpdate(true);
+    setIsLikedByCurrentUser && setIsLikedByCurrentUser(true);
+    setIsLiked(true);
+    setTempLikes((prev) => prev + 1);
+    setChallengeUpdateLike({
+      id: progressId,
+      numberOfLikes: tempLikes + 1,
+      isLikedByCurrentUser: true,
+    });
+    createProgressLike(progressId);
   };
 
   const debouncedHandleLike = debounce(handleLike, 300); // Change the debounce delay as needed (in milliseconds)

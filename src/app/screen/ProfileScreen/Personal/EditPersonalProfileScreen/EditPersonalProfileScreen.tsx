@@ -35,6 +35,8 @@ import { VideoWithPlayButton } from "../../../../component/Profile/ProfileTabs/U
 
 import CalendarIcon from "./asset/calendar-icon.svg";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { serviceGetMyProfile } from "../../../../service/auth";
+import Spinner from "react-native-loading-spinner-overlay";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -118,17 +120,17 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   useGetUserData();
-  // const [isShowCompany, setIsShowCompany] = useState(false);
   const {
     control,
     handleSubmit,
     setValue,
     getValues,
     formState: { errors },
+    watch,
   } = useForm<{
     name: string;
     surname: string;
-    birth: Date | undefined | string;
+    birth: any;
     occupation: string;
     bio: string;
     hardSkill: IHardSkillProps[];
@@ -143,10 +145,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       hardSkill: userData?.hardSkill || [],
       isShowCompany: userData?.isShowCompany || false,
     },
-    // TODO fix typescript
     resolver: yupResolver(EditProfileValidators()),
   });
-
+  const isShowCompany = watch("isShowCompany");
   const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
   const removeVideo = () => {
     uploadNewVideo("");
@@ -182,11 +183,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
       setArrayMyHardSkills(hardSkill);
     }
-    // if (userData?.isShowCompany) {
-    //   setIsShowCompany(userData?.isShowCompany);
-    // }
   }, [userData?.hardSkill]);
-
+  const { setUserProfile } = useUserProfileStore();
   const onSubmit = async (data: any) => {
     const IdOccupation = occupationList.find(
       (item) => item.name === data.occupation
@@ -202,16 +200,18 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           birth: data.birth,
           occupation: IdOccupation,
           hardSkill: arrayMyHardSkills,
-          isShowCompany: isShowCompany,
+          isShowCompany: data.isShowCompany,
         }),
       ]);
+      const res = await serviceGetMyProfile();
+      setUserProfile(res.data);
       setIsLoading(false);
+      navigation.navigate("ProfileScreen");
       GlobalToastController.showModal({
         message:
           t("dialog.update_profile_success") ||
           "Your profile update successfully!",
       });
-      navigation.navigate("Profile");
     } catch (error) {
       setIsLoading(false);
       setIsErrDialog(true);
@@ -220,6 +220,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
+      {isLoading && <Spinner visible={isLoading} />}
       <KeyboardAwareScrollView>
         <View className="  h-full rounded-t-xl bg-white ">
           <ConfirmDialog
@@ -342,7 +343,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                         <View className="flex flex-row pt-2">
                           <Warning />
                           <Text className="pl-1 text-sm font-normal text-red-500">
-                            {errors.birth.message}
+                            {errors.birth.message as string}
                           </Text>
                         </View>
                       )}
@@ -439,10 +440,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                     <CustomSwitch
                       textDisable=""
                       textEnable=""
-                      onValueChange={() => {
-                        console.log("TODO update isShowCompany API");
+                      onValueChange={(isShowCompany) => {
+                        setValue("isShowCompany", isShowCompany);
                       }}
-                      value={userData?.isShowCompany}
+                      value={isShowCompany}
                     />
                   </View>
                 </>

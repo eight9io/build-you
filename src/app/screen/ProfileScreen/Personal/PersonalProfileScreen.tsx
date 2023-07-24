@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,6 +20,7 @@ import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfil
 import Button from "../../../component/common/Buttons/Button";
 
 import ShareIcon from "../../../../../assets/svg/share.svg";
+import { serviceGetMyProfile } from "../../../service/auth";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,7 +33,7 @@ interface IProfileProps {
   navigation: ProfileScreenNavigationProp;
 }
 
-const Profile: React.FC<IProfileProps> = ({ navigation }) => {
+const Profile: React.FC<IProfileProps> = ({ route, navigation }: any) => {
   const { getUserProfile } = useUserProfileStore();
 
   const userData = getUserProfile();

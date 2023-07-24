@@ -10,7 +10,6 @@ export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
       setFollowingList(res.data);
     })
     .catch((err) => {
-      // TODO handling of error should be delegated to where it is use
       if (err.response.status == 404) {
         setFollowingList([]);
       } else {
@@ -28,7 +27,6 @@ export const fetchListEmployee = (id: any, setEmployeeList: any) => {
       setEmployeeList(res.data);
     })
     .catch((err) => {
-      // TODO handling of error should be delegated to where it is use
       if (err.response.status == 404) setEmployeeList([]);
       GlobalDialogController.showModal({
         title: "Error",

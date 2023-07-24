@@ -17,13 +17,13 @@ export const EditProfileValidators = () => {
       .required(t("form_onboarding.screen_1.last_name_error") as string),
 
     birth: yup
-      .string()
+      .mixed()
       .required(t("form_onboarding.screen_1.birthday_error") as string),
 
     occupation: yup
       .string()
       .required(t("form_onboarding.screen_1.occupation_error") as string),
-    biography: yup.string(),
+    bio: yup.string(),
     hardSkill: yup
       .array()
       .min(3, t("form_onboarding.screen_3.error") as string),

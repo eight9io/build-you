@@ -70,6 +70,7 @@ export function setupInterceptor(
           } else {
             try {
               setAuthTokenToHttpHeader(newTokens.data.authorization);
+              originalRequest.headers["Authorization"] = `Bearer ${newTokens}`;
               const res = await httpInstance(originalRequest);
               resolve(res);
             } catch (error) {

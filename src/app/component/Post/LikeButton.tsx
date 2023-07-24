@@ -23,7 +23,6 @@ interface ILikeButtonProps {
 }
 
 const LikeButton: FC<ILikeButtonProps> = ({
-  isFocused = false,
   navigation,
   progressId,
   currentUserId,
@@ -62,31 +61,10 @@ const LikeButton: FC<ILikeButtonProps> = ({
     }
   };
 
-  // TODO focused should only use on root screen, not in component
   useEffect(() => {
-    // if (!isFocused || isFirstLoad) return;
-    // if (shouldOptimisticUpdate) {
-    //   setShouldOptimisticUpdate(false);
-    //   return;
-    // }
-    // (async () => {
-    //   await loadProgressLikes();
-    // })();
+    if (!progressId) return;
     loadProgressLikes();
-  }, []);
-
-  // TODO seems useless hook
-  // useEffect(() => {
-  //   (async () => {
-  //     await loadProgressLikes();
-  //   })();
-  // }, [progressId, currentUserId]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     await loadProgressLikes();
-  //   })();
-  // }, []);
+  }, [progressId]);
 
   // TODO for optimistic like just update the state and consider using https://www.npmjs.com/package/@chris.troutner/retry-queue for api call
   useEffect(() => {

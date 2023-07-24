@@ -6,7 +6,7 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-// import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
 import httpInstance from "../../../utils/http";
 import { IChallenge } from "../../../types/challenge";
@@ -73,7 +73,7 @@ const PersonalChallenges = ({
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
-  // const isFocused = useIsFocused();
+  const isFocused = useIsFocused();
 
   const fetchData = async () => {
     try {
@@ -81,17 +81,17 @@ const PersonalChallenges = ({
       setPersonalChallengesList(sortChallengeByStatusFromResponse(res));
       setTimeout(() => {
         setIsLoading(false);
-      }, 500);
+      }, 300);
     } catch (err) {
       setIsFetchingError(true);
       setIsLoading(false);
     }
   };
 
-  // useEffect(() => {
-  //   if (!isFocused) return;
-  //   fetchData();
-  // }, [isFocused]);
+  useEffect(() => {
+    if (!isFocused) return;
+    fetchData();
+  }, [isFocused]);
 
   return (
     <SafeAreaView className={clsx("flex-1 bg-white")}>

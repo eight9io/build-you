@@ -40,11 +40,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   >([]);
   const [progressIndexToUpdate, setProgressIndexToUpdate] =
     useState<number>(-1);
-  // const [shouldRefetch, setShouldRefetch] = useState<boolean>(false);
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
-
-  // const isFocused = useIsFocused();
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -77,7 +75,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setTimeout(() => {
       setProgressLoading(false);
     }, 800);
-  }, []);
+  }, [challengeData?.id, shouldRefresh]);
 
   const refetch = () => {
     setProgressLoading(true);

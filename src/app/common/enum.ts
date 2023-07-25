@@ -19,3 +19,10 @@ export enum SORT_ORDER {
   ASC = "asc",
   DESC = "desc",
 }
+
+export enum LOGIN_TYPE {
+  GOOGLE = "google",
+  LINKEDIN = "linkedin",
+  APPLE = "apple",
+  EMAIL_PASSWORD = "email_password",
+}

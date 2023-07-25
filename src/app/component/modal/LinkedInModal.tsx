@@ -19,7 +19,7 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const handleNavigationStateChange = async (event: any) => {
     const { url } = event;
-    const callbackUrl = process.env.EXPO_LINKEDIN_REDIRECT_URI;
+    const callbackUrl = process.env.EXPO_LINKEDIN_REDIRECT_URI + "?code";
     if (!url || !callbackUrl) return;
 
     if (url.startsWith(LINKEDIN_LOGIN.LOGIN_CANCEL_URL)) onLoginCancel();
@@ -29,7 +29,6 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
       onLoginSuccess(code);
     }
   };
-
   return (
     <Modal
       animationType="slide"

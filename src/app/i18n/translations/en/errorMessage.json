@@ -1,6 +1,8 @@
 {
   "err_login": {
-    "400": "Email/password is incorrect, Please try again"
+    "400": "Email/password is incorrect, Please try again",
+    "cannot_get_access_token": "Cannot get access token. Please try again later.",
+    "500":"Internal error. Please try again later."
   },
   "err_register": {
     "409": "Email has already been registered"

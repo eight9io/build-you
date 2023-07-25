@@ -17,7 +17,6 @@ interface IAppleLoginButtonProps {
 const AppleLoginButton: FC<IAppleLoginButtonProps> = ({ title, onLogin }) => {
   const { t } = useTranslation();
 
-  // Rewrite this similar to login email / password
   const handleAppleLogin = async () => {
     try {
       // Start the sign-in request

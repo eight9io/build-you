@@ -332,7 +332,9 @@
     "edit_challenge_success": "Your challenge has been edited successfully ! ",
     "create_progress_success": "Your progress has been created successfully !",
     "completed_challenge_success": "Challenge has been completed successfully !",
-    "delete_challenge_success": "Deleted Challenge successfully !"
+    "delete_challenge_success": "Deleted Challenge successfully !",
+    "copied_to_clipboard": "Copied to clipboard",
+    "copied_to_clipboard_error": "Error when copying to clipboard"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

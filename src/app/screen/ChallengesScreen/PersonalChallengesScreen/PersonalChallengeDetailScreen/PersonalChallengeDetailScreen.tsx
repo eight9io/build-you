@@ -1,12 +1,10 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
 
-import { Asset } from "expo-asset";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
+import { EXPO_API_APP_DOMAIN } from "@env";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-// import { useIsFocused } from "@react-navigation/native";
 
 import httpInstance from "../../../../utils/http";
 import {
@@ -29,8 +27,7 @@ import TaskAltIcon from "./assets/task-alt.svg";
 import TaskAltIconGray from "./assets/task-alt-gray.svg";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-
-const image = Asset.fromModule(require("./assets/test.png"));
+import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -59,7 +56,6 @@ export const RightPersonalChallengeDetailOptions: FC<
   setIsDeleteChallengeDialogVisible,
 }) => {
   const { t } = useTranslation();
-  const [isSharing, setIsSharing] = React.useState(false);
   const [
     isCompletedChallengeDialogVisible,
     setIsCompletedChallengeDialogVisible,
@@ -97,17 +93,8 @@ export const RightPersonalChallengeDetailOptions: FC<
     );
   }, [challengeData]);
 
-  // when sharing is available, we can share the image
-  const onShare = async () => {
-    setIsSharing(true);
-    try {
-      const fileUri = FileSystem.documentDirectory + "test.png";
-      await FileSystem.downloadAsync(image.uri, fileUri);
-      await Sharing.shareAsync(fileUri);
-    } catch (error) {
-      console.error(error);
-    }
-    setIsSharing(false);
+  const onShare = () => {
+    onShareChallengeLink(challengeData?.id);
   };
 
   const onCheckChallengeCompleted = () => {

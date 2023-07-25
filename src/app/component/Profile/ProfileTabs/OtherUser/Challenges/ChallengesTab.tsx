@@ -9,7 +9,7 @@ import {
 } from "@react-navigation/native";
 
 import { getChallengeByUserId } from "../../../../../service/challenge";
-import { IChallenge } from "../../../../../types/challenge";
+import { IChallenge, IChallengeOwner } from "../../../../../types/challenge";
 import ChallengeCard from "../../../../Card/ChallengeCard/ChallengeCard";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
 import GolbalDialogController from "../../../../common/Dialog/GlobalDialogController";
@@ -37,8 +37,6 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   // const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  console.log('isLoading', isLoading);
-
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
 
@@ -46,21 +44,21 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
     if (!userId || isCurrentUserInCompany == null) return;
     setIsLoading(true);
     getChallengeByUserId(userId)
-      // TODO add typescript
       .then((res) => {
-        let challengeList = res.data.flat();
-        const originalChallengeList = res.data.flat();
+        let challengeList = res.data.flat() as IChallenge[];
+        const originalChallengeList = res.data.flat() as IChallenge[];
 
         if (!isCurrentUserInCompany) {
           challengeList = challengeList.filter(
-            (item: any) => item?.public == true || item?.public == null
+            (item: IChallenge) => item?.public == true || item?.public == null
           );
         }
         // if current user is company, add back the challenge that is not public when the owner is the current user
         challengeList = challengeList.concat(
           originalChallengeList.filter(
-            (item: any) =>
-              item?.public == false && item?.owner?.id === userProfile?.id
+            (item: IChallenge) =>
+              item?.public == false &&
+              (item?.owner as IChallengeOwner)?.id === userProfile?.id
           )
         );
         if (isCurrentUserInSameCompanyWithViewingUser) {

@@ -39,7 +39,7 @@ const Toast = () => {
   const handleHideToast = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 700,
+      duration: 300,
       useNativeDriver: true,
     }).start(() => {
       setToastVisible(false);
@@ -50,7 +50,7 @@ const Toast = () => {
     if (toastVisible) {
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 700,
+        duration: 300,
         useNativeDriver: true,
       }).start();
 

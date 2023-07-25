@@ -37,6 +37,7 @@ import EditChallengeModal from "../../../component/modal/EditChallengeModal";
 import { getChallengeStatusColor } from "../../../utils/common";
 import { AxiosError } from "axios";
 import { debounce } from "../../../hooks/useDebounce";
+import { onShareChallengeLink } from "../../../utils/shareLink.uitl";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -187,7 +188,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             <View>
               <Button
                 Icon={<ShareIcon />}
-                onPress={() => console.log("press share")}
+                onPress={() => onShareChallengeLink(challengeData?.id)}
               />
             </View>
           );

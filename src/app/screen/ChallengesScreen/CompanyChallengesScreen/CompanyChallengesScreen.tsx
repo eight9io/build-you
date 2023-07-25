@@ -200,16 +200,6 @@ const CompanyChallengesScreen = () => {
               withBackIcon
             />
           ),
-          headerRight: () => {
-            return (
-              <View>
-                <Button
-                  Icon={<ShareIcon />}
-                  onPress={() => console.log("press share")}
-                />
-              </View>
-            );
-          },
         })}
       />
 

@@ -373,5 +373,6 @@
   },
   "notification_screen": {
     "no_notification": "You have no notifications at the moment"
-  }
+  },
+  "challenge_detail_screen.not_found": "Challenge not found"
 }

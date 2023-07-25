@@ -246,13 +246,6 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
       }}
     >
       <HomeScreenStack.Screen
-        name="FeedScreenUnregister"
-        component={HomeFeedUnregister}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <HomeScreenStack.Screen
         name="FeedScreen"
         component={HomeFeed}
         options={({ navigation }) => ({
@@ -319,7 +312,16 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
           headerLeft: (props) => (
             <NavButton
               text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                if (navigation.canGoBack()) {
+                  navigation.goBack();
+                } else {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "FeedScreen" }],
+                  });
+                }
+              }}
               withBackIcon
             />
           ),

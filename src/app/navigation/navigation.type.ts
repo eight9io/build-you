@@ -75,6 +75,8 @@ export type RootStackParamList = {
   };
 
   MainSearchScreen: undefined;
+  BottomNavBar: undefined;
+  SplashScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

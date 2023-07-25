@@ -29,10 +29,14 @@ import NewNotificationIcon from "../asset/new-notification-icon.svg";
 import { useGetUserData } from "../../hooks/useGetUser";
 import { useUserProfileStore } from "../../store/user-store";
 import { useNotificationStore } from "../../store/notification-store";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../navigation/navigation.type";
 
 const Tab = createBottomTabNavigator();
 
-interface IBottomNavBarProps {}
+interface IBottomNavBarProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, "BottomNavBar">;
+}
 
 const SCREENS_TO_HIDE_TAB_BAR = ["ProgressCommentScreen", "MainSearchScreen"];
 
@@ -50,6 +54,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
 
   return (
     <Tab.Navigator
+      initialRouteName="BottomNavBar"
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: true,
@@ -123,7 +128,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Create Challenge"
         component={() => undefined}
         listeners={({ navigation }) => ({
@@ -148,7 +153,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             </View>
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Notifications"
         component={NotificationsScreen}

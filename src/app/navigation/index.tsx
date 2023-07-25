@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
 } from "@react-navigation/native";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import * as SplashScreen from "expo-splash-screen";
@@ -39,6 +40,8 @@ import {
   setAuthTokenToHttpHeader,
   setupInterceptor,
 } from "../utils/refreshToken.util";
+import { DeepLink } from "../utils/linking.util";
+import * as Linking from "expo-linking";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -58,6 +61,21 @@ export const RootNavigation = () => {
   const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>();
   const isLoggedin = getAccessToken();
 
+  const isNavigationReadyRef = useRef(false);
+
+  const getInitialURL = async () => {
+    const url = await Linking.getInitialURL();
+    if (url) {
+      isNavigationReadyRef.current = true;
+    }
+    return url;
+  };
+
+  const link = {
+    ...DeepLink,
+    getInitialURL,
+  };
+
   useEffect(() => {
     if (authStoreHydrated) {
       if (isLoggedin) {
@@ -70,9 +88,12 @@ export const RootNavigation = () => {
         getUserProfileAsync()
           .then(({ data: profile }) => {
             const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
-            const navigateToRoute = isCompleteProfile
+            let navigateToRoute = isCompleteProfile
               ? "HomeScreen"
               : "CompleteProfileScreen";
+            if (isCompleteProfile && isNavigationReadyRef?.current) {
+              return profile;
+            }
 
             navigationRef.current.dispatch(
               CommonActions.reset({
@@ -83,7 +104,9 @@ export const RootNavigation = () => {
             return profile;
           })
           .finally(() => {
-            setTimeout(() => SplashScreen.hideAsync(), 200);
+            setTimeout(() => {
+              SplashScreen.hideAsync();
+            }, 200);
           });
       } else {
         SplashScreen.hideAsync();
@@ -97,6 +120,7 @@ export const RootNavigation = () => {
         NavigatorService.setContainer(navigation);
         navigationRef.current = navigation;
       }}
+      linking={isLoggedin && (link as any)}
     >
       <GlobalDialog />
       <RootStack.Navigator

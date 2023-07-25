@@ -105,7 +105,7 @@ const MainSearchScreen = () => {
         key={item.id}
         activeOpacity={0.8}
         onPress={() => navigateToUserDetail(item.id)}
-        className="flex items-center bg-white px-5 py-3"
+        className="flex flex-1 items-center bg-white px-5 py-3"
       >
         <View className="relative flex flex-1 flex-row">
           {!item.avatar && (
@@ -121,7 +121,7 @@ const MainSearchScreen = () => {
             />
           )}
           <Text className="flex-1 pl-4 text-base font-semibold text-basic-black">
-            {item.name}
+            {item.name} {item.surname}
           </Text>
         </View>
       </TouchableOpacity>
@@ -140,9 +140,9 @@ const MainSearchScreen = () => {
             <View className="flex-1">
               <FlatList
                 data={searchResults}
-                className="flex flex-col bg-white"
+                className="flex flex-1 flex-col bg-white"
                 renderItem={renderItem}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id + Math.random().toString()}
               />
             </View>
           )}

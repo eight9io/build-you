@@ -73,7 +73,6 @@ const LikeButton: FC<ILikeButtonProps> = ({
     }
   }, [localProgressLikes?.id, localProgressLikes?.numberOfLikes]);
 
-  // TODO for optimistic like just update the state and consider using https://www.npmjs.com/package/@chris.troutner/retry-queue for api call
   useEffect(() => {
     setTempLikes(numberOfLikes);
   }, [numberOfLikes]);

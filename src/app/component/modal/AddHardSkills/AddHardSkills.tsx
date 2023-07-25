@@ -91,7 +91,6 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
     );
   };
 
-  // TODO: This might cause render loop, please rewrite
   useEffect(() => {
     if (userAddSkill.length > 0) {
       setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);

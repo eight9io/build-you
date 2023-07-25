@@ -44,7 +44,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         name="Feed"
         component={HomeScreen}
         options={({ navigation }) => ({
-          headerShown: true,
+          headerShown: false,
           headerTitle: () => <AppTitle title={t("your_feed.header")} />,
           headerRight: () => (
             <NavButton

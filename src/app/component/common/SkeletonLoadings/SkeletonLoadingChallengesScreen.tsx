@@ -25,7 +25,6 @@ const SkeletonLoadingChallengesScreen = () => {
     outputRange: [-100, width],
   });
 
-  // TODO use tailwind
   return (
     <View style={styles.container}>
       <View className="flex flex-col justify-between p-4">

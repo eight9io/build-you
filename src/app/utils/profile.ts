@@ -21,7 +21,10 @@ export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
     });
 };
 // ===== company ====
-export const fetchListEmployee = (id: any, setEmployeeList: any) => {
+export const fetchListEmployee = async (
+  id: string,
+  setEmployeeList: Function
+) => {
   return serviceGetEmployeeList(id)
     .then((res) => {
       setEmployeeList(res.data);

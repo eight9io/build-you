@@ -11,20 +11,33 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo.svg";
 import StarLogo from "../../../common/svg/auto_awesome.svg";
-import { useIsCompleteProfileStore } from "../../../store/is-complete-profile";
+import { useDeepLinkStore } from "../../../store/deep-link-store";
 
 interface CompleteProfileFinishProps {
   navigation: CompleteProfileScreenNavigationProp;
 }
 
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = () => {
-  // const { setIsCompleteProfileStore } = useIsCompleteProfileStore();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const { getDeepLink } = useDeepLinkStore();
+  const deepLink = getDeepLink();
 
   const { t } = useTranslation();
 
   setTimeout(() => {
-    // setIsCompleteProfileStore(true);
+    if (deepLink) {
+      navigation.navigate("HomeScreen", {
+        screen: "Feed",
+        params: {
+          screen: "OtherUserProfileChallengeDetailsScreen",
+          params: {
+            challengeId: deepLink.challengeId,
+          },
+        },
+      });
+      return;
+    }
     navigation.navigate("HomeScreen");
   }, 2000);
 

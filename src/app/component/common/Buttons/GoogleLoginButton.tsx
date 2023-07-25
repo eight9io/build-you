@@ -17,7 +17,9 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title, onLogin }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    GoogleSignin.configure();
+    GoogleSignin.configure({
+      webClientId: process.env.EXPO_GOOGLE_WEB_CLIENT_ID,
+    });
   }, []);
 
   const handleGoogleBtnClicked = async () => {

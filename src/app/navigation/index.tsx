@@ -4,20 +4,27 @@ import {
   NavigationContainerRef,
 } from "@react-navigation/native";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
+import { TouchableOpacity } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { TouchableOpacity } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { RootStackParamList } from "./navigation.type";
+
 import Header from "../component/common/Header";
 import AppTitle from "../component/common/AppTitle";
 import NavButton from "../component/common/Buttons/NavButton";
 import BottomNavBar from "../component/BottomNavBar/BottomNavBar";
+import GlobalDialog from "../component/common/Dialog/GlobalDialog";
+import BottomNavBarWithoutLogin from "../component/BottomNavBar/BottomNavBarWithoutLogin";
 
+import Login from "../screen/LoginScreen/LoginScreen";
 import IntroScreen from "../screen/IntroScreen/IntroScreen";
+import Register from "../screen/RegisterScreen/RegisterScreen";
+import ForgotPassword from "../screen/ForgotPassword/ForgotPassword";
 import SettingsScreen from "../screen/SettingsScreen/SettingsScreen";
 import CompleteProfileScreen from "../screen/OnboardingScreens/CompleteProfile/CompleteProfile";
 import EditCompanyProfileScreen from "../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen";
@@ -25,12 +32,7 @@ import EditPersonalProfileScreen from "../screen/ProfileScreen/Personal/EditPers
 import CreateChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen";
 import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
 
-import Login from "../screen/LoginScreen/LoginScreen";
-import Register from "../screen/RegisterScreen/RegisterScreen";
-import ForgotPassword from "../screen/ForgotPassword/ForgotPassword";
 import { useAuthStore } from "../store/auth-store";
-import BottomNavBarWithoutLogin from "../component/BottomNavBar/BottomNavBarWithoutLogin";
-import GlobalDialog from "../component/common/Dialog/GlobalDialog";
 import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
@@ -41,7 +43,7 @@ import {
   setupInterceptor,
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
-import * as Linking from "expo-linking";
+import { useDeepLinkStore } from "../store/deep-link-store";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -62,6 +64,7 @@ export const RootNavigation = () => {
   const isLoggedin = getAccessToken();
 
   const isNavigationReadyRef = useRef(false);
+  const { setDeepLink } = useDeepLinkStore();
 
   const getInitialURL = async () => {
     const url = await Linking.getInitialURL();
@@ -93,6 +96,18 @@ export const RootNavigation = () => {
               : "CompleteProfileScreen";
             if (isCompleteProfile && isNavigationReadyRef?.current) {
               return profile;
+            } else if (!isCompleteProfile) {
+              //get challenge id from deep link
+              link.getInitialURL().then((url) => {
+                if (url) {
+                  const challengeId = url.split("/").pop();
+                  if (challengeId) {
+                    setDeepLink({
+                      challengeId,
+                    });
+                  }
+                }
+              });
             }
 
             navigationRef.current.dispatch(

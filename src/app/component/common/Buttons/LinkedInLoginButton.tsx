@@ -29,7 +29,6 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
     setLinkedInModalVisible(false);
   };
 
-  // Rewrite this similar to login email / password
   const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
     setLinkedInModalVisible(false);
     let accessToken = null;

@@ -20,7 +20,6 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title, onLogin }) => {
     GoogleSignin.configure();
   }, []);
 
-  // TODO Rewrite this similar to login email / password
   const handleGoogleBtnClicked = async () => {
     try {
       const userInfo = await GoogleSignin.signIn();

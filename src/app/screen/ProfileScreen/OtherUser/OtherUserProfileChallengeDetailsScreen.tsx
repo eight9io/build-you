@@ -1,4 +1,9 @@
-import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
+import {
+  CommonActions,
+  NavigationProp,
+  Route,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 
@@ -31,6 +36,7 @@ import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
 import EditChallengeModal from "../../../component/modal/EditChallengeModal";
 import { getChallengeStatusColor } from "../../../utils/common";
 import { AxiosError } from "axios";
+import { debounce } from "../../../hooks/useDebounce";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -57,11 +63,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
   const { challengeId, isCompanyAccount: isCompany } = route.params;
+
   const [index, setIndex] = useState<number>(0);
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
-
+  const [isError, setIsError] = useState<boolean>(false);
   const [challengeOwner, setChallengeOwner] = useState<any>(null);
   // const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
@@ -144,6 +151,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         getChallengeParticipants();
       }
     } catch (err) {
+      setIsError(true);
       GlobalDialogController.showModal({
         title: "Error",
         message: "Something went wrong. Please try again later!",
@@ -233,13 +241,13 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     }
   };
 
-  const handleJoinLeaveChallenge = async () => {
+  const handleJoinLeaveChallenge = debounce(async () => {
     if (isJoined) {
       await handleLeaveChallenge();
     } else {
       await handleJoinChallenge();
     }
-  };
+  }, 500);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -282,6 +290,19 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const handleEditChallengeModalConfirm = () => {
     setIsEditChallengeModalVisible(false);
   };
+
+  if (isError) {
+    return (
+      <SafeAreaView>
+        <View className="flex h-full items-center justify-start px-10 pt-56">
+          <Text className="text-base font-medium text-black-default">
+            {t("challenge_detail_screen.not_found") ||
+              "Challenge is not found!"}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView>

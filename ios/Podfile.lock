@@ -15,7 +15,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - EXConstants (14.2.1):
     - ExpoModulesCore
-  - EXFileSystem (15.4.2):
+  - EXFileSystem (15.2.2):
     - ExpoModulesCore
   - EXFont (11.1.1):
     - ExpoModulesCore
@@ -34,7 +34,7 @@ PODS:
     - ExpoModulesCore
   - ExpoCrypto (12.2.2):
     - ExpoModulesCore
-  - ExpoDevice (5.4.0):
+  - ExpoDevice (5.2.1):
     - ExpoModulesCore
   - ExpoImage (1.0.1):
     - ExpoModulesCore
@@ -510,7 +510,7 @@ PODS:
   - RNCCheckbox (0.5.16):
     - BEMCheckBox (~> 1.4)
     - React-Core
-  - RNCMaskedView (0.2.9):
+  - RNCMaskedView (0.2.8):
     - React-Core
   - RNCPicker (2.4.8):
     - React-Core
@@ -534,12 +534,11 @@ PODS:
     - RNNotifee/NotifeeCore (= 7.8.0)
   - RNNotifee/NotifeeCore (7.8.0):
     - React-Core
-  - RNReanimated (3.3.0):
+  - RNReanimated (2.14.4):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
     - glog
-    - hermes-engine
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -549,7 +548,6 @@ PODS:
     - React-Core/RCTWebSocket
     - React-CoreModules
     - React-cxxreact
-    - React-hermes
     - React-jsi
     - React-jsiexecutor
     - React-jsinspector
@@ -846,7 +844,7 @@ SPEC CHECKSUMS:
   EXApplication: d8f53a7eee90a870a75656280e8d4b85726ea903
   EXAV: f1f69397ecdcf44cfacd4ff5d338cd1b96891e87
   EXConstants: f348da07e21b23d2b085e270d7b74f282df1a7d9
-  EXFileSystem: d7f59869885cfeab3ac771e2a8d0f5ed98cd3fdb
+  EXFileSystem: 844e86ca9b5375486ecc4ef06d3838d5597d895d
   EXFont: 6ea3800df746be7233208d80fe379b8ed74f4272
   EXImageLoader: fd053169a8ee932dd83bf1fe5487a50c26d27c2b
   EXLocation: 74a0ba446f54fd585ea6cfcd19a25644bf22c30d
@@ -854,7 +852,7 @@ SPEC CHECKSUMS:
   ExpoAdapterGoogleSignIn: b6e7ca3d25261737d31c274460b503ff1b6cb303
   ExpoAppleAuthentication: 7bd5e4150d59e8df37aa80b425850ae88adf9e65
   ExpoCrypto: 9105610a09cd6290b900bd82fc5d190e489125a3
-  ExpoDevice: 1c1b0c9cad96c292c1de73948649cfd654b2b3c0
+  ExpoDevice: e0bebf68f978b3d353377ce42e73c20c0a070215
   ExpoImage: 55b537a1f50df2f6fc3c2d82552e6d1df397a73d
   ExpoImagePicker: 270dea232b3a072d981dd564e2cafc63a864edb1
   ExpoKeepAwake: 69f5f627670d62318410392d03e0b5db0f85759a
@@ -921,7 +919,7 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
   RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
-  RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
+  RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
   RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNDateTimePicker: 00247f26c34683c80be94207f488f6f13448586e
   RNFBApp: 147c3274daa84d7410d457510548d5fb3b317e37
@@ -929,7 +927,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
-  RNReanimated: 9976fbaaeb8a188c36026154c844bf374b3b7eeb
+  RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
@@ -941,4 +939,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a8ff88e42fd13fdab441a53d9c9a5461d9ed7e52
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.12.0

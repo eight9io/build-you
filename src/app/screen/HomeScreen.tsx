@@ -154,7 +154,7 @@ export const HomeFeed = () => {
 
   return (
     <SafeAreaView className={clsx("bg-white")}>
-      <View className={clsx("h-full w-full bg-gray-50 mb-[70px]")}>
+      <View className={clsx("mb-[70px] h-full w-full bg-gray-50")}>
         <FlatList
           data={feedData}
           renderItem={renderItem}
@@ -325,16 +325,6 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
               withBackIcon
             />
           ),
-          headerRight: () => {
-            return (
-              <View>
-                <Button
-                  Icon={<ShareIcon />}
-                  onPress={() => console.log("press share")}
-                />
-              </View>
-            );
-          },
         })}
       />
 

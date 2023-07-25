@@ -35,8 +35,6 @@ export function setupInterceptor(
 
         if (status === 401) {
           const originalRequest = error.config;
-          originalRequest._retry = true;
-
           if (originalRequest._retry) {
             onRefreshFail();
             // Todo: translate
@@ -46,6 +44,7 @@ export function setupInterceptor(
               button: "OK",
             });
           }
+          originalRequest._retry = true;
           const refreshToken = getRefreshToken();
           console.log("refreshToken", refreshToken);
 

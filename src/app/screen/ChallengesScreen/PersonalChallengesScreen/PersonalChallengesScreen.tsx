@@ -20,9 +20,7 @@ import CurrentUserChallengeCard from "../../../component/Card/ChallengeCard/Curr
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
-import Button from "../../../component/common/Buttons/Button";
 
-import ShareIcon from "../../../../../assets/svg/share.svg";
 import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import { sortChallengeByStatusFromResponse } from "../../../utils/common";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
@@ -199,16 +197,6 @@ const PersonalChallengesNavigator = () => {
               withBackIcon
             />
           ),
-          headerRight: () => {
-            return (
-              <View>
-                <Button
-                  Icon={<ShareIcon />}
-                  onPress={() => console.log("press share")}
-                />
-              </View>
-            );
-          },
         })}
       />
 

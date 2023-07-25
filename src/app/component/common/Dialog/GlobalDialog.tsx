@@ -10,8 +10,8 @@ import React, {
 import Dialog from "react-native-dialog";
 import GlobalDialogController, {
   GlobalDialogRef,
-  IGlobalDialogProps,
 } from "./GlobalDialogController";
+import { IGlobalDialogProps } from "../../../types/globalDialog";
 
 const GlobalDialog = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);

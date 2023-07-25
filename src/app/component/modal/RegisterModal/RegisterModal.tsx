@@ -1,5 +1,7 @@
 import { View, Text, Modal, SafeAreaView, Platform } from "react-native";
 import { Image } from "expo-image";
+import { useState } from "react";
+import { CommonActions } from "@react-navigation/native";
 
 import { useTranslation } from "react-i18next";
 import NavButton from "../../common/Buttons/NavButton";
@@ -7,6 +9,14 @@ import Button from "../../common/Buttons/Button";
 import AppleLoginButton from "../../common/Buttons/AppleLoginButton";
 import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
 import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
+import Spinner from "react-native-loading-spinner-overlay";
+import ErrorText from "../../common/ErrorText";
+import { ISocialLoginForm } from "../../../types/auth";
+import { LOGIN_TYPE } from "../../../common/enum";
+import { useAuthStore } from "../../../store/auth-store";
+import { checkIsCompleteProfileOrCompany, useUserProfileStore } from "../../../store/user-store";
+import { setupInterceptor } from "../../../utils/refreshToken.util";
+import { errorMessage } from "../../../utils/statusCode";
 
 interface Props {
   modalVisible: boolean;
@@ -19,7 +29,42 @@ const RegisterModal = ({
   setModalVisible,
 }: Props) => {
   const { t } = useTranslation();
+  const [errMessage, setErrMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
+  const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
+    useUserProfileStore();
+  
+  const handleRegisterSocial = async (
+    payload: ISocialLoginForm,
+    type: LOGIN_TYPE
+  ) => {
+    setIsLoading(true);
+    try {
+      const t = await asyncLogin(payload, type);
+      setupInterceptor(getRefreshToken, () => {
+        logout();
+        userProfileStoreOnLogout();
+      });
 
+      const { data: profile } = await getUserProfileAsync();
+      setIsLoading(false); // Important to not crashing app with duplicate modal
+      const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
+      const navigateToRoute = isCompleteProfile
+        ? "HomeScreen"
+        : "CompleteProfileScreen";
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: navigateToRoute }],
+        })
+      );
+    } catch (error) {
+      setErrMessage(errorMessage(error, "err_login"));
+      setIsLoading(false);
+    }
+  };
   return (
     <Modal
       animationType="slide"
@@ -36,6 +81,7 @@ const RegisterModal = ({
           />
         </View>
         <SafeAreaView>
+          {isLoading && <Spinner visible={isLoading} />}
           <View className="h-full p-5">
             <View className="flex h-[65%] pt-4">
               <View className="h-[70%]">
@@ -54,17 +100,27 @@ const RegisterModal = ({
                 </Text>
               </View>
             </View>
+
+            {errMessage && (
+              <ErrorText
+                containerClassName="justify-center px-5"
+                message={errMessage}
+              />
+            )}
             <View className="h-[35%] flex-col items-center pt-5">
               {Platform.OS === "ios" ? (
                 <AppleLoginButton
                   title={t("register_modal.apple") || "Register with Apple"}
+                  onLogin={handleRegisterSocial}
                 />
               ) : null}
               <LinkedInLoginButton
                 title={t("register_modal.linked") || "Register with Linkedin"}
+                onLogin={handleRegisterSocial}
               />
               <GoogleLoginButton
                 title={t("register_modal.google") || "Register with Google"}
+                onLogin={handleRegisterSocial}
               />
               <Button
                 title={t("register_modal.register")}

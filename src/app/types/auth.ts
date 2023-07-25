@@ -1,3 +1,4 @@
+
 export interface LoginForm {
   user: string;
   password: string;
@@ -28,4 +29,8 @@ export interface IToken {
   exp: number;
   iat: number;
   sub: string;
+}
+
+export interface ISocialLoginForm {
+  token: string;
 }

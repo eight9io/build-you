@@ -20,7 +20,7 @@ import Button from "../../component/common/Buttons/Button";
 import TextInput from "../../component/common/Inputs/TextInput";
 import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
-import { LoginForm } from "../../types/auth";
+import { ISocialLoginForm, LoginForm } from "../../types/auth";
 import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { errorMessage } from "../../utils/statusCode";
 import { useAuthStore } from "../../store/auth-store";
@@ -31,6 +31,8 @@ import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../../store/user-store";
+import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
+import { LOGIN_TYPE } from "../../common/enum";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -58,14 +60,18 @@ export default function Login() {
     reValidateMode: "onChange",
     mode: "onSubmit",
   });
-  const { asyncLoginEmailPassword, getRefreshToken, logout } = useAuthStore();
+  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
 
   const onSubmit = async (payload: LoginForm) => {
+    await handleLogin(payload, LOGIN_TYPE.EMAIL_PASSWORD);
+  };
+
+  const handleLogin = async (payload: LoginForm | ISocialLoginForm, type: LOGIN_TYPE) => {
     setIsLoading(true);
     try {
-      const t = await asyncLoginEmailPassword(payload);
+      const t = await asyncLogin(payload, type);
       setupInterceptor(getRefreshToken, () => {
         logout();
         userProfileStoreOnLogout();
@@ -106,8 +112,11 @@ export default function Login() {
                 />
               </View>
               <View className="flex-row">
-                {Platform.OS === "ios" ? <AppleLoginButton /> : null}
-                <LinkedInLoginButton />
+                {Platform.OS === "ios" ? (
+                  <AppleLoginButton onLogin={handleLogin} />
+                ) : null}
+                <GoogleLoginButton onLogin={handleLogin} />
+                <LinkedInLoginButton onLogin={handleLogin} />
               </View>
               <View className="mt-5 flex-row items-center justify-center px-6">
                 <View className="h-[0.5px] w-[50%] bg-black-default"></View>

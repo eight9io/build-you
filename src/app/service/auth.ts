@@ -48,13 +48,13 @@ export const serviceGetMyProfile = () => {
 };
 
 export const googleLogin = (token: string) => {
-  return http.get(`/auth/google/${token}`);
+  return http.get<ILoginResponse>(`/auth/google/${token}`);
 };
 
 export const linkedInLogin = (token: string) => {
-  return http.get(`/auth/linkedin/${token}`);
+  return http.get<ILoginResponse>(`/auth/linkedin/${token}`);
 };
 
 export const appleLogin = (token: string) => {
-  return http.get(`/auth/aple/${token}`);
+  return http.get<ILoginResponse>(`/auth/apple/${token}`);
 };

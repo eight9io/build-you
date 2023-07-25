@@ -128,7 +128,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Create Challenge"
         component={() => undefined}
         listeners={({ navigation }) => ({
@@ -153,7 +153,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             </View>
           ),
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Notifications"
         component={NotificationsScreen}

@@ -154,7 +154,7 @@ export const HomeFeed = () => {
 
   return (
     <SafeAreaView className={clsx("bg-white")}>
-      <View className={clsx("h-full w-full bg-gray-50 pb-[70px]")}>
+      <View className={clsx("h-full w-full bg-gray-50 mb-[70px]")}>
         <FlatList
           data={feedData}
           renderItem={renderItem}

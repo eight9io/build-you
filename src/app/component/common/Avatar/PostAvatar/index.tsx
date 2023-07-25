@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { View } from "react-native";
 import { Image } from "expo-image";
 import clsx from "clsx";
@@ -11,23 +11,14 @@ interface IPostAvatarProps {
 }
 
 const PostAvatar: React.FC<IPostAvatarProps> = ({ src }) => {
-  // TODO useless state
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
-  const [newAvatarUrl, setNewAvatarUrl] = useState<string | null | undefined>(
-    null
-  );
-
-  // TODO convert to useMemo
-  useEffect(() => {
+  const newAvatarUrl = useMemo(() => {
     let url: string | null | undefined;
     if (src && !src.startsWith("http")) {
       url = `https://buildyou-front.stg.startegois.com${src}`;
     } else {
       url = src;
     }
-    setNewAvatarUrl(url);
+    return url;
   }, [src]);
 
   return (
@@ -39,12 +30,6 @@ const PostAvatar: React.FC<IPostAvatarProps> = ({ src }) => {
             className={clsx("h-[32px] w-[32px] rounded-full")}
             source={{
               uri: newAvatarUrl,
-            }}
-            onLoadStart={() => setLoading(true)}
-            onLoadEnd={() => setLoading(false)}
-            onError={(err) => {
-              setLoading(false);
-              setError(true);
             }}
           />
         </View>

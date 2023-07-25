@@ -47,6 +47,7 @@ export function setupInterceptor(
             });
           }
           const refreshToken = getRefreshToken();
+          console.log("refreshToken", refreshToken);
 
           if (!refreshToken) {
             reject(error); // throw so next check retry will force logout

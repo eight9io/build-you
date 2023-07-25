@@ -33,11 +33,7 @@ const CommentButton: FC<ICommentButtonProps> = ({
       const response = await getProgressComments(progressId);
       if (response.status === 200) setNumberOfComments(response.data.length);
     } catch (_) {
-      // TODO this could lead to multiple modal showing that crash app
-      // GlobalDialogController.showModal({
-      //   title: "Error",
-      //   message: "Something went wrong. Please try again later.",
-      // });
+      setNumberOfComments(0);
     }
   };
   const handleNavigationToComment = debounce(() => {

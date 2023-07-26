@@ -40,6 +40,8 @@ interface IBottomNavBarProps {
 
 const SCREENS_TO_HIDE_TAB_BAR = ["ProgressCommentScreen", "MainSearchScreen"];
 
+const EmptyScreen = () => null;
+
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
   const isAndroid = Platform.OS === "android";
@@ -130,7 +132,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Create Challenge"
-        component={() => undefined}
+        component={EmptyScreen}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();

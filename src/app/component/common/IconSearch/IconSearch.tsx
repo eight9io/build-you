@@ -1,15 +1,14 @@
-import React, { useMemo } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { TouchableOpacity, View } from "react-native";
 import SearchIcon from "./asset/search.svg";
 interface ISearchIcon {
   onPress?: any;
 }
 export const IconSearch: React.FC<ISearchIcon> = ({ onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} className="p-2 pr-0">
       <View className="flex-row ">
         <SearchIcon />
-        <Image source={SearchIcon} />
       </View>
     </TouchableOpacity>
   );

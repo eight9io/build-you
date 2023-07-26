@@ -6,12 +6,20 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Text, StyleSheet, Animated, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Animated,
+  TouchableOpacity,
+  Platform,
+  View,
+} from "react-native";
 import IconClose from "../../../component/asset/icon-close.svg";
 import GlobalToastController, {
   GlobalToastRef,
   IGlobalToastProps,
 } from "./GlobalToastController";
+import clsx from "clsx";
 
 const duration = 2000;
 const Toast = () => {
@@ -62,35 +70,22 @@ const Toast = () => {
   if (!toastVisible) return null;
 
   return (
-    <Animated.View style={[styles.toastContainer, { opacity: fadeAnim }]}>
-      <Text className="mt-3  text-h6 text-white">{message}</Text>
+    <Animated.View
+      style={[{ opacity: fadeAnim }]}
+      className={clsx(
+        "absolute  left-[20px] right-[20px]  z-[2000]  flex-row justify-between rounded-xl bg-[#24252B] pb-[22px] pl-[16px] pr-[10px] pt-[10px] ",
+        Platform.OS === "ios" ? "bottom-[120px] " : "bottom-[100px] "
+      )}
+    >
+      <Text className="mt-5  w-[90%] text-h6 text-white">{message}</Text>
+
       <TouchableOpacity onPress={handleHideToast}>
-        <IconClose />
+        <View>
+          <IconClose />
+        </View>
       </TouchableOpacity>
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  toastContainer: {
-    position: "absolute",
-    bottom: 120,
-    left: 20,
-    right: 20,
-    backgroundColor: "#24252B",
-    paddingTop: 10,
-    paddingBottom: 22,
-    paddingRight: 10,
-    paddingLeft: 16,
-    borderRadius: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    zIndex: 2000,
-  },
-  toastText: {
-    color: "#fff",
-    // textAlign: 'center',
-  },
-});
 
 export default forwardRef(Toast);

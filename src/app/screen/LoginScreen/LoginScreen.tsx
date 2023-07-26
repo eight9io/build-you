@@ -53,8 +53,8 @@ export default function Login() {
     formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
-      user: "hoanggia@gmail.com",
-      password: "Test1234",
+      user: "",
+      password: "",
     },
     resolver: yupResolver(LoginValidationSchema()),
     reValidateMode: "onChange",
@@ -68,7 +68,10 @@ export default function Login() {
     await handleLogin(payload, LOGIN_TYPE.EMAIL_PASSWORD);
   };
 
-  const handleLogin = async (payload: LoginForm | ISocialLoginForm, type: LOGIN_TYPE) => {
+  const handleLogin = async (
+    payload: LoginForm | ISocialLoginForm,
+    type: LOGIN_TYPE
+  ) => {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);

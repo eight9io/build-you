@@ -46,14 +46,11 @@ export function setupInterceptor(
           }
           originalRequest._retry = true;
           const refreshToken = getRefreshToken();
-          console.log("refreshToken", refreshToken);
-
           if (!refreshToken) {
             reject(error); // throw so next check retry will force logout
           }
 
           const decodedRefreshToken = jwt_decode<IToken>(refreshToken);
-          console.log("decodedRefreshToken", decodedRefreshToken);
           const currentTime = Date.now() / 1000;
           if (decodedRefreshToken?.exp < currentTime) {
             reject(error); // throw so next check retry will force logout
@@ -65,7 +62,6 @@ export function setupInterceptor(
               token: refreshToken,
             }
           );
-          console.log("newTokens", newTokens);
           if (newTokens.status !== 201) {
             reject(error); // throw so next check retry will force logout
           } else {
@@ -73,6 +69,7 @@ export function setupInterceptor(
               console.log("call original request with new token");
               setAuthTokenToHttpHeader(newTokens.data.authorization);
               originalRequest.headers["Authorization"] = `Bearer ${newTokens.data.authorization}`;
+              // set new tokens to local storage
               const res = await httpInstance(originalRequest);
               resolve(res);
             } catch (error) {

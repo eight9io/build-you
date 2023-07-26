@@ -24,8 +24,9 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({ title, onLogin }) => {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       });
+      console.log(appleAuthRequestResponse)
       if (appleAuthRequestResponse.authorizationCode) {
-        await onLogin({ token: appleAuthRequestResponse.authorizationCode }, LOGIN_TYPE.APPLE);
+        // await onLogin({ token: appleAuthRequestResponse.authorizationCode }, LOGIN_TYPE.APPLE);
       } else
         throw new Error(t("errorMessage:err_login.cannot_get_access_token"));
     } catch (error) {

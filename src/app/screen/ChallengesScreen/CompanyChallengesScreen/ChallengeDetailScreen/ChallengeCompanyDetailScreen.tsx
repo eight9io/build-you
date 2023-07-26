@@ -80,10 +80,10 @@ export const ChallengeCompanyDetailScreen: FC<
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: "Maximum people reached",
           message:
             t("dialog.err_max_join") ||
-            "You are already joined this challenge!",
+            "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
         });
         return;
       }

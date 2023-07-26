@@ -95,7 +95,7 @@ const PersonalChallenges = ({
     <SafeAreaView className={clsx("flex-1 bg-white")}>
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && !isFetchingError && (
-        <View className={clsx("h-full w-full flex-1 bg-gray-50 pb-[65px]")}>
+        <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
           {personalChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (

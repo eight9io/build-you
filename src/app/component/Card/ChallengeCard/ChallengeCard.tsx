@@ -10,6 +10,7 @@ import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
 import { isArray } from "util";
 import { useUserProfileStore } from "../../../store/user-store";
+import { StackActions } from "@react-navigation/native";
 
 interface IChallengeCardProps {
   item: IChallenge;
@@ -67,6 +68,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
 
   const onPress = () => {
     // handlePress or navigation
+
     if (navigation) {
       if (isCompanyAccount) {
         return navigation.navigate("CompanyChallengeDetailScreen", {
@@ -74,15 +76,24 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
         });
       } else if (isFromOtherUser) {
         if (companyName) {
-          navigation.navigate("OtherUserProfileChallengeDetailsScreen", {
-            challengeId: item.id,
-            isCompanyAccount: true,
-          });
+          const action = StackActions.push(
+            "OtherUserProfileChallengeDetailsScreen",
+            {
+              challengeId: item.id,
+              isCompanyAccount: true,
+            }
+          );
+          navigation.dispatch(action);
           return;
         }
-        navigation.navigate("OtherUserProfileChallengeDetailsScreen", {
-          challengeId: item.id,
-        });
+        const action = StackActions.push(
+          "OtherUserProfileChallengeDetailsScreen",
+          {
+            challengeId: item.id,
+          }
+        );
+
+        navigation.dispatch(action);
         return;
       }
       navigation.navigate("PersonalChallengeDetailScreen", {

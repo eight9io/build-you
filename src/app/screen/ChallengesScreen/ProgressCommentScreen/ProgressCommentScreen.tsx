@@ -190,10 +190,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     loadProgressComments();
   }, []);
 
-  const handleRefreshComments = async () => {
+  const handleRefreshComments = async ({ isDelete }: { isDelete: boolean }) => {
     setChallengeUpdateComment({
       id: progressId,
-      numberOfComments: comments.length + 1,
+      numberOfComments: comments.length + (isDelete ? -1 : 1),
     });
     await loadProgressComments();
   };
@@ -206,7 +206,9 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       });
       if (res.status === 201) {
         // Reload comments
-        await handleRefreshComments();
+        await handleRefreshComments({
+          isDelete: false,
+        });
       }
     } catch (error) {
       GlobalDialogController.showModal({
@@ -235,7 +237,11 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                   <View key={index} className="px-3">
                     <SingleComment
                       comment={item}
-                      onDeleteCommentSuccess={handleRefreshComments}
+                      onDeleteCommentSuccess={() =>
+                        handleRefreshComments({
+                          isDelete: true,
+                        })
+                      }
                     />
                   </View>
                 );

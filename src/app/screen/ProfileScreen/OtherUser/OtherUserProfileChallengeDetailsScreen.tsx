@@ -195,7 +195,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         },
       });
     }
-  }, [isJoined]);
+  }, [isJoined, isCurrentUserOwnerOfChallenge]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;

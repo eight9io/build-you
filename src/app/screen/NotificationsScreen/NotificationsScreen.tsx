@@ -17,8 +17,6 @@ import Notification from "../../component/Notification";
 import { useNotificationStore } from "../../store/notification-store";
 import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
-import Button from "../../component/common/Buttons/Button";
-import ShareIcon from "../../../../assets/svg/share.svg";
 import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
@@ -32,25 +30,24 @@ export type NotificationsScreenNavigationProp = NativeStackNavigationProp<
 
 const Notifications = () => {
   const { t } = useTranslation();
-  const isFocused = useIsFocused();
-  const { getHasNewNotification, setHasNewNotification } =
-    useNotificationStore();
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const isFocused = useIsFocused();
+  const { numOfNewNotifications, refreshNumOfNewNotifications } =
+    useNotificationStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-
-  useLayoutEffect(() => {
-    if (isFocused) {
-      const hasNewNotification = getHasNewNotification();
-      // Remove new notification icon (if any) when user enter this screen
-      if (hasNewNotification) setHasNewNotification(false);
-    }
-  }, [isFocused]);
 
   useEffect(() => {
     setIsLoading(true);
     fetchNotifications().finally(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchNotifications(); // Implicitly fetch notifications when there is a new notification
+    if (isFocused) {
+      refreshNumOfNewNotifications();
+    }
+  }, [numOfNewNotifications]);
 
   const fetchNotifications = async () => {
     try {
@@ -68,7 +65,7 @@ const Notifications = () => {
     }
   };
 
-  const handleScrollToRefresh = async () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
     await fetchNotifications();
     setIsRefreshing(false);
@@ -92,7 +89,7 @@ const Notifications = () => {
       <Notification
         notifications={notifications}
         isRefreshing={isRefreshing}
-        onRefresh={handleScrollToRefresh}
+        onRefresh={handleRefresh}
       />
     </SafeAreaView>
   );

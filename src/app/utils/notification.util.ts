@@ -1,6 +1,7 @@
 import * as Device from "expo-device";
 import notifee, {
   AuthorizationStatus,
+  Event,
   EventType,
   Notification,
 } from "@notifee/react-native";
@@ -41,6 +42,7 @@ export const registerForPushNotificationsAsync = async () => {
 };
 
 export const unregisterForPushNotificationsAsync = async () => {
+  console.log("unregisterForPushNotificationsAsync: ");
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
@@ -57,7 +59,7 @@ export const addNotificationListener = async (
   const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
   ) => {
-    // console.log('message: ', message);
+    console.log('message: ', message);
     if (message.notification)
       // Display notification on foreground
       await notifee.displayNotification({
@@ -65,9 +67,9 @@ export const addNotificationListener = async (
         body: message.notification.body,
         data: message.data,
       });
-    await notifee.getBadgeCount();
+
     await notifee.incrementBadgeCount();
-    useNotificationStore.getState().setHasNewNotification(true);
+    useNotificationStore.getState().increaseNumOfNewNotifications();
   };
 
   const onBackgroundMessageReceived = async (
@@ -76,7 +78,7 @@ export const addNotificationListener = async (
     // console.log('background: ', message);
     await notifee.getBadgeCount();
     await notifee.incrementBadgeCount();
-    useNotificationStore.getState().setHasNewNotification(true);
+    useNotificationStore.getState().increaseNumOfNewNotifications();
   };
 
   // Listen to messages from FCM
@@ -84,19 +86,19 @@ export const addNotificationListener = async (
   messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
 
   // Listen to foreground events
-  notifee.onForegroundEvent(async ({ type, detail }) => {
-    // console.log('detail: ', detail);
-    switch (type) {
+  notifee.onForegroundEvent(async (event: Event) => {
+    console.log("foreground event: ", event);
+    switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
-        if (detail.notification) {
+        if (event.detail.notification) {
           await handleTapOnIncomingNotification(
-            detail.notification,
+            event.detail.notification,
             navigation
           );
-          if (detail.notification.id)
+          if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count
-            await clearNotification(detail.notification.id);
-          useNotificationStore.getState().setHasNewNotification(false); // reset the new notification flag
+            await clearNotification(event.detail.notification.id);
+          useNotificationStore.getState().refreshNumOfNewNotifications(); // reset the new notification flag
         }
         break;
     }
@@ -107,6 +109,7 @@ export const handleTapOnIncomingNotification = async (
   notification: Notification,
   navigation: NavigationContainerRef<RootStackParamList>
 ) => {
+  console.log("tap on incoming notification: ", notification);
   const payload = notification.data as Record<
     string,
     any
@@ -146,10 +149,11 @@ export const handleTapOnIncomingNotification = async (
 };
 
 export const handleTapOnNotification = async (
-  notification: INotification,
+  notification: any,
   navigation: NativeStackNavigationProp<RootStackParamList>,
   setNotificationIsRead: any
 ) => {
+  console.log("tap on notification: ", notification);
   const handleNavigation = async (
     screen: string,
     notification: INotification
@@ -250,7 +254,7 @@ export const mapNotificationResponses = (
       user: {
         id: response.user.id,
         name: `${response.user.name} ${response.user.surname}`,
-        avatar: "https://picsum.photos/200",
+        avatar: response.user.avatar,
       },
       createdAt: response.createdAt,
       isRead: response.isRead,

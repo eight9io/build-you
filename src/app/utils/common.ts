@@ -1,6 +1,9 @@
 import queryString from "query-string";
+import { AxiosResponse } from "axios";
+import isEmpty from "lodash.isempty";
 import dayjs from "./date.util";
 import { IChallenge } from "../types/challenge";
+
 export const getRandomId = () => Math.random().toString(36).slice(2, 11);
 
 export const getUrlParam = (url: string, param: string) => {
@@ -36,13 +39,11 @@ export const sortArrayByCreatedAt = (
   });
 };
 
-// TODO use lodash isEmpty
 export const isObjectEmpty = (obj: any) => {
-  return Object.keys(obj).length === 0;
+  return isEmpty(obj);
 };
 
-// TODO add typescript
-export const sortChallengeByStatusFromResponse = (res: any) => {
+export const sortChallengeByStatusFromResponse = (res: AxiosResponse) => {
   if (!res?.data) {
     return [];
   }

@@ -12,7 +12,7 @@ import { getChallengeByUserId } from "../../../../../service/challenge";
 import { IChallenge, IChallengeOwner } from "../../../../../types/challenge";
 import ChallengeCard from "../../../../Card/ChallengeCard/ChallengeCard";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
-import GolbalDialogController from "../../../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../common/Dialog/GlobalDialogController";
 import { sortChallengeByStatus } from "../../../../../utils/common";
 import { useUserProfileStore } from "../../../../../store/user-store";
 
@@ -67,10 +67,11 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
         setOtherUserChallenge(sortChallengeByStatus(challengeList));
       })
       .catch(() => {
-        // TODO add translation
-        GolbalDialogController.showModal({
+        GlobalDialogController.showModal({
           title: "Error",
-          message: "Something went wrong. Please try again later.",
+          message:
+            (t("error_general_message") as string) || "Something went wrong",
+          button: "OK",
         });
       })
       .finally(() => {

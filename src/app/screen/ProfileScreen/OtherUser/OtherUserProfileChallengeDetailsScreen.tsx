@@ -36,7 +36,7 @@ import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
 import EditChallengeModal from "../../../component/modal/EditChallengeModal";
 import { getChallengeStatusColor } from "../../../utils/common";
 import { AxiosError } from "axios";
-import { debounce } from "../../../hooks/useDebounce";
+import debounce from "lodash.debounce";
 import { onShareChallengeLink } from "../../../utils/shareLink.uitl";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {

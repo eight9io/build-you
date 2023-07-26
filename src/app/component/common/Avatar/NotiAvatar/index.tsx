@@ -36,7 +36,10 @@ const NotiAvatar: React.FC<INotiAvatarProps> = ({
               }}
             />
           ) : (
-            <DefaultAvatar className="h-[57px] w-[57px] rounded-full" />
+            <DefaultAvatar
+              width={57}
+              height={57}
+            />
           )}
           {typeOfNoti && (
             <Image

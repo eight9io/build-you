@@ -106,16 +106,17 @@ const CreateChallengeScreen = () => {
 
       // Create a challenge without image
       const challengeCreateResponse = await createChallenge(payload);
+      const newChallengeId = challengeCreateResponse.data.id;
       // If challenge created successfully, upload image
       if (
         challengeCreateResponse.status === 200 ||
         challengeCreateResponse.status === 201
       ) {
-        setNewChallengeId(challengeCreateResponse.data.id);
+        setNewChallengeId(newChallengeId);
         if (image) {
           const challengeImageResponse = await updateChallengeImage(
             {
-              id: challengeCreateResponse.data.id,
+              id: newChallengeId,
             },
             image
           );
@@ -124,15 +125,20 @@ const CreateChallengeScreen = () => {
             challengeImageResponse.status === 200 ||
             challengeCreateResponse.status === 201
           ) {
-            navigation.navigate("HomeScreen", {
-              screen: "Challenges",
-              params: {
-                screen: "PersonalChallengeDetailScreen",
-                params: {
-                  challengeId: challengeCreateResponse.data.id,
-                },
-              },
+            const isChallengesScreenInStack = navigation
+              .getState()
+              .routes.some((route) => route.name === "Challenges");
+            if (isChallengesScreenInStack) {
+              navigation.dispatch(StackActions.popToTop());
+            } else {
+              navigation.navigate("Challenges");
+            }
+
+            navigation.navigate("Challenges", {
+              screen: "PersonalChallengeDetailScreen",
+              params: { challengeId: newChallengeId },
             });
+
             GlobalToastController.showModal({
               message:
                 t("toast.create_challenge_success") ||

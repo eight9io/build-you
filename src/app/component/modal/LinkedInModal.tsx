@@ -60,6 +60,7 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
           onNavigationStateChange={handleNavigationStateChange}
           thirdPartyCookiesEnabled={true}
           onLoad={() => setIsLoading(false)}
+          incognito
         />
       </View>
     </Modal>

@@ -49,9 +49,9 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
 
   const { getUserProfile } = useUserProfileStore();
-  const { getHasNewNotification } = useNotificationStore();
+  const { numOfNewNotifications, refreshNumOfNewNotifications } =
+    useNotificationStore();
   const currentUser = getUserProfile();
-  const hasNewNotification = getHasNewNotification();
   const isCompany = currentUser && currentUser?.companyAccount;
 
   return (
@@ -81,7 +81,19 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         }
         return {};
       }}
-      tabBar={(props) => <BottomTabBar {...props} />}
+      tabBar={(props) => (
+        <View
+          style={{
+            display: shouldHideTabBar ? "none" : "flex",
+            backgroundColor: "#FFFFFF",
+            height: isAndroid ? 68 : 102,
+            paddingBottom: isAndroid ? 0 : 30,
+            position: "relative", // Make sure all the screen is above the tab bar and not be hidden by it
+          }}
+        >
+          <BottomTabBar {...props} />
+        </View>
+      )}
     >
       <Tab.Screen
         name="Feed"
@@ -159,14 +171,20 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       <Tab.Screen
         name="Notifications"
         component={NotificationsScreen}
+        listeners={() => ({
+          tabPress: () => {
+            if (numOfNewNotifications > 0)
+              refreshNumOfNewNotifications();
+          },
+        })}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View className={clsx("flex flex-col items-center justify-center")}>
-              {hasNewNotification ? (
-                <NewNotificationIcon fill={"#6C6E76"} />
-              ) : focused ? (
+              {focused ? (
                 <NotificationFillIcon fill={"#FF7B1C"} />
+              ) : numOfNewNotifications > 0 ? (
+                <NewNotificationIcon fill={"#6C6E76"} />
               ) : (
                 <NotificationIcon fill={"#6C6E76"} />
               )}

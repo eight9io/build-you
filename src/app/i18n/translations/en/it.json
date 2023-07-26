@@ -187,6 +187,12 @@
       "title": "Thank you for your information. We're personalizing your experience..."
     }
   },
+  "company_profile": {
+    "website": "Website",
+    "phone": "Phone",
+    "email": "Email",
+    "VAT_number": "VAT number"
+  },
   "video_profile": "Video Profile",
   "work_place": "Workplace",
   "show_company": "Show company",
@@ -319,7 +325,7 @@
     "err_add_employee": "The user is already part of the company",
     "open_settings": "Open settings",
     "alert_title": "Alert",
-    "err_max_join": "The maximum number of participants for this challenge has been reached"
+    "err_max_join": "Sorry! You can not join this challenge, it has reached the maximum number of participants."
   },
   "toast": {
     "joined_success": "You have joined the challenge!",

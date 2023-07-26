@@ -28,6 +28,11 @@ export interface IUserData {
   companyAccount?: boolean | null;
   isShowCompany?: boolean | null;
   challengeStatus?: string;
+  emailContact?: string;
+  phone?: string;
+  webSite?: string;
+  vatNumber?: string;
+
 }
 
 export interface IHardSkillProps {

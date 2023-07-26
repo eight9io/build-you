@@ -17,7 +17,6 @@ import FeedPostCard, {
 import NavButton from "../component/common/Buttons/NavButton";
 import IconSearch from "../component/common/IconSearch/IconSearch";
 
-import ShareIcon from "../../../assets/svg/share.svg";
 import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import { serviceGetFeed, serviceGetFeedUnregistered } from "../service/feed";
 
@@ -45,7 +44,6 @@ export const HomeFeed = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useGetListFollowing();
-  // const isFocused = useIsFocused();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -67,7 +65,7 @@ export const HomeFeed = () => {
   };
 
   const keyExtractor = useCallback(
-    (item: any, index: number) => `${item.id}${index}` as unknown as string,
+    (item: any, index: number) => `${item?.id}${index}` as unknown as string,
     []
   );
 
@@ -139,22 +137,25 @@ export const HomeFeed = () => {
   }, []);
 
   const renderItem = useCallback(
-    ({ item }: { item: any }) => (
-      <FeedPostCard
-        itemFeedPostCard={item}
-        userId={userData?.id}
-        isFocused={true}
-        navigation={navigation}
-        challgeneUpdateLike={challgeneUpdateLike}
-        challengeUpdateComment={challgeneUpdateComment}
-      />
-    ),
-    [isFocused]
+    ({ item }: { item: any }) => {
+      if (!item?.id) return null;
+      return (
+        <FeedPostCard
+          itemFeedPostCard={item}
+          userId={userData?.id}
+          isFocused={true}
+          navigation={navigation}
+          challgeneUpdateLike={challgeneUpdateLike}
+          challengeUpdateComment={challgeneUpdateComment}
+        />
+      );
+    },
+    [challgeneUpdateLike, challgeneUpdateComment]
   );
 
   return (
     <SafeAreaView className={clsx("bg-white")}>
-      <View className={clsx("mb-[70px] h-full w-full bg-gray-50")}>
+      <View className={clsx("mb-[-100px] h-full w-full bg-gray-50")}>
         <FlatList
           data={feedData}
           renderItem={renderItem}
@@ -217,14 +218,17 @@ export const HomeFeedUnregister = () => {
     setIsRefreshing(false);
   };
 
+  const renderItem = ({ item }) => {
+    if (!item?.id) return null;
+    return <FeedPostCardUnregister itemFeedPostCard={item} />;
+  };
+
   return (
     <SafeAreaView className={clsx("bg-white")}>
-      <View className={clsx("h-full w-full bg-gray-50")}>
+      <View className={clsx("h-full w-full bg-gray-50 ")}>
         <FlatList
           data={feedData}
-          renderItem={({ item }) => (
-            <FeedPostCardUnregister itemFeedPostCard={item} />
-          )}
+          renderItem={renderItem}
           keyExtractor={(item) => item.id as unknown as string}
           onEndReached={getNewFeed}
           onEndReachedThreshold={0.5}

@@ -25,12 +25,13 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import httpInstance from "../../../../utils/http";
+import { StackActions } from "@react-navigation/native";
 // import CalendarIcon from "./asset/calendar.svg";
 // import CloseIcon from "../asset/close.svg";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
-  achievementTime?: Date;
+  achievementTime?: string | Date;
   image?: string;
 }
 
@@ -54,7 +55,6 @@ const CreateChallengeScreen = () => {
     control,
     getValues,
     setValue,
-
     handleSubmit,
     formState: { errors },
   } = useForm<ICreateChallengeForm>({
@@ -136,7 +136,7 @@ const CreateChallengeScreen = () => {
             GlobalToastController.showModal({
               message:
                 t("toast.create_challenge_success") ||
-                "Your challenge has been created successfully !",
+                "Your challenge has been created successfully!",
             });
             // setIsRequestSuccess(true);
             // setIsShowModal(true);

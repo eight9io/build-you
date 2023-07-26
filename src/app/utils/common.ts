@@ -84,7 +84,7 @@ export const sortChallengeByStatusFromResponse = (res: any) => {
       if (firstChallenge) {
         if (
           new Date(firstChallenge.achievementTime).getTime() -
-            new Date(challenge.achievementTime).getTime() <
+            new Date(challenge.achievementTime).getTime() >
           0
         ) {
           arrangedChallenges.unshift(challenge);

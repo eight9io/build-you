@@ -10,6 +10,7 @@ import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
 import { CompanyTag } from "./ChallengeCard";
 import { useUserProfileStore } from "../../../store/user-store";
+import { StackActions } from "@react-navigation/native";
 
 interface ICurrentUserChallengeCardProps {
   item: IChallenge;
@@ -32,11 +33,14 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   const currentUser = getUserProfile();
 
   const onPress = () => {
-    // handlePress or navigation
     if (navigation) {
-      navigation.navigate("PersonalChallengeDetailScreen", {
+      // navigation.navigate("PersonalChallengeDetailScreen", {
+      //   challengeId: item.id,
+      // });
+      const action = StackActions.push("PersonalChallengeDetailScreen", {
         challengeId: item.id,
       });
+      navigation.dispatch(action);
       return;
     }
   };

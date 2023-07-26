@@ -53,8 +53,8 @@ export default function Login() {
     formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
-      user: "hoanggia@gmail.com",
-      password: "Test1234",
+      user: "",
+      password: "",
     },
     resolver: yupResolver(LoginValidationSchema()),
     reValidateMode: "onChange",

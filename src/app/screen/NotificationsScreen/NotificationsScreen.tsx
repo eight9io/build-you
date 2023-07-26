@@ -21,6 +21,9 @@ import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
+
+import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
+
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
 export type NotificationsScreenNavigationProp = NativeStackNavigationProp<
@@ -36,6 +39,8 @@ const Notifications = () => {
     useNotificationStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const { setNewestNotificationId } = useNotificationStore();
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,6 +58,10 @@ const Notifications = () => {
     try {
       const data = await getNotifications();
       setNotifications(data);
+      if (data.length > 0) {
+        setLastNotiIdToLocalStorage(`${data[0]?.id}`);
+        setNewestNotificationId(`${data[0]?.id}`);
+      }
     } catch (error) {
       GlobalDialogController.showModal({
         title: "Error",

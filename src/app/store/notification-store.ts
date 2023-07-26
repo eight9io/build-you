@@ -4,9 +4,12 @@ import { clearAllNotifications } from "../utils/notification.util";
 
 export interface NotificationStore {
   numOfNewNotifications: number;
+  newestNotificationId: string | null;
   increaseNumOfNewNotifications: (value?: number) => void; // default increase by 1
   refreshNumOfNewNotifications: () => void;
   getNumOfNewNotifcations: () => number;
+  setNewestNotificationId: (id: string) => void;
+  getNewestNotificationId: () => string | null;
 }
 
 // Use persist to store data in local storage
@@ -14,8 +17,9 @@ export interface NotificationStore {
 export const useNotificationStore = create<NotificationStore>()(
   subscribeWithSelector((set, get) => ({
     numOfNewNotifications: 0,
+    newestNotificationId: null,
     increaseNumOfNewNotifications: async (value = 1) => {
-      if(value <= 0) return;
+      if (value <= 0) return;
       set((state) => ({
         numOfNewNotifications: state.numOfNewNotifications + value,
       }));
@@ -25,5 +29,7 @@ export const useNotificationStore = create<NotificationStore>()(
       await clearAllNotifications();
     },
     getNumOfNewNotifcations: () => get().numOfNewNotifications,
+    setNewestNotificationId: (id: string) => set({ newestNotificationId: id }),
+    getNewestNotificationId: () => get().newestNotificationId,
   }))
 );

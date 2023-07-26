@@ -100,14 +100,15 @@ const MainSearchScreen = () => {
   }: {
     item: ISearchUserData;
   }) => {
+    if (!item?.id) return null;
     return (
       <TouchableOpacity
         key={item.id}
         activeOpacity={0.8}
         onPress={() => navigateToUserDetail(item.id)}
-        className="flex flex-1 items-center bg-white px-5 py-3"
+        className="flex flex-1 bg-white px-5 py-3"
       >
-        <View className="relative flex flex-1 flex-row">
+        <View className="relative flex flex-1 flex-row items-center">
           {!item.avatar && (
             <Image
               className={clsx("h-12 w-12 rounded-full")}

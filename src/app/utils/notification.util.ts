@@ -19,6 +19,7 @@ import {
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
@@ -59,7 +60,6 @@ export const addNotificationListener = async (
   const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
   ) => {
-    console.log('message: ', message);
     if (message.notification)
       // Display notification on foreground
       await notifee.displayNotification({
@@ -75,7 +75,6 @@ export const addNotificationListener = async (
   const onBackgroundMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
   ) => {
-    // console.log('background: ', message);
     await notifee.getBadgeCount();
     await notifee.incrementBadgeCount();
     useNotificationStore.getState().increaseNumOfNewNotifications();
@@ -275,4 +274,14 @@ export const sortNotificationsByDate = (
   return notifications.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+};
+
+export const getLastNotiIdFromLocalStorage = async () => {
+  const data = await AsyncStorage.getItem("lastNotiId");
+  return data;
+};
+
+export const setLastNotiIdToLocalStorage = async (lastNotiId: string) => {
+  if (!lastNotiId) return;
+  await AsyncStorage.setItem("lastNotiId", lastNotiId);
 };

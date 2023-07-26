@@ -13,9 +13,8 @@ import {
   deleteProgressLike,
   getProgressLikes,
 } from "../../service/progress";
-import { debounce } from "../../hooks/useDebounce";
+import debounce from "lodash.debounce";
 
-import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 import { INumberOfLikeUpdate } from "../../types/challenge";
 
 interface ILikeButtonProps {

@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import CommentSvg from "./asset/comment.svg";
 import { getProgressComments } from "../../service/progress";
 // import GlobalDialogController from "../common/Dialog/GlobalDialogController";
-import { debounce } from "../../hooks/useDebounce";
+import debounce from "lodash.debounce";
 import { INumberOfCommentUpdate } from "../../types/challenge";
 
 interface ICommentButtonProps {

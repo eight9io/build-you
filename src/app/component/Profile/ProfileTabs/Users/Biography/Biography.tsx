@@ -121,16 +121,78 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             })}
           </View>
         )}
-        {occupation && (
-          <Text className="mt-3">
-            <Text className={clsx("text-md font-semibold  text-gray-dark")}>
-              {occupation && t("form_onboarding.screen_1.occupation")}:&nbsp;
-            </Text>
-            <Text className={clsx("text-md text-gray-dark")}>
-              {occupation?.name}
-            </Text>
-          </Text>
-        )}
+        <View className="flex-column flex gap-5 pt-[20px]">
+          {occupation && (
+            <View className="flex flex-row ">
+              <Text className={clsx("text-md font-semibold  text-gray-dark")}>
+                {occupation && t("form_onboarding.screen_1.occupation")}:&nbsp;
+              </Text>
+              <Text className={clsx("text-md text-gray-dark")}>
+                {occupation?.name}
+              </Text>
+            </View>
+          )}
+          {userProfile?.webSite && (
+            <View className="flex flex-row ">
+              <Text
+                className={clsx(
+                  "w-[25%] text-md font-semibold  text-gray-dark"
+                )}
+              >
+                {t("company_profile.website")}:&nbsp;
+              </Text>
+
+              <Text className={clsx("text-md text-gray-dark")}>
+                {userProfile?.webSite}
+              </Text>
+            </View>
+          )}
+          {userProfile?.phone && (
+            <View className="flex flex-row ">
+              <Text
+                className={clsx(
+                  "w-[25%] text-md font-semibold  text-gray-dark"
+                )}
+              >
+                {t("company_profile.phone")}:&nbsp;
+              </Text>
+
+              <Text className={clsx("text-md text-gray-dark")}>
+                {userProfile?.phone}
+              </Text>
+            </View>
+          )}
+          {userProfile?.emailContact && (
+            <View className="flex flex-row ">
+              <Text
+                className={clsx(
+                  "w-[25%] text-md font-semibold  text-gray-dark"
+                )}
+              >
+                {t("company_profile.email")}:&nbsp;
+              </Text>
+
+              <Text className={clsx("text-md text-gray-dark")}>
+                {userProfile?.emailContact}
+              </Text>
+            </View>
+          )}
+          {userProfile?.vatNumber && (
+            <View className="flex flex-row ">
+              <Text
+                className={clsx(
+                  "w-[25%] text-md font-semibold  text-gray-dark"
+                )}
+              >
+                {t("company_profile.VAT_number")}:&nbsp;
+              </Text>
+
+              <Text className={clsx("text-md text-gray-dark")}>
+                {userProfile?.vatNumber}
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
     </ScrollView>
   );

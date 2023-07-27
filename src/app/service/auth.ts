@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   ChangePasswordForm,
   ILoginResponse,
+  ISocialLoginForm,
   LoginForm,
   RegisterForm,
 } from "../types/auth";
@@ -55,6 +57,20 @@ export const linkedInLogin = (token: string) => {
   return http.get<ILoginResponse>(`/auth/linkedin/${token}`);
 };
 
-export const appleLogin = (token: string) => {
-  return http.post<ILoginResponse>(`/auth/apple/${token}`, { token });
+export const appleLogin = async (payload: ISocialLoginForm) => {
+  let { token, email, sub } = payload;
+  if (!email) {
+    const userEmailFromStorage = await AsyncStorage.getItem("@userAppleEmail");
+    const userSubFromStorage = await AsyncStorage.getItem("@userAppleSub");
+    if (sub === userSubFromStorage) {
+      // Current login data is the same as the stored one
+      email = userEmailFromStorage;
+    }
+  }
+
+  return http.post<ILoginResponse>(`/auth/apple/${token}`, {
+    token,
+    email,
+    sub,
+  });
 };

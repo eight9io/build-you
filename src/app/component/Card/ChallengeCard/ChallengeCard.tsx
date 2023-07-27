@@ -70,7 +70,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
     // handlePress or navigation
 
     if (navigation) {
-      if (isCompanyAccount) {
+      if (isCompanyAccount && !isFromOtherUser) {
         return navigation.navigate("CompanyChallengeDetailScreen", {
           challengeId: item.id,
         });

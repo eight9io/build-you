@@ -1,6 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useIsFocused } from "@react-navigation/native";
 
 import {
   IChallenge,
@@ -17,7 +18,6 @@ import httpInstance from "../../../../utils/http";
 
 import SkeletonLoadingCommon from "../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import EditChallengeProgressModal from "../../../../component/modal/EditChallengeProgressModal";
-// import { useIsFocused } from "@react-navigation/native";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -44,6 +44,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
+  const isFocused = useIsFocused();
+  console.log('isFocused', isFocused);
+  
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const challengeOwner: IChallengeOwner = Array.isArray(challengeData?.owner)
@@ -75,7 +78,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setTimeout(() => {
       setProgressLoading(false);
     }, 800);
-  }, [challengeData?.id, shouldRefresh]);
+  }, [challengeData?.id, shouldRefresh, isFocused]);
 
   const refetch = () => {
     setProgressLoading(true);

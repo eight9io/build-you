@@ -88,6 +88,7 @@ const LocationInput: React.FC<ILocationInputProps> = ({
     }
     setShowLocationPicker(false);
   };
+
   return (
     <View>
       <Controller

@@ -24,7 +24,7 @@ const Notification: React.FC<INotificationProps> = ({
   const { t } = useTranslation();
 
   return (
-    <View className="mt-4 flex-1">
+    <View className="flex-1">
       {title ? (
         <View className="px-6 py-4">
           <Text className="text-lg font-medium">{title}</Text>

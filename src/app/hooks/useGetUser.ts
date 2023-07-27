@@ -4,7 +4,6 @@ import {
   useUserProfileStore,
 } from "../store/user-store";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { serviceGetOtherUserData } from "../service/user";
 import { serviceGetMyProfile } from "../service/auth";
 import { serviceGetListFollowing } from "../service/profile";
@@ -15,16 +14,13 @@ export const useGetUserData = (setLoading?: any) => {
 
   const fetchingUserData = async () => {
     setLoading && setLoading(true);
-    const accessToken = await AsyncStorage.getItem("@auth_token");
-    if (accessToken !== null) {
-      await serviceGetMyProfile()
-        .then((res) => {
-          setUserProfile(res.data);
-        })
-        .catch((err) => {
-          console.error("err", err);
-        });
-    }
+    await serviceGetMyProfile()
+      .then((res) => {
+        setUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.error("err", err);
+      });
     setLoading && setLoading(false);
   };
 

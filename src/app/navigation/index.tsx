@@ -81,7 +81,7 @@ export const RootNavigation = () => {
 
   useEffect(() => {
     if (authStoreHydrated) {
-      if (isLoggedin) {
+      if (!!isLoggedin) {
         setupInterceptor(getRefreshToken, () => {
           logout();
           userProfileStoreOnLogout();

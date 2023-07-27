@@ -119,8 +119,6 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const [progressCommentScreenLoading, setProgressCommentScreenLoading] =
     useState<boolean>(true);
   const [comments, setComments] = useState<IProgressComment[]>([]);
-  const [shouldRefreshComments, setShouldRefreshComments] =
-    useState<boolean>(false);
   const [progressData, setProgressData] = useState<IProgressChallenge>(
     {} as IProgressChallenge
   );
@@ -133,15 +131,14 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
   const numberOfCommentsLocal = getChallengeUpdateComment();
 
   useEffect(() => {
-    if (!progressId) return;
+    if (!progressId || !challengeId) return;
     const loadProgressData = async () => {
       try {
-        const response = await getProgressById(progressId);
         const challengeResponse = await getChallengeById(challengeId);
+        const response = await getProgressById(progressId);
         const owner = Array.isArray(challengeResponse.data.owner)
           ? challengeResponse.data.owner[0]
           : challengeResponse.data.owner;
-
         const isChallengePublic = challengeResponse.data?.public;
         setIsChallengePublic(isChallengePublic);
         const shouldRetrictEmployeeList =
@@ -165,7 +162,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       }
     };
     loadProgressData();
-  }, []);
+  }, [progressId, challengeId]);
 
   const loadProgressComments = async () => {
     try {
@@ -193,14 +190,12 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
     loadProgressComments();
   }, []);
 
-  const handleRefreshComments = async () => {
-    setShouldRefreshComments(true);
+  const handleRefreshComments = async ({ isDelete }: { isDelete: boolean }) => {
     setChallengeUpdateComment({
       id: progressId,
-      numberOfComments: comments.length + 1,
+      numberOfComments: comments.length + (isDelete ? -1 : 1),
     });
     await loadProgressComments();
-    setShouldRefreshComments(false);
   };
 
   const handleSubmit = async (comment: string) => {
@@ -211,7 +206,9 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       });
       if (res.status === 201) {
         // Reload comments
-        await handleRefreshComments();
+        await handleRefreshComments({
+          isDelete: false,
+        });
       }
     } catch (error) {
       GlobalDialogController.showModal({
@@ -240,7 +237,11 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                   <View key={index} className="px-3">
                     <SingleComment
                       comment={item}
-                      onDeleteCommentSuccess={handleRefreshComments}
+                      onDeleteCommentSuccess={() =>
+                        handleRefreshComments({
+                          isDelete: true,
+                        })
+                      }
                     />
                   </View>
                 );

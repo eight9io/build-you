@@ -152,14 +152,23 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         />
       )}
       {progressLoading && <SkeletonLoadingCommon />}
-      {!progressLoading && localProgressData?.length > 0 && (
+      {!progressLoading && (
         <FlatList
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
             (isJoined || isCurrentUserOwnerOfChallenge) &&
             !isChallengeCompleted ? (
-              <AddNewChallengeProgressButton />
+              <View>
+                <AddNewChallengeProgressButton />
+                {!progressLoading && localProgressData?.length == 0 && (
+                  <View className="px-4 py-4">
+                    <Text className="selection: text-base">
+                      {t("challenge_detail_screen.no_progress_yet") as string}
+                    </Text>
+                  </View>
+                )}
+              </View>
             ) : null
           }
           renderItem={({ item, index }) => (
@@ -179,13 +188,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           )}
           contentContainerStyle={{ paddingBottom: 80 }}
         />
-      )}
-      {!progressLoading && localProgressData?.length == 0 && (
-        <View className="px-4 py-4">
-          <Text className="selection: text-base">
-            {t("challenge_detail_screen.no_progress_yet") as string}
-          </Text>
-        </View>
       )}
     </View>
   );

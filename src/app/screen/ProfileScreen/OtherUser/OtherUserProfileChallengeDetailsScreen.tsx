@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/native";
 import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import i18n from "../../../i18n/i18n";
 import { IChallenge } from "../../../types/challenge";
@@ -36,7 +37,7 @@ import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
 import EditChallengeModal from "../../../component/modal/EditChallengeModal";
 import { getChallengeStatusColor } from "../../../utils/common";
 import { AxiosError } from "axios";
-import { debounce } from "../../../hooks/useDebounce";
+import debounce from "lodash.debounce";
 import { onShareChallengeLink } from "../../../utils/shareLink.uitl";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
@@ -71,11 +72,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   );
   const [isError, setIsError] = useState<boolean>(false);
   const [challengeOwner, setChallengeOwner] = useState<any>(null);
-  // const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
   const [participantList, setParticipantList] = useState<any>([]);
+  const [isChallengePrivate, setIsChallengePrivate] = useState<boolean | null>(
+    null
+  );
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
-
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
   const [isJoined, setIsJoined] = useState<boolean | null>(null);
@@ -87,6 +89,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+
+  const getLocalId = async () => {
+    const id = await AsyncStorage.getItem("user_id");
+    return id;
+  };
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
 
@@ -115,13 +123,18 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const getChallengeData = async () => {
     try {
       const response = await getChallengeById(challengeId);
+      const localId = await getLocalId();
+
       setChallengeData(response.data);
+      setIsChallengePrivate(response.data?.public == false);
 
       const owner = Array.isArray(response.data?.owner)
         ? response.data?.owner[0]
         : response.data?.owner;
       setChallengeOwner(owner);
-      setIsCurrentUserOwnerOfChallenge(owner?.id === currentUser?.id);
+      setIsCurrentUserOwnerOfChallenge(
+        owner?.id === currentUser?.id || owner?.id === localId
+      );
       if (isCompanyAccount || owner?.companyAccount) {
         const getChallengeParticipants = async () => {
           try {
@@ -134,9 +147,13 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               return;
             }
             if (
-              response.data.find(
-                (participant: any) => participant.id === currentUser?.id
-              )
+              response.data.find((participant: any) => {
+                if (currentUser?.id) {
+                  return participant.id === currentUser?.id;
+                } else {
+                  return participant.id === localId;
+                }
+              })
             ) {
               setIsJoined(true);
             } else {
@@ -153,16 +170,11 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       }
     } catch (err) {
       setIsError(true);
-      GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
-      });
     }
   };
 
   useEffect(() => {
     if (!challengeId) return;
-
     getChallengeData();
   }, []);
 
@@ -195,7 +207,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         },
       });
     }
-  }, [isJoined]);
+  }, [isJoined, isCurrentUserOwnerOfChallenge]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
@@ -292,7 +304,10 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     setIsEditChallengeModalVisible(false);
   };
 
-  if (isError) {
+  if (
+    isError ||
+    (isChallengePrivate && (!isCurrentUserOwnerOfChallenge || !isJoined))
+  ) {
     return (
       <SafeAreaView>
         <View className="flex h-full items-center justify-start px-10 pt-56">

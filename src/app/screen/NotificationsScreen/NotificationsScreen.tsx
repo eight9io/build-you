@@ -17,12 +17,13 @@ import Notification from "../../component/Notification";
 import { useNotificationStore } from "../../store/notification-store";
 import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
-import Button from "../../component/common/Buttons/Button";
-import ShareIcon from "../../../../assets/svg/share.svg";
 import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
+
+import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
+
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
 export type NotificationsScreenNavigationProp = NativeStackNavigationProp<
@@ -32,30 +33,35 @@ export type NotificationsScreenNavigationProp = NativeStackNavigationProp<
 
 const Notifications = () => {
   const { t } = useTranslation();
-  const isFocused = useIsFocused();
-  const { getHasNewNotification, setHasNewNotification } =
-    useNotificationStore();
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const isFocused = useIsFocused();
+  const { numOfNewNotifications, refreshNumOfNewNotifications } =
+    useNotificationStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
-    if (isFocused) {
-      const hasNewNotification = getHasNewNotification();
-      // Remove new notification icon (if any) when user enter this screen
-      if (hasNewNotification) setHasNewNotification(false);
-    }
-  }, [isFocused]);
+  const { setNewestNotificationId } = useNotificationStore();
 
   useEffect(() => {
     setIsLoading(true);
     fetchNotifications().finally(() => setIsLoading(false));
   }, []);
 
+  useEffect(() => {
+    fetchNotifications(); // Implicitly fetch notifications when there is a new notification
+    if (isFocused) {
+      refreshNumOfNewNotifications();
+    }
+  }, [numOfNewNotifications]);
+
   const fetchNotifications = async () => {
     try {
       const data = await getNotifications();
       setNotifications(data);
+      if (data.length > 0) {
+        setLastNotiIdToLocalStorage(`${data[0]?.id}`);
+        setNewestNotificationId(`${data[0]?.id}`);
+      }
     } catch (error) {
       GlobalDialogController.showModal({
         title: "Error",
@@ -68,7 +74,7 @@ const Notifications = () => {
     }
   };
 
-  const handleScrollToRefresh = async () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
     await fetchNotifications();
     setIsRefreshing(false);
@@ -92,7 +98,7 @@ const Notifications = () => {
       <Notification
         notifications={notifications}
         isRefreshing={isRefreshing}
-        onRefresh={handleScrollToRefresh}
+        onRefresh={handleRefresh}
       />
     </SafeAreaView>
   );

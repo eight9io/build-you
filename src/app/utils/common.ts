@@ -1,6 +1,9 @@
 import queryString from "query-string";
+import { AxiosResponse } from "axios";
+import isEmpty from "lodash.isempty";
 import dayjs from "./date.util";
 import { IChallenge } from "../types/challenge";
+
 export const getRandomId = () => Math.random().toString(36).slice(2, 11);
 
 export const getUrlParam = (url: string, param: string) => {
@@ -36,13 +39,11 @@ export const sortArrayByCreatedAt = (
   });
 };
 
-// TODO use lodash isEmpty
 export const isObjectEmpty = (obj: any) => {
-  return Object.keys(obj).length === 0;
+  return isEmpty(obj);
 };
 
-// TODO add typescript
-export const sortChallengeByStatusFromResponse = (res: any) => {
+export const sortChallengeByStatusFromResponse = (res: AxiosResponse) => {
   if (!res?.data) {
     return [];
   }
@@ -59,14 +60,18 @@ export const sortChallengeByStatusFromResponse = (res: any) => {
     const challenge = uniqueData[i];
     if (challenge.status === "closed" || challenge.status === "done") {
       // compare with last challenge in array in achievementTime
-      const lastChallenge = arrangedChallenges[arrangedChallenges.length - 1];
+      // find last challenge with status done or closed
+      const lastChallenge = arrangedChallenges.findLast(
+        (challenge) =>
+          challenge.status === "closed" || challenge.status === "done"
+      );
       if (lastChallenge) {
         if (
           new Date(lastChallenge.achievementTime).getTime() -
             new Date(challenge.achievementTime).getTime() >
           0
         ) {
-          // add to -2 index of array
+          // add to the next to last index of array
           arrangedChallenges.splice(
             arrangedChallenges.length - 2,
             0,
@@ -80,11 +85,14 @@ export const sortChallengeByStatusFromResponse = (res: any) => {
         arrangedChallenges.push(challenge);
       }
     } else if (challenge.status === "open" || challenge.status === "progress") {
-      const firstChallenge = arrangedChallenges[0];
+      const firstChallenge = arrangedChallenges.find(
+        (challenge) =>
+          challenge.status === "open" || challenge.status === "progress"
+      );
       if (firstChallenge) {
         if (
           new Date(firstChallenge.achievementTime).getTime() -
-            new Date(challenge.achievementTime).getTime() <
+            new Date(challenge.achievementTime).getTime() >
           0
         ) {
           arrangedChallenges.unshift(challenge);
@@ -116,7 +124,10 @@ export const sortChallengeByStatus = (challengeList: IChallenge[]) => {
     const challenge = uniqueData[i];
     if (challenge.status === "closed" || challenge.status === "done") {
       // compare with last challenge in array in achievementTime
-      const lastChallenge = arrangedChallenges[arrangedChallenges.length - 1];
+      const lastChallenge = arrangedChallenges.findLast(
+        (challenge) =>
+          challenge.status === "closed" || challenge.status === "done"
+      );
       if (lastChallenge) {
         if (
           new Date(lastChallenge.achievementTime).getTime() -
@@ -137,7 +148,10 @@ export const sortChallengeByStatus = (challengeList: IChallenge[]) => {
         arrangedChallenges.push(challenge);
       }
     } else if (challenge.status === "open" || challenge.status === "progress") {
-      const firstChallenge = arrangedChallenges[0];
+      const firstChallenge = arrangedChallenges.find(
+        (challenge) =>
+          challenge.status === "open" || challenge.status === "progress"
+      );
       if (firstChallenge) {
         if (
           new Date(firstChallenge.achievementTime).getTime() -

@@ -57,13 +57,13 @@ const SelectPicker: FC<ISelectPickerProps> = ({
             </View>
             <FlatList
               data={data}
-              keyExtractor={(item, index) => `${item?.id}`}
+              keyExtractor={(item, index) => `${Math.random()}-${index}}`}
               renderItem={({ item, index }) => {
                 return (
-                  <View className="px-4" key={`${item?.id}`}>
+                  <View className="px-4">
                     <BottomSheetOption
                       onPress={() => setSelected(index)}
-                      title={item.name}
+                      title={item?.name || item?.label}
                       containerClassName={clsx(
                         "focus:bg-gray-light",
                         index === selected && "bg-gray-light"

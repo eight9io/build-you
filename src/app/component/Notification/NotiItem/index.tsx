@@ -23,7 +23,7 @@ const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
   let content = "";
   if (notification.type === NOTIFICATION_TYPES.CHALLENGE_CREATED || notification.type === NOTIFICATION_TYPES.PROGRESS_CREATED)
     content = getNotificationContent(notification.type, {
-      challengeName: notification.challengeName,
+      challengeGoal: notification.challengeGoal,
     });
   else content = getNotificationContent(notification.type);
   return (

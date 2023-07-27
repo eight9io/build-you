@@ -1,8 +1,9 @@
 export enum NOTIFICATION_TYPES {
-  NEW_PROGRESS_FROM_FOLLOWING = "new_progress_from_following",
-  NEW_COMMENT = "new_comment",
-  NEW_MENTION = "new_mention",
+  NEW_COMMENT = "NewComment",
+  NEW_MENTION = "CommentTag",
   NEW_FOLLOWER = "NewFollower",
+  CHALLENGE_CREATED = "ChallengeCreated",
+  PROGRESS_CREATED = "ProgressCreated",
 }
 
 export enum NOTIFICATION_TOKEN_STATUS {

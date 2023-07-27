@@ -8,6 +8,7 @@ import { IChallenge } from "../../../../types/challenge";
 import { getChallengeStatusColor } from "../../../../utils/common";
 import { useUserProfileStore } from "../../../../store/user-store";
 import {
+  getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
@@ -46,8 +47,13 @@ export const ChallengeCompanyDetailScreen: FC<
   const { getUserProfile } = useUserProfileStore();
 
   const currentUser = getUserProfile();
-
-  const participantList = challengeData?.participants || [];
+  const [participantList, setParticipantList] = useState(
+    challengeData?.participants || []
+  );
+  const fetchParticipants = async () => {
+    const response = await getChallengeParticipants(challengeId);
+    setParticipantList(response.data);
+  };
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
@@ -73,6 +79,7 @@ export const ChallengeCompanyDetailScreen: FC<
     if (!currentUser?.id || !challengeId) return;
     try {
       await serviceAddChallengeParticipant(challengeId);
+      await fetchParticipants();
       GlobalToastController.showModal({
         message: t("toast.joined_success") || "You have joined the challenge!",
       });
@@ -98,6 +105,7 @@ export const ChallengeCompanyDetailScreen: FC<
     if (!currentUser?.id || !challengeId) return;
     try {
       await serviceRemoveChallengeParticipant(challengeId);
+      await fetchParticipants();
       GlobalToastController.showModal({
         message: t("toast.leave_success") || "You have left the challenge!",
       });

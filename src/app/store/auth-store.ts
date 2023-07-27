@@ -133,7 +133,7 @@ export const useAuthStore = create<LoginStore>()(
               res = await linkedInLogin(payload.token);
               break;
             case LOGIN_TYPE.APPLE:
-              res = await appleLogin(payload.token);
+              res = await appleLogin(payload);
               break;
             case LOGIN_TYPE.EMAIL_PASSWORD:
               res = await serviceLogin(payload);

@@ -96,6 +96,7 @@ const CreateChallengeScreen = () => {
   const onSubmit = async (data: ICreateChallengeForm) => {
     setIsLoading(true);
     setErrorMessage("");
+    let newChallengeId: string | null;
 
     try {
       const { image, ...rest } = data; // Images upload will be handle separately
@@ -106,63 +107,58 @@ const CreateChallengeScreen = () => {
 
       // Create a challenge without image
       const challengeCreateResponse = await createChallenge(payload);
-      const newChallengeId = challengeCreateResponse.data.id;
+      newChallengeId = challengeCreateResponse.data?.id;
       // If challenge created successfully, upload image
       if (
         challengeCreateResponse.status === 200 ||
         challengeCreateResponse.status === 201
       ) {
-        setNewChallengeId(newChallengeId);
-        if (image) {
-          const challengeImageResponse = await updateChallengeImage(
-            {
-              id: newChallengeId,
-            },
-            image
-          );
+        try {
+          setNewChallengeId(newChallengeId);
+          if (image) {
+            const challengeImageResponse = await updateChallengeImage(
+              {
+                id: newChallengeId,
+              },
+              image
+            );
 
-          if (
-            challengeImageResponse.status === 200 ||
-            challengeCreateResponse.status === 201
-          ) {
-            const isChallengesScreenInStack = navigation
-              .getState()
-              .routes.some((route) => route.name === "Challenges");
-            if (isChallengesScreenInStack) {
-              navigation.dispatch(StackActions.popToTop());
-            } else {
-              navigation.navigate("Challenges");
+            if (
+              challengeImageResponse.status === 200 ||
+              challengeCreateResponse.status === 201
+            ) {
+              const isChallengesScreenInStack = navigation
+                .getState()
+                .routes.some((route) => route.name === "Challenges");
+              if (isChallengesScreenInStack) {
+                navigation.dispatch(StackActions.popToTop());
+              } else {
+                navigation.navigate("Challenges");
+              }
+
+              navigation.navigate("Challenges", {
+                screen: "PersonalChallengeDetailScreen",
+                params: { challengeId: newChallengeId },
+              });
+
+              GlobalToastController.showModal({
+                message:
+                  t("toast.create_challenge_success") ||
+                  "Your challenge has been created successfully!",
+              });
+              // setIsRequestSuccess(true);
+              // setIsShowModal(true);
+              setIsLoading(false);
+              return;
             }
-
-            navigation.navigate("Challenges", {
-              screen: "PersonalChallengeDetailScreen",
-              params: { challengeId: newChallengeId },
-            });
-
-            GlobalToastController.showModal({
-              message:
-                t("toast.create_challenge_success") ||
-                "Your challenge has been created successfully!",
-            });
-            // setIsRequestSuccess(true);
-            // setIsShowModal(true);
-            setIsLoading(false);
-            return;
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
           }
-          setIsRequestSuccess(false);
+          setIsRequestSuccess(true);
           setIsShowModal(true);
-          httpInstance.delete(
-            `/challenge/delete/${challengeCreateResponse.data.id}`
-          );
-          setErrorMessage(t("errorMessage:500") || "");
+        } catch (error) {
+          httpInstance.delete(`/challenge/delete/${newChallengeId}`);
         }
-        setIsRequestSuccess(true);
-        setIsShowModal(true);
-        // GlobalToastController.showModal({
-        //   message:
-        //     t('toast.create_challenge_success') ||
-        //     'Employee deleted successfully!',
-        // });
       }
     } catch (error) {
       setErrorMessage(t("errorMessage:500") || "");

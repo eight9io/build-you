@@ -1,6 +1,7 @@
 import * as Device from "expo-device";
 import notifee, {
   AuthorizationStatus,
+  Event,
   EventType,
   Notification,
 } from "@notifee/react-native";
@@ -18,6 +19,7 @@ import {
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
@@ -57,7 +59,6 @@ export const addNotificationListener = async (
   const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
   ) => {
-    // console.log('message: ', message);
     if (message.notification)
       // Display notification on foreground
       await notifee.displayNotification({
@@ -65,18 +66,17 @@ export const addNotificationListener = async (
         body: message.notification.body,
         data: message.data,
       });
-    await notifee.getBadgeCount();
+
     await notifee.incrementBadgeCount();
-    useNotificationStore.getState().setHasNewNotification(true);
+    useNotificationStore.getState().increaseNumOfNewNotifications();
   };
 
   const onBackgroundMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
   ) => {
-    // console.log('background: ', message);
     await notifee.getBadgeCount();
     await notifee.incrementBadgeCount();
-    useNotificationStore.getState().setHasNewNotification(true);
+    useNotificationStore.getState().increaseNumOfNewNotifications();
   };
 
   // Listen to messages from FCM
@@ -84,19 +84,18 @@ export const addNotificationListener = async (
   messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
 
   // Listen to foreground events
-  notifee.onForegroundEvent(async ({ type, detail }) => {
-    // console.log('detail: ', detail);
-    switch (type) {
+  notifee.onForegroundEvent(async (event: Event) => {
+    switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
-        if (detail.notification) {
+        if (event.detail.notification) {
           await handleTapOnIncomingNotification(
-            detail.notification,
+            event.detail.notification,
             navigation
           );
-          if (detail.notification.id)
+          if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count
-            await clearNotification(detail.notification.id);
-          useNotificationStore.getState().setHasNewNotification(false); // reset the new notification flag
+            await clearNotification(event.detail.notification.id);
+          useNotificationStore.getState().refreshNumOfNewNotifications(); // reset the new notification flag
         }
         break;
     }
@@ -113,7 +112,8 @@ export const handleTapOnIncomingNotification = async (
   > as INotificationPayload;
 
   switch (payload.notificationType) {
-    case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
+      NOTIFICATION_TYPES.PROGRESS_CREATED:
       if (payload.post_id && payload.challenge_id)
         navigation.navigate("ProgressCommentScreen", {
           progressId: payload.post_id,
@@ -146,7 +146,7 @@ export const handleTapOnIncomingNotification = async (
 };
 
 export const handleTapOnNotification = async (
-  notification: INotification,
+  notification: any,
   navigation: NativeStackNavigationProp<RootStackParamList>,
   setNotificationIsRead: any
 ) => {
@@ -179,9 +179,9 @@ export const handleTapOnNotification = async (
     }
   };
 
-  // console.log('notification: ', notification);
   switch (notification.type) {
-    case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
+      NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
@@ -201,20 +201,20 @@ export const getNotificationContent = (
   contentPayload?: any
 ) => {
   switch (notificationType) {
-    case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       return `has added a new progress in ${
         contentPayload?.challengeName || "a challenge"
       }`;
-      break;
+    case NOTIFICATION_TYPES.PROGRESS_CREATED:
+      return `has added a new progress in ${
+        contentPayload?.challengeName || "a challenge"
+      }`;
     case NOTIFICATION_TYPES.NEW_COMMENT:
       return `commented on your update`;
-      break;
     case NOTIFICATION_TYPES.NEW_MENTION:
       return `mentioned you in a comment`;
-      break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
       return `has started following you`;
-      break;
   }
 };
 
@@ -250,7 +250,7 @@ export const mapNotificationResponses = (
       user: {
         id: response.user.id,
         name: `${response.user.name} ${response.user.surname}`,
-        avatar: "https://picsum.photos/200",
+        avatar: response.user.avatar,
       },
       createdAt: response.createdAt,
       isRead: response.isRead,
@@ -271,4 +271,14 @@ export const sortNotificationsByDate = (
   return notifications.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+};
+
+export const getLastNotiIdFromLocalStorage = async () => {
+  const data = await AsyncStorage.getItem("lastNotiId");
+  return data;
+};
+
+export const setLastNotiIdToLocalStorage = async (lastNotiId: string) => {
+  if (!lastNotiId) return;
+  await AsyncStorage.setItem("lastNotiId", lastNotiId);
 };

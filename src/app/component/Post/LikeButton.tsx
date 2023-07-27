@@ -13,9 +13,8 @@ import {
   deleteProgressLike,
   getProgressLikes,
 } from "../../service/progress";
-import { debounce } from "../../hooks/useDebounce";
+import debounce from "lodash.debounce";
 
-import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 import { INumberOfLikeUpdate } from "../../types/challenge";
 
 interface ILikeButtonProps {
@@ -70,14 +69,15 @@ const LikeButton: FC<ILikeButtonProps> = ({
     if (localProgressLikes?.id && localProgressLikes.id === progressId) {
       setNumberOfLikes(localProgressLikes.numberOfLikes || 0);
       setIsLikedByCurrentUser(localProgressLikes.isLikedByCurrentUser || false);
+      setIsLiked(localProgressLikes.isLikedByCurrentUser || false);
     }
-  }, [localProgressLikes?.id, localProgressLikes?.numberOfLikes]);
+  }, [localProgressLikes]);
 
   useEffect(() => {
     setTempLikes(numberOfLikes);
   }, [numberOfLikes]);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (!isToken) {
       // this is for unauthenticated user
       return navigation.navigate("LoginScreen");
@@ -92,7 +92,7 @@ const LikeButton: FC<ILikeButtonProps> = ({
         numberOfLikes: tempLikes - 1,
         isLikedByCurrentUser: false,
       });
-      deleteProgressLike(progressId);
+      await deleteProgressLike(progressId);
       return;
     }
     setShouldOptimisticUpdate(true);
@@ -104,10 +104,10 @@ const LikeButton: FC<ILikeButtonProps> = ({
       numberOfLikes: tempLikes + 1,
       isLikedByCurrentUser: true,
     });
-    createProgressLike(progressId);
+    await createProgressLike(progressId);
   };
 
-  const debouncedHandleLike = debounce(handleLike, 300); // Change the debounce delay as needed (in milliseconds)
+  const debouncedHandleLike = debounce(handleLike, 300);
 
   return (
     <TouchableHighlight

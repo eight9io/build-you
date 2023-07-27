@@ -4,7 +4,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { ILoginResponse, ISocialLoginForm, LoginForm } from "../types/auth";
-import { appleLogin, googleLogin, linkedInLogin, serviceLogin } from "../service/auth";
+import {
+  appleLogin,
+  googleLogin,
+  linkedInLogin,
+  serviceLogin,
+} from "../service/auth";
 import {
   addNotificationListener,
   registerForPushNotificationsAsync,
@@ -107,7 +112,10 @@ export const useAuthStore = create<LoginStore>()(
 
       getAccessToken: () => get().accessToken,
 
-      asyncLogin: async (loginForm: ISocialLoginForm | LoginForm, type: LOGIN_TYPE) => {
+      asyncLogin: async (
+        loginForm: ISocialLoginForm | LoginForm,
+        type: LOGIN_TYPE
+      ) => {
         let res = null;
         let payload = null;
         if (type === LOGIN_TYPE.EMAIL_PASSWORD) {
@@ -116,19 +124,24 @@ export const useAuthStore = create<LoginStore>()(
           payload = loginForm as ISocialLoginForm;
         }
 
-        switch (type) {
-          case LOGIN_TYPE.GOOGLE:
-            res = await googleLogin(payload.token);
-            break;
-          case LOGIN_TYPE.LINKEDIN:
-            res = await linkedInLogin(payload.token);
-            break;
-          case LOGIN_TYPE.APPLE:
-            res = await appleLogin(payload.token);
-            break;
-          case LOGIN_TYPE.EMAIL_PASSWORD:
-            res = await serviceLogin(payload);
-            break;
+        try {
+          switch (type) {
+            case LOGIN_TYPE.GOOGLE:
+              res = await googleLogin(payload.token);
+              break;
+            case LOGIN_TYPE.LINKEDIN:
+              res = await linkedInLogin(payload.token);
+              break;
+            case LOGIN_TYPE.APPLE:
+              res = await appleLogin(payload.token);
+              break;
+            case LOGIN_TYPE.EMAIL_PASSWORD:
+              res = await serviceLogin(payload);
+              break;
+          }
+        } catch (error) {
+          console.log("error: ", error);
+          throw error;
         }
         setAuthTokenToHttpHeader(res.data.authorization);
 
@@ -143,11 +156,12 @@ export const useAuthStore = create<LoginStore>()(
         return res;
       },
 
-      logout: () => {
+      logout: async () => {
         set({
           accessToken: null,
           refreshToken: null,
         });
+        await AsyncStorage.removeItem("user_id");
       },
       setHasHydrated: () => {
         set({

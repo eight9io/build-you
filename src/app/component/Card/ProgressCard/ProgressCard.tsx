@@ -29,7 +29,8 @@ import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 import IconDot from "./asset/dot.svg";
 import { useUserProfileStore } from "../../../store/user-store";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
-import { debounce } from "../../../hooks/useDebounce";
+import debounce from "lodash.debounce";
+
 
 interface IProgressCardProps {
   challengeOwner: {

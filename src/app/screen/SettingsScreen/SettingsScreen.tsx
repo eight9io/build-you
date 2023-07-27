@@ -17,6 +17,8 @@ import Settings from "../../component/Settings";
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen";
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
 import { useUserProfileStore } from "../../store/user-store";
+import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
+
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
   navigation: SetingsScreenNavigationProp;
@@ -40,6 +42,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         routes: [{ name: "IntroScreen" }],
       })
     );
+    setLastNotiIdToLocalStorage("");
     logout();
     userProfileStoreOnLogout();
   };

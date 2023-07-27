@@ -2,6 +2,12 @@ import jwt_decode from "jwt-decode";
 import { ILoginResponse, IToken } from "../types/auth";
 import httpInstance from "./http";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import { AxiosRequestConfig } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface AxiosRequestConfigExtends extends AxiosRequestConfig {
+  _retry?: boolean;
+}
 
 export const setAuthTokenToHttpHeader = (token: string | null) => {
   if (token) {
@@ -34,29 +40,32 @@ export function setupInterceptor(
         }
 
         if (status === 401) {
-          const originalRequest = error.config;
+          const originalRequest: AxiosRequestConfigExtends = error.config;
+          console.log(originalRequest);
+
           if (originalRequest._retry) {
             onRefreshFail();
             // Todo: translate
-            return GlobalDialogController.showModal({
+            GlobalDialogController.showModal({
               title: "Error",
               message: "Session expires. Please login again",
               button: "OK",
             });
+            reject(error);
+            return;
           }
           originalRequest._retry = true;
           const refreshToken = getRefreshToken();
-          console.log("refreshToken", refreshToken);
-
           if (!refreshToken) {
             reject(error); // throw so next check retry will force logout
+            return;
           }
 
           const decodedRefreshToken = jwt_decode<IToken>(refreshToken);
-          console.log("decodedRefreshToken", decodedRefreshToken);
           const currentTime = Date.now() / 1000;
           if (decodedRefreshToken?.exp < currentTime) {
             reject(error); // throw so next check retry will force logout
+            return;
           }
 
           const newTokens = await httpInstance.post<ILoginResponse>(
@@ -65,14 +74,21 @@ export function setupInterceptor(
               token: refreshToken,
             }
           );
-          console.log("newTokens", newTokens);
           if (newTokens.status !== 201) {
             reject(error); // throw so next check retry will force logout
           } else {
             try {
               console.log("call original request with new token");
               setAuthTokenToHttpHeader(newTokens.data.authorization);
-              originalRequest.headers["Authorization"] = `Bearer ${newTokens}`;
+              await AsyncStorage.setItem(
+                "user_id",
+                newTokens.data.authorization
+              );
+
+              originalRequest.headers[
+                "Authorization"
+              ] = `Bearer ${newTokens.data.authorization}`;
+              // set new tokens to local storage
               const res = await httpInstance(originalRequest);
               resolve(res);
             } catch (error) {

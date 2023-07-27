@@ -31,6 +31,7 @@ import httpInstance from "../../../../utils/http";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { StackActions } from "@react-navigation/native";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -95,32 +96,39 @@ export const CreateCompanyChallengeScreen: FC<
         achievementTime: data.achievementTime as Date,
       };
       const challengeCreateResponse = await createCompanyChallenge(payload);
+      const newChallengeId = challengeCreateResponse.data.id;
       // If challenge created successfully, upload image
       if (challengeCreateResponse.status === 200 || 201) {
         setNewChallengeId(challengeCreateResponse.data.id);
         if (image) {
           const challengeImageResponse = (await updateChallengeImage(
             {
-              id: challengeCreateResponse.data.id,
+              id: newChallengeId,
             },
             image
           )) as AxiosResponse;
           if (challengeImageResponse.status === 200 || 201) {
-            // onClose();
-            navigation.navigate("Challenges", {
-              screen: "PersonalChallengeDetailScreen",
-              params: {
-                challengeId: challengeCreateResponse.data.id as string,
-              },
-            });
             GlobalToastController.showModal({
               message:
                 t("toast.create_challenge_success") ||
                 "Your challenge has been created successfully !",
             });
 
-            // setIsRequestSuccess(true);
-            // setIsShowModal(true);
+            const isChallengesScreenInStack = navigation
+              .getState()
+              .routes.some((route) => route.name === "Challenges");
+            if (isChallengesScreenInStack) {
+              navigation.dispatch(StackActions.popToTop());
+            } else {
+              // add ChallengesScreen to the stack
+              navigation.navigate("Challenges");
+            }
+
+            navigation.navigate("Challenges", {
+              screen: "CompanyChallengeDetailScreen",
+              params: { challengeId: newChallengeId },
+            });
+
             setIsLoading(false);
             return;
           }

@@ -180,8 +180,10 @@ export const handleTapOnNotification = async (
   };
 
   switch (notification.type) {
-    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
-      NOTIFICATION_TYPES.PROGRESS_CREATED:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
+      handleNavigation("ProgressCommentScreen", notification);
+      break;
+    case NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
@@ -203,11 +205,11 @@ export const getNotificationContent = (
   switch (notificationType) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       return `has added a new progress in ${
-        contentPayload?.challengeName || "a challenge"
+        contentPayload?.challengeGoal || "a challenge"
       }`;
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       return `has added a new progress in ${
-        contentPayload?.challengeName || "a challenge"
+        contentPayload?.challengeGoal || "a challenge"
       }`;
     case NOTIFICATION_TYPES.NEW_COMMENT:
       return `commented on your update`;
@@ -232,7 +234,7 @@ export const clearNotification = async (notificationId: string) => {
 export const mapNotificationResponses = (
   responses: INotificationResponse[]
 ): INotification[] => {
-  const transformedData = responses.map((response) => {
+  const transformedData: INotification[] = responses.map((response) => {
     // const extractUserInfoRegex = /@\[([^\(]+)\(([^)]+)\)/;
     // const match = response.body.match(extractUserInfoRegex);
     // let username = '';
@@ -254,6 +256,9 @@ export const mapNotificationResponses = (
       },
       createdAt: response.createdAt,
       isRead: response.isRead,
+      challengeId: response.challenge?.id,
+      challengeGoal: response.challenge?.goal,
+      progressId: response.progress?.id
     };
   });
 

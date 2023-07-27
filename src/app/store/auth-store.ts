@@ -124,19 +124,24 @@ export const useAuthStore = create<LoginStore>()(
           payload = loginForm as ISocialLoginForm;
         }
 
-        switch (type) {
-          case LOGIN_TYPE.GOOGLE:
-            res = await googleLogin(payload.token);
-            break;
-          case LOGIN_TYPE.LINKEDIN:
-            res = await linkedInLogin(payload.token);
-            break;
-          case LOGIN_TYPE.APPLE:
-            res = await appleLogin(payload.token);
-            break;
-          case LOGIN_TYPE.EMAIL_PASSWORD:
-            res = await serviceLogin(payload);
-            break;
+        try {
+          switch (type) {
+            case LOGIN_TYPE.GOOGLE:
+              res = await googleLogin(payload.token);
+              break;
+            case LOGIN_TYPE.LINKEDIN:
+              res = await linkedInLogin(payload.token);
+              break;
+            case LOGIN_TYPE.APPLE:
+              res = await appleLogin(payload.token);
+              break;
+            case LOGIN_TYPE.EMAIL_PASSWORD:
+              res = await serviceLogin(payload);
+              break;
+          }
+        } catch (error) {
+          console.log("error: ", error);
+          throw error;
         }
         setAuthTokenToHttpHeader(res.data.authorization);
 

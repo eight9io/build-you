@@ -21,7 +21,7 @@ const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
   const [isRead, setIsRead] = useState<boolean>(notification.isRead);
 
   let content = "";
-  if (notification.type === NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING)
+  if (notification.type === NOTIFICATION_TYPES.CHALLENGE_CREATED || notification.type === NOTIFICATION_TYPES.PROGRESS_CREATED)
     content = getNotificationContent(notification.type, {
       challengeName: notification.challengeName,
     });

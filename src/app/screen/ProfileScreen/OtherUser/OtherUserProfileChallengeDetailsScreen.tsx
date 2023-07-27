@@ -126,7 +126,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       const localId = await getLocalId();
 
       setChallengeData(response.data);
-      setIsChallengePrivate(!response.data?.public);
+      setIsChallengePrivate(response.data?.public == false);
 
       const owner = Array.isArray(response.data?.owner)
         ? response.data?.owner[0]

@@ -2,6 +2,8 @@ import { FC } from "react";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import jwt_decode from "jwt-decode";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Button from "../../common/Buttons/Button";
 import { LOGIN_TYPE } from "../../../common/enum";
@@ -22,10 +24,31 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({ title, onLogin }) => {
       // Start the sign-in request
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
+
+      const { email, sub } = jwt_decode<{
+        email: string;
+        sub: string;
+      }>(appleAuthRequestResponse.identityToken);
+      const userEmail = appleAuthRequestResponse.email || email;
+      const userSub = sub;
+      if (userEmail && userSub) {
+        // Save user login data to AsyncStorage to retry if login failed due to network error
+        await AsyncStorage.multiSet([
+          ["@userAppleEmail", userEmail],
+          ["@userAppleSub", userSub],
+        ]);
+      }
       if (appleAuthRequestResponse.authorizationCode) {
-        await onLogin({ token: appleAuthRequestResponse.authorizationCode }, LOGIN_TYPE.APPLE);
+        await onLogin(
+          {
+            token: appleAuthRequestResponse.authorizationCode,
+            email: userEmail,
+            sub,
+          },
+          LOGIN_TYPE.APPLE
+        );
       } else
         throw new Error(t("errorMessage:err_login.cannot_get_access_token"));
     } catch (error) {

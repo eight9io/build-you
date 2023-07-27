@@ -33,4 +33,8 @@ export interface IToken {
 
 export interface ISocialLoginForm {
   token: string;
+
+  // For apple login
+  email?: string;
+  sub?: string;
 }

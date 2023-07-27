@@ -47,7 +47,7 @@ const EmptyScreen = () => null;
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
   const isAndroid = Platform.OS === "android";
-  useGetUserData();
+  // useGetUserData();
   const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
   const [lastNotiId, setLastNotiId] = useState<string>("");
   const { getNewestNotificationId, setNewestNotificationId } =

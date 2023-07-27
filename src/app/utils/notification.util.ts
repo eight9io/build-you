@@ -43,7 +43,6 @@ export const registerForPushNotificationsAsync = async () => {
 };
 
 export const unregisterForPushNotificationsAsync = async () => {
-  console.log("unregisterForPushNotificationsAsync: ");
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
@@ -86,7 +85,6 @@ export const addNotificationListener = async (
 
   // Listen to foreground events
   notifee.onForegroundEvent(async (event: Event) => {
-    console.log("foreground event: ", event);
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
@@ -108,14 +106,14 @@ export const handleTapOnIncomingNotification = async (
   notification: Notification,
   navigation: NavigationContainerRef<RootStackParamList>
 ) => {
-  console.log("tap on incoming notification: ", notification);
   const payload = notification.data as Record<
     string,
     any
   > as INotificationPayload;
 
   switch (payload.notificationType) {
-    case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
+      NOTIFICATION_TYPES.PROGRESS_CREATED:
       if (payload.post_id && payload.challenge_id)
         navigation.navigate("ProgressCommentScreen", {
           progressId: payload.post_id,
@@ -152,7 +150,6 @@ export const handleTapOnNotification = async (
   navigation: NativeStackNavigationProp<RootStackParamList>,
   setNotificationIsRead: any
 ) => {
-  console.log("tap on notification: ", notification);
   const handleNavigation = async (
     screen: string,
     notification: INotification
@@ -182,9 +179,9 @@ export const handleTapOnNotification = async (
     }
   };
 
-  // console.log('notification: ', notification);
   switch (notification.type) {
-    case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
+      NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
@@ -204,20 +201,20 @@ export const getNotificationContent = (
   contentPayload?: any
 ) => {
   switch (notificationType) {
-    case NOTIFICATION_TYPES.NEW_PROGRESS_FROM_FOLLOWING:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       return `has added a new progress in ${
         contentPayload?.challengeName || "a challenge"
       }`;
-      break;
+    case NOTIFICATION_TYPES.PROGRESS_CREATED:
+      return `has added a new progress in ${
+        contentPayload?.challengeName || "a challenge"
+      }`;
     case NOTIFICATION_TYPES.NEW_COMMENT:
       return `commented on your update`;
-      break;
     case NOTIFICATION_TYPES.NEW_MENTION:
       return `mentioned you in a comment`;
-      break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
       return `has started following you`;
-      break;
   }
 };
 

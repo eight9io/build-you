@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import { create } from "zustand";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { IUserData } from "../types/user";
 import { serviceGetMe } from "../service/profile";
@@ -32,6 +33,7 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
   getUserProfileAsync: async () => {
     try {
       const r = await serviceGetMe();
+      await AsyncStorage.setItem("user_id", r.data.id);
       set({
         userProfile: r.data,
       });

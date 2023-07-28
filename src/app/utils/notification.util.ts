@@ -56,6 +56,7 @@ export const addNotificationListener = async (
   navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
+  if(useNotificationStore.getState().listenerIsReady) return; // prevent multiple listeners
   const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage
   ) => {
@@ -100,6 +101,8 @@ export const addNotificationListener = async (
         break;
     }
   });
+  
+  useNotificationStore.getState().setListenerIsReady(true);
 };
 
 export const handleTapOnIncomingNotification = async (
@@ -112,26 +115,32 @@ export const handleTapOnIncomingNotification = async (
   > as INotificationPayload;
 
   switch (payload.notificationType) {
-    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
-      NOTIFICATION_TYPES.PROGRESS_CREATED:
-      if (payload.post_id && payload.challenge_id)
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
+      if (payload.progressId && payload.challengeId)
         navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.post_id,
-          challengeId: payload.challenge_id,
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
+        });
+      break;
+    case NOTIFICATION_TYPES.PROGRESS_CREATED:
+      if (payload.progressId && payload.challengeId)
+        navigation.navigate("ProgressCommentScreen", {
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      if (payload.post_id && payload.challenge_id)
+      if (payload.progressId && payload.challengeId)
         navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.post_id,
-          challengeId: payload.challenge_id,
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_MENTION:
-      if (payload.post_id && payload.challenge_id)
+      if (payload.progressId && payload.challengeId)
         navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.post_id,
-          challengeId: payload.challenge_id,
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:

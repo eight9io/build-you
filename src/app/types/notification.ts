@@ -9,9 +9,10 @@ import { IUserData } from "./user";
 export interface INotificationPayload {
   // Interface for the data that is sent from the FCM or APN
   notificationType: string;
-  post_id?: string;
+  progressId?: string;
   followerId?: string;
-  challenge_id?: string;
+  challengeId?: string;
+  commentUserId?: string;
 }
 
 export interface INotification {

@@ -80,11 +80,6 @@ export function setupInterceptor(
             try {
               console.log("call original request with new token");
               setAuthTokenToHttpHeader(newTokens.data.authorization);
-              await AsyncStorage.setItem(
-                "user_id",
-                newTokens.data.authorization
-              );
-
               originalRequest.headers[
                 "Authorization"
               ] = `Bearer ${newTokens.data.authorization}`;

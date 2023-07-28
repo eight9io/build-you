@@ -45,8 +45,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
   const isFocused = useIsFocused();
-  console.log('isFocused', isFocused);
-  
+
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   const challengeOwner: IChallengeOwner = Array.isArray(challengeData?.owner)

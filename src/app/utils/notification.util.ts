@@ -20,6 +20,7 @@ import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NavigationService from "./navigationService";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
@@ -56,20 +57,6 @@ export const addNotificationListener = (
   navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
-  // const onMessageReceived = (message: FirebaseMessagingTypes.RemoteMessage) => {
-  //   if (message.notification)
-  //     // Display notification on foreground
-  //     notifee.displayNotification({
-  //       title: message.notification.title,
-  //       body: message.notification.body,
-  //       data: message.data,
-  //     });
-
-  //   useNotificationStore.getState().increaseNumOfNewNotifications();
-  // };
-
-  // // Listen to messages from FCM
-  // messaging().onMessage(onMessageReceived);
 
   // Listen to foreground events
   const unsubscribe = notifee.onForegroundEvent(async (event: Event) => {
@@ -79,7 +66,6 @@ export const addNotificationListener = (
         if (event.detail.notification) {
           await handleTapOnIncomingNotification(
             event.detail.notification,
-            navigation
           );
           if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count
@@ -95,8 +81,8 @@ export const addNotificationListener = (
 
 export const handleTapOnIncomingNotification = async (
   notification: Notification,
-  navigation: NavigationContainerRef<RootStackParamList>
 ) => {
+  const navigation = NavigationService.getContainer();
   const payload = notification.data as Record<
     string,
     any

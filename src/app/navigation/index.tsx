@@ -84,11 +84,10 @@ export const RootNavigation = () => {
   useEffect(() => {
     if (authStoreHydrated) {
       if (!!isLoggedin) {
-        if (navigationRef.current)
-          setupInterceptor(getRefreshToken, () => {
-            logout();
-            userProfileStoreOnLogout();
-          });
+        setupInterceptor(getRefreshToken, () => {
+          logout();
+          userProfileStoreOnLogout();
+        });
         setAuthTokenToHttpHeader(isLoggedin);
 
         getUserProfileAsync()
@@ -133,10 +132,13 @@ export const RootNavigation = () => {
   }, [authStoreHydrated]);
 
   useEffect(() => {
-    const unsubscribe = addNotificationListener(navigationRef.current, useNotificationStore);
+    const unsubscribe = addNotificationListener(
+      navigationRef.current,
+      useNotificationStore
+    );
     return () => {
       unsubscribe();
-    }
+    };
   }, []);
 
   return (

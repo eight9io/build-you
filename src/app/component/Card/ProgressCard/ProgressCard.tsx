@@ -48,7 +48,7 @@ interface IProgressCardProps {
   setProgressIndexToUpdate?: any;
   isChallengeCompleted?: boolean;
   itemProgressCard: IProgressChallenge;
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
   setIsShowEditModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -58,7 +58,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   challengeId,
   challengeName,
   challengeOwner,
-  setShouldRefresh,
+  refetch,
   itemProgressCard,
   setIsShowEditModal,
   setProgressIndexToUpdate,
@@ -142,7 +142,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   };
 
   const handleDeleteProgressSuccess = () => {
-    setShouldRefresh(true);
+    refetch();
   };
 
   const handleCloseAckModal = () => {

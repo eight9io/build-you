@@ -150,7 +150,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
 
   const { setSoftSkills, getProfile } = useCompleteProfileStore();
-  const { setUserProfile } = useUserProfileStore();
+  const { setUserProfile, getUserProfileAsync } = useUserProfileStore();
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [value, setValue] = useState<string[]>([]);
@@ -228,7 +228,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       return;
     }
     try {
-      const results = await Promise.all([
+      await Promise.all([
         uploadNewVideo(profile?.video),
         httpInstance.put(`/user/update/${userData.id}`, {
           name: profile?.name,
@@ -241,7 +241,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           company: "",
         }),
       ]);
-      setUserProfile(results[1].data)
+      await getUserProfileAsync();
       navigation.navigate("CompleteProfileFinishScreen");
     } catch (error) {
       GlobalDialogController.showModal({

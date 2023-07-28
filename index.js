@@ -1,6 +1,7 @@
 import { registerRootComponent } from "expo";
 import { LogBox } from "react-native";
 import messaging from "@react-native-firebase/messaging";
+import notifee from "@notifee/react-native";
 import { H } from "highlight.run";
 
 import App from "./src/app/App";
@@ -9,7 +10,7 @@ import { expo } from "./app.json";
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
 
-const onBackgroundMessageReceived = async () => {
+const onMessageReceived = async (message) => {
   // await notifee.getBadgeCount();
   await notifee.displayNotification({
     title: message.notification.title,
@@ -21,7 +22,7 @@ const onBackgroundMessageReceived = async () => {
 };
 
 messaging().onMessage(onMessageReceived);
-messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
+messaging().setBackgroundMessageHandler(onMessageReceived);
 
 registerRootComponent(App);
 if (!__DEV__) {

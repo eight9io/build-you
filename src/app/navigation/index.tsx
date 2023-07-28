@@ -44,6 +44,8 @@ import {
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
 import { useDeepLinkStore } from "../store/deep-link-store";
+import { addNotificationListener } from "../utils/notification.util";
+import { useNotificationStore } from "../store/notification-store";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -82,6 +84,8 @@ export const RootNavigation = () => {
   useEffect(() => {
     if (authStoreHydrated) {
       if (!!isLoggedin) {
+        if (navigationRef.current)
+          addNotificationListener(navigationRef.current, useNotificationStore); // Add notification listener every time the navigation is reset
         setupInterceptor(getRefreshToken, () => {
           logout();
           userProfileStoreOnLogout();
@@ -127,7 +131,7 @@ export const RootNavigation = () => {
         SplashScreen.hideAsync();
       }
     }
-  }, [authStoreHydrated]);
+  }, [authStoreHydrated, navigationRef.current]);
 
   return (
     <NavigationContainer

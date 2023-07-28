@@ -106,7 +106,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   const handleEditProgress = () => {
     // setShouldRefresh(true);
-    refresh();
+    refetch();
   };
 
   const AddNewChallengeProgressButton = () => {
@@ -182,7 +182,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               itemProgressCard={item}
               challengeId={challengeData.id}
               challengeName={challengeData.goal}
-              setShouldRefresh={setShouldRefresh}
+              refetch={refetch}
               setIsShowEditModal={setIsShowEditModal}
               challengeOwner={(challengeData.owner as IChallengeOwner[])[0]}
               isChallengeCompleted={challengeData.status === "closed"}

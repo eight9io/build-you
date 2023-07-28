@@ -9,6 +9,7 @@ export const DeepLink = {
       HomeScreen: {
         screens: {
           Feed: {
+            initialRouteName: "FeedScreen",
             screens: {
               OtherUserProfileChallengeDetailsScreen: {
                 path: "/challenge/:challengeId",

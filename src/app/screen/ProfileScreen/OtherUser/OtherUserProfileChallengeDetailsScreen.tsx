@@ -86,6 +86,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const [isCurrentUserOwnerOfChallenge, setIsCurrentUserOwnerOfChallenge] =
     useState<boolean | null>(null);
+  const [shouldRefesh, setShouldRefresh] = useState<boolean>(true);
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -131,6 +132,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       const owner = Array.isArray(response.data?.owner)
         ? response.data?.owner[0]
         : response.data?.owner;
+
       setChallengeOwner(owner);
       setIsCurrentUserOwnerOfChallenge(
         owner?.id === currentUser?.id || owner?.id === localId
@@ -174,9 +176,10 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   useEffect(() => {
-    if (!challengeId) return;
+    if (!challengeId || !shouldRefesh) return;
     getChallengeData();
-  }, []);
+    setShouldRefresh(false);
+  }, [shouldRefesh]);
 
   useLayoutEffect(() => {
     if (isJoined || isCurrentUserOwnerOfChallenge) {
@@ -301,6 +304,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const handleEditChallengeModalConfirm = () => {
+    setShouldRefresh(true);
     setIsEditChallengeModalVisible(false);
   };
 

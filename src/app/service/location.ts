@@ -31,5 +31,7 @@ export const getNearbyLocations = async (
       baseURL: GOOGLE_MAP_API.BASE_URL,
     }
   );
+  console.log('GOOGLE_MAP_API.API_KEY', GOOGLE_MAP_API.API_KEY);
+  console.log('response', response.data);
   return extractNearbyAddresses(response.data);
 };

@@ -85,11 +85,10 @@ export const RootNavigation = () => {
     if (authStoreHydrated) {
       if (!!isLoggedin) {
         if (navigationRef.current)
-          addNotificationListener(navigationRef.current, useNotificationStore); // Add notification listener every time the navigation is reset
-        setupInterceptor(getRefreshToken, () => {
-          logout();
-          userProfileStoreOnLogout();
-        });
+          setupInterceptor(getRefreshToken, () => {
+            logout();
+            userProfileStoreOnLogout();
+          });
         setAuthTokenToHttpHeader(isLoggedin);
 
         getUserProfileAsync()
@@ -131,7 +130,14 @@ export const RootNavigation = () => {
         SplashScreen.hideAsync();
       }
     }
-  }, [authStoreHydrated, navigationRef.current]);
+  }, [authStoreHydrated]);
+
+  useEffect(() => {
+    const unsubscribe = addNotificationListener(navigationRef.current, useNotificationStore);
+    return () => {
+      unsubscribe();
+    }
+  }, []);
 
   return (
     <NavigationContainer

@@ -52,40 +52,28 @@ export const unregisterForPushNotificationsAsync = async () => {
   return token;
 };
 
-export const addNotificationListener = async (
+export const addNotificationListener = (
   navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
-  if(useNotificationStore.getState().listenerIsReady) return; // prevent multiple listeners
-  const onMessageReceived = async (
-    message: FirebaseMessagingTypes.RemoteMessage
-  ) => {
-    if (message.notification)
-      // Display notification on foreground
-      await notifee.displayNotification({
-        title: message.notification.title,
-        body: message.notification.body,
-        data: message.data,
-      });
+  // const onMessageReceived = (message: FirebaseMessagingTypes.RemoteMessage) => {
+  //   if (message.notification)
+  //     // Display notification on foreground
+  //     notifee.displayNotification({
+  //       title: message.notification.title,
+  //       body: message.notification.body,
+  //       data: message.data,
+  //     });
 
-    await notifee.incrementBadgeCount();
-    useNotificationStore.getState().increaseNumOfNewNotifications();
-  };
+  //   useNotificationStore.getState().increaseNumOfNewNotifications();
+  // };
 
-  const onBackgroundMessageReceived = async (
-    message: FirebaseMessagingTypes.RemoteMessage
-  ) => {
-    await notifee.getBadgeCount();
-    await notifee.incrementBadgeCount();
-    useNotificationStore.getState().increaseNumOfNewNotifications();
-  };
-
-  // Listen to messages from FCM
-  messaging().onMessage(onMessageReceived);
-  messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
+  // // Listen to messages from FCM
+  // messaging().onMessage(onMessageReceived);
 
   // Listen to foreground events
-  notifee.onForegroundEvent(async (event: Event) => {
+  const unsubscribe = notifee.onForegroundEvent(async (event: Event) => {
+    useNotificationStore.getState().increaseNumOfNewNotifications();
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
@@ -101,8 +89,8 @@ export const addNotificationListener = async (
         break;
     }
   });
-  
-  useNotificationStore.getState().setListenerIsReady(true);
+
+  return unsubscribe;
 };
 
 export const handleTapOnIncomingNotification = async (
@@ -267,7 +255,7 @@ export const mapNotificationResponses = (
       isRead: response.isRead,
       challengeId: response.challenge?.id,
       challengeGoal: response.challenge?.goal,
-      progressId: response.progress?.id
+      progressId: response.progress?.id,
     };
   });
 

@@ -318,7 +318,6 @@ const PersonalChallengeDetailScreen = ({
         <>
           <ChallengeDetailScreen
             challengeData={challengeData}
-            refresh={refresh}
             setIsJoinedLocal={setIsJoinedLocal}
           />
           <EditChallengeModal

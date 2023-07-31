@@ -53,58 +53,32 @@ export const sortChallengeByStatusFromResponse = (res: AxiosResponse) => {
     (challenge: IChallenge, index: number, self: IChallenge[]) =>
       index === self.findIndex((t) => t.id === challenge.id)
   );
-  res.data = uniqueData;
+  let challengeList = uniqueData;
+  const closedChallenges = challengeList
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === "closed" || challenge.status === "done"
+    )
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(a.achievementTime).getTime() -
+        new Date(b.achievementTime).getTime()
+      );
+    });
 
-  const arrangedChallenges = [];
-  for (let i = 0; i < uniqueData.length; i++) {
-    const challenge = uniqueData[i];
-    if (challenge.status === "closed" || challenge.status === "done") {
-      // compare with last challenge in array in achievementTime
-      // find last challenge with status done or closed
-      const lastChallenge = arrangedChallenges.findLast(
-        (challenge) =>
-          challenge.status === "closed" || challenge.status === "done"
+  const openChallenges = challengeList
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === "open" || challenge.status === "progress"
+    )
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(a.achievementTime).getTime() -
+        new Date(b.achievementTime).getTime()
       );
-      if (lastChallenge) {
-        if (
-          new Date(lastChallenge.achievementTime).getTime() -
-            new Date(challenge.achievementTime).getTime() >
-          0
-        ) {
-          // add to the next to last index of array
-          arrangedChallenges.splice(
-            arrangedChallenges.length - 2,
-            0,
-            challenge
-          );
-        } else {
-          // add to end of array
-          arrangedChallenges.push(challenge);
-        }
-      } else {
-        arrangedChallenges.push(challenge);
-      }
-    } else if (challenge.status === "open" || challenge.status === "progress") {
-      const firstChallenge = arrangedChallenges.find(
-        (challenge) =>
-          challenge.status === "open" || challenge.status === "progress"
-      );
-      if (firstChallenge) {
-        if (
-          new Date(firstChallenge.achievementTime).getTime() -
-            new Date(challenge.achievementTime).getTime() >
-          0
-        ) {
-          arrangedChallenges.unshift(challenge);
-        } else {
-          arrangedChallenges.splice(1, 0, challenge);
-        }
-      } else {
-        arrangedChallenges.push(challenge);
-      }
-    }
-  }
-  return arrangedChallenges;
+    });
+
+  return [...openChallenges, ...closedChallenges];
 };
 
 export const sortChallengeByStatus = (challengeList: IChallenge[]) => {
@@ -119,53 +93,29 @@ export const sortChallengeByStatus = (challengeList: IChallenge[]) => {
   );
   challengeList = uniqueData;
 
-  const arrangedChallenges = [];
-  for (let i = 0; i < uniqueData.length; i++) {
-    const challenge = uniqueData[i];
-    if (challenge.status === "closed" || challenge.status === "done") {
-      // compare with last challenge in array in achievementTime
-      const lastChallenge = arrangedChallenges.findLast(
-        (challenge) =>
-          challenge.status === "closed" || challenge.status === "done"
+  const closedChallenges = challengeList
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === "closed" || challenge.status === "done"
+    )
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(b.achievementTime).getTime() -
+        new Date(a.achievementTime).getTime()
       );
-      if (lastChallenge) {
-        if (
-          new Date(lastChallenge.achievementTime).getTime() -
-            new Date(challenge.achievementTime).getTime() >
-          0
-        ) {
-          // add to -2 index of array
-          arrangedChallenges.splice(
-            arrangedChallenges.length - 2,
-            0,
-            challenge
-          );
-        } else {
-          // add to end of array
-          arrangedChallenges.push(challenge);
-        }
-      } else {
-        arrangedChallenges.push(challenge);
-      }
-    } else if (challenge.status === "open" || challenge.status === "progress") {
-      const firstChallenge = arrangedChallenges.find(
-        (challenge) =>
-          challenge.status === "open" || challenge.status === "progress"
+    });
+
+  const openChallenges = challengeList
+    .filter(
+      (challenge: IChallenge) =>
+        challenge.status === "open" || challenge.status === "progress"
+    )
+    .sort((a: IChallenge, b: IChallenge) => {
+      return (
+        new Date(b.achievementTime).getTime() -
+        new Date(a.achievementTime).getTime()
       );
-      if (firstChallenge) {
-        if (
-          new Date(firstChallenge.achievementTime).getTime() -
-            new Date(challenge.achievementTime).getTime() <
-          0
-        ) {
-          arrangedChallenges.unshift(challenge);
-        } else {
-          arrangedChallenges.splice(1, 0, challenge);
-        }
-      } else {
-        arrangedChallenges.push(challenge);
-      }
-    }
-  }
-  return arrangedChallenges;
+    });
+
+  return [...openChallenges, ...closedChallenges];
 };

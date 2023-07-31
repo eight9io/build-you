@@ -3,43 +3,14 @@ import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
 
-import { IChallenge, IChallengeOwner } from "../../../types/challenge";
 import { getChallengeStatusColor } from "../../../utils/common";
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
-import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
+import { IChallengeCardProps, CompanyTag } from "./ChallengeCard";
 
-export interface IChallengeCardProps {
-  item: IChallenge;
-  isCompanyAccount?: boolean | undefined | null;
-  imageSrc: string | null | undefined;
-  navigation?: any;
-  handlePress?: () => void;
-  isFromOtherUser?: boolean;
-}
-
-export const CompanyTag = ({
-  companyName,
-}: {
-  companyName: string | false | undefined;
-}) => {
-  if (!companyName) return null;
-  if (companyName?.length > 13) {
-    companyName = companyName.slice(0, 13) + "...";
-  }
-  return (
-    <View className="flex h-8 w-2/5 flex-row items-center rounded-l-md bg-primary-default">
-      <View className="mx-2 h-[20px] w-[20px] rounded-full bg-gray-200 py-1"></View>
-      <Text className="text-md font-normal text-white">
-        {companyName || "Company"}
-      </Text>
-    </View>
-  );
-};
-
-const ChallengeCard: React.FC<IChallengeCardProps> = ({
+const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   item,
   imageSrc,
   isCompanyAccount,
@@ -52,17 +23,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
     : item?.owner;
   const companyName = challengeOwner.companyAccount && challengeOwner?.name;
 
-  const { getUserProfile } = useUserProfileStore();
-  const currentUser = getUserProfile();
-
-  const isCurrentUserParticipant = item?.participants?.find(
-    (participant) => participant.id === currentUser?.id
-  );
-
-  const challengeStatus =
-    challengeOwner.id === currentUser?.id || !isCurrentUserParticipant
-      ? item.status
-      : isCurrentUserParticipant?.challengeStatus;
+  const challengeStatus = item.status;
 
   const onPress = () => {
     if (navigation) {
@@ -142,4 +103,4 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   );
 };
 
-export default ChallengeCard;
+export default ChallengeCardCompany;

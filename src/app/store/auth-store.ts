@@ -55,8 +55,8 @@ const watchLogin = (config) => (set, get, api) =>
         }
         registerForPushNotificationsAsync()
           .then((token) => {
-            const navigation = NavigationService.getContainer();
-            addNotificationListener(navigation, useNotificationStore);
+            // const navigation = NavigationService.getContainer();
+            // addNotificationListener(navigation, useNotificationStore);
             updateNotificationToken({
               notificationToken: token,
               status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
@@ -73,7 +73,7 @@ const watchLogin = (config) => (set, get, api) =>
       if (args.accessToken === null) {
         unregisterForPushNotificationsAsync()
           .then((token) => {
-            console.log(token);
+            console.log('push token revoked', token);
             updateNotificationToken({
               notificationToken: token,
               status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
@@ -133,7 +133,7 @@ export const useAuthStore = create<LoginStore>()(
               res = await linkedInLogin(payload.token);
               break;
             case LOGIN_TYPE.APPLE:
-              res = await appleLogin(payload.token);
+              res = await appleLogin(payload);
               break;
             case LOGIN_TYPE.EMAIL_PASSWORD:
               res = await serviceLogin(payload);
@@ -161,6 +161,7 @@ export const useAuthStore = create<LoginStore>()(
           accessToken: null,
           refreshToken: null,
         });
+        useNotificationStore.getState().setListenerIsReady(false);
         await AsyncStorage.removeItem("user_id");
       },
       setHasHydrated: () => {

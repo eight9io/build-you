@@ -23,6 +23,7 @@ import GlobalDialogController from "../../component/common/Dialog/GlobalDialogCo
 import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 
 import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
+import ProgressCommentScreen from "../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -148,6 +149,22 @@ const NotificationsScreen = () => {
       <NotificationsStack.Screen
         name="OtherUserProfileChallengeDetailsScreen"
         component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <NotificationsStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => "",

@@ -1,7 +1,11 @@
 import { View, Text, Modal, SafeAreaView, Platform } from "react-native";
 import { Image } from "expo-image";
 import { useState } from "react";
-import { CommonActions } from "@react-navigation/native";
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 
 import { useTranslation } from "react-i18next";
 import NavButton from "../../common/Buttons/NavButton";
@@ -17,24 +21,22 @@ import { useAuthStore } from "../../../store/auth-store";
 import { checkIsCompleteProfileOrCompany, useUserProfileStore } from "../../../store/user-store";
 import { setupInterceptor } from "../../../utils/refreshToken.util";
 import { errorMessage } from "../../../utils/statusCode";
+import { RootStackParamList } from "../../../navigation/navigation.type";
 
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
   navigation?: any;
 }
-const RegisterModal = ({
-  navigation,
-  modalVisible,
-  setModalVisible,
-}: Props) => {
+const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
   const [errMessage, setErrMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { asyncLogin, getRefreshToken, logout } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
-  
+
   const handleRegisterSocial = async (
     payload: ISocialLoginForm,
     type: LOGIN_TYPE
@@ -53,14 +55,21 @@ const RegisterModal = ({
       const navigateToRoute = isCompleteProfile
         ? "HomeScreen"
         : "CompleteProfileScreen";
-
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: navigateToRoute }],
-        })
-      );
+      
+      setModalVisible(false);
+      setTimeout(() => {
+        // Timeout used to wait for the register modal to close before navigate
+        // The app crash when calling "reset" action, "navigate" action works fine
+        // Reference: https://github.com/react-navigation/react-navigation/issues/11201
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: navigateToRoute }],
+          })
+        );
+      }, 300);
     } catch (error) {
+      console.log("error: ", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }

@@ -1,8 +1,6 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
 
-import { EXPO_API_APP_DOMAIN } from "@env";
-import Clipboard from "@react-native-clipboard/clipboard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 
@@ -316,13 +314,12 @@ const PersonalChallengeDetailScreen = ({
           setIsDeleteError(false);
         }}
       />
-      {challengeData && (
+      {challengeData?.id && (
         <>
           <ChallengeDetailScreen
             challengeData={challengeData}
             refresh={refresh}
             setIsJoinedLocal={setIsJoinedLocal}
-            // setShouldRefresh={setShouldRefresh}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

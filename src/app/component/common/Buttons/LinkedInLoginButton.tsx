@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import Button from "./Button";
-import { getLinkedInAccessToken } from "../../../service/auth";
+// import { getLinkedInAccessToken } from "../../../service/auth";
 import LinkedInModal from "../../modal/LinkedInModal";
 import { LOGIN_TYPE } from "../../../common/enum";
 import { ISocialLoginForm, LoginForm } from "../../../types/auth";
@@ -31,12 +31,11 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
 
   const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
     setLinkedInModalVisible(false);
-    let accessToken = null;
-    const result = await getLinkedInAccessToken(authrozationCode);
-    accessToken = result.data?.access_token;
-
-    if (accessToken) {
-      await onLogin({ token: accessToken }, LOGIN_TYPE.LINKEDIN);
+    // let accessToken = null;
+    // const result = await getLinkedInAccessToken(authrozationCode);
+    // accessToken = result.data?.access_token;
+    if (authrozationCode) {
+      await onLogin({ token: authrozationCode }, LOGIN_TYPE.LINKEDIN);
     } else throw new Error(t("errorMessage:err_login.cannot_get_access_token"));
   };
   return (

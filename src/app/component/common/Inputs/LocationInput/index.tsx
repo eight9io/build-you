@@ -12,6 +12,7 @@ import ConfirmDialog from "../../Dialog/ConfirmDialog";
 import SelectPicker from "../../Pickers/SelectPicker";
 import { ISelectOption } from "../../../../types/common";
 import { getNearbyLocations } from "../../../../service/location";
+import Spinner from "react-native-loading-spinner-overlay";
 
 interface ILocationInputProps {
   control?: any;
@@ -34,6 +35,8 @@ const LocationInput: React.FC<ILocationInputProps> = ({
   >();
   const [nearbyLocations, setNearbyLocations] = useState<ISelectOption[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | undefined>(); // for load more
+  const [fetchLocationLoading, setFetchLocationLoading] =
+    useState<boolean>(false);
 
   const handleTextInputPress = async () => {
     const currentPermission = await Location.getForegroundPermissionsAsync();
@@ -54,6 +57,7 @@ const LocationInput: React.FC<ILocationInputProps> = ({
   };
 
   const fetchNearbyLocations = async (isLoadMore?: boolean) => {
+    setFetchLocationLoading(true);
     const { coords } = await Location.getCurrentPositionAsync();
     const extractedCoords = `${coords.latitude},${coords.longitude}`;
     if (isLoadMore !== undefined && isLoadMore) {
@@ -72,6 +76,7 @@ const LocationInput: React.FC<ILocationInputProps> = ({
       if (addresses.length > 0) setNearbyLocations(addresses);
       setNextPageToken(token);
     }
+    setFetchLocationLoading(false);
   };
   const handleCloseRequireLocationModal = () => {
     setRequireLocationModalVisible(false);
@@ -91,6 +96,7 @@ const LocationInput: React.FC<ILocationInputProps> = ({
 
   return (
     <View>
+      {setFetchLocationLoading && <Spinner visible={fetchLocationLoading} />}
       <Controller
         control={control}
         rules={{

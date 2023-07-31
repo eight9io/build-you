@@ -23,7 +23,6 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   imageSrc,
   navigation,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true);
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
@@ -70,11 +69,7 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
-            onLoadStart={() => setLoading(true)}
-            onLoadEnd={() => setLoading(false)}
-            onError={(err) => {
-              setLoading(false);
-            }}
+
           />
         )}
         <View

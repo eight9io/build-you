@@ -6,45 +6,58 @@ import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
 import Followers from "../common/Followers/Followers";
 import Following from "../common/Following/Following";
 import Employees from "./Employees/Employees";
-import {
-  useFollowingListStore,
-  useUserProfileStore,
-} from "../../../../store/user-store";
+import { useUserProfileStore } from "../../../../store/user-store";
 import Biography from "../Users/Biography/Biography";
 
 import GlobalDialogController from "../../../common/Dialog/GlobalDialogController";
-import { serviceGetListFollower } from "../../../../service/profile";
+import {
+  serviceGetListFollower,
+  serviceGetListFollowing,
+} from "../../../../service/profile";
 
 const CompanyProfileTabs = () => {
+  const [isFollowerRefreshing, setIsFollowerRefreshing] =
+    useState<boolean>(false);
+  const [isFollowingRefreshing, setIsFollowingRefreshing] =
+    useState<boolean>(false);
+  const [followerList, setFollowerList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
   const { t } = useTranslation();
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
 
-  const { getFollowingList } = useFollowingListStore();
-  const [followerList, setFollowerList] = useState([]);
-  // const isFocused = useIsFocused();
+  const getFollowerList = async () => {
+    setIsFollowerRefreshing(true);
+    const { data: followerList } = await serviceGetListFollower(
+      userProfile?.id
+    );
+    setFollowerList(followerList);
+    setIsFollowerRefreshing(false);
+  };
+
+  const getFollowingList = async () => {
+    setIsFollowingRefreshing(true);
+    const { data: followingList } = await serviceGetListFollowing(
+      userProfile?.id
+    );
+    setFollowingList(followingList);
+    setIsFollowingRefreshing(false);
+  };
 
   useEffect(() => {
     if (!userProfile?.id) return;
-
-    const getFollowerList = async () => {
-      const { data: followerList } = await serviceGetListFollower(
-        userProfile?.id
-      );
-      setFollowerList(followerList);
-    };
     try {
       getFollowerList();
+      getFollowingList();
     } catch (error) {
       GlobalDialogController.showModal({
         title: "Error",
         message: t("errorMessage:500") as string,
       });
     }
-  }, []);
+  }, [userProfile?.id]);
 
-  const followingList = getFollowingList();
   if (!userProfile?.id) return null;
   const titles = [
     t("profile_screen_tabs.biography"),
@@ -59,8 +72,18 @@ const CompanyProfileTabs = () => {
         titles={titles}
         children={[
           <Biography key="0" userProfile={userProfile} />,
-          <Followers followers={followerList} key="1" />,
-          <Following following={followingList} key="2" />,
+          <Followers
+            followers={followerList}
+            isRefreshing={isFollowerRefreshing}
+            getFollowerList={getFollowerList}
+            key="2"
+          />,
+          <Following
+            following={followingList}
+            isRefreshing={isFollowingRefreshing}
+            getFollowingList={getFollowingList}
+            key="2"
+          />,
           <Employees key="3" />,
         ]}
         activeTabClassName=""

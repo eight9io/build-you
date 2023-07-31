@@ -47,7 +47,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   handlePress,
   isFromOtherUser = false,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true);
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
@@ -119,11 +118,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
-            onLoadStart={() => setLoading(true)}
-            onLoadEnd={() => setLoading(false)}
-            onError={(err) => {
-              setLoading(false);
-            }}
           />
         )}
         {!imageSrc && (

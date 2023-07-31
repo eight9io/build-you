@@ -49,14 +49,6 @@ interface IFeedPostCardProps {
 
 const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
   const [isImageLoading, setIsImageLoading] = React.useState<boolean>(true);
-  let newUrl = image;
-
-  if (newUrl && !newUrl.startsWith("http")) {
-    newUrl = `https://buildyou-front.stg.startegois.com${image}`;
-  }
-  if (newUrl?.includes(";")) {
-    newUrl = newUrl.split(";")[0];
-  }
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -64,10 +56,10 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
       className={clsx("w-full rounded-xl border border-gray-80 bg-white")}
     >
       <View className={clsx("relative w-full")}>
-        {newUrl && (
+        {image && (
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
-            source={{ uri: newUrl }}
+            source={{ uri: image }}
             onLoadEnd={() => setIsImageLoading(false)}
           />
         )}
@@ -100,10 +92,6 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
 };
 
 const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
-  let videoUrl = video;
-  if (videoUrl && !videoUrl.startsWith("http")) {
-    videoUrl = `https://buildyou-front.stg.startegois.com${video}`;
-  }
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -111,10 +99,10 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
       className={clsx("w-full rounded-xl border border-gray-80 bg-white")}
     >
       <View className={clsx("relative w-full")}>
-        {videoUrl && (
+        {video && (
           <Video
             className={clsx("aspect-square w-full rounded-t-xl")}
-            source={{ uri: videoUrl }}
+            source={{ uri: video }}
             useNativeControls
           />
         )}

@@ -1,7 +1,9 @@
 import { EXPO_API_APP_DOMAIN } from "@env";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { Alert, View, Button } from "react-native";
+import Share from "react-native-share";
+
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-import GlobalToastController from "../component/common/Toast/GlobalToastController";
 
 export const onShareChallengeLink = (challengeId: string) => {
   if (!challengeId) {
@@ -11,8 +13,19 @@ export const onShareChallengeLink = (challengeId: string) => {
     });
     return;
   }
-  Clipboard.setString(`${EXPO_API_APP_DOMAIN}/challenge/${challengeId}`);
-  GlobalToastController.showModal({
-    message: "Copied to clipboard!",
-  });
+  const onShare = async () => {
+    try {
+      await Share.open({
+        title: "Join my challenge!",
+        url: `${EXPO_API_APP_DOMAIN}/challenge/${challengeId}`,
+      });
+    } catch (error: any) {
+      if (error.message === "User did not share") {
+        return;
+      }
+      Alert.alert(error.message);
+    }
+  };
+
+  onShare();
 };

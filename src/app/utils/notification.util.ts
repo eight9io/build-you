@@ -20,6 +20,7 @@ import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NavigationService from "./navigationService";
 
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
@@ -52,45 +53,19 @@ export const unregisterForPushNotificationsAsync = async () => {
   return token;
 };
 
-export const addNotificationListener = async (
+export const addNotificationListener = (
   navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
-  const onMessageReceived = async (
-    message: FirebaseMessagingTypes.RemoteMessage
-  ) => {
-    if (message.notification)
-      // Display notification on foreground
-      await notifee.displayNotification({
-        title: message.notification.title,
-        body: message.notification.body,
-        data: message.data,
-      });
-
-    await notifee.incrementBadgeCount();
-    useNotificationStore.getState().increaseNumOfNewNotifications();
-  };
-
-  const onBackgroundMessageReceived = async (
-    message: FirebaseMessagingTypes.RemoteMessage
-  ) => {
-    await notifee.getBadgeCount();
-    await notifee.incrementBadgeCount();
-    useNotificationStore.getState().increaseNumOfNewNotifications();
-  };
-
-  // Listen to messages from FCM
-  messaging().onMessage(onMessageReceived);
-  messaging().setBackgroundMessageHandler(onBackgroundMessageReceived);
 
   // Listen to foreground events
-  notifee.onForegroundEvent(async (event: Event) => {
+  const unsubscribe = notifee.onForegroundEvent(async (event: Event) => {
+    useNotificationStore.getState().increaseNumOfNewNotifications();
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
           await handleTapOnIncomingNotification(
             event.detail.notification,
-            navigation
           );
           if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count
@@ -100,38 +75,46 @@ export const addNotificationListener = async (
         break;
     }
   });
+
+  return unsubscribe;
 };
 
 export const handleTapOnIncomingNotification = async (
   notification: Notification,
-  navigation: NavigationContainerRef<RootStackParamList>
 ) => {
+  const navigation = NavigationService.getContainer();
   const payload = notification.data as Record<
     string,
     any
   > as INotificationPayload;
 
   switch (payload.notificationType) {
-    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
-      NOTIFICATION_TYPES.PROGRESS_CREATED:
-      if (payload.post_id && payload.challenge_id)
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
+      if (payload.progressId && payload.challengeId)
         navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.post_id,
-          challengeId: payload.challenge_id,
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
+        });
+      break;
+    case NOTIFICATION_TYPES.PROGRESS_CREATED:
+      if (payload.progressId && payload.challengeId)
+        navigation.navigate("ProgressCommentScreen", {
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      if (payload.post_id && payload.challenge_id)
+      if (payload.progressId && payload.challengeId)
         navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.post_id,
-          challengeId: payload.challenge_id,
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_MENTION:
-      if (payload.post_id && payload.challenge_id)
+      if (payload.progressId && payload.challengeId)
         navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.post_id,
-          challengeId: payload.challenge_id,
+          progressId: payload.progressId,
+          challengeId: payload.challengeId,
         });
       break;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
@@ -180,8 +163,10 @@ export const handleTapOnNotification = async (
   };
 
   switch (notification.type) {
-    case NOTIFICATION_TYPES.CHALLENGE_CREATED ||
-      NOTIFICATION_TYPES.PROGRESS_CREATED:
+    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
+      handleNavigation("ProgressCommentScreen", notification);
+      break;
+    case NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
       break;
     case NOTIFICATION_TYPES.NEW_COMMENT:
@@ -203,11 +188,11 @@ export const getNotificationContent = (
   switch (notificationType) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       return `has added a new progress in ${
-        contentPayload?.challengeName || "a challenge"
+        contentPayload?.challengeGoal || "a challenge"
       }`;
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       return `has added a new progress in ${
-        contentPayload?.challengeName || "a challenge"
+        contentPayload?.challengeGoal || "a challenge"
       }`;
     case NOTIFICATION_TYPES.NEW_COMMENT:
       return `commented on your update`;
@@ -232,7 +217,7 @@ export const clearNotification = async (notificationId: string) => {
 export const mapNotificationResponses = (
   responses: INotificationResponse[]
 ): INotification[] => {
-  const transformedData = responses.map((response) => {
+  const transformedData: INotification[] = responses.map((response) => {
     // const extractUserInfoRegex = /@\[([^\(]+)\(([^)]+)\)/;
     // const match = response.body.match(extractUserInfoRegex);
     // let username = '';
@@ -254,6 +239,9 @@ export const mapNotificationResponses = (
       },
       createdAt: response.createdAt,
       isRead: response.isRead,
+      challengeId: response.challenge?.id,
+      challengeGoal: response.challenge?.goal,
+      progressId: response.progress?.id,
     };
   });
 

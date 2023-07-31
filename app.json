@@ -2,7 +2,7 @@
   "expo": {
     "name": "BuildYou",
     "slug": "build-you",
-    "version": "1.2.0",
+    "version": "1.2.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,7 +17,7 @@
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
       "associatedDomains": ["applinks:app.uat.buildyou.it"],
-      "buildNumber": "8",
+      "buildNumber": "1",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"]

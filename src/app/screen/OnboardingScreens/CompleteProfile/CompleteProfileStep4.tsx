@@ -4,8 +4,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Pressable,
-  StyleSheet,
+  ScrollView,
 } from "react-native";
 
 import clsx from "clsx";
@@ -151,6 +150,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
 
   const { setSoftSkills, getProfile } = useCompleteProfileStore();
+  const { setUserProfile, getUserProfileAsync } = useUserProfileStore();
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [value, setValue] = useState<string[]>([]);
@@ -241,6 +241,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           company: "",
         }),
       ]);
+      await getUserProfileAsync();
       navigation.navigate("CompleteProfileFinishScreen");
     } catch (error) {
       GlobalDialogController.showModal({
@@ -267,11 +268,11 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
   return (
     <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
-      <View className="relative flex h-full w-full flex-col items-center justify-start">
+      <ScrollView showsVerticalScrollIndicator>
         <View>
           <StepOfSteps step={4} totalSteps={4} />
         </View>
-        <View className="flex w-[282px] flex-col items-center justify-center py-6 ">
+        <View className="px-16 py-6">
           <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
             Select the soft skills you are already competent on
           </Text>
@@ -281,7 +282,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           </Text>
         </View>
 
-        <View className="flex h-full w-full pt-5 ">
+        <View className="flex w-full pt-5 ">
           <View className="flex flex-col px-5">
             <Text className="pb-2 text-md font-semibold text-primary-default">
               Soft skills
@@ -305,6 +306,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 borderWidth: 1,
                 borderRadius: 8,
                 height: 48,
+                zIndex: 10,
               }}
               containerStyle={{
                 width: "100%",
@@ -382,15 +384,15 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
             </View>
           </View>
         </View>
-        <View className="absolute bottom-6 left-0 h-12 w-full px-4">
+        {!openDropdown && (
           <Button
             title="Next"
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
+            containerClassName=" bg-primary-default my-5 mx-5 "
+            textClassName="text-white text-md leading-6"
             onPress={() => handleSubmitForm()}
           />
-        </View>
-      </View>
+        )}
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };

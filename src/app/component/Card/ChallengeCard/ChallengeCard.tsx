@@ -8,7 +8,6 @@ import { getChallengeStatusColor } from "../../../utils/common";
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
-import { isArray } from "util";
 import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
 
@@ -70,7 +69,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
     // handlePress or navigation
 
     if (navigation) {
-      if (isCompanyAccount) {
+      if (isCompanyAccount && !isFromOtherUser) {
         return navigation.navigate("CompanyChallengeDetailScreen", {
           challengeId: item.id,
         });

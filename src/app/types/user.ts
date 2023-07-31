@@ -32,14 +32,11 @@ export interface IUserData {
   phone?: string;
   webSite?: string;
   vatNumber?: string;
-
 }
 
 export interface IHardSkillProps {
-  skill: {
-    id: string;
-    skill: string;
-  };
+  id: string;
+  skill: string;
 }
 export interface IHardSkill {
   id: string;

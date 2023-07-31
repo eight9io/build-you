@@ -1,6 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useIsFocused } from "@react-navigation/native";
 
 import {
   IChallenge,
@@ -17,7 +18,6 @@ import httpInstance from "../../../../utils/http";
 
 import SkeletonLoadingCommon from "../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import EditChallengeProgressModal from "../../../../component/modal/EditChallengeProgressModal";
-// import { useIsFocused } from "@react-navigation/native";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -43,6 +43,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+
+  const isFocused = useIsFocused();
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
@@ -75,7 +77,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setTimeout(() => {
       setProgressLoading(false);
     }, 800);
-  }, [challengeData?.id, shouldRefresh]);
+  }, [challengeData?.id, shouldRefresh, isFocused]);
 
   const refetch = () => {
     setProgressLoading(true);
@@ -103,7 +105,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   const handleEditProgress = () => {
     // setShouldRefresh(true);
-    refresh();
+    refetch();
   };
 
   const AddNewChallengeProgressButton = () => {
@@ -179,7 +181,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               itemProgressCard={item}
               challengeId={challengeData.id}
               challengeName={challengeData.goal}
-              setShouldRefresh={setShouldRefresh}
+              refetch={refetch}
               setIsShowEditModal={setIsShowEditModal}
               challengeOwner={(challengeData.owner as IChallengeOwner[])[0]}
               isChallengeCompleted={challengeData.status === "closed"}

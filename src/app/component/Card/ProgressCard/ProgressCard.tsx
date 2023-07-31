@@ -30,7 +30,7 @@ import IconDot from "./asset/dot.svg";
 import { useUserProfileStore } from "../../../store/user-store";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 import debounce from "lodash.debounce";
-
+import { useChallengeUpdateStore } from "../../../store/challenge-update-store";
 
 interface IProgressCardProps {
   challengeOwner: {
@@ -48,7 +48,7 @@ interface IProgressCardProps {
   setProgressIndexToUpdate?: any;
   isChallengeCompleted?: boolean;
   itemProgressCard: IProgressChallenge;
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
   setIsShowEditModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -58,7 +58,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   challengeId,
   challengeName,
   challengeOwner,
-  setShouldRefresh,
+  refetch,
   itemProgressCard,
   setIsShowEditModal,
   setProgressIndexToUpdate,
@@ -72,6 +72,11 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const currentUserId = currentUser?.id;
+
+  const { getChallengeUpdateLike, getChallengeUpdateComment } =
+    useChallengeUpdateStore();
+  const challengeUpdateComment = getChallengeUpdateComment();
+  const challengeUpdateLike = getChallengeUpdateLike();
 
   const isChallengeOwnerCompanyAccount = challengeOwner?.companyAccount;
 
@@ -137,7 +142,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   };
 
   const handleDeleteProgressSuccess = () => {
-    setShouldRefresh(true);
+    refetch();
   };
 
   const handleCloseAckModal = () => {
@@ -209,10 +214,12 @@ const ProgressCard: FC<IProgressCardProps> = ({
         <LikeButton
           progressId={itemProgressCard.id}
           currentUserId={currentUser?.id}
+          localProgressLikes={challengeUpdateLike}
         />
         <CommentButton
           navigationToComment={handleNavigationToComment}
           progressId={itemProgressCard.id}
+          localCommentUpdate={challengeUpdateComment}
         />
       </View>
 

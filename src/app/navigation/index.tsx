@@ -44,6 +44,8 @@ import {
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
 import { useDeepLinkStore } from "../store/deep-link-store";
+import { addNotificationListener } from "../utils/notification.util";
+import { useNotificationStore } from "../store/notification-store";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -128,6 +130,16 @@ export const RootNavigation = () => {
       }
     }
   }, [authStoreHydrated]);
+
+  useEffect(() => {
+    const unsubscribe = addNotificationListener(
+      navigationRef.current,
+      useNotificationStore
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <NavigationContainer

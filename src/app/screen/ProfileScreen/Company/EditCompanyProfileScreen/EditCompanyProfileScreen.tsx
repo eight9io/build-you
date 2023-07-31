@@ -16,12 +16,13 @@ import Button from "../../../../component/common/Buttons/Button";
 import { EditCompanyProfileValidators } from "../../../../Validators/EditProfile.validate";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { serviceGetMyProfile } from "../../../../service/auth";
 
 const EditCompanyProfileScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isErrDialog, setIsErrDialog] = useState(false);
   const { t } = useTranslation();
-
+  const { setUserProfile } = useUserProfileStore();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
   useGetUserData();
@@ -50,6 +51,8 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
     })
       .then(async (res) => {
         if (res.status === 200) {
+          const res = await serviceGetMyProfile();
+          setUserProfile(res.data);
           setIsLoading(false);
           GlobalToastController.showModal({
             message:

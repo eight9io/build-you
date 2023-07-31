@@ -21,6 +21,7 @@ import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfil
 import Button from "../../../component/common/Buttons/Button";
 
 import ShareIcon from "../../../../../assets/svg/share.svg";
+import { useGetListEmployee } from "../../../hooks/useGetCompany";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,6 +35,7 @@ interface ICompanyProps {
 }
 
 const Company: React.FC<ICompanyProps> = ({ navigation }) => {
+  useGetListEmployee();
   const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
     useState<boolean>(true);
 
@@ -43,6 +45,7 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
       setShouldNotLoadOnFirstFocus(false);
       return;
     }
+    useGetListEmployee();
     serviceGetMyProfile()
       .then((res) => {
         setUserProfile(res.data);
@@ -51,6 +54,7 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
         console.error("err", err);
       });
   }, []);
+
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
   return (

@@ -12,6 +12,7 @@ interface ISingleDescriptionProps {
 
 interface IDescriptionTabProps {
   challengeData: IChallenge;
+  maxPepleCanJoin?: number;
 }
 
 const SingleDescription: FC<ISingleDescriptionProps> = ({
@@ -30,7 +31,10 @@ const SingleDescription: FC<ISingleDescriptionProps> = ({
   );
 };
 
-export const DescriptionTab: FC<IDescriptionTabProps> = ({ challengeData }) => {
+export const DescriptionTab: FC<IDescriptionTabProps> = ({
+  challengeData,
+  maxPepleCanJoin,
+}) => {
   const { id, achievementTime, benefits, image, goal, reasons } = challengeData;
   const date = new Date(achievementTime);
   return (
@@ -40,6 +44,10 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({ challengeData }) => {
       <SingleDescription
         title="Time to reach the goal"
         description={dayjs(date).format("DD/MM/YYYY")}
+      />
+      <SingleDescription
+        title="Participants"
+        description={`${challengeData?.participants.length}/${maxPepleCanJoin}`}
       />
     </ScrollView>
   );

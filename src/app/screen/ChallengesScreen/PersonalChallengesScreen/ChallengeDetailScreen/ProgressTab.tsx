@@ -24,7 +24,6 @@ interface IProgressTabProps {
   isJoined?: boolean | null;
   isOtherUserProfile?: boolean;
   isChallengeCompleted?: boolean | null;
-  refresh: React.Dispatch<React.SetStateAction<void>>;
 }
 
 export const ProgressTab: FC<IProgressTabProps> = ({
@@ -32,7 +31,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   challengeData,
   isChallengeCompleted = false,
   isOtherUserProfile = false,
-  refresh,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<

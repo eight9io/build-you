@@ -15,10 +15,8 @@ export const getImageFromUrl = (
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        let newUrl: string;
         if (!url.startsWith("http")) {
-          newUrl = `https://buildyou-front.stg.startegois.com${url}`;
-          const response = await fetch(newUrl);
+          const response = await fetch(url);
           const imageData = await response.blob();
           setImageSource({ uri: URL.createObjectURL(imageData) });
           setLoading(false);

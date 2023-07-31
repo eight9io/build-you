@@ -95,7 +95,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
   const { t } = useTranslation();
 
   return (
-    <ScrollView className="w-full px-4 ">
+    <ScrollView className="w-full px-4  ">
       <View className="justify-content: space-between mb-[100px] w-full pt-4 ">
         {videoSrc && videoSrc !== null && (
           <View className={clsx(" flex flex-col ")}>
@@ -121,19 +121,19 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             })}
           </View>
         )}
-        <View className="flex-column flex gap-5 pt-[20px]">
+        <View className="flex-column flex flex-wrap gap-5 pt-[20px]">
           {occupation && (
-            <View className="flex flex-row ">
+            <View className="flex w-full flex-row  flex-wrap ">
               <Text className={clsx("text-md font-semibold  text-gray-dark")}>
                 {occupation && t("form_onboarding.screen_1.occupation")}:&nbsp;
               </Text>
-              <Text className={clsx("text-md text-gray-dark")}>
+              <Text className={clsx("text-md text-gray-dark ")}>
                 {occupation?.name}
               </Text>
             </View>
           )}
           {userProfile?.webSite && (
-            <View className="flex flex-row ">
+            <View className="flex flex-row flex-wrap ">
               <Text
                 className={clsx(
                   "w-[25%] text-md font-semibold  text-gray-dark"
@@ -148,7 +148,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.phone && (
-            <View className="flex flex-row ">
+            <View className="flex flex-row flex-wrap">
               <Text
                 className={clsx(
                   "w-[25%] text-md font-semibold  text-gray-dark"
@@ -163,7 +163,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.emailContact && (
-            <View className="flex flex-row ">
+            <View className="flex flex-row flex-wrap">
               <Text
                 className={clsx(
                   "w-[25%] text-md font-semibold  text-gray-dark"
@@ -178,7 +178,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.vatNumber && (
-            <View className="flex flex-row ">
+            <View className="flex flex-row flex-wrap ">
               <Text
                 className={clsx(
                   "w-[25%] text-md font-semibold  text-gray-dark"

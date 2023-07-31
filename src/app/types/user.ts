@@ -36,7 +36,7 @@ export interface IUserData {
 
 export interface IHardSkillProps {
   id: string;
-  skill: string;
+  skill: any;
 }
 export interface IHardSkill {
   id: string;

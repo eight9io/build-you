@@ -45,10 +45,14 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
         title="Time to reach the goal"
         description={dayjs(date).format("DD/MM/YYYY")}
       />
-      <SingleDescription
-        title="Participants"
-        description={`${challengeData?.participants.length}/${maxPepleCanJoin}`}
-      />
+      {maxPepleCanJoin && (
+        <SingleDescription
+          title="Participants"
+          description={`${
+            challengeData?.participants?.length || 0
+          }/${maxPepleCanJoin}`}
+        />
+      )}
     </ScrollView>
   );
 };

@@ -5,11 +5,13 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import Empty from "./assets/emptyFollow.svg";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
+import MarkDone from "./assets/mark_done.svg";
 interface IParticipantsTabProps {
   participant?: {
     id: string | number;
     avatar: string;
     name: string;
+    challengeStatus?: string;
   }[];
   maxPepleCanJoin?: number;
 }
@@ -38,25 +40,28 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
                     userId: item.id as string,
                   })
                 }
-                className="mb-5 flex-row items-center gap-3"
+                className="mb-5 flex-row items-center justify-between gap-3"
               >
-                <View className="relative">
-                  <Image
-                    className="h-10 w-10 rounded-full"
-                    source={require("../../../../common/image/avatar-load.png")}
-                  />
-                  {item?.avatar && (
+                <View className="flex-row  items-center ">
+                  <View className="relative">
                     <Image
-                      source={{ uri: item.avatar.trim() }}
-                      className={clsx(
-                        "absolute left-0  top-0 h-10 w-10  rounded-full"
-                      )}
+                      className="h-10 w-10 rounded-full"
+                      source={require("../../../../common/image/avatar-load.png")}
                     />
-                  )}
+                    {item?.avatar && (
+                      <Image
+                        source={{ uri: item.avatar.trim() }}
+                        className={clsx(
+                          "absolute left-0  top-0 h-10 w-10  rounded-full"
+                        )}
+                      />
+                    )}
+                  </View>
+                  <Text className="ml-3 text-base font-semibold text-basic-black">
+                    {item.name}
+                  </Text>
                 </View>
-                <Text className="text-base font-semibold text-basic-black">
-                  {item.name}
-                </Text>
+                {item?.challengeStatus == "done" && <MarkDone />}
               </TouchableOpacity>
             );
           }}

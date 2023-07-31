@@ -77,7 +77,7 @@ const Toast = () => {
         Platform.OS === "ios" ? "bottom-[120px] " : "bottom-[100px] "
       )}
     >
-      <Text className="mt-5  w-[90%] text-h6 text-white">{message}</Text>
+      <Text className="mt-3  w-[90%] text-h6 text-white">{message}</Text>
 
       <TouchableOpacity onPress={handleHideToast}>
         <View>

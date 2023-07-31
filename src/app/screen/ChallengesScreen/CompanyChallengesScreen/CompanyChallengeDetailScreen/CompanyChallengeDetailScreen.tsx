@@ -240,13 +240,7 @@ const CompanyChallengeDetailScreen = ({
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-    // setShouldRefresh(false);
   }, []);
-
-  // useEffect(() => {
-  //   if (!isFocused || isFirstLoad) return;
-  //   setShouldRefresh(true);
-  // }, []);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -273,10 +267,6 @@ const CompanyChallengeDetailScreen = ({
               "Deleted Challenge successfully ! ",
           });
           navigation.navigate("CompanyChallengesScreen");
-
-          // setTimeout(() => {
-          //   setIsDeleteSuccess(true);
-          // }, 600);
         }
       })
       .catch((err) => {

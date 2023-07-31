@@ -3,55 +3,63 @@ import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
 
-import { IChallenge, IChallengeOwner } from "../../../types/challenge";
 import { getChallengeStatusColor } from "../../../utils/common";
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
-import { CompanyTag } from "./ChallengeCard";
-import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
+import { IChallengeCardProps, CompanyTag } from "./ChallengeCard";
 
-interface ICurrentUserChallengeCardProps {
-  item: IChallenge;
-  imageSrc: string | null | undefined;
-  navigation?: any;
-}
-
-const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
+const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   item,
   imageSrc,
+  isCompanyAccount,
   navigation,
+  handlePress,
+  isFromOtherUser = false,
 }) => {
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
   const companyName = challengeOwner.companyAccount && challengeOwner?.name;
 
-  const { getUserProfile } = useUserProfileStore();
-  const currentUser = getUserProfile();
+  const challengeStatus = item.status;
 
   const onPress = () => {
     if (navigation) {
-      // navigation.navigate("PersonalChallengeDetailScreen", {
-      //   challengeId: item.id,
-      // });
-      const action = StackActions.push("PersonalChallengeDetailScreen", {
+      if (isCompanyAccount && !isFromOtherUser) {
+        return navigation.navigate("CompanyChallengeDetailScreen", {
+          challengeId: item.id,
+        });
+      } else if (isFromOtherUser) {
+        if (companyName) {
+          const action = StackActions.push(
+            "OtherUserProfileChallengeDetailsScreen",
+            {
+              challengeId: item.id,
+              isCompanyAccount: true,
+            }
+          );
+          navigation.dispatch(action);
+          return;
+        }
+        const action = StackActions.push(
+          "OtherUserProfileChallengeDetailsScreen",
+          {
+            challengeId: item.id,
+          }
+        );
+
+        navigation.dispatch(action);
+        return;
+      }
+      navigation.navigate("PersonalChallengeDetailScreen", {
         challengeId: item.id,
       });
-      navigation.dispatch(action);
       return;
     }
+    if (handlePress) handlePress();
   };
-  // find participants status with current user
-  const isCurrentUserParticipant = item?.participants?.find(
-    (participant) => participant.id === currentUser?.id
-  );
-
-  const challengeStatus =
-    challengeOwner.id === currentUser?.id
-      ? item.status
-      : isCurrentUserParticipant?.challengeStatus;
 
   return (
     <TouchableOpacity
@@ -60,7 +68,7 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
       className={clsx("mb-5 w-full rounded-xl border border-gray-80 bg-white")}
     >
       <View className={clsx("relative w-full")}>
-        {companyName && (
+        {(isCompanyAccount || companyName) && (
           <View className={clsx("absolute top-6 z-10 flex w-full items-end")}>
             <CompanyTag companyName={companyName} />
           </View>
@@ -69,7 +77,6 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
-
           />
         )}
         <View
@@ -96,4 +103,4 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   );
 };
 
-export default CurrentUserChallengeCard;
+export default ChallengeCardCompany;

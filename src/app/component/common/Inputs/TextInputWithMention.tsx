@@ -109,7 +109,7 @@ const renderSuggestions: FC<IUserSuggestionProps> = ({
                     )}
                   </View>
                   <Text className="text-base font-semibold text-basic-black">
-                    {item.name}
+                    {item?.name} {item?.surname}
                   </Text>
                 </TouchableOpacity>
               );

@@ -6,18 +6,24 @@ import Empty from "../asset/emptyFollow.svg";
 import { useTranslation } from "react-i18next";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
-import { IUserData } from "apps/client/src/app/types/user";
+import { IUserData } from "../../../../../types/user";
 import clsx from "clsx";
 
 interface IFollowersProps {
   followers: IUserData[];
+  isRefreshing?: boolean;
+  getFollowerList?: () => void;
 }
 
-const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
+const Followers: FC<IFollowersProps> = ({
+  followers = [],
+  isRefreshing = false,
+  getFollowerList,
+}) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className=" flex-1 px-4 ">
+    <View className="flex-1 px-1 pl-4 ">
       {followers.length > 0 && (
         <FlatList
           data={followers}
@@ -56,6 +62,8 @@ const Followers: FC<IFollowersProps> = ({ followers = [] }) => {
               </TouchableOpacity>
             );
           }}
+          onRefresh={getFollowerList}
+          refreshing={isRefreshing}
           ListFooterComponent={<View className="h-20" />}
         />
       )}

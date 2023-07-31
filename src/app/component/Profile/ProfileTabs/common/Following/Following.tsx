@@ -10,13 +10,19 @@ import Empty from "../asset/emptyFollow.svg";
 import { useTranslation } from "react-i18next";
 interface IFollowingProps {
   following: IUserData[] | null;
+  isRefreshing?: boolean;
+  getFollowingList?: () => void;
 }
 
-const Following: FC<IFollowingProps> = ({ following = [] }) => {
+const Following: FC<IFollowingProps> = ({
+  following = [],
+  isRefreshing = false,
+  getFollowingList,
+}) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className=" flex-1  px-4 ">
+    <View className="flex-1 px-1 pl-4 ">
       {following && following.length > 0 && (
         <FlatList
           className="pt-4"
@@ -55,6 +61,8 @@ const Following: FC<IFollowingProps> = ({ following = [] }) => {
               </TouchableOpacity>
             );
           }}
+          onRefresh={getFollowingList}
+          refreshing={isRefreshing}
           ListFooterComponent={<View className="h-20" />}
         />
       )}

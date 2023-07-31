@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { SafeAreaView, View, Text, FlatList } from "react-native";
-import { useTranslation } from "react-i18next";
 
 import {
   createNativeStackNavigator,
@@ -10,8 +9,7 @@ import {
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import CompanyChallengeDetailScreen from "./CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
-import ShareIcon from "../../../../../assets/svg/share.svg";
-import ChallengeCard from "../../../component/Card/ChallengeCard/ChallengeCard";
+import ChallengeCardCompany from "../../../component/Card/ChallengeCard/ChallengeCardCompany";
 import { t } from "i18next";
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
@@ -24,7 +22,6 @@ import { sortChallengeByStatusFromResponse } from "../../../utils/common";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
-import Button from "../../../component/common/Buttons/Button";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -63,7 +60,6 @@ const CompanyChallenges = ({
 }: {
   navigation: CompanyChallengesScreenNavigationProp;
 }) => {
-  const { t } = useTranslation();
   const [companyChallengesList, setCompanyChallengesList] = useState<
     IChallenge[]
   >([]);
@@ -106,7 +102,7 @@ const CompanyChallenges = ({
               className="px-4 pt-4"
               data={companyChallengesList}
               renderItem={({ item }: { item: IChallenge }) => (
-                <ChallengeCard
+                <ChallengeCardCompany
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}

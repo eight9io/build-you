@@ -11,30 +11,20 @@ interface IPostAvatarProps {
 }
 
 const PostAvatar: React.FC<IPostAvatarProps> = ({ src }) => {
-  const newAvatarUrl = useMemo(() => {
-    let url: string | null | undefined;
-    if (src && !src.startsWith("http")) {
-      url = `https://buildyou-front.stg.startegois.com${src}`;
-    } else {
-      url = src;
-    }
-    return url;
-  }, [src]);
-
   return (
     <View className={clsx("flex flex-row items-center")}>
-      {newAvatarUrl && (
+      {src && (
         <View className={clsx("relative")}>
           <Image
-            key={`${newAvatarUrl}`}
+            key={`${src}`}
             className={clsx("h-[32px] w-[32px] rounded-full")}
             source={{
-              uri: newAvatarUrl,
+              uri: src,
             }}
           />
         </View>
       )}
-      {!newAvatarUrl && (
+      {!src && (
         <View className={clsx("z-10 h-[32px] w-[32px] rounded-full  bg-white")}>
           <DefaultAvatar />
         </View>

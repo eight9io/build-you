@@ -3,7 +3,6 @@ import { ILoginResponse, IToken } from "../types/auth";
 import httpInstance from "./http";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import { AxiosRequestConfig } from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AxiosRequestConfigExtends extends AxiosRequestConfig {
   _retry?: boolean;

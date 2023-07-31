@@ -324,6 +324,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     );
   }
 
+  console.log("challengeData", challengeData);
+
   return (
     <SafeAreaView>
       <ConfirmDialog
@@ -421,10 +423,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             isJoined={isJoined}
             isOtherUserProfile
             challengeData={challengeData}
-            refresh={getChallengeData}
             isChallengeCompleted={isChallengeCompleted}
           />
-          <DescriptionTab challengeData={challengeData} />
+          <DescriptionTab
+            challengeData={challengeData}
+            maxPepleCanJoin={challengeData?.maximumPeople}
+          />
           {(isCompanyAccount || challengeOwner?.companyAccount) && (
             <ParticipantsTab participant={participantList} />
           )}

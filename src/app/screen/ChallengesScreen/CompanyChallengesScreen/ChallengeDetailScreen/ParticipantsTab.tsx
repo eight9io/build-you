@@ -13,9 +13,13 @@ interface IParticipantsTabProps {
     name: string;
     challengeStatus?: string;
   }[];
+  maxPepleCanJoin?: number;
 }
 
-const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
+const ParticipantsTab: FC<IParticipantsTabProps> = ({
+  participant = [],
+  maxPepleCanJoin,
+}) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (

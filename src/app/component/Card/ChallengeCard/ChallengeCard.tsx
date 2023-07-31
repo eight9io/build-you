@@ -11,7 +11,7 @@ import BackSvg from "../../asset/back.svg";
 import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
 
-interface IChallengeCardProps {
+export interface IChallengeCardProps {
   item: IChallenge;
   isCompanyAccount?: boolean | undefined | null;
   imageSrc: string | null | undefined;
@@ -47,7 +47,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   handlePress,
   isFromOtherUser = false,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true);
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
@@ -66,8 +65,6 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
       : isCurrentUserParticipant?.challengeStatus;
 
   const onPress = () => {
-    // handlePress or navigation
-
     if (navigation) {
       if (isCompanyAccount && !isFromOtherUser) {
         return navigation.navigate("CompanyChallengeDetailScreen", {
@@ -119,22 +116,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
-            onLoadStart={() => setLoading(true)}
-            onLoadEnd={() => setLoading(false)}
-            onError={(err) => {
-              setLoading(false);
-            }}
           />
-        )}
-        {!imageSrc && (
-          <View className={clsx("aspect-square w-full rounded-t-xl")}>
-            <Image
-              className={clsx("aspect-square w-full rounded-t-xl")}
-              source={{
-                uri: `https://picsum.photos/400/600.webp?random=${item.id}`,
-              }}
-            />
-          </View>
         )}
         <View
           className={clsx(

@@ -26,6 +26,7 @@ import ChallengeCompanyDetailScreen from "../ChallengeDetailScreen/ChallengeComp
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { useTranslation } from "react-i18next";
+import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -52,7 +53,6 @@ export const RightCompanyChallengeDetailOptions: FC<
   setIsDeleteChallengeDialogVisible,
 }) => {
   const { t } = useTranslation();
-  const [isSharing, setIsSharing] = React.useState(false);
   const [
     isCompletedChallengeDialogVisible,
     setIsCompletedChallengeDialogVisible,
@@ -84,17 +84,8 @@ export const RightCompanyChallengeDetailOptions: FC<
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
-  // when sharing is available, we can share the image
   const onShare = async () => {
-    setIsSharing(true);
-    // try {
-    //   const fileUri = FileSystem.documentDirectory + 'test.png';
-    //   await FileSystem.downloadAsync(image.uri, fileUri);
-    //   await Sharing.shareAsync(fileUri);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    setIsSharing(false);
+    onShareChallengeLink(challengeData?.id);
   };
 
   const onCheckChallengeCompleted = () => {
@@ -249,13 +240,7 @@ const CompanyChallengeDetailScreen = ({
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-    // setShouldRefresh(false);
   }, []);
-
-  // useEffect(() => {
-  //   if (!isFocused || isFirstLoad) return;
-  //   setShouldRefresh(true);
-  // }, []);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -282,10 +267,6 @@ const CompanyChallengeDetailScreen = ({
               "Deleted Challenge successfully ! ",
           });
           navigation.navigate("CompanyChallengesScreen");
-
-          // setTimeout(() => {
-          //   setIsDeleteSuccess(true);
-          // }, 600);
         }
       })
       .catch((err) => {

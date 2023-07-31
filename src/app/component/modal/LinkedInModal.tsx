@@ -1,6 +1,7 @@
 import { Modal, View } from "react-native";
 import { FC, useState } from "react";
 import WebView from "react-native-webview";
+import uuid from "react-native-uuid";
 import { LINKEDIN_LOGIN } from "../../common/constants";
 import { getUrlParam } from "../../utils/common";
 import NavButton from "../common/Buttons/NavButton";
@@ -17,6 +18,9 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
   onLoginCancel,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
+  // Generate a random string for state param in linkedin authorization url
+  // This state is to prevent CSRF attack, read more at https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin%2Fcontext&view=li-lms-2022-07&tabs=HTTPS1#step-2-request-an-authorization-code
+  const authorizationState = uuid.v4();
   const handleNavigationStateChange = async (event: any) => {
     const { url } = event;
     const callbackUrl = process.env.EXPO_LINKEDIN_REDIRECT_URI + "?code";
@@ -26,6 +30,9 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
     else if (url.startsWith(callbackUrl)) {
       const code = getUrlParam(url, "code") as string; // Get authorization code from linkedin
       if (!code) throw new Error("Cannot get authorization code from linkedin");
+      const state = getUrlParam(url, "state") as string; // Get state from linkedin
+      if (!state || state !== authorizationState)
+        throw new Error("Authorization state does not match");
       onLoginSuccess(code);
     }
   };
@@ -53,7 +60,7 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
       >
         <WebView
           source={{
-            uri: `${LINKEDIN_LOGIN.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.EXPO_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.EXPO_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress`,
+            uri: `${LINKEDIN_LOGIN.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.EXPO_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.EXPO_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress&state=${authorizationState}`,
           }}
           contentMode="mobile"
           automaticallyAdjustContentInsets={false}

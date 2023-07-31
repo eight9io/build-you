@@ -566,6 +566,8 @@ PODS:
   - RNScreens (3.20.0):
     - React-Core
     - React-RCTImage
+  - RNShare (9.2.3):
+    - React-Core
   - RNSVG (13.4.0):
     - React-Core
   - SDWebImage (5.15.8):
@@ -657,6 +659,7 @@ DEPENDENCIES:
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -834,6 +837,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   UMAppLoader:
@@ -935,6 +940,7 @@ SPEC CHECKSUMS:
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNShare: da6d90b6dc332f51f86498041d6e34211f96b630
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
   SDWebImageAVIFCoder: 4aeea8fdf65af5c18525ecb5bdd8b8ed9bb45019
@@ -945,4 +951,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a8ff88e42fd13fdab441a53d9c9a5461d9ed7e52
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.12.0

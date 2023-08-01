@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, SafeAreaView } from "react-native";
 import {
   NativeStackNavigationProp,
@@ -6,18 +6,22 @@ import {
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
+
+import { useUserProfileStore } from "../../store/user-store";
 import { useAuthStore } from "../../store/auth-store";
-import Button from "../../component/common/Buttons/Button";
-import { ScrollView } from "react-native-gesture-handler";
-import AppTitle from "../../component/common/AppTitle";
-import NavButton from "../../component/common/Buttons/NavButton";
+import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
+
 import Settings from "../../component/Settings";
+import AppTitle from "../../component/common/AppTitle";
+import Button from "../../component/common/Buttons/Button";
+import NavButton from "../../component/common/Buttons/NavButton";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen";
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
-import { useUserProfileStore } from "../../store/user-store";
-import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -30,25 +34,40 @@ export type SetingsScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
+  const [isShowLogoutModal, setIsShowLogoutModal] = useState<boolean>(false);
   const { logout } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
 
   const { t } = useTranslation();
 
   const handleLogout = async () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "IntroScreen" }],
-      })
-    );
-    setLastNotiIdToLocalStorage("");
-    logout();
-    userProfileStoreOnLogout();
+    setIsShowLogoutModal(false);
+
+    setTimeout(() => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "IntroScreen" }],
+        })
+      );
+      setLastNotiIdToLocalStorage("");
+      logout();
+      userProfileStoreOnLogout();
+    }, 500);
   };
 
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white">
+      <ConfirmDialog
+        isVisible={isShowLogoutModal}
+        onConfirm={handleLogout}
+        onClosed={() => setIsShowLogoutModal(false)}
+        title={t("dialog.logout.title") as string}
+        confirmButtonLabel={`${t("dialog.logout.title")}`}
+        confirmButtonColor="#FF4949"
+        closeButtonLabel={`${t("dialog.logout.cancel")}`}
+        description={t("dialog.logout.description") as string}
+      />
       <ScrollView>
         <View className="flex flex-1 flex-col bg-gray-veryLight">
           <Settings navigation={navigation} />
@@ -58,7 +77,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
                 title={t("user_settings_screen.logout")}
                 containerClassName="bg-gray-medium flex-1"
                 textClassName="text-white text-md leading-6"
-                onPress={() => handleLogout()}
+                onPress={() => setIsShowLogoutModal(true)}
               />
             </View>
           </View>

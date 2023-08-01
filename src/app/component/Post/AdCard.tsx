@@ -76,8 +76,8 @@ const AdCard: FC<IAdCardProps> = ({ item }) => {
         await InAppBrowser.open(url, {
           // iOS Properties
           dismissButtonStyle: "cancel",
-          preferredBarTintColor: "#FF9C54",
-          preferredControlTintColor: "white",
+          preferredBarTintColor: "white",
+          preferredControlTintColor: "black",
           readerMode: false,
           animated: true,
           modalPresentationStyle: "fullScreen",
@@ -86,7 +86,7 @@ const AdCard: FC<IAdCardProps> = ({ item }) => {
           enableBarCollapsing: false,
           // Android Properties
           showTitle: true,
-          toolbarColor: "#FF9C54",
+          toolbarColor: "white",
           secondaryToolbarColor: "black",
           navigationBarColor: "black",
           navigationBarDividerColor: "white",

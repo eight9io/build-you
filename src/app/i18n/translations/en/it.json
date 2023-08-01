@@ -393,7 +393,9 @@
     "content_4": "to add employee to your company."
   },
   "image_picker": {
-    "image_permission_required": "Permission denied. Please enable it your phone settings."
+    "image_permission_required": "Permission denied. Please enable it your phone settings.",
+    "upload_a_video": "Upload a video",
+    "upload_a_video_waiting": "Please wait until the video is uploaded."
   },
   "search_screen.no_result": "No user found",
   "edit_company_profile_screen": {

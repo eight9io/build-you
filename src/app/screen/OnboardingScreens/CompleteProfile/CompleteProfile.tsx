@@ -19,6 +19,7 @@ import Header from "../../../component/common/Header";
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useAuthStore } from "../../../store/auth-store";
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -98,6 +99,8 @@ const CompleteProfileFinishScreen = ({
 };
 
 const CompleteProfileScreen = () => {
+  const { logout } = useAuthStore();
+
   return (
     <CompleteProfileStack.Navigator
       screenOptions={{
@@ -109,10 +112,20 @@ const CompleteProfileScreen = () => {
       <CompleteProfileStack.Screen
         name="CompleteProfileStep1Screen"
         component={CompleteProfileScreen1}
-        options={{
+        options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => <AppTitle title="Complete profile" />,
-        }}
+          headerLeft: (props) => (
+            <NavButton
+              text="Logout"
+              withBackIcon={true}
+              onPress={() => {
+                logout();
+                navigation.navigate("IntroScreen");
+              }}
+            />
+          ),
+        })}
       />
       <CompleteProfileStack.Screen
         name="CompleteProfileStep2Screen"

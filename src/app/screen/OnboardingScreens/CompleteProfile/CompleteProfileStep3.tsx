@@ -119,11 +119,10 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         </View>
         <View className=" px-4 py-6 ">
           <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-            How do you define yourself as competent?
+            {t("onboarding_screens.screen_3.how_you_define")}
           </Text>
           <Text className="pt-2 text-center text-lg font-normal leading-6 text-gray-dark">
-            Choose at least 3 and up to a maximum of 10 hard skills to better
-            tell the community about yourself
+            {t("onboarding_screens.screen_3.choose_least_3")}
           </Text>
         </View>
 
@@ -154,7 +153,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
           />
           {numberOfSkillError && (
             <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
-              Please select at least 3 skills and maximum of 10 skills
+              {t("onboarding_screens.screen_3.choose_least_3_error")}
             </Text>
           )}
         </View>

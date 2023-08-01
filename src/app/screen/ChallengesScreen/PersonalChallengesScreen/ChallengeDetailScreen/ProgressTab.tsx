@@ -37,6 +37,7 @@ interface IProgressTabProps {
 const MAX_PROGRESS_VALUE = 5;
 
 const RateChallengeSection = ({ challengeId }) => {
+  const { t } = useTranslation();
   const [ratedValue, setRatedValue] = useState<number>(0);
   const [isRated, setIsRated] = useState<boolean>(false);
   const [showComfirmModal, setShowComfirmModal] = useState<boolean>(false);
@@ -94,21 +95,35 @@ const RateChallengeSection = ({ challengeId }) => {
         isVisible={showComfirmModal}
         onClosed={onCanceled}
         onConfirm={handleConfirm}
-        title="Do you want to confirm your rating?"
-        description="You cannot undo this action."
+        title={
+          t("challenge_progress_tab.do_you_want_to_confirm_rating") ||
+          "Do you want to confirm your rating?"
+        }
+        description={
+          t("challenge_progress_tab.cannot_undo") ||
+          "You cannot undo this action"
+        }
       />
       <ConfirmDialog
         isVisible={isRatingSuccess}
         onConfirm={onClosed}
-        title="Your rating has been saved!"
+        title={
+          t("challenge_progress_tab.rating_saved") ||
+          "Your rating has been saved"
+        }
       />
       <ConfirmDialog
         isVisible={isRatingError}
         onClosed={onCanceled}
-        title="Something went wrong!"
+        title={
+          t("error_general_message") ||
+          "Something went wrong. Please try again later."
+        }
       />
 
-      <Text className="text-lg font-medium">Rate the challenge</Text>
+      <Text className="text-lg font-medium">
+        {t("challenge_progress_tab.rate_the_challenge") || "Rate the challenge"}
+      </Text>
       <View className="flex flex-row items-center">
         {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
           <TouchableOpacity

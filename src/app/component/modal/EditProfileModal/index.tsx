@@ -71,8 +71,8 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
       <SafeAreaView className="bg-white">
         <View className="mt-4 flex h-full  rounded-t-xl bg-white">
           <Header
-            title="Edit profile"
-            rightBtn="SAVE"
+            title={t("edit_profile_modal.title") || "Edit Profile"}
+            rightBtn={t("save") || "Save"}
             leftBtn={<CloseIcon />}
             onLeftBtnPress={onClose}
           />
@@ -87,8 +87,11 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col gap-1">
                     <TextInput
-                      label="First Name"
-                      placeholder={"Enter your first name"}
+                      label={t("edit_profile_modal.first_name") || "First Name"}
+                      placeholder={
+                        t("edit_profile_modal.first_name_placeholder") ||
+                        "Enter your first name"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -108,8 +111,11 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col gap-1">
                     <TextInput
-                      label="Last Name"
-                      placeholder={"Enter your last name"}
+                      label={t("edit_profile_modal.last_name") || "Last Name"}
+                      placeholder={
+                        t("edit_profile_modal.last_name_placeholder") ||
+                        "Enter your last name"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -129,8 +135,11 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col gap-1">
                     <TextInput
-                      label="Birthday"
-                      placeholder={"Enter your birth"}
+                      label={t("edit_profile_modal.birthday") || "Birthday"}
+                      placeholder={
+                        t("edit_profile_modal.birthday_placeholder") ||
+                        "Enter your birth"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       rightIcon={<CalendarIcon />}
                       onBlur={onBlur}
@@ -155,8 +164,11 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col gap-1">
                     <TextInput
-                      label="Occupation"
-                      placeholder={"Enter your occupation"}
+                      label={t("edit_profile_modal.occupation") || "Occupation"}
+                      placeholder={
+                        t("edit_profile_modal.occupation_placeholder") ||
+                        "Enter your occupation"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -177,8 +189,11 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col gap-1">
                     <TextInput
-                      label="Biography"
-                      placeholder={"Enter your biography"}
+                      label={t("edit_profile_modal.biography") || "Biography"}
+                      placeholder={
+                        t("edit_profile_modal.biography_placeholder") ||
+                        "Enter your biography"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -201,7 +216,7 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
             }}
           />
           <SelectPicker
-            title="Occupation"
+            title={t("edit_profile_modal.occupation") || "Occupation"}
             show={showOccupationPicker}
             data={MOCK_OCCUPATION_SELECT}
             selectedIndex={selectedOccupationIndex}

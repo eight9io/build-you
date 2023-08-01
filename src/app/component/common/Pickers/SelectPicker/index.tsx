@@ -7,6 +7,7 @@ import Button from "../../Buttons/Button";
 import BottomSheet2 from "../../BottomSheet/BottomSheet";
 import { FlatList } from "react-native-gesture-handler";
 import BottomSheetOption from "../../Buttons/BottomSheetOption";
+import { useTranslation } from "react-i18next";
 
 interface ISelectPickerProps {
   show: boolean;
@@ -26,6 +27,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
   onCancel,
   onLoadMore,
 }) => {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<number>(0);
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
             />
             <View className="absolute bottom-[-20px] h-12 w-full bg-white px-4">
               <Button
-                title={"Save"}
+                title={t('save') || "Save"}
                 onPress={() => onSelect(selected)}
                 containerClassName="bg-primary-default flex-1"
                 textClassName="text-white"

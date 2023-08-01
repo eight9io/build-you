@@ -124,8 +124,8 @@ const LikeButton: FC<ILikeButtonProps> = ({
         {shouldOptimisticUpdate && (isLiked ? <FilledThumbUP /> : <ThumbUp />)}
         <Text className={clsx("text-md font-normal text-gray-dark ")}>
           {shouldOptimisticUpdate
-            ? `${tempLikes} ${tempLikes > 1 ? "likes" : "like"}`
-            : `${numberOfLikes} ${numberOfLikes > 1 ? "likes" : "like"}`}
+            ? t("likeWithCount", { count: tempLikes })
+            : t("likeWithCount", { count: numberOfLikes })}
         </Text>
       </View>
     </TouchableHighlight>

@@ -1,3 +1,5 @@
+import i18n from "../i18n/i18n";
+
 export const getTimeDiffToNow = (createdAt: string) => {
   const createdDate = new Date(createdAt);
   if (isNaN(createdDate.getTime())) {
@@ -11,14 +13,13 @@ export const getTimeDiffToNow = (createdAt: string) => {
   const hoursElapsed = Math.floor(minutesElapsed / 60);
   const daysElapsed = Math.floor(hoursElapsed / 24);
 
-  // TODO: use i18n
   if (daysElapsed >= 7) {
     return createdDate.toLocaleDateString(); // Returns the formatted date if it's more than 7 days ago
   } else if (daysElapsed >= 1) {
-    return daysElapsed + " days ago"; // Returns the number of days ago if it's less than 7 days
+    return i18n.t("days_ago", { numOfDays: daysElapsed }); // Returns the number of days ago if it's less than 7 days
   } else if (hoursElapsed >= 1) {
-    return hoursElapsed + " hours ago"; // Returns the number of hours ago if it's less than a day
+    return i18n.t("hours_ago", { numOfHours: hoursElapsed }); // Returns the number of hours ago if it's less than a day
   } else {
-    return minutesElapsed + " minutes ago"; // Returns the number of minutes ago if it's less than an hour
+    return i18n.t("minutes_ago", { numOfMinutes: minutesElapsed }); // Returns the number of minutes ago if it's less than an hour
   }
 };

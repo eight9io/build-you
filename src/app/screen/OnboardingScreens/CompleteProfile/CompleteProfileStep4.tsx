@@ -62,6 +62,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   changeSkillValue,
   skillValueError,
 }) => {
+  const { t } = useTranslation();
   const randomId = Math.random().toString();
   return (
     <View className="flex w-full flex-col">
@@ -91,7 +92,8 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
         <View className="flex flex-row items-center">
           <WarningSvg />
           <Text className="pl-1 text-sm text-red-500">
-            Please rate from 1 to 5.
+            {t("form_onboarding.screen_4.error_rate") ||
+              "Please rate from 1 to 5"}
           </Text>
         </View>
       )}
@@ -221,9 +223,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
     if (!userData?.id) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
-        button: "OK",
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
+        button: t("dialog.ok"),
       });
       return;
     }
@@ -245,8 +248,9 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       navigation.navigate("CompleteProfileFinishScreen");
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     }
   };
@@ -274,17 +278,19 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         </View>
         <View className="px-16 py-6">
           <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-            {t("onboarding_screens.screen_4.select_soft_skills")}
+            {t("form_onboarding.screen_4.title") ||
+              "Select the soft skills you are already competent on"}
           </Text>
           <Text className="pt-2 text-center text-h6 font-normal leading-5 text-gray-dark">
-            {t("onboarding_screens.screen_4.select_least_3")}
+            {t("form_onboarding.screen_4.sub_title") ||
+              "Please select at least 3 different soft skills and rate it from 1 to 5."}
           </Text>
         </View>
 
         <View className="flex w-full pt-5 ">
           <View className="flex flex-col px-5">
             <Text className="pb-2 text-md font-semibold text-primary-default">
-              {t("onboarding_screens.screen_4.soft_skills")}
+              {t("form_onboarding.screen_4.soft_skills") || "Soft skills"}
             </Text>
 
             <DropDownPicker
@@ -296,7 +302,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               setItems={setFetchedSoftSkills}
               placeholder={
                 selectedCompetencedSkill.length == 0
-                  ? `${t("onboarding_screens.screen_4.select_a_soft_skill")}`
+                  ? t("form_onboarding.screen_4.select_soft_skill") ||
+                    "Select a soft skill"
                   : `${selectedCompetencedSkill.length}/${fetchedSoftSkills.length}`
               }
               style={{
@@ -369,7 +376,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 <View className="flex flex-row items-center justify-start pt-2">
                   <WarningSvg />
                   <Text className="pl-1 text-sm font-normal leading-5 text-red-500">
-                    {t("onboarding_screens.screen_4.please_select")}
+                    {t("form_onboarding.screen_4.error") ||
+                      "Please select at least 3 soft skills."}
                   </Text>
                 </View>
               )}
@@ -385,7 +393,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         </View>
         {!openDropdown && (
           <Button
-            title={`${t("onboarding_screens.screen_4.next")}`}
+            title={t("button.next") || "Next"}
             containerClassName=" bg-primary-default my-5 mx-5 "
             textClassName="text-white text-md leading-6"
             onPress={() => handleSubmitForm()}

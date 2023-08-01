@@ -2,9 +2,7 @@ import * as ExpoImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 import { serviceUpdateAvatar, serviceUpdateCover } from "../service/profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-
-import { useTranslation } from "react-i18next";
-
+import i18n from "../i18n/i18n";
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
   base64?: boolean;
@@ -15,7 +13,6 @@ interface PickImageOptions {
 
 export const getImageFromUserDevice = (props: PickImageOptions) => {
   const { allowsMultipleSelection, base64, showPermissionRequest } = props;
-  const { t } = useTranslation();
   return async () => {
     const { status } =
       await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -76,9 +73,11 @@ export const uploadNewCover = async (image: string) => {
     })
     .catch((_) => {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Upload cover failed. Please try again later.",
-        button: "OK",
+        title: i18n.t("dialog.err_title"),
+        message:
+          i18n.t("upload_cover_failed") ||
+          "Upload cover failed. Please try again later.",
+        button: i18n.t("dialog.ok"),
       });
       return undefined;
     });

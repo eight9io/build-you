@@ -13,8 +13,13 @@ export const CreateProgressValidationSchema = () => {
       .required(t("new_progress_modal.caption_required") as string),
     media: yup
       .mixed()
-      .test("required", "Please upload images or video", (value) => {
-        return value != null;
-      }),
+      .test(
+        "required",
+        t("new_progress_modal.image_required") ||
+          "Please upload images or video",
+        (value) => {
+          return value != null;
+        }
+      ),
   });
 };

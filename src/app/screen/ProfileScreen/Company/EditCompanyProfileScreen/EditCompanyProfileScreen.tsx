@@ -89,8 +89,15 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col">
                     <TextInput
-                      label="Company Name"
-                      placeholder={"Enter your first name"}
+                      label={
+                        t("edit_company_profile_screen.company_name") ||
+                        "Company Name"
+                      }
+                      placeholder={
+                        t(
+                          "edit_company_profile_screen.company_name_placeholder"
+                        ) || "Enter your company name"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -116,8 +123,15 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col">
                     <TextInput
-                      label="Biography"
-                      placeholder={"Your biography"}
+                      label={
+                        t("edit_company_profile_screen.biography_name") ||
+                        "Biography"
+                      }
+                      placeholder={
+                        t(
+                          "edit_company_profile_screen.biography_name_placeholder"
+                        ) || "Your biography"
+                      }
                       placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -132,7 +146,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
             </View>
 
             <Button
-              title="Update"
+              title={t("button.update") || "Update"}
               containerClassName=" bg-primary-default my-10"
               textClassName="text-white text-md leading-6"
               onPress={handleSubmit(onSubmit)}

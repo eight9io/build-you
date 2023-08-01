@@ -207,7 +207,7 @@ export const RootNavigation = () => {
               headerTitle: () => <AppTitle title="Edit profile" />,
               headerLeft: () => (
                 <NavButton
-                  text="Back"
+                  text={t("button.back") || "Back"}
                   onPress={() => navigation.goBack()}
                   withBackIcon
                 />
@@ -249,7 +249,7 @@ export const RootNavigation = () => {
 
               headerLeft: (props) => (
                 <NavButton
-                  text={t("button.back")}
+                  text={t("button.back") || "Back"}
                   onPress={() => navigation.navigate("IntroScreen")}
                   withBackIcon
                 />
@@ -267,7 +267,7 @@ export const RootNavigation = () => {
 
               headerLeft: () => (
                 <NavButton
-                  text={t("button.back")}
+                  text={t("button.back") || "Back"}
                   onPress={() => navigation.goBack()}
                   withBackIcon
                 />
@@ -286,7 +286,7 @@ export const RootNavigation = () => {
 
               headerLeft: () => (
                 <NavButton
-                  text={t("button.back")}
+                  text={t("button.back") || "Back"}
                   onPress={() => navigation.goBack()}
                   withBackIcon
                 />

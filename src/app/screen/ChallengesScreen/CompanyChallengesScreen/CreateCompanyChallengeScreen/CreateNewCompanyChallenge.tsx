@@ -138,8 +138,10 @@ export const CreateCompanyChallengeScreen: FC<
             `/challenge/delete/${challengeCreateResponse.data.id}`
           );
           GlobalDialogController.showModal({
-            title: "Error",
-            message: t("errorMessage:500") || "",
+            title: t("dialog.err_title"),
+            message:
+              t("error_general_message") ||
+              "Something went wrong. Please try again later!",
           });
         }
         setIsLoading(false);
@@ -149,8 +151,10 @@ export const CreateCompanyChallengeScreen: FC<
     } catch (error) {
       setIsLoading(false);
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") || "",
+        title: t("dialog.err_title"),
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
       });
     }
   };
@@ -204,25 +208,30 @@ export const CreateCompanyChallengeScreen: FC<
       {isLoading && <Spinner visible={isLoading} />}
 
       <ConfirmDialog
-        title={isRequestSuccess ? "Success" : "Error"}
+        title={
+          isRequestSuccess
+            ? t("dialog.success_title") || "Success"
+            : t("dialog.err_title") || "Error"
+        }
         description={
           isRequestSuccess
-            ? "Your challenge has been created successfully"
-            : "Something went wrong. Please try again later."
+            ? t("dialog.create_challenge_success") ||
+              "Your challenge has been created successfully !"
+            : t("error_general_message") ||
+              "Something went wrong. Please try again later."
         }
         isVisible={isShowModal}
         onClosed={() => handleCloseModal(newChallengeId)}
-        closeButtonLabel="Got it"
+        closeButtonLabel={t("dialog.got_it") || "Got it"}
       />
 
       <KeyboardAwareScrollView extraHeight={150}>
         <View className=" flex h-full  rounded-t-xl bg-white">
           <ScrollView showsVerticalScrollIndicator>
             <View className="mb-10 mt-2 flex flex-col px-5">
-              {/* TODO translate */}
               <Text className="text-md font-normal leading-5 text-gray-dark">
-                Create a new challenge for yourself with a concrete goal and
-                time to reach it.{" "}
+                {t("new_challenge_screen.description") ||
+                  "Create a new challenge for yourself with a concrete goal and time to reach it."}{" "}
               </Text>
               <View className="pt-5">
                 <Controller
@@ -374,13 +383,13 @@ export const CreateCompanyChallengeScreen: FC<
 
               <View className="flex flex-col justify-start pt-5">
                 <CustomSwitch
-                  textDisable="Private"
-                  textEnable="Public"
+                  textDisable={t("private") || "Private"}
+                  textEnable={t("public") || "Public"}
                   setValue={setValue}
                 />
                 <Text className="pt-2 text-sm font-normal leading-4 text-gray-dark ">
-                  Everyone can join your public challenge while only user from
-                  your company can join your private challenge.
+                  {t("new_challenge_screen.challenge_status_description") ||
+                    "Everyone can join your public challenge while only user from your company can join your private challenge."}
                 </Text>
               </View>
 

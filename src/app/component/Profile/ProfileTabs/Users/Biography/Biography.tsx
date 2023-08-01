@@ -105,7 +105,9 @@ const Biography = ({ userProfile }: IBiographyProps) => {
           </View>
         )}
         <Text className={clsx("text-h6 text-gray-dark")}>
-          {bio ? bio : "No biography yet"}
+          {bio
+            ? bio
+            : t("biography_tab.no_biography") || "No biography yet"}
         </Text>
         {hardSkill && (
           <View className="align-center mt-3 flex-row flex-wrap  ">

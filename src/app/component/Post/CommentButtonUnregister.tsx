@@ -5,8 +5,10 @@ import { clsx } from "clsx";
 import CommentSvg from "./asset/comment.svg";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/navigation.type";
+import { useTranslation } from "react-i18next";
 
 const CommentButtonUnregister = () => {
+  const { t } = useTranslation();
   const numberOfComments = Math.floor(Math.random() * 100);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -27,7 +29,7 @@ const CommentButtonUnregister = () => {
       >
         <CommentSvg />
         <Text className={clsx("text-md font-normal text-gray-dark ")}>
-          {numberOfComments} comment{numberOfComments > 1 && "s"}
+          {t("commentWithCount", { count: numberOfComments })}
         </Text>
       </View>
     </TouchableHighlight>

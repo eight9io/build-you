@@ -80,7 +80,7 @@ export const HomeFeed = () => {
       })
       .catch((err) => {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             t("error_general_message") ||
             "Something went wrong. Please try again later!",
@@ -189,7 +189,7 @@ export const HomeFeedUnregister = () => {
       })
       .catch((err) => {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             t("error_general_message") ||
             "Something went wrong. Please try again later!",
@@ -275,7 +275,9 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => (
-            <Text className="text-lg font-semibold">Search User</Text>
+            <Text className="text-lg font-semibold">
+              {t("main_search_screen.search") || "Search user"}
+            </Text>
           ),
           headerSearchBarOptions: {
             hideNavigationBar: false,

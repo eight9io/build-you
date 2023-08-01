@@ -119,10 +119,12 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         </View>
         <View className=" px-4 py-6 ">
           <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-            {t("onboarding_screens.screen_3.how_you_define")}
+            {t("form_onboarding.screen_3.title") ||
+              "How do you define yourself as competent?"}
           </Text>
           <Text className="pt-2 text-center text-lg font-normal leading-6 text-gray-dark">
-            {t("onboarding_screens.screen_3.choose_least_3")}
+            {t("form_onboarding.screen_3.sub_title") ||
+              "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself"}
           </Text>
         </View>
 
@@ -153,12 +155,13 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
           />
           {numberOfSkillError && (
             <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
-              {t("onboarding_screens.screen_3.choose_least_3_error")}
+              {t("form_onboarding.screen_3.error") ||
+                "Please select at least 3 hard skills and maximum of 10 skills"}
             </Text>
           )}
         </View>
         <Button
-          title="Next"
+          title={t("button.next") || "Next"}
           containerClassName="flex-1 bg-primary-default my-5 mx-5"
           textClassName="text-white text-md leading-6"
           onPress={() =>

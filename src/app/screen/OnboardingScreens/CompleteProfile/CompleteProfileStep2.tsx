@@ -25,10 +25,10 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
+  const { t } = useTranslation();
   const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
 
   const { setBiography, setVideo } = useCompleteProfileStore();
-  const { t } = useTranslation();
 
   const {
     control,
@@ -76,7 +76,8 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
         <View className="flex flex-col items-center justify-center  pt-6">
           <View className="flex w-64 ">
             <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-              {t("onboarding_screens.screen_2.tell_something") as string}
+              {t("form_onboarding.screen_2.title") ||
+                "Tell the others something about you"}
             </Text>
           </View>
         </View>
@@ -90,8 +91,13 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
               render={({ field: { onChange, onBlur, value } }) => (
                 <View className="flex flex-col">
                   <TextInput
-                    label="Biography"
-                    placeholder={"Your biography"}
+                    label={
+                      t("form_onboarding.screen_2.biography") || "Biography"
+                    }
+                    placeholder={
+                      t("form_onboarding.screen_2.your_biography") ||
+                      "Your biography"
+                    }
                     placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -119,7 +125,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
           </View>
 
           <Button
-            title="Next"
+            title={t("button.next") || "Next"}
             containerClassName="h-12 w-full bg-primary-default my-5 "
             textClassName="text-white text-md leading-6"
             onPress={handleSubmit(handleSubmitForm)}

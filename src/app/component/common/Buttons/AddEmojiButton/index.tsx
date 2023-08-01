@@ -5,6 +5,7 @@ import clsx from "clsx";
 import Button from "../Button";
 import AddEmojiIcon from "../asset/add-emoji.svg";
 import WarningSvg from "../../../asset/warning.svg";
+import { useTranslation } from "react-i18next";
 
 interface IAddEmojiButtonProps {
   selectedEmoji: string | null;
@@ -44,10 +45,11 @@ const AddEmojiButton: React.FC<IAddEmojiButtonProps> = ({
   triggerFunction,
   selectEmojiError,
 }) => {
+  const { t } = useTranslation();
   return (
     <View className={clsx("flex h-12 w-full flex-row items-center")}>
       <Text className={clsx("text-md font-semibold text-primary-default")}>
-        Emoji
+        {t("emoji") || "Emoji"}
       </Text>
       <View className="relativeflex flex-1 flex-col items-start pl-4">
         <View>
@@ -57,7 +59,7 @@ const AddEmojiButton: React.FC<IAddEmojiButtonProps> = ({
           <View className="absolute bottom-[-20px] left-4 flex flex-row items-center justify-center">
             <WarningSvg />
             <Text className="pl-1 text-sm text-red-500">
-              Please select an emoji
+              {t("emoji_required") || "Please select an emoji"}
             </Text>
           </View>
         )}

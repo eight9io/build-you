@@ -20,6 +20,7 @@ import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "../../../store/auth-store";
+import { useTranslation } from "react-i18next";
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -100,7 +101,8 @@ const CompleteProfileFinishScreen = ({
 
 const CompleteProfileScreen = () => {
   const { logout } = useAuthStore();
-
+  const { t } = useTranslation();
+  
   return (
     <CompleteProfileStack.Navigator
       screenOptions={{
@@ -136,7 +138,7 @@ const CompleteProfileScreen = () => {
 
           headerLeft: (props) => (
             <NavButton
-              text="Back"
+              text={t("button.back") || "Back"}
               withBackIcon={true}
               onPress={() => navigation.navigate("CompleteProfileStep1Screen")}
             />
@@ -144,7 +146,7 @@ const CompleteProfileScreen = () => {
 
           headerRight: (props) => (
             <NavButton
-              text="Skip"
+              text={t("button.skip") || "Skip"}
               withIcon={false}
               onPress={() => navigation.navigate("CompleteProfileStep3Screen")}
             />
@@ -160,7 +162,7 @@ const CompleteProfileScreen = () => {
 
           headerLeft: (props) => (
             <NavButton
-              text="Back"
+              text={t("button.back") || "Back"}
               withBackIcon={true}
               onPress={() => navigation.goBack()}
             />
@@ -176,7 +178,7 @@ const CompleteProfileScreen = () => {
 
           headerLeft: (props) => (
             <NavButton
-              text="Back"
+              text={t("button.back") || "Back"}
               withBackIcon={true}
               onPress={() => navigation.goBack()}
             />

@@ -80,8 +80,8 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       })
       .catch((_) => {
         GlobalDialogController.showModal({
-          title: "Error",
-          message: "Something went wrong. Please try again later.",
+          title: t("dialog.err_title"),
+          message: t("errorMessage:500"),
         });
       });
 
@@ -114,14 +114,15 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
             setSelectEmojiError={setSelectEmojiError}
           />
           <Header
-            title="Add skill"
+            title={t("add_skill_modal.title") || "Add skill"}
             leftBtn={<Close fill={"black"} />}
             onLeftBtnPress={onCloseAddSkillModal}
           />
           <View className="px-4">
             <View className="py-4">
               <Text className="text-md text-gray-dark">
-                Select the emoji and enter the skill name
+                {t("add_skill_modal.description") ||
+                  "Select the emoji and enter the skill name"}
               </Text>
             </View>
 
@@ -136,7 +137,10 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
               <InlineTextInput
                 title="Skill"
                 containerClassName="pl-6"
-                placeholder="Enter your skill name"
+                placeholder={
+                  t("add_skill_modal.enter_skill_name") ||
+                  "Enter your skill name"
+                }
                 control={control}
                 errors={errors}
                 showError={skillNameError}
@@ -146,7 +150,7 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
 
           <View className="absolute bottom-12 left-0 h-12 w-full px-4">
             <Button
-              title="Save"
+              title={t("save") || "Save"}
               containerClassName="bg-primary-default flex-1"
               textClassName="text-white"
               onPress={handleSave}

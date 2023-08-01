@@ -166,8 +166,10 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             }
           } catch (err) {
             GlobalDialogController.showModal({
-              title: "Error",
-              message: "Something went wrong. Please try again later!",
+              title: t("dialog.err_title"),
+              message:
+                (t("error_general_message") as string) ||
+                "Something went wrong",
             });
           }
         };
@@ -229,7 +231,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
-          title: "Maximum people reached",
+          title: t("maximum_participants_reached"),
           message:
             t("dialog.err_max_join") ||
             "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
@@ -237,8 +239,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         return;
       }
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     }
   };
@@ -254,8 +257,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       getChallengeData();
     } catch (err) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     }
   };
@@ -334,18 +338,27 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     <SafeAreaView>
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
-        title="Delete Challenge"
-        description="Are you sure you want to delete this challenge?"
-        confirmButtonLabel="Delete"
-        closeButtonLabel="Cancel"
+        title={t("dialog.delete_challenge.title") || "Delete Challenge"}
+        description={
+          t("dialog.delete_challenge.description") ||
+          "Are you sure you want to delete this challenge?"
+        }
+        confirmButtonLabel={t("dialog.delete") || "Delete"}
+        closeButtonLabel={t("dialog.cancel") || "Cancel"}
         onConfirm={handleDeleteChallenge}
         onClosed={() => setIsDeleteChallengeDialogVisible(false)}
       />
       <ConfirmDialog
         isVisible={isDeleteSuccess}
-        title="Challenge Deleted"
-        description="Challenge has been deleted successfully."
-        confirmButtonLabel="Got it"
+        title={
+          t("dialog.delete_challenge.delete_success_title") ||
+          "Challenge Deleted"
+        }
+        description={
+          t("dialog.delete_challenge.delete_success_description") ||
+          "Challenge has been deleted successfully."
+        }
+        confirmButtonLabel={t("dialog.got_it") || "Got it"}
         onConfirm={() => {
           setIsDeleteSuccess(false);
           navigation.goBack();
@@ -353,13 +366,14 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       />
       <ConfirmDialog
         isVisible={isDeleteError}
-        title="Something went wrong"
-        description="Please try again later."
-        confirmButtonLabel="Close"
+        title={t("dialog.err_title") || "Error"}
+        description={t("error_general_message") || "Something went wrong"}
+        confirmButtonLabel={t("dialog.close") || "Close"}
         onConfirm={() => {
           setIsDeleteError(false);
         }}
       />
+
       <View className="flex h-full flex-col bg-white pt-4">
         <View className="flex flex-row items-center justify-between px-4 pb-3">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">

@@ -1,8 +1,9 @@
 import jwt_decode from "jwt-decode";
+import { AxiosRequestConfig } from "axios";
 import { ILoginResponse, IToken } from "../types/auth";
 import httpInstance from "./http";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-import { AxiosRequestConfig } from "axios";
+import i18n from "../i18n/i18n";
 
 interface AxiosRequestConfigExtends extends AxiosRequestConfig {
   _retry?: boolean;
@@ -18,7 +19,7 @@ export const setAuthTokenToHttpHeader = (token: string | null) => {
 
 export function setupInterceptor(
   getRefreshToken: () => string,
-  onRefreshFail: () => void
+  onRefreshFail: () => void,
 ) {
   httpInstance.interceptors.response.use(
     function (res) {
@@ -27,15 +28,15 @@ export function setupInterceptor(
     function (error) {
       return new Promise(async (resolve, reject) => {
         const status = error.response ? error.response.status : null;
-
         if ([500, 501, 502, 503].includes(status)) {
-          // Todo: translate
           GlobalDialogController.showModal({
-            title: "Error",
-            message: "Something went wrong",
-            button: "OK",
+            title: i18n.t("dialog.err_title"),
+            message:
+              (i18n.t("error_general_message") as string) ||
+              "Something went wrong",
+            button: i18n.t("dialog.ok"),
           });
-          reject("Server error");
+          reject(i18n.t("server_error"));
         }
 
         if (status === 401) {
@@ -44,11 +45,10 @@ export function setupInterceptor(
 
           if (originalRequest._retry) {
             onRefreshFail();
-            // Todo: translate
             GlobalDialogController.showModal({
-              title: "Error",
-              message: "Session expires. Please login again",
-              button: "OK",
+              title: i18n.t("dialog.err_title"),
+              message: i18n.t("session_expired_error"),
+              button: i18n.t("dialog.ok"),
             });
             reject(error);
             return;

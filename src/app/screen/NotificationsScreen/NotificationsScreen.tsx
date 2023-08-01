@@ -65,11 +65,10 @@ const Notifications = () => {
       }
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
+        title: t("dialog.err_title"),
         message:
-          t("errorMessage:500") ||
-          "Something went wrong. Please try again later!",
-        button: "OK",
+          (t("error_general_message") as string) || "Something went wrong",
+        button: t("dialog.ok"),
       });
       console.error(error);
     }

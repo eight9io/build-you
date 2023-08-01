@@ -103,6 +103,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     (participant) => participant.id === currentUser?.id
   );
 
+  const isCurrentUserInCompany =
+    currentUser?.employeeOf?.id === challengeOwner?.id;
+
   const isCompanyAccount = isCompany || challengeOwner?.companyAccount;
 
   const challengeStatus =
@@ -310,7 +313,10 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   if (
     isError ||
-    (isChallengePrivate && (!isCurrentUserOwnerOfChallenge || !isJoined))
+    (isChallengePrivate &&
+      !isCurrentUserOwnerOfChallenge &&
+      !isCurrentUserInCompany &&
+      !isCurrentUserParticipant)
   ) {
     return (
       <SafeAreaView>

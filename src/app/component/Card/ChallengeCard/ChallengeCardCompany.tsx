@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
+import { useIsFocused } from '@react-navigation/native';
 
 import { getChallengeStatusColor } from "../../../utils/common";
 
@@ -9,6 +10,9 @@ import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
 import { StackActions } from "@react-navigation/native";
 import { IChallengeCardProps, CompanyTag } from "./ChallengeCard";
+import { serviceGetChallengeRating } from "../../../service/challenge";
+
+import StarFillSvg from "../../../common/svg/star-fill.svg";
 
 const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   item,
@@ -18,6 +22,10 @@ const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   handlePress,
   isFromOtherUser = false,
 }) => {
+  const [ratedValue, setRatedValue] = useState<number>(0);
+
+  const isFocused = useIsFocused();
+
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
@@ -61,6 +69,19 @@ const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
     if (handlePress) handlePress();
   };
 
+  useEffect(() => {
+    const fetchChallengeRating = async () => {
+      try {
+        const res = await serviceGetChallengeRating(item?.id);
+        const rating = res.data?.rateAverage;
+        setRatedValue(rating);
+      } catch (_) {
+        setRatedValue(0);
+      }
+    };
+    fetchChallengeRating();
+  }, [isFocused]);
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -94,7 +115,15 @@ const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
               </Text>
             </View>
           </View>
-          <View className={clsx("flex w-10 items-end")}>
+          <View className={clsx("flex flex-row items-end")}>
+            {ratedValue > 0 && (
+              <View className={clsx("mr-4 flex flex-row items-center")}>
+                <Text className={clsx("mr-1 text-h6 font-semibold leading-6")}>
+                  {ratedValue}/{5}
+                </Text>
+                <StarFillSvg width={18} height={18} />
+              </View>
+            )}
             <BackSvg />
           </View>
         </View>

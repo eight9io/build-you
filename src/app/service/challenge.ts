@@ -70,3 +70,15 @@ export const serviceAddChallengeParticipant = (challengeId: string) => {
 export const serviceRemoveChallengeParticipant = (challengeId: string) => {
   return http.delete(`/challenge/participant/remove/${challengeId}`);
 };
+
+export const serviceRateChallenge = (challengeID: string, rate: number) => {
+  return http.post(`/challenge/rate`, {
+    challenge: challengeID,
+    rating: rate,
+    review: "",
+  });
+};
+
+export const serviceGetChallengeRating = (challengeId: string) => {
+  return http.get(`/challenge/rating/${challengeId}`);
+};

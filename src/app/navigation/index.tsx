@@ -81,8 +81,6 @@ export const RootNavigation = () => {
     getInitialURL,
   };
 
-  console.log('isLoggedin',isLoggedin);
-
   useEffect(() => {
     if (authStoreHydrated) {
       if (!!isLoggedin) {

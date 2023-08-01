@@ -42,3 +42,15 @@ export interface IEmployeeDataProps {
   surname: string;
   video: string;
 }
+
+export interface IAdProps {
+  id: string;
+  caption: string;
+  image: string;
+  video: string;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  url: string;
+  isAd: number;
+}

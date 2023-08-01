@@ -154,10 +154,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
         setProgressData(response.data);
       } catch (error) {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             (t("error_general_message") as string) || "Something went wrong",
-          button: "OK",
+          button: t("dialog.ok"),
         });
       }
     };
@@ -178,10 +178,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       }, 600);
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
+        title: t("dialog.err_title"),
         message:
           (t("error_general_message") as string) || "Something went wrong",
-        button: "OK",
+        button: t("dialog.ok"),
       });
     }
   };
@@ -212,10 +212,10 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
       }
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
+        title: t("dialog.err_title"),
         message:
           (t("error_general_message") as string) || "Something went wrong",
-        button: "OK",
+        button: t("dialog.ok"),
       });
     }
   };

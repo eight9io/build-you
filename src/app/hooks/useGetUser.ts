@@ -8,6 +8,7 @@ import { serviceGetOtherUserData } from "../service/user";
 import { serviceGetMyProfile } from "../service/auth";
 import { serviceGetListFollowing } from "../service/profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import { useTranslation } from "react-i18next";
 
 export const useGetUserData = (setLoading?: any) => {
   const { setUserProfile } = useUserProfileStore();
@@ -33,6 +34,7 @@ export const useGetOtherUserData = (
   userId: string | null | undefined,
   setOtherUserData?: any
 ) => {
+  const { t } = useTranslation();
   if (!userId || userId === null) return null;
 
   const fetchingUserData = async () => {
@@ -42,8 +44,8 @@ export const useGetOtherUserData = (
       })
       .catch(() => {
         GlobalDialogController.showModal({
-          title: "Error",
-          message: "User not found",
+          title: t("dialog.err_title"),
+          message: t("user_not_found"),
         });
       });
   };

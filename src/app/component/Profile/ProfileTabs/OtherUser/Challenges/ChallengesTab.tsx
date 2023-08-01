@@ -68,10 +68,10 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       })
       .catch(() => {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             (t("error_general_message") as string) || "Something went wrong",
-          button: "OK",
+          button: t("dialog.ok"),
         });
       })
       .finally(() => {

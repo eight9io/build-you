@@ -55,8 +55,8 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       const navigateToRoute = isCompleteProfile
         ? "HomeScreen"
         : "CompleteProfileScreen";
-      
-      setModalVisible(false);
+
+      closeModal();
       setTimeout(() => {
         // Timeout used to wait for the register modal to close before navigate
         // The app crash when calling "reset" action, "navigate" action works fine
@@ -69,11 +69,17 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
         );
       }, 300);
     } catch (error) {
-      console.log("error: ", error);
+      console.error("error: ", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }
   };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setErrMessage("");
+  }
+
   return (
     <Modal
       animationType="slide"
@@ -84,7 +90,9 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       <View className=" bg-white " style={{ borderRadius: 10 }}>
         <View className="absolute z-10 my-6 ml-4 ">
           <NavButton
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              closeModal();
+            }}
             text={t("button.back") as string}
             withBackIcon
           />
@@ -121,22 +129,25 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
                 <AppleLoginButton
                   title={t("register_modal.apple") || "Register with Apple"}
                   onLogin={handleRegisterSocial}
+                  onError={setErrMessage}
                 />
               ) : null}
               <LinkedInLoginButton
                 title={t("register_modal.linked") || "Register with Linkedin"}
                 onLogin={handleRegisterSocial}
+                onError={setErrMessage}
               />
               <GoogleLoginButton
                 title={t("register_modal.google") || "Register with Google"}
                 onLogin={handleRegisterSocial}
+                onError={setErrMessage}
               />
               <Button
                 title={t("register_modal.register")}
                 containerClassName="border-primary-default flex-row border-[1px] m-2"
                 textClassName="text-primary-default ml-2 text-base font-bold"
                 onPress={() => {
-                  setModalVisible(false);
+                  closeModal();
                   navigation.navigate("RegisterScreen");
                 }}
               />

@@ -59,8 +59,9 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       );
     } catch (error: AxiosError | any) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     }
   };
@@ -74,8 +75,9 @@ const TopSectionOtherProfile: FC<ITopSectionOtherProfileProps> = ({
       setIsShowModalUnfollow(false);
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     }
   };
@@ -149,8 +151,8 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
     );
   } else if (!otherUserData) {
     GlobalDialogController.showModal({
-      title: "Error",
-      message: t("errorMessage:500") as string,
+      title: t("dialog.err_title"),
+      message: (t("error_general_message") as string) || "Something went wrong",
     });
     setTimeout(() => {
       navigation.goBack();

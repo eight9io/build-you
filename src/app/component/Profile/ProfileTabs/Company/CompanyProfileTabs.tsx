@@ -52,7 +52,7 @@ const CompanyProfileTabs = () => {
       getFollowingList();
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
+        title: t("dialog.err_title") || "Error",
         message: t("errorMessage:500") as string,
       });
     }

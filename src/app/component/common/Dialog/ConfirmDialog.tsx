@@ -1,8 +1,7 @@
-import clsx from "clsx";
-import { FC, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { FC } from "react";
+import { View } from "react-native";
 import Dialog from "react-native-dialog";
-
+import i18n from "../../../i18n/i18n";
 interface IComfirmDialogProps {
   title?: string;
   description?: string;
@@ -39,14 +38,14 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (
             <Dialog.Button
-              label={closeButtonLabel ?? "Cancel"}
+              label={closeButtonLabel ?? i18n.t("dialog.cancel")}
               onPress={handleCancel}
             />
           )}
           {onConfirm && (
             <Dialog.Button
               bold
-              label={confirmButtonLabel ?? "Confirm"}
+              label={confirmButtonLabel ?? i18n.t("dialog.ok")}
               onPress={handleConfirm}
             />
           )}

@@ -200,15 +200,21 @@ const CreateChallengeScreen = () => {
       <KeyboardAwareScrollView>
         {isLoading && <Spinner visible={isLoading} />}
         <ConfirmDialog
-          title={isRequestSuccess ? "Success" : "Error"}
+          title={
+            isRequestSuccess
+              ? t("dialog.success_title") || "Success"
+              : t("dialog.err_title") || "Error"
+          }
           description={
             isRequestSuccess
-              ? "Your challenge has been created successfully"
-              : "Something went wrong. Please try again later."
+              ? t("dialog.create_challenge_success") ||
+                "Your challenge has been created successfully !"
+              : t("error_general_message") ||
+                "Something went wrong. Please try again later."
           }
           isVisible={isShowModal}
           onClosed={() => handleCloseModal(newChallengeId)}
-          closeButtonLabel="Got it"
+          closeButtonLabel={t("dialog.got_it") || "Got it"}
         />
         <View className="mx-4 flex h-full rounded-t-xl bg-white">
           <View className="flex flex-col  py-5">

@@ -139,18 +139,29 @@ export const RightPersonalChallengeDetailOptions: FC<
     <View>
       <ConfirmDialog
         isVisible={isCompletedChallengeDialogVisible}
-        title="Mark this challenge as complete?"
-        description="You cannot edit challenge or update progress after marking the challenge as complete"
-        confirmButtonLabel="Complete"
-        closeButtonLabel="Cancel"
+        title={
+          t("dialog.mark_challenge.title") || "Mark challenge as completed"
+        }
+        description={
+          t("dialog.mark_challenge.description") ||
+          "You cannot edit challenge or update progress after marking the challenge as complete"
+        }
+        confirmButtonLabel={t("dialog.complete") || "Complete"}
+        closeButtonLabel={t("dialog.cancel") || "Cancel"}
         onConfirm={onCompleteChallenge}
         onClosed={() => setIsCompletedChallengeDialogVisible(false)}
       />
       <ConfirmDialog
         isVisible={isChallengeAlreadyCompletedDialogVisible}
-        title="Challenge already completed"
-        description="This challenge has already been completed. Please try another one."
-        confirmButtonLabel="Got it"
+        title={
+          t("dialog.challenge_already_completed.title") ||
+          "Challenge already complete"
+        }
+        description={
+          t("dialog.challenge_already_completed.description") ||
+          "This challenge has already been completed. Please try another one."
+        }
+        confirmButtonLabel={t("dialog.got_it") || "Got it"}
         onConfirm={() => {
           setIsChallengeAlreadyCompletedDialogVisible(false);
         }}
@@ -159,14 +170,17 @@ export const RightPersonalChallengeDetailOptions: FC<
         <ConfirmDialog
           isVisible={isCompletedChallengeSuccess !== null}
           title={
-            isCompletedChallengeSuccess ? "Congrats!" : "Something went wrong"
+            isCompletedChallengeSuccess
+              ? t("dialog.congratulation") || "Congratulation!"
+              : t("dialog.error_general_message") || "Something went wrong"
           }
           description={
             isCompletedChallengeSuccess
-              ? "Challenge has been completed successfully."
-              : "Please try again later."
+              ? t("dialog.completed_challenge_success") ||
+                "Challenge has been completed successfully."
+              : t("dialog.error_general_message") || "Please try again later."
           }
-          confirmButtonLabel="Got it"
+          confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}
         />
       )}
@@ -298,22 +312,27 @@ const PersonalChallengeDetailScreen = ({
     <SafeAreaView className="bg-white pt-3">
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
-        title="Delete Challenge"
-        description="Are you sure you want to delete this challenge?"
-        confirmButtonLabel="Delete"
-        closeButtonLabel="Cancel"
+        title={t("dialog.delete_challenge.title") || "Delete Challenge"}
+        description={
+          t("dialog.delete_challenge.description") ||
+          "Are you sure you want to delete this challenge?"
+        }
+        confirmButtonLabel={t("dialog.delete") || "Delete"}
+        closeButtonLabel={t("dialog.cancel") || "Cancel"}
         onConfirm={handleDeleteChallenge}
         onClosed={() => setIsDeleteChallengeDialogVisible(false)}
       />
+
       <ConfirmDialog
         isVisible={isDeleteError}
-        title="Something went wrong"
-        description="Please try again later."
-        confirmButtonLabel="Close"
+        title={t("dialog.err_title") || "Error"}
+        description={t("error_general_message") || "Something went wrong"}
+        confirmButtonLabel={t("dialog.close") || "Close"}
         onConfirm={() => {
           setIsDeleteError(false);
         }}
       />
+
       {challengeData?.id && (
         <>
           <ChallengeDetailScreen

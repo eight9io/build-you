@@ -292,6 +292,10 @@
       "title": "Mark this challenge as complete?",
       "description": "You cannot edit challenge or update progress after marking the challenge as complete"
     },
+    "challenge_already_completed": {
+      "title": "Challenge already completed",
+      "description": "This challenge has already been completed. Please try another one."
+    },
     "delete_progress": {
       "title": "Do you want to delete this progress",
       "description": "You cannot undo this action"
@@ -308,7 +312,15 @@
       "title": "Do you want to remove this employee from the company?",
       "description": "You cannot undo this action"
     },
+    "delete_challenge": {
+      "title": "Delete Challenge",
+      "description": "Are you sure you want to delete this challenge?",
+      "delete_success_title": "Challenge deleted",
+      "delete_success_description": "Your challenge has been deleted successfully"
+    },
     "cancel": "Cancel",
+    "complete": "Complete",
+    "got_it": "Got it",
     "delete": "Delete",
     "unfollow": "Unfollow",
     "remove": "Remove",
@@ -325,7 +337,14 @@
     "err_add_employee": "The user is already part of the company",
     "open_settings": "Open settings",
     "alert_title": "Alert",
-    "err_max_join": "Sorry! You can not join this challenge, it has reached the maximum number of participants."
+    "err_title": "Error",
+    "success_title": "Success",
+    "ok": "OK",
+    "err_max_join": "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
+    "create_challenge_success": "Your challenge has been created successfully !",
+    "create_progress_success": "Your progress has been created successfully !",
+    "completed_challenge_success": "Challenge has been completed successfully !",
+    "congratulation": "Congratulation!"
   },
   "toast": {
     "joined_success": "You have joined the challenge!",
@@ -382,5 +401,21 @@
   "notification_screen": {
     "no_notification": "You have no notifications at the moment"
   },
-  "challenge_detail_screen.not_found": "Challenge not found"
+  "challenge_detail_screen.not_found": "Challenge not found",
+  "user_not_found": "User not found",
+  "maximum_participants_reached": "Maximum people reached",
+  "server_error": "Server error",
+  "session_expired_error": "Session expires. Please login again",
+  "share_link": {
+    "copying_to_clipboard_error": "Error when copying to clipboard",
+    "join_my_challenge": "Join my challenge!",
+    "user_did_not_share_link": "User did not share"
+  },
+  "upload_cover_failed": "Upload cover failed. Please try again later.",
+  "add_new_challenge_progress_modal": {
+    "cancel": "Cancel",
+    "caption": "Caption",
+    "caption_placeholder": "What do you achieve?"
+  },
+  "please_upload_images_or_video": "Please upload images or video"
 }

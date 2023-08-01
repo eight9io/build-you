@@ -221,9 +221,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
     if (!userData?.id) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
-        button: "OK",
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
+        button: t("dialog.ok"),
       });
       return;
     }
@@ -245,8 +246,9 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       navigation.navigate("CompleteProfileFinishScreen");
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     }
   };

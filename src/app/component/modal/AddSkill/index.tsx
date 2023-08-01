@@ -80,8 +80,8 @@ export const AddSkillModal: FC<IAddSkillModallProps> = ({
       })
       .catch((_) => {
         GlobalDialogController.showModal({
-          title: "Error",
-          message: "Something went wrong. Please try again later.",
+          title: t("dialog.err_title"),
+          message: t("errorMessage:500"),
         });
       });
 

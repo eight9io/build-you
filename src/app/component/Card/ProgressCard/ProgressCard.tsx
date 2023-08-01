@@ -102,7 +102,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
   const handleNavigationToComment = () => {
     if (!itemProgressCard?.id || !challengeOwner?.id) {
       GlobalDialogController.showModal({
-        title: "Error",
+        title: t("dialog.err_title"),
         message: t("errorMessage:500") as string,
       });
       return;
@@ -239,8 +239,8 @@ const ProgressCard: FC<IProgressCardProps> = ({
         onConfirm={handleConfirmDeleteChallengeProgress}
         onClosed={() => setIsShowDeleteModal(false)}
         title={t("dialog.delete_progress.title") as string}
-        confirmButtonLabel="Delete"
-        closeButtonLabel="Cancel"
+        confirmButtonLabel={t("dialog.delete") || "Delete"}
+        closeButtonLabel={t("dialog.cancel") || "Cancel"}
         description={t("dialog.delete_progress.description") as string}
       />
     </View>

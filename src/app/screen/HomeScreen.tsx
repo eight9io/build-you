@@ -81,7 +81,7 @@ export const HomeFeed = () => {
       })
       .catch((err) => {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             t("error_general_message") ||
             "Something went wrong. Please try again later!",
@@ -188,7 +188,7 @@ export const HomeFeedUnregister = () => {
       })
       .catch((err) => {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             t("error_general_message") ||
             "Something went wrong. Please try again later!",

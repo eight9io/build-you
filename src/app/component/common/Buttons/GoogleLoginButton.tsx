@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import { ISocialLoginForm, LoginForm } from "../../../types/auth";
 import { LOGIN_TYPE } from "../../../common/enum";
+import { errorMessage } from "../../../utils/statusCode";
 
 interface IGoogleLoginButtonProps {
   title?: string;
@@ -12,8 +13,13 @@ interface IGoogleLoginButtonProps {
     payload: LoginForm | ISocialLoginForm,
     type: LOGIN_TYPE
   ) => Promise<void>;
+  onError?: (message: string) => void;
 }
-const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title, onLogin }) => {
+const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({
+  title,
+  onLogin,
+  onError,
+}) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -26,7 +32,7 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title, onLogin }) => {
     try {
       const userInfo = await GoogleSignin.signIn();
       if (userInfo.idToken) {
-        await onLogin({ token: userInfo.idToken }, LOGIN_TYPE.GOOGLE);
+        onLogin({ token: userInfo.idToken }, LOGIN_TYPE.GOOGLE);
       } else
         throw new Error(t("errorMessage:err_login.cannot_get_access_token"));
     } catch (error) {
@@ -34,7 +40,8 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({ title, onLogin }) => {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log("User canceled Google Sign in.");
       } else {
-        console.log("Error", error);
+        console.error("Error", error);
+        onError && onError(errorMessage(error, "err_login"));
       }
     }
   };

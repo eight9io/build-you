@@ -14,10 +14,12 @@ interface ILinkedInLoginButtonProps {
     payload: LoginForm | ISocialLoginForm,
     type: LOGIN_TYPE
   ) => Promise<void>;
+  onError?: (errorMessage: string) => void;
 }
 const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
   title,
-  onLogin
+  onLogin,
+  onError,
 }) => {
   const { t } = useTranslation();
   const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
@@ -36,7 +38,13 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
     // accessToken = result.data?.access_token;
     if (authrozationCode) {
       await onLogin({ token: authrozationCode }, LOGIN_TYPE.LINKEDIN);
-    } else throw new Error(t("errorMessage:err_login.cannot_get_access_token"));
+    } else {
+      onError && onError(t("errorMessage:err_login.cannot_get_access_token"));
+    };
+  };
+
+  const handleLinkedInLoginError = (errorMessage: string) => {
+    onError && onError(errorMessage);
   };
   return (
     <>
@@ -51,6 +59,7 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
         isVisible={linkedInModalVisible}
         onLoginCancel={handleLinkedInLoginCancel}
         onLoginSuccess={handleLinkedInLoginSuccess}
+        onError={handleLinkedInLoginError}
       />
     </>
   );

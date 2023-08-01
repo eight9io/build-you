@@ -236,15 +236,21 @@ export const AddNewChallengeProgressModal: FC<
           }}
         >
           <ConfirmDialog
-            title={isRequestSuccess ? "Success" : "Error"}
+            title={
+              isRequestSuccess
+                ? t("dialog.success_title") || "Success"
+                : t("dialog.err_title") || "Error"
+            }
             description={
               isRequestSuccess
-                ? "Your progress has been created successfully"
-                : "Something went wrong. Please try again later."
+                ? t("dialog.create_progress_success") ||
+                  "Your progress has been created successfully !"
+                : t("error_general_message") ||
+                  "Something went wrong. Please try again later!"
             }
             isVisible={isShowModal}
             onClosed={handleCloseModal}
-            closeButtonLabel="Got it"
+            closeButtonLabel={t("dialog.got_it") || "Got it"}
           />
           <View className="mx-4  h-full rounded-t-xl">
             <Header
@@ -252,7 +258,7 @@ export const AddNewChallengeProgressModal: FC<
               rightBtn={
                 t("challenge_detail_screen.new_progress_post") as string
               }
-              leftBtn="Cancel"
+              leftBtn={t("add_new_challenge_progress_modal.cancel") || "Cancel"}
               onLeftBtnPress={onClose}
               onRightBtnPress={handleSubmit(onSubmit)}
               containerStyle={Platform.OS === "ios" ? "mt-5" : "mt-0"}
@@ -260,9 +266,14 @@ export const AddNewChallengeProgressModal: FC<
 
             <View className="flex flex-col justify-between pt-4">
               <CustomTextInput
-                title="Caption"
+                title={
+                  t("add_new_challenge_progress_modal.caption") || "Caption"
+                }
                 placeholderClassName="h-32"
-                placeholder="What do you achieve?"
+                placeholder={
+                  t("add_new_challenge_progress_modal.caption_placeholder") ||
+                  "What do you achieve?"
+                }
                 control={control}
                 errors={errors.caption}
               />
@@ -275,7 +286,9 @@ export const AddNewChallengeProgressModal: FC<
                   onRemoveItem={(medias) => {
                     if (!medias.length) {
                       setError("media", {
-                        message: "Please upload images or video",
+                        message:
+                          t("please_upload_images_or_video") ||
+                          "Please upload images or video",
                         type: "required",
                       });
                     }

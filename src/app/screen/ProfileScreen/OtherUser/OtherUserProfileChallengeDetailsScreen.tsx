@@ -324,8 +324,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     );
   }
 
-  console.log("challengeData", challengeData);
-
   return (
     <SafeAreaView>
       <ConfirmDialog

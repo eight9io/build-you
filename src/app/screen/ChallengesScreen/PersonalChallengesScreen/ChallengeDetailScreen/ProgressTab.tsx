@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useIsFocused } from "@react-navigation/native";
@@ -9,6 +9,10 @@ import {
   IProgressChallenge,
 } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
+import {
+  serviceRateChallenge,
+  serviceGetChallengeRating,
+} from "../../../../service/challenge";
 
 import AddIcon from "../../../../component/asset/add.svg";
 import Button from "../../../../component/common/Buttons/Button";
@@ -18,6 +22,10 @@ import httpInstance from "../../../../utils/http";
 
 import SkeletonLoadingCommon from "../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import EditChallengeProgressModal from "../../../../component/modal/EditChallengeProgressModal";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+
+import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
+import StarFillSvg from "../../../../common/svg/star-fill.svg";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -25,6 +33,101 @@ interface IProgressTabProps {
   isOtherUserProfile?: boolean;
   isChallengeCompleted?: boolean | null;
 }
+
+const MAX_PROGRESS_VALUE = 5;
+
+const RateChallengeSection = ({ challengeId }) => {
+  const [ratedValue, setRatedValue] = useState<number>(0);
+  const [isRated, setIsRated] = useState<boolean>(false);
+  const [showComfirmModal, setShowComfirmModal] = useState<boolean>(false);
+  const [isRatingSuccess, setIsRatingSuccess] = useState<boolean>(false);
+  const [isRatingError, setIsRatingError] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchChallengeRating = async () => {
+      try {
+        const res = await serviceGetChallengeRating(challengeId);
+        const rating = res.data.rateAverage;
+        setRatedValue(rating);
+        if (rating > 0) {
+          setIsRated(true);
+        }
+      } catch (_) {
+        setRatedValue(0);
+      }
+    };
+    fetchChallengeRating();
+  }, []);
+
+  const handleRateChallenge = (index: number) => {
+    setRatedValue(index + 1);
+    setShowComfirmModal(true);
+  };
+
+  const onCanceled = () => {
+    setRatedValue(0);
+    setShowComfirmModal(false);
+    setIsRatingSuccess(false);
+    setIsRatingError(false);
+  };
+
+  const onClosed = () => {
+    setShowComfirmModal(false);
+    setIsRatingSuccess(false);
+    setIsRatingError(false);
+  };
+
+  const handleConfirm = async () => {
+    setShowComfirmModal(false);
+    try {
+      await serviceRateChallenge(challengeId, ratedValue as number);
+      setIsRatingSuccess(true);
+      setIsRated(true);
+    } catch (error) {
+      setIsRatingError(true);
+    }
+  };
+
+  return (
+    <View className="flex w-full flex-row items-center justify-between gap-14 px-4 py-4">
+      <ConfirmDialog
+        isVisible={showComfirmModal}
+        onClosed={onCanceled}
+        onConfirm={handleConfirm}
+        title="Do you want to confirm your rating?"
+        description="You cannot undo this action."
+      />
+      <ConfirmDialog
+        isVisible={isRatingSuccess}
+        onConfirm={onClosed}
+        title="Your rating has been saved!"
+      />
+      <ConfirmDialog
+        isVisible={isRatingError}
+        onClosed={onCanceled}
+        title="Something went wrong!"
+      />
+
+      <Text className="text-lg font-medium">Rate the challenge</Text>
+      <View className="flex flex-row items-center">
+        {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
+          <TouchableOpacity
+            className="pr-4"
+            key={`${index}`}
+            disabled={isRated}
+            onPress={() => handleRateChallenge(index as number)}
+          >
+            {ratedValue > index ? (
+              <StarFillSvg width={20} height={20} />
+            ) : (
+              <StarNoFillSvg width={20} height={20} />
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+};
 
 export const ProgressTab: FC<IProgressTabProps> = ({
   isJoined = false,
@@ -50,6 +153,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     ? challengeData?.owner[0]
     : challengeData.owner;
   const isCurrentUserOwnerOfChallenge = userData?.id === challengeOwner?.id;
+
+  const isChallengeCompletedOrClosed =
+    challengeData?.status === "closed" || challengeData?.status === "done";
 
   const { t } = useTranslation();
 
@@ -152,13 +258,14 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         />
       )}
       {progressLoading && <SkeletonLoadingCommon />}
+
       {!progressLoading && (
         <FlatList
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
             (isJoined || isCurrentUserOwnerOfChallenge) &&
-            !isChallengeCompleted ? (
+            (!isChallengeCompleted ? (
               <View>
                 <AddNewChallengeProgressButton />
                 {!progressLoading && localProgressData?.length == 0 && (
@@ -169,7 +276,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
                   </View>
                 )}
               </View>
-            ) : null
+            ) : (
+              <RateChallengeSection challengeId={challengeData.id} />
+            ))
           }
           renderItem={({ item, index }) => (
             <ProgressCard

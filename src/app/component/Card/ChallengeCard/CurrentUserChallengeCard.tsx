@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
@@ -11,6 +11,9 @@ import BackSvg from "../../asset/back.svg";
 import { CompanyTag } from "./ChallengeCard";
 import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
+import { serviceGetChallengeRating } from "../../../service/challenge";
+
+import StarFillSvg from "../../../common/svg/star-fill.svg";
 
 interface ICurrentUserChallengeCardProps {
   item: IChallenge;
@@ -23,6 +26,8 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   imageSrc,
   navigation,
 }) => {
+  const [ratedValue, setRatedValue] = useState<number>(0);
+
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
@@ -33,9 +38,6 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
 
   const onPress = () => {
     if (navigation) {
-      // navigation.navigate("PersonalChallengeDetailScreen", {
-      //   challengeId: item.id,
-      // });
       const action = StackActions.push("PersonalChallengeDetailScreen", {
         challengeId: item.id,
       });
@@ -53,6 +55,19 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
       ? item.status
       : isCurrentUserParticipant?.challengeStatus;
 
+  useEffect(() => {
+    const fetchChallengeRating = async () => {
+      try {
+        const res = await serviceGetChallengeRating(item?.id);
+        const rating = res.data?.rateAverage;
+        setRatedValue(rating);
+      } catch (_) {
+        setRatedValue(0);
+      }
+    };
+    fetchChallengeRating();
+  }, []);
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -69,7 +84,6 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
-
           />
         )}
         <View
@@ -87,7 +101,15 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
               </Text>
             </View>
           </View>
-          <View className={clsx("flex w-10 items-end")}>
+          <View className={clsx("flex flex-row items-end")}>
+            {ratedValue > 0 && (
+              <View className={clsx("mr-4 flex flex-row items-center")}>
+                <Text className={clsx("mr-1 text-h6 font-semibold leading-6")}>
+                  {ratedValue}/{5}
+                </Text>
+                <StarFillSvg width={18} height={18} />
+              </View>
+            )}
             <BackSvg />
           </View>
         </View>

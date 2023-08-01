@@ -1,40 +1,39 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useCallback, useEffect, useState } from "react";
-import { View, FlatList, SafeAreaView, Text } from "react-native";
 import clsx from "clsx";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { t } from "i18next";
-
-import { RootStackParamList } from "../navigation/navigation.type";
-
-import OtherUserProfileScreen from "./ProfileScreen/OtherUser/OtherUserProfileScreen";
-
-import AppTitle from "../component/common/AppTitle";
-import Button from "../component/common/Buttons/Button";
-import FeedPostCard, {
-  FeedPostCardUnregister,
-} from "../component/Post/FeedPostCard";
-import NavButton from "../component/common/Buttons/NavButton";
-import IconSearch from "../component/common/IconSearch/IconSearch";
-
-import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
-import { serviceGetFeed, serviceGetFeedUnregistered } from "../service/feed";
-
-import { useGetListFollowing } from "../hooks/useGetUser";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
-import { useAuthStore } from "../store/auth-store";
-import { useUserProfileStore } from "../store/user-store";
 import {
   NavigationProp,
   useIsFocused,
   useNavigation,
 } from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
+import { View, FlatList, SafeAreaView, Text } from "react-native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { RootStackParamList } from "../navigation/navigation.type";
+import { IFeedPostProps } from "../types/common";
+import { serviceGetFeed, serviceGetFeedUnregistered } from "../service/feed";
+
+import { useGetListFollowing } from "../hooks/useGetUser";
+import { useUserProfileStore } from "../store/user-store";
+import { useChallengeUpdateStore } from "../store/challenge-update-store";
+
+import OtherUserProfileScreen from "./ProfileScreen/OtherUser/OtherUserProfileScreen";
+
+import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import MainSearchScreen from "./MainSearchScreen/MainSearchScreen";
 import ProgressCommentScreen from "./ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { IFeedPostProps } from "../types/common";
 import CompanyChallengeDetailScreen from "./ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
-import { useChallengeUpdateStore } from "../store/challenge-update-store";
+
+import AppTitle from "../component/common/AppTitle";
+import FeedPostCard, {
+  FeedPostCardUnregister,
+} from "../component/Post/FeedPostCard";
+import NavButton from "../component/common/Buttons/NavButton";
+import IconSearch from "../component/common/IconSearch/IconSearch";
+import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import AdCard from "../component/Post/AdCard";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -139,6 +138,8 @@ export const HomeFeed = () => {
   const renderItem = useCallback(
     ({ item }: { item: any }) => {
       if (!item?.id) return null;
+      if (item?.isAd) return <AdCard item={item} />;
+
       return (
         <FeedPostCard
           itemFeedPostCard={item}

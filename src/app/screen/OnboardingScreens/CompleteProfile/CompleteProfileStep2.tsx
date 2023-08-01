@@ -1,7 +1,8 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
+import Spinner from "react-native-loading-spinner-overlay";
 
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
@@ -13,6 +14,7 @@ import VideoPicker from "../../../component/common/VideoPicker";
 
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 import { IUploadMediaWithId } from "../../../types/media";
+import { useTranslation } from "react-i18next";
 
 interface CompleteProfileStep2Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -21,9 +23,12 @@ interface CompleteProfileStep2Props {
 const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   navigation,
 }) => {
+  const [loading, setLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
   const [pickedVideo, setPickedVideo] = useState<IUploadMediaWithId[]>([]);
 
   const { setBiography, setVideo } = useCompleteProfileStore();
+  const { t } = useTranslation();
 
   const {
     control,
@@ -39,8 +44,17 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
     },
   });
 
-  const { setSoftSkills, getProfile } = useCompleteProfileStore();
+  useEffect(() => {
+    if (!loading) {
+      setLoadingError(false);
+    }
+  }, [loading]);
+
   const handleSubmitForm = (data: any) => {
+    if (loading) {
+      setLoadingError(true);
+      return;
+    }
     setBiography(data.biography);
     if (pickedVideo[0]?.uri) {
       setVideo(pickedVideo[0]?.uri);
@@ -62,7 +76,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
         <View className="flex flex-col items-center justify-center  pt-6">
           <View className="flex w-64 ">
             <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-              Tell the others something about you
+              {t("onboarding_screens.screen_2.tell_something") as string}
             </Text>
           </View>
         </View>
@@ -91,10 +105,17 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
           </View>
           <View className="mt-10">
             <VideoPicker
-              setExternalVideo={setPickedVideo}
+              loading={loading}
               useBigImage={true}
+              setLoading={setLoading}
               removeVideo={removeVideo}
+              setExternalVideo={setPickedVideo}
             />
+            {loadingError && (
+              <Text className="pt-2 text-sm text-red-500">
+                {t("image_picker.upload_a_video_waiting") as string}
+              </Text>
+            )}
           </View>
 
           <Button

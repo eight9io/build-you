@@ -136,32 +136,13 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
   const isCompanyAccount = user.companyAccount;
 
   const navigateToUserProfile = () => {
-    if (!user?.id) {
-      GlobalDialogController.showModal({
-        title: t("dialog.err_title") || "Error",
-        message:
-          t("error_general_message") ||
-          "Something went wrong. Please try again later!",
-      });
-      return;
-    }
-    navigation.navigate("OtherUserProfileScreen", { userId: user?.id });
+    navigation.goBack();
+    navigation.navigate("LoginScreen");
   };
 
   const navigateToChallengeDetail = () => {
-    if (!challenge?.id) {
-      GlobalDialogController.showModal({
-        title: t("dialog.err_title") || "Error",
-        message:
-          t("error_general_message") ||
-          "Something went wrong. Please try again later!",
-      });
-      return;
-    }
-    navigation.navigate("OtherUserProfileChallengeDetailsScreen", {
-      challengeId: challenge?.id,
-      isCompanyAccount: isCompanyAccount ? true : false,
-    });
+    navigation.goBack();
+    navigation.navigate("LoginScreen");
   };
 
   return (

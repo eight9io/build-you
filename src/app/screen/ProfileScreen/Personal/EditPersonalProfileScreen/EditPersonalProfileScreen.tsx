@@ -106,15 +106,20 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     };
     getOccupationList();
   }, []);
-  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-  const [showOccupationPicker, setShowOccupationPicker] = useState(false);
+  const [showDateTimePicker, setShowDateTimePicker] = useState<boolean>(false);
+  const [showOccupationPicker, setShowOccupationPicker] =
+    useState<boolean>(false);
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
     number | undefined
   >();
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isErrDialog, setIsErrDialog] = useState(false);
+  const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [videoLoading, setVideoLoading] = useState<boolean>(false);
+  const [videoLoadingError, setVideoLoadingError] = useState<boolean>(false);
+  const [isErrDialog, setIsErrDialog] = useState<boolean>(false);
   const { t } = useTranslation();
 
   const { getUserProfile } = useUserProfileStore();
@@ -171,21 +176,14 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     }
     setShowOccupationPicker(false);
   };
-  const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
-  useEffect(() => {
-    if (userData?.hardSkill) {
-      const hardSkill = userData?.hardSkill.map((item) => {
-        return {
-          skill: item.skill.skill,
-          id: item.skill.id,
-        };
-      });
 
-      setArrayMyHardSkills(hardSkill);
-    }
-  }, [userData?.hardSkill]);
   const { setUserProfile } = useUserProfileStore();
+
   const onSubmit = async (data: any) => {
+    if (videoLoading) {
+      setVideoLoadingError(true);
+      return;
+    }
     const IdOccupation = occupationList.find(
       (item) => item.name === data.occupation
     )?.id;
@@ -217,6 +215,25 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       setIsErrDialog(true);
     }
   };
+
+  useEffect(() => {
+    if (!videoLoading) {
+      setVideoLoadingError(false);
+    }
+  }, [videoLoading]);
+
+  useEffect(() => {
+    if (userData?.hardSkill) {
+      const hardSkill = userData?.hardSkill.map((item) => {
+        return {
+          skill: item.skill.skill,
+          id: item.skill.id,
+        };
+      });
+
+      setArrayMyHardSkills(hardSkill);
+    }
+  }, [userData?.hardSkill]);
 
   return (
     <SafeAreaView className="h-full bg-white">
@@ -394,10 +411,18 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   </View>
                 )}
                 <VideoPicker
+                  loading={videoLoading}
+                  setLoading={setVideoLoading}
                   setExternalVideo={setPickedVideo}
                   useBigImage={true}
                   removeVideo={removeVideo}
                 />
+
+                {videoLoadingError && (
+                  <Text className="pt-2 text-sm text-red-500">
+                    {t("image_picker.upload_a_video_waiting") as string}
+                  </Text>
+                )}
               </View>
 
               <View className="pt-3">

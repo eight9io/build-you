@@ -229,10 +229,9 @@ export const CreateCompanyChallengeScreen: FC<
         <View className=" flex h-full  rounded-t-xl bg-white">
           <ScrollView showsVerticalScrollIndicator>
             <View className="mb-10 mt-2 flex flex-col px-5">
-              {/* TODO translate */}
               <Text className="text-md font-normal leading-5 text-gray-dark">
-                Create a new challenge for yourself with a concrete goal and
-                time to reach it.{" "}
+                {t("new_challenge_screen.description") ||
+                  "Create a new challenge for yourself with a concrete goal and time to reach it."}{" "}
               </Text>
               <View className="pt-5">
                 <Controller
@@ -389,8 +388,8 @@ export const CreateCompanyChallengeScreen: FC<
                   setValue={setValue}
                 />
                 <Text className="pt-2 text-sm font-normal leading-4 text-gray-dark ">
-                  Everyone can join your public challenge while only user from
-                  your company can join your private challenge.
+                  {t("new_challenge_screen.challenge_status_description") ||
+                    "Everyone can join your public challenge while only user from your company can join your private challenge."}
                 </Text>
               </View>
 

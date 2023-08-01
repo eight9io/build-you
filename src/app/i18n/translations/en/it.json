@@ -237,7 +237,8 @@
     "image_required": "Please upload an image",
     "max_people_required": "Please select the maximum number of people",
     "min_people_required": "Minimum number of people is 2",
-    "is_public_required": "Please select challenge privacy"
+    "is_public_required": "Please select challenge privacy",
+    "challenge_status_description": "Everyone can join your public challenge while only user from your company can join your private challenge."
   },
   "new_progress_modal": {
     "title": "New progress",
@@ -417,5 +418,8 @@
     "caption": "Caption",
     "caption_placeholder": "What do you achieve?"
   },
-  "please_upload_images_or_video": "Please upload images or video"
+  "please_upload_images_or_video": "Please upload images or video",
+  "days_ago": "{{numOfDays}} days ago",
+  "hours_ago": "{{numOfHours}} hours ago",
+  "minutes_ago": "{{numOfMinutes}} minutes ago"
 }

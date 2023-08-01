@@ -274,18 +274,17 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         </View>
         <View className="px-16 py-6">
           <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-            Select the soft skills you are already competent on
+            {t("onboarding_screens.screen_4.select_soft_skills")}
           </Text>
           <Text className="pt-2 text-center text-h6 font-normal leading-5 text-gray-dark">
-            Please select at least 3 different soft skills and rate it from 1 to
-            5.
+            {t("onboarding_screens.screen_4.select_least_3")}
           </Text>
         </View>
 
         <View className="flex w-full pt-5 ">
           <View className="flex flex-col px-5">
             <Text className="pb-2 text-md font-semibold text-primary-default">
-              Soft skills
+              {t("onboarding_screens.screen_4.soft_skills")}
             </Text>
 
             <DropDownPicker
@@ -297,7 +296,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               setItems={setFetchedSoftSkills}
               placeholder={
                 selectedCompetencedSkill.length == 0
-                  ? "Select a soft skill"
+                  ? `${t("onboarding_screens.screen_4.select_a_soft_skill")}`
                   : `${selectedCompetencedSkill.length}/${fetchedSoftSkills.length}`
               }
               style={{
@@ -370,7 +369,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 <View className="flex flex-row items-center justify-start pt-2">
                   <WarningSvg />
                   <Text className="pl-1 text-sm font-normal leading-5 text-red-500">
-                    Please select at least 3 different soft skills
+                    {t("onboarding_screens.screen_4.please_select")}
                   </Text>
                 </View>
               )}
@@ -386,7 +385,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         </View>
         {!openDropdown && (
           <Button
-            title="Next"
+            title={`${t("onboarding_screens.screen_4.next")}`}
             containerClassName=" bg-primary-default my-5 mx-5 "
             textClassName="text-white text-md leading-6"
             onPress={() => handleSubmitForm()}

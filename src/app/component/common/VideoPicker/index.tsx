@@ -1,5 +1,11 @@
 import React, { useState, useEffect, FC } from "react";
-import { View, TouchableOpacity, Text, Linking } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Linking,
+  ActivityIndicator,
+} from "react-native";
 import * as ExpoImagePicker from "expo-image-picker";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import clsx from "clsx";
@@ -14,6 +20,7 @@ import PlayButton from "./asset/play-button.svg";
 import CloseButton from "./asset/close-button.svg";
 import ConfirmDialog from "../Dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
   useBigImage?: boolean;
@@ -21,6 +28,8 @@ interface IVideoPickerProps {
   setExternalVideo?: (video: IUploadMediaWithId[]) => void;
   setIsSelectedImage?: (isSelected: boolean) => void;
   removeVideo?: () => void;
+  loading?: boolean;
+  setLoading?: (loading: boolean) => void;
 }
 
 const VideoPicker: FC<IVideoPickerProps> = ({
@@ -30,6 +39,8 @@ const VideoPicker: FC<IVideoPickerProps> = ({
   setSelectedVideo,
   setIsSelectedImage,
   removeVideo,
+  loading = false,
+  setLoading,
 }) => {
   const [pickedVideo, setPickedVideo] = useState<string[]>([]);
   const [thumbnailImage, setThumbnailImage] = useState<string>();
@@ -55,19 +66,23 @@ const VideoPicker: FC<IVideoPickerProps> = ({
         setExternalVideo([{ id, uri }]);
         setSelectedVideo && setSelectedVideo([{ id, uri: video }]);
         setIsSelectedImage(false);
+        setLoading && setLoading(false);
         return;
       }
       if (setExternalVideo) {
         const id = getRandomId();
         setExternalVideo([{ id, uri: video }]);
         setThumbnailImage(uri);
+        setLoading && setLoading(false);
         return;
       }
       setThumbnailImage(uri);
     } catch (e) {
+      setLoading && setLoading(false);
       console.error("generateThumbnail", e);
     }
   };
+
   useEffect(() => {
     if (!pickedVideo.length) return;
     generateThumbnail(pickedVideo[0]);
@@ -80,12 +95,12 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       handleShowPermissionRequiredModal();
       return;
     }
+    setLoading && setLoading(true);
 
-    // No permissions request is necessary for launching the image library
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.8,
       allowsMultipleSelection: false,
     });
 
@@ -101,6 +116,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   return (
     <View className="flex flex-col">
+      {loading && <ActivityIndicator size="large" color="#C5C8D2" />}
       {useBigImage && pickedVideo.length > 0 && !setExternalVideo && (
         <View className="h-[108px] w-[108px]">
           <Image
@@ -141,7 +157,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
               isSelectedImage && "text-gray-medium"
             )}
           >
-            Upload a video
+            {t("image_picker.upload_a_video") || ""}
           </Text>
         </View>
       </TouchableOpacity>

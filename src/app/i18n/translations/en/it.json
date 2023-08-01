@@ -373,7 +373,9 @@
     "content_4": "to add employee to your company."
   },
   "image_picker": {
-    "image_permission_required": "Permission denied. Please enable it your phone settings."
+    "image_permission_required": "Permission denied. Please enable it your phone settings.",
+    "upload_a_video": "Upload a video",
+    "upload_a_video_waiting": "Please wait until the video is uploaded."
   },
   "search_screen.no_result": "No user found",
   "edit_company_profile_screen": {
@@ -382,5 +384,24 @@
   "notification_screen": {
     "no_notification": "You have no notifications at the moment"
   },
-  "challenge_detail_screen.not_found": "Challenge not found"
+  "challenge_detail_screen.not_found": "Challenge not found",
+  "onboarding_screens": {
+    "screen_2": {
+      "tell_something": "Tell the others something about you"
+    },
+    "screen_3": {
+      "how_you_define": "How do you define yourself as competent?",
+      "choose_least_3": "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself",
+      "choose_least_3_error": "Please select at least 3 skills and maximum of 10 skills"
+    },
+    "screen_4": {
+      "next": "Next",
+      "soft_skills": "Soft skills",
+      "select_a_soft_skill": "Select a soft skill",
+      "select_soft_skills": "Select the soft skills you are already competent on",
+      "select_least_3": "Please select at least 3 different soft skills and rate it from 1 to 5",
+      "select_least_3_error": "Please select at least 3 soft skills",
+      "please_select": "Please select at least 3 different soft skills"
+    }
+  }
 }

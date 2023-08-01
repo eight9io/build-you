@@ -100,7 +100,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,
       aspect: [4, 3],
-      quality: 0.8,
+      quality: 0.5,
       allowsMultipleSelection: false,
     });
 

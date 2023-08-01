@@ -206,11 +206,14 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   challgeneUpdateLike,
   challengeUpdateComment,
 }) => {
+  const { t } = useTranslation();
   const navigateToUserProfile = () => {
     if (!user?.id) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title") || "Error",
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
       });
       return;
     }
@@ -220,8 +223,10 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   const navigateToProgressComment = () => {
     if (!user?.id || !id) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title") || "Error",
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
       });
       return;
     }
@@ -236,8 +241,10 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   const navigateToChallengeDetail = () => {
     if (!challenge?.id) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title") || "Error",
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
       });
       return;
     }

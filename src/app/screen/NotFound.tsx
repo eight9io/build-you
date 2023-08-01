@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { View, Text, SafeAreaView } from "react-native";
 
 const NotFound = () => {
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="flex items-center justify-center">
-      <Text>NotFound</Text>
+      <Text>{t('not_found') || "Not found"}</Text>
     </SafeAreaView>
   );
 };

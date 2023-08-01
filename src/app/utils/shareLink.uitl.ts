@@ -2,25 +2,31 @@ import { EXPO_API_APP_DOMAIN } from "@env";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Alert, View, Button } from "react-native";
 import Share from "react-native-share";
-
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import i18n from "../i18n/i18n";
 
 export const onShareChallengeLink = (challengeId: string) => {
   if (!challengeId) {
     GlobalDialogController.showModal({
-      title: "Error",
-      message: "Error copying to clipboard!",
+      title: i18n.t("dialog.err_title"),
+      message:
+        i18n.t("share_link.copying_to_clipboard_error") ||
+        "Something went wrong",
+      button: i18n.t("dialog.ok"),
     });
     return;
   }
   const onShare = async () => {
     try {
       await Share.open({
-        title: "Join my challenge!",
+        title: i18n.t("share_link.join_my_challenge") || "Join my challenge!",
         url: `${EXPO_API_APP_DOMAIN}/challenge/${challengeId}`,
       });
     } catch (error: any) {
-      if (error.message === "User did not share") {
+      if (
+        error.message === i18n.t("share_link.user_did_not_share_link") ||
+        "User did not share"
+      ) {
         return;
       }
       Alert.alert(error.message);

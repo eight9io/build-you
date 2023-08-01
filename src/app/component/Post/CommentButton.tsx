@@ -7,6 +7,7 @@ import { getProgressComments } from "../../service/progress";
 // import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 import debounce from "lodash.debounce";
 import { INumberOfCommentUpdate } from "../../types/challenge";
+import { useTranslation } from "react-i18next";
 
 interface ICommentButtonProps {
   progressId: string;
@@ -21,6 +22,7 @@ const CommentButton: FC<ICommentButtonProps> = ({
   navigationToComment,
   localCommentUpdate,
 }) => {
+  const { t } = useTranslation();
   const [numberOfComments, setNumberOfComments] = useState(0);
 
   useEffect(() => {
@@ -53,13 +55,14 @@ const CommentButton: FC<ICommentButtonProps> = ({
         <CommentSvg />
         {!(localCommentUpdate?.id === progressId) && (
           <Text className={clsx("text-md font-normal text-gray-dark ")}>
-            {numberOfComments} comment{numberOfComments > 1 && "s"}
+            {t("commentWithCount", { count: numberOfComments })}
           </Text>
         )}
         {localCommentUpdate?.id === progressId && (
           <Text className={clsx("text-md font-normal text-gray-dark ")}>
-            {localCommentUpdate.numberOfComments} comment
-            {localCommentUpdate.numberOfComments > 1 && "s"}
+            {t("commentWithCount", {
+              count: localCommentUpdate.numberOfComments,
+            })}
           </Text>
         )}
       </View>

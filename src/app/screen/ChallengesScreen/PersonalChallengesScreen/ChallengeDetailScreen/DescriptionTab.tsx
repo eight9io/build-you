@@ -4,6 +4,7 @@ import { Text, View, ScrollView } from "react-native";
 
 import dayjs from "../../../../utils/date.util";
 import { IChallenge } from "../../../../types/challenge";
+import { useTranslation } from "react-i18next";
 
 interface ISingleDescriptionProps {
   title: string;
@@ -35,19 +36,29 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
   challengeData,
   maxPepleCanJoin,
 }) => {
+  const { t } = useTranslation();
   const { id, achievementTime, benefits, image, goal, reasons } = challengeData;
   const date = new Date(achievementTime);
   return (
     <ScrollView className="h-full px-4 pt-4">
-      <SingleDescription title="The benefits" description={benefits} />
-      <SingleDescription title="The reasons" description={reasons} />
       <SingleDescription
-        title="Time to reach the goal"
+        title={t("challenge_description_tab.the_benefits") || "The benefits"}
+        description={benefits}
+      />
+      <SingleDescription
+        title={t("challenge_description_tab.the_reason") || "The reason"}
+        description={reasons}
+      />
+      <SingleDescription
+        title={
+          t("challenge_description_tab.time_to_reach_goal") ||
+          "Time to reach goal"
+        }
         description={dayjs(date).format("DD/MM/YYYY")}
       />
       {maxPepleCanJoin && (
         <SingleDescription
-          title="Participants"
+          title={t("challenge_description_tab.participants") || "Participants"}
           description={`${
             challengeData?.participants?.length || 0
           }/${maxPepleCanJoin}`}

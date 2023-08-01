@@ -14,8 +14,9 @@ export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
         setFollowingList([]);
       } else {
         GlobalDialogController.showModal({
-          title: "Error",
-          message: t("errorMessage:500") as string,
+          title: t("dialog.err_title"),
+          message:
+            (t("error_general_message") as string) || "Something went wrong",
         });
       }
     });
@@ -32,8 +33,9 @@ export const fetchListEmployee = async (
     .catch((err) => {
       if (err.response.status == 404) setEmployeeList([]);
       GlobalDialogController.showModal({
-        title: "Error",
-        message: t("errorMessage:500") as string,
+        title: t("dialog.err_title"),
+        message:
+          (t("error_general_message") as string) || "Something went wrong",
       });
     });
 };

@@ -95,7 +95,9 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
-          title: "Maximum people reached",
+          title: t(
+            "maximum_participants_reached"
+          ),
           message:
             t("dialog.err_max_join") ||
             "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
@@ -103,8 +105,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
         return;
       }
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title"),
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
       });
     }
   };
@@ -121,8 +125,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       fetchParticipants();
     } catch (err) {
       GlobalDialogController.showModal({
-        title: "Error",
-        message: "Something went wrong. Please try again later!",
+        title: t("dialog.err_title"),
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
       });
     }
   };

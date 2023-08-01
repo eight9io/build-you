@@ -116,10 +116,19 @@ export default function Login() {
               </View>
               <View className="flex-row">
                 {Platform.OS === "ios" ? (
-                  <AppleLoginButton onLogin={handleLogin} />
+                  <AppleLoginButton
+                    onLogin={handleLogin}
+                    onError={setErrMessage}
+                  />
                 ) : null}
-                <GoogleLoginButton onLogin={handleLogin} />
-                <LinkedInLoginButton onLogin={handleLogin} />
+                <GoogleLoginButton
+                  onLogin={handleLogin}
+                  onError={setErrMessage}
+                />
+                <LinkedInLoginButton
+                  onLogin={handleLogin}
+                  onError={setErrMessage}
+                />
               </View>
               <View className="mt-5 flex-row items-center justify-center px-6">
                 <View className="h-[0.5px] w-[50%] bg-black-default"></View>
@@ -214,7 +223,10 @@ export default function Login() {
             </View>
             <View>
               <TouchableOpacity
-                onPress={() => navigation.navigate("ForgotPasswordScreen")}
+                onPress={() => {
+                  setErrMessage("");
+                  navigation.navigate("ForgotPasswordScreen");
+                }}
               >
                 <Text className="my-5 px-24 text-center text-h6 leading-6 text-gray-dark">
                   {t("forgot_password")}

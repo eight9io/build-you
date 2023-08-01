@@ -12,6 +12,7 @@ import GlobalDialogController, {
   GlobalDialogRef,
 } from "./GlobalDialogController";
 import { IGlobalDialogProps } from "../../../types/globalDialog";
+import { useTranslation } from "react-i18next";
 
 const GlobalDialog = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -22,6 +23,7 @@ const GlobalDialog = () => {
   const [customButton, setCustomButton] = useState<string | undefined>(
     undefined
   );
+  const { t } = useTranslation();
 
   const modalRef = useRef<GlobalDialogRef>();
 
@@ -54,10 +56,10 @@ const GlobalDialog = () => {
   return (
     <View className="items-center justify-center bg-white">
       <Dialog.Container visible={modalVisible}>
-        <Dialog.Title>{customTitle || "Alert"}</Dialog.Title>
+        <Dialog.Title>{customTitle || t("dialog.alert_title")}</Dialog.Title>
         <Dialog.Description>{customMessage}</Dialog.Description>
         <Dialog.Button
-          label={customButton || "OK"}
+          label={customButton || t("dialog.ok")}
           onPress={() => {
             modalRef.current?.hide();
           }}

@@ -102,8 +102,8 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
       />
       <View className=" flex h-full rounded-t-xl bg-white px-4">
         <Header
-          title="New employee"
-          rightBtn="SAVE"
+          title={t("add_new_employee_modal.title") || "New employee"}
+          rightBtn={t("save") || "Save"}
           leftBtn={<Close fill={"black"} />}
           onLeftBtnPress={onClose}
           onRightBtnPress={handleSubmit(onSubmit)}
@@ -118,8 +118,11 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
             render={({ field: { onChange, onBlur, value } }) => (
               <View className="flex flex-col gap-1">
                 <TextInput
-                  label="Email"
-                  placeholder={"Enter employee email"}
+                  label={t("add_new_employee_modal.email") || "Email"}
+                  placeholder={
+                    t("add_new_employee_modal.email_placeholder") ||
+                    "Enter employee email"
+                  }
                   placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                   onBlur={onBlur}
                   onChangeText={(text) => onChange(text)}

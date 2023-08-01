@@ -42,7 +42,7 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
     const navigateToUserProfile = (userId: string | undefined) => {
       if (!userId) {
         GlobalDialogController.showModal({
-          title: "Error",
+          title: t("dialog.err_title"),
           message:
             t("error_general_message") ||
             "Something went wrong. Please try again later!",
@@ -115,11 +115,11 @@ const SingleComment: FC<ISingleCommentProps> = ({
       }
     } catch (error) {
       GlobalDialogController.showModal({
-        title: "Error",
+        title: t("dialog.err_title"),
         message:
           t("errorMessage:500") ||
           "Something went wrong. Please try again later!",
-        button: "OK",
+        button: t("dialog.ok"),
       });
       console.error(error);
     }
@@ -182,7 +182,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
             iconColor="#FF7B1D"
             options={[
               {
-                text: "Delete",
+                text: t("pop_up_menu.delete") || "Delete",
                 onPress: () => handleDeleteComment(),
               },
             ]}

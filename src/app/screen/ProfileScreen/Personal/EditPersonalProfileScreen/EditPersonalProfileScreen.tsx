@@ -60,7 +60,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
     <View className="flex flex-col items-start justify-start ">
       <View className="w-full flex-row items-center justify-between">
         <Text className="pr-2 text-base font-semibold text-primary-default">
-          Hard skills
+          {t("edit_personal_profile_screen.hard_skills") || "Hard skills"}
         </Text>
         <View className="w-6">
           <Button
@@ -266,7 +266,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           />
 
           <SelectPicker
-            title="Occupation"
+            title={t("edit_personal_profile_screen.occupation") || "Occupation"}
             show={showOccupationPicker}
             data={occupationList}
             selectedIndex={selectedOccupationIndex}
@@ -285,8 +285,14 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="First Name"
-                        placeholder={"Enter your first name"}
+                        label={
+                          t("edit_personal_profile_screen.first_name") ||
+                          "First name"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_first_name") ||
+                          "Enter your first name"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -312,8 +318,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Last Name"
-                        placeholder={"Enter your first name"}
+                        label={
+                          t("edit_personal_profile_screen.last_name") || "Last name"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_last_name") ||
+                          "Enter your last name"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -338,8 +349,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Birthday"
-                        placeholder={"Enter your birth day"}
+                        label={
+                          t("edit_personal_profile_screen.birth") || "Birthday"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.select_your_birthday") ||
+                          "Select your birth"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         rightIcon={
                           <TouchableOpacity
@@ -375,8 +391,14 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Occupation"
-                        placeholder={"Enter your occupation"}
+                        label={
+                          t("edit_personal_profile_screen.occupation") ||
+                          "Occupation"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_occupation") ||
+                          "Enter your occupation"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -432,8 +454,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Biography"
-                        placeholder={"Your biography"}
+                        label={
+                          t("edit_personal_profile_screen.biography") || "Biography"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.your_biography") ||
+                          "Your biography"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -475,7 +502,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
               )}
 
               <Button
-                title="Update"
+                title={t("button.update") || "Update"}
                 containerClassName="mb-4  bg-primary-default mt-10 mb-"
                 textClassName="text-white text-md leading-6"
                 onPress={handleSubmit(onSubmit)}

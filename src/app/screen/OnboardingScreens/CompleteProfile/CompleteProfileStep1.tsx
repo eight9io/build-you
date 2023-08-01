@@ -112,7 +112,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       />
 
       <SelectPicker
-        title="Occupation"
+        title={t("form_onboarding.screen_1.occupation") || "Occupation"}
         show={showOccupationPicker}
         data={occupationList}
         selectedIndex={selectedOccupationIndex}
@@ -146,8 +146,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="First Name"
-                        placeholder={"Enter your first name"}
+                        label={
+                          t("form_onboarding.screen_1.first_name") ||
+                          "First name"
+                        }
+                        placeholder={
+                          t("form_onboarding.screen_1.enter_first_name") ||
+                          "Enter your first name"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -172,8 +178,13 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Last Name"
-                        placeholder={"Enter your last name"}
+                        label={
+                          t("form_onboarding.screen_1.last_name") || "Last name"
+                        }
+                        placeholder={
+                          t("form_onboarding.screen_1.enter_last_name") ||
+                          "Enter your last name"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -198,8 +209,13 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Birthday"
-                        placeholder={"Enter your birth day"}
+                        label={
+                          t("form_onboarding.screen_1.birth") || "Birthday"
+                        }
+                        placeholder={
+                          t("form_onboarding.screen_1.select_your_birthday") ||
+                          "Select your birth"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         rightIcon={
                           <TouchableOpacity
@@ -235,8 +251,14 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View className="flex flex-col">
                       <TextInput
-                        label="Occupation"
-                        placeholder={"Enter your occupation"}
+                        label={
+                          t("form_onboarding.screen_1.occupation") ||
+                          "Occupation"
+                        }
+                        placeholder={
+                          t("form_onboarding.screen_1.enter_occupation") ||
+                          "Enter your occupation"
+                        }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -256,7 +278,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                 />
               </View>
               <Button
-                title="Next"
+                title={t("button.next") || "Next"}
                 containerClassName="h-12 w-full bg-primary-default my-5 "
                 textClassName="text-white text-md leading-6"
                 onPress={handleSubmit(handleSubmitForm)}

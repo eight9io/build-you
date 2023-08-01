@@ -54,7 +54,7 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
       {!isLoading ? (
         <View className="h-14 w-full justify-center border-b-2 border-gray-light bg-gray-veryLight pl-6">
           <NavButton
-            text="Cancel"
+            text={t("cancel") || "Cancel"}
             textClassName="text-blue-500 text-lg"
             onPress={onLoginCancel}
           />

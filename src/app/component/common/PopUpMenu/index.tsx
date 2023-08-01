@@ -10,6 +10,7 @@ import {
 import clsx from "clsx";
 
 import EditIcon from "./assets/edit-icon.svg";
+import { useTranslation } from "react-i18next";
 
 type MenuOptionProp = {
   text: string;
@@ -43,6 +44,8 @@ const MenuItem = ({ text, onPress }: { text: string; onPress: any }) => {
 };
 
 const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options, isDisabled }) => {
+  const { t } = useTranslation();
+
   return (
     <Menu>
       <MenuTrigger
@@ -74,10 +77,22 @@ const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options, isDisabled }) => {
             borderRadius: 4,
           }}
         >
-          <MenuItem text="Edit" onPress={() => alert("pressed")} />
-          <MenuItem text="Delete" onPress={() => alert("pressed")} />
-          <MenuItem text="Share" onPress={() => alert("pressed")} />
-          <MenuItem text="Mark as complete" onPress={() => alert("pressed")} />
+          <MenuItem
+            text={t("pop_up_menu.edit") || "Edit"}
+            onPress={() => alert("pressed")}
+          />
+          <MenuItem
+            text={t("pop_up_menu.delete") || "Delete"}
+            onPress={() => alert("pressed")}
+          />
+          <MenuItem
+            text={t("pop_up_menu.share") || "Share"}
+            onPress={() => alert("pressed")}
+          />
+          <MenuItem
+            text={t("pop_up_menu.mark_as_completed") || "Mark as complete"}
+            onPress={() => alert("pressed")}
+          />
         </MenuOptions>
       )}
       {options && (

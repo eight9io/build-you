@@ -133,6 +133,8 @@
   "modal_skill.manually": "Add manually",
   "button.next": "Next",
   "button.back": "Back",
+  "button.skip": "Skip",
+  "button.update": "Update",
   "button.edit_companyProfile": "Edit profile",
   "new_challenge_screen.title": "Create a new challenge",
   "new_challenge_screen.location": "Location",
@@ -159,6 +161,7 @@
       "select_your_birthday": "Select your birth",
       "birthday_error": "Please select your birth.",
       "occupation": "Occupation",
+      "enter_occupation": "Enter your occupation",
       "occupation_error": "Please select your occupation."
     },
     "screen_2": {
@@ -171,13 +174,15 @@
       "title": "How do you define yourself as competent?",
       "sub_title": "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself",
       "add_manually": "Add manually",
-      "error": "Please select at least 3 hard skills."
+      "error": "Please select at least 3 hard skills and maximum of 10 skills"
     },
     "screen_4": {
       "title": "Select the soft skills you are already competent on",
       "sub_title": "Please select at least 3 different soft skills and rate it from 1 to 5.",
       "soft_skills": "Soft skills",
-      "error": "Please select at least 3 soft skills."
+      "error": "Please select at least 3 soft skills.",
+      "error_rate": "Please rate from 1 to 5",
+      "select_soft_skill": "Select a soft skill"
     },
     "add_skill_screen": {
       "add_skill": "Add skill",
@@ -399,6 +404,10 @@
   },
   "search_screen.no_result": "No user found",
   "edit_company_profile_screen": {
+    "company_name": "Company name",
+    "company_name_placeholder": "Enter your company name",
+    "biography_name": "Biography",
+    "biography_name_placeholder": "Your biography",
     "first_name_required": "Please fill in your first name."
   },
   "notification_screen": {
@@ -420,8 +429,100 @@
     "caption": "Caption",
     "caption_placeholder": "What do you achieve?"
   },
+  "upload_image": "Upload image",
+  "upload_video": "Upload a video",
   "please_upload_images_or_video": "Please upload images or video",
   "days_ago": "{{numOfDays}} days ago",
   "hours_ago": "{{numOfHours}} hours ago",
-  "minutes_ago": "{{numOfMinutes}} minutes ago"
+  "minutes_ago": "{{numOfMinutes}} minutes ago",
+  "company": "Company",
+  "save": "Save",
+  "emoji": "Emoji",
+  "emoji_required": "Please select an emoji",
+  "max_characters": "Max {{numOfCharacters}} characters",
+  "pop_up_menu": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "share": "Share",
+    "mark_as_completed": "Mark as completed"
+  },
+  "step_of": "Step {{currentStep}} of {{totalStep}}",
+  "select": "Select",
+  "add_emoji": {
+    "select_emoji": "Select an emoji"
+  },
+  "add_skill_modal": {
+    "title": "Add skill",
+    "description": "Select the emoji and enter the skill name",
+    "enter_skill_name": "Enter your skill name"
+  },
+  "add_new_employee_modal": {
+    "title": "New employee",
+    "email": "Email",
+    "email_placeholder": "Enter employee email"
+  },
+  "edit_profile_modal": {
+    "title": "Edit profile",
+    "first_name": "First name",
+    "first_name_placeholder": "Enter your first name",
+    "last_name": "Last name",
+    "last_name_placeholder": "Enter your last name",
+    "birthday": "Birthday",
+    "birthday_placeholder": "Enter your birth",
+    "occupation": "Occupation",
+    "occupation_placeholder": "Enter your occupation",
+    "biography": "Biography",
+    "biography_placeholder": "Enter your biography"
+  },
+  "policy_modal": {
+    "title": "Privacy policy..."
+  },
+  "commentWithCount": "{{count}} comment",
+  "commentWithCount_plural": "{{count}} comments",
+  "likeWithCount": "{{count}} like",
+  "likeWithCount_plural": "{{count}} likes",
+  "loading": "Loading...",
+  "biography_tab": {
+    "no_biography": "No biography yet"
+  },
+  "skill_tab": {
+    "self_declared": "Self-declared"
+  },
+  "private": "Private",
+  "public": "Public",
+  "empty_challenge": "You have no challenge at the moment",
+  "create": "Create",
+  "click": "Click",
+  "to_create_new_challenge": "to create new challenge",
+  "challenge_description_tab": {
+    "the_benefits": "The benefits",
+    "the_reason": "The reason",
+    "time_to_reach_goal": "Time to reach goal",
+    "participants": "Participants"
+  },
+  "challenge_progress_tab": {
+    "do_you_want_to_confirm_rating": "Do you want to confirm your rating?",
+    "cannot_undo": "You cannot undo this action",
+    "rating_saved": "Your rating has been saved",
+    "rate_the_challenge": "Rate the challenge"
+  },
+  "main_search_screen": {
+    "search": "Search user"
+  },
+  "edit_personal_profile_screen": {
+    "hard_skills": "Hard skills",
+    "first_name": "First name",
+    "enter_first_name": "Enter your first name",
+    "last_name": "Last name",
+    "enter_last_name": "Enter your last name",
+    "birth": "Birthday",
+    "select_your_birthday": "Select your birth",
+    "birthday_error": "Please select your birth.",
+    "occupation": "Occupation",
+    "enter_occupation": "Enter your occupation",
+    "biography": "Biography",
+    "your_biography": "Your biography"
+  },
+  "not_found": "Not found",
+  "invalid_date": "Invalid date",
 }

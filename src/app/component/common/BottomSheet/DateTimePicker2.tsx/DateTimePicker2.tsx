@@ -1,6 +1,7 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Platform, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import BottomSheet2 from "../BottomSheet";
@@ -25,6 +26,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   minimumDate,
   shouldMinus16Years = false,
 }) => {
+  const { t } = useTranslation();
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
     dayjs()
       .subtract(shouldMinus16Years ? 16 : 0, "years")
@@ -99,7 +101,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                   )}
                   <View className="absolute bottom-10 h-12 w-full px-4">
                     <Button
-                      title={"Save"}
+                      title={t('save') || "Save"}
                       onPress={onConfirm}
                       containerClassName="bg-primary-default flex-1"
                       textClassName="text-white"

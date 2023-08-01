@@ -46,7 +46,9 @@ const MainSearchScreen = () => {
     navigation.setOptions({
       headerShown: true,
       headerTitle: () => (
-        <Text className="text-lg font-semibold">Search User</Text>
+        <Text className="text-lg font-semibold">
+          {t("main_search_screen.search") || "Search user"}
+        </Text>
       ),
       headerSearchBarOptions: {
         placeholder: t("search_screen.search") as string,

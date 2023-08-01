@@ -383,8 +383,8 @@ export const CreateCompanyChallengeScreen: FC<
 
               <View className="flex flex-col justify-start pt-5">
                 <CustomSwitch
-                  textDisable="Private"
-                  textEnable="Public"
+                  textDisable={t("private") || "Private"}
+                  textEnable={t("public") || "Public"}
                   setValue={setValue}
                 />
                 <Text className="pt-2 text-sm font-normal leading-4 text-gray-dark ">

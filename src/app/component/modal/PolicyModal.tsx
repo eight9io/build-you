@@ -32,7 +32,7 @@ export default function PolicyModal({
         <View style={styles.centeredView}>
           <View className=" ml-4 ">
             <Header
-              title="Privacy policy..."
+              title={t("policy_modal.title") || "Privacy policy..."}
               leftBtn={
                 <NavButton
                   text={t("button.back") as string}

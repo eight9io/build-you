@@ -13,7 +13,7 @@ import { StackActions } from "@react-navigation/native";
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
-
+import i18n from "../../../i18n/i18n";
 export interface IChallengeCardProps {
   item: IChallenge;
   isCompanyAccount?: boolean | undefined | null;
@@ -36,7 +36,7 @@ export const CompanyTag = ({
     <View className="flex h-8 w-2/5 flex-row items-center rounded-l-md bg-primary-default">
       <View className="mx-2 h-[20px] w-[20px] rounded-full bg-gray-200 py-1"></View>
       <Text className="text-md font-normal text-white">
-        {companyName || "Company"}
+        {companyName || i18n.t("company") || "Company"}
       </Text>
     </View>
   );

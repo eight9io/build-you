@@ -157,7 +157,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
               isSelectedImage && "text-gray-medium"
             )}
           >
-            {t("image_picker.upload_a_video") || ""}
+            {t("upload_video") || "Upload a video"}
           </Text>
         </View>
       </TouchableOpacity>

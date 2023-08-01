@@ -22,6 +22,7 @@ import { sortChallengeByStatusFromResponse } from "../../../utils/common";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
+import { useTranslation } from "react-i18next";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,22 +35,23 @@ const EmptyChallenges = ({
   navigation,
 }: {
   navigation: CompanyChallengesScreenNavigationProp;
-}) => {
+  }) => {
+  const { t } = useTranslation();
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
       <Text className={clsx("text-lg")}>
-        You have no challenges at the moment.
+        {t("empty_challenge") || "You have no challenges at the moment."}
       </Text>
       <Text className={clsx("text-lg")}>
-        Click
+        {t("click") || "Click"}
         <Text
           className={clsx("text-primary-default")}
           onPress={() => navigation.navigate("CreateCompanyChallengeScreen")}
         >
           {" "}
-          Create{" "}
+          {t("create") || "Create"}{" "}
         </Text>
-        to Create new challenge.
+        {t("to_create_new_challenge") || "to create new challenge"}
       </Text>
     </View>
   );
@@ -122,10 +124,8 @@ const CompanyChallenges = ({
           className={clsx("flex h-3/4 flex-col items-center justify-center")}
         >
           <Text className={clsx("text-md font-medium")}>
-            Something went wrong.
-          </Text>
-          <Text className={clsx("text-md font-medium")}>
-            Please try again later.
+            {t("error_general_message") ||
+              "Something went wrong. Please try again later."}
           </Text>
         </View>
       )}

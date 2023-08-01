@@ -120,7 +120,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
             (isSelectedImage === false || isDisabled) && "text-gray-medium"
           )}
         >
-          Upload image
+          {t('upload_image') || "Upload image"}
         </Text>
       </TouchableOpacity>
       <ConfirmDialog

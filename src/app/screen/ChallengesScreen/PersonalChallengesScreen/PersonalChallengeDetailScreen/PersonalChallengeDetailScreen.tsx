@@ -205,11 +205,11 @@ export const RightPersonalChallengeDetailOptions: FC<
               isDisabled={!!isChallengeCompleted}
               options={[
                 {
-                  text: "Edit",
+                  text: t('pop_up_menu.edit') || "Edit",
                   onPress: onEditChallengeBtnPress,
                 },
                 {
-                  text: "Delete",
+                  text: t('pop_up_menu.delete') || "Delete",
                   onPress: () => setIsDeleteChallengeDialogVisible(true),
                 },
               ]}

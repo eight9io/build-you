@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 
 import Dot from "./assets/dot.svg";
 import CurrentDot from "./assets/current-dot.svg";
+import { useTranslation } from "react-i18next";
 
 interface IStepOfStepsProps {
   step: number;
@@ -10,6 +11,8 @@ interface IStepOfStepsProps {
 }
 
 const StepOfSteps: FC<IStepOfStepsProps> = ({ step, totalSteps }) => {
+  const { t } = useTranslation();
+
   const renderRemainingDots = () => {
     const remainingDots = totalSteps - step;
     const dots = [];
@@ -38,7 +41,10 @@ const StepOfSteps: FC<IStepOfStepsProps> = ({ step, totalSteps }) => {
   return (
     <View className="mt-8 flex h-8 flex-col items-center justify-between">
       <Text className="font-regular text-md font-normal leading-4 text-black-default">
-        Steps {step} of {totalSteps}
+        {t("step_of", {
+          currentStep: step,
+          totalStep: totalSteps,
+        })}
       </Text>
       <View className="flex flex-row items-center justify-center space-x-2">
         {renderDoneDots()}

@@ -45,10 +45,10 @@ export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
     >
       <View className="mt-auto flex h-1/2 flex-1 flex-col rounded-t-xl px-6 ">
         <Header
-          title="Select emoji"
+          title={t("add_emoji.select_emoji") || "Select emoji"}
           leftBtn={<Close fill={"black"} />}
           onLeftBtnPress={hanldleClose}
-          rightBtn="Select"
+          rightBtn={t("select") || "Select"}
           onRightBtnPress={handleSelectEmoji}
         />
         <View className="flex h-20 flex-row items-center justify-center ">

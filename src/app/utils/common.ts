@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import isEmpty from "lodash.isempty";
 import dayjs from "./date.util";
 import { IChallenge } from "../types/challenge";
+import i18n from "../i18n/i18n";
 
 export const getRandomId = () => Math.random().toString(36).slice(2, 11);
 
@@ -29,7 +30,7 @@ export const sortArrayByCreatedAt = (
 ) => {
   return array.sort((a, b) => {
     if (!dayjs(a[key]).isValid() || !dayjs(b[key]).isValid()) {
-      throw new Error("Invalid date");
+      throw new Error(i18n.t("invalid_date") || "Invalid date");
     }
     const dateA = dayjs(a[key]).toDate();
     const dateB = dayjs(b[key]).toDate();

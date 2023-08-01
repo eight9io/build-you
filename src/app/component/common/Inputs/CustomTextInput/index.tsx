@@ -4,6 +4,7 @@ import { View, Text, TextInput } from "react-native";
 
 import clsx from "clsx";
 import ErrorText from "../../ErrorText";
+import { useTranslation } from "react-i18next";
 
 interface ICustomTextInputProps {
   title: string;
@@ -22,6 +23,7 @@ const CustomTextInput: React.FC<ICustomTextInputProps> = ({
   placeholderClassName,
   maxChar,
 }) => {
+  const { t } = useTranslation();
   return (
     <View>
       <Controller
@@ -49,7 +51,9 @@ const CustomTextInput: React.FC<ICustomTextInputProps> = ({
               />
               {maxChar && (
                 <Text className="pt-1 text-sm font-normal text-gray-dark">
-                  Max. {maxChar} characters
+                  {t("max_characters", {
+                    numOfCharacters: maxChar,
+                  })}
                 </Text>
               )}
             </View>

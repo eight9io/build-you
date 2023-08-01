@@ -120,7 +120,9 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
               )}
               {otherUserData === null && (
                 <View className={clsx("flex-1  bg-gray-50")}>
-                  <Text className={clsx("text-gray-dark")}>Loading...</Text>
+                  <Text className={clsx("text-gray-dark")}>
+                    {t("loading") || "Loading..."}
+                  </Text>
                 </View>
               )}
             </>

@@ -182,7 +182,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
             iconColor="#FF7B1D"
             options={[
               {
-                text: "Delete",
+                text: t("pop_up_menu.delete") || "Delete",
                 onPress: () => handleDeleteComment(),
               },
             ]}

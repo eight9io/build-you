@@ -38,21 +38,22 @@ const EmptyChallenges = ({
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
+  const { t } = useTranslation();
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
       <Text className={clsx("text-lg")}>
-        You have no challenges at the moment.
+        {t("empty_challenge") || "You have no challenges at the moment."}
       </Text>
       <Text className={clsx("text-lg")}>
-        Click
+        {t("click") || "Click"}
         <Text
           className={clsx("text-primary-default")}
           onPress={() => navigation.navigate("CreateChallengeScreen")}
         >
           {" "}
-          Create{" "}
+          {t("create") || "Create"}{" "}
         </Text>
-        to Create new challenge.
+        {t("to_create_new_challenge") || "to create new challenge"}
       </Text>
     </View>
   );
@@ -66,6 +67,7 @@ const PersonalChallenges = ({
   const [personalChallengesList, setPersonalChallengesList] = useState<
     IChallenge[]
   >([]);
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFetchingError, setIsFetchingError] = useState<boolean>(false);
   const { getUserProfile } = useUserProfileStore();
@@ -122,10 +124,8 @@ const PersonalChallenges = ({
           className={clsx("flex h-full flex-col items-center justify-center")}
         >
           <Text className={clsx("text-md font-medium")}>
-            Something went wrong.
-          </Text>
-          <Text className={clsx("text-md font-medium")}>
-            Please try again later or contact us.
+            {t("error_general_message") ||
+              "Something went wrong. Please try again later."}
           </Text>
         </View>
       )}

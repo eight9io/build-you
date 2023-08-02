@@ -198,6 +198,12 @@
     "email": "Email",
     "VAT_number": "VAT number"
   },
+  "personal_profile": {
+    "name": "Name",
+    "surname": "Surname",
+    "birthday": "Birthday",
+    "email": "Email"
+  },
   "video_profile": "Video Profile",
   "work_place": "Workplace",
   "show_company": "Show company",
@@ -217,8 +223,8 @@
     "account_settings_description": "Manage settings related to permissions, ads and other account information.",
     "account_settings_sections": {
       "personal_information": "Personal information",
-      "security_and_access": "Security and access",
-      "condition_of_use": "Condition of use"
+      "terms_of_services": "Terms of Services",
+      "privacy_policy": "Privacy Policy "
     }
   },
   "new_challenge_screen": {

@@ -22,6 +22,8 @@ import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen";
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
+import TermsOfServicesScreen from "../PersonalInformations/TermsOfServicesScreen";
+import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -120,6 +122,40 @@ const SettingsScreen = () => {
           headerShown: true,
           headerTitle: () => (
             <AppTitle title={t("personal_information.title")} />
+          ),
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <SettingStack.Screen
+        name="TermsOfServicesScreen"
+        component={TermsOfServicesScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle title={t("user_settings_screen.account_settings_sections.terms_of_services")} />
+          ),
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <SettingStack.Screen
+        name="PrivacyPolicyScreen"
+        component={PrivacyPolicyScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle title={t("user_settings_screen.account_settings_sections.privacy_policy")} />
           ),
           headerLeft: (props) => (
             <NavButton

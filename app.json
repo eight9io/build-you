@@ -21,7 +21,7 @@
       "associatedDomains": [
         "applinks:app.uat.buildyou.it"
       ],
-      "buildNumber": "3",
+      "buildNumber": "4",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": [
@@ -80,7 +80,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "6fef699d-c9d1-4275-9011-cb2fb97c7711"
+        "projectId": "77d6f55d-333d-4f73-b0ac-53deee609202"
       }
     }
   }

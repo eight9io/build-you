@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { FC, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 
 import { IChallenge } from "../../../../types/challenge";
 import i18n from "../../../../i18n/i18n";
@@ -95,9 +95,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
-          title: t(
-            "maximum_participants_reached"
-          ),
+          title: t("maximum_participants_reached"),
           message:
             t("dialog.err_max_join") ||
             "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
@@ -142,64 +140,66 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   };
 
   return (
-    <View className="flex h-full flex-col bg-white py-2">
-      <View className="flex flex-row items-center justify-between px-4">
-        <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
-          <CheckCircle fill={statusColor} />
-          <View className="flex-1">
-            <Text className="text-2xl font-semibold">{goal}</Text>
+    <SafeAreaView>
+      <View className="flex h-full flex-col bg-white py-2">
+        <View className="flex flex-row items-center justify-between px-4">
+          <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
+            <CheckCircle fill={statusColor} />
+            <View className="flex-1">
+              <Text className="text-2xl font-semibold">{goal}</Text>
+            </View>
           </View>
-        </View>
-        {challengeOwner?.id !== currentUser?.id && !isChallengeCompleted && (
-          <View className="ml-2 h-9">
-            <Button
-              isDisabled={false}
-              containerClassName={
-                isJoined
-                  ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
-                  : "bg-primary-default flex items-center justify-center px-5"
-              }
-              textClassName={`text-center text-md font-semibold ${
-                isJoined ? "text-gray-dark" : "text-white"
-              } `}
-              title={
-                isJoined
-                  ? i18n.t("challenge_detail_screen.leave")
-                  : i18n.t("challenge_detail_screen.join")
-              }
-              onPress={handleJoinLeaveChallenge}
-            />
-          </View>
-        )}
-        {isChallengeCompleted && (
-          <View className="ml-2 h-9">
-            <Button
-              containerClassName="border border-gray-dark flex items-center justify-center px-5"
-              textClassName={`text-center text-md font-semibold text-gray-dark `}
-              title={i18n.t("challenge_detail_screen.completed")}
-            />
-          </View>
-        )}
-      </View>
-
-      <View className="mt-2 flex flex-1">
-        <TabView
-          titles={CHALLENGE_TABS_TITLE_TRANSLATION}
-          activeTabIndex={index}
-          setActiveTabIndex={setIndex}
-        >
-          <ProgressTab
-            isJoined={isJoined}
-            isChallengeCompleted={isChallengeCompleted}
-            challengeData={challengeData}
-          />
-          <DescriptionTab challengeData={challengeData} />
-          {participantList && challengeOwner?.companyAccount && (
-            <ParticipantsTab participant={participantList} />
+          {challengeOwner?.id !== currentUser?.id && !isChallengeCompleted && (
+            <View className="ml-2 h-9">
+              <Button
+                isDisabled={false}
+                containerClassName={
+                  isJoined
+                    ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
+                    : "bg-primary-default flex items-center justify-center px-5"
+                }
+                textClassName={`text-center text-md font-semibold ${
+                  isJoined ? "text-gray-dark" : "text-white"
+                } `}
+                title={
+                  isJoined
+                    ? i18n.t("challenge_detail_screen.leave")
+                    : i18n.t("challenge_detail_screen.join")
+                }
+                onPress={handleJoinLeaveChallenge}
+              />
+            </View>
           )}
-        </TabView>
+          {isChallengeCompleted && (
+            <View className="ml-2 h-9">
+              <Button
+                containerClassName="border border-gray-dark flex items-center justify-center px-5"
+                textClassName={`text-center text-md font-semibold text-gray-dark `}
+                title={i18n.t("challenge_detail_screen.completed")}
+              />
+            </View>
+          )}
+        </View>
+
+        <View className="mt-2 flex flex-1">
+          <TabView
+            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+            activeTabIndex={index}
+            setActiveTabIndex={setIndex}
+          >
+            <ProgressTab
+              isJoined={isJoined}
+              isChallengeCompleted={isChallengeCompleted}
+              challengeData={challengeData}
+            />
+            <DescriptionTab challengeData={challengeData} />
+            {participantList && challengeOwner?.companyAccount && (
+              <ParticipantsTab participant={participantList} />
+            )}
+          </TabView>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

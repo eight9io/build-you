@@ -15,6 +15,8 @@ export type RootStackParamList = {
   SettingsScreen: undefined;
   SettingsScreenRoot: undefined;
   PersonalInformationScreen: undefined;
+  TermsOfServicesScreen: undefined;
+  PrivacyPolicyScreen: undefined;
   DeleteAccountScreen: undefined;
   ProfileScreen: undefined;
   ModalScreen: undefined;

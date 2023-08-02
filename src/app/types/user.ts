@@ -31,7 +31,7 @@ export interface IUserData {
   emailContact?: string;
   phone?: string;
   webSite?: string;
-  vatNumber?: string;
+  pIva?: string;
 }
 
 export interface IHardSkillProps {

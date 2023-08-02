@@ -120,25 +120,27 @@ const RateChallengeSection = ({ challengeId }) => {
           "Something went wrong. Please try again later."
         }
       />
-
-      <Text className="text-lg font-medium">
-        {t("challenge_progress_tab.rate_the_challenge") || "Rate the challenge"}
-      </Text>
-      <View className="flex flex-row items-center">
-        {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
-          <TouchableOpacity
-            className="pr-4"
-            key={`${index}`}
-            disabled={isRated}
-            onPress={() => handleRateChallenge(index as number)}
-          >
-            {ratedValue > index ? (
-              <StarFillSvg width={20} height={20} />
-            ) : (
-              <StarNoFillSvg width={20} height={20} />
-            )}
-          </TouchableOpacity>
-        ))}
+      <View className="flex w-full flex-row justify-between">
+        <Text className="text-lg font-medium">
+          {t("challenge_progress_tab.rate_the_challenge") ||
+            "Rate the challenge"}
+        </Text>
+        <View className="flex flex-row items-center">
+          {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
+            <TouchableOpacity
+              className="pr-4"
+              key={`${index}`}
+              disabled={isRated}
+              onPress={() => handleRateChallenge(index as number)}
+            >
+              {ratedValue > index ? (
+                <StarFillSvg width={20} height={20} />
+              ) : (
+                <StarNoFillSvg width={20} height={20} />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -158,7 +160,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     useState<number>(-1);
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
   const isFocused = useIsFocused();
 
@@ -171,6 +172,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   const isChallengeCompletedOrClosed =
     challengeData?.status === "closed" || challengeData?.status === "done";
+
+  const isChallengeDoneByCurrentUser =
+    challengeData.participants?.find(
+      (participant) => participant.id === userData?.id
+    )?.challengeStatus === "done";
 
   const { t } = useTranslation();
 
@@ -196,7 +202,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setTimeout(() => {
       setProgressLoading(false);
     }, 800);
-  }, [challengeData?.id, shouldRefresh, isFocused]);
+  }, [challengeData?.id, isFocused]);
 
   const refetch = () => {
     setProgressLoading(true);
@@ -278,23 +284,33 @@ export const ProgressTab: FC<IProgressTabProps> = ({
         <FlatList
           data={localProgressData}
           keyExtractor={(item) => item.id}
-          ListHeaderComponent={
-            (isJoined || isCurrentUserOwnerOfChallenge) &&
-            (!isChallengeCompleted ? (
-              <View>
-                <AddNewChallengeProgressButton />
-                {!progressLoading && localProgressData?.length == 0 && (
-                  <View className="px-4 py-4">
-                    <Text className="selection: text-base">
-                      {t("challenge_detail_screen.no_progress_yet") as string}
-                    </Text>
-                  </View>
+          ListHeaderComponent={() => {
+            return (
+              <>
+                {(isJoined || isCurrentUserOwnerOfChallenge) &&
+                  (!isChallengeCompleted ? (
+                    <View>
+                      <AddNewChallengeProgressButton />
+                      {!progressLoading && localProgressData?.length == 0 && (
+                        <View className="px-4 py-4">
+                          <Text className="selection: text-base">
+                            {
+                              t(
+                                "challenge_detail_screen.no_progress_yet"
+                              ) as string
+                            }
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  ) : null)}
+                {(isChallengeCompletedOrClosed ||
+                  isChallengeDoneByCurrentUser) && (
+                  <RateChallengeSection challengeId={challengeData.id} />
                 )}
-              </View>
-            ) : (
-              <RateChallengeSection challengeId={challengeData.id} />
-            ))
-          }
+              </>
+            );
+          }}
           renderItem={({ item, index }) => (
             <ProgressCard
               isJoined={isJoined}

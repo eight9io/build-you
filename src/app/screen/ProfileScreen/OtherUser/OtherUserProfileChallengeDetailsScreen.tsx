@@ -231,10 +231,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalDialogController.showModal({
-          title: t("maximum_participants_reached"),
-          message:
-            t("dialog.err_max_join") ||
-            "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
+          title: t("dialog.err_title"),
+          message: error?.response?.data?.message || t("dialog.err_max_join"),
         });
         return;
       }

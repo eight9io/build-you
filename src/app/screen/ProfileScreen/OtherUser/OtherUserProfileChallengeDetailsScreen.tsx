@@ -184,7 +184,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     if (!challengeId || !shouldRefesh) return;
     getChallengeData();
     setShouldRefresh(false);
-  }, [shouldRefesh]);
+  }, [shouldRefesh, challengeId]);
 
   useLayoutEffect(() => {
     if (isJoined || isCurrentUserOwnerOfChallenge) {

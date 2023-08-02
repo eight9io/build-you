@@ -13,7 +13,7 @@ const Accordition = ({ navigation }: IAccorditionProps) => {
 
   return (
     <View>
-      <View className={clsx("flex flex-col pt-3")}>
+      {/* <View className={clsx("flex flex-col pt-3")}>
         <View className={clsx("py-4")}>
           <Text className={clsx("text-h4 font-medium")}>
             {t("user_settings_screen.general_settings")}
@@ -44,8 +44,8 @@ const Accordition = ({ navigation }: IAccorditionProps) => {
             "user_settings_screen.general_settings_sections.notifications"
           )}
         />
-      </View>
-      <View className={clsx("flex flex-col pt-7")}>
+      </View> */}
+      <View className={clsx("flex flex-col pt-4")}>
         <View className={clsx("py-4")}>
           <Text className={clsx("text-h4 font-medium")}>
             {t("user_settings_screen.account")}
@@ -64,13 +64,15 @@ const Accordition = ({ navigation }: IAccorditionProps) => {
         />
         <AccorditionItem
           title={t(
-            "user_settings_screen.account_settings_sections.security_and_access"
+            "user_settings_screen.account_settings_sections.terms_of_services"
           )}
+          onPress={() => navigation.navigate("TermsOfServicesScreen")}
         />
         <AccorditionItem
           title={t(
-            "user_settings_screen.account_settings_sections.condition_of_use"
+            "user_settings_screen.account_settings_sections.privacy_policy"
           )}
+          onPress={() => navigation.navigate("PrivacyPolicyScreen")}
         />
       </View>
     </View>

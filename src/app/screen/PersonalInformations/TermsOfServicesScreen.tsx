@@ -1,12 +1,9 @@
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import React, { Component, useState } from "react";
-import clsx from "clsx";
+import { View } from "react-native";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useUserProfileStore } from "../../store/user-store";
 import { serviceGetTerms } from "../../service/settings";
-
+import { WebView } from 'react-native-webview';
 export default function TermsOfServicesScreen({ navigation }: any) {
-  const { t } = useTranslation();
   const [content, setContent] = useState<any>()
   const getContent = () => {
     serviceGetTerms()
@@ -21,8 +18,11 @@ export default function TermsOfServicesScreen({ navigation }: any) {
   }
   getContent()
   return (
-    <SafeAreaView className="justify-content: space-between flex-1 bg-white px-4 pt-3">
-      {content}
-    </SafeAreaView>
+    <View className=" flex-1 bg-white px-3 pt-3 ">
+      <WebView
+        originWhitelist={['*']}
+        source={{ html: content }}
+      />
+    </View>
   );
 }

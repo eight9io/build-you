@@ -223,6 +223,7 @@
     "account_settings_description": "Manage settings related to permissions, ads and other account information.",
     "account_settings_sections": {
       "personal_information": "Personal information",
+      "company_information": "Company information",
       "terms_of_services": "Terms of Services",
       "privacy_policy": "Privacy Policy "
     }
@@ -419,7 +420,15 @@
     "company_name_placeholder": "Enter your company name",
     "biography_name": "Biography",
     "biography_name_placeholder": "Your biography",
-    "first_name_required": "Please fill in your first name."
+    "first_name_required": "Please fill in your first name.",
+    "company_phone": "Phone",
+    "company_phone_placeholder": "Enter your company phone",
+    "mailContact": "Email contact",
+    "company_email_placeholder": "Enter your company email contact",
+    "webSite": "Website",
+    "company_webSite_placeholder": "Enter your company website ",
+    "pIva": "VAT Number",
+    "company_vat_placeholder": "Enter your company VAT Number "
   },
   "notification_screen": {
     "no_notification": "You have no notifications at the moment"

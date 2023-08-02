@@ -35,10 +35,19 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
   } = useForm<{
     name: string;
     bio: string;
+    webSite: string;
+    phone: string;
+    mailContact: string;
+    pIva: string;
+
   }>({
     defaultValues: {
       name: userData?.name || "",
       bio: userData?.bio || "",
+      webSite: userData?.webSite || "",
+      phone: userData?.phone || "",
+      mailContact: userData?.emailContact || "",
+      pIva: userData?.pIva || "",
     },
     resolver: yupResolver(EditCompanyProfileValidators()),
   });
@@ -48,6 +57,10 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
     serviceUpdateMyProfile(userData?.id, {
       name: data.name,
       bio: data.bio,
+      webSite: data.webSite,
+      phone: data.phone,
+      emailContact: data.mailContact,
+      pIva: data.pIva,
     })
       .then(async (res) => {
         if (res.status === 200) {
@@ -144,6 +157,115 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 )}
               />
             </View>
+
+            <View className="pt-3">
+              <Controller
+                control={control}
+                name="phone"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View className="flex flex-col">
+                    <TextInput
+                      label={
+                        t("edit_company_profile_screen.company_phone") ||
+                        "Phone"
+                      }
+                      placeholder={
+                        t(
+                          "edit_company_profile_screen.company_phone_placeholder"
+                        ) || "Enter your company phone"
+                      }
+                      placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      keyboardType="numeric"
+                    />
+
+                  </View>
+                )}
+              />
+            </View>
+            <View className="pt-3">
+              <Controller
+                control={control}
+                name="mailContact"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View className="flex flex-col">
+                    <TextInput
+                      label={
+                        t("edit_company_profile_screen.mailContact") ||
+                        "Email contact"
+                      }
+                      placeholder={
+                        t(
+                          "edit_company_profile_screen.company_email_placeholder"
+                        ) || "Enter your company email contact"
+                      }
+                      placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+
+                  </View>
+                )}
+              />
+            </View>
+            <View className="pt-3">
+              <Controller
+                control={control}
+                name="webSite"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View className="flex flex-col">
+                    <TextInput
+                      label={
+                        t("edit_company_profile_screen.webSite") ||
+                        "Website"
+                      }
+                      placeholder={
+                        t(
+                          "edit_company_profile_screen.company_webSite_placeholder"
+                        ) || "Enter your company website"
+                      }
+                      placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+
+                  </View>
+                )}
+              />
+            </View>
+            <View className="pt-3">
+              <Controller
+                control={control}
+                name="pIva"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View className="flex flex-col">
+                    <TextInput
+                      label={
+                        t("edit_company_profile_screen.pIva") ||
+                        "Website"
+                      }
+                      placeholder={
+                        t(
+                          "edit_company_profile_screen.company_vat_placeholder"
+                        ) || "Enter your company VAT Number "
+                      }
+                      placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      keyboardType="numeric"
+                    />
+
+                  </View>
+                )}
+              />
+            </View>
+
+
 
             <Button
               title={t("button.update") || "Update"}

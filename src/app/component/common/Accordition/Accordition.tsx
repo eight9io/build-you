@@ -4,13 +4,17 @@ import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 
 import AccorditionItem from "./AccorditionItem";
+import { useUserProfileStore } from "../../../store/user-store";
 
 interface IAccorditionProps {
   navigation: any;
 }
 const Accordition = ({ navigation }: IAccorditionProps) => {
   const { t } = useTranslation();
+  const { getUserProfile } = useUserProfileStore();
 
+  const userData = getUserProfile();
+  const isCompany = userData && userData?.companyAccount;
   return (
     <View>
       {/* <View className={clsx("flex flex-col pt-3")}>
@@ -57,9 +61,7 @@ const Accordition = ({ navigation }: IAccorditionProps) => {
           </Text>
         </View>
         <AccorditionItem
-          title={t(
-            "user_settings_screen.account_settings_sections.personal_information"
-          )}
+          title={isCompany ? t("user_settings_screen.account_settings_sections.company_information") : t("personal_information.title")}
           onPress={() => navigation.navigate("PersonalInformationScreen")}
         />
         <AccorditionItem

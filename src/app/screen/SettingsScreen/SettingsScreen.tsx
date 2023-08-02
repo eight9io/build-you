@@ -24,6 +24,7 @@ import PersonalInformationScreen from "../PersonalInformations/PersonalInformati
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
 import TermsOfServicesScreen from "../PersonalInformations/TermsOfServicesScreen";
 import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
+import CompanyInformationScreen from "../PersonalInformations/CompanyInformationScreen";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -90,6 +91,9 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
 };
 const SettingsScreen = () => {
   const { t } = useTranslation();
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const isCompany = currentUser && currentUser?.companyAccount;
   return (
     <SettingStack.Navigator
       screenOptions={{
@@ -117,11 +121,11 @@ const SettingsScreen = () => {
       />
       <SettingStack.Screen
         name="PersonalInformationScreen"
-        component={PersonalInformationScreen}
+        component={isCompany ? CompanyInformationScreen : PersonalInformationScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => (
-            <AppTitle title={t("personal_information.title")} />
+            <AppTitle title={isCompany ? t("user_settings_screen.account_settings_sections.company_information") : t("personal_information.title")} />
           ),
           headerLeft: (props) => (
             <NavButton

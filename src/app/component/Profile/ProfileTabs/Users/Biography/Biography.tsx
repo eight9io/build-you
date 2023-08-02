@@ -126,7 +126,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
         <View className="flex-column flex flex-wrap gap-5 pt-[20px]">
 
           {occupation && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap  w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[24%]  text-md font-semibold  text-gray-dark"
@@ -141,7 +141,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.webSite && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[24%]  text-md font-semibold  text-gray-dark"
@@ -156,7 +156,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.phone && (
-            <View className="flex flex-row flex-wrap">
+            <View className="flex flex-row flex-wrap  w-full">
               <Text
                 className={clsx(
                   "w-[24%]  text-md font-semibold  text-gray-dark"
@@ -171,7 +171,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.emailContact && (
-            <View className="flex flex-row flex-wrap">
+            <View className="flex flex-row flex-wrap  w-full">
               <Text
                 className={clsx(
                   "w-[24%]  text-md font-semibold  text-gray-dark"
@@ -186,7 +186,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.pIva && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap  w-full">
               <Text
                 className={clsx(
                   "w-[24%]  text-md font-semibold  text-gray-dark"

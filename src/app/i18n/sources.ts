@@ -1,10 +1,10 @@
 export const buildYou = {
   en: {
-    index: require("./translations/en/it.json"),
-    errorMessage: require("./translations/en/errorMessage.json"),
+    index: require("./translations/en/en.json"),
+    errorMessage: require("./translations/en/errorMessage.en.json"),
   },
-  vi: {
-    // index: require('./translations/vi/it.json'),
-    // errorMessage: require('./translations/vi/errMessage.json'),
+  it: {
+    index: require("./translations/it/it.json"),
+    errorMessage: require("./translations/it/errorMessage.it.json"),
   },
 };

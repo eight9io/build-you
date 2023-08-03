@@ -28,11 +28,17 @@ interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldRefresh: boolean;
   setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
-> = ({ challengeData, shouldRefresh, setShouldRefresh }) => {
+> = ({
+  challengeData,
+  shouldRefresh,
+  setShouldRefresh,
+  setIsNewProgressAdded,
+}) => {
   const { t } = useTranslation();
   // const [isJoined, setIsJoined] = useState(true);
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
@@ -191,6 +197,7 @@ export const ChallengeCompanyDetailScreen: FC<
               challengeData={challengeData}
               isChallengeCompleted={isChallengeCompleted}
               isOtherUserProfile={challengeOwner.id !== currentUser?.id}
+              setShouldRefresh={setIsNewProgressAdded}
             />
             <DescriptionTab challengeData={challengeData} />
             <ParticipantsTab participant={participantList as any} />

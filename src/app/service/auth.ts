@@ -68,7 +68,7 @@ export const appleLogin = async (payload: ISocialLoginForm) => {
     }
   }
 
-  return http.post<ILoginResponse>(`/auth/apple/${token}`, {
+  return http.post<ILoginResponse>(`/auth/apple`, {
     token,
     email,
     sub,

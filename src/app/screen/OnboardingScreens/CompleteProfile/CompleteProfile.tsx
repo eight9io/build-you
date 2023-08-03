@@ -21,6 +21,9 @@ import NavButton from "../../../component/common/Buttons/NavButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "../../../store/auth-store";
 import { useTranslation } from "react-i18next";
+import { CommonActions } from "@react-navigation/native";
+import { useUserProfileStore } from "../../../store/user-store";
+import { setLastNotiIdToLocalStorage } from "../../../utils/notification.util";
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -102,7 +105,9 @@ const CompleteProfileFinishScreen = ({
 const CompleteProfileScreen = () => {
   const { logout } = useAuthStore();
   const { t } = useTranslation();
-  
+
+  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
+
   return (
     <CompleteProfileStack.Navigator
       screenOptions={{
@@ -122,8 +127,17 @@ const CompleteProfileScreen = () => {
               text="Logout"
               withBackIcon={true}
               onPress={() => {
-                logout();
-                navigation.navigate("IntroScreen");
+                setTimeout(() => {
+                  navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: "IntroScreen" }],
+                    })
+                  );
+                  setLastNotiIdToLocalStorage("");
+                  logout();
+                  userProfileStoreOnLogout();
+                }, 500);
               }}
             />
           ),

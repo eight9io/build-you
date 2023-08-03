@@ -62,8 +62,8 @@
   "register_screen.sub_title": "Register for free with your email and password.",
   "register_screen.policy": "I've read and agreed with ",
   "register_screen.policy_link": "Privacy Policy",
-  "register_screen.terms_link": "Terms",
-  "register_screen.conditions_link": "Conditions",
+  "register_screen.terms_link": "Terms and Conditions",
+
   "and": "and",
   "policy": [
     {
@@ -495,7 +495,7 @@
     "biography_placeholder": "Enter your biography"
   },
   "policy_modal": {
-    "title": "Privacy policy..."
+    "title": "Privacy Policy"
   },
   "commentWithCount": "{{count}} comment",
   "commentWithCount_plural": "{{count}} comments",

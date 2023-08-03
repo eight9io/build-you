@@ -19,6 +19,7 @@ import PolicyModal from "../../component/modal/PolicyModal";
 
 import IconEyeOn from "./asset/icon-eye.svg";
 import IconEyeOff from "./asset/eye-off.svg";
+import TermModal from "../../component/modal/TermModal";
 
 type FormData = {
   email: string;
@@ -75,6 +76,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
       });
   };
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalTerms, setModalTerms] = useState(false);
 
   const [hidePassword, setHidePassword] = useState(true);
   return (
@@ -177,7 +179,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                   <View className="">
                     <CheckBox
                       title={
-                        <View className="gray-black-light ml-3 flex-row flex-wrap  text-sm leading-6 ">
+                        <Text className="pl-4">
                           <Text className="">
                             {t("register_screen.policy")}
                           </Text>
@@ -190,18 +192,12 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                           <Text className=""> {t("and")} </Text>
                           <Text
                             className="cursor-pointer font-medium underline underline-offset-auto"
-                            onPress={() => setModalVisible(true)}
+                            onPress={() => setModalTerms(true)}
                           >
                             {t("register_screen.terms_link")}
                           </Text>
-                          <Text className=""> {t("and")} </Text>
-                          <Text
-                            className="cursor-pointer  font-medium underline underline-offset-1"
-                            onPress={() => setModalVisible(true)}
-                          >
-                            {t("register_screen.conditions_link")}
-                          </Text>
-                        </View>
+
+                        </Text>
                       }
                       containerStyle={{
                         backgroundColor: "transparent",
@@ -238,6 +234,11 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             navigation={navigation}
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
+          />
+          <TermModal
+            navigation={navigation}
+            modalVisible={modalTerms}
+            setModalVisible={setModalTerms}
           />
         </View>
       </KeyboardAwareScrollView>

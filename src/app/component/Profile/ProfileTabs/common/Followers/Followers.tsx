@@ -23,7 +23,7 @@ const Followers: FC<IFollowersProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="flex-1 px-1 pl-4 ">
+    <View className="flex-1 px-6 pl-4 ">
       {followers.length > 0 && (
         <FlatList
           data={followers}
@@ -56,8 +56,8 @@ const Followers: FC<IFollowersProps> = ({
                     />
                   )}
                 </View>
-                <Text className="text-base font-semibold text-basic-black">
-                  {item.name} {item.surname}
+                <Text className="flex w-full flex-row flex-wrap gap-1 pr-[40px]  text-base font-semibold text-basic-black">
+                  {item.name}{item.surname}
                 </Text>
               </TouchableOpacity>
             );

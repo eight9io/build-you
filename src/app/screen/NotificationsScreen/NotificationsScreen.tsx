@@ -89,12 +89,6 @@ const Notifications = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#F7F9FB]">
-      {/* <MainNavBar
-        title={t('top_nav.noti')}
-        navigation={navigation}
-        withSearch
-      /> */}
-
       <Notification
         notifications={notifications}
         isRefreshing={isRefreshing}

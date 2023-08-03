@@ -1,5 +1,11 @@
 import { useState, FC } from "react";
-import { View, TouchableOpacity, Text, Linking } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Linking,
+  ActivityIndicator,
+} from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
@@ -19,6 +25,8 @@ interface IImagePickerProps {
   setIsSelectedImage?: (isSelected: boolean) => void;
   base64?: boolean;
   isDisabled?: boolean;
+  loading?: boolean;
+  setLoading?: (loading: boolean) => void;
 }
 
 const ImagePicker: FC<IImagePickerProps> = ({
@@ -30,6 +38,8 @@ const ImagePicker: FC<IImagePickerProps> = ({
   allowsMultipleSelection = false,
   base64,
   isDisabled = false,
+  loading = false,
+  setLoading,
 }) => {
   const { t } = useTranslation();
   const [requirePermissionModal, setRequirePermissionModal] = useState(false);
@@ -47,12 +57,16 @@ const ImagePicker: FC<IImagePickerProps> = ({
   });
 
   const handlePickImage = async () => {
+    setTimeout(() => {
+      setLoading && setLoading(true);
+    }, 300);
     const result = await pickImageFunction();
     if (result && !result.canceled) {
       const imagesPicked = result.assets.map((asset) => asset.uri);
       onImagesSelected && onImagesSelected(imagesPicked);
       if (setIsSelectedImage) setIsSelectedImage(true);
     }
+    setLoading && setLoading(false);
   };
 
   const handleRemoveSelectedImage = (index: number) => {
@@ -70,6 +84,8 @@ const ImagePicker: FC<IImagePickerProps> = ({
   };
   return (
     <View className="flex flex-col">
+      {loading && <ActivityIndicator size="large" color="#C5C8D2" />}
+
       {images && images.length > 0 && (
         <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
           {images.map((uri, index) => (
@@ -120,7 +136,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
             (isSelectedImage === false || isDisabled) && "text-gray-medium"
           )}
         >
-          {t('upload_image') || "Upload image"}
+          {t("upload_image") || "Upload image"}
         </Text>
       </TouchableOpacity>
       <ConfirmDialog

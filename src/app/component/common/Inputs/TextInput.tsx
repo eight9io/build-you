@@ -36,12 +36,14 @@ export const TextInput: FC<ITextInputProps> = (props) => {
       ) : null}
       <View className="relative">
         {onPress ? (
-          <TouchableOpacity onPress={onPress}>
-            <View pointerEvents={"none"}>
+          <TouchableOpacity
+            onPress={onPress}
+            className="bg-gray-veryLigh w-full rounded-[10px] border-[1px] border-gray-medium"
+          >
+            <View pointerEvents={"none"} className="w-11/12">
               <Base
                 {...inputProps}
                 className={clsx(
-                  "w-full rounded-[10px] border-[1px] border-gray-medium bg-gray-veryLight",
                   inputProps?.className,
                   Platform.OS === "ios" ? "p-3" : "p-2.5"
                 )}

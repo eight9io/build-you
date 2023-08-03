@@ -32,6 +32,21 @@ interface IProgressTabProps {
   isJoined?: boolean | null;
   isOtherUserProfile?: boolean;
   isChallengeCompleted?: boolean | null;
+  setShouldRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface IRatingResponse {
+  rateAverage: number;
+  entities: {
+    createdAt: string;
+    rating: number;
+    updatedAt: string;
+    user: {
+      id: string;
+      name: string;
+      surname: string;
+    };
+  }[];
 }
 
 const MAX_PROGRESS_VALUE = 5;
@@ -39,20 +54,29 @@ const MAX_PROGRESS_VALUE = 5;
 const RateChallengeSection = ({ challengeId }) => {
   const { t } = useTranslation();
   const [ratedValue, setRatedValue] = useState<number>(0);
-  const [isRated, setIsRated] = useState<boolean>(false);
+  const [isRatedByCurrentUser, setIsRatedByCurrentUser] =
+    useState<boolean>(false);
+  const [valueRatedByCurrentUser, setValueRatedByCurrentUser] =
+    useState<number>(0);
   const [showComfirmModal, setShowComfirmModal] = useState<boolean>(false);
   const [isRatingSuccess, setIsRatingSuccess] = useState<boolean>(false);
   const [isRatingError, setIsRatingError] = useState<boolean>(false);
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
 
   useEffect(() => {
     const fetchChallengeRating = async () => {
       try {
         const res = await serviceGetChallengeRating(challengeId);
-        const rating = res.data.rateAverage;
-        setRatedValue(rating);
-        if (rating > 0) {
-          setIsRated(true);
-        }
+        const resData: IRatingResponse = res.data;
+        const isRatedByCurrentUser = resData.entities.some(
+          (entity) => entity.user.id === currentUser?.id
+        );
+        const valueRatedByCurrentUser = resData.entities.find(
+          (entity) => entity.user.id === currentUser?.id
+        )?.rating;
+        setValueRatedByCurrentUser(valueRatedByCurrentUser);
+        setIsRatedByCurrentUser(isRatedByCurrentUser);
       } catch (_) {
         setRatedValue(0);
       }
@@ -62,6 +86,7 @@ const RateChallengeSection = ({ challengeId }) => {
 
   const handleRateChallenge = (index: number) => {
     setRatedValue(index + 1);
+    setValueRatedByCurrentUser(index + 1);
     setShowComfirmModal(true);
   };
 
@@ -83,7 +108,7 @@ const RateChallengeSection = ({ challengeId }) => {
     try {
       await serviceRateChallenge(challengeId, ratedValue as number);
       setIsRatingSuccess(true);
-      setIsRated(true);
+      setIsRatedByCurrentUser(true);
     } catch (error) {
       setIsRatingError(true);
     }
@@ -130,10 +155,10 @@ const RateChallengeSection = ({ challengeId }) => {
             <TouchableOpacity
               className="pr-4"
               key={`${index}`}
-              disabled={isRated}
+              disabled={isRatedByCurrentUser}
               onPress={() => handleRateChallenge(index as number)}
             >
-              {ratedValue > index ? (
+              {valueRatedByCurrentUser > index ? (
                 <StarFillSvg width={20} height={20} />
               ) : (
                 <StarNoFillSvg width={20} height={20} />
@@ -151,6 +176,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   challengeData,
   isChallengeCompleted = false,
   isOtherUserProfile = false,
+  setShouldRefresh,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [localProgressData, setLocalProgressData] = useState<
@@ -206,6 +232,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   const refetch = () => {
     setProgressLoading(true);
+    setShouldRefresh && setShouldRefresh(true);
     httpInstance.get(`/challenge/one/${challengeData.id}`).then((res) => {
       const progressDataLocal =
         res.data?.progress &&
@@ -229,7 +256,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   };
 
   const handleEditProgress = () => {
-    // setShouldRefresh(true);
     refetch();
   };
 

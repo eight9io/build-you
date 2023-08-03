@@ -107,6 +107,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
     if (!result.canceled) {
       setPickedVideo(result.assets.map((asset) => asset.uri));
     }
+    setLoading && setLoading(false);
   };
 
   const removeLocalVideo = () => {

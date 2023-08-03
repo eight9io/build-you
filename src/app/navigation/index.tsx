@@ -86,6 +86,7 @@ export const RootNavigation = () => {
       if (!!isLoggedin) {
         setupInterceptor(getRefreshToken, () => {
           logout();
+          userProfileStoreOnLogout();
         });
         setAuthTokenToHttpHeader(isLoggedin);
 
@@ -125,7 +126,9 @@ export const RootNavigation = () => {
             }, 200);
           });
       } else {
-        SplashScreen.hideAsync();
+        setTimeout(() => {
+          SplashScreen.hideAsync();
+        }, 200);
       }
     }
   }, [authStoreHydrated]);

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
 
 import clsx from "clsx";
-import { useUserProfileStore } from "../../../../store/user-store";
+import { useFollowingListStore, useUserProfileStore } from "../../../../store/user-store";
 
 import Biography from "./Biography/Biography";
 import Skills from "./Skills";
@@ -21,8 +21,9 @@ const ProfileTabs: FC = () => {
   const [isFollowingRefreshing, setIsFollowingRefreshing] =
     useState<boolean>(false);
   const [followerList, setFollowerList] = useState([]);
-  const [followingList, setFollowingList] = useState([]);
-
+  // const [followingList, setFollowingList] = useState([]);
+  const { getFollowingList, setFollowingList } = useFollowingListStore();
+  const followingList = getFollowingList();
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const { t } = useTranslation();
@@ -36,7 +37,7 @@ const ProfileTabs: FC = () => {
     setIsFollowerRefreshing(false);
   };
 
-  const getFollowingList = async () => {
+  const fetchFollowingList = async () => {
     setIsFollowingRefreshing(true);
     const { data: followingList } = await serviceGetListFollowing(
       userProfile?.id
@@ -74,7 +75,7 @@ const ProfileTabs: FC = () => {
           <Following
             following={followingList}
             isRefreshing={isFollowingRefreshing}
-            getFollowingList={getFollowingList}
+            getFollowingList={fetchFollowingList}
             key="3"
           />,
         ]}

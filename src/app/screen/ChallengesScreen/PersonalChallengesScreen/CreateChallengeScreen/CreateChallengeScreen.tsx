@@ -26,6 +26,7 @@ import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePi
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 // import CalendarIcon from "./asset/calendar.svg";
 // import CloseIcon from "../asset/close.svg";
 
@@ -51,6 +52,8 @@ const CreateChallengeScreen = () => {
   const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
     undefined
   );
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
+
   const {
     control,
     getValues,
@@ -94,6 +97,7 @@ const CreateChallengeScreen = () => {
   };
 
   const onSubmit = async (data: ICreateChallengeForm) => {
+    if (isImageLoading) return;
     setIsLoading(true);
     setErrorMessage("");
     let newChallengeId: string | null;
@@ -355,8 +359,22 @@ const CreateChallengeScreen = () => {
                 onImagesSelected={handleImagesSelected}
                 onRemoveSelectedImage={handleRemoveSelectedImage}
                 base64
+                loading={isImageLoading}
+                setLoading={setIsImageLoading}
               />
-              {errors.image && <ErrorText message={errors.image.message} />}
+              {!isImageLoading && errors.image && (
+                <ErrorText message={errors.image.message} />
+              )}
+              {isImageLoading && (
+                <Text className="pt-2 text-sm text-red-500">
+                  <Ionicons
+                    name="alert-circle-outline"
+                    size={14}
+                    color="#FF4949"
+                  />
+                  {t("image_picker.upload_a_video_waiting") as string}
+                </Text>
+              )}
             </View>
           </View>
         </View>

@@ -1,10 +1,12 @@
 import {
   View,
+  Text,
   Modal,
   SafeAreaView,
   Dimensions,
   ScaledSize,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
 import React, { FC, useState, useEffect } from "react";
@@ -35,6 +37,7 @@ import {
 import ConfirmDialog from "../common/Dialog/ConfirmDialog";
 import ErrorText from "../common/ErrorText";
 import GlobalToastController from "../common/Toast/GlobalToastController";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface IAddNewChallengeProgressModalProps {
   challengeId: string;
@@ -104,6 +107,8 @@ export const AddNewChallengeProgressModal: FC<
   );
   const [shouldDisableAddImage, setShouldDisableAddImage] =
     useState<boolean>(false);
+  const [isImageOrVideoLoading, setIsImageOrVideoLoading] =
+    useState<boolean>(false);
 
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
@@ -144,6 +149,7 @@ export const AddNewChallengeProgressModal: FC<
   }, [selectedMedia]);
 
   const onSubmit = async (data: any) => {
+    if (isImageOrVideoLoading) return;
     try {
       setIsLoading(true);
       if (!userProfile || !userProfile.id) return;
@@ -165,8 +171,6 @@ export const AddNewChallengeProgressModal: FC<
           await updateProgressImage(progressId, selectedMedia)
             .then((res) => {
               if (res.status === 200 || 201) {
-                // setIsRequestSuccess(true);
-                // setIsShowModal(true);
                 handleCloseModal();
                 GlobalToastController.showModal({
                   message:
@@ -184,9 +188,6 @@ export const AddNewChallengeProgressModal: FC<
           await updateProgressVideo(progressId, selectedVideo[0])
             .then((res) => {
               if (res.status === 200 || 201) {
-                // setIsRequestSuccess(true);
-                // setIsShowModal(true);
-
                 handleCloseModal();
                 GlobalToastController.showModal({
                   message:
@@ -297,6 +298,9 @@ export const AddNewChallengeProgressModal: FC<
               )}
 
               <View>
+                {isImageOrVideoLoading && (
+                  <ActivityIndicator size="large" color="#C5C8D2" />
+                )}
                 <View className="">
                   <ImagePicker
                     onImagesSelected={(images) => {
@@ -322,6 +326,7 @@ export const AddNewChallengeProgressModal: FC<
                     isSelectedImage={isSelectedImage}
                     setIsSelectedImage={setIsSelectedImage}
                     isDisabled={shouldDisableAddImage}
+                    setLoading={setIsImageOrVideoLoading}
                   />
                 </View>
 
@@ -334,9 +339,22 @@ export const AddNewChallengeProgressModal: FC<
                     setSelectedVideo={setSelectedVideo}
                     isSelectedImage={isSelectedImage}
                     setIsSelectedImage={setIsSelectedImage}
+                    setLoading={setIsImageOrVideoLoading}
                   />
                 </View>
-                {errors?.media && <ErrorText message={errors.media.message} />}
+                {!isImageOrVideoLoading && errors?.media && (
+                  <ErrorText message={errors.media.message} />
+                )}
+                {isImageOrVideoLoading && (
+                  <Text className="pt-2 text-sm text-red-500">
+                    <Ionicons
+                      name="alert-circle-outline"
+                      size={14}
+                      color="#FF4949"
+                    />
+                    {t("image_picker.upload_a_video_waiting") as string}
+                  </Text>
+                )}
               </View>
 
               <View className="flex flex-col pt-4">

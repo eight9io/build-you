@@ -228,10 +228,9 @@ const CompanyChallengeDetailScreen = ({
     useState<boolean>(false);
   const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
+  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
-
-  // const isFocused = useIsFocused();
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -254,7 +253,7 @@ const CompanyChallengeDetailScreen = ({
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-  }, []);
+  }, [isNewProgressAdded]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -336,6 +335,7 @@ const CompanyChallengeDetailScreen = ({
             challengeData={challengeData}
             shouldRefresh={shouldRefresh}
             setShouldRefresh={setShouldRefresh}
+            setIsNewProgressAdded={setIsNewProgressAdded}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

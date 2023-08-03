@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import { useUserProfileStore } from "../../store/user-store";
+import Button from "../../component/common/Buttons/Button";
 
 export default function PersonalInformationScreen({ navigation }: any) {
   const { t } = useTranslation();
@@ -17,12 +18,12 @@ export default function PersonalInformationScreen({ navigation }: any) {
             {t("personal_information.description")}
           </Text>
         </View>
-        <View className="flex-column flex flex-wrap gap-5 pt-[20px] px-4 ">
+        <View className="flex-column flex flex-wrap gap-3 pt-[20px] px-4 ">
           {userData?.name && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[24%] text-md font-semibold  text-gray-dark"
+                  "w-[30%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.name")}:&nbsp;
@@ -34,10 +35,10 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.surname && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[24%] text-md font-semibold  text-gray-dark"
+                  "w-[30%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.surname")}:&nbsp;
@@ -49,10 +50,10 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.birth && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[24%] text-md font-semibold  text-gray-dark"
+                  "w-[30%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.birthday")}:&nbsp;
@@ -64,10 +65,10 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.email && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[24%] text-md font-semibold  text-gray-dark"
+                  "w-[30%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.email")}:&nbsp;
@@ -79,10 +80,10 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.occupation && (
-            <View className="flex flex-row flex-wrap ">
+            <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[24%] text-md font-semibold  text-gray-dark"
+                  "w-[30%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("form_onboarding.screen_1.occupation")}:&nbsp;
@@ -94,6 +95,16 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
         </View>
+        <View className="px-5 py-10">
+          <Button
+            title={t("personal_information.delete_account")}
+            containerClassName="bg-gray-medium flex-1"
+            textClassName="text-white text-md leading-6"
+            onPress={() => navigation.navigate("DeleteAccountScreen")}
+          />
+
+        </View>
+
       </ScrollView>
     </SafeAreaView>
   );

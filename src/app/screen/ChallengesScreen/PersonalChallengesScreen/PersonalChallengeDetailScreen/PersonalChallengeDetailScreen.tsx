@@ -205,11 +205,11 @@ export const RightPersonalChallengeDetailOptions: FC<
               isDisabled={!!isChallengeCompleted}
               options={[
                 {
-                  text: t('pop_up_menu.edit') || "Edit",
+                  text: t("pop_up_menu.edit") || "Edit",
                   onPress: onEditChallengeBtnPress,
                 },
                 {
-                  text: t('pop_up_menu.delete') || "Delete",
+                  text: t("pop_up_menu.delete") || "Delete",
                   onPress: () => setIsDeleteChallengeDialogVisible(true),
                 },
               ]}
@@ -237,6 +237,7 @@ const PersonalChallengeDetailScreen = ({
     useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
+  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
@@ -271,7 +272,7 @@ const PersonalChallengeDetailScreen = ({
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [isNewProgressAdded]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -338,6 +339,7 @@ const PersonalChallengeDetailScreen = ({
           <ChallengeDetailScreen
             challengeData={challengeData}
             setIsJoinedLocal={setIsJoinedLocal}
+            setIsNewProgressAdded={setIsNewProgressAdded}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

@@ -22,6 +22,8 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
 }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  console.log(participant);
   return (
     <View className={clsx("flex-1 px-4")}>
       {participant.length > 0 && (
@@ -61,7 +63,8 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
                     {item.name}
                   </Text>
                 </View>
-                {item?.challengeStatus == "done" && <MarkDone />}
+                {item?.challengeStatus == "done" ||
+                  (item?.challengeStatus == "closed" && <MarkDone />)}
               </TouchableOpacity>
             );
           }}

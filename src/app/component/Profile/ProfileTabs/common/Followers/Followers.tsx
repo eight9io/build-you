@@ -23,7 +23,7 @@ const Followers: FC<IFollowersProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="flex-1 px-6 pl-4 ">
+    <View className="flex-1 pl-4 ">
       {followers.length > 0 && (
         <FlatList
           data={followers}
@@ -40,7 +40,7 @@ const Followers: FC<IFollowersProps> = ({
                     userId: item.id,
                   })
                 }
-                className="mb-5 flex-row items-center gap-3"
+                className="mb-5 flex-row items-center gap-3 pr-10"
               >
                 <View className="relative">
                   <Image

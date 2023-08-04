@@ -19,7 +19,7 @@ export const setAuthTokenToHttpHeader = (token: string | null) => {
 
 export function setupInterceptor(
   getRefreshToken: () => string,
-  onRefreshFail: () => void,
+  onRefreshFail: () => void
 ) {
   httpInstance.interceptors.response.use(
     function (res) {
@@ -37,6 +37,15 @@ export function setupInterceptor(
             button: i18n.t("dialog.ok"),
           });
           reject(i18n.t("server_error"));
+        }
+
+        if (status === 400) {
+          onRefreshFail();
+          GlobalDialogController.showModal({
+            title: i18n.t("dialog.err_title"),
+            message: i18n.t("session_expired_error"),
+            button: i18n.t("dialog.ok"),
+          });
         }
 
         if (status === 401) {

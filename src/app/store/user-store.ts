@@ -39,7 +39,6 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
       });
       return r;
     } catch (e) {
-      console.log(e);
       throw e;
     }
   },

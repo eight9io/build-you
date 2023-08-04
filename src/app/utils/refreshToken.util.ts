@@ -28,6 +28,7 @@ export function setupInterceptor(
     function (error) {
       return new Promise(async (resolve, reject) => {
         const status = error.response ? error.response.status : null;
+        const originalRequest: AxiosRequestConfigExtends = error.config;
         if ([500, 501, 502, 503].includes(status)) {
           GlobalDialogController.showModal({
             title: i18n.t("dialog.err_title"),
@@ -39,19 +40,8 @@ export function setupInterceptor(
           reject(i18n.t("server_error"));
         }
 
-        if (status === 400) {
-          onRefreshFail();
-          GlobalDialogController.showModal({
-            title: i18n.t("dialog.err_title"),
-            message: i18n.t("session_expired_error"),
-            button: i18n.t("dialog.ok"),
-          });
-        }
-
         if (status === 401) {
-          const originalRequest: AxiosRequestConfigExtends = error.config;
           console.log(originalRequest);
-
           if (originalRequest._retry) {
             onRefreshFail();
             GlobalDialogController.showModal({

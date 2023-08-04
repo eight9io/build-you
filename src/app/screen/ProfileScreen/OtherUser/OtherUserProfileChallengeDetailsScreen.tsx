@@ -230,14 +230,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       getChallengeData();
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
-        GlobalDialogController.showModal({
-          title: t("dialog.err_title"),
+        GlobalToastController.showModal({
           message: error?.response?.data?.message || t("dialog.err_max_join"),
         });
         return;
       }
-      GlobalDialogController.showModal({
-        title: t("dialog.err_title"),
+      GlobalToastController.showModal({
         message:
           (t("error_general_message") as string) || "Something went wrong",
       });
@@ -254,8 +252,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       setIsJoined(false);
       getChallengeData();
     } catch (err) {
-      GlobalDialogController.showModal({
-        title: t("dialog.err_title"),
+      GlobalToastController.showModal({
         message:
           (t("error_general_message") as string) || "Something went wrong",
       });

@@ -57,16 +57,13 @@ export const addNotificationListener = (
   navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
-
   // Listen to foreground events
   const unsubscribe = notifee.onForegroundEvent(async (event: Event) => {
     useNotificationStore.getState().increaseNumOfNewNotifications();
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
-          await handleTapOnIncomingNotification(
-            event.detail.notification,
-          );
+          await handleTapOnIncomingNotification(event.detail.notification);
           if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count
             await clearNotification(event.detail.notification.id);
@@ -80,7 +77,7 @@ export const addNotificationListener = (
 };
 
 export const handleTapOnIncomingNotification = async (
-  notification: Notification,
+  notification: Notification
 ) => {
   const navigation = NavigationService.getContainer();
   const payload = notification.data as Record<
@@ -153,6 +150,12 @@ export const handleTapOnNotification = async (
               isFollower: true,
             });
           break;
+        case "OtherUserProfileChallengeDetailsScreen":
+          if (notification.challengeId)
+            navigation.navigate("OtherUserProfileChallengeDetailsScreen", {
+              challengeId: notification.challengeId,
+            });
+          break;
       }
       if (!notification.isRead) {
         await setNotificationIsRead([notification.id.toString()]);
@@ -164,7 +167,7 @@ export const handleTapOnNotification = async (
 
   switch (notification.type) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-      handleNavigation("ProgressCommentScreen", notification);
+      handleNavigation("OtherUserProfileChallengeDetailsScreen", notification);
       break;
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
@@ -178,6 +181,9 @@ export const handleTapOnNotification = async (
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
       handleNavigation("OtherUserProfileScreen", notification);
       break;
+    case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
+      handleNavigation("OtherUserProfileScreen", notification);
+      break;
   }
 };
 
@@ -187,9 +193,7 @@ export const getNotificationContent = (
 ) => {
   switch (notificationType) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-      return `has added a new progress in ${
-        contentPayload?.challengeGoal || "a challenge"
-      }`;
+      return `has added a new challenge`;
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       return `has added a new progress in ${
         contentPayload?.challengeGoal || "a challenge"
@@ -200,6 +204,8 @@ export const getNotificationContent = (
       return `mentioned you in a comment`;
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
       return `has started following you`;
+    case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
+      return `has added you as an employee`;
   }
 };
 

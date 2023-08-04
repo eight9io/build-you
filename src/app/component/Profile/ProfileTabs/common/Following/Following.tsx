@@ -22,7 +22,7 @@ const Following: FC<IFollowingProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="flex-1 px-6 pl-4 ">
+    <View className="flex-1 pl-4 ">
       {following && following.length > 0 && (
         <FlatList
           className="pt-4"
@@ -36,11 +36,10 @@ const Following: FC<IFollowingProps> = ({
                 activeOpacity={0.8}
                 onPress={() =>
                   navigation.navigate("OtherUserProfileScreen", {
-                    userId: item.id,
-                    getFollowing: getFollowingList
+                    userId: item.id
                   })
                 }
-                className="mb-5 flex-row items-center gap-3"
+                className="mb-5 flex-row items-center gap-3 pr-10"
               >
                 <View className="relative">
                   <Image

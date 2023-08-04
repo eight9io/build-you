@@ -21,7 +21,10 @@ const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
   const [isRead, setIsRead] = useState<boolean>(notification.isRead);
 
   let content = "";
-  if (notification.type === NOTIFICATION_TYPES.CHALLENGE_CREATED || notification.type === NOTIFICATION_TYPES.PROGRESS_CREATED)
+  if (
+    notification.type === NOTIFICATION_TYPES.CHALLENGE_CREATED ||
+    notification.type === NOTIFICATION_TYPES.PROGRESS_CREATED
+  )
     content = getNotificationContent(notification.type, {
       challengeGoal: notification.challengeGoal,
     });
@@ -45,6 +48,14 @@ const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
         src={notification.user.avatar}
         alt="avatar"
         typeOfNoti={notification.type}
+        onPress={async () => {
+          await handleTapOnNotification(
+            notification,
+            navigation,
+            setNotificationIsRead
+          );
+          setIsRead(true);
+        }}
       />
       <View className={clsx("ml-4 flex-1")}>
         <Text className={clsx("text-base font-normal")}>

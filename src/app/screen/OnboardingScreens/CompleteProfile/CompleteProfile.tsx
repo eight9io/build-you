@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
 import { useUserProfileStore } from "../../../store/user-store";
 import { setLastNotiIdToLocalStorage } from "../../../utils/notification.util";
+import { useCompleteProfileStore } from "../../../store/complete-user-profile";
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -107,6 +108,7 @@ const CompleteProfileScreen = () => {
   const { t } = useTranslation();
 
   const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
+  const { setBiography, setVideo } = useCompleteProfileStore();
 
   return (
     <CompleteProfileStack.Navigator
@@ -162,7 +164,11 @@ const CompleteProfileScreen = () => {
             <NavButton
               text={t("button.skip") || "Skip"}
               withIcon={false}
-              onPress={() => navigation.navigate("CompleteProfileStep3Screen")}
+              onPress={() => {
+                setVideo("");
+                setBiography("");
+                navigation.navigate("CompleteProfileStep3Screen");
+              }}
             />
           ),
         })}

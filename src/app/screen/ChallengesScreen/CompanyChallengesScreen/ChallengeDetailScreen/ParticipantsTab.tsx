@@ -23,7 +23,6 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  console.log(participant);
   return (
     <View className={clsx("flex-1 px-4")}>
       {participant.length > 0 && (

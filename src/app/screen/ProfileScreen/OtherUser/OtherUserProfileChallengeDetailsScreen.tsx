@@ -125,7 +125,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   );
 
   const getChallengeData = async () => {
-    console.log('getChallengeData');
     try {
       const response = await getChallengeById(challengeId);
       const localId = await getLocalId();

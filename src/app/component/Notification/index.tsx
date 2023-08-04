@@ -39,6 +39,7 @@ const Notification: React.FC<INotificationProps> = ({
           keyExtractor={(item) => item.createdAt.toString()} // TODO: change to id
           onRefresh={onRefresh}
           refreshing={isRefreshing}
+          ListFooterComponent={<View className="h-20" />}
         />
       ) : (
         <>

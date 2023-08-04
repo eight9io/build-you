@@ -48,8 +48,6 @@ export const EditProfileModal: FC<IEditProfileModalProps> = ({
       biography: "",
     },
   });
-  const onSubmit = (data: any) => console.log(data);
-
   const handleDatePicked = (date?: Date) => {
     if (date) setValue("birth", date);
     setShowDateTimePicker(false);

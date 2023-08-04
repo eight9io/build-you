@@ -387,8 +387,8 @@
     "delete_success": "Your progress has been deleted successfully"
   },
   "personal_information": {
-    "title": "Personal informations",
-    "description": "Your BuilddYou information",
+    "title": "Personal information",
+    "description": "Your BuildYou information",
     "delete_account": "Delete my account"
   },
   "delete_account": {

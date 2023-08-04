@@ -32,7 +32,10 @@ export interface IUserData {
   phone?: string;
   webSite?: string;
   pIva?: string;
+  loginType?: ILoginType;
 }
+
+export type ILoginType = "standard" | "google" | "facebook" | "linkedin" | "apple";
 
 export interface IHardSkillProps {
   id: string;

@@ -1,24 +1,158 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import { useUserProfileStore } from "../../store/user-store";
+
+import {
+  checkIsCompleteProfileOrCompany,
+  useUserProfileStore,
+} from "../../store/user-store";
 import Button from "../../component/common/Buttons/Button";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import { LOGIN_TYPE } from "../../common/enum";
+import { LoginForm, ISocialLoginForm } from "../../types/auth";
+import { errorMessage } from "../../utils/statusCode";
+import { useAuthStore } from "../../store/auth-store";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import appleAuth from "@invertase/react-native-apple-authentication";
+import { serviceDeleteAccount } from "../../service/profile";
+import { CommonActions } from "@react-navigation/native";
+import LinkedInModal from "../../component/modal/LinkedInModal";
+
+const getGoogleToken = async () => {
+  const { idToken } = await GoogleSignin.signIn();
+  return idToken;
+};
+
+const getAppleToken = async () => {
+  const { identityToken } = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+  });
+  return identityToken;
+};
 
 export default function PersonalInformationScreen({ navigation }: any) {
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+  const [linkedInModalVisible, setLinkedInModalVisible] =
+    useState<boolean>(false);
+  const [errMessage, setErrMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const { t } = useTranslation();
+  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
+  const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
+    useUserProfileStore();
   const { getUserProfile } = useUserProfileStore();
 
   const userData = getUserProfile();
+
+  let linkedinToken = null;
+
+  const handleLoginOnDeleteAccount = async (
+    payload: LoginForm | ISocialLoginForm,
+    type: LOGIN_TYPE
+  ) => {
+    setIsLoading(true);
+    try {
+      await asyncLogin(payload, type);
+      const res = await serviceDeleteAccount(userData?.id);
+      if (res.status == 200) {
+        handleLogOut();
+      }
+    } catch (error) {
+      setErrMessage(errorMessage(error, "err_login"));
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleleAcount = () => {
+    if (userData?.loginType === "standard") {
+      navigation.navigate("DeleteAccountScreen");
+    } else {
+      setIsDialogVisible(true);
+    }
+  };
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: process.env.EXPO_GOOGLE_WEB_CLIENT_ID,
+    });
+  }, []);
+
+  const handleDeleteSocialAccount = async () => {
+    switch (userData?.loginType) {
+      case "google":
+        const token = await getGoogleToken();
+        handleLoginOnDeleteAccount({ token: token }, LOGIN_TYPE.GOOGLE);
+        break;
+      case "apple":
+        const tokenApple = await getAppleToken();
+        handleLoginOnDeleteAccount({ token: tokenApple }, LOGIN_TYPE.APPLE);
+        break;
+      case "linkedin":
+        setLinkedInModalVisible(true);
+        handleLoginOnDeleteAccount(
+          { token: linkedinToken },
+          LOGIN_TYPE.LINKEDIN
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleLogOut = () => {
+    logout();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "IntroScreen" }],
+      })
+    );
+    logout();
+    userProfileStoreOnLogout();
+  };
+
+  const handleLinkedInLoginCancel = () => {
+    setLinkedInModalVisible(false);
+  };
+
+  const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
+    setLinkedInModalVisible(false);
+    linkedinToken = authrozationCode;
+  };
+
+  const handleLinkedInLoginError = (errorMessage: string) => {
+    console.log("errorMessage", errorMessage);
+    setErrMessage(errorMessage);
+  };
+
   return (
     <SafeAreaView className="justify-content: space-between flex-1 bg-white px-4 pt-3">
+      <ConfirmDialog
+        isVisible={isDialogVisible}
+        title={t("personal_information.delete_account")}
+        description={t("personal_information.delete_account_description")}
+        confirmButtonLabel={t("personal_information.delete_account")}
+        closeButtonLabel={t("personal_information.cancel")}
+        onConfirm={handleDeleteSocialAccount}
+        onClosed={() => setIsDialogVisible(false)}
+      />
+      <LinkedInModal
+        isVisible={linkedInModalVisible}
+        onLoginCancel={handleLinkedInLoginCancel}
+        onLoginSuccess={handleLinkedInLoginSuccess}
+        onError={handleLinkedInLoginError}
+      />
+
       <ScrollView>
         <View className={clsx("px-4 py-4")}>
           <Text className={clsx("text-h4 font-medium")}>
             {t("personal_information.description")}
           </Text>
         </View>
-        <View className="flex-column flex flex-wrap gap-3 pt-[20px] px-4 ">
+        <View className="flex-column flex flex-wrap gap-3 px-4 pt-[20px] ">
           {userData?.name && (
             <View className="flex flex-row flex-wrap gap-1">
               <Text
@@ -100,11 +234,9 @@ export default function PersonalInformationScreen({ navigation }: any) {
             title={t("personal_information.delete_account")}
             containerClassName="bg-gray-medium flex-1"
             textClassName="text-white text-md leading-6"
-            onPress={() => navigation.navigate("DeleteAccountScreen")}
+            onPress={handleDeleleAcount}
           />
-
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );

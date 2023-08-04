@@ -114,8 +114,6 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           style={{
             display: shouldHideTabBar ? "none" : "flex",
             backgroundColor: "#FFFFFF",
-            height: isAndroid ? 68 : 102,
-            paddingBottom: isAndroid ? 0 : 30,
             position: "relative", // Make sure all the screen is above the tab bar and not be hidden by it
           }}
         >

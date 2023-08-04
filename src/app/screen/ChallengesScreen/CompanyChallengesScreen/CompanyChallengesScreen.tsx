@@ -35,7 +35,7 @@ const EmptyChallenges = ({
   navigation,
 }: {
   navigation: CompanyChallengesScreenNavigationProp;
-  }) => {
+}) => {
   const { t } = useTranslation();
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
@@ -112,7 +112,7 @@ const CompanyChallenges = ({
                 />
               )}
               keyExtractor={(item) => item.id}
-              ListFooterComponent={<View className="h-4" />}
+              ListFooterComponent={<View className="h-20" />}
               refreshing={isLoading}
               onRefresh={fetchCompanyChallenges}
             />

@@ -112,7 +112,7 @@ const PersonalChallenges = ({
                 />
               )}
               keyExtractor={(item) => item.id}
-              ListFooterComponent={<View className="h-4" />}
+              ListFooterComponent={<View className="h-20" />}
               refreshing={isLoading}
               onRefresh={fetchData}
             />

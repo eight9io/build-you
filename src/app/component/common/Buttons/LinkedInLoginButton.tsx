@@ -33,9 +33,6 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
 
   const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
     setLinkedInModalVisible(false);
-    // let accessToken = null;
-    // const result = await getLinkedInAccessToken(authrozationCode);
-    // accessToken = result.data?.access_token;
     if (authrozationCode) {
       await onLogin({ token: authrozationCode }, LOGIN_TYPE.LINKEDIN);
     } else {

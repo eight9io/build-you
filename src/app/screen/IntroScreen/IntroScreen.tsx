@@ -60,6 +60,7 @@ export const IntroScreen = ({ navigation, route }: any) => {
             onPress={() => setModalVisible(true)}
           />
           <Button
+            testID="intro_login_btn"
             title={t("login_screen.login")}
             containerClassName="border-primary-default border-[1px] ml-1"
             textClassName="text-primary-default"

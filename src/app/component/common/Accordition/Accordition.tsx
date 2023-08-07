@@ -17,38 +17,6 @@ const Accordition = ({ navigation }: IAccorditionProps) => {
   const isCompany = userData && userData?.companyAccount;
   return (
     <View>
-      {/* <View className={clsx("flex flex-col pt-3")}>
-        <View className={clsx("py-4")}>
-          <Text className={clsx("text-h4 font-medium")}>
-            {t("user_settings_screen.general_settings")}
-          </Text>
-        </View>
-        <View>
-          <Text className={clsx("text-h6 font-normal leading-6")}>
-            {t("user_settings_screen.general_settings_description")}
-          </Text>
-        </View>
-        <AccorditionItem
-          title={t(
-            "user_settings_screen.general_settings_sections.cookie_regulation"
-          )}
-        />
-        <AccorditionItem
-          title={t(
-            "user_settings_screen.general_settings_sections.preferences"
-          )}
-        />
-        <AccorditionItem
-          title={t(
-            "user_settings_screen.general_settings_sections.community_standards"
-          )}
-        />
-        <AccorditionItem
-          title={t(
-            "user_settings_screen.general_settings_sections.notifications"
-          )}
-        />
-      </View> */}
       <View className={clsx("flex flex-col pt-4")}>
         <View className={clsx("py-4")}>
           <Text className={clsx("text-h4 font-medium")}>
@@ -61,7 +29,13 @@ const Accordition = ({ navigation }: IAccorditionProps) => {
           </Text>
         </View>
         <AccorditionItem
-          title={isCompany ? t("user_settings_screen.account_settings_sections.company_information") : t("personal_information.title")}
+          title={
+            isCompany
+              ? t(
+                  "user_settings_screen.account_settings_sections.company_information"
+                )
+              : t("personal_information.title")
+          }
           onPress={() => navigation.navigate("PersonalInformationScreen")}
         />
         <AccorditionItem

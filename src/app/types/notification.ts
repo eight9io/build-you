@@ -13,6 +13,7 @@ export interface INotificationPayload {
   followerId?: string;
   challengeId?: string;
   commentUserId?: string;
+  companyId?: string;
 }
 
 export interface INotification {

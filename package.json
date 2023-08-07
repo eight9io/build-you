@@ -114,6 +114,7 @@
     "babel-plugin-dotenv-import": "^3.0.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "babel-preset-expo": "~9.3.2",
+    "detox": "^20.11.2",
     "esbuild": "^0.18.16",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",

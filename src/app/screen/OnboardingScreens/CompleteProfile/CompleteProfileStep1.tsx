@@ -57,7 +57,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   } = useForm<{
     name: string;
     surname: string;
-    birth: Date | undefined;
+    birth: any;
     occupation: string;
   }>({
     defaultValues: {
@@ -236,7 +236,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         <View className="flex flex-row pt-2">
                           <Warning />
                           <Text className="pl-1 text-sm font-normal text-red-500">
-                            {errors.birth.message}
+                            {errors?.birth?.message as string}
                           </Text>
                         </View>
                       )}

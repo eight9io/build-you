@@ -20,6 +20,7 @@ import PolicyModal from "../../component/modal/PolicyModal";
 import IconEyeOn from "./asset/icon-eye.svg";
 import IconEyeOff from "./asset/eye-off.svg";
 import TermModal from "../../component/modal/TermModal";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 
 type FormData = {
   email: string;
@@ -29,7 +30,7 @@ type FormData = {
 };
 export default function RegisterScreen({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
-  const [ruleBtnChecked, setRuleBtnChecked] = useState(false);
+  const [ruleBtnChecked, setRuleBtnChecked] = useState(true);
   const {
     control,
     handleSubmit,
@@ -48,7 +49,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isShowModal, setIsShowModal] = useState(false)
   const [errMessage, setErrMessage] = useState("");
 
   const onSubmit = (data: FormData) => {
@@ -57,10 +58,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
     serviceRegister({ email: data.email, password: data.password })
       .then((res) => {
         if (res.status == 201) {
-          setTimeout(() => {
-            navigation.navigate("LoginScreen");
-          }, 1500);
-
+          setIsShowModal(true)
           setErrMessage("");
         } else {
           setErrMessage(err_server);
@@ -73,16 +71,21 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
+
       });
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTerms, setModalTerms] = useState(false);
-
+  const handleConfirm = () => {
+    setIsShowModal(false)
+    navigation.navigate("LoginScreen")
+  }
   const [hidePassword, setHidePassword] = useState(true);
   return (
     <SafeAreaView className=" h-full bg-white ">
       <KeyboardAwareScrollView>
         {isLoading && <Spinner visible={isLoading} />}
+
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">
@@ -239,6 +242,13 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             navigation={navigation}
             modalVisible={modalTerms}
             setModalVisible={setModalTerms}
+          />
+          <ConfirmDialog
+            title={t("dialog.register.title") || ""}
+            description={t("dialog.register.description") || ""}
+            isVisible={isShowModal}
+            confirmButtonLabel={t("dialog.close") || ""}
+            onConfirm={() => handleConfirm()}
           />
         </View>
       </KeyboardAwareScrollView>

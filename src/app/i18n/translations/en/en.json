@@ -300,6 +300,10 @@
     "edit_success": "Your challenge has been updated successfully"
   },
   "dialog": {
+    "register": {
+      "title": "Verify your email",
+      "description": "Please check your email and click the link to activate your account."
+    },
     "logout": {
       "title": "Log out",
       "description": "Are you sure you want to log out?",
@@ -340,6 +344,7 @@
       "delete_success_description": "Your challenge has been deleted successfully"
     },
     "cancel": "Cancel",
+    "close": "Close",
     "complete": "Complete",
     "got_it": "Got it",
     "delete": "Delete",

@@ -4,6 +4,10 @@ import { useTranslation } from "react-i18next";
 export const ResetPasswordValidationSchema = () => {
   const { t } = useTranslation();
   return yup.object().shape({
+    email: yup
+      .string()
+      .email(t("form.0.error") as string)
+      .notOneOf([""], t("form.0.required") as string),
     code: yup.string().required(t("form.2.required") as string),
     password: yup
       .string()

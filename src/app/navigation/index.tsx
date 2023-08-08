@@ -46,6 +46,8 @@ import { DeepLink } from "../utils/linking.util";
 import { useDeepLinkStore } from "../store/deep-link-store";
 import { addNotificationListener } from "../utils/notification.util";
 import { useNotificationStore } from "../store/notification-store";
+import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
+import i18n from "../i18n/i18n";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -138,6 +140,15 @@ export const RootNavigation = () => {
       navigationRef.current,
       useNotificationStore
     );
+    const getLanguageFromStorage = async () => {
+      const language = await getLanguageLocalStorage();
+      if (language) {
+        i18n.changeLanguage(language);
+      } else {
+        i18n.changeLanguage("it");
+      }
+    };
+    getLanguageFromStorage();
     return () => {
       unsubscribe();
     };

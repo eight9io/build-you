@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 
@@ -60,7 +60,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="justify-content: space-between flex-1 bg-white">
+    <SafeAreaView className="justify-content: space-between relative flex-1 bg-gray-veryLight">
       <ConfirmDialog
         isVisible={isShowLogoutModal}
         onConfirm={handleLogout}
@@ -71,21 +71,25 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         closeButtonLabel={`${t("dialog.logout.cancel")}`}
         description={t("dialog.logout.description") as string}
       />
-      <ScrollView>
-        <View className="flex flex-1 flex-col bg-gray-veryLight">
-          <Settings navigation={navigation} />
-          <View className="w-full bg-white px-4 py-6">
-            <View className="h-12">
-              <Button
-                title={t("user_settings_screen.logout")}
-                containerClassName="bg-gray-medium flex-1"
-                textClassName="text-white text-md leading-6"
-                onPress={() => setIsShowLogoutModal(true)}
-              />
-            </View>
+      <FlatList
+        data={[]}
+        renderItem={() => <></>}
+        ListHeaderComponent={() => (
+          <View className="flex flex-1 flex-col bg-gray-veryLight">
+            <Settings navigation={navigation} />
           </View>
+        )}
+      />
+      <View className="absolute bottom-10 w-full px-4 py-6">
+        <View className="h-12">
+          <Button
+            title={t("user_settings_screen.logout")}
+            containerClassName="bg-gray-medium flex-1"
+            textClassName="text-white text-md leading-6"
+            onPress={() => setIsShowLogoutModal(true)}
+          />
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -121,11 +125,21 @@ const SettingsScreen = () => {
       />
       <SettingStack.Screen
         name="PersonalInformationScreen"
-        component={isCompany ? CompanyInformationScreen : PersonalInformationScreen}
+        component={
+          isCompany ? CompanyInformationScreen : PersonalInformationScreen
+        }
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => (
-            <AppTitle title={isCompany ? t("user_settings_screen.account_settings_sections.company_information") : t("personal_information.title")} />
+            <AppTitle
+              title={
+                isCompany
+                  ? t(
+                      "user_settings_screen.account_settings_sections.company_information"
+                    )
+                  : t("personal_information.title")
+              }
+            />
           ),
           headerLeft: (props) => (
             <NavButton
@@ -142,7 +156,11 @@ const SettingsScreen = () => {
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => (
-            <AppTitle title={t("user_settings_screen.account_settings_sections.terms_of_services")} />
+            <AppTitle
+              title={t(
+                "user_settings_screen.account_settings_sections.terms_of_services"
+              )}
+            />
           ),
           headerLeft: (props) => (
             <NavButton
@@ -159,7 +177,11 @@ const SettingsScreen = () => {
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => (
-            <AppTitle title={t("user_settings_screen.account_settings_sections.privacy_policy")} />
+            <AppTitle
+              title={t(
+                "user_settings_screen.account_settings_sections.privacy_policy"
+              )}
+            />
           ),
           headerLeft: (props) => (
             <NavButton

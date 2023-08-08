@@ -186,7 +186,7 @@ export default function ForgotPasswordModal({
                                     secureTextEntry={
                                       (item.name === "password" ||
                                         item.name === "repeat_password") &&
-                                      hidePassword
+                                        hidePassword
                                         ? true
                                         : false
                                     }

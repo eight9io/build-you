@@ -67,6 +67,7 @@ export const appleLogin = async (payload: ISocialLoginForm) => {
       email = userEmailFromStorage;
     }
   }
+  console.log("email: ", email, "sub: ", sub, "token: ", token);
 
   return http.post<ILoginResponse>(`/auth/apple`, {
     token,

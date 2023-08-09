@@ -2,6 +2,7 @@ import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import React, { Component, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import jwt_decode from "jwt-decode";
 
 import {
   checkIsCompleteProfileOrCompany,
@@ -25,11 +26,21 @@ const getGoogleToken = async () => {
 };
 
 const getAppleToken = async () => {
-  const { identityToken } = await appleAuth.performRequest({
+  const { identityToken, authorizationCode } = await appleAuth.performRequest({
     requestedOperation: appleAuth.Operation.LOGIN,
     requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
   });
-  return identityToken;
+
+  const { email, sub } = jwt_decode<{
+    email: string;
+    sub: string;
+  }>(identityToken);
+
+  return {
+    email,
+    sub,
+    token: authorizationCode,
+  };
 };
 
 export default function PersonalInformationScreen({ navigation }: any) {
@@ -55,19 +66,21 @@ export default function PersonalInformationScreen({ navigation }: any) {
   ) => {
     setIsLoading(true);
     try {
-      await asyncLogin(payload, type);
+      const login = await asyncLogin(payload, type);
+      console.log("login", login);
       const res = await serviceDeleteAccount(userData?.id);
       if (res.status == 200) {
         handleLogOut();
       }
     } catch (error) {
+      console.log("error", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }
   };
 
   const handleDeleleAcount = () => {
-    if (userData?.loginType === "standard") {
+    if (userData?.loginType !== "standard") {
       navigation.navigate("DeleteAccountScreen");
     } else {
       setIsDialogVisible(true);
@@ -81,23 +94,21 @@ export default function PersonalInformationScreen({ navigation }: any) {
   }, []);
 
   const handleDeleteSocialAccount = async () => {
+    setIsDialogVisible(false);
     switch (userData?.loginType) {
       case "google":
-        const token = await getGoogleToken();
-        handleLoginOnDeleteAccount({ token: token }, LOGIN_TYPE.GOOGLE);
+        const googleToken = await getGoogleToken();
+        handleLoginOnDeleteAccount({ token: googleToken }, LOGIN_TYPE.GOOGLE);
         break;
       case "apple":
-        const tokenApple = await getAppleToken();
-        handleLoginOnDeleteAccount({ token: tokenApple }, LOGIN_TYPE.APPLE);
+        const applePayload = await getAppleToken();
+        handleLoginOnDeleteAccount(applePayload, LOGIN_TYPE.APPLE);
         break;
       case "linkedin":
         setLinkedInModalVisible(true);
-        handleLoginOnDeleteAccount(
-          { token: linkedinToken },
-          LOGIN_TYPE.LINKEDIN
-        );
         break;
       default:
+        navigation.navigate("DeleteAccountScreen");
         break;
     }
   };
@@ -121,6 +132,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
   const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
     setLinkedInModalVisible(false);
     linkedinToken = authrozationCode;
+    handleLoginOnDeleteAccount({ token: linkedinToken }, LOGIN_TYPE.LINKEDIN);
   };
 
   const handleLinkedInLoginError = (errorMessage: string) => {
@@ -133,9 +145,10 @@ export default function PersonalInformationScreen({ navigation }: any) {
       <ConfirmDialog
         isVisible={isDialogVisible}
         title={t("personal_information.delete_account")}
-        description={t("personal_information.delete_account_description")}
+        description={t("dialog.delete_account.title")}
         confirmButtonLabel={t("personal_information.delete_account")}
-        closeButtonLabel={t("personal_information.cancel")}
+        closeButtonLabel={t("dialog.cancel")}
+        confirmButtonColor="red"
         onConfirm={handleDeleteSocialAccount}
         onClosed={() => setIsDialogVisible(false)}
       />

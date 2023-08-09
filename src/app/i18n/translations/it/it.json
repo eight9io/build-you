@@ -226,6 +226,10 @@
       "company_information": "Informazioni aziendali",
       "terms_of_services": "Termini di Servizio",
       "privacy_policy": "Privacy Policy "
+    },
+    "account_settings_language": {
+      "language": "Lingua",
+      "language_description": "Seleziona la tua lingua"
     }
   },
   "new_challenge_screen": {

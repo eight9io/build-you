@@ -14,7 +14,7 @@ export const serviceLogin = (data: LoginForm) => {
   return http.post<ILoginResponse>("/auth/login", data);
 };
 export const serviceRegister = (data: RegisterForm) => {
-  return http.post("/user/create", data);
+  return http.post("/user/create_verify", data);
 };
 export const serviceChangePassword = (data: ChangePasswordForm) => {
   return http.post("/auth/changePassword", data);
@@ -67,6 +67,7 @@ export const appleLogin = async (payload: ISocialLoginForm) => {
       email = userEmailFromStorage;
     }
   }
+  console.log("email: ", email, "sub: ", sub, "token: ", token);
 
   return http.post<ILoginResponse>(`/auth/apple`, {
     token,

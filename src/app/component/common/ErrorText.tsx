@@ -6,8 +6,13 @@ import IconErr from "../asset/IconErr.svg";
 interface Props {
   message: any;
   containerClassName?: string;
+  testID?: string;
 }
-export default function ErrorText({ message, containerClassName }: Props) {
+export default function ErrorText({
+  message,
+  containerClassName,
+  testID,
+}: Props) {
   return (
     <View
       className={clsx(
@@ -17,7 +22,9 @@ export default function ErrorText({ message, containerClassName }: Props) {
     >
       <Ionicons name="alert-circle-outline" size={14} color="#FF4949" />
 
-      <Text className={clsx(" ml-1  text-sm text-red-500")}>{message}</Text>
+      <Text className={clsx(" ml-1  text-sm text-red-500")} testID={testID}>
+        {message}
+      </Text>
     </View>
   );
 }

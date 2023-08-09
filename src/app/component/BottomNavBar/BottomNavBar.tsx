@@ -232,7 +232,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
+            <View className={clsx("flex flex-col items-center justify-center")} testID="profile_tab_btn">
               {focused ? (
                 <ProfileFillSvg fill={"#FF7B1C"} />
               ) : (

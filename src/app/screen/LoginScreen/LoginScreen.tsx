@@ -142,6 +142,7 @@ export default function Login() {
                 <ErrorText
                   containerClassName="justify-center "
                   message={errMessage}
+                  testID="login_error_message"
                 />
               )}
 
@@ -202,6 +203,7 @@ export default function Login() {
                                 onBlur={onBlur}
                                 onChangeText={(text) => onChange(text)}
                                 value={value}
+                                testID={item.name === "user" ? "login_email_input" : "login_password_input"}
                               />
                             </View>
                           )}
@@ -239,6 +241,7 @@ export default function Login() {
                   textClassName="line-[30px] text-center text-md font-medium text-white"
                   title={t("login_screen.login")}
                   onPress={handleSubmit(onSubmit)}
+                  testID="login_submit_btn"
                 />
               </View>
             </View>

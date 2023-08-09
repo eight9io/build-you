@@ -73,6 +73,7 @@ const PersonalProfileScreen = () => {
             <ButtonWithIcon
               icon="setting"
               onPress={() => navigation.push("SettingsScreenRoot")}
+              testID="settings_btn"
             />
           ),
         })}

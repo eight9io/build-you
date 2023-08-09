@@ -100,7 +100,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   return (
-    <View className="">
+    <View className="" testID="complete_profile_step_1">
       <DateTimePicker2
         shouldMinus16Years
         selectedDate={selectedDate}

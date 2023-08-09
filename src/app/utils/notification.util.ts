@@ -122,6 +122,14 @@ export const handleTapOnIncomingNotification = async (
         });
       }
       break;
+    case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
+      console.log(payload);
+      if (payload.companyId) {
+        navigation.navigate("OtherUserProfileScreen", {
+          userId: payload.companyId,
+        });
+      }
+      break;
   }
 };
 

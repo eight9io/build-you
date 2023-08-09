@@ -42,7 +42,7 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
 }) => {
   return (
     <View>
-      <View className=" mr-3 flex-row items-center justify-between  ">
+      <View className=" mr-6 flex flex-row items-start justify-between  ">
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() =>
@@ -72,14 +72,14 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
         </TouchableOpacity>
 
         {isCompany && (
-          <View>
-            <Button
-              Icon={<BinIcon fill={"black"} />}
-              onPress={() =>
-                setIsShowModal && setIsShowModal({ isShow: true, id: item.id })
-              }
-            />
-          </View>
+          <TouchableOpacity
+            className="flex pt-2"
+            onPress={() =>
+              setIsShowModal && setIsShowModal({ isShow: true, id: item.id })
+            }
+          >
+            <BinIcon fill={"black"} />
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -181,7 +181,7 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   };
 
   return (
-    <View className="flex-1 px-4">
+    <View className="flex-1 pl-4 ">
       {employeeList.length > 0 && (
         <FlatList
           data={employeeList}

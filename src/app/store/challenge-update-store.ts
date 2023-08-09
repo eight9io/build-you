@@ -3,12 +3,14 @@ import {
   IChallenge,
   INumberOfCommentUpdate,
   INumberOfLikeUpdate,
+  IChallengeRatingUpdate,
 } from "../types/challenge";
 
 export interface ChallengeUpdateStore {
   challengeUpdateDetails: IChallenge[];
   challengeUpdateNumberOfComment: INumberOfCommentUpdate;
   challengeUpdateNumberOfLike: INumberOfLikeUpdate;
+  challengeRatingUpdate: IChallengeRatingUpdate;
   setChallengeUpdateDetails: (list: any) => void;
   getChallengeUpdateDetails: () => any;
 
@@ -30,6 +32,15 @@ export interface ChallengeUpdateStore {
     isLikedByCurrentUser: boolean;
   }) => void;
   getChallengeUpdateLike: () => INumberOfLikeUpdate;
+
+  setChallengeRatingUpdate: ({
+    id,
+    rating,
+  }: {
+    id: string;
+    rating: number;
+  }) => void;
+  getChallengeRatingUpdate: () => IChallengeRatingUpdate;
 }
 
 export const useChallengeUpdateStore = create<ChallengeUpdateStore>(
@@ -62,6 +73,17 @@ export const useChallengeUpdateStore = create<ChallengeUpdateStore>(
     },
     getChallengeUpdateLike: () => {
       return get().challengeUpdateNumberOfLike;
+    },
+    challengeRatingUpdate: {} as IChallengeRatingUpdate,
+    setChallengeRatingUpdate: ({ id, rating }) => {
+      const newRatingDetails = {
+        id: id,
+        rating: rating,
+      };
+      set({ challengeRatingUpdate: newRatingDetails });
+    },
+    getChallengeRatingUpdate: () => {
+      return get().challengeRatingUpdate;
     },
   })
 );

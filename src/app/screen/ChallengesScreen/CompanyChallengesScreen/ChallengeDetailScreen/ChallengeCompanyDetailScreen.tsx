@@ -137,6 +137,12 @@ export const ChallengeCompanyDetailScreen: FC<
     setShouldRefresh(true);
   };
 
+  useEffect(() => {
+    if (!shouldRefresh) return;
+    fetchParticipants();
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
+
   return (
     <SafeAreaView>
       <View className="flex h-full flex-col bg-white pt-4">

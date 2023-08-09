@@ -25,11 +25,15 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
+  shouldRefresh: boolean;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
+  shouldRefresh,
+  setShouldRefresh,
   challengeData,
   setIsJoinedLocal,
   setIsNewProgressAdded,
@@ -47,8 +51,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     setParticipantList(response.data);
   };
   useEffect(() => {
+    if (!shouldRefresh) return;
     fetchParticipants();
-  }, []);
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]

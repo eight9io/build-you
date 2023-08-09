@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 interface ICustomTextInputProps {
   title: string;
+  field: string;
   placeholder: string;
   placeholderClassName?: string;
   control?: any;
@@ -18,6 +19,7 @@ interface ICustomTextInputProps {
 const CustomTextInput: React.FC<ICustomTextInputProps> = ({
   title,
   control,
+  field,
   errors,
   placeholder,
   placeholderClassName,
@@ -60,7 +62,7 @@ const CustomTextInput: React.FC<ICustomTextInputProps> = ({
             {errors ? <ErrorText message={errors.message} /> : null}
           </View>
         )}
-        name={title.toLowerCase()}
+        name={field}
       />
     </View>
   );

@@ -21,7 +21,6 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import ShareIcon from "./assets/share.svg";
 import TaskAltIcon from "./assets/task-alt.svg";
 import TaskAltIconGray from "./assets/task-alt-gray.svg";
-// import ChallengeDetailScreen from '../../PersonalChallengesScreen/ChallengeDetailScreen/ChallengeDetailScreen';
 import ChallengeCompanyDetailScreen from "../ChallengeDetailScreen/ChallengeCompanyDetailScreen";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";

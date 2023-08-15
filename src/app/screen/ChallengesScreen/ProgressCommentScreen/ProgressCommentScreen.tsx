@@ -255,7 +255,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
                   </View>
                   <ChallengeProgressCardForComment
                     progress={progressData}
-                    ownerId={ownerId}
+                    ownerId={ownerId ? ownerId : progressData.owner?.id}
                     localCommentUpdate={numberOfCommentsLocal}
                   />
                 </View>

@@ -11,6 +11,7 @@ import {
 import { getImageExtension } from "../utils/uploadUserImage";
 import { IUploadMediaWithId } from "../types/media";
 import { Platform } from "react-native";
+import { IProgressChallenge } from "../types/challenge";
 
 export const createProgress = (data: ICreateProgress) => {
   return httpInstance.post("/challenge/progress/create", data);
@@ -71,8 +72,15 @@ export const updateProgressVideo = (
   );
 };
 
-export const getProgressById = (id: string) => {
-  return httpInstance.get(`/challenge/progress/${id}`);
+export const getProgressById = async (
+  id: string
+): Promise<AxiosResponse<IProgressChallenge>> => {
+  const res = await httpInstance.get(`/challenge/progress/${id}`);
+  res.data = {
+    ...res.data,
+    owner: res.data.user,
+  };
+  return res;
 };
 
 export const getProgressLikes = (

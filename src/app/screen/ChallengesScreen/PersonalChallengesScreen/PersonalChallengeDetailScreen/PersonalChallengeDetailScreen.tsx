@@ -238,6 +238,7 @@ const PersonalChallengeDetailScreen = ({
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
   const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
@@ -265,6 +266,7 @@ const PersonalChallengeDetailScreen = ({
   }, [challengeData, isJoinedLocal]);
 
   const refresh = () => {
+    setShouldRefresh(true);
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
@@ -337,6 +339,8 @@ const PersonalChallengeDetailScreen = ({
       {challengeData?.id && (
         <>
           <ChallengeDetailScreen
+            shouldRefresh={shouldRefresh}
+            setShouldRefresh={setShouldRefresh}
             challengeData={challengeData}
             setIsJoinedLocal={setIsJoinedLocal}
             setIsNewProgressAdded={setIsNewProgressAdded}

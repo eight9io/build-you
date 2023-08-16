@@ -270,6 +270,7 @@ export const AddNewChallengeProgressModal: FC<
                 title={
                   t("add_new_challenge_progress_modal.caption") || "Caption"
                 }
+                field="caption"
                 placeholderClassName="h-32"
                 placeholder={
                   t("add_new_challenge_progress_modal.caption_placeholder") ||

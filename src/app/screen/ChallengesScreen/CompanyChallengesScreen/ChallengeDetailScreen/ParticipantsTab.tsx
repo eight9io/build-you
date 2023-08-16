@@ -13,13 +13,9 @@ interface IParticipantsTabProps {
     name: string;
     challengeStatus?: string;
   }[];
-  maxPepleCanJoin?: number;
 }
 
-const ParticipantsTab: FC<IParticipantsTabProps> = ({
-  participant = [],
-  maxPepleCanJoin,
-}) => {
+const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -43,7 +39,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
                 }
                 className="mb-5 flex-row items-center justify-between gap-3"
               >
-                <View className="flex-row  items-center ">
+                <View className="flex-row items-center">
                   <View className="relative">
                     <Image
                       className="h-10 w-10 rounded-full"
@@ -62,8 +58,10 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
                     {item.name}
                   </Text>
                 </View>
-                {item?.challengeStatus == "done" ||
-                  (item?.challengeStatus == "closed" && <MarkDone />)}
+                <View className="pr-3">
+                  {(item?.challengeStatus == "done" ||
+                    item?.challengeStatus == "closed") && <MarkDone />}
+                </View>
               </TouchableOpacity>
             );
           }}

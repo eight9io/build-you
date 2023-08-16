@@ -26,6 +26,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 
 import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
 import StarFillSvg from "../../../../common/svg/star-fill.svg";
+import { useChallengeUpdateStore } from "../../../../store/challenge-update-store";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -63,6 +64,8 @@ const RateChallengeSection = ({ challengeId }) => {
   const [isRatingError, setIsRatingError] = useState<boolean>(false);
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+
+  const { setChallengeRatingUpdate } = useChallengeUpdateStore();
 
   useEffect(() => {
     const fetchChallengeRating = async () => {
@@ -107,6 +110,10 @@ const RateChallengeSection = ({ challengeId }) => {
     setShowComfirmModal(false);
     try {
       await serviceRateChallenge(challengeId, ratedValue as number);
+      setChallengeRatingUpdate({
+        id: challengeId,
+        rating: ratedValue as number,
+      });
       setIsRatingSuccess(true);
       setIsRatedByCurrentUser(true);
     } catch (error) {

@@ -17,10 +17,6 @@ import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
-import Button from "../../../component/common/Buttons/Button";
-
-import ShareIcon from "../../../../../assets/svg/share.svg";
-import { serviceGetMyProfile } from "../../../service/auth";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 

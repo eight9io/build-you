@@ -61,12 +61,12 @@ const ChallengeProgressCardForComment: React.FC<
               </Text>
 
               {location && (
-                <View>
+                <View className="flex flex-row">
                   <Text className="text-xs font-light text-gray-dark ">
                     <IconDot fill={"#7D7E80"} />
                     {"  "}
                   </Text>
-                  <Text className="mr-16 text-xs font-light text-gray-dark">
+                  <Text className="mr-6 text-xs font-light text-gray-dark">
                     {location}
                   </Text>
                 </View>

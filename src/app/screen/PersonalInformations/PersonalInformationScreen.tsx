@@ -167,10 +167,10 @@ export default function PersonalInformationScreen({ navigation }: any) {
         </View>
         <View className="flex-column flex flex-wrap gap-3 px-4 pt-[20px] ">
           {userData?.name && (
-            <View className="flex flex-row flex-wrap gap-1">
+            <View className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[30%] text-md font-semibold  text-gray-dark"
+                  "w-[40%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.name")}:&nbsp;
@@ -185,7 +185,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[30%] text-md font-semibold  text-gray-dark"
+                  "w-[40%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.surname")}:&nbsp;
@@ -200,7 +200,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[30%] text-md font-semibold  text-gray-dark"
+                  "w-[40%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.birthday")}:&nbsp;
@@ -215,7 +215,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[30%] text-md font-semibold  text-gray-dark"
+                  "w-[40%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.email")}:&nbsp;
@@ -230,7 +230,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[30%] text-md font-semibold  text-gray-dark"
+                  "w-[40%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("form_onboarding.screen_1.occupation")}:&nbsp;

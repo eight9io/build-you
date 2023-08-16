@@ -66,13 +66,13 @@ const LanguageSettings = () => {
   }, []);
 
   return (
-    <View>
-      <View className={clsx("flex flex-col pt-4")}>
-        <View className={clsx("py-4")}>
-          <Text className={clsx("text-h4 font-medium")}>
-            {t("user_settings_screen.account_settings_language.language")}
-          </Text>
-        </View>
+    <View className={clsx("flex flex-col pt-4")}>
+      <View className={clsx("py-4")}>
+        <Text className={clsx("text-h4 font-medium")}>
+          {t("user_settings_screen.account_settings_language.language")}
+        </Text>
+      </View>
+      <View className="h-40">
         <View className="flex flex-row items-center justify-between">
           <Text className={clsx("text-h6 font-normal leading-6")}>
             {t(
@@ -107,7 +107,7 @@ const LanguageSettings = () => {
               borderRadius: 8,
               maxHeight: 300,
               overflow: "scroll",
-              zIndex: 10,
+              zIndex: 20,
             }}
             theme="LIGHT"
             multiple={true}
@@ -116,26 +116,28 @@ const LanguageSettings = () => {
             renderListItem={({ item, isSelected, onPress }) => {
               const randomIndex = Math.random().toString().replace(".", "");
               return (
-                <TouchableOpacity
-                  onPress={() => handleSelectLanguage(item.value)}
-                  key={randomIndex}
-                >
-                  <View
-                    className={clsx(
-                      "flex-row items-center justify-start px-4 py-3",
-                      {
-                        "bg-gray-light": isSelected,
-                      }
-                    )}
+                <View key={randomIndex}>
+                  <TouchableOpacity
+                    onPress={() => handleSelectLanguage(item.value)}
+                    key={randomIndex}
                   >
-                    <Text
-                      key={item.label}
-                      className="pl-3 text-h6 font-medium leading-6 text-black-default"
+                    <View
+                      className={clsx(
+                        "flex-row items-center justify-start px-4 py-3",
+                        {
+                          "bg-gray-light": isSelected,
+                        }
+                      )}
                     >
-                      {item.label}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                      <Text
+                        key={item.label}
+                        className="pl-3 text-h6 font-medium leading-6 text-black-default"
+                      >
+                        {item.label}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               );
             }}
           />

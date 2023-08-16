@@ -19,7 +19,7 @@ export default function CompanyInformationScreen({ navigation }: any) {
         </View>
         <View className="flex-column flex flex-wrap gap-5 pt-[20px] px-4 ">
           {userData?.name && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px]">
+            <Text className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[24%] text-md font-semibold  text-gray-dark"
@@ -31,7 +31,7 @@ export default function CompanyInformationScreen({ navigation }: any) {
               <Text className={clsx("text-md text-gray-dark")}>
                 {userData?.name}
               </Text>
-            </View>
+            </Text>
           )}
           {userData?.webSite && (
             <View className="flex flex-row flex-wrap w-full pr-[30px]">

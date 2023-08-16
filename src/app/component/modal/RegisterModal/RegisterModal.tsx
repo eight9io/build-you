@@ -150,6 +150,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
                   closeModal();
                   navigation.navigate("RegisterScreen");
                 }}
+                testID="register_with_email_btn"
               />
             </View>
           </View>

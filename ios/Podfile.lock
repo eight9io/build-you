@@ -575,7 +575,7 @@ PODS:
   - SDWebImage (5.15.8):
     - SDWebImage/Core (= 5.15.8)
   - SDWebImage/Core (5.15.8)
-  - SDWebImageAVIFCoder (0.10.0):
+  - SDWebImageAVIFCoder (0.10.1):
     - libavif (>= 0.11.0)
     - SDWebImage (~> 5.10)
   - SDWebImageSVGCoder (1.6.1):
@@ -949,7 +949,7 @@ SPEC CHECKSUMS:
   RNShare: da6d90b6dc332f51f86498041d6e34211f96b630
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
-  SDWebImageAVIFCoder: 4aeea8fdf65af5c18525ecb5bdd8b8ed9bb45019
+  SDWebImageAVIFCoder: 8348fef6d0ec69e129c66c9fe4d74fbfbf366112
   SDWebImageSVGCoder: 6fc109f9c2a82ab44510fff410b88b1a6c271ee8
   SDWebImageWebPCoder: 18503de6621dd2c420d680e33d46bf8e1d5169b0
   UMAppLoader: d1cd37524ea948f9e695722994496784a6d6213c

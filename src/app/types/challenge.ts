@@ -82,3 +82,8 @@ export interface INumberOfLikeUpdate {
   numberOfLikes: number;
   isLikedByCurrentUser: boolean;
 }
+
+export interface IChallengeRatingUpdate {
+  id: string;
+  rating: number;
+}

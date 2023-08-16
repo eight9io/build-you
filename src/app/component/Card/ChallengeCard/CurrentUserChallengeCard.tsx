@@ -14,6 +14,7 @@ import { StackActions } from "@react-navigation/native";
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
+import { useChallengeUpdateStore } from "../../../store/challenge-update-store";
 
 interface ICurrentUserChallengeCardProps {
   item: IChallenge;
@@ -35,6 +36,8 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+  const { getChallengeRatingUpdate } = useChallengeUpdateStore();
+  const challengeRatingUpdate = getChallengeRatingUpdate();
 
   const onPress = () => {
     if (navigation) {
@@ -67,6 +70,12 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
     };
     fetchChallengeRating();
   }, []);
+
+  useEffect(() => {
+    if (challengeRatingUpdate?.id === item?.id) {
+      setRatedValue(challengeRatingUpdate?.rating);
+    }
+  }, [challengeRatingUpdate?.id]);
 
   return (
     <TouchableOpacity

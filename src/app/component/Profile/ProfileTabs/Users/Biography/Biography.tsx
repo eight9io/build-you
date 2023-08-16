@@ -126,17 +126,17 @@ const Biography = ({ userProfile }: IBiographyProps) => {
         <View className="flex-column flex flex-wrap gap-5 pt-[20px]">
 
           {occupation && (
-            <View className="flex flex-row flex-wrap  w-full pr-[30px] gap-1">
+            <View className="flex flex-row flex-wrap gap-1">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[40%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("form_onboarding.screen_1.occupation")}:&nbsp;
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
-                {occupation?.name}
+                {occupation.name}
               </Text>
             </View>
           )}
@@ -144,7 +144,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             <View className="flex flex-row flex-wrap w-full pr-[30px] gap-1">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[40%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.website")}:&nbsp;
@@ -159,7 +159,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             <View className="flex flex-row flex-wrap  w-full gap-1">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[40%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.phone")}:&nbsp;
@@ -174,7 +174,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             <View className="flex flex-row flex-wrap  w-full gap-1">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[40%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.email")}:&nbsp;
@@ -189,7 +189,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             <View className="flex flex-row flex-wrap  w-full gap-1">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[40%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.VAT_number")}:&nbsp;

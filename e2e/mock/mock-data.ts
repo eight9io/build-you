@@ -12,4 +12,8 @@ export const MOCK_DATA = {
     PASSWORD: "password",
     REPEAT_PASSWORD: "repeat_password",
   },
+  NORMAL_USER: {
+    EMAIL: "ktest5@gmail.com",
+    PASSWORD: "Aa1234567",
+  }
 };

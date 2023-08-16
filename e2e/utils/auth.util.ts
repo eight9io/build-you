@@ -1,5 +1,25 @@
 import { element, by } from "detox";
 import { execSync } from "child_process";
+import { MOCK_DATA } from "../mock/mock-data";
+
+export const login = async () => {
+  // Navigate to login screen
+  const loginBtn = element(by.id("intro_login_btn"));
+  await loginBtn.tap();
+
+  // Mock input
+  const emailInput = element(by.id("login_email_input"));
+  await emailInput.replaceText(MOCK_DATA.NORMAL_USER.EMAIL); // Replace email input with invalid email
+  await emailInput.tapReturnKey();
+
+  const passwordInput = element(by.id("login_password_input"));
+  await passwordInput.replaceText(MOCK_DATA.NORMAL_USER.PASSWORD); // Replace password input with valid test password
+  await passwordInput.tapReturnKey();
+
+  // Submit login form
+  const loginSubmitBtn = element(by.id("login_submit_btn"));
+  await loginSubmitBtn.tap();
+};
 
 export const logOut = async () => {
   const profileBtn = element(by.id("profile_tab_btn"));

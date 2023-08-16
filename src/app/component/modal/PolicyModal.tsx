@@ -42,11 +42,8 @@ export default function PolicyModal({
       // transparent={true}
       visible={modalVisible}
       presentationStyle="pageSheet"
-
     >
-
-
-      <View className=" flex-1 bg-white px-3 pt-3  ">
+      <View className=" flex-1 bg-white px-3 pt-3" testID="policy_modal">
         <Header
           title={t("policy_modal.title") || "Privacy policy..."}
           leftBtn={
@@ -54,18 +51,13 @@ export default function PolicyModal({
               text={t("button.back") as string}
               onPress={() => setModalVisible(false)}
               withBackIcon
+              testID="policy_modal_back_btn"
             />
           }
           containerStyle="mb-4"
-
         />
-        <WebView
-          originWhitelist={['*']}
-          source={{ html: content }}
-        />
-
+        <WebView originWhitelist={["*"]} source={{ html: content }} />
       </View>
-
     </Modal>
   );
 }

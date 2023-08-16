@@ -8,7 +8,7 @@ i18n
     compatibilityJSON: "v3",
     debug: false,
     resources: buildYou,
-    lng: "en",
+    lng: "it",
     ns: ["index", "errorMessage"],
     react: {
       useSuspense: false,

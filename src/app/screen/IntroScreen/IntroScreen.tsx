@@ -18,7 +18,7 @@ export const IntroScreen = ({ navigation, route }: any) => {
   }, []);
 
   return (
-    <View className="justify-content: space-between flex-1">
+    <View className="justify-content: space-between flex-1" testID="">
       <View className="flex-1">
         <Image
           className="z-10 h-[100%] w-[100%] rounded-xl"
@@ -58,6 +58,7 @@ export const IntroScreen = ({ navigation, route }: any) => {
             containerClassName="bg-primary-default"
             textClassName="text-white"
             onPress={() => setModalVisible(true)}
+            testID="intro_register_btn"
           />
           <Button
             testID="intro_login_btn"

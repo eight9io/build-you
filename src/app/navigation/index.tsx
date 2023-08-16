@@ -284,6 +284,7 @@ export const RootNavigation = () => {
                   text={t("button.back") || "Back"}
                   onPress={() => navigation.goBack()}
                   withBackIcon
+                  testID="email_registration_back_btn"
                 />
               ),
             })}

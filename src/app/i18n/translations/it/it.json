@@ -110,7 +110,8 @@
       "label": "Codice",
       "name": "codice",
       "required": "Per favore inserisci il codice.",
-      "placeholder": "Inserisci codice."
+      "placeholder": "Inserisci codice.",
+      "type": "code"
     },
     {
       "label": "Password",
@@ -125,7 +126,7 @@
       "name": "ripeti password",
       "error": "Le password non corrispondono.",
       "required": "Per favore ripeti la tua password.",
-      "type": "password",
+      "type": "repeat_password",
       "placeholder": "Ripeti password"
     }
   ],

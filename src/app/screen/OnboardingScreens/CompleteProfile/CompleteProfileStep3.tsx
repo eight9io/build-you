@@ -26,6 +26,10 @@ interface MyObject {
 const NUMBER_OF_SKILL_REQUIRED = 3;
 const MAX_NUMBER_OF_SKILL = 10;
 
+const generateTestIdForSkills = (index: number) => {
+  return `complete_profile_step_3_skill_${index}`;
+};
+
 const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   navigation,
 }) => {
@@ -113,7 +117,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         isVisible={isShowAddSkillModal}
         onClose={() => setIsShowAddSkillModal(false)}
       />
-      <ScrollView showsVerticalScrollIndicator>
+      <ScrollView showsVerticalScrollIndicator testID="complete_profile_step_3">
         <View>
           <StepOfSteps step={3} totalSteps={4} />
         </View>
@@ -133,6 +137,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             {fetchedHardSkills.map((item, index) => (
               <Button
                 key={index}
+                testID={generateTestIdForSkills(index)}
                 title={item.skill}
                 onPress={() => addCompetenceSkill(item)}
                 textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
@@ -154,13 +159,17 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             onPress={() => setIsShowAddSkillModal(true)}
           />
           {numberOfSkillError && (
-            <Text className="pt-1 text-center text-sm font-normal leading-5 text-red-500">
+            <Text
+              testID="complete_profile_step_3_error"
+              className="pt-1 text-center text-sm font-normal leading-5 text-red-500"
+            >
               {t("form_onboarding.screen_3.error") ||
                 "Please select at least 3 hard skills and maximum of 10 skills"}
             </Text>
           )}
         </View>
         <Button
+          testID="complete_profile_step_3_next_button"
           title={t("button.next") || "Next"}
           containerClassName="flex-1 bg-primary-default my-5 mx-5"
           textClassName="text-white text-md leading-6"

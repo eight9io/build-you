@@ -154,6 +154,7 @@ const CompleteProfileScreen = () => {
 
           headerLeft: (props) => (
             <NavButton
+              testID="complete_profile_step_2_back_button"
               text={t("button.back") || "Back"}
               withBackIcon={true}
               onPress={() => navigation.navigate("CompleteProfileStep1Screen")}
@@ -162,6 +163,7 @@ const CompleteProfileScreen = () => {
 
           headerRight: (props) => (
             <NavButton
+              testID="complete_profile_step_2_skip_button"
               text={t("button.skip") || "Skip"}
               withIcon={false}
               onPress={() => {
@@ -182,6 +184,7 @@ const CompleteProfileScreen = () => {
 
           headerLeft: (props) => (
             <NavButton
+              testID="complete_profile_step_3_back_button"
               text={t("button.back") || "Back"}
               withBackIcon={true}
               onPress={() => navigation.goBack()}
@@ -198,6 +201,7 @@ const CompleteProfileScreen = () => {
 
           headerLeft: (props) => (
             <NavButton
+              testID="complete_profile_step_4_back_button"
               text={t("button.back") || "Back"}
               withBackIcon={true}
               onPress={() => navigation.goBack()}

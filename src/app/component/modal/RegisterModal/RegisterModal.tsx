@@ -86,6 +86,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       visible={modalVisible}
       presentationStyle="pageSheet"
       style={{ borderRadius: 10 }}
+      testID="register_modal"
     >
       <View className=" bg-white " style={{ borderRadius: 10 }}>
         <View className="absolute z-10 my-6 ml-4 ">

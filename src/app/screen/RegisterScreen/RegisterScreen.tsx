@@ -28,6 +28,20 @@ type FormData = {
   repeat_password: string;
   check_policy: boolean;
 };
+
+const getInputTypeForE2ETest = (type: string) => {
+  switch (type) {
+    case "email":
+      return "register_with_email_email_input";
+    case "password":
+      return "register_with_email_password_input";
+    case "repeat_password":
+      return "register_with_email_confirm_password_input";
+    default:
+      return "";
+  }
+};
+
 export default function RegisterScreen({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
   const {
@@ -40,7 +54,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
       email: "",
       password: "",
       repeat_password: "",
-      check_policy: true,
+      check_policy: false,
     },
     resolver: yupResolver(RegisterValidationSchema()),
     reValidateMode: "onChange",
@@ -48,7 +62,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isShowModal, setIsShowModal] = useState(false)
+  const [isShowModal, setIsShowModal] = useState(false);
   const [errMessage, setErrMessage] = useState("");
 
   const onSubmit = (data: FormData) => {
@@ -56,12 +70,8 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
     serviceRegister({ email: data.email, password: data.password })
       .then((res) => {
-        if (res.status == 201) {
-          setIsShowModal(true)
-          setErrMessage("");
-        } else {
-          setErrMessage(err_server);
-        }
+        setIsShowModal(true);
+        setErrMessage("");
       })
       .catch((error) => {
         setErrMessage(errorMessage(error, "err_register") as string);
@@ -70,15 +80,14 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
-
       });
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTerms, setModalTerms] = useState(false);
   const handleConfirm = () => {
-    setIsShowModal(false)
-    navigation.navigate("LoginScreen")
-  }
+    setIsShowModal(false);
+    navigation.navigate("LoginScreen");
+  };
   const [hidePassword, setHidePassword] = useState(true);
   return (
     <SafeAreaView
@@ -127,6 +136,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                         render={({ field: { onChange, onBlur, value } }) => (
                           <View className="flex flex-col gap-1">
                             <TextInput
+                              testID={getInputTypeForE2ETest(item.type)}
                               rightIcon={
                                 (item.type === "repeat_password" ||
                                   item.type === "password") &&
@@ -181,18 +191,6 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                               onBlur={onBlur}
                               onChangeText={(text) => onChange(text)}
                               value={value}
-                              testID={(() => {
-                                switch (item.type) {
-                                  case "email":
-                                    return "register_email_input";
-                                  case "repeat_password":
-                                    return "register_repeat_password_input";
-                                  case "password":
-                                    return "register_password_input";
-                                  default:
-                                    return null;
-                                }
-                              })()}
                             />
                           </View>
                         )}
@@ -284,13 +282,13 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             modalVisible={modalTerms}
             setModalVisible={setModalTerms}
           />
-          <ConfirmDialog
+          {/* <ConfirmDialog
             title={t("dialog.register.title") || ""}
             description={t("dialog.register.description") || ""}
             isVisible={isShowModal}
             confirmButtonLabel={t("dialog.close") || ""}
             onConfirm={() => handleConfirm()}
-          />
+          /> */}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

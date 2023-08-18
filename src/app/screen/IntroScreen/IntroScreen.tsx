@@ -54,11 +54,11 @@ export const IntroScreen = ({ navigation, route }: any) => {
 
         <View className="w-full flex-row">
           <Button
+            testID="intro_register_btn"
             title={t("login_screen.register")}
             containerClassName="bg-primary-default"
             textClassName="text-white"
             onPress={() => setModalVisible(true)}
-            testID="intro_register_btn"
           />
           <Button
             testID="intro_login_btn"

@@ -83,4 +83,7 @@ module.exports = {
       app: "android.release",
     },
   },
+  // logger: {
+  //   level: "debug"
+  // }
 };

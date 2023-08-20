@@ -68,7 +68,10 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
   };
 
   return (
-    <View className="flex h-full w-full flex-col items-center justify-start">
+    <View
+      className="flex h-full w-full flex-col items-center justify-start"
+      testID="complete_profile_step_2"
+    >
       <ScrollView className="w-full ">
         <View className="pt-2">
           <StepOfSteps step={2} totalSteps={4} />
@@ -129,6 +132,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
             containerClassName="h-12 w-full bg-primary-default my-5 "
             textClassName="text-white text-md leading-6"
             onPress={handleSubmit(handleSubmitForm)}
+            testID="complete_profile_step_2_next_button"
           />
         </View>
       </ScrollView>

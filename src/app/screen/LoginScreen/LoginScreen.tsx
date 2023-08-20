@@ -101,7 +101,10 @@ export default function Login() {
 
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView className="relative h-full flex-1 bg-white">
+    <SafeAreaView
+      className="relative h-full flex-1 bg-white"
+      testID="login_with_email_screen"
+    >
       {isLoading && <Spinner visible={isLoading} />}
       <View className="relative h-full bg-white ">
         <KeyboardAwareScrollView>
@@ -203,7 +206,11 @@ export default function Login() {
                                 onBlur={onBlur}
                                 onChangeText={(text) => onChange(text)}
                                 value={value}
-                                testID={item.name === "user" ? "login_email_input" : "login_password_input"}
+                                testID={
+                                  item.name === "user"
+                                    ? "login_email_input"
+                                    : "login_password_input"
+                                }
                               />
                             </View>
                           )}

@@ -28,9 +28,22 @@ type FormData = {
   repeat_password: string;
   check_policy: boolean;
 };
+
+const getInputTypeForE2ETest = (type: string) => {
+  switch (type) {
+    case "email":
+      return "register_with_email_email_input";
+    case "password":
+      return "register_with_email_password_input";
+    case "repeat_password":
+      return "register_with_email_confirm_password_input";
+    default:
+      return "";
+  }
+};
+
 export default function RegisterScreen({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
-  const [ruleBtnChecked, setRuleBtnChecked] = useState(true);
   const {
     control,
     handleSubmit,
@@ -49,7 +62,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isShowModal, setIsShowModal] = useState(false)
+  const [isShowModal, setIsShowModal] = useState(false);
   const [errMessage, setErrMessage] = useState("");
 
   const onSubmit = (data: FormData) => {
@@ -57,12 +70,8 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
     serviceRegister({ email: data.email, password: data.password })
       .then((res) => {
-        if (res.status == 201) {
-          setIsShowModal(true)
-          setErrMessage("");
-        } else {
-          setErrMessage(err_server);
-        }
+        setIsShowModal(true);
+        setErrMessage("");
       })
       .catch((error) => {
         setErrMessage(errorMessage(error, "err_register") as string);
@@ -71,19 +80,21 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
-
       });
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTerms, setModalTerms] = useState(false);
   const handleConfirm = () => {
-    setIsShowModal(false)
-    navigation.navigate("LoginScreen")
-  }
+    setIsShowModal(false);
+    navigation.navigate("LoginScreen");
+  };
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView className=" h-full bg-white ">
-      <KeyboardAwareScrollView>
+    <SafeAreaView
+      className=" h-full bg-white "
+      testID="register_with_email_screen"
+    >
+      <KeyboardAwareScrollView testID="register_scroll_view">
         {isLoading && <Spinner visible={isLoading} />}
 
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
@@ -102,6 +113,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
               <ErrorText
                 containerClassName="justify-center "
                 message={errMessage}
+                testID="register_error"
               />
             )}
             <View className="mb-1 mt-4 flex  flex-col ">
@@ -110,29 +122,40 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                   returnObjects: true,
                 }) as Array<any>
               ).map((item, index) => {
-                if (item.name === "code" || item.name === "user") {
+                if (item.type === "code" || item.name === "user") {
                   return;
                 } else {
                   return (
                     <View className="pt-5" key={index}>
                       <Controller
                         control={control}
-                        name={item.name}
+                        name={item.type}
                         rules={{
                           required: true,
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                           <View className="flex flex-col gap-1">
                             <TextInput
+                              testID={getInputTypeForE2ETest(item.type)}
                               rightIcon={
-                                (item.name === "repeat_password" ||
-                                  item.name === "password") &&
+                                (item.type === "repeat_password" ||
+                                  item.type === "password") &&
                                 (!hidePassword ? (
                                   <TouchableOpacity
                                     onPress={() =>
                                       setHidePassword(!hidePassword)
                                     }
                                     className=" mt-[2px]"
+                                    testID={(() => {
+                                      switch (item.type) {
+                                        case "repeat_password":
+                                          return "register_repeat_password_hide_password_btn";
+                                        case "password":
+                                          return "register_password_hide_password_btn";
+                                        default:
+                                          return null;
+                                      }
+                                    })()}
                                   >
                                     <IconEyeOn />
                                   </TouchableOpacity>
@@ -142,14 +165,24 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                                       setHidePassword(!hidePassword)
                                     }
                                     className=" mt-[2px]"
+                                    testID={(() => {
+                                      switch (item.type) {
+                                        case "repeat_password":
+                                          return "register_repeat_password_show_password_btn";
+                                        case "password":
+                                          return "register_password_show_password_btn";
+                                        default:
+                                          return null;
+                                      }
+                                    })()}
                                   >
                                     <IconEyeOff />
                                   </TouchableOpacity>
                                 ))
                               }
                               secureTextEntry={
-                                (item.name == "repeat_password" ||
-                                  item.name == "password") &&
+                                (item.type == "repeat_password" ||
+                                  item.type == "password") &&
                                 hidePassword
                               }
                               label={item.label}
@@ -162,9 +195,10 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                           </View>
                         )}
                       />
-                      {errors[item.name as keyof FormData] && (
+                      {errors[item.type as keyof FormData] && (
                         <ErrorText
-                          message={errors[item.name as keyof FormData]?.message}
+                          message={errors[item.type as keyof FormData]?.message}
+                          testID={`register_${item.type}_error`}
                         />
                       )}
                     </View>
@@ -182,13 +216,14 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                   <View className="">
                     <CheckBox
                       title={
-                        <Text className="pl-4">
+                        <View className="flex-1 flex-row flex-wrap items-center pl-4">
                           <Text className="">
                             {t("register_screen.policy")}
                           </Text>
                           <Text
                             className="cursor-pointer font-medium  underline underline-offset-1"
                             onPress={() => setModalVisible(true)}
+                            testID="register_policy_link"
                           >
                             {t("register_screen.policy_link")}
                           </Text>
@@ -196,11 +231,11 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                           <Text
                             className="cursor-pointer font-medium underline underline-offset-auto"
                             onPress={() => setModalTerms(true)}
+                            testID="register_terms_link"
                           >
                             {t("register_screen.terms_link")}
                           </Text>
-
-                        </Text>
+                        </View>
                       }
                       containerStyle={{
                         backgroundColor: "transparent",
@@ -208,18 +243,21 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                         paddingLeft: 0,
                         marginTop: 10,
                       }}
-                      checked={ruleBtnChecked}
+                      checked={value}
                       onPress={() => {
-                        setValue("check_policy", !ruleBtnChecked);
-                        setRuleBtnChecked(!ruleBtnChecked);
+                        setValue("check_policy", !value);
                       }}
                       iconType="material-community"
                       checkedIcon="checkbox-marked"
                       uncheckedIcon="checkbox-blank-outline"
                       checkedColor="blue"
+                      testID="register_argee_policy_checkbox"
                     />
-                    {errors.check_policy && !ruleBtnChecked && (
-                      <ErrorText message={errors.check_policy?.message} />
+                    {errors.check_policy && !value && (
+                      <ErrorText
+                        message={errors.check_policy?.message}
+                        testID="register_argee_policy_error"
+                      />
                     )}
                   </View>
                 )}
@@ -231,6 +269,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             textClassName="line-[30px] text-center text-md font-medium text-white"
             title={t("register_screen.title")}
             onPress={handleSubmit(onSubmit)}
+            testID="register_submit_btn"
           />
 
           <PolicyModal
@@ -243,13 +282,13 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             modalVisible={modalTerms}
             setModalVisible={setModalTerms}
           />
-          <ConfirmDialog
+          {/* <ConfirmDialog
             title={t("dialog.register.title") || ""}
             description={t("dialog.register.description") || ""}
             isVisible={isShowModal}
             confirmButtonLabel={t("dialog.close") || ""}
             onConfirm={() => handleConfirm()}
-          />
+          /> */}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

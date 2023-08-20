@@ -9,11 +9,19 @@ export const OnboardingScreen1Validators = () => {
     name: yup
       .string()
       .trim()
+      .matches(
+        /^[a-zA-Z0-9_ ]*$/,
+        t("form_onboarding.screen_1.first_name_error")
+      )
       .required(t("form_onboarding.screen_1.first_name_error") as string),
 
     surname: yup
       .string()
       .trim()
+      .matches(
+        /^[a-zA-Z0-9_ ]*$/,
+        t("form_onboarding.screen_1.last_name_error")
+      )
       .required(t("form_onboarding.screen_1.last_name_error") as string),
 
     birth: yup

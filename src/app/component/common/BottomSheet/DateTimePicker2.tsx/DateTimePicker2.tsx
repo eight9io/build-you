@@ -105,6 +105,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                       onPress={onConfirm}
                       containerClassName="bg-primary-default flex-1"
                       textClassName="text-white"
+                      testID="date_time_picker_confirm_btn"
                     />
                   </View>
                 </View>

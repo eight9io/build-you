@@ -514,8 +514,6 @@ PODS:
     - React-Core
   - RNCMaskedView (0.2.8):
     - React-Core
-  - RNCPicker (2.4.8):
-    - React-Core
   - RNDateTimePicker (6.7.3):
     - React-Core
   - RNFBApp (18.3.0):
@@ -652,7 +650,6 @@ DEPENDENCIES:
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
-  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
@@ -822,8 +819,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
-  RNCPicker:
-    :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNFBApp:
@@ -936,7 +931,6 @@ SPEC CHECKSUMS:
   RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
-  RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNDateTimePicker: 00247f26c34683c80be94207f488f6f13448586e
   RNFBApp: 147c3274daa84d7410d457510548d5fb3b317e37
   RNFBMessaging: 0e98a1452a60e6828fcd7139b1ad45ebf4452aa8
@@ -957,4 +951,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a8ff88e42fd13fdab441a53d9c9a5461d9ed7e52
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1

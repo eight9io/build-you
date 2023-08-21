@@ -65,7 +65,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <SafeAreaView className=" h-full bg-white ">
+    <SafeAreaView className=" h-full bg-white " testID="forgotPasswordScreen">
       {isLoading && <Spinner visible={isLoading} />}
       <View className=" h-full bg-white ">
         <ScrollView>
@@ -108,6 +108,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                                 onBlur={onBlur}
                                 onChangeText={(text) => onChange(text)}
                                 value={value}
+                                testID="email_forgot_password_input"
                               />
                             </View>
                           )}
@@ -118,6 +119,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                               errors[item.name as keyof ForgotPasswordForm]
                                 ?.message
                             }
+                            testID="email_forgot_password_error"
                           />
                         )}
                       </View>
@@ -132,6 +134,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                 textClassName="line-[30px] text-center text-md font-medium text-white"
                 title={t("send_code")}
                 onPress={handleSubmit(onSubmit)}
+                testID="send_code_btn"
               />
             </View>
             {email && (

@@ -178,6 +178,7 @@ export default function Login() {
                                         setHidePassword(!hidePassword)
                                       }
                                       className=" mt-[2px]"
+                                      testID="login_hide_password_btn"
                                     >
                                       <Ionicons name="eye-outline" size={24} />
                                     </TouchableOpacity>
@@ -187,6 +188,7 @@ export default function Login() {
                                         setHidePassword(!hidePassword)
                                       }
                                       className=" mt-[2px]"
+                                      testID="login_show_password_btn"
                                     >
                                       <Ionicons
                                         name="eye-off-outline"
@@ -220,6 +222,7 @@ export default function Login() {
                             message={
                               errors[item.name as keyof LoginForm]?.message
                             }
+                            testID={`login_${item.type}_error`}
                           />
                         )}
                       </View>
@@ -236,6 +239,7 @@ export default function Login() {
                   setErrMessage("");
                   navigation.navigate("ForgotPasswordScreen");
                 }}
+                testID="forgotPasswordButton"
               >
                 <Text className="my-5 px-24 text-center text-h6 leading-6 text-gray-dark">
                   {t("forgot_password")}

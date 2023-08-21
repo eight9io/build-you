@@ -51,6 +51,7 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
         textClassName="text-white ml-2 text-base font-bold"
         Icon={<Ionicons name="logo-linkedin" size={24} color="#FFF" />}
         onPress={handleLinkedInBtnClicked}
+        testID="linkedlnButton"
       />
       <LinkedInModal
         isVisible={linkedInModalVisible}

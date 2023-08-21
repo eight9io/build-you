@@ -141,6 +141,7 @@ const CompleteProfileScreen = () => {
                   userProfileStoreOnLogout();
                 }, 500);
               }}
+              testID="complete_profile_step_1_logout_button"
             />
           ),
         })}

@@ -96,6 +96,18 @@ export default function ForgotPasswordModal({
       });
   };
   const [hidePassword, setHidePassword] = useState(true);
+  const getInputTypeForE2ETest = (type: string) => {
+    switch (type) {
+      case "code":
+        return "forgot_password_code_input";
+      case "password":
+        return "forgot_password_password_input";
+      case "repeat_password":
+        return "forgot_password_confirm_password_input";
+      default:
+        return "";
+    }
+  };
   return (
     <Modal
       animationType="slide"
@@ -103,7 +115,9 @@ export default function ForgotPasswordModal({
       presentationStyle="pageSheet"
       statusBarTranslucent={isLoading}
     >
-      <View className="mx-1 h-full bg-white">
+      <View className="mx-1 h-full bg-white"
+        testID="forgot_password_modal"
+      >
         <Header
           containerStyle="mx-4"
           title={t("forgot_password.title") as string}
@@ -115,7 +129,7 @@ export default function ForgotPasswordModal({
             />
           }
         />
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView testID="forgot_password_scroll_view">
           <View className="h-full pt-5">
             <SafeAreaView>
               {isLoading && <Spinner visible={isLoading} />}
@@ -138,37 +152,46 @@ export default function ForgotPasswordModal({
                       message={errMessage}
                     />
                   )}
-                  <View className="mt-4 flex flex-col ">
+                  <View className="mb-1 mt-4 flex  flex-col ">
                     {(
                       t("form", {
                         returnObjects: true,
                       }) as Array<any>
                     ).map((item, index) => {
-                      if (item.name === "email" || item.name === "user") {
+                      if (item.type === "email" || item.name === "user") {
                         return;
                       } else {
                         return (
                           <View className="pt-5" key={index}>
                             <Controller
                               control={control}
-                              name={item.name}
+                              name={item.type}
                               rules={{
                                 required: true,
                               }}
-                              render={({
-                                field: { onChange, onBlur, value },
-                              }) => (
+                              render={({ field: { onChange, onBlur, value } }) => (
                                 <View className="flex flex-col gap-1">
                                   <TextInput
+                                    testID={getInputTypeForE2ETest(item.type)}
                                     rightIcon={
-                                      (item.name === "repeat_password" ||
-                                        item.name === "password") &&
+                                      (item.type === "repeat_password" ||
+                                        item.type === "password") &&
                                       (!hidePassword ? (
                                         <TouchableOpacity
                                           onPress={() =>
                                             setHidePassword(!hidePassword)
                                           }
                                           className=" mt-[2px]"
+                                          testID={(() => {
+                                            switch (item.type) {
+                                              case "repeat_password":
+                                                return "register_repeat_password_hide_password_btn";
+                                              case "password":
+                                                return "register_password_hide_password_btn";
+                                              default:
+                                                return null;
+                                            }
+                                          })()}
                                         >
                                           <IconEyeOn />
                                         </TouchableOpacity>
@@ -178,17 +201,25 @@ export default function ForgotPasswordModal({
                                             setHidePassword(!hidePassword)
                                           }
                                           className=" mt-[2px]"
+                                          testID={(() => {
+                                            switch (item.type) {
+                                              case "repeat_password":
+                                                return "register_repeat_password_show_password_btn";
+                                              case "password":
+                                                return "register_password_show_password_btn";
+                                              default:
+                                                return null;
+                                            }
+                                          })()}
                                         >
                                           <IconEyeOff />
                                         </TouchableOpacity>
                                       ))
                                     }
                                     secureTextEntry={
-                                      (item.name === "password" ||
-                                        item.name === "repeat_password") &&
-                                        hidePassword
-                                        ? true
-                                        : false
+                                      (item.type == "repeat_password" ||
+                                        item.type == "password") &&
+                                      hidePassword
                                     }
                                     label={item.label}
                                     placeholder={item.placeholder}
@@ -200,17 +231,18 @@ export default function ForgotPasswordModal({
                                 </View>
                               )}
                             />
-                            {errors[item.name as keyof FormData] && (
+                            {errors[item.type as keyof FormData] && (
                               <ErrorText
-                                message={
-                                  errors[item.name as keyof FormData]?.message
-                                }
+                                message={errors[item.type as keyof FormData]?.message}
+                                testID={`forgot_password_${item.type}_error`}
                               />
                             )}
                           </View>
                         );
                       }
                     })}
+
+
                   </View>
                 </View>
                 <View className="pb-10 pt-10">
@@ -219,6 +251,7 @@ export default function ForgotPasswordModal({
                     textClassName="line-[30px] text-center text-md font-medium text-white"
                     title={t("reset_password")}
                     onPress={handleSubmit(onSubmit)}
+                    testID="forgot_password_submit_btn"
                   />
                 </View>
               </View>

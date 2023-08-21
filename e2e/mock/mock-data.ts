@@ -1,5 +1,6 @@
 export const MOCK_DATA = {
   INVALID_EMAIL: "abc",
+  WRONG_EMAIL: "abc@gmail.com",
   EXISTING_EMAIL: "test123@gmail.com",
   PASSWORD: "Aa1234567",
   PASSWORD_NOT_MATCH: "Aa123456789",

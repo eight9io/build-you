@@ -151,6 +151,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
         onPress={pickVideo}
         className="mt-5 flex h-14 flex-row items-center justify-center rounded-xl bg-gray-light "
         disabled={!!isSelectedImage}
+        testID="video_picker_button"
       >
         <View className="flex flex-row items-center justify-center rounded-xl">
           <CameraIcon fill={!isSelectedImage ? "#1C1B1F" : "#C5C8D2"} />

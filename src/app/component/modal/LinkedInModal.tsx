@@ -51,33 +51,36 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
       visible={isVisible}
       presentationStyle="pageSheet"
     >
-      {!isLoading ? (
-        <View className="h-14 w-full justify-center border-b-2 border-gray-light bg-gray-veryLight pl-6">
-          <NavButton
-            text={t("cancel") || "Cancel"}
-            textClassName="text-blue-500 text-lg"
-            onPress={onLoginCancel}
+      <View testID="linkend_modal">
+        {!isLoading ? (
+          <View className="h-14 w-full justify-center border-b-2 border-gray-light bg-gray-veryLight pl-6">
+            <NavButton
+              text={t("cancel") || "Cancel"}
+              textClassName="text-blue-500 text-lg"
+              onPress={onLoginCancel}
+              testID="linkedln_modal_cancel_btn"
+            />
+          </View>
+        ) : null}
+        <View
+          style={{
+            backgroundColor: "red",
+            height: "90%",
+            display: "flex",
+          }}
+        >
+          <WebView
+            source={{
+              uri: `${LINKEDIN_LOGIN.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.EXPO_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.EXPO_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress&state=${authorizationState}`,
+            }}
+            contentMode="mobile"
+            automaticallyAdjustContentInsets={false}
+            onNavigationStateChange={handleNavigationStateChange}
+            thirdPartyCookiesEnabled={true}
+            onLoad={() => setIsLoading(false)}
+            incognito
           />
         </View>
-      ) : null}
-      <View
-        style={{
-          backgroundColor: "red",
-          height: "90%",
-          display: "flex",
-        }}
-      >
-        <WebView
-          source={{
-            uri: `${LINKEDIN_LOGIN.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.EXPO_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.EXPO_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress&state=${authorizationState}`,
-          }}
-          contentMode="mobile"
-          automaticallyAdjustContentInsets={false}
-          onNavigationStateChange={handleNavigationStateChange}
-          thirdPartyCookiesEnabled={true}
-          onLoad={() => setIsLoading(false)}
-          incognito
-        />
       </View>
     </Modal>
   );

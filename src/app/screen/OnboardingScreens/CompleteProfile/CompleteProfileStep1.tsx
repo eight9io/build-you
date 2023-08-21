@@ -100,7 +100,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   return (
-    <View className="">
+    <View className="" testID="complete_profile_step_1">
       <DateTimePicker2
         shouldMinus16Years
         selectedDate={selectedDate}
@@ -158,11 +158,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        testID="complete_profile_step_1_name_input"
                       />
                       {errors.name && (
                         <View className="flex flex-row pt-2">
                           <Warning />
-                          <Text className="pl-1 text-sm font-normal text-red-500">
+                          <Text
+                            className="pl-1 text-sm font-normal text-red-500"
+                            testID="complete_profile_step_1_name_error_message"
+                          >
                             {errors.name.message}
                           </Text>
                         </View>
@@ -189,11 +193,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        testID="complete_profile_step_1_surname_input"
                       />
                       {errors.surname && (
                         <View className="flex flex-row pt-2">
                           <Warning />
-                          <Text className="pl-1 text-sm font-normal text-red-500">
+                          <Text
+                            className="pl-1 text-sm font-normal text-red-500"
+                            testID="complete_profile_step_1_surname_error_message"
+                          >
                             {errors.surname.message}
                           </Text>
                         </View>
@@ -231,11 +239,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         editable={false}
                         onPress={() => setShowDateTimePicker(true)}
                         className="text-black-default"
+                        testID="complete_profile_step_1_birthdate_input"
                       />
                       {errors.birth && !birth && (
                         <View className="flex flex-row pt-2">
                           <Warning />
-                          <Text className="pl-1 text-sm font-normal text-red-500">
+                          <Text
+                            className="pl-1 text-sm font-normal text-red-500"
+                            testID="complete_profile_step_1_birthdate_input_error_message"
+                          >
                             {errors?.birth?.message as string}
                           </Text>
                         </View>
@@ -264,11 +276,15 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                         onChangeText={onChange}
                         onPress={() => setShowOccupationPicker(true)}
                         value={value}
+                        testID="complete_profile_step_1_occupation_input"
                       />
                       {errors.occupation && !occupation && (
                         <View className="flex flex-row pt-2">
                           <Warning />
-                          <Text className="pl-1 text-sm font-normal text-red-500">
+                          <Text
+                            className="pl-1 text-sm font-normal text-red-500"
+                            testID="complete_profile_step_1_occupation_input_error_message"
+                          >
                             {errors.occupation.message}
                           </Text>
                         </View>
@@ -278,6 +294,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                 />
               </View>
               <Button
+                testID="complete_profile_step_1_next_button"
                 title={t("button.next") || "Next"}
                 containerClassName="h-12 w-full bg-primary-default my-5 "
                 textClassName="text-white text-md leading-6"

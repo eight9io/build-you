@@ -200,7 +200,7 @@ const CreateChallengeScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" testID="user_create_challenge_screen">
       <KeyboardAwareScrollView>
         {isLoading && <Spinner visible={isLoading} />}
         <ConfirmDialog

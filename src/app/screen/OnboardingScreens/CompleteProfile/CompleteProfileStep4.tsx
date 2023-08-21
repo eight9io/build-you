@@ -47,6 +47,7 @@ interface IFormValueInput {
   label: string;
   value: number; //rating
   id: string;
+  testID?: string;
 }
 
 interface IRenderSoftSkillProgress {
@@ -64,6 +65,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   skillValueError,
 }) => {
   const randomId = Math.random().toString();
+  console.log(`${item.testID}_progress_${3}`);
   return (
     <View className="flex w-full flex-col">
       <View className="flex w-full flex-row items-center justify-between">
@@ -78,6 +80,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
               className="pr-4"
               key={`${randomId}${index}`}
               onPress={() => changeSkillValue(item?.label, index + 1)}
+              testID={`${item.testID}_progress_${index}`}
             >
               {index < item?.value ? (
                 <CheckedSvg />
@@ -91,7 +94,10 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
       {skillValueError && item?.value === 0 && (
         <View className="flex flex-row items-center">
           <WarningSvg />
-          <Text className="pl-1 text-sm text-red-500">
+          <Text
+            className="pl-1 text-sm text-red-500"
+            testID={`${item.testID}_error`}
+          >
             {i18n.t("form_onboarding.screen_4.error_rate") ||
               "Please rate from 1 to 5"}
           </Text>
@@ -121,10 +127,11 @@ const renderSelectedSoftSkill = (
 const convertFetchedSoftSkillToSkillProps = (
   fetchedSoftSkills: IFetchedSkill[]
 ): IFormValueInput[] => {
-  return fetchedSoftSkills.map((item) => ({
+  return fetchedSoftSkills.map((item, index) => ({
     label: item?.skill,
     value: 0,
     id: item?.id,
+    testID: `soft_skill_dropdown_picker_item_${index}`
   }));
 };
 
@@ -272,7 +279,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
   return (
     <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
-      <ScrollView showsVerticalScrollIndicator>
+      <ScrollView showsVerticalScrollIndicator testID="complete_profile_step_4">
         <View>
           <StepOfSteps step={4} totalSteps={4} />
         </View>
@@ -294,11 +301,13 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
             </Text>
 
             <DropDownPicker
+              testID="soft_skill_dropdown_picker"
               open={openDropdown}
               value={value}
               items={fetchedSoftSkills}
               setOpen={setOpenDropdown}
               setValue={setValue}
+              onPress={setOpenDropdown}
               setItems={setFetchedSoftSkills}
               placeholder={
                 selectedCompetencedSkill.length == 0
@@ -332,50 +341,52 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
               multiple={true}
               mode="SIMPLE"
               badgeDotColors={["#e76f51"]}
-              renderListItem={({ item, isSelected, onPress }) => {
+              renderListItem={({ item, isSelected }) => {
                 const isSkillAlreadySelected = selectedCompetencedSkill.find(
                   (selected) => selected.label === item.label
                 );
                 const randomIndex = Math.random().toString().replace(".", "");
                 return (
-                  <View key={randomIndex}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        addCompetencedSkill(item as IFormValueInput)
-                      }
+                  <TouchableOpacity
+                    onPress={() => addCompetencedSkill(item as IFormValueInput)}
+                    key={randomIndex}
+                    testID={item.testID}
+                  >
+                    <View
+                      className={clsx(
+                        "flex-row items-center justify-start px-4 py-3",
+                        {
+                          "bg-gray-light": isSelected,
+                        }
+                      )}
                     >
-                      <View
-                        className={clsx(
-                          "flex-row items-center justify-start px-4 py-3",
-                          {
-                            "bg-gray-light": isSelected,
-                          }
-                        )}
+                      <Checkbox
+                        value={!!isSkillAlreadySelected}
+                        onValueChange={() =>
+                          addCompetencedSkill(item as IFormValueInput)
+                        }
+                        color={isSelected ? "#4630EB" : undefined}
+                      />
+                      <Text
+                        key={item.label}
+                        className="pl-3 text-h6 font-medium leading-6 text-black-default"
                       >
-                        <Checkbox
-                          value={!!isSkillAlreadySelected}
-                          onValueChange={() =>
-                            addCompetencedSkill(item as IFormValueInput)
-                          }
-                          color={isSelected ? "#4630EB" : undefined}
-                        />
-                        <Text
-                          key={item.label}
-                          className="pl-3 text-h6 font-medium leading-6 text-black-default"
-                        >
-                          {item.label}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+                        {item.label}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 );
               }}
             />
+
             <View>
               {numberOfSkillError && (
                 <View className="flex flex-row items-center justify-start pt-2">
                   <WarningSvg />
-                  <Text className="pl-1 text-sm font-normal leading-5 text-red-500">
+                  <Text
+                    className="pl-1 text-sm font-normal leading-5 text-red-500"
+                    testID="complete_profile_step_4_error"
+                  >
                     {t("form_onboarding.screen_4.error") ||
                       "Please select at least 3 soft skills."}
                   </Text>
@@ -393,6 +404,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         </View>
         {!openDropdown && (
           <Button
+            testID="complete_profile_step_4_next_button"
             title={t("button.next") || "Next"}
             containerClassName=" bg-primary-default my-5 mx-5 "
             textClassName="text-white text-md leading-6"

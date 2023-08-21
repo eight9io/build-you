@@ -11,6 +11,7 @@ interface IComfirmDialogProps {
   confirmButtonColor?: string;
   onClosed?: () => void;
   onConfirm?: () => void;
+  confirmButtonTestID?: string;
 }
 
 const ConfirmDialog: FC<IComfirmDialogProps> = ({
@@ -22,6 +23,7 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   onConfirm,
   confirmButtonLabel,
   confirmButtonColor,
+  confirmButtonTestID
 }) => {
   const handleCancel = () => {
     onClosed && onClosed();
@@ -49,6 +51,7 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
               label={confirmButtonLabel ?? i18n.t("dialog.ok")}
               color={confirmButtonColor}
               onPress={handleConfirm}
+              testID={confirmButtonTestID}
             />
           )}
         </Dialog.Container>

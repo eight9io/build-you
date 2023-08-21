@@ -62,7 +62,13 @@ const SelectPicker: FC<ISelectPickerProps> = ({
               keyExtractor={(item, index) => `${Math.random()}-${index}}`}
               renderItem={({ item, index }) => {
                 return (
-                  <View className="px-4">
+                  <View
+                    className="px-4"
+                    testID={
+                      index == 0 &&
+                      "complete_profile_step_1_occupation_picker_item_0"
+                    }
+                  >
                     <BottomSheetOption
                       onPress={() => setSelected(index)}
                       title={item?.name || item?.label}
@@ -85,10 +91,11 @@ const SelectPicker: FC<ISelectPickerProps> = ({
             />
             <View className="absolute bottom-[-20px] h-12 w-full bg-white px-4">
               <Button
-                title={t('save') || "Save"}
+                title={t("save") || "Save"}
                 onPress={() => onSelect(selected)}
                 containerClassName="bg-primary-default flex-1"
                 textClassName="text-white"
+                testID="complete_profile_step_1_occupation_picker_save_btn"
               />
             </View>
           </View>

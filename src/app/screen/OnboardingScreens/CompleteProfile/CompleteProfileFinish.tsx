@@ -42,7 +42,10 @@ const CompleteProfileFinish: FC<CompleteProfileFinishProps> = () => {
   }, 2000);
 
   return (
-    <View className="mt-28 flex h-full flex-col items-center">
+    <View
+      className="mt-28 flex h-full flex-col items-center"
+      testID="onboarding_complete_screen"
+    >
       <View className="">
         <BuildYouLogo />
       </View>

@@ -266,6 +266,7 @@ export const RootNavigation = () => {
                   text={t("button.back") || "Back"}
                   onPress={() => navigation.navigate("IntroScreen")}
                   withBackIcon
+                  testID="login_back_btn"
                 />
               ),
             })}
@@ -284,6 +285,7 @@ export const RootNavigation = () => {
                   text={t("button.back") || "Back"}
                   onPress={() => navigation.goBack()}
                   withBackIcon
+                  testID="email_registration_back_btn"
                 />
               ),
             })}
@@ -303,6 +305,7 @@ export const RootNavigation = () => {
                   text={t("button.back") || "Back"}
                   onPress={() => navigation.goBack()}
                   withBackIcon
+                  testID="forgot_password_back_btn"
                 />
               ),
             })}
@@ -316,8 +319,11 @@ export const RootNavigation = () => {
               headerTitle: () => (
                 <AppTitle title={t("new_challenge_screen.title") || ""} />
               ),
-              headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+              headerLeft: ({ }) => (
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  testID="user_create_challenge_close_btn"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),
@@ -332,7 +338,7 @@ export const RootNavigation = () => {
               headerTitle: () => (
                 <AppTitle title={t("new_challenge_screen.title") || ""} />
               ),
-              headerLeft: ({}) => (
+              headerLeft: ({ }) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>

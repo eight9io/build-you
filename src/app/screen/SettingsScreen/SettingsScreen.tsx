@@ -70,6 +70,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         confirmButtonColor="#FF4949"
         closeButtonLabel={`${t("dialog.logout.cancel")}`}
         description={t("dialog.logout.description") as string}
+        confirmButtonTestID="logout_confirm_btn"
       />
       <FlatList
         data={[]}
@@ -87,6 +88,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
             containerClassName="bg-gray-medium flex-1"
             textClassName="text-white text-md leading-6"
             onPress={() => setIsShowLogoutModal(true)}
+            testID="logout_btn"
           />
         </View>
       </View>

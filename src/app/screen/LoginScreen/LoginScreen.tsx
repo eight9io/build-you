@@ -101,7 +101,10 @@ export default function Login() {
 
   const [hidePassword, setHidePassword] = useState(true);
   return (
-    <SafeAreaView className="relative h-full flex-1 bg-white">
+    <SafeAreaView
+      className="relative h-full flex-1 bg-white"
+      testID="login_with_email_screen"
+    >
       {isLoading && <Spinner visible={isLoading} />}
       <View className="relative h-full bg-white ">
         <KeyboardAwareScrollView>
@@ -142,6 +145,7 @@ export default function Login() {
                 <ErrorText
                   containerClassName="justify-center "
                   message={errMessage}
+                  testID="login_error_message"
                 />
               )}
 
@@ -174,6 +178,7 @@ export default function Login() {
                                         setHidePassword(!hidePassword)
                                       }
                                       className=" mt-[2px]"
+                                      testID="login_hide_password_btn"
                                     >
                                       <Ionicons name="eye-outline" size={24} />
                                     </TouchableOpacity>
@@ -183,6 +188,7 @@ export default function Login() {
                                         setHidePassword(!hidePassword)
                                       }
                                       className=" mt-[2px]"
+                                      testID="login_show_password_btn"
                                     >
                                       <Ionicons
                                         name="eye-off-outline"
@@ -202,6 +208,11 @@ export default function Login() {
                                 onBlur={onBlur}
                                 onChangeText={(text) => onChange(text)}
                                 value={value}
+                                testID={
+                                  item.name === "user"
+                                    ? "login_email_input"
+                                    : "login_password_input"
+                                }
                               />
                             </View>
                           )}
@@ -211,6 +222,7 @@ export default function Login() {
                             message={
                               errors[item.name as keyof LoginForm]?.message
                             }
+                            testID={`login_${item.type}_error`}
                           />
                         )}
                       </View>
@@ -227,6 +239,7 @@ export default function Login() {
                   setErrMessage("");
                   navigation.navigate("ForgotPasswordScreen");
                 }}
+                testID="forgotPasswordButton"
               >
                 <Text className="my-5 px-24 text-center text-h6 leading-6 text-gray-dark">
                   {t("forgot_password")}
@@ -239,6 +252,7 @@ export default function Login() {
                   textClassName="line-[30px] text-center text-md font-medium text-white"
                   title={t("login_screen.login")}
                   onPress={handleSubmit(onSubmit)}
+                  testID="login_submit_btn"
                 />
               </View>
             </View>

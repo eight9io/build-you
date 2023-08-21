@@ -11,6 +11,7 @@ interface IButtonProps {
   isDisabled?: boolean;
   disabledContainerClassName?: string;
   disabledTextClassName?: string;
+  testID?: string;
 }
 
 const Button: FC<IButtonProps> = ({
@@ -22,6 +23,7 @@ const Button: FC<IButtonProps> = ({
   containerClassName,
   disabledTextClassName,
   disabledContainerClassName,
+  testID,
 }) => {
   return (
     <TouchableOpacity
@@ -32,6 +34,7 @@ const Button: FC<IButtonProps> = ({
       )}
       onPress={onPress}
       disabled={isDisabled}
+      testID={testID}
     >
       <View className="flex-1 flex-row items-center justify-center">
         {Icon && Icon}

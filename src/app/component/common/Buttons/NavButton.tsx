@@ -10,6 +10,7 @@ interface INavButtonProps {
   text?: string;
   textClassName?: string;
   onPress?: () => void;
+  testID?: string;
 }
 
 const NavButton: FC<INavButtonProps> = ({
@@ -19,12 +20,14 @@ const NavButton: FC<INavButtonProps> = ({
   text,
   textClassName,
   onPress,
+  testID,
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       className={clsx("flex flex-row items-center")}
       onPress={onPress}
+      testID={testID}
     >
       {withBackIcon && <BackIcon />}
       {withIcon && icon && icon}

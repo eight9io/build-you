@@ -53,6 +53,7 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({
       textClassName="text-white ml-2 text-base font-bold"
       Icon={<Ionicons name="logo-google" size={24} color="#FFF" />}
       onPress={handleGoogleBtnClicked}
+      testID="googleButton"
     />
   );
 };

@@ -35,7 +35,7 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
-      
+
       if (
         !appleAuthRequestResponse.authorizationCode ||
         !appleAuthRequestResponse.identityToken
@@ -81,6 +81,7 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({
       textClassName="text-white ml-2 text-base font-bold"
       Icon={<Ionicons name="logo-apple" size={24} color="#FFF" />}
       onPress={handleAppleLogin}
+      testID="appleButton"
     />
   );
 };

@@ -180,7 +180,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         })}
         options={{
           tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
+            <View
+              className={clsx("flex flex-col items-center justify-center")}
+              testID="bottom_nav_bar_create_challenge_btn"
+            >
               <CreateSvg fill={"#6C6E76"} />
               <Text
                 className={clsx(
@@ -232,7 +235,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
+            <View
+              className={clsx("flex flex-col items-center justify-center")}
+              testID="profile_tab_btn"
+            >
               {focused ? (
                 <ProfileFillSvg fill={"#FF7B1C"} />
               ) : (

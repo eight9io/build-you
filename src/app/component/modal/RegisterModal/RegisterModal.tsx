@@ -86,8 +86,9 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       visible={modalVisible}
       presentationStyle="pageSheet"
       style={{ borderRadius: 10 }}
+
     >
-      <View className=" bg-white " style={{ borderRadius: 10 }}>
+      <View className=" bg-white " style={{ borderRadius: 10 }} testID="register_modal">
         <View className="absolute z-10 my-6 ml-4 ">
           <NavButton
             onPress={() => {
@@ -95,6 +96,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
             }}
             text={t("button.back") as string}
             withBackIcon
+            testID="register_modal_back_btn"
           />
         </View>
         <SafeAreaView>
@@ -150,6 +152,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
                   closeModal();
                   navigation.navigate("RegisterScreen");
                 }}
+                testID="register_with_email_btn"
               />
             </View>
           </View>

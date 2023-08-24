@@ -14,6 +14,7 @@ import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
 import { IUserData } from "../../../../../types/user";
 import { useTranslation } from "react-i18next";
+import { useUserProfileStore } from "../../../../../store/user-store";
 interface IBiographyProps {
   userProfile: IUserData | null;
 }
@@ -88,6 +89,9 @@ export const VideoWithPlayButton = ({
 };
 
 const Biography = ({ userProfile }: IBiographyProps) => {
+  const { getUserProfile } = useUserProfileStore();
+  const myProfile = getUserProfile();
+
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;
   const occupation = userProfile?.occupation;
@@ -126,7 +130,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
         <View className="flex-column flex flex-wrap gap-5 pt-[20px]">
 
           {occupation && (
-            <View className="flex flex-row flex-wrap gap-1">
+            <View className="flex flex-row flex-wrap gap-1 pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -141,7 +145,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.webSite && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px] gap-1">
+            <View className="flex flex-row flex-wrap  w-full gap-1 pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%]  text-md font-semibold  text-gray-dark"
@@ -155,8 +159,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               </Text>
             </View>
           )}
-          {userProfile?.phone && (
-            <View className="flex flex-row flex-wrap  w-full gap-1">
+          {(userProfile?.phone && (userProfile.companyAccount || myProfile.id === userProfile.id)) && (
+            <View className="flex flex-row flex-wrap  w-full gap-1 pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%]  text-md font-semibold  text-gray-dark"
@@ -170,8 +174,13 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               </Text>
             </View>
           )}
+
+
+
+
+          {/* ============ */}
           {userProfile?.emailContact && (
-            <View className="flex flex-row flex-wrap  w-full gap-1">
+            <View className="flex flex-row flex-wrap  w-full gap-1 pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%]  text-md font-semibold  text-gray-dark"
@@ -186,7 +195,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
             </View>
           )}
           {userProfile?.pIva && (
-            <View className="flex flex-row flex-wrap  w-full gap-1">
+            <View className="flex flex-row flex-wrap  w-full gap-1 pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%]  text-md font-semibold  text-gray-dark"

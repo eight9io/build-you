@@ -182,7 +182,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.surname && (
-            <View className="flex flex-row flex-wrap gap-1">
+            <View className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -197,7 +197,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.birth && (
-            <View className="flex flex-row flex-wrap gap-1">
+            <View className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -212,7 +212,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.email && (
-            <View className="flex flex-row flex-wrap gap-1">
+            <View className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -227,7 +227,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.occupation && (
-            <View className="flex flex-row flex-wrap gap-1">
+            <View className="flex flex-row flex-wrap w-full pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"

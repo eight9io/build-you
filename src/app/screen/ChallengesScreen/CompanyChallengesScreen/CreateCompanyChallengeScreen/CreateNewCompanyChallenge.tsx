@@ -31,6 +31,7 @@ import GlobalDialogController from "../../../../component/common/Dialog/GlobalDi
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StackActions } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -53,7 +54,7 @@ export const CreateCompanyChallengeScreen: FC<
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
   const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
     undefined
   );
@@ -399,10 +400,22 @@ export const CreateCompanyChallengeScreen: FC<
                   onImagesSelected={handleImagesSelected}
                   onRemoveSelectedImage={handleRemoveSelectedImage}
                   base64
+                  loading={isImageLoading}
+                  setLoading={setIsImageLoading}
                 />
-                {errors.image ? (
+                {!isImageLoading && errors.image && (
                   <ErrorText message={errors.image.message} />
-                ) : null}
+                )}
+                {isImageLoading && errors.image && (
+                  <Text className="pt-2 text-sm text-red-500">
+                    <Ionicons
+                      name="alert-circle-outline"
+                      size={14}
+                      color="#FF4949"
+                    />
+                    {t("image_picker.upload_a_video_waiting") as string}
+                  </Text>
+                )}
               </View>
             </View>
             <View className="h-20" />

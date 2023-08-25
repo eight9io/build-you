@@ -346,7 +346,7 @@ export const AddNewChallengeProgressModal: FC<
                 {!isImageOrVideoLoading && errors?.media && (
                   <ErrorText message={errors.media.message} />
                 )}
-                {isImageOrVideoLoading && (
+                {isImageOrVideoLoading && errors?.media && (
                   <Text className="pt-2 text-sm text-red-500">
                     <Ionicons
                       name="alert-circle-outline"

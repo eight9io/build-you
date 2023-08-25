@@ -41,7 +41,6 @@ export function setupInterceptor(
         }
 
         if (status === 401) {
-          console.log(originalRequest);
           if (originalRequest._retry) {
             onRefreshFail();
             GlobalDialogController.showModal({
@@ -65,18 +64,16 @@ export function setupInterceptor(
             reject(error); // throw so next check retry will force logout
             return;
           }
-
-          const newTokens = await httpInstance.post<ILoginResponse>(
-            "/auth/refresh",
-            {
-              token: refreshToken,
-            }
-          );
-          if (newTokens.status !== 201) {
-            reject(error); // throw so next check retry will force logout
-          } else {
-            try {
-              console.log("call original request with new token");
+          try {
+            const newTokens = await httpInstance.post<ILoginResponse>(
+              "/auth/refresh",
+              {
+                token: refreshToken,
+              }
+            );
+            if (newTokens.status !== 201) {
+              reject(error); // throw so next check retry will force logout
+            } else {
               setAuthTokenToHttpHeader(newTokens.data.authorization);
               originalRequest.headers[
                 "Authorization"
@@ -84,9 +81,9 @@ export function setupInterceptor(
               // set new tokens to local storage
               const res = await httpInstance(originalRequest);
               resolve(res);
-            } catch (error) {
-              reject(error); // throw so next check retry will force logout
             }
+          } catch (e) {
+            reject(error); // throw so next check retry will force logout
           }
         }
 

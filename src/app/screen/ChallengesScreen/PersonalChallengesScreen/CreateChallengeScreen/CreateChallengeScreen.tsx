@@ -200,7 +200,10 @@ const CreateChallengeScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-white" testID="user_create_challenge_screen">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      testID="user_create_challenge_screen"
+    >
       <KeyboardAwareScrollView>
         {isLoading && <Spinner visible={isLoading} />}
         <ConfirmDialog
@@ -365,7 +368,7 @@ const CreateChallengeScreen = () => {
               {!isImageLoading && errors.image && (
                 <ErrorText message={errors.image.message} />
               )}
-              {isImageLoading && (
+              {isImageLoading && errors.image && (
                 <Text className="pt-2 text-sm text-red-500">
                   <Ionicons
                     name="alert-circle-outline"

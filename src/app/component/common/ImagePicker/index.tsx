@@ -57,9 +57,11 @@ const ImagePicker: FC<IImagePickerProps> = ({
   });
 
   const handlePickImage = async () => {
+    setTimeout(() => {
+      setLoading && setLoading(true);
+    }, 300);
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-      setLoading && setLoading(true);
       const imagesPicked = result.assets.map((asset) => asset.uri);
       onImagesSelected && onImagesSelected(imagesPicked);
       if (setIsSelectedImage) setIsSelectedImage(true);

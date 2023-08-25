@@ -95,6 +95,9 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       handleShowPermissionRequiredModal();
       return;
     }
+    setTimeout(() => {
+      setLoading && setLoading(true);
+    }, 300);
 
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,
@@ -104,7 +107,6 @@ const VideoPicker: FC<IVideoPickerProps> = ({
     });
 
     if (!result.canceled) {
-      setLoading && setLoading(true);
       setPickedVideo(result.assets.map((asset) => asset.uri));
     }
     setLoading && setLoading(false);

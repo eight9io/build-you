@@ -319,7 +319,7 @@ export const RootNavigation = () => {
               headerTitle: () => (
                 <AppTitle title={t("new_challenge_screen.title") || ""} />
               ),
-              headerLeft: ({ }) => (
+              headerLeft: ({}) => (
                 <TouchableOpacity
                   onPress={() => navigation.goBack()}
                   testID="user_create_challenge_close_btn"
@@ -338,7 +338,7 @@ export const RootNavigation = () => {
               headerTitle: () => (
                 <AppTitle title={t("new_challenge_screen.title") || ""} />
               ),
-              headerLeft: ({ }) => (
+              headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>

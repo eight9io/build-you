@@ -87,3 +87,16 @@ export interface IChallengeRatingUpdate {
   id: string;
   rating: number;
 }
+
+export interface ICreateChallengeForm
+  extends Omit<ICreateChallenge, "achievementTime"> {
+  achievementTime: string | Date;
+  image: string;
+}
+
+export interface ICreateCretifiedChallengeForm
+  extends Omit<ICreateChallenge, "achievementTime"> {
+  achievementTime: string | Date;
+  image: string;
+  softSkills: string[];
+}

@@ -6,7 +6,7 @@ import {
 
 import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
@@ -48,6 +48,8 @@ import { addNotificationListener } from "../utils/notification.util";
 import { useNotificationStore } from "../store/notification-store";
 import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
 import i18n from "../i18n/i18n";
+import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
+import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateCretifiedChallengeScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -251,6 +253,21 @@ export const RootNavigation = () => {
               },
             }}
           />
+          <RootStack.Screen
+            name="CreateChallengeScreenMain"
+            component={CreateChallengeScreenMain}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("new_challenge_screen.title") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Text className="text-lg text-primary-default">Cancel</Text>
+                </TouchableOpacity>
+              ),
+            })}
+          />
         </RootStack.Group>
 
         <RootStack.Group screenOptions={{ presentation: "modal" }}>
@@ -333,6 +350,22 @@ export const RootNavigation = () => {
           <RootStack.Screen
             name="CreateCompanyChallengeScreen"
             component={CreateCompanyChallengeScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("new_challenge_screen.title") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+
+          <RootStack.Screen
+            name="CreateCretifiedChallengeScreen"
+            component={CreateCretifiedChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (

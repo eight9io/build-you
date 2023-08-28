@@ -8,6 +8,7 @@ import {
   OpenSans_600SemiBold,
   OpenSans_700Bold,
 } from "@expo-google-fonts/open-sans";
+import { EventProvider } from "react-native-outside-press";
 
 import "./i18n/i18n";
 import Toast from "./component/common/Toast/Toast";
@@ -27,8 +28,10 @@ export const App = () => {
 
   return (
     <MenuProvider>
-      <Toast />
-      <RootNavigation />
+      <EventProvider>
+        <Toast />
+        <RootNavigation />
+      </EventProvider>
     </MenuProvider>
   );
 };

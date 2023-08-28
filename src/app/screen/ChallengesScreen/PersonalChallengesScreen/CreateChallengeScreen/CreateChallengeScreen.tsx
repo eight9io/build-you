@@ -4,12 +4,15 @@ import { useTranslation } from "react-i18next";
 
 import clsx from "clsx";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, Resolver } from "react-hook-form";
 import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import { ICreateChallenge } from "../../../../types/challenge";
+import {
+  ICreateChallenge,
+  ICreateChallengeForm,
+} from "../../../../types/challenge";
 import { useNav } from "../../../../navigation/navigation.type";
 import { CreateChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
@@ -27,14 +30,6 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-// import CalendarIcon from "./asset/calendar.svg";
-// import CloseIcon from "../asset/close.svg";
-
-interface ICreateChallengeForm
-  extends Omit<ICreateChallenge, "achievementTime"> {
-  achievementTime?: string | Date;
-  image?: string;
-}
 
 const CreateChallengeScreen = () => {
   const onClose = () => {
@@ -62,13 +57,15 @@ const CreateChallengeScreen = () => {
     formState: { errors },
   } = useForm<ICreateChallengeForm>({
     defaultValues: {
-      goal: "",
+      goal: "" as string,
       benefits: "",
       reasons: "",
       achievementTime: undefined,
       image: "",
     },
-    resolver: yupResolver(CreateChallengeValidationSchema()),
+    resolver: yupResolver(
+      CreateChallengeValidationSchema()
+    ) as unknown as Resolver<ICreateChallengeForm, any>,
   });
 
   const handleShowDatePicker = () => {

@@ -49,7 +49,8 @@ import { useNotificationStore } from "../store/notification-store";
 import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
 import i18n from "../i18n/i18n";
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
-import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateCretifiedChallengeScreen";
+import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCretifiedChallengeScreen/CreateCretifiedChallengeScreen";
+import CreateCretifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCretifiedCompanyChallengeScreen/CreateCretifiedCompanyChallengeScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -366,6 +367,21 @@ export const RootNavigation = () => {
           <RootStack.Screen
             name="CreateCretifiedChallengeScreen"
             component={CreateCretifiedChallengeScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("new_challenge_screen.title") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="CreateCretifiedCompanyChallengeScreen"
+            component={CreateCretifiedCompanyChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (

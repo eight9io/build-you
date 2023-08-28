@@ -97,6 +97,14 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
       <KeyboardAwareScrollView testID="register_scroll_view">
         {isLoading && <Spinner visible={isLoading} />}
 
+        <ConfirmDialog
+          title={t("dialog.register.title") || ""}
+          description={t("dialog.register.description") || ""}
+          isVisible={isShowModal}
+          confirmButtonLabel={t("dialog.close") || ""}
+          onConfirm={() => handleConfirm()}
+        />
+
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">

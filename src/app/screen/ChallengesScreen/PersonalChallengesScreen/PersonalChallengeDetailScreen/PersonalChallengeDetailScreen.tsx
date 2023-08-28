@@ -312,7 +312,7 @@ const PersonalChallengeDetailScreen = ({
       });
   };
   return (
-    <SafeAreaView className="bg-white pt-3">
+    <SafeAreaView className="pt-3">
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}

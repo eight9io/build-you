@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar } from "react-native";
 import { Image } from "expo-image";
 
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,10 @@ export const IntroScreen = ({ navigation, route }: any) => {
   }, []);
 
   return (
-    <View className="justify-content: space-between flex-1" testID="intro_screen">
+    <View
+      className="justify-content: space-between flex-1"
+      testID="intro_screen"
+    >
       <View className="flex-1">
         <Image
           className="z-10 h-[100%] w-[100%] rounded-xl"

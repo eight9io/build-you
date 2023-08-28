@@ -8,6 +8,7 @@ import {
   OpenSans_600SemiBold,
   OpenSans_700Bold,
 } from "@expo-google-fonts/open-sans";
+import { StatusBar } from "react-native";
 
 import "./i18n/i18n";
 import Toast from "./component/common/Toast/Toast";
@@ -24,6 +25,7 @@ export const App = () => {
   if (!fontLoaded) {
     return null;
   }
+  StatusBar.setBarStyle("dark-content", true);
 
   return (
     <MenuProvider>

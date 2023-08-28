@@ -65,8 +65,9 @@ const SelectPicker: FC<ISelectPickerProps> = ({
                   <View
                     className="px-4"
                     testID={
-                      index == 0 &&
-                      "complete_profile_step_1_occupation_picker_item_0"
+                      index == 0
+                        ? "complete_profile_step_1_occupation_picker_item_0"
+                        : null
                     }
                   >
                     <BottomSheetOption

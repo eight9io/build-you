@@ -26,51 +26,22 @@ import { servieGetUserOnSearch } from "../../service/search";
 import clsx from "clsx";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useUserProfileStore } from "../../store/user-store";
+import UserSearchBar from "../../component/common/SearchBar/UserSearchBar";
 
 const MainSearchScreen = () => {
   const [isSearchLoadinging, setIsSearchLoading] = useState<boolean>(false);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState<string>("");
   const [searchResults, setSearchResults] = useState<
     ISearchUserData[] | undefined
   >(undefined);
+  const [isSearchBarFocused, setIsSearchBarFocused] = useState<boolean>(false);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
-  const isAndroid = Platform.OS === "android";
 
   const debouncedSearchQuery = useDebounce(searchText, 500); // Adjust the delay as needed
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      headerTitle: () => (
-        <Text className="text-lg font-semibold">
-          {t("main_search_screen.search") || "Search user"}
-        </Text>
-      ),
-      headerSearchBarOptions: {
-        placeholder: t("search_screen.search") as string,
-        onChangeText: (text: any) => {
-          setSearchText(text.nativeEvent.text);
-        },
-        visible: true,
-        focus: true,
-        shouldShowHintSearchIcon: true,
-        hideNavigationBar: false,
-        tintColor: "#FF7B1C",
-      },
-
-      headerLeft: () => (
-        <NavButton
-          text={t("button.back") as string}
-          onPress={() => navigation.goBack()}
-          withBackIcon
-        />
-      ),
-    });
-  }, []);
 
   useEffect(() => {
     if (debouncedSearchQuery) {
@@ -138,6 +109,12 @@ const MainSearchScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
+        <UserSearchBar
+          focused={isSearchBarFocused}
+          setFocused={setIsSearchBarFocused}
+          searchPhrase={searchText}
+          setSearchPhrase={setSearchText}
+        />
         <View className="flex flex-1">
           {searchResults && searchResults.length > 0 && !isSearchLoadinging && (
             <View className="flex-1">

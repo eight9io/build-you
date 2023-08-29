@@ -17,6 +17,23 @@ export const setAuthTokenToHttpHeader = (token: string | null) => {
   }
 };
 
+export const checkTokens = ({ getAccessToken, getRefreshToken }) => {
+  const accessToken = getAccessToken();
+  const refreshToken = getRefreshToken();
+  const currentTime = Date.now() / 1000;
+  const isAccessTokenValid =
+    accessToken && jwt_decode<IToken>(accessToken)?.exp >= currentTime;
+  if (isAccessTokenValid) {
+    return true;
+  }
+  const isRefreshTokenValid =
+    refreshToken && jwt_decode<IToken>(refreshToken)?.exp >= currentTime;
+  if (isRefreshTokenValid) {
+    return true;
+  }
+  return false;
+};
+
 export function setupInterceptor(
   getRefreshToken: () => string,
   onRefreshFail: () => void
@@ -51,6 +68,7 @@ export function setupInterceptor(
             reject(error);
             return;
           }
+          console.log(originalRequest);
           originalRequest._retry = true;
           const refreshToken = getRefreshToken();
           if (!refreshToken) {

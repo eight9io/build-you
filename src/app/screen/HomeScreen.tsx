@@ -279,9 +279,7 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
               {t("main_search_screen.search") || "Search user"}
             </Text>
           ),
-          headerSearchBarOptions: {
-            hideNavigationBar: false,
-          },
+
           headerLeft: () => (
             <NavButton
               text={t("button.back") as string}

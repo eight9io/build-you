@@ -39,6 +39,7 @@ import {
 } from "../store/user-store";
 import NavigatorService from "../utils/navigationService";
 import {
+  checkTokens,
   setAuthTokenToHttpHeader,
   setupInterceptor,
 } from "../utils/refreshToken.util";
@@ -89,6 +90,11 @@ export const RootNavigation = () => {
   useEffect(() => {
     if (authStoreHydrated) {
       if (!!isLoggedin) {
+        const isTokensValid = checkTokens({ getAccessToken, getRefreshToken });
+        if (!isTokensValid) {
+          logout();
+          userProfileStoreOnLogout();
+        }
         setupInterceptor(getRefreshToken, () => {
           logout();
           userProfileStoreOnLogout();

@@ -5,11 +5,9 @@ import notifee, {
   EventType,
   Notification,
 } from "@notifee/react-native";
-import messaging, {
-  FirebaseMessagingTypes,
-} from "@react-native-firebase/messaging";
+import { Platform } from "react-native";
+import messaging from "@react-native-firebase/messaging";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { NavigationContainerRef } from "@react-navigation/native";
 import { RootStackParamList } from "../navigation/navigation.type";
 import {
   INotification,
@@ -22,6 +20,8 @@ import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
 
+let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
+let RETRY_DELAY = 1000; // milliseconds
 export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
@@ -54,7 +54,6 @@ export const unregisterForPushNotificationsAsync = async () => {
 };
 
 export const addNotificationListener = (
-  navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
   // Listen to foreground events
@@ -72,7 +71,6 @@ export const addNotificationListener = (
         break;
     }
   });
-
   return unsubscribe;
 };
 
@@ -80,56 +78,74 @@ export const handleTapOnIncomingNotification = async (
   notification: Notification
 ) => {
   const navigation = NavigationService.getContainer();
-  const payload = notification.data as Record<
-    string,
-    any
-  > as INotificationPayload;
 
-  switch (payload.notificationType) {
-    case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-      if (payload.progressId && payload.challengeId)
-        navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.progressId,
-          challengeId: payload.challengeId,
-        });
-      break;
-    case NOTIFICATION_TYPES.PROGRESS_CREATED:
-      if (payload.progressId && payload.challengeId)
-        navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.progressId,
-          challengeId: payload.challengeId,
-        });
-      break;
-    case NOTIFICATION_TYPES.NEW_COMMENT:
-      if (payload.progressId && payload.challengeId)
-        navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.progressId,
-          challengeId: payload.challengeId,
-        });
-      break;
-    case NOTIFICATION_TYPES.NEW_MENTION:
-      if (payload.progressId && payload.challengeId)
-        navigation.navigate("ProgressCommentScreen", {
-          progressId: payload.progressId,
-          challengeId: payload.challengeId,
-        });
-      break;
-    case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      if (payload.followerId) {
-        navigation.navigate("OtherUserProfileScreen", {
-          userId: payload.followerId,
-          isFollower: true,
-        });
-      }
-      break;
-    case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
-      console.log(payload);
-      if (payload.companyId) {
-        navigation.navigate("OtherUserProfileScreen", {
-          userId: payload.companyId,
-        });
-      }
-      break;
+  // When the app is launched by tapping on the notification from killed state => notification event will be triggered before navigation is ready
+  // => Keep calling handleTapOnIncomingNotification until navigation is ready
+  if (
+    !navigation ||
+    (navigation && navigation.getCurrentRoute().name !== "FeedScreen") // Since screens to be navigated from notification are all in the FeedScreen stack => only handle notification when current screen is FeedScreen
+  ) {
+    if (MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT === 0) {
+      MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10; // Reset the retry count
+      return; // Stop retrying
+    }
+    MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT--;
+    return setTimeout(
+      () => handleTapOnIncomingNotification(notification),
+      RETRY_DELAY
+    ); // retry after a delay (prevent stack overflow)
+  } else {
+    const payload = notification.data as Record<
+      string,
+      any
+    > as INotificationPayload;
+
+    switch (payload.notificationType) {
+      case NOTIFICATION_TYPES.CHALLENGE_CREATED:
+        if (payload.progressId && payload.challengeId)
+          navigation.navigate("ProgressCommentScreen", {
+            progressId: payload.progressId,
+            challengeId: payload.challengeId,
+          });
+        break;
+      case NOTIFICATION_TYPES.PROGRESS_CREATED:
+        if (payload.progressId && payload.challengeId)
+          navigation.navigate("ProgressCommentScreen", {
+            progressId: payload.progressId,
+            challengeId: payload.challengeId,
+          });
+        break;
+      case NOTIFICATION_TYPES.NEW_COMMENT:
+        if (payload.progressId && payload.challengeId)
+          navigation.navigate("ProgressCommentScreen", {
+            progressId: payload.progressId,
+            challengeId: payload.challengeId,
+          });
+        break;
+      case NOTIFICATION_TYPES.NEW_MENTION:
+        if (payload.progressId && payload.challengeId)
+          navigation.navigate("ProgressCommentScreen", {
+            progressId: payload.progressId,
+            challengeId: payload.challengeId,
+          });
+        break;
+      case NOTIFICATION_TYPES.NEW_FOLLOWER:
+        if (payload.followerId) {
+          navigation.navigate("OtherUserProfileScreen", {
+            userId: payload.followerId,
+            isFollower: true,
+          });
+        }
+        break;
+      case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
+        console.log(payload);
+        if (payload.companyId) {
+          navigation.navigate("OtherUserProfileScreen", {
+            userId: payload.companyId,
+          });
+        }
+        break;
+    }
   }
 };
 
@@ -283,4 +299,12 @@ export const getLastNotiIdFromLocalStorage = async () => {
 export const setLastNotiIdToLocalStorage = async (lastNotiId: string) => {
   if (!lastNotiId) return;
   await AsyncStorage.setItem("lastNotiId", lastNotiId);
+};
+
+export const handleAppOpenOnNotificationPressed = async () => {
+  if (Platform.OS === "android") {
+    const initialNotification = await messaging().getInitialNotification();
+    if (initialNotification)
+      handleTapOnIncomingNotification(initialNotification);
+  }
 };

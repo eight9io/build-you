@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -45,8 +45,6 @@ import {
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
 import { useDeepLinkStore } from "../store/deep-link-store";
-import { addNotificationListener } from "../utils/notification.util";
-import { useNotificationStore } from "../store/notification-store";
 import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
 import i18n from "../i18n/i18n";
 
@@ -64,7 +62,6 @@ export const RootNavigation = () => {
   } = useAuthStore();
   const { getUserProfileAsync, onLogout: userProfileStoreOnLogout } =
     useUserProfileStore();
-
   const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>();
   const isLoggedin = getAccessToken();
 
@@ -142,10 +139,6 @@ export const RootNavigation = () => {
   }, [authStoreHydrated]);
 
   useEffect(() => {
-    const unsubscribe = addNotificationListener(
-      navigationRef.current,
-      useNotificationStore
-    );
     const getLanguageFromStorage = async () => {
       const language = await getLanguageLocalStorage();
       if (language) {
@@ -155,9 +148,6 @@ export const RootNavigation = () => {
       }
     };
     getLanguageFromStorage();
-    return () => {
-      unsubscribe();
-    };
   }, []);
 
   return (

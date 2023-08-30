@@ -24,6 +24,7 @@ import {
 import { updateNotificationToken } from "../service/notification";
 import { useNotificationStore } from "./notification-store";
 import NavigationService from "../utils/navigationService";
+import httpInstance from "../utils/http";
 
 export interface LoginStore {
   accessToken: string | null;
@@ -73,7 +74,7 @@ const watchLogin = (config) => (set, get, api) =>
       if (args.accessToken === null) {
         unregisterForPushNotificationsAsync()
           .then((token) => {
-            console.log('push token revoked', token);
+            console.log("push token revoked", token);
             updateNotificationToken({
               notificationToken: token,
               status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
@@ -162,6 +163,8 @@ export const useAuthStore = create<LoginStore>()(
           refreshToken: null,
         });
         useNotificationStore.getState().setListenerIsReady(false);
+        delete httpInstance.defaults.headers.common["Authorization"];
+
         await AsyncStorage.removeItem("user_id");
       },
       setHasHydrated: () => {

@@ -29,7 +29,6 @@ import WarningSvg from "../../../component/asset/warning.svg";
 import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
-import i18n from "../../../i18n/i18n";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -66,7 +65,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   skillValueError,
 }) => {
   const randomId = Math.random().toString();
-  console.log(`${item.testID}_progress_${3}`);
+  const { t } = useTranslation();
   return (
     <View className="flex w-full flex-col">
       <View className="flex w-full flex-row items-center justify-between">
@@ -99,7 +98,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
             className="pl-1 text-sm text-red-500"
             testID={`${item.testID}_error`}
           >
-            {i18n.t("form_onboarding.screen_4.error_rate") ||
+            {t("form_onboarding.screen_4.error_rate") ||
               "Please rate from 1 to 5"}
           </Text>
         </View>

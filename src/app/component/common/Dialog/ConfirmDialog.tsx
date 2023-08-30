@@ -1,7 +1,8 @@
 import { FC } from "react";
 import { View } from "react-native";
 import Dialog from "react-native-dialog";
-import i18n from "../../../i18n/i18n";
+import { useTranslation } from "react-i18next";
+
 interface IComfirmDialogProps {
   title?: string;
   description?: string;
@@ -23,8 +24,9 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   onConfirm,
   confirmButtonLabel,
   confirmButtonColor,
-  confirmButtonTestID
+  confirmButtonTestID,
 }) => {
+  const { t } = useTranslation();
   const handleCancel = () => {
     onClosed && onClosed();
   };
@@ -41,14 +43,14 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (
             <Dialog.Button
-              label={closeButtonLabel ?? i18n.t("dialog.cancel")}
+              label={closeButtonLabel ?? t("dialog.cancel")}
               onPress={handleCancel}
             />
           )}
           {onConfirm && (
             <Dialog.Button
               bold
-              label={confirmButtonLabel ?? i18n.t("dialog.ok")}
+              label={confirmButtonLabel ?? t("dialog.ok")}
               color={confirmButtonColor}
               onPress={handleConfirm}
               testID={confirmButtonTestID}

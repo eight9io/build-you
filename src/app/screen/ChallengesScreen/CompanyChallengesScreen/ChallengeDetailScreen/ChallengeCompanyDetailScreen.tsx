@@ -2,7 +2,6 @@ import { View, Text, SafeAreaView } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
-import i18n from "../../../../i18n/i18n";
 
 import { IChallenge } from "../../../../types/challenge";
 import { getChallengeStatusColor } from "../../../../utils/common";
@@ -42,9 +41,9 @@ export const ChallengeCompanyDetailScreen: FC<
   const { t } = useTranslation();
   // const [isJoined, setIsJoined] = useState(true);
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    i18n.t("challenge_detail_screen.progress"),
-    i18n.t("challenge_detail_screen.description"),
-    i18n.t("challenge_detail_screen.participants"),
+    t("challenge_detail_screen.progress"),
+    t("challenge_detail_screen.description"),
+    t("challenge_detail_screen.participants"),
   ];
 
   const [index, setIndex] = useState(0);
@@ -174,8 +173,8 @@ export const ChallengeCompanyDetailScreen: FC<
                 disabledTextClassName="text-center text-md font-semibold text-gray-medium"
                 title={
                   isJoined
-                    ? i18n.t("challenge_detail_screen.leave")
-                    : i18n.t("challenge_detail_screen.join")
+                    ? t("challenge_detail_screen.leave")
+                    : t("challenge_detail_screen.join")
                 }
                 onPress={handleJoinLeaveChallenge}
               />
@@ -186,7 +185,7 @@ export const ChallengeCompanyDetailScreen: FC<
               <Button
                 containerClassName="border border-gray-dark flex items-center justify-center px-5"
                 textClassName={`text-center text-md font-semibold text-gray-dark `}
-                title={i18n.t("challenge_detail_screen.completed")}
+                title={t("challenge_detail_screen.completed")}
               />
             </View>
           )}

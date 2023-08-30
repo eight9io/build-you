@@ -1,5 +1,4 @@
 import {
-  IChallenge,
   ICreateChallenge,
   IEditChallenge,
   ICreateCompanyChallenge,

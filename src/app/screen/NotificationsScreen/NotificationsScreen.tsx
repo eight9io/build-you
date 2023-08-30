@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -11,7 +11,6 @@ import { t } from "i18next";
 import { useIsFocused } from "@react-navigation/native";
 import AppTitle from "../../component/common/AppTitle";
 import NavButton from "../../component/common/Buttons/NavButton";
-import IconSearch from "../../component/common/IconSearch/IconSearch";
 
 import Notification from "../../component/Notification";
 import { useNotificationStore } from "../../store/notification-store";

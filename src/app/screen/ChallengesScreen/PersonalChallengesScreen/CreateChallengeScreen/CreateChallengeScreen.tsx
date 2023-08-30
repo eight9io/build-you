@@ -9,10 +9,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import {
-  ICreateChallenge,
-  ICreateChallengeForm,
-} from "../../../../types/challenge";
+import { ICreateChallengeForm } from "../../../../types/challenge";
 import { useNav } from "../../../../navigation/navigation.type";
 import { CreateChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
@@ -20,7 +17,6 @@ import {
   createChallenge,
   updateChallengeImage,
 } from "../../../../service/challenge";
-import Header from "../../../../component/common/Header";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";

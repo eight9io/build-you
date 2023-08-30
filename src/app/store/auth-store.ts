@@ -11,7 +11,6 @@ import {
   serviceLogin,
 } from "../service/auth";
 import {
-  addNotificationListener,
   registerForPushNotificationsAsync,
   unregisterForPushNotificationsAsync,
 } from "../utils/notification.util";
@@ -23,7 +22,6 @@ import {
 } from "../common/enum";
 import { updateNotificationToken } from "../service/notification";
 import { useNotificationStore } from "./notification-store";
-import NavigationService from "../utils/navigationService";
 import httpInstance from "../utils/http";
 
 export interface LoginStore {

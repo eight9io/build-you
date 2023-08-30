@@ -1,9 +1,4 @@
-import {
-  CommonActions,
-  NavigationProp,
-  Route,
-  useNavigation,
-} from "@react-navigation/native";
+import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";

@@ -1,13 +1,10 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import jwt_decode from "jwt-decode";
 
-import {
-  checkIsCompleteProfileOrCompany,
-  useUserProfileStore,
-} from "../../store/user-store";
+import { useUserProfileStore } from "../../store/user-store";
 import Button from "../../component/common/Buttons/Button";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { LOGIN_TYPE } from "../../common/enum";
@@ -167,7 +164,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
         </View>
         <View className="flex-column flex flex-wrap gap-3 px-4 pt-[20px] ">
           {userData?.name && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px]">
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -182,7 +179,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.surname && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px]">
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -197,7 +194,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.birth && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px]">
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -212,7 +209,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.email && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px]">
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"
@@ -227,7 +224,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.occupation && (
-            <View className="flex flex-row flex-wrap w-full pr-[30px]">
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
                   "w-[40%] text-md font-semibold  text-gray-dark"

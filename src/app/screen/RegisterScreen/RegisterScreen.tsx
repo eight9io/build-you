@@ -10,7 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import { RegisterValidationSchema } from "../../Validators/Register.validate";
 import { serviceRegister } from "../../service/auth";
-import { err_server, errorMessage } from "../../utils/statusCode";
+import { errorMessage } from "../../utils/statusCode";
 
 import Button from "../../component/common/Buttons/Button";
 import TextInput from "../../component/common/Inputs/TextInput";

@@ -1,13 +1,9 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
   TouchableOpacity,
   Image,
-  ScrollView,
-  Alert,
   SafeAreaView,
   ImageSourcePropType,
 } from "react-native";

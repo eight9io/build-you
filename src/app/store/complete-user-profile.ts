@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IUserData, IHardSkillProps } from "../types/user";
+import { IHardSkillProps } from "../types/user";
 
 interface IUserDataUpload {
   id: string;

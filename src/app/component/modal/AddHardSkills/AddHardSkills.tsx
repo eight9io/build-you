@@ -7,9 +7,6 @@ import httpInstance from "../../../utils/http";
 import { IHardSkill } from "../../../types/user";
 
 import Header from "../../common/Header";
-// import InlineTextInput from "../../common/Inputs/InlineTextInput";
-// import AddEmojiButton from "../../common/Buttons/AddEmojiButton";
-// import AddEmojiModal from "../AddEmoji";
 import clsx from "clsx";
 import Close from "../../../component/asset/close.svg";
 import Button from "../../common/Buttons/Button";

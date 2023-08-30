@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 interface ITabTitleProps {

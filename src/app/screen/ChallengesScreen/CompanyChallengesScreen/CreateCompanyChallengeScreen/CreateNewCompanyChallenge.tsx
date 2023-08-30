@@ -1,4 +1,4 @@
-import { View, Text, Modal, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, ScrollView } from "react-native";
 import React, { FC, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -11,7 +11,6 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useNav } from "../../../../navigation/navigation.type";
 import { ICreateCompanyChallenge } from "../../../../types/challenge";
 import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
-import Header from "../../../../component/common/Header";
 import CustomSwitch from "../../../../component/common/Switch";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";

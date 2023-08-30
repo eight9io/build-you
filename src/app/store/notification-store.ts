@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { subscribeWithSelector } from "zustand/middleware";
 import { clearAllNotifications } from "../utils/notification.util";
 
 export interface NotificationStore {

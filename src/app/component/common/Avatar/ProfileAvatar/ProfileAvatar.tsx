@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Pressable,
-  ImageSourcePropType,
-  Linking,
-} from "react-native";
+import { View, TouchableOpacity, Pressable, Linking } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
 

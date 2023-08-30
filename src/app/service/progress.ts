@@ -3,7 +3,6 @@ import httpInstance from "../utils/http";
 import {
   ICreateProgress,
   ICreateProgressComment,
-  ICreateProgressLike,
   IProgressComment,
   IProgressLike,
   IUpdateProgress,

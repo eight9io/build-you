@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 

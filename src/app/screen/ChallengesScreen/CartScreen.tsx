@@ -1,6 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
-import { Route } from "@react-navigation/native";
+import {
+  NavigationProp,
+  Route,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
 import { stringPriceToNumber, numberToStringPrice } from "../../utils/price";
@@ -8,6 +13,20 @@ import { stringPriceToNumber, numberToStringPrice } from "../../utils/price";
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
+import {
+  createChallenge,
+  createCompanyChallenge,
+  updateChallengeImage,
+} from "../../service/challenge";
+import { AxiosResponse } from "axios";
+import GlobalToastController from "../../component/common/Toast/GlobalToastController";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import { RootStackParamList } from "../../navigation/navigation.type";
+import httpInstance from "../../utils/http";
+import Spinner from "react-native-loading-spinner-overlay";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import { ICreateCompanyChallenge } from "../../types/challenge";
+import { useUserProfileStore } from "../../store/user-store";
 
 interface ICartScreenProps {
   route: Route<
@@ -28,11 +47,21 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [finalPrice, setFinalPrice] = useState<number>(0);
   const [lowestCheckpointError, setLowestCheckpointError] =
     useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
 
   const { initialPrice, typeOfPackage } = route.params;
   const { t } = useTranslation();
-  const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
-    useCreateChallengeDataStore();
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { getCreateChallengeDataStore } = useCreateChallengeDataStore();
+
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
   useEffect(() => {
     setFinalPrice(
@@ -59,11 +88,138 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     setNumberOfCheckpoints((prev) => prev - 1);
   };
 
+  const onClose = () => {
+    navigation.goBack();
+  };
+
+  const onSumitCertifiedChallenge = async () => {
+    const data = getCreateChallengeDataStore();
+    setIsLoading(true);
+    let newChallengeId: string | null = null;
+    try {
+      const { image, ...rest } = data; // Images upload will be handled separately
+      const payload: ICreateCompanyChallenge = {
+        ...rest,
+        checkpoint: numberOfCheckpoints,
+        achievementTime: data.achievementTime as Date,
+      };
+
+      let challengeCreateResponse: AxiosResponse;
+      if (isCurrentUserCompany) {
+        challengeCreateResponse = (await createCompanyChallenge(
+          payload
+        )) as AxiosResponse;
+      } else {
+        challengeCreateResponse = (await createChallenge(
+          payload
+        )) as AxiosResponse;
+      }
+
+      newChallengeId = challengeCreateResponse.data.id;
+      // If challenge created successfully, upload image
+      if (challengeCreateResponse.status === 200 || 201) {
+        setNewChallengeId(challengeCreateResponse.data.id);
+        if (image) {
+          const challengeImageResponse = (await updateChallengeImage(
+            {
+              id: newChallengeId,
+            },
+            image
+          )) as AxiosResponse;
+          if (challengeImageResponse.status === 200 || 201) {
+            GlobalToastController.showModal({
+              message:
+                t("toast.create_challenge_success") ||
+                "Your challenge has been created successfully !",
+            });
+
+            const isChallengesScreenInStack = navigation
+              .getState()
+              .routes.some((route) => route.name === "Challenges");
+            if (isChallengesScreenInStack) {
+              navigation.dispatch(StackActions.popToTop());
+            } else {
+              // add ChallengesScreen to the stack
+              navigation.navigate("Challenges");
+            }
+
+            if (isCurrentUserCompany) {
+              navigation.navigate("Challenges", {
+                screen: "CompanyChallengeDetailScreen",
+                params: { challengeId: newChallengeId },
+              });
+            } else {
+              navigation.navigate("Challenges", {
+                screen: "PersonalChallengeDetailScreen",
+                params: { challengeId: newChallengeId },
+              });
+            }
+
+            setIsLoading(false);
+            return;
+          }
+          setIsRequestSuccess(false);
+          setIsShowModal(true);
+          httpInstance.delete(
+            `/challenge/delete/${challengeCreateResponse.data.id}`
+          );
+          GlobalDialogController.showModal({
+            title: t("dialog.err_title"),
+            message:
+              t("error_general_message") ||
+              "Something went wrong. Please try again later!",
+          });
+        }
+        setIsLoading(false);
+        setIsRequestSuccess(true);
+        setIsShowModal(true);
+      }
+    } catch (error) {
+      httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+      setIsLoading(false);
+      GlobalDialogController.showModal({
+        title: t("dialog.err_title"),
+        message:
+          t("error_general_message") ||
+          "Something went wrong. Please try again later!",
+      });
+    }
+  };
+
+  const handleCloseModal = (newChallengeId: string | undefined) => {
+    setIsShowModal(false);
+    if (isRequestSuccess && newChallengeId) {
+      onClose();
+      navigation.navigate("Challenges", {
+        screen: "PersonalChallengeDetailScreen",
+        params: { challengeId: newChallengeId },
+      });
+    }
+  };
+
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white ">
-      {/* <Text className="pt-4 text-lg font-semibold leading-tight text-primary-default">
-        {t("cart_screen.title") || "Summary"}
-      </Text> */}
+      {isLoading && <Spinner visible={isLoading} />}
+      {isShowModal && (
+        <ConfirmDialog
+          title={
+            isRequestSuccess
+              ? t("dialog.success_title") || "Success"
+              : t("dialog.err_title") || "Error"
+          }
+          description={
+            isRequestSuccess
+              ? t("dialog.create_challenge_success") ||
+                "Your challenge has been created successfully !"
+              : t("error_general_message") ||
+                "Something went wrong. Please try again later."
+          }
+          isVisible={isShowModal}
+          onClosed={() => handleCloseModal(newChallengeId)}
+          closeButtonLabel={t("dialog.got_it") || "Got it"}
+        />
+      )}
+
       <View className="flex flex-col items-center justify-between space-y-4">
         <View
           className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
@@ -193,7 +349,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           height: 48,
           width: 344,
         }}
-        onPress={handlePay}
+        onPress={onSumitCertifiedChallenge}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">
           {t("cart_screen.pay") || "Pay"}

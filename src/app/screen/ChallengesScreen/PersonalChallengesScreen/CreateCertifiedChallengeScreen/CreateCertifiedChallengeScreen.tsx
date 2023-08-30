@@ -27,6 +27,7 @@ import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
+import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
 
 interface ICreateCertifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -66,6 +67,8 @@ const CreateCertifiedChallengeScreen = () => {
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
+
+  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
 
   const {
     control,
@@ -118,74 +121,14 @@ const CreateCertifiedChallengeScreen = () => {
     if (isImageLoading) return;
     setIsLoading(true);
     setErrorMessage("");
-    let newChallengeId: string | null;
-
-    try {
-      const { image, ...rest } = data; // Images upload will be handle separately
-      const payload = {
-        ...rest,
-        achievementTime: data.achievementTime as Date,
-      };
-
-      // Create a challenge without image
-      const challengeCreateResponse = await createChallenge(payload);
-      newChallengeId = challengeCreateResponse.data?.id;
-      // If challenge created successfully, upload image
-      if (
-        challengeCreateResponse.status === 200 ||
-        challengeCreateResponse.status === 201
-      ) {
-        try {
-          setNewChallengeId(newChallengeId);
-          if (image) {
-            const challengeImageResponse = await updateChallengeImage(
-              {
-                id: newChallengeId,
-              },
-              image
-            );
-
-            if (
-              challengeImageResponse.status === 200 ||
-              challengeCreateResponse.status === 201
-            ) {
-              const isChallengesScreenInStack = navigation
-                .getState()
-                .routes.some((route) => route.name === "Challenges");
-              if (isChallengesScreenInStack) {
-                navigation.dispatch(StackActions.popToTop());
-              } else {
-                navigation.navigate("Challenges");
-              }
-
-              navigation.navigate("Challenges", {
-                screen: "PersonalChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
-
-              GlobalToastController.showModal({
-                message:
-                  t("toast.create_challenge_success") ||
-                  "Your challenge has been created successfully!",
-              });
-              // setIsRequestSuccess(true);
-              // setIsShowModal(true);
-              setIsLoading(false);
-              return;
-            }
-            setIsRequestSuccess(false);
-            setIsShowModal(true);
-          }
-          setIsRequestSuccess(true);
-          setIsShowModal(true);
-        } catch (error) {
-          httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-        }
-      }
-    } catch (error) {
-      setErrorMessage(t("errorMessage:500") || "");
-    }
-    setIsLoading(false);
+    setCreateChallengeDataStore({
+      ...data,
+      type: "certified",
+    });
+    setTimeout(() => {
+      setIsLoading(false);
+      navigation.navigate("ChoosePackageScreen");
+    }, 500);
   };
 
   const handleCloseModal = (newChallengeId: string | undefined) => {
@@ -222,8 +165,8 @@ const CreateCertifiedChallengeScreen = () => {
       const { testID, value, ...rest } = softSkill;
       return rest;
     });
-    setSelectedCompetencedSkill(softSkills);
-    setValue("softSkills", softSkills, {
+    setSelectedCompetencedSkill(softSkillsWithoutTestID);
+    setValue("softSkills", softSkillsWithoutTestID, {
       shouldValidate: true,
     });
   };

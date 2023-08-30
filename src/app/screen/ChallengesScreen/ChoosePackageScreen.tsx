@@ -18,6 +18,7 @@ const RenderPackageOptions = ({
   price,
   onPress,
 }) => {
+  const { t } = useTranslation();
   return (
     <View
       className="flex flex-col items-start justify-start rounded-2xl bg-slate-50 pb-4"
@@ -40,8 +41,15 @@ const RenderPackageOptions = ({
             {benefits}
           </Text>
           <View className="flex flex-col items-center justify-start space-y-2 py-2">
-            {["Intake", "Check", "Closing"].map((item) => (
-              <Text className="text-center text-sm font-semibold leading-none text-neutral-700">
+            {[
+              t("cart_screen.intake"),
+              t("cart_screen.check"),
+              t("cart_screen.closing"),
+            ].map((item) => (
+              <Text
+                className="text-center text-sm font-semibold leading-none text-neutral-700"
+                key={item}
+              >
                 {item}
               </Text>
             ))}

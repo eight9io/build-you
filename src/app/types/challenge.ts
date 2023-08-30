@@ -15,6 +15,10 @@ export interface ICreateCompanyChallenge {
   maximumPeople: number | undefined;
   public: boolean;
   image?: string;
+  type?: string;
+  package?: string;
+  softSkills?: string[];
+  checkpoint: number
 }
 
 export interface IEditChallenge {

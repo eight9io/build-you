@@ -1,184 +1,104 @@
-import { View, Text, Modal, SafeAreaView, ScrollView } from "react-native";
-import React, { FC, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
-import { useForm, Controller, Resolver } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import clsx from "clsx";
-import dayjs from "dayjs";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
+import { useForm, Controller, Resolver } from "react-hook-form";
 import Spinner from "react-native-loading-spinner-overlay";
+import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
+import { ICreateChallenge } from "../../../../types/challenge";
 import { useNav } from "../../../../navigation/navigation.type";
-import { ICreateCompanyChallenge } from "../../../../types/challenge";
-import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
-import Header from "../../../../component/common/Header";
-import CustomSwitch from "../../../../component/common/Switch";
+import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
+import dayjs from "../../../../utils/date.util";
+import {
+  createChallenge,
+  updateChallengeImage,
+} from "../../../../service/challenge";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
-
-import { ICreateChallenge } from "../../../../types/challenge";
-import {
-  KeyboardAwareFlatList,
-  KeyboardAwareScrollView,
-} from "react-native-keyboard-aware-scroll-view";
-import {
-  createCompanyChallenge,
-  updateChallengeImage,
-} from "../../../../service/challenge";
-import { AxiosResponse } from "axios";
-import httpInstance from "../../../../utils/http";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
 
-interface ICreateChallengeForm
+interface ICreateCertifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
-  achievementTime: Date;
-  image?: string | undefined;
-  public: boolean;
-  maximumPeople: number | undefined;
-  softSkills: ISoftSkillsInput[];
+  achievementTime: string | Date;
+  image: string;
+  softSkills: string[];
 }
 
-interface ISoftSkillsInput {
+interface IFormValueInput {
   label: string;
   value: number; //rating
   id: string;
+  testID?: string;
 }
 
-interface ICreateChallengeModalProps {
-  onClose: () => void;
-}
-
-export const CreateCretifiedCompanyChallengeScreen: FC<
-  ICreateChallengeModalProps
-> = () => {
+const CreateCertifiedChallengeScreen = () => {
+  const onClose = () => {
+    navigation.goBack();
+  };
+  const { t } = useTranslation();
+  const navigation = useNav();
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
   const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
     undefined
   );
-  const [errorMessage, setErrorMessage] = useState("");
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
-    ISoftSkillsInput[]
+    IFormValueInput[]
   >([]);
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
 
-  const { t } = useTranslation();
-  const navigation = useNav();
-  const onClose = () => {
-    navigation.goBack();
-  };
-
   const {
     control,
-    handleSubmit,
     getValues,
     setValue,
+    watch,
+    handleSubmit,
     formState: { errors },
-  } = useForm<ICreateChallengeForm>({
+  } = useForm<ICreateCertifiedChallengeForm>({
     defaultValues: {
-      goal: "",
+      goal: "" as string,
       benefits: "",
       reasons: "",
       achievementTime: undefined,
-      maximumPeople: undefined,
-      public: false,
       image: "",
       softSkills: [],
     },
     resolver: yupResolver(
-      CreateCompanyChallengeValidationSchema()
-    ) as unknown as Resolver<ICreateChallengeForm, any>,
-    reValidateMode: "onChange",
+      CreateCertifiedChallengeValidationSchema()
+    ) as unknown as Resolver<ICreateCertifiedChallengeForm, any>,
   });
 
-  const onSubmit = async (data: ICreateCompanyChallenge) => {
-    setIsLoading(true);
-    setErrorMessage("");
-    console.log("data", data);
-    // try {
-    //   const { image, ...rest } = data; // Images upload will be handled separately
-    //   const payload = {
-    //     ...rest,
-    //     achievementTime: data.achievementTime as Date,
-    //   };
-    //   const challengeCreateResponse = await createCompanyChallenge(payload);
-    //   const newChallengeId = challengeCreateResponse.data.id;
-    //   // If challenge created successfully, upload image
-    //   if (challengeCreateResponse.status === 200 || 201) {
-    //     setNewChallengeId(challengeCreateResponse.data.id);
-    //     if (image) {
-    //       const challengeImageResponse = (await updateChallengeImage(
-    //         {
-    //           id: newChallengeId,
-    //         },
-    //         image
-    //       )) as AxiosResponse;
-    //       if (challengeImageResponse.status === 200 || 201) {
-    //         GlobalToastController.showModal({
-    //           message:
-    //             t("toast.create_challenge_success") ||
-    //             "Your challenge has been created successfully !",
-    //         });
+  const handleShowDatePicker = () => {
+    setShowDatePicker(true);
+  };
 
-    //         const isChallengesScreenInStack = navigation
-    //           .getState()
-    //           .routes.some((route) => route.name === "Challenges");
-    //         if (isChallengesScreenInStack) {
-    //           navigation.dispatch(StackActions.popToTop());
-    //         } else {
-    //           // add ChallengesScreen to the stack
-    //           navigation.navigate("Challenges");
-    //         }
-
-    //         navigation.navigate("Challenges", {
-    //           screen: "CompanyChallengeDetailScreen",
-    //           params: { challengeId: newChallengeId },
-    //         });
-
-    //         setIsLoading(false);
-    //         return;
-    //       }
-    //       setIsRequestSuccess(false);
-    //       setIsShowModal(true);
-    //       httpInstance.delete(
-    //         `/challenge/delete/${challengeCreateResponse.data.id}`
-    //       );
-    //       GlobalDialogController.showModal({
-    //         title: t("dialog.err_title"),
-    //         message:
-    //           t("error_general_message") ||
-    //           "Something went wrong. Please try again later!",
-    //       });
-    //     }
-    //     setIsLoading(false);
-    //     setIsRequestSuccess(true);
-    //     setIsShowModal(true);
-    //   }
-    // } catch (error) {
-    //   setIsLoading(false);
-    //   GlobalDialogController.showModal({
-    //     title: t("dialog.err_title"),
-    //     message:
-    //       t("error_general_message") ||
-    //       "Something went wrong. Please try again later!",
-    //   });
-    // }
+  const handleDatePicked = (date?: Date) => {
+    if (date) {
+      setValue("achievementTime", date, {
+        shouldValidate: true,
+      });
+    }
+    setShowDatePicker(false);
   };
 
   const handleImagesSelected = (images: string[]) => {
@@ -187,42 +107,102 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
     });
   };
 
+  const handleRemoveSelectedImage = (index: number) => {
+    setValue("image", undefined, {
+      shouldValidate: true,
+    });
+  };
+
+  const onSubmit = async (data: ICreateCertifiedChallengeForm) => {
+    // remove rating and testID from softSkills
+    if (isImageLoading) return;
+    setIsLoading(true);
+    setErrorMessage("");
+    let newChallengeId: string | null;
+
+    try {
+      const { image, ...rest } = data; // Images upload will be handle separately
+      const payload = {
+        ...rest,
+        achievementTime: data.achievementTime as Date,
+      };
+
+      // Create a challenge without image
+      const challengeCreateResponse = await createChallenge(payload);
+      newChallengeId = challengeCreateResponse.data?.id;
+      // If challenge created successfully, upload image
+      if (
+        challengeCreateResponse.status === 200 ||
+        challengeCreateResponse.status === 201
+      ) {
+        try {
+          setNewChallengeId(newChallengeId);
+          if (image) {
+            const challengeImageResponse = await updateChallengeImage(
+              {
+                id: newChallengeId,
+              },
+              image
+            );
+
+            if (
+              challengeImageResponse.status === 200 ||
+              challengeCreateResponse.status === 201
+            ) {
+              const isChallengesScreenInStack = navigation
+                .getState()
+                .routes.some((route) => route.name === "Challenges");
+              if (isChallengesScreenInStack) {
+                navigation.dispatch(StackActions.popToTop());
+              } else {
+                navigation.navigate("Challenges");
+              }
+
+              navigation.navigate("Challenges", {
+                screen: "PersonalChallengeDetailScreen",
+                params: { challengeId: newChallengeId },
+              });
+
+              GlobalToastController.showModal({
+                message:
+                  t("toast.create_challenge_success") ||
+                  "Your challenge has been created successfully!",
+              });
+              // setIsRequestSuccess(true);
+              // setIsShowModal(true);
+              setIsLoading(false);
+              return;
+            }
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
+          }
+          setIsRequestSuccess(true);
+          setIsShowModal(true);
+        } catch (error) {
+          httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+        }
+      }
+    } catch (error) {
+      setErrorMessage(t("errorMessage:500") || "");
+    }
+    setIsLoading(false);
+  };
+
   const handleCloseModal = (newChallengeId: string | undefined) => {
     setIsShowModal(false);
     if (isRequestSuccess && newChallengeId) {
       onClose();
-      navigation.navigate("Challenges", {
-        screen: "PersonalChallengeDetailScreen",
-        params: { challengeId: newChallengeId },
+
+      navigation.navigate("HomeScreen", {
+        screen: "Challenges",
+        params: {
+          screen: "PersonalChallengeDetailScreen",
+          params: {
+            challengeId: newChallengeId,
+          },
+        },
       });
     }
-  };
-
-  const handleDatePicked = (date?: any) => {
-    if (typeof date.getMonth === "function") {
-      setValue("achievementTime", date, {
-        shouldValidate: true,
-      });
-    }
-    setShowDatePicker(false);
-  };
-
-  const handleRemoveSelectedImage = (index: number) => {
-    setValue("image", "", {
-      shouldValidate: true,
-    });
-  };
-
-  const handleSelectSoftSkills = (softSkills: any) => {
-    const softSkillsWithoutTestID = softSkills.map((softSkill: any) => {
-      const { testID, value, ...rest } = softSkill;
-      return rest;
-    });
-
-    setSelectedCompetencedSkill(softSkillsWithoutTestID);
-    setValue("softSkills", softSkillsWithoutTestID, {
-      shouldValidate: true,
-    });
   };
 
   useLayoutEffect(() => {
@@ -237,10 +217,22 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
     });
   }, []);
 
-  return (
-    <SafeAreaView className="flex flex-col bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+  const handleSelectSoftSkills = (softSkills: any) => {
+    const softSkillsWithoutTestID = softSkills.map((softSkill: any) => {
+      const { testID, value, ...rest } = softSkill;
+      return rest;
+    });
+    setSelectedCompetencedSkill(softSkills);
+    setValue("softSkills", softSkills, {
+      shouldValidate: true,
+    });
+  };
 
+  return (
+    <SafeAreaView
+      className="flex-1 bg-white"
+      testID="user_create_challenge_screen"
+    >
       <ConfirmDialog
         title={
           isRequestSuccess
@@ -258,7 +250,6 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
         onClosed={() => handleCloseModal(newChallengeId)}
         closeButtonLabel={t("dialog.got_it") || "Got it"}
       />
-
       <KeyboardAwareFlatList
         data={[]}
         keyboardShouldPersistTaps="handled"
@@ -268,12 +259,17 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
           <View>{isLoading && <Spinner visible={isLoading} />}</View>
         }
         ListFooterComponent={
-          <View className=" flex h-full  rounded-t-xl bg-white">
-            <View className="mb-10 mt-2 flex flex-col px-5">
+          <View className="mx-4 flex h-full rounded-t-xl bg-white">
+            <View className="flex flex-col  py-5">
               <Text className="text-md font-normal leading-5 text-gray-dark">
-                {t("new_challenge_screen.description") ||
-                  "Create a new challenge for yourself with a concrete goal and time to reach it."}{" "}
+                {t("new_challenge_screen.description")}
               </Text>
+              {errorMessage && (
+                <ErrorText
+                  containerClassName="justify-center "
+                  message={errorMessage}
+                />
+              )}
               <View className="pt-5">
                 <Controller
                   control={control}
@@ -292,7 +288,9 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                   )}
                   name={"goal"}
                 />
-                {errors.goal && <ErrorText message={errors.goal.message} />}
+                {errors.goal ? (
+                  <ErrorText message={errors.goal.message} />
+                ) : null}
               </View>
               <View className="pt-5">
                 <Controller
@@ -317,9 +315,9 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                   )}
                   name={"benefits"}
                 />
-                {errors.benefits && (
+                {errors.benefits ? (
                   <ErrorText message={errors.benefits.message} />
-                )}
+                ) : null}
               </View>
 
               <View className="pt-5">
@@ -347,10 +345,11 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                   )}
                   name={"reasons"}
                 />
-                {errors.reasons && (
+                {errors.reasons ? (
                   <ErrorText message={errors.reasons.message} />
-                )}
+                ) : null}
               </View>
+
               <View className="mt-5">
                 <Controller
                   control={control}
@@ -377,13 +376,13 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                             color="#FFF"
                           />
                         }
-                        onPress={() => setShowDatePicker(true)}
+                        onPress={handleShowDatePicker}
                         className={clsx(
                           errors.achievementTime && "border-1 border-red-500"
                         )}
                       />
                       <DateTimePicker2
-                        selectedDate={value}
+                        selectedDate={value as Date}
                         setSelectedDate={handleDatePicked}
                         setShowDateTimePicker={setShowDatePicker}
                         showDateTimePicker={showDatePicker}
@@ -393,33 +392,9 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                   )}
                   name={"achievementTime"}
                 />
-                {errors.achievementTime && (
+                {errors.achievementTime ? (
                   <ErrorText message={errors.achievementTime.message} />
-                )}
-              </View>
-
-              <View className="pt-5">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      label={t("new_challenge_screen.max_people") || ""}
-                      placeholder={
-                        t("new_challenge_screen.max_people_placeholder") || ""
-                      }
-                      placeholderTextColor={"#6C6E76"}
-                      onChangeText={(number) => onChange(+number)}
-                      onBlur={onBlur}
-                      value={value ? value.toString() : ""}
-                      keyboardType="number-pad"
-                      className={clsx(errors.goal && "border-1 border-red-500")}
-                    />
-                  )}
-                  name={"maximumPeople"}
-                />
-                {errors.maximumPeople && (
-                  <ErrorText message={errors.maximumPeople.message} />
-                )}
+                ) : null}
               </View>
               <View className="mt-5 flex flex-col ">
                 <Text className="pb-2 text-md font-semibold text-primary-default">
@@ -439,21 +414,7 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                   <ErrorText message={errors.softSkills.message} />
                 ) : null}
               </View>
-
-              <View className="flex flex-col justify-start pt-5">
-                <CustomSwitch
-                  textDisable={t("private") || "Private"}
-                  textEnable={t("public") || "Public"}
-                  setValue={setValue}
-                />
-                <Text className="pt-2 text-sm font-normal leading-4 text-gray-dark ">
-                  {t("new_challenge_screen.challenge_status_description") ||
-                    "Everyone can join your public challenge while only user from your company can join your private challenge."}
-                </Text>
-              </View>
-
               <View className="mt-5">
-                {/* <ImagePicker isSelectedImage /> */}
                 <ImagePicker
                   images={getValues("image") ? [getValues("image")!] : []}
                   onImagesSelected={handleImagesSelected}
@@ -477,11 +438,11 @@ export const CreateCretifiedCompanyChallengeScreen: FC<
                 )}
               </View>
             </View>
-            <View className="h-20" />
           </View>
         }
       />
     </SafeAreaView>
   );
 };
-export default CreateCretifiedCompanyChallengeScreen;
+
+export default CreateCertifiedChallengeScreen;

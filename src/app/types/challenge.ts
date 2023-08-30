@@ -94,7 +94,7 @@ export interface ICreateChallengeForm
   image: string;
 }
 
-export interface ICreateCretifiedChallengeForm
+export interface ICreateCertifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
   achievementTime: string | Date;
   image: string;

@@ -50,8 +50,10 @@ import { useNotificationStore } from "../store/notification-store";
 import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
 import i18n from "../i18n/i18n";
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
-import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCretifiedChallengeScreen/CreateCretifiedChallengeScreen";
-import CreateCretifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCretifiedCompanyChallengeScreen/CreateCretifiedCompanyChallengeScreen";
+import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
+import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
+import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";
+import CartScreen from "../screen/ChallengesScreen/CartScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -314,7 +316,6 @@ export const RootNavigation = () => {
               ),
             })}
           />
-
           <RootStack.Screen
             name="ForgotPasswordScreen"
             component={ForgotPassword}
@@ -334,7 +335,6 @@ export const RootNavigation = () => {
               ),
             })}
           />
-
           <RootStack.Screen
             name="CreateChallengeScreen"
             component={CreateChallengeScreen}
@@ -353,7 +353,6 @@ export const RootNavigation = () => {
               ),
             })}
           />
-
           <RootStack.Screen
             name="CreateCompanyChallengeScreen"
             component={CreateCompanyChallengeScreen}
@@ -369,10 +368,9 @@ export const RootNavigation = () => {
               ),
             })}
           />
-
           <RootStack.Screen
-            name="CreateCretifiedChallengeScreen"
-            component={CreateCretifiedChallengeScreen}
+            name="CreateCertifiedChallengeScreen"
+            component={CreateCertifiedChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
@@ -386,12 +384,42 @@ export const RootNavigation = () => {
             })}
           />
           <RootStack.Screen
-            name="CreateCretifiedCompanyChallengeScreen"
-            component={CreateCretifiedCompanyChallengeScreen}
+            name="CreateCertifiedCompanyChallengeScreen"
+            component={CreateCertifiedCompanyChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
                 <AppTitle title={t("new_challenge_screen.title") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="ChoosePackageScreen"
+            component={ChoosePackageScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("choose_packages_screen.package") || ""} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="CartScreen"
+            component={CartScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("cart_screen.title") || "Sumary"} />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>

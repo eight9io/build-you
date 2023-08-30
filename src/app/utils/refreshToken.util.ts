@@ -36,7 +36,9 @@ export const checkTokens = ({ getAccessToken, getRefreshToken }) => {
 
 export function setupInterceptor(
   getRefreshToken: () => string,
-  onRefreshFail: () => void
+  onRefreshFail: () => void,
+  setAccessToken: (token: string) => void,
+  setRefreshToken: (token: string) => void
 ) {
   httpInstance.interceptors.response.use(
     function (res) {
@@ -59,12 +61,12 @@ export function setupInterceptor(
 
         if (status === 401) {
           if (originalRequest._retry) {
-            onRefreshFail();
             GlobalDialogController.showModal({
               title: i18n.t("dialog.err_title"),
               message: i18n.t("session_expired_error"),
               button: i18n.t("dialog.ok"),
             });
+            onRefreshFail();
             reject(error);
             return;
           }
@@ -96,6 +98,8 @@ export function setupInterceptor(
               originalRequest.headers[
                 "Authorization"
               ] = `Bearer ${newTokens.data.authorization}`;
+              setAccessToken(newTokens.data.authorization);
+              setRefreshToken(newTokens.data.refresh);
               // set new tokens to local storage
               const res = await httpInstance(originalRequest);
               resolve(res);

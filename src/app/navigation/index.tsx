@@ -64,6 +64,8 @@ export const RootNavigation = () => {
   const {
     getAccessToken,
     getRefreshToken,
+    setAccessToken,
+    setRefreshToken,
     logout,
     _hasHydrated: authStoreHydrated,
   } = useAuthStore();
@@ -97,10 +99,15 @@ export const RootNavigation = () => {
           logout();
           userProfileStoreOnLogout();
         }
-        setupInterceptor(getRefreshToken, () => {
-          logout();
-          userProfileStoreOnLogout();
-        });
+        setupInterceptor(
+          getRefreshToken,
+          () => {
+            logout();
+            userProfileStoreOnLogout();
+          },
+          setAccessToken,
+          setRefreshToken
+        );
         setAuthTokenToHttpHeader(isLoggedin);
 
         getUserProfileAsync()

@@ -60,7 +60,13 @@ export default function Login() {
     reValidateMode: "onChange",
     mode: "onSubmit",
   });
-  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
+  const {
+    asyncLogin,
+    getRefreshToken,
+    logout,
+    setAccessToken,
+    setRefreshToken,
+  } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
 
@@ -74,12 +80,16 @@ export default function Login() {
   ) => {
     setIsLoading(true);
     try {
-      const t = await asyncLogin(payload, type);
-      setupInterceptor(getRefreshToken, () => {
-        logout();
-        userProfileStoreOnLogout();
-      });
-
+      await asyncLogin(payload, type);
+      setupInterceptor(
+        getRefreshToken,
+        () => {
+          logout();
+          userProfileStoreOnLogout();
+        },
+        setAccessToken,
+        setRefreshToken
+      );
       const { data: profile } = await getUserProfileAsync();
       setIsLoading(false); // Important to not crashing app with duplicate modal
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);

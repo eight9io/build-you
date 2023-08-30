@@ -8,7 +8,6 @@ import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import i18n from "../../../i18n/i18n";
 import { IChallenge } from "../../../types/challenge";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 import { useUserProfileStore } from "../../../store/user-store";
@@ -50,17 +49,6 @@ interface IOtherUserProfileChallengeDetailsScreenProps {
   >;
 }
 
-const CHALLENGE_TABS_TITLE_TRANSLATION = [
-  i18n.t("challenge_detail_screen.progress"),
-  i18n.t("challenge_detail_screen.description"),
-];
-
-const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
-  i18n.t("challenge_detail_screen.progress"),
-  i18n.t("challenge_detail_screen.description"),
-  i18n.t("challenge_detail_screen.participants"),
-];
-
 const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
@@ -88,6 +76,19 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     useState<boolean | null>(null);
   const [shouldRefesh, setShouldRefresh] = useState<boolean>(true);
 
+  const { t } = useTranslation();
+
+  const CHALLENGE_TABS_TITLE_TRANSLATION = [
+    t("challenge_detail_screen.progress"),
+    t("challenge_detail_screen.description"),
+  ];
+
+  const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
+    t("challenge_detail_screen.progress"),
+    t("challenge_detail_screen.description"),
+    t("challenge_detail_screen.participants"),
+  ];
+
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
 
@@ -97,7 +98,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { t } = useTranslation();
 
   const isCurrentUserParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
@@ -395,8 +395,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
                   } `}
                   title={
                     isJoined
-                      ? i18n.t("challenge_detail_screen.leave")
-                      : i18n.t("challenge_detail_screen.join")
+                      ? t("challenge_detail_screen.leave")
+                      : t("challenge_detail_screen.join")
                   }
                   onPress={handleJoinLeaveChallenge}
                 />
@@ -409,7 +409,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
                 <Button
                   containerClassName="border border-gray-dark flex items-center justify-center px-5"
                   textClassName={`text-center text-md font-semibold text-gray-dark `}
-                  title={i18n.t("challenge_detail_screen.completed")}
+                  title={t("challenge_detail_screen.completed")}
                 />
               </View>
             )}

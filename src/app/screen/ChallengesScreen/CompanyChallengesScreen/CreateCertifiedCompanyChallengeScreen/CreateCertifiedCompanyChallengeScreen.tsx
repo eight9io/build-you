@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import Spinner from "react-native-loading-spinner-overlay";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import { useNav } from "../../../../navigation/navigation.type";
+import { useNav } from "../../../../hooks/useNav";
 import { ICreateCompanyChallenge } from "../../../../types/challenge";
 import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import CustomSwitch from "../../../../component/common/Switch";
@@ -94,7 +94,6 @@ export const CreateCertifiedCompanyChallengeScreen: FC<
       setIsLoading(false);
       navigation.navigate("ChoosePackageScreen");
     }, 500);
-
   };
 
   const handleImagesSelected = (images: string[]) => {

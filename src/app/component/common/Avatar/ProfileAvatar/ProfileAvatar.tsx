@@ -6,7 +6,7 @@ import { Image } from "expo-image";
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
-} from "../../../../utils/uploadUserImage";
+} from "../../../../service/upload-image";
 
 import DefaultAvatar from "../../../asset/default-avatar.svg";
 import IconUploadAvatar from "./asset/uploadAvatar.svg";

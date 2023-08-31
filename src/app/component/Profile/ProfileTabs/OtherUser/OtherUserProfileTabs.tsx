@@ -5,13 +5,15 @@ import clsx from "clsx";
 
 import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
 
-import Skills from "../Users/Skills";
-import ChallengesTab from "./Challenges/ChallengesTab";
+import { IEmployeeDataProps } from "../../../../types/common";
 import { IUserData } from "../../../../types/user";
-import Biography from "../Users/Biography/Biography";
 
 import { fetchListEmployee } from "../../../../utils/profile";
 import { useUserProfileStore } from "../../../../store/user-store";
+
+import Skills from "../Users/Skills";
+import ChallengesTab from "./Challenges/ChallengesTab";
+import Biography from "../Users/Biography/Biography";
 import EmployeesCompany from "./EmployeesCompany";
 import SkeletonLoadingCommon from "../../../common/SkeletonLoadings/SkeletonLoadingCommon";
 
@@ -52,8 +54,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
 
   useEffect(() => {
     if (!otherUserData?.id) return;
-    //TODO add typescript
-    fetchListEmployee(otherUserData?.id, (res: any) => {
+    fetchListEmployee(otherUserData?.id, (res: IEmployeeDataProps[]) => {
       if (
         !!res?.find((item: any) => item?.id === userProfile?.id) ||
         otherUserData?.id === userProfile?.id

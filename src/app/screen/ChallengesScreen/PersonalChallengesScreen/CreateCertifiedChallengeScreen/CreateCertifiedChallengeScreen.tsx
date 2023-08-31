@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { ICreateChallenge } from "../../../../types/challenge";
-import { useNav } from "../../../../navigation/navigation.type";
+import { useNav } from "../../../../hooks/useNav";
 import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
 import {

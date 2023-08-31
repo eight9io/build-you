@@ -1,8 +1,9 @@
 import * as ExpoImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
-import { serviceUpdateAvatar, serviceUpdateCover } from "../service/profile";
+import { serviceUpdateAvatar, serviceUpdateCover } from "./profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import i18n from "../i18n/i18n";
+
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
   base64?: boolean;
@@ -38,7 +39,6 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
   };
 };
 
-// TODO: this one don't need utils, can stay inside service folder
 export const uploadNewAvatar = async (image: string) => {
   const formData = new FormData();
   const uri = Platform.OS === "android" ? image : image.replace("file://", "");
@@ -82,9 +82,4 @@ export const uploadNewCover = async (image: string) => {
       return undefined;
     });
   return response;
-};
-
-export const getImageExtension = (uri: string) => {
-  const uriSplit = uri.split(".");
-  return uriSplit[uriSplit.length - 1];
 };

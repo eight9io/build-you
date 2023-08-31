@@ -52,6 +52,7 @@ const watchLogin = (config) => (set, get, api) =>
       if (typeof args.accessToken === "string") {
         const oldState = get();
         if (typeof oldState.accessToken === "string") {
+          set(args);
           return;
         }
         registerForPushNotificationsAsync()

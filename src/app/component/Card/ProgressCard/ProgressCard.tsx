@@ -177,15 +177,19 @@ const ProgressCard: FC<IProgressCardProps> = ({
             >
               {userData?.name} {userData?.surname}
             </Text>
-            <View className="flex flex-row items-center">
+            <View className="flex-1 flex-row items-center">
               <Text className="text-xs font-light text-gray-dark ">
-                {timeDiff}{" "}
+                {timeDiff}
               </Text>
-
               {itemProgressCard?.location && (
-                <Text className="text-xs font-light text-gray-dark ">
-                  <IconDot fill={"#7D7E80"} /> {itemProgressCard?.location}
-                </Text>
+                <>
+                  <View className="px-2">
+                    <IconDot fill={"#7D7E80"} />
+                  </View>
+                  <Text className="flex-1 text-xs font-light text-gray-dark ">
+                    {itemProgressCard?.location}
+                  </Text>
+                </>
               )}
             </View>
           </View>

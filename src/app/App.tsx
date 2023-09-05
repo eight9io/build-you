@@ -11,6 +11,8 @@ import {
 import { isDevice } from "expo-device";
 import { useEffect } from "react";
 import { StatusBar } from "react-native";
+import { EventProvider } from "react-native-outside-press";
+
 import "./i18n/i18n";
 import Toast from "./component/common/Toast/Toast";
 import { addNotificationListener } from "./utils/notification.util";
@@ -44,8 +46,10 @@ export const App = () => {
 
   return (
     <MenuProvider>
-      <Toast />
-      <RootNavigation />
+      <EventProvider>
+        <Toast />
+        <RootNavigation />
+      </EventProvider>
     </MenuProvider>
   );
 };

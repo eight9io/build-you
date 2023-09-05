@@ -28,47 +28,47 @@ const UserSearchBar = ({
   const handleFocus = () => {
     setFocused(true);
 
-    Animated.parallel([
-      Animated.timing(inputLength, {
-        toValue: SEARCH_SHRINK_WIDTH,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-      Animated.timing(cancelPosition, {
-        toValue: 16,
-        duration: 400,
-        useNativeDriver: false,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-    ]).start();
+    // Animated.parallel([
+    //   Animated.timing(inputLength, {
+    //     toValue: SEARCH_SHRINK_WIDTH,
+    //     duration: 250,
+    //     useNativeDriver: false,
+    //   }),
+    //   Animated.timing(cancelPosition, {
+    //     toValue: 16,
+    //     duration: 400,
+    //     useNativeDriver: false,
+    //   }),
+    //   Animated.timing(opacity, {
+    //     toValue: 1,
+    //     duration: 250,
+    //     useNativeDriver: false,
+    //   }),
+    // ]).start();
   };
 
-  const handleCancel = () => {
-    Keyboard.dismiss();
-    setSearchPhrase("");
-    setFocused(false);
-    Animated.parallel([
-      Animated.timing(inputLength, {
-        toValue: SEARCH_FULL_WIDTH,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-      Animated.timing(cancelPosition, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-    ]).start();
-  };
+  // const handleCancel = () => {
+  //   Keyboard.dismiss();
+  //   setSearchPhrase("");
+  //   setFocused(false);
+  //   Animated.parallel([
+  //     Animated.timing(inputLength, {
+  //       toValue: SEARCH_FULL_WIDTH,
+  //       duration: 250,
+  //       useNativeDriver: false,
+  //     }),
+  //     Animated.timing(cancelPosition, {
+  //       toValue: 0,
+  //       duration: 250,
+  //       useNativeDriver: false,
+  //     }),
+  //     Animated.timing(opacity, {
+  //       toValue: 0,
+  //       duration: 250,
+  //       useNativeDriver: false,
+  //     }),
+  //   ]).start();
+  // };
   return (
     <View className="m-[15] w-[90%] flex-row items-center justify-start">
       <Animated.View
@@ -95,7 +95,7 @@ const UserSearchBar = ({
           onFocus={handleFocus}
         />
         {/* cross Icon, depending on whether the search bar is focused or not */}
-        {focused && (
+        {searchPhrase !== "" && (
           <Entypo
             name="cross"
             size={20}
@@ -108,9 +108,9 @@ const UserSearchBar = ({
         )}
       </Animated.View>
       {/* cancel button, depending on whether the search bar is focused or not */}
-      {focused && (
+      {/* {focused && (
         <Button title="Cancel" color="#FF7B1C" onPress={handleCancel} />
-      )}
+      )} */}
     </View>
   );
 };

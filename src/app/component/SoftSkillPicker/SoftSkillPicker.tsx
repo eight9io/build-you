@@ -142,8 +142,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
     []
   );
 
-  const dropDownRef = React.useRef(null);
-
   useEffect(() => {
     const fetchSkills = async () => {
       try {
@@ -186,12 +184,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
     setSelectedCompetencedSkill(newSelectedCompetencedSkill);
   };
 
-  const closeDropdown = () => {
-    if (openDropdown) {
-      setOpenDropdown(false);
-    }
-  };
-
   return (
     <OutsidePressHandler
       onOutsidePress={() => {
@@ -220,7 +212,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
             borderColor: "#e2e8f0",
             borderWidth: 1,
             borderRadius: 8,
-            height: 48,
             zIndex: 10,
           }}
           containerStyle={{
@@ -233,7 +224,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
             borderColor: "#e2e8f0",
             borderWidth: 1,
             borderRadius: 8,
-            maxHeight: 300,
             overflow: "scroll",
             zIndex: 10,
           }}
@@ -241,6 +231,12 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
           multiple={true}
           mode="SIMPLE"
           badgeDotColors={["#e76f51"]}
+          containerProps={{
+            style: {
+              zIndex: 10,
+              height: openDropdown ? 50 * (fetchedSoftSkills?.length + 1) : 50,
+            },
+          }}
           renderListItem={({ item, isSelected }) => {
             const isSkillAlreadySelected = selectedCompetencedSkill.find(
               (selected) => selected.label === item.label

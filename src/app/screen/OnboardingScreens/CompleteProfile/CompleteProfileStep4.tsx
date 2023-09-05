@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
+  FlatList,
 } from "react-native";
 
 import clsx from "clsx";
@@ -192,7 +193,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       return;
     }
 
-    console.log(userData.id)
+    console.log(userData.id);
     try {
       await Promise.all([
         uploadNewVideo(profile?.video),
@@ -235,7 +236,60 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
 
   return (
     <TouchableWithoutFeedback onPress={() => setOpenDropdown(false)}>
-      <ScrollView showsVerticalScrollIndicator testID="complete_profile_step_4">
+      <FlatList
+        data={[]}
+        renderItem={() => <View />}
+        keyExtractor={() => "empty"}
+        ListHeaderComponent={() => (
+          <View>
+            <View>
+              <StepOfSteps step={4} totalSteps={4} />
+            </View>
+            <View className="px-16 py-6">
+              <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
+                {t("form_onboarding.screen_4.title") ||
+                  "Select the soft skills you are already competent on"}
+              </Text>
+              <Text className="pt-2 text-center text-h6 font-normal leading-5 text-gray-dark">
+                {t("form_onboarding.screen_4.sub_title") ||
+                  "Please select at least 3 different soft skills and rate it from 1 to 5."}
+              </Text>
+            </View>
+          </View>
+        )}
+        ListFooterComponent={() => (
+          <View>
+            <View className="flex w-full pt-5 ">
+              <View className="flex flex-col px-5">
+                <Text className="pb-2 text-md font-semibold text-primary-default">
+                  {t("form_onboarding.screen_4.soft_skills") || "Soft skills"}
+                </Text>
+                <SoftSkillPicker
+                  value={value}
+                  setValue={setValue}
+                  openDropdown={openDropdown}
+                  setOpenDropdown={setOpenDropdown}
+                  skillValueError={skillValueError}
+                  numberOfSkillError={numberOfSkillError}
+                  selectedCompetencedSkill={selectedCompetencedSkill}
+                  setSelectedCompetencedSkill={setSelectedCompetencedSkill}
+                />
+              </View>
+            </View>
+            {!openDropdown && (
+              <Button
+                testID="complete_profile_step_4_next_button"
+                title={t("button.next") || "Next"}
+                containerClassName=" bg-primary-default my-5 mx-5 "
+                textClassName="text-white text-md leading-6"
+                onPress={() => handleSubmitForm()}
+              />
+            )}
+          </View>
+        )}
+      />
+
+      {/* <ScrollView showsVerticalScrollIndicator testID="complete_profile_step_4">
         <View>
           <StepOfSteps step={4} totalSteps={4} />
         </View>
@@ -276,7 +330,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
             onPress={() => handleSubmitForm()}
           />
         )}
-      </ScrollView>
+      </ScrollView> */}
     </TouchableWithoutFeedback>
   );
 };

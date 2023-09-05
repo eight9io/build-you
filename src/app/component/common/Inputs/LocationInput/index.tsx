@@ -61,7 +61,10 @@ const LocationInput: React.FC<ILocationInputProps> = ({
     const { coords } = await Location.getCurrentPositionAsync();
     const extractedCoords = `${coords.latitude},${coords.longitude}`;
     if (isLoadMore !== undefined && isLoadMore) {
-      if (!nextPageToken) return;
+      if (!nextPageToken) {
+        setFetchLocationLoading(false);
+        return;
+      }
       const { nextPageToken: token, addresses } = await getNearbyLocations(
         extractedCoords,
         nextPageToken

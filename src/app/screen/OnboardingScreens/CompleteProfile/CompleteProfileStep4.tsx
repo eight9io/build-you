@@ -287,8 +287,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   }, []);
 
   return (
-    <View>
-      <ScrollView>
+    <View className="flex-1">
+      <ScrollView nestedScrollEnabled={true} horizontal={false}>
         <View>
           <View>
             <StepOfSteps step={4} totalSteps={4} />
@@ -325,6 +325,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                   setItems={setFetchedSoftSkills}
                   testID="soft_skill_dropdown_picker"
                   dropDownDirection="BOTTOM"
+                  listMode="SCROLLVIEW"
+                  scrollViewProps={{
+                    nestedScrollEnabled: true,
+                  }}
                   placeholder={
                     selectedCompetencedSkill.length == 0
                       ? t("form_onboarding.screen_4.select_soft_skill") ||
@@ -362,6 +366,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                       height: openDropdown
                         ? 50 * (fetchedSoftSkills?.length + 1)
                         : 50,
+                      overflow: "scroll",
                     },
                   }}
                   renderListItem={({ item, isSelected }) => {

@@ -148,7 +148,11 @@ export const handleTapOnIncomingNotification = async (
             challengeId: string;
           };
           // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
-          if (currentRouteParams.progressId === payload.progressId) return;
+          if (
+            currentRouteParams && currentRouteParams.progressId ===
+            payload.progressId
+          )
+            return;
           const pushAction = StackActions.push("ProgressCommentScreen", {
             progressId: payload.progressId,
             challengeId: payload.challengeId,
@@ -162,7 +166,11 @@ export const handleTapOnIncomingNotification = async (
           challengeId: string;
         };
         // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
-        if (currentRouteParams.progressId === payload.progressId) return;
+        if (
+          currentRouteParams &&
+          currentRouteParams.progressId === payload.progressId
+        )
+          return;
         if (payload.progressId && payload.challengeId) {
           // navigation.navigate("ProgressCommentScreen", {
           //   progressId: payload.progressId,

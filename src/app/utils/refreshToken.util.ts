@@ -68,7 +68,7 @@ export function setupInterceptor(
             reject(error);
             return;
           }
-          console.log(originalRequest);
+
           originalRequest._retry = true;
           const refreshToken = getRefreshToken();
           if (!refreshToken) {

@@ -81,6 +81,7 @@
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^15.0.1",
+    "react-native-outside-press": "^1.2.1",
     "react-native-pager-view": "6.1.2",
     "react-native-popup-menu": "^0.16.1",
     "react-native-reanimated": "~2.14.4",

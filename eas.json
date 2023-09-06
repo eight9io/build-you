@@ -10,11 +10,8 @@
         "EXPO_EXPO_CLIENT_ID": "360419550439-hi80i66nq5bd7f3c0tv8flndjrluv5cu.apps.googleusercontent.com",
         "EXPO_LINKEDIN_CLIENT_ID": "77xjji8o0jqh9u",
         "EXPO_LINKEDIN_CLIENT_SECRET": "CCeKiPa73v93opdk",
-
         "EXPO_API_URL": "https://api.uat.buildyou.it",
-
         "EXPO_GOOGLE_MAP_API_KEY": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI",
-
         "EXPO_API_APP_DOMAIN": "https://app.uat.buildyou.it",
         "EXPO_GOOGLE_WEB_CLIENT_ID": "182046676611-kjnvhpd4t3hu5g3an7fets5todbobi4b.apps.googleusercontent.com"
       }
@@ -27,6 +24,17 @@
       },
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_IOS_CLIENT_ID": "360419550439-mpi0jbel7ua6et5k5trkh42211hhum5f.apps.googleusercontent.com",
+        "EXPO_ANDROID_CLIENT_ID": "360419550439-ipokeml63b3rlo5a8mi5v7p2m4eiaf58.apps.googleusercontent.com",
+        "EXPO_EXPO_CLIENT_ID": "360419550439-hi80i66nq5bd7f3c0tv8flndjrluv5cu.apps.googleusercontent.com",
+        "EXPO_LINKEDIN_CLIENT_ID": "77xjji8o0jqh9u",
+        "EXPO_LINKEDIN_CLIENT_SECRET": "CCeKiPa73v93opdk",
+        "EXPO_API_URL": "https://buildyou-back.stg.startegois.com",
+        "EXPO_GOOGLE_MAP_API_KEY": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI",
+        "EXPO_API_APP_DOMAIN": "https://app.uat.buildyou.it",
+        "EXPO_GOOGLE_WEB_CLIENT_ID": "182046676611-kjnvhpd4t3hu5g3an7fets5todbobi4b.apps.googleusercontent.com"
       }
     },
     "preview": {
@@ -36,6 +44,17 @@
       },
       "android": {
         "image": "ubuntu-18.04-jdk-11-ndk-r19c"
+      },
+      "env": {
+        "EXPO_IOS_CLIENT_ID": "360419550439-mpi0jbel7ua6et5k5trkh42211hhum5f.apps.googleusercontent.com",
+        "EXPO_ANDROID_CLIENT_ID": "360419550439-ipokeml63b3rlo5a8mi5v7p2m4eiaf58.apps.googleusercontent.com",
+        "EXPO_EXPO_CLIENT_ID": "360419550439-hi80i66nq5bd7f3c0tv8flndjrluv5cu.apps.googleusercontent.com",
+        "EXPO_LINKEDIN_CLIENT_ID": "77xjji8o0jqh9u",
+        "EXPO_LINKEDIN_CLIENT_SECRET": "CCeKiPa73v93opdk",
+        "EXPO_API_URL": "https://buildyou-back.stg.startegois.com",
+        "EXPO_GOOGLE_MAP_API_KEY": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI",
+        "EXPO_API_APP_DOMAIN": "https://app.uat.buildyou.it",
+        "EXPO_GOOGLE_WEB_CLIENT_ID": "182046676611-kjnvhpd4t3hu5g3an7fets5todbobi4b.apps.googleusercontent.com"
       }
     },
     "adhoc": {

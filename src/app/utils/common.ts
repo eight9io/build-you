@@ -120,3 +120,12 @@ export const sortChallengeByStatus = (challengeList: IChallenge[]) => {
 
   return [...openChallenges, ...closedChallenges];
 };
+
+export const roundToDecimalOrWhole = (number: number): number => {
+  // Check if the number is a whole number (has no decimal part)
+  if (Number.isInteger(number)) {
+    return Math.floor(number); // Return the number as a whole number
+  } else {
+    return Math.round(number * 10) / 10; // Return the number rounded to one decimal place
+  }
+};

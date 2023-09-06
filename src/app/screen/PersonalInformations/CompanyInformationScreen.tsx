@@ -19,10 +19,10 @@ export default function CompanyInformationScreen({ navigation }: any) {
         </View>
         <View className="flex-column flex flex-wrap gap-5 px-4 pt-[20px] ">
           {userData?.name && (
-            <Text className="flex w-full flex-row flex-wrap pr-[30px]">
+            <View className="flex w-full flex-row flex-wrap pr-[30px] ">
               <Text
                 className={clsx(
-                  "w-[24%] text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.name")}:&nbsp;
@@ -31,13 +31,13 @@ export default function CompanyInformationScreen({ navigation }: any) {
               <Text className={clsx("text-md text-gray-dark")}>
                 {userData?.name}
               </Text>
-            </Text>
+            </View>
           )}
           {userData?.webSite && (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[35%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.website")}:&nbsp;
@@ -49,10 +49,10 @@ export default function CompanyInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.phone && (
-            <View className="flex w-full flex-row  flex-wrap">
+            <View className="flex w-full flex-row  flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[35%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.phone")}:&nbsp;
@@ -64,10 +64,10 @@ export default function CompanyInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.emailContact && (
-            <View className="flex w-full flex-row  flex-wrap">
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.email")}:&nbsp;
@@ -79,10 +79,10 @@ export default function CompanyInformationScreen({ navigation }: any) {
             </View>
           )}
           {userData?.pIva && (
-            <View className="flex w-full flex-row  flex-wrap">
+            <View className="flex w-full flex-row  flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[24%]  text-md font-semibold  text-gray-dark"
+                  "w-[35%]  text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("company_profile.VAT_number")}:&nbsp;

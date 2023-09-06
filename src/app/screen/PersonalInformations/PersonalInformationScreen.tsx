@@ -162,12 +162,12 @@ export default function PersonalInformationScreen({ navigation }: any) {
             {t("personal_information.description")}
           </Text>
         </View>
-        <View className="flex-column flex flex-wrap gap-3 px-4 pt-[20px] ">
+        <View className="flex-column flex flex-wrap gap-3 px-4 pt-[20px]">
           {userData?.name && (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[40%] text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.name")}:&nbsp;
@@ -182,7 +182,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[40%] text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.surname")}:&nbsp;
@@ -197,7 +197,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[40%] text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.birthday")}:&nbsp;
@@ -212,7 +212,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[40%] text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("personal_profile.email")}:&nbsp;
@@ -227,7 +227,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
-                  "w-[40%] text-md font-semibold  text-gray-dark"
+                  "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
                 {t("form_onboarding.screen_1.occupation")}:&nbsp;

@@ -349,7 +349,6 @@ const CreateCertifiedChallengeScreen = () => {
                   openDropdown={openDropdown}
                   setValue={setSoftSkillValue}
                   setOpenDropdown={setOpenDropdown}
-                  shouldRenderSelectedSoftSkill={false}
                   selectedCompetencedSkill={selectedCompetencedSkill}
                   setSelectedCompetencedSkill={handleSelectSoftSkills}
                 />

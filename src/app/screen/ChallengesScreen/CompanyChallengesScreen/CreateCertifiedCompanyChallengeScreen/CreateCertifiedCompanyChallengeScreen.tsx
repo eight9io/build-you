@@ -317,7 +317,6 @@ export const CreateCertifiedCompanyChallengeScreen: FC<
                   openDropdown={openDropdown}
                   setValue={setSoftSkillValue}
                   setOpenDropdown={setOpenDropdown}
-                  shouldRenderSelectedSoftSkill={false}
                   selectedCompetencedSkill={selectedCompetencedSkill}
                   setSelectedCompetencedSkill={handleSelectSoftSkills}
                 />

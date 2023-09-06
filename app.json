@@ -14,26 +14,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
-      "associatedDomains": [
-        "applinks:app.uat.buildyou.it"
-      ],
-      "buildNumber": "14",
+      "associatedDomains": ["applinks:app.uat.buildyou.it"],
+      "buildNumber": "15",
       "supportsTablet": false,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
+        "UIBackgroundModes": ["remote-notification"]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
-        "com.apple.developer.applesignin": [
-          "Default"
-        ]
+        "com.apple.developer.applesignin": ["Default"]
       }
     },
     "android": {

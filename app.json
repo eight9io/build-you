@@ -22,7 +22,7 @@
       "associatedDomains": [
         "applinks:app.uat.buildyou.it"
       ],
-      "buildNumber": "13",
+      "buildNumber": "14",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": [

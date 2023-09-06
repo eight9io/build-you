@@ -114,7 +114,7 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
             {ratedValue > 0 && (
               <View className={clsx("mr-4 flex flex-row items-center")}>
                 <Text className={clsx("mr-1 text-h6 font-semibold leading-6")}>
-                  {ratedValue}/{5}
+                  {ratedValue.toFixed(1)}/{5}
                 </Text>
                 <StarFillSvg width={18} height={18} />
               </View>

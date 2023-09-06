@@ -167,7 +167,7 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
           <Button
             title={t("challenge_detail_screen.add_new_employees") as string}
             containerClassName="bg-primary-default"
-            textClassName="text-white text-md font-semibold py-4 ml-2"
+            textClassName="text-white text-md font-semibold  ml-2"
             Icon={<AddIcon fill={"white"} />}
             onPress={() => setIsShowModalAdd(true)}
           />

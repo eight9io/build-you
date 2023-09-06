@@ -70,25 +70,27 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
     serviceRegister({ email: data.email, password: data.password })
       .then((res) => {
-        setIsShowModal(true);
         setErrMessage("");
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsShowModal(true);
+        }, 500);
       })
       .catch((error) => {
+        setIsLoading(false);
         setErrMessage(errorMessage(error, "err_register") as string);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
       });
   };
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTerms, setModalTerms] = useState(false);
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsShowModal(false);
-    navigation.navigate("LoginScreen");
+    await navigation.goBack();
+    await navigation.navigate("LoginScreen");
   };
   const [hidePassword, setHidePassword] = useState(true);
+
   return (
     <SafeAreaView
       className=" h-full bg-white "
@@ -97,14 +99,15 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
       <KeyboardAwareScrollView testID="register_scroll_view">
         {isLoading && <Spinner visible={isLoading} />}
 
-        <ConfirmDialog
-          title={t("dialog.register.title") || ""}
-          description={t("dialog.register.description") || ""}
-          isVisible={isShowModal}
-          confirmButtonLabel={t("dialog.close") || ""}
-          onConfirm={() => handleConfirm()}
-        />
-
+        {isShowModal && (
+          <ConfirmDialog
+            title={t("dialog.register.title") || ""}
+            description={t("dialog.register.description") || ""}
+            isVisible={isShowModal}
+            confirmButtonLabel={t("dialog.close") || ""}
+            onConfirm={() => handleConfirm()}
+          />
+        )}
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">
@@ -290,13 +293,6 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             modalVisible={modalTerms}
             setModalVisible={setModalTerms}
           />
-          {/* <ConfirmDialog
-            title={t("dialog.register.title") || ""}
-            description={t("dialog.register.description") || ""}
-            isVisible={isShowModal}
-            confirmButtonLabel={t("dialog.close") || ""}
-            onConfirm={() => handleConfirm()}
-          /> */}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

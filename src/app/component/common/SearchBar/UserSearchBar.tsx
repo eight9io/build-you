@@ -21,53 +21,11 @@ const UserSearchBar = ({
   setSearchPhrase,
 }) => {
   const inputLength = useRef(new Animated.Value(SEARCH_FULL_WIDTH)).current;
-  const cancelPosition = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
 
   const handleFocus = () => {
     setFocused(true);
-
-    Animated.parallel([
-      Animated.timing(inputLength, {
-        toValue: SEARCH_SHRINK_WIDTH,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-      Animated.timing(cancelPosition, {
-        toValue: 16,
-        duration: 400,
-        useNativeDriver: false,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-    ]).start();
   };
 
-  const handleCancel = () => {
-    Keyboard.dismiss();
-    setSearchPhrase("");
-    setFocused(false);
-    Animated.parallel([
-      Animated.timing(inputLength, {
-        toValue: SEARCH_FULL_WIDTH,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-      Animated.timing(cancelPosition, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: false,
-      }),
-    ]).start();
-  };
   return (
     <View className="m-[15] w-[90%] flex-row items-center justify-start">
       <Animated.View
@@ -87,11 +45,12 @@ const UserSearchBar = ({
           style={{
             marginLeft: 10,
           }}
-          className="w-11/12 flex-1 pb-1 text-base"
+          className="w-11/12 flex-1 py-1"
           placeholder="Search"
           value={searchPhrase}
           onChangeText={setSearchPhrase}
           onFocus={handleFocus}
+          textAlignVertical="top"
         />
         {/* cross Icon, depending on whether the search bar is focused or not */}
         {focused && (
@@ -106,10 +65,6 @@ const UserSearchBar = ({
           />
         )}
       </Animated.View>
-      {/* cancel button, depending on whether the search bar is focused or not */}
-      {focused && (
-        <Button title="Cancel" color="#FF7B1C" onPress={handleCancel} />
-      )}
     </View>
   );
 };

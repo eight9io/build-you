@@ -1,4 +1,11 @@
-import { View, Text, SafeAreaView, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { FC, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -28,7 +35,6 @@ import { AxiosResponse } from "axios";
 import httpInstance from "../../../../utils/http";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 

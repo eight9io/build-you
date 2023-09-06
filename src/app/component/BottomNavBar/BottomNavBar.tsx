@@ -33,7 +33,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
 import { getNotifications } from "../../service/notification";
-import CreateChallengeScreenMain from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,6 +80,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
     (lastNotiId !== null &&
       newestNotiId !== null &&
       lastNotiId.toString() !== newestNotiId.toString());
+
 
   return (
     <Tab.Navigator
@@ -170,18 +170,21 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Create Challenge"
-        component={CreateChallengeScreenMain}
+        component={EmptyScreen}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            if (isCompany) navigation.navigate("CreateCompanyChallengeScreen");
+            else navigation.navigate("CreateChallengeScreen");
+          },
+        })}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
               className={clsx("flex flex-col items-center justify-center")}
               testID="bottom_nav_bar_create_challenge_btn"
             >
-              {focused ? (
-                <CreateFillSvg fill={"#FF7B1C"} />
-              ) : (
-                <CreateSvg fill={"#6C6E76"} />
-              )}
+              <CreateSvg fill={"#6C6E76"} />
               <Text
                 className={clsx(
                   "pt-1.5 text-xs font-semibold text-gray-bottomBar",

@@ -113,7 +113,6 @@ export default function ForgotPasswordModal({
       animationType="slide"
       visible={modalVisible}
       presentationStyle="pageSheet"
-      statusBarTranslucent={isLoading}
     >
       <View className="mx-1 h-full bg-white"
         testID="forgot_password_modal"

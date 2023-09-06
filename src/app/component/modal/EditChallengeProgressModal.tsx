@@ -36,11 +36,6 @@ export const EditChallengeProgressModal: FC<
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {
-    isVisible: isConfirmModalVisible,
-    openModal: openConfirmModal,
-    closeModal: closeConfirmModal,
-  } = useModal();
-  const {
     control,
     reset,
     handleSubmit,
@@ -68,8 +63,6 @@ export const EditChallengeProgressModal: FC<
         ...data,
       });
       if (res.status === 200) {
-        // openConfirmModal();
-
         handleCloseConfirmModal();
         GlobalToastController.showModal({
           message: t("edit_progress_modal.edit_success") as string,
@@ -84,15 +77,14 @@ export const EditChallengeProgressModal: FC<
   };
 
   const handleCloseConfirmModal = () => {
-    closeConfirmModal();
     onConfirm();
   };
+
   return (
     <Modal
       animationType="slide"
       presentationStyle="pageSheet"
       visible={isVisible}
-      statusBarTranslucent={isLoading}
     >
       <SafeAreaView className=" bg-white">
         {isLoading && <Spinner visible={isLoading} />}
@@ -143,17 +135,7 @@ export const EditChallengeProgressModal: FC<
             </View>
           ) : null}
         </View>
-        <ConfirmDialog
-          title={(!errorMessage ? t("success") : t("error")) || ""}
-          description={
-            (!errorMessage
-              ? t("edit_progress_modal.edit_success")
-              : t("errorMessage:500")) || ""
-          }
-          isVisible={isConfirmModalVisible}
-          onClosed={handleCloseConfirmModal}
-          closeButtonLabel={t("close") || ""}
-        />
+
       </SafeAreaView>
     </Modal>
   );

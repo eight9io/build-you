@@ -115,7 +115,6 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
     <Modal
       animationType="slide"
       presentationStyle="pageSheet"
-      statusBarTranslucent={isLoading}
       visible={visible}
     >
       <SafeAreaView className="flex-1">

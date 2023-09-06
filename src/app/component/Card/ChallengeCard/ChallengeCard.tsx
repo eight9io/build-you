@@ -5,7 +5,10 @@ import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 
 import { IChallenge, IChallengeOwner } from "../../../types/challenge";
-import { getChallengeStatusColor } from "../../../utils/common";
+import {
+  getChallengeStatusColor,
+  roundToDecimalOrWhole,
+} from "../../../utils/common";
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
@@ -157,7 +160,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             {ratedValue > 0 && (
               <View className={clsx("mr-4 flex flex-row items-center")}>
                 <Text className={clsx("mr-1 text-h6 font-semibold leading-6")}>
-                  {ratedValue.toFixed(1)}/{5}
+                  {roundToDecimalOrWhole(ratedValue)}/{5}
                 </Text>
                 <StarFillSvg width={18} height={18} />
               </View>

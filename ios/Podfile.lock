@@ -52,6 +52,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - ExpoRandom (13.1.2):
     - ExpoModulesCore
+  - ExpoSystemUI (2.2.1):
+    - ExpoModulesCore
   - ExpoVideoThumbnails (7.2.1):
     - ExpoModulesCore
   - EXSharing (11.2.2):
@@ -604,6 +606,7 @@ DEPENDENCIES:
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoRandom (from `../node_modules/expo-random/ios`)
+  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - ExpoVideoThumbnails (from `../node_modules/expo-video-thumbnails/ios`)
   - EXSharing (from `../node_modules/expo-sharing/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -731,6 +734,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoRandom:
     :path: "../node_modules/expo-random/ios"
+  ExpoSystemUI:
+    :path: "../node_modules/expo-system-ui/ios"
   ExpoVideoThumbnails:
     :path: "../node_modules/expo-video-thumbnails/ios"
   EXSharing:
@@ -868,6 +873,7 @@ SPEC CHECKSUMS:
   ExpoKeepAwake: 69f5f627670d62318410392d03e0b5db0f85759a
   ExpoModulesCore: 653958063a301098b541ae4dfed1ac0b98db607b
   ExpoRandom: 2b8cb73f02f534b083a1f79b10b89ca0f0111b55
+  ExpoSystemUI: 0be5173ee2a7c01e9abc44f56d879a1eaaa16527
   ExpoVideoThumbnails: 0021303b614a89fcc5df8b59d9d37ddf14a7d4cf
   EXSharing: 09839ace249f61bfa13c50c6a28256c31d260355
   EXSplashScreen: 0e0a9ba0cf7553094e93213099bd7b42e6e237e9
@@ -951,4 +957,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a8ff88e42fd13fdab441a53d9c9a5461d9ed7e52
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.12.0

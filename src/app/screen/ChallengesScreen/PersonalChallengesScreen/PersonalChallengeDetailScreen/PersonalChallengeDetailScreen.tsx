@@ -198,8 +198,8 @@ export const RightPersonalChallengeDetailOptions: FC<
         </View>
 
         {shouldRenderEditAndDeleteBtns &&
-          onEditChallengeBtnPress &&
-          setIsDeleteChallengeDialogVisible && (
+          !!onEditChallengeBtnPress &&
+          !!setIsDeleteChallengeDialogVisible && (
             <PopUpMenu
               iconColor="#FF7B1D"
               isDisabled={!!isChallengeCompleted}
@@ -312,7 +312,7 @@ const PersonalChallengeDetailScreen = ({
       });
   };
   return (
-    <SafeAreaView className="pt-3">
+    <SafeAreaView>
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}

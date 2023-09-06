@@ -251,7 +251,7 @@ const CompanyChallengeDetailScreen = ({
     httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
       setChallengeData(res.data);
     });
-  }, [isNewProgressAdded]);
+  }, [isNewProgressAdded, shouldRefresh]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);

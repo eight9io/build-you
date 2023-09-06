@@ -28,6 +28,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
 import StarFillSvg from "../../../../common/svg/star-fill.svg";
 import { useChallengeUpdateStore } from "../../../../store/challenge-update-store";
+import Spinner from "react-native-loading-spinner-overlay";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -303,7 +304,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   return (
     <View className="h-full flex-1">
-      {progressIndexToUpdate > -1 && (
+      {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal && (
         <EditChallengeProgressModal
           progress={localProgressData[progressIndexToUpdate]}
           isVisible={isShowEditModal}
@@ -311,7 +312,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           onConfirm={handleConfirmEditChallengeProgress}
         />
       )}
-      {progressLoading && <SkeletonLoadingCommon />}
+      {progressLoading && <Spinner />}
 
       {!progressLoading && (
         <FlatList

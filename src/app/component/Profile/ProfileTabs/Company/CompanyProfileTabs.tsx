@@ -16,6 +16,8 @@ import {
 } from "../../../../service/profile";
 
 const CompanyProfileTabs = () => {
+  const [currentTab, setCurrentTab] = useState<number>(0);
+
   const [isFollowerRefreshing, setIsFollowerRefreshing] =
     useState<boolean>(false);
   const [isFollowingRefreshing, setIsFollowingRefreshing] =
@@ -29,19 +31,27 @@ const CompanyProfileTabs = () => {
 
   const getFollowerList = async () => {
     setIsFollowerRefreshing(true);
-    const { data: followerList } = await serviceGetListFollower(
-      userProfile?.id
-    );
-    setFollowerList(followerList);
+    try {
+      const { data: followerList } = await serviceGetListFollower(
+        userProfile?.id
+      );
+      setFollowerList(followerList);
+    } catch (error) {
+      console.log("getFollowerList", error);
+    }
     setIsFollowerRefreshing(false);
   };
 
   const getFollowingList = async () => {
     setIsFollowingRefreshing(true);
-    const { data: followingList } = await serviceGetListFollowing(
-      userProfile?.id
-    );
-    setFollowingList(followingList);
+    try {
+      const { data: followingList } = await serviceGetListFollowing(
+        userProfile?.id
+      );
+      setFollowingList(followingList);
+    } catch (error) {
+      console.log("fetchFollowingList", error);
+    }
     setIsFollowingRefreshing(false);
   };
 
@@ -66,6 +76,15 @@ const CompanyProfileTabs = () => {
     t("profile_screen_tabs.employees"),
   ];
 
+  useEffect(() => {
+    if (currentTab === 1) {
+      getFollowerList();
+    }
+    if (currentTab === 2) {
+      getFollowingList();
+    }
+  }, [currentTab]);
+
   return (
     <View className="flex-1 bg-gray-50">
       <TabViewFlatlist
@@ -76,7 +95,7 @@ const CompanyProfileTabs = () => {
             followers={followerList}
             isRefreshing={isFollowerRefreshing}
             getFollowerList={getFollowerList}
-            key="2"
+            key="1"
           />,
           <Following
             following={followingList}
@@ -88,6 +107,7 @@ const CompanyProfileTabs = () => {
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark"
+        getCurrentTab={(index) => setCurrentTab(index)}
       />
     </View>
   );

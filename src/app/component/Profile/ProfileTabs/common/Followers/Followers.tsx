@@ -57,7 +57,8 @@ const Followers: FC<IFollowersProps> = ({
                   )}
                 </View>
                 <Text className="flex w-full flex-row flex-wrap gap-1 pr-[40px]  text-base font-semibold text-basic-black">
-                  {item.name}{item.surname}
+                  {item.name}
+                  {item.surname}
                 </Text>
               </TouchableOpacity>
             );
@@ -68,11 +69,22 @@ const Followers: FC<IFollowersProps> = ({
         />
       )}
       {followers.length == 0 && (
-        <View className=" h-full flex-1 items-center justify-center">
-          <Empty />
-          <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
-            {t("empty_followers")}
-          </Text>
+        <View className="mt-2 h-full flex-1 items-center justify-center">
+          <FlatList
+            data={[]}
+            renderItem={() => <></>}
+            showsVerticalScrollIndicator={true}
+            ListFooterComponent={
+              <View className=" justify-cente mt-6 items-center ">
+                <Empty />
+                <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
+                  {t("empty_followers")}
+                </Text>
+              </View>
+            }
+            onRefresh={getFollowerList}
+            refreshing={isRefreshing}
+          />
         </View>
       )}
     </View>

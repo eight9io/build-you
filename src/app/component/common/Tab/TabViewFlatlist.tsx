@@ -14,6 +14,7 @@ interface ITabViewProps {
   children: ReactNode[];
   activeTabClassName?: string;
   defaultTabClassName?: string;
+  getCurrentTab?: (index: number) => void;
 }
 
 const TabTitle: FC<ITabTitleProps> = ({
@@ -40,8 +41,14 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
   children,
   activeTabClassName,
   defaultTabClassName,
+  getCurrentTab,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const onTabChange = (index: number) => {
+    setActiveTabIndex(index);
+    getCurrentTab && getCurrentTab(index);
+  };
 
   return (
     <View className="h-full flex-1 ">
@@ -51,10 +58,7 @@ export const TabViewFlatlist: FC<ITabViewProps> = ({
           showsHorizontalScrollIndicator={false}
           data={titles}
           renderItem={({ item, index }) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => setActiveTabIndex(index)}
-            >
+            <TouchableOpacity key={index} onPress={() => onTabChange(index)}>
               <TabTitle
                 title={item}
                 isActive={index === activeTabIndex}

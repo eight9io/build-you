@@ -17,6 +17,7 @@ import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
+import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -92,6 +93,22 @@ const PersonalProfileScreen = () => {
       <ProfileStack.Screen
         name="OtherUserProfileChallengeDetailsScreen"
         component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <ProfileStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => "",

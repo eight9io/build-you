@@ -70,6 +70,7 @@ export const addNotificationListener = (
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
+          console.log(event.detail.notification);
           await handleTapOnIncomingNotification(event.detail.notification);
           if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count

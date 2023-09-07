@@ -231,7 +231,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
         GlobalToastController.showModal({
-          message: error?.response?.data?.message || t("dialog.err_max_join"),
+          message:
+            t("dialog.err_max_join") ||
+            "Sorry! You can not join this challenge, it has reached the maximum number of participants.",
         });
         return;
       }

@@ -18,7 +18,10 @@ import ErrorText from "../../common/ErrorText";
 import { ISocialLoginForm } from "../../../types/auth";
 import { LOGIN_TYPE } from "../../../common/enum";
 import { useAuthStore } from "../../../store/auth-store";
-import { checkIsCompleteProfileOrCompany, useUserProfileStore } from "../../../store/user-store";
+import {
+  checkIsCompleteProfileOrCompany,
+  useUserProfileStore,
+} from "../../../store/user-store";
 import { setupInterceptor } from "../../../utils/refreshToken.util";
 import { errorMessage } from "../../../utils/statusCode";
 import { RootStackParamList } from "../../../navigation/navigation.type";
@@ -33,7 +36,13 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
   const { t } = useTranslation();
   const [errMessage, setErrMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
+  const {
+    asyncLogin,
+    getRefreshToken,
+    logout,
+    setAccessToken,
+    setRefreshToken,
+  } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
 
@@ -44,11 +53,15 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);
-      setupInterceptor(getRefreshToken, () => {
-        logout();
-        userProfileStoreOnLogout();
-      });
-
+      setupInterceptor(
+        getRefreshToken,
+        () => {
+          logout();
+          userProfileStoreOnLogout();
+        },
+        setAccessToken,
+        setRefreshToken
+      );
       const { data: profile } = await getUserProfileAsync();
       setIsLoading(false); // Important to not crashing app with duplicate modal
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
@@ -78,7 +91,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
   const closeModal = () => {
     setModalVisible(false);
     setErrMessage("");
-  }
+  };
 
   return (
     <Modal
@@ -86,9 +99,12 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       visible={modalVisible}
       presentationStyle="pageSheet"
       style={{ borderRadius: 10 }}
-
     >
-      <View className=" bg-white " style={{ borderRadius: 10 }} testID="register_modal">
+      <View
+        className=" bg-white "
+        style={{ borderRadius: 10 }}
+        testID="register_modal"
+      >
         <View className="absolute z-10 my-6 ml-4 ">
           <NavButton
             onPress={() => {

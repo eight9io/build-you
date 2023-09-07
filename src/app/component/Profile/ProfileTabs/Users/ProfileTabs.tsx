@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
 
 import clsx from "clsx";
-import { useFollowingListStore, useUserProfileStore } from "../../../../store/user-store";
+import {
+  useFollowingListStore,
+  useUserProfileStore,
+} from "../../../../store/user-store";
 
 import Biography from "./Biography/Biography";
 import Skills from "./Skills";
@@ -16,6 +19,7 @@ import {
 } from "../../../../service/profile";
 
 const ProfileTabs: FC = () => {
+  const [currentTab, setCurrentTab] = useState<number>(0);
   const [isFollowerRefreshing, setIsFollowerRefreshing] =
     useState<boolean>(false);
   const [isFollowingRefreshing, setIsFollowingRefreshing] =
@@ -30,19 +34,27 @@ const ProfileTabs: FC = () => {
 
   const getFollowerList = async () => {
     setIsFollowerRefreshing(true);
-    const { data: followerList } = await serviceGetListFollower(
-      userProfile?.id
-    );
-    setFollowerList(followerList);
+    try {
+      const { data: followerList } = await serviceGetListFollower(
+        userProfile?.id
+      );
+      setFollowerList(followerList);
+    } catch (error) {
+      console.log("getFollowerList", error);
+    }
     setIsFollowerRefreshing(false);
   };
 
   const fetchFollowingList = async () => {
     setIsFollowingRefreshing(true);
-    const { data: followingList } = await serviceGetListFollowing(
-      userProfile?.id
-    );
-    setFollowingList(followingList);
+    try {
+      const { data: followingList } = await serviceGetListFollowing(
+        userProfile?.id
+      );
+      setFollowingList(followingList);
+    } catch (error) {
+      console.log("fetchFollowingList", error);
+    }
     setIsFollowingRefreshing(false);
   };
 
@@ -51,6 +63,15 @@ const ProfileTabs: FC = () => {
     getFollowerList();
     getFollowingList();
   }, [userProfile?.id]);
+
+  useEffect(() => {
+    if (currentTab === 2) {
+      getFollowerList();
+    }
+    if (currentTab === 3) {
+      fetchFollowingList();
+    }
+  }, [currentTab]);
 
   const titles = [
     t("profile_screen_tabs.biography"),
@@ -81,6 +102,7 @@ const ProfileTabs: FC = () => {
         ]}
         activeTabClassName=""
         defaultTabClassName="text-gray-dark "
+        getCurrentTab={(index) => setCurrentTab(index)}
       />
     </View>
   );

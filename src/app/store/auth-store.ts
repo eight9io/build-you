@@ -25,6 +25,7 @@ import { updateNotificationToken } from "../service/notification";
 import { useNotificationStore } from "./notification-store";
 import NavigationService from "../utils/navigationService";
 import httpInstance from "../utils/http";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export interface LoginStore {
   accessToken: string | null;
@@ -167,6 +168,16 @@ export const useAuthStore = create<LoginStore>()(
         delete httpInstance.defaults.headers.common["Authorization"];
 
         await AsyncStorage.removeItem("user_id");
+
+        const googleSignOut = async () => {
+          try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        googleSignOut();
       },
       setHasHydrated: () => {
         set({

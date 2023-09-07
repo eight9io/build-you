@@ -20,6 +20,7 @@ import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
 
 import { useGetListEmployee } from "../../../hooks/useGetCompany";
+import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -113,6 +114,22 @@ const CompanyProfileScreen = () => {
       <CompanyStack.Screen
         name="OtherUserProfileChallengeDetailsScreen"
         component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CompanyStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
         options={({ navigation }) => ({
           headerShown: true,
           headerTitle: () => "",

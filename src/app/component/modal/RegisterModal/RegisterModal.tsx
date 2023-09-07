@@ -39,9 +39,9 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
   const {
     asyncLogin,
     getRefreshToken,
+    logout,
     setAccessToken,
     setRefreshToken,
-    logout,
   } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
@@ -62,7 +62,6 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
         setAccessToken,
         setRefreshToken
       );
-
       const { data: profile } = await getUserProfileAsync();
       setIsLoading(false); // Important to not crashing app with duplicate modal
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);

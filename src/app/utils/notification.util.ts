@@ -17,6 +17,8 @@ import {
 } from "../types/notification";
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
+import RNRestart from "react-native-restart";
+
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
@@ -34,7 +36,6 @@ export const registerForPushNotificationsAsync = async () => {
     await messaging().registerDeviceForRemoteMessages();
     // Get the device push token
     const token = await messaging().getToken();
-    console.log(token);
 
     return token;
   } else {
@@ -51,6 +52,12 @@ export const unregisterForPushNotificationsAsync = async () => {
   }
   const token = await messaging().getToken();
   await messaging().unregisterDeviceForRemoteMessages();
+  await messaging()
+    .deleteToken()
+    .then(() => {
+      RNRestart.Restart();
+    });
+
   return token;
 };
 
@@ -141,8 +148,8 @@ export const handleTapOnIncomingNotification = async (
           };
           // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
           if (
-            currentRouteParams && currentRouteParams.progressId ===
-            payload.progressId
+            currentRouteParams &&
+            currentRouteParams.progressId === payload.progressId
           )
             return;
           const pushAction = StackActions.push("ProgressCommentScreen", {

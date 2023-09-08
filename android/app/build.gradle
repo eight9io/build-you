@@ -113,7 +113,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'it.buildyou.buildyou'
+    namespace 'com.buildyou.buildyou'
     defaultConfig {
         applicationId 'com.buildyou.buildyou'
         minSdkVersion rootProject.ext.minSdkVersion

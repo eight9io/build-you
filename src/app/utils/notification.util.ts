@@ -34,17 +34,16 @@ export const registerForPushNotificationsAsync = async (
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
-  const userId = jwt_decode<IToken>(accessToken).sub;
-  console.log("userId: ", userId);
-
   const settings = await notifee.requestPermission();
   if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
     await messaging().registerDeviceForRemoteMessages();
     // Get the device push token
-    const token = await messaging().getToken({
-      appName: "build-you",
-      senderId: userId,
-    });
+    // const token = await messaging().getToken({
+    //   appName: "build-you",
+    //   senderId: "288098023879",
+    // });
+    const token = await messaging().getToken();
+    console.log("token: ", token);
 
     return token;
   } else {
@@ -68,7 +67,7 @@ export const unregisterForPushNotificationsAsync = async (
   await messaging()
     .deleteToken({
       appName: "build-you",
-      senderId: userId,
+      senderId: "288098023879",
     })
     .then(() => {
       RNRestart.Restart();

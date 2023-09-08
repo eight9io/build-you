@@ -57,8 +57,8 @@ const Followers: FC<IFollowersProps> = ({
                   )}
                 </View>
                 <Text className="flex w-full flex-row flex-wrap gap-1 pr-[40px]  text-base font-semibold text-basic-black">
-                  {item.name}
-                  {item.surname}
+                  {item.name + " " + item.surname}
+
                 </Text>
               </TouchableOpacity>
             );

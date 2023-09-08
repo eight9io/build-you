@@ -14,13 +14,14 @@ import Spinner from "react-native-loading-spinner-overlay";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { CommonActions } from "@react-navigation/native";
+import jwt_decode from "jwt-decode";
 
 import ErrorText from "../../component/common/ErrorText";
 import Button from "../../component/common/Buttons/Button";
 import TextInput from "../../component/common/Inputs/TextInput";
 import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
-import { ISocialLoginForm, LoginForm } from "../../types/auth";
+import { ISocialLoginForm, IToken, LoginForm } from "../../types/auth";
 import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { errorMessage } from "../../utils/statusCode";
 import { useAuthStore } from "../../store/auth-store";
@@ -85,10 +86,12 @@ export default function Login() {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);
+      const currentAccessToken = getAccessToken();
+      const decodeUserId = jwt_decode<IToken>(currentAccessToken).sub;
       setupInterceptor(
         getRefreshToken,
         () => {
-          logout();
+          logout(decodeUserId);
           userProfileStoreOnLogout();
         },
         setAccessToken,

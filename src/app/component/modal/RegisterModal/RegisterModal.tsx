@@ -6,6 +6,7 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
+import jwt_decode from "jwt-decode";
 
 import { useTranslation } from "react-i18next";
 import NavButton from "../../common/Buttons/NavButton";
@@ -15,7 +16,7 @@ import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
 import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
 import Spinner from "react-native-loading-spinner-overlay";
 import ErrorText from "../../common/ErrorText";
-import { ISocialLoginForm } from "../../../types/auth";
+import { ISocialLoginForm, IToken } from "../../../types/auth";
 import { LOGIN_TYPE } from "../../../common/enum";
 import { useAuthStore } from "../../../store/auth-store";
 import {
@@ -41,6 +42,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
     getRefreshToken,
     logout,
     setAccessToken,
+    getAccessToken,
     setRefreshToken,
   } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
@@ -53,10 +55,12 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);
+      const currentAccessToken = getAccessToken();
+      const decodeUserId = jwt_decode<IToken>(currentAccessToken).sub;
       setupInterceptor(
         getRefreshToken,
         () => {
-          logout();
+          logout(decodeUserId);
           userProfileStoreOnLogout();
         },
         setAccessToken,

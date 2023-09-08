@@ -21,3 +21,7 @@ export const setNotificationIsRead = (notificationIds: string[]) => {
     id: notificationIds,
   });
 };
+
+export const deletePushNotificatoinToken = async (token: string) => {
+  return await httpInstance.delete(`/notification/push/delete/${token}`);
+};

@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
+import messaging from "@react-native-firebase/messaging";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
@@ -39,14 +40,17 @@ export type SetingsScreenNavigationProp = NativeStackNavigationProp<
 const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const [isShowLogoutModal, setIsShowLogoutModal] = useState<boolean>(false);
   const { logout } = useAuthStore();
-  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
+  const { onLogout: userProfileStoreOnLogout, getUserProfile } =
+    useUserProfileStore();
+
+  const currentUser = getUserProfile();
 
   const { t } = useTranslation();
 
   const handleLogout = async () => {
     setIsShowLogoutModal(false);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -54,7 +58,8 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         })
       );
       setLastNotiIdToLocalStorage("");
-      logout();
+      logout(currentUser.id);
+
       userProfileStoreOnLogout();
     }, 500);
   };

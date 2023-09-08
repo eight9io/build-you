@@ -3,6 +3,8 @@ import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import { persist, createJSONStorage } from "zustand/middleware";
+import messaging from "@react-native-firebase/messaging";
+
 import { ILoginResponse, ISocialLoginForm, LoginForm } from "../types/auth";
 import {
   appleLogin,
@@ -20,7 +22,10 @@ import {
   NOTIFICATION_TOKEN_STATUS,
   LOGIN_TYPE,
 } from "../common/enum";
-import { updateNotificationToken } from "../service/notification";
+import {
+  updateNotificationToken,
+  deletePushNotificatoinToken,
+} from "../service/notification";
 import { useNotificationStore } from "./notification-store";
 import httpInstance from "../utils/http";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -42,7 +47,7 @@ export interface LoginStore {
     type: LOGIN_TYPE
   ) => Promise<AxiosResponse<ILoginResponse>>;
 
-  logout: () => void;
+  logout: (currentUserI?: string) => void;
 }
 
 const watchLogin = (config) => (set, get, api) =>
@@ -54,7 +59,7 @@ const watchLogin = (config) => (set, get, api) =>
           set(args);
           return;
         }
-        registerForPushNotificationsAsync()
+        registerForPushNotificationsAsync(args.accessToken)
           .then((token) => {
             // const navigation = NavigationService.getContainer();
             // addNotificationListener(navigation, useNotificationStore);
@@ -72,7 +77,7 @@ const watchLogin = (config) => (set, get, api) =>
           });
       }
       if (args.accessToken === null) {
-        unregisterForPushNotificationsAsync()
+        unregisterForPushNotificationsAsync(args.accessToken)
           .then((token) => {
             console.log("push token revoked", token);
             updateNotificationToken({
@@ -157,15 +162,21 @@ export const useAuthStore = create<LoginStore>()(
         return res;
       },
 
-      logout: async () => {
+      logout: async (currentUserId: string) => {
+        if (currentUserId) {
+          const messagingToken = await messaging().getToken({
+            appName: "build-you",
+            senderId: currentUserId,
+          });
+          await deletePushNotificatoinToken(messagingToken);
+        }
+
         set({
           accessToken: null,
           refreshToken: null,
         });
         useNotificationStore.getState().setListenerIsReady(false);
         delete httpInstance.defaults.headers.common["Authorization"];
-
-        await AsyncStorage.removeItem("user_id");
 
         const googleSignOut = async () => {
           try {

@@ -23,21 +23,29 @@ import RNRestart from "react-native-restart";
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
+import jwt_decode from "jwt-decode";
+import { IToken } from "../types/auth";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
-
-export const registerForPushNotificationsAsync = async () => {
+export const registerForPushNotificationsAsync = async (
+  accessToken: string
+) => {
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
+  const userId = jwt_decode<IToken>(accessToken).sub;
+  console.log("userId: ", userId);
 
   const settings = await notifee.requestPermission();
   if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
     await messaging().registerDeviceForRemoteMessages();
     // Get the device push token
-    const token = await messaging().getToken();
+    const token = await messaging().getToken({
+      appName: "build-you",
+      senderId: userId,
+    });
 
     return token;
   } else {
@@ -47,17 +55,21 @@ export const registerForPushNotificationsAsync = async () => {
   }
 };
 
-export const unregisterForPushNotificationsAsync = async () => {
+export const unregisterForPushNotificationsAsync = async (
+  accessToken: string
+) => {
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
   const token = await messaging().getToken();
+  const userId = jwt_decode<IToken>(accessToken).sub;
+
   await messaging().unregisterDeviceForRemoteMessages();
   await messaging()
     .deleteToken({
       appName: "build-you",
-      senderId: "",
+      senderId: userId,
     })
     .then(() => {
       RNRestart.Restart();

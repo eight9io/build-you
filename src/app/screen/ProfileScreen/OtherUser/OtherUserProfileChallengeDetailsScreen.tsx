@@ -1,7 +1,7 @@
 import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from "jwt-decode";
 
 import { IChallenge } from "../../../types/challenge";
 import { RootStackParamList } from "../../../navigation/navigation.type";
@@ -33,6 +33,8 @@ import { getChallengeStatusColor } from "../../../utils/common";
 import { AxiosError } from "axios";
 import debounce from "lodash.debounce";
 import { onShareChallengeLink } from "../../../utils/shareLink.uitl";
+import { useAuthStore } from "../../../store/auth-store";
+import { IToken } from "../../../types/auth";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -71,6 +73,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     useState<boolean | null>(null);
   const [shouldRefesh, setShouldRefresh] = useState<boolean>(true);
 
+  const { getAccessToken } = useAuthStore();
+
   const { t } = useTranslation();
 
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
@@ -88,8 +92,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const currentUser = getUserProfile();
 
   const getLocalId = async () => {
-    const id = await AsyncStorage.getItem("user_id");
-    return id;
+    const accessToken = getAccessToken();
+    const userId = jwt_decode<IToken>(accessToken);
+    return userId;
   };
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

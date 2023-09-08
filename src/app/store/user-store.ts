@@ -33,7 +33,6 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
   getUserProfileAsync: async () => {
     try {
       const r = await serviceGetMe();
-      await AsyncStorage.setItem("user_id", r.data.id);
       set({
         userProfile: r.data,
       });

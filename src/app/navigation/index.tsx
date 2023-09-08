@@ -11,6 +11,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import jwt_decode from "jwt-decode";
 
 import { RootStackParamList } from "./navigation.type";
 
@@ -54,6 +55,7 @@ import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalC
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
 import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";
 import CartScreen from "../screen/ChallengesScreen/CartScreen";
+import { IToken } from "../types/auth";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -99,10 +101,12 @@ export const RootNavigation = () => {
           logout();
           userProfileStoreOnLogout();
         }
+        const currentAccessToken = getAccessToken();
+        const decodeUserId = jwt_decode<IToken>(currentAccessToken).sub;
         setupInterceptor(
           getRefreshToken,
           () => {
-            logout();
+            logout(decodeUserId);
             userProfileStoreOnLogout();
           },
           setAccessToken,

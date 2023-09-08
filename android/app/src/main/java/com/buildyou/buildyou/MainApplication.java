@@ -1,4 +1,4 @@
-package it.buildyou.buildyou;
+package com.buildyou.buildyou;
 
 import android.app.Application;
 import android.content.res.Configuration;

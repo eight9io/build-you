@@ -72,8 +72,8 @@ const watchLogin = (config) => (set, get, api) =>
                   : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
             });
           })
-          .catch(() => {
-            console.log("Ignore Push Notification");
+          .catch((e) => {
+            console.log("Ignore Push Notification", e);
           });
       }
       if (args.accessToken === null) {
@@ -150,31 +150,32 @@ export const useAuthStore = create<LoginStore>()(
           throw error;
         }
         setAuthTokenToHttpHeader(res.data.authorization);
+        set({
+          accessToken: res.data.authorization,
+          refreshToken: res.data.refresh,
+        });
+        // setTimeout(
+        //   () =>
 
-        setTimeout(
-          () =>
-            set({
-              accessToken: res.data.authorization,
-              refreshToken: res.data.refresh,
-            }),
-          300
-        ); // Timeout used to wait for loading modal to close before navigate
+        //   300
+        // ); // Timeout used to wait for loading modal to close before navigate
         return res;
       },
 
       logout: async (currentUserId: string) => {
-        if (currentUserId) {
-          const messagingToken = await messaging().getToken({
-            appName: "build-you",
-            senderId: currentUserId,
-          });
-          await deletePushNotificatoinToken(messagingToken);
-        }
-
         set({
           accessToken: null,
           refreshToken: null,
         });
+        if (currentUserId) {
+          // const messagingToken = await messaging().getToken({
+          //   appName: "build-you",
+          //   senderId: "288098023879",
+          // });
+          const messagingToken = await messaging().getToken();
+
+          await deletePushNotificatoinToken(messagingToken);
+        }
         useNotificationStore.getState().setListenerIsReady(false);
         delete httpInstance.defaults.headers.common["Authorization"];
 

@@ -33,9 +33,15 @@ export interface IUserData {
   webSite?: string;
   pIva?: string;
   loginType?: ILoginType;
+  isVerified?: boolean;
 }
 
-export type ILoginType = "standard" | "google" | "facebook" | "linkedin" | "apple";
+export type ILoginType =
+  | "standard"
+  | "google"
+  | "facebook"
+  | "linkedin"
+  | "apple";
 
 export interface IHardSkillProps {
   id: string;

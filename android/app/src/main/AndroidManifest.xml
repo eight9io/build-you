@@ -33,6 +33,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="it.buildyou.buildyou"/>
         <data android:scheme="it.buildyou.buildyou"/>
+        <data android:scheme="com.buildyou.buildyou"/>
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>

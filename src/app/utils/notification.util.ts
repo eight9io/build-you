@@ -55,7 +55,10 @@ export const unregisterForPushNotificationsAsync = async () => {
   const token = await messaging().getToken();
   await messaging().unregisterDeviceForRemoteMessages();
   await messaging()
-    .deleteToken()
+    .deleteToken({
+      appName: "build-you",
+      senderId: "",
+    })
     .then(() => {
       RNRestart.Restart();
     });

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "288098023879-9spmqgolc030qf9gato0i1k8dookktg1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buildyou.buildyou",
+            "certificate_hash": "01043873c14eac070c3c1825d146836391006f6f"
+          }
+        },
+        {
           "client_id": "288098023879-dad08l50q4uv8bp1d0sdt38fsc368itp.apps.googleusercontent.com",
           "client_type": 3
         }

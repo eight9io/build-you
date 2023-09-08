@@ -28,11 +28,13 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { setupInterceptor } from "../../utils/refreshToken.util";
 import {
+  checkIsAccountVerified,
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../../store/user-store";
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
 import { LOGIN_TYPE } from "../../common/enum";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -46,6 +48,8 @@ export default function Login() {
   }, []);
   const { t } = useTranslation(["index", "errorMessage"]);
   const [errMessage, setErrMessage] = useState("");
+  const [isShowVerifiedErrorModal, setIsShowVerifiedErrorModal] =
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
     control,
@@ -60,7 +64,13 @@ export default function Login() {
     reValidateMode: "onChange",
     mode: "onSubmit",
   });
-  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
+  const {
+    asyncLogin,
+    getRefreshToken,
+    logout,
+    getAccessToken,
+    setAccessToken,
+  } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
 
@@ -75,14 +85,26 @@ export default function Login() {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);
-      setupInterceptor(getRefreshToken, () => {
-        logout();
-        userProfileStoreOnLogout();
-      });
+      setupInterceptor(
+        getRefreshToken,
+        () => {
+          logout();
+          userProfileStoreOnLogout();
+        },
+        setAccessToken,
+        getAccessToken
+      );
 
       const { data: profile } = await getUserProfileAsync();
       setIsLoading(false); // Important to not crashing app with duplicate modal
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
+      const isAccountVerified = checkIsAccountVerified(profile);
+
+      if (!isAccountVerified) {
+        setIsShowVerifiedErrorModal(true);
+        return;
+      }
+
       const navigateToRoute = isCompleteProfile
         ? "HomeScreen"
         : "CompleteProfileScreen";
@@ -94,18 +116,38 @@ export default function Login() {
         })
       );
     } catch (error) {
+      if (error.response?.status === 401) {
+        setIsShowVerifiedErrorModal(true);
+        setIsLoading(false);
+        return;
+      }
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }
   };
 
   const [hidePassword, setHidePassword] = useState(true);
+
+  const handleConfirmError = async () => {
+    setIsShowVerifiedErrorModal(false);
+  };
+
   return (
     <SafeAreaView
       className="relative h-full flex-1 bg-white"
       testID="login_with_email_screen"
     >
       {isLoading && <Spinner visible={isLoading} />}
+
+      {isShowVerifiedErrorModal && (
+        <ConfirmDialog
+          title={t("dialog.register.title") || ""}
+          description={t("dialog.register.description") || ""}
+          isVisible={isShowVerifiedErrorModal}
+          confirmButtonLabel={t("dialog.close") || ""}
+          onConfirm={() => handleConfirmError()}
+        />
+      )}
       <View className="relative h-full bg-white ">
         <KeyboardAwareScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">

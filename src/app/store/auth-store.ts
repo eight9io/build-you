@@ -13,7 +13,6 @@ import {
   serviceLogin,
 } from "../service/auth";
 import {
-  addNotificationListener,
   registerForPushNotificationsAsync,
   unregisterForPushNotificationsAsync,
 } from "../utils/notification.util";
@@ -60,10 +59,8 @@ const watchLogin = (config) => (set, get, api) =>
           set(args);
           return;
         }
-        registerForPushNotificationsAsync(args.accessToken)
+        registerForPushNotificationsAsync()
           .then((token) => {
-            // const navigation = NavigationService.getContainer();
-            // addNotificationListener(navigation, useNotificationStore);
             updateNotificationToken({
               notificationToken: token,
               status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
@@ -78,9 +75,8 @@ const watchLogin = (config) => (set, get, api) =>
           });
       }
       if (args.accessToken === null) {
-        unregisterForPushNotificationsAsync(args.accessToken)
+        unregisterForPushNotificationsAsync()
           .then((token) => {
-            console.log("push token revoked", token);
             updateNotificationToken({
               notificationToken: token,
               status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
@@ -147,7 +143,6 @@ export const useAuthStore = create<LoginStore>()(
               break;
           }
         } catch (error) {
-          console.log("error: ", error);
           throw error;
         }
         setAuthTokenToHttpHeader(res.data.authorization);

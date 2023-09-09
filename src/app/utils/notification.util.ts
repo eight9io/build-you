@@ -17,33 +17,29 @@ import {
 } from "../types/notification";
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
-import RNRestart from "react-native-restart";
 
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
-import jwt_decode from "jwt-decode";
-import { IToken } from "../types/auth";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
-export const registerForPushNotificationsAsync = async (
-  accessToken: string
-) => {
+export const registerForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
+
   const settings = await notifee.requestPermission();
   if (settings.authorizationStatus === AuthorizationStatus.AUTHORIZED) {
-    await messaging().registerDeviceForRemoteMessages();
-    // Get the device push token
-    // const token = await messaging().getToken({
-    //   appName: "build-you",
-    //   senderId: "288098023879",
-    // });
+    try {
+      await messaging().registerDeviceForRemoteMessages();
+    } catch (e) {
+      console.log(e);
+    }
+
     const token = await messaging().getToken();
-    console.log("token: ", token);
+    console.log("Token --->:", token);
 
     return token;
   } else {
@@ -53,25 +49,15 @@ export const registerForPushNotificationsAsync = async (
   }
 };
 
-export const unregisterForPushNotificationsAsync = async (
-  accessToken: string
-) => {
+export const unregisterForPushNotificationsAsync = async () => {
   if (!Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
   const token = await messaging().getToken();
-  const userId = jwt_decode<IToken>(accessToken).sub;
 
   await messaging().unregisterDeviceForRemoteMessages();
-  await messaging()
-    .deleteToken({
-      appName: "build-you",
-      senderId: "288098023879",
-    })
-    .then(() => {
-      RNRestart.Restart();
-    });
+  await messaging().deleteToken();
 
   return token;
 };
@@ -85,7 +71,6 @@ export const addNotificationListener = (
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
-          console.log(event.detail.notification);
           await handleTapOnIncomingNotification(event.detail.notification);
           if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count

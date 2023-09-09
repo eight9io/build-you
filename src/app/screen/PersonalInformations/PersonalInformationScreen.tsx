@@ -65,7 +65,6 @@ export default function PersonalInformationScreen({ navigation }: any) {
     setIsLoading(true);
     try {
       const login = await asyncLogin(payload, type);
-      console.log("login", login);
       const res = await serviceDeleteAccount(userData?.id);
       if (res.status == 200) {
         handleLogOut();

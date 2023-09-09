@@ -1,4 +1,3 @@
-
 export interface LoginForm {
   user: string;
   password: string;
@@ -26,9 +25,11 @@ export interface ILoginResponse {
 }
 
 export interface IToken {
+  id: string;
+  email: string;
+  role: string;
   exp: number;
   iat: number;
-  sub: string;
 }
 
 export interface ISocialLoginForm {

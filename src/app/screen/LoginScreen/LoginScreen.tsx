@@ -87,7 +87,7 @@ export default function Login() {
     try {
       const t = await asyncLogin(payload, type);
       const currentAccessToken = getAccessToken();
-      const decodeUserId = jwt_decode<IToken>(currentAccessToken).sub;
+      const decodeUserId = jwt_decode<IToken>(currentAccessToken).id;
       setupInterceptor(
         getRefreshToken,
         () => {

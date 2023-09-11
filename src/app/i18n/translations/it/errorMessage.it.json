@@ -1,0 +1,20 @@
+{
+  "err_login": {
+    "400": "Email o password errati. Per favore, riprova.",
+    "cannot_get_access_token": "Impossibile ottenere il token di accesso. Riprova più tardi.",
+    "500": "Errore interno. Riprova più tardi."
+  },
+  "err_register": {
+    "409": "L'email è già stata registrata."
+  },
+  "err_forgot_password": {
+    "400": "Nessun account registrato con questa email."
+  },
+  "err_change_password": {
+    "400": "Il codice di verifica non è valido."
+  },
+  "err_password": "Password errata. Per favore, riprova.",
+  "500": "Errore interno. Riprova più tardi.",
+  "401": "Non autorizzato.",
+  "cannot_register_notification": "Impossibile attivare le notifiche. Riprova più tardi."
+}

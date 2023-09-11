@@ -51,7 +51,7 @@ export type RootStackParamList = {
   CreateChallengeScreenMain: undefined;
   CreateCretifiedChallengeScreen: undefined;
   CreateCretifiedCompanyChallengeScreen: undefined;
-  
+
   ProgressCommentScreen: {
     progressId: string;
     ownerId?: string;

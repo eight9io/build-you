@@ -1,0 +1,558 @@
+{
+  "success": "Success",
+  "error": "Errore",
+  "close": "Chiudi",
+  "search_screen.search": "Cerca nome utente",
+  "error_general_message": "Qualcosa è andato storto. Per favore riprova più tardi.",
+  "error_network_message": "Per favore controlla la tua connessione internet e riprova.",
+  "error_permission_message": "Permesso negato. Per favore riprova più tardi.",
+  "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
+  "login_screen.description": "Crea e sostieni challenge personali, per\n accrescere le tue soft skill da spenderti\n anche nel contesto lavorativo.",
+  "login_screen.register": "Registrati gratis ",
+  "login_screen.login": "Log in",
+  "login_screen.explore_no_account": "Esplora senza account",
+  "challenge_detail_screen.title": "Challenge",
+  "challenge_detail_screen.builder": "Builder",
+  "challenge_detail_screen.progress": "Progresso",
+  "challenge_detail_screen.edit_progress": "Modifica progresso",
+  "challenge_detail_screen.description": "Descrizione",
+  "challenge_detail_screen.skills": "Skills",
+  "challenge_detail_screen.coach": "Coach",
+  "challenge_detail_screen.participants": "Partecipanti",
+  "challenge_detail_screen.upload_new_progress": "Aggiungi nuovo progresso",
+  "challenge_detail_screen.new_progress": "Nuovo progresso",
+  "challenge_detail_screen.new_progress_post": "POST",
+  "challenge_detail_screen.add_new_employees": "Aggiungi nuovo impiegato",
+  "challenge_detail_screen.join": "Entra",
+  "challenge_detail_screen.leave": "Lascia",
+  "challenge_detail_screen.completed": "Completato",
+  "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
+  "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
+  "bottom_nav": {
+    "feed": "Feed",
+    "challenges": "Sfide",
+    "create": "Crea",
+    "noti": "Notifiche",
+    "profile": "Profilo"
+  },
+  "top_nav.noti": "Notifiche",
+  "top_nav.your_feed": "Tuo feed",
+  "top_nav.challenges": "Sfide",
+  "register_modal.title": "Registrati gratis",
+  "register_modal.description": "Crea il tuo account gratuito, ottieni la massima motivazione e supporto dalla community e dai coach.",
+  "register_modal.apple": "Registrati con Apple",
+  "register_modal.google": "Registrati con Google",
+  "register_modal.linked": "Registrati con Linkedin",
+  "register_modal.register": "Registrati con email e password",
+  "button.edit_profile": "Modifica profilo",
+  "button.follow": "Segui",
+  "button.following": "Following",
+  "button.followers": "Followers",
+  "button.unfollow": "Unfollow",
+  "profile_title": "Mio profilo",
+  "profile_screen_tabs.biography": "biografia",
+  "profile_screen_tabs.skills": "skills",
+  "profile_screen_tabs.followers": "followers",
+  "profile_screen_tabs.following": "following",
+  "profile_screen_tabs.employees": "impiegati",
+  "profile_screen_tabs.challenges": "sfide",
+  "your_feed.header": "Tuo feed",
+  "card.builder": "Builder",
+  "register_screen.title": "Registrati",
+  "register_screen.sub_title": "Registrati gratuitamente con la tua email e password.",
+  "register_screen.policy": "Ho letto e approvo ",
+  "register_screen.policy_link": "Privacy Policy",
+  "register_screen.terms_link": "Termini",
+  "register_screen.conditions_link": "Condizioni",
+  "and": "e",
+  "policy": [
+    {
+      "stt": 1,
+      "title": "Privacy Policy",
+      "detail": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus."
+    },
+    {
+      "stt": 2,
+      "title": "Privacy Policy",
+      "detail": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus."
+    },
+    {
+      "stt": 3,
+      "title": "Privacy Policy",
+      "detail": "Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus."
+    }
+  ],
+  "register_screen.loading": "  Creando il tuo account... ",
+  "modal_skill.title": "Completa profilo",
+  "modal_skill.step": "Steps",
+  "modal_skill.of": "di",
+  "modal_skill.skip": "Salta",
+  "modal_skill.question": "Su cosa ti ritieni competente?",
+  "modal_skill.sub_question": "Scegli almeno 3 e fino a un massimo di 10 hard skills per raccontare di te al meglio alla community",
+  "form": [
+    {
+      "label": "Email",
+      "name": "user",
+      "error": "Email invalida. ",
+      "required": "Per favore inserisci la tua email.",
+      "type": "email",
+      "placeholder": "Inserisci email "
+    },
+    {
+      "label": "Email",
+      "name": "email",
+      "error": "Email invalida. ",
+      "required": "Per favore inserisci la tua email.",
+      "type": "email",
+      "placeholder": "Inserisci email "
+    },
+    {
+      "label": "Codice",
+      "name": "codice",
+      "required": "Per favore inserisci il codice.",
+      "placeholder": "Inserisci codice.",
+      "type": "code"
+    },
+    {
+      "label": "Password",
+      "name": "password",
+      "required": "Per favore inserisci la password.",
+      "error": "La tua password deve contenere 8 o più caratteri, 1 lettera maiuscola, 1 lettera minuscola e 1 numero.",
+      "type": "password",
+      "placeholder": "Inserisci password"
+    },
+    {
+      "label": "Ripeti password",
+      "name": "ripeti password",
+      "error": "Le password non corrispondono.",
+      "required": "Per favore ripeti la tua password.",
+      "type": "repeat_password",
+      "placeholder": "Ripeti password"
+    }
+  ],
+  "register_screen.err_policy": "Si prega di accettare la nostra politica sulla privacy",
+  "modal_skill.manually": "Aggiungi manualmente",
+  "button.next": "Next",
+  "button.back": "Back",
+  "button.skip": "Skip",
+  "button.update": "Aggiorna",
+  "button.edit_companyProfile": "Modifica profilo",
+  "new_challenge_screen.title": "Crea una nuova sfida",
+  "new_challenge_screen.location": "Location",
+  "new_challenge_screen.enter_your_location": "Seleziona la tua location",
+  "login": "Login",
+  "forgot_password": "Password dimenticata?",
+  "forgot_password.title": "Password dimenticata",
+  "forgot_password.sub_title": "Ti abbiamo inviato un codice tramite email. Inserisci il codice e la tua nuova password.",
+  "change_password.changing": "Cambia la password del tuo account. Accedi con una nuova email e password dopo il reindirizzamento...",
+  "register_screen.or": "O",
+  "send_code": "Invia codice",
+  "reset_password": "Reset Password",
+  "form_onboarding": {
+    "screen_1": {
+      "title": "Parlaci di te",
+      "avatar_error": "Seleziona una immagine",
+      "first_name": "Nome",
+      "enter_first_name": "Inserisci il tuo name",
+      "first_name_error": "Inserisci il tuo nome.",
+      "last_name": "Cognome",
+      "enter_last_name": "Inserisci il tuo cognome",
+      "last_name_error": "Inserisci il tuo cognome.",
+      "birth": "Data di nascita",
+      "select_your_birthday": "Seleziona data",
+      "birthday_error": "Selziona data.",
+      "occupation": "Professione",
+      "enter_occupation": "Inserisci la tua professione",
+      "occupation_error": "Seleziona la professione più coerente."
+    },
+    "screen_2": {
+      "title": "Racconta agli altri qualcosa di te",
+      "biography": "Biografia",
+      "your_biography": "Tua biografia",
+      "upload_video": "Carica un video"
+    },
+    "screen_3": {
+      "title": "Su cosa ti definisci competente?",
+      "sub_title": "Scegli almeno 3 e fino a un massimo di 10 hard skills per raccontare al meglio di te alla community",
+      "add_manually": "Aggiungi manualmente",
+      "error": "Seleziona almeno 3 hard skills."
+    },
+    "screen_4": {
+      "title": "Seleziona le soft skills su cui sei già competente",
+      "sub_title": "Seleziona almeno 3 diverse soft skills e valutale da 1 a 5.",
+      "soft_skills": "Soft skills",
+      "error": "Select almeno 3 soft skills.",
+      "error_rate": "Vota da 1 a 5",
+      "select_soft_skill": "Seleziona una soft skill"
+    },
+    "add_skill_screen": {
+      "add_skill": "Aggiungi skill",
+      "add_skill_title": "Selezione l'emoji e inserisci il nome della skill"
+    },
+    "finished_screen": {
+      "title": "Grazie per le tue informazioni. Stiamo personalizzando la tua esperienza..."
+    }
+  },
+  "company_profile": {
+    "website": "Sito web",
+    "phone": "Telefono",
+    "email": "Email",
+    "VAT_number": "P.Iva"
+  },
+  "personal_profile": {
+    "name": "Nome",
+    "surname": "Cognome",
+    "birthday": "Data di nascita",
+    "email": "Email"
+  },
+  "video_profile": "Video profilo",
+  "work_place": "Posto di lavoro",
+  "show_company": "Mostra azienda",
+  "register_screen.creating": "Creazione del tuo account. Accedi con la tua e-mail e password dopo il reindirizzamento...",
+  "user_settings_screen.title": "Impostazioni",
+  "user_settings_screen.logout": "Log out",
+  "user_settings_screen.general_settings": "Impostazioni generali",
+  "user_settings_screen": {
+    "general_settings_description": "Gestisci le impostazioni relative ad autorizzazioni, annunci e altre informazioni sull'account.",
+    "general_settings_sections": {
+      "cookie_regulation": "Normativa sui cookie",
+      "preferences": "Preferenze",
+      "community_standards": "Standard della community",
+      "notifications": "Notifiche"
+    },
+    "account": "Account",
+    "account_settings_description": "Gestisci le impostazioni relative ad autorizzazioni, annunci e altre informazioni sull'account.",
+    "account_settings_sections": {
+      "personal_information": "Informazioni personali",
+      "company_information": "Informazioni aziendali",
+      "terms_of_services": "Termini di Servizio",
+      "privacy_policy": "Privacy Policy "
+    },
+    "account_settings_language": {
+      "language": "Lingua",
+      "language_description": "Seleziona la tua lingua"
+    }
+  },
+  "new_challenge_screen": {
+    "title": "Nuova sfida",
+    "create_button": "Crea",
+    "description": "Crea una nuova sfida per te stesso con un obiettivo concreto e tempo per raggiungerlo.",
+    "your_goal": "Tuo obiettivo",
+    "your_goal_placeholder": "Imposta un obiettivo concreto",
+    "benefits": "I benefici",
+    "benefits_placeholder": "Elenca i vantaggi che otterrai al raggiungimento",
+    "reasons": "Il motivo",
+    "max_people": "Numero max partecipanti",
+    "max_people_placeholder": "Inserisci il numero di persone",
+    "reasons_placeholder": "Indica i motivi che ti spingono a realizzarlo",
+    "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
+    "time_to_reach_goal_placeholder": "Indica la data",
+    "your_goal_required": "Imposta il tuo obiettivo",
+    "benefits_required": "Elenca i vantaggi",
+    "reasons_required": "Indica i motivi",
+    "time_to_reach_goal_required": "Seleziona la data",
+    "image_required": "Carica un'immagine",
+    "max_people_required": "Indica il numero massimo di persone",
+    "min_people_required": "Il numero minimo di persone è 2",
+    "is_public_required": "Per favore seleziona la privacy della sfida",
+    "challenge_status_description": "Tutti possono partecipare alla tua sfida pubblica mentre solo gli utenti della tua azienda possono partecipare alla tua sfida privata."
+  },
+  "new_progress_modal": {
+    "title": "Nuovo progresso",
+    "caption": "Contenuto",
+    "caption_placeholder": "Parla del progresso e di cosa ottieni",
+    "caption_required": "Per favore inserisci informazioni sul tuo progresso.",
+    "image_required": "Per favore carica una immagine o un video.",
+    "location": "Location",
+    "location_placeholder": "Dove lo hai raggiunto?",
+    "location_required": "La location è richiesta.",
+    "enable_location_required": "Abilitare l'autorizzazione alla posizione.",
+    "enter_your_location": "Seleziona la tua location"
+  },
+  "edit_progress_modal": {
+    "title": "Modifica progresso",
+    "save_button": "Salva",
+    "caption": "Contenuto",
+    "caption_placeholder": "Parla del progresso e di cosa ottieni",
+    "caption_required": "Per favore inserisci informazioni sul tuo progresso.",
+    "edit_success": "Il tuo progresso è stato aggiornato con successo"
+  },
+  "add_hard_skill_modal": {
+    "title": "Hard skill",
+    "save_button": "Salva",
+    "caption": "  Su cosa ti definisci competente?",
+    "caption_placeholder": "Scegli un minimo di 3 ed un massimo di 10 hard skills per raccontare al meglio di te alla community",
+    "caption_required": "Seleziona un minimo di 3 ed un massimo di 10 hard skills"
+  },
+  "edit_challenge_screen": {
+    "title": "Modifica sfida",
+    "save_button": "Salva",
+    "your_goal": "Tuo obiettivo",
+    "your_goal_placeholder": "Imposta un obiettivo concreto",
+    "benefits": "I benefici",
+    "benefits_placeholder": "Elenca i vantaggi che otterrai al raggiungimento",
+    "reasons": "Il motivo",
+    "reasons_placeholder": "Indica i motivi che ti spingono a realizzarlo",
+    "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
+    "time_to_reach_goal_placeholder": "Seleziona il periodo",
+    "your_goal_required": "Inserisci il tuo obiettivo.",
+    "benefits_required": "Inserisci i benefici.",
+    "reasons_required": "Inserisci i motivi.",
+    "time_to_reach_goal_required": "Seleziona il tempo per raggiungere l'obiettivo.",
+    "edit_success": "La tua sfida è stata aggiornata con successo"
+  },
+  "dialog": {
+    "register": {
+      "title": "Verifica la tua email",
+      "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
+    },
+    "logout": {
+      "title": "Log out",
+      "description": "Sei sicuro di voler uscire?",
+      "cancel": "Annulla"
+    },
+    "delete_account": {
+      "title": "Sei davvero sicuro di voler eliminare il tuo account?",
+      "description": "Non puoi annullare questa azione"
+    },
+    "mark_challenge": {
+      "title": "Contrassegnare questa sfida come completata?",
+      "description": "Non puoi modificare la sfida o aggiornare i progressi dopo aver contrassegnato la sfida come completata"
+    },
+    "challenge_already_completed": {
+      "title": "Sfida già completata",
+      "description": "Questa sfida è già stata completata. Provane un'altra."
+    },
+    "delete_progress": {
+      "title": "Vuoi eliminare questo progresso?",
+      "description": "Non puoi annullare questa azione"
+    },
+    "delete_password_incorrect": {
+      "title": "Password sbagliata",
+      "description": "Per favore riprova"
+    },
+    "unfollow_user": {
+      "title": "Smetti di seguire questo account",
+      "description": "Smetterai di seguire questo account"
+    },
+    "remove_user": {
+      "title": "Vuoi rimuovere questo dipendente dall'azienda?",
+      "description": "Non puoi annullare questa azione"
+    },
+    "delete_challenge": {
+      "title": "Elimina Sfida",
+      "description": "Sei sicuro di voler cancellare questa sfida?",
+      "delete_success_title": "Sfida cancellata",
+      "delete_success_description": "Sfida cancellata con successo"
+    },
+    "cancel": "Cancella",
+    "close": "Chiudi",
+    "complete": "Completa",
+    "got_it": "Fatto",
+    "delete": "Elimina",
+    "unfollow": "Unfollow",
+    "remove": "Rimuovi",
+    "your_goal_required": "Imposta il tuo obiettivo",
+    "benefits_required": "Elenca i benefici",
+    "reasons_required": "Indica i motivi",
+    "time_to_reach_goal_required": "Seleziona il periodo",
+    "edit_success": "La tua sfida è stata aggiornata con successo",
+    "err_title_delete_account": "Impossibile eliminare il tuo account",
+    "err_title_update_img": "Impossibile aggiornare l'immagine",
+    "err_title_update_profile": "Impossibile aggiornare il tuo profilo",
+    "update_profile_success": "Il tuo profilo è stato aggiornato correttamente !",
+    "err_update_profile": "Qualcosa è andato storto. Per favore riprova più tardi",
+    "err_add_employee": "L'utente fa già parte dell'azienda",
+    "open_settings": "Apri impostazioni",
+    "alert_title": "Alert",
+    "err_title": "Errore",
+    "success_title": "Success",
+    "ok": "OK",
+    "err_max_join": "Scusa! Non puoi partecipare a questa sfida, ha raggiunto il numero massimo di partecipanti.",
+    "create_challenge_success": "La tua sfida è stata creata con successo !",
+    "create_progress_success": "Il tuo progresso è stato creato con successo !",
+    "completed_challenge_success": "La sfida è stata completata con successo !",
+    "congratulation": "Congratulazioni!"
+  },
+  "toast": {
+    "joined_success": "Ti sei unito alla sfida!",
+    "leave_success": "Hai abbandonato la sfida!",
+    "delete_success": "Commento eliminato con successo!",
+    "add_employee_success": "Dipendente aggiunto correttamente! ",
+    "delete_employee_success": "Dipendente eliminato correttamente! ",
+    "reset_password_success": "Password reimpostata con successo! ",
+    "create_challenge_success": "La tua sfida è stata creata con successo !",
+    "edit_challenge_success": "I tuoi progressi sono stati modificati con successo ! ",
+    "create_progress_success": "I tuoi progressi sono stati creati con successo !",
+    "completed_challenge_success": "La sfida è stata completata con successo !",
+    "delete_challenge_success": "Sfida eliminata con successo !",
+    "copied_to_clipboard": "Copiato negli appunti",
+    "copied_to_clipboard_error": "Errore durante la copia negli appunti"
+  },
+  "progress_comment_screen": {
+    "comment_input_placeholder": "Scrivi un commento...",
+    "delete_comment_success": "Il tuo commento è stato eliminato con successo"
+  },
+  "delete_progress": {
+    "delete_success": "I tuoi progressi sono stati eliminati con successo"
+  },
+  "personal_information": {
+    "title": "Informazioni personali",
+    "description": "Le tue informazioni su BuildYou",
+    "delete_account": "Cancella il mio account"
+  },
+  "delete_account": {
+    "title": "Cancella account",
+    "title_sub": "Ci dispiace vederti andare via!",
+    "description": "Solo un rapido promemoria, eliminare il tuo account significa che tutte le tue informazioni andranno perse per sempre, comprese le sfide che hai completato. Non saremo in grado di ripristinare il tuo account. Vuoi ancora eliminare il tuo account?",
+    "confirming_password": "Conferma digitando la tua password qui sotto"
+  },
+  "company_profile_screen": {
+    "no_challenge": "Nessuna sfida al momento",
+    "no_employee": "Nessun dipendente al momento"
+  },
+  "empty_followers": "Non hai followers al momento",
+  "empty_following": "Non segui nessuno al momento",
+  "empty_employee": {
+    "content_1": "Non hai nessun dipendente al momento.",
+    "content_2": "Click",
+    "content_3": "Aggiungi nuovo dipendente",
+    "content_4": "per aggiungere un dipendente alla tua azienda."
+  },
+  "image_picker": {
+    "image_permission_required": "Permesso negato. Si prega di abilitarlo nelle impostazioni del telefono.",
+    "upload_a_video": "Carica un video",
+    "upload_a_video_waiting": "Attendi fino al caricamento del video."
+  },
+  "search_screen.no_result": "Nessun utente trovato",
+  "edit_company_profile_screen": {
+    "company_name": "Nome azienda",
+    "company_name_placeholder": "Inserisci il nome dell'azienda",
+    "biography_name": "Biografia",
+    "biography_name_placeholder": "Tua biografia",
+    "first_name_required": "Inserisci il tuo nome.",
+    "company_phone": "Telefono",
+    "company_phone_placeholder": "Inserisci il telefono aziendale",
+    "mailContact": "Contatto Email",
+    "company_email_placeholder": "Inserisci la tua email per contatti",
+    "webSite": "Sito Web",
+    "company_webSite_placeholder": "Inserisci il tuo sito web ",
+    "pIva": "P.Iva",
+    "company_vat_placeholder": "Inserisci la tua P.Iva "
+  },
+  "notification_screen": {
+    "no_notification": "Non hai notifiche al momento"
+  },
+  "challenge_detail_screen.not_found": "Sfida non trovata",
+  "user_not_found": "Utente non trovato",
+  "maximum_participants_reached": "Numero massimo di partecipanti raggiunto",
+  "server_error": "Server error",
+  "session_expired_error": "Sessione scaduta. Per favore esegui l'accesso di nuovo",
+  "share_link": {
+    "copying_to_clipboard_error": "Errore durante la copia negli appunti",
+    "join_my_challenge": "Unisciti alla mia sfida!",
+    "user_did_not_share_link": "L'utente non ha condiviso"
+  },
+  "upload_cover_failed": "Caricamento della copertina non riuscito. Riprova più tardi.",
+  "add_new_challenge_progress_modal": {
+    "cancel": "Annulla",
+    "caption": "Contenuto",
+    "caption_placeholder": "Cosa ottieni?"
+  },
+  "upload_image": "Carica una immagine",
+  "upload_video": "Carica un video",
+  "please_upload_images_or_video": "Carica immagini o video",
+  "days_ago": "{{numOfDays}} giorni fa",
+  "hours_ago": "{{numOfHours}} ore fa",
+  "minutes_ago": "{{numOfMinutes}} minuti fa",
+  "company": "Azienda",
+  "save": "Salva",
+  "emoji": "Emoji",
+  "emoji_required": "Seleziona un emoji",
+  "max_characters": "Massimo {{numOfCharacters}} caratteri",
+  "pop_up_menu": {
+    "edit": "Modifica",
+    "delete": "Cancella",
+    "share": "Condividi",
+    "mark_as_completed": "Segna come completata"
+  },
+  "step_of": "Step {{currentStep}} di {{totalStep}}",
+  "select": "Seleziona",
+  "add_emoji": {
+    "select_emoji": "Seleziona una emoji"
+  },
+  "add_skill_modal": {
+    "title": "Aggiungi skill",
+    "description": "Seleziona l'emoji e inserisci il nome della skill",
+    "enter_skill_name": "Inserisci il nome della skill"
+  },
+  "add_new_employee_modal": {
+    "title": "Nuovo collaboratore",
+    "email": "Email",
+    "email_placeholder": "Inserisci l'email del collaboratore"
+  },
+  "edit_profile_modal": {
+    "title": "Modifica profilo",
+    "first_name": "Nome",
+    "first_name_placeholder": "Inserisci il tuo nome",
+    "last_name": "Cognome",
+    "last_name_placeholder": "Inserisci il tuo cognome",
+    "birthday": "Data di nascita",
+    "birthday_placeholder": "Inserisci la tua data di nascita",
+    "occupation": "Professione",
+    "occupation_placeholder": "Inserisci la tua professione",
+    "biography": "Biografica",
+    "biography_placeholder": "Scrivi una breve biografia"
+  },
+  "policy_modal": {
+    "title": "Privacy policy..."
+  },
+  "commentWithCount": "{{count}} commento",
+  "commentWithCount_plural": "{{count}} commenti",
+  "likeWithCount": "{{count}} like",
+  "likeWithCount_plural": "{{count}} likes",
+  "loading": "Caricamento...",
+  "biography_tab": {
+    "no_biography": "Nessuna biografia al momento"
+  },
+  "skill_tab": {
+    "self_declared": "Auto-dichiarate"
+  },
+  "private": "Privata",
+  "public": "Pubblica",
+  "empty_challenge": "Non hai sfide al momento",
+  "create": "Crea",
+  "click": "Clicca",
+  "to_create_new_challenge": "per creare una nuova sfida",
+  "challenge_description_tab": {
+    "the_benefits": "I benefici",
+    "the_reason": "Il motivo",
+    "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
+    "participants": "Partecipanti"
+  },
+  "challenge_progress_tab": {
+    "do_you_want_to_confirm_rating": "Vuoi confermare la tua valutazione?",
+    "cannot_undo": "Non puoi annullare questa azione",
+    "rating_saved": "La tua valutazione è stata salvata",
+    "rate_the_challenge": "Valuta la sfida"
+  },
+  "main_search_screen": {
+    "search": "Cerca utente"
+  },
+  "edit_personal_profile_screen": {
+    "hard_skills": "Hard skills",
+    "first_name": "Nome",
+    "enter_first_name": "Inserisci il tuo name",
+    "last_name": "Cognome",
+    "enter_last_name": "Inserisci il tuo cognome",
+    "birth": "Data di nascita",
+    "select_your_birthday": "Inserisci la tua data di nascita",
+    "birthday_error": "Seleziona il tuo compleanno.",
+    "occupation": "Professione",
+    "enter_occupation": "Inserisci la tua professione",
+    "biography": "Biografia",
+    "your_biography": "Tua biografia"
+  },
+  "not_found": "Non trovato",
+  "invalid_date": "Data non valida"
+}

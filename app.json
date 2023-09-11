@@ -1,22 +1,90 @@
 {
   "expo": {
-    "name": "Build you",
+    "name": "BuildYou",
     "slug": "build-you",
-    "version": "0.0.1",
-    "sdkVersion": "48.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "version": "1.2.3",
+    "orientation": "portrait",
+    "jsEngine": "hermes",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.buildyou.app"
+      "bundleIdentifier": "it.buildyou.buildyou",
+      "associatedDomains": ["applinks:app.uat.buildyou.it"],
+      "buildNumber": "19",
+      "supportsTablet": false,
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"],
+        "CFBundleAllowMixedLocalizations": true
+      },
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "entitlements": {
+        "com.apple.developer.applesignin": ["Default"]
+      }
+    },
+    "locales": {
+      "en": "./languages/en.json",
+      "it": "./languages/it.json"
     },
     "android": {
-      "package": "com.buildyou.app"
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png"
+      },
+      "package": "com.buildyou.buildyou",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ],
+      "googleServicesFile": "./google-services.json"
     },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "userInterfaceStyle": "automatic",
+    "scheme": "it.buildyou.buildyou",
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      "@react-native-firebase/app",
+      [
+        "expo-gradle-ext-vars",
+        {
+          "androidXBrowser": "1.4.0"
+        }
+      ]
+    ],
     "extra": {
       "eas": {
-        "projectId": "783e060c-e143-450b-9321-2b54ae91b3d5"
+        "projectId": "77d6f55d-333d-4f73-b0ac-53deee609202"
       }
     }
   }

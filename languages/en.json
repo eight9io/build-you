@@ -1,0 +1,8 @@
+{
+  "NSCameraUsageDescription": "BuildYou would like to use your camera to share the progress on your goals.",
+  "NSPhotoLibraryAddUsageDescription": "BuildYou would like to save photos to your photo gallery so you can use them to track the progress on your goals.",
+  "NSPhotoLibraryUsageDescription": "BuildYou would like access to your photo gallery so you can chose a photo to use in your goal.",
+  "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow BuildYou to use your location to complement your goals.",
+  "NSLocationAlwaysUsageDescription": "Allow BuildYou to access your location to complement your goals.",
+  "NSLocationWhenInUseUsageDescription": "Allow BuildYou to access your location to complement your goals."
+}

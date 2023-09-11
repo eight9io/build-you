@@ -21,12 +21,17 @@
       "buildNumber": "19",
       "supportsTablet": false,
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": ["remote-notification"],
+        "CFBundleAllowMixedLocalizations": true
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
         "com.apple.developer.applesignin": ["Default"]
       }
+    },
+    "locales": {
+      "en": "./languages/en.json",
+      "it": "./languages/it.json"
     },
     "android": {
       "adaptiveIcon": {

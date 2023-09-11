@@ -302,6 +302,10 @@
     "edit_success": "La tua sfida è stata aggiornata con successo"
   },
   "dialog": {
+    "register": {
+      "title": "Verifica la tua email",
+      "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
+    },
     "logout": {
       "title": "Log out",
       "description": "Sei sicuro di voler uscire?",
@@ -342,6 +346,7 @@
       "delete_success_description": "Sfida cancellata con successo"
     },
     "cancel": "Cancella",
+    "close": "Chiudi",
     "complete": "Completa",
     "got_it": "Fatto",
     "delete": "Elimina",

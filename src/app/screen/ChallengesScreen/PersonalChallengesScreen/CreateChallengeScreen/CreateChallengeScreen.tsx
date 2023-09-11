@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { ICreateChallengeForm } from "../../../../types/challenge";
-import { useNav } from "../../../../hooks/useNav";
+// import { useNav } from "../../../../navigation/navigation.type";
 import { CreateChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
 import {
@@ -26,6 +26,7 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNav } from "../../../../hooks/useNav";
 
 const CreateChallengeScreen = () => {
   const onClose = () => {

@@ -98,6 +98,9 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         headerRightContainerStyle: {
           paddingRight: 10,
         },
+        tabBarIconStyle: {
+          width: "100%", // Make sure the tab bar item stretch in large screens
+        },
       }}
       screenListeners={({ route }) => {
         const routeName = getFocusedRouteNameFromRoute(route);

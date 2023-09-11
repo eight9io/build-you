@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import {
   ICreateChallengeForm,
-  ICreateCertifiedChallengeForm,
+  ICreateCretifiedChallengeForm,
 } from "../types/challenge";
 
 export const CreateChallengeValidationSchema = (): yup.ObjectSchema<
@@ -38,14 +38,14 @@ export const CreateChallengeValidationSchema = (): yup.ObjectSchema<
   });
 };
 
-export const CreateCertifiedChallengeValidationSchema = (): yup.ObjectSchema<
-  Record<keyof ICreateCertifiedChallengeForm, yup.AnySchema>
+export const CreateCretifiedChallengeValidationSchema = (): yup.ObjectSchema<
+  Record<keyof ICreateCretifiedChallengeForm, yup.AnySchema>
 > => {
   const { t } = useTranslation();
 
   return yup
     .object()
-    .shape<Record<keyof ICreateCertifiedChallengeForm, yup.AnySchema>>({
+    .shape<Record<keyof ICreateCretifiedChallengeForm, yup.AnySchema>>({
       goal: yup
         .string()
         .trim()

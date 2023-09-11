@@ -63,9 +63,9 @@ const CreateChallengeScreenMain = () => {
     if (isCompany) navigation.navigate("CreateCompanyChallengeScreen");
     else navigation.navigate("CreateChallengeScreen");
   };
-  const handleCreateCertifiedChallenge = () => {
-    if (isCompany) navigation.navigate("CreateCertifiedCompanyChallengeScreen");
-    else navigation.navigate("CreateCertifiedChallengeScreen");
+  const handleCreateCretifiedChallenge = () => {
+    if (isCompany) navigation.navigate("CreateCretifiedCompanyChallengeScreen");
+    else navigation.navigate("CreateCretifiedChallengeScreen");
   };
   return (
     <SafeAreaView
@@ -91,12 +91,12 @@ const CreateChallengeScreenMain = () => {
           <View className="h-6" />
           <CreateChallengeCard
             image={require("../../common/image/image-cost-challenge.jpg")}
-            title={t("new_challenge_screen.Certified_challenge")}
+            title={t("new_challenge_screen.cretified_challenge")}
             description={t(
-              "new_challenge_screen.Certified_challenge_description"
+              "new_challenge_screen.cretified_challenge_description"
             )}
-            createText={t("new_challenge_screen.create_Certified_challenge")}
-            onPress={handleCreateCertifiedChallenge}
+            createText={t("new_challenge_screen.create_cretified_challenge")}
+            onPress={handleCreateCretifiedChallenge}
           />
         </View>
       </View>

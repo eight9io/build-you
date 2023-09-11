@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  StyleSheet,
   TextInput,
   View,
   Keyboard,
@@ -24,48 +25,8 @@ const UserSearchBar = ({
 
   const handleFocus = () => {
     setFocused(true);
-
-    // Animated.parallel([
-    //   Animated.timing(inputLength, {
-    //     toValue: SEARCH_SHRINK_WIDTH,
-    //     duration: 250,
-    //     useNativeDriver: false,
-    //   }),
-    //   Animated.timing(cancelPosition, {
-    //     toValue: 16,
-    //     duration: 400,
-    //     useNativeDriver: false,
-    //   }),
-    //   Animated.timing(opacity, {
-    //     toValue: 1,
-    //     duration: 250,
-    //     useNativeDriver: false,
-    //   }),
-    // ]).start();
   };
 
-  // const handleCancel = () => {
-  //   Keyboard.dismiss();
-  //   setSearchPhrase("");
-  //   setFocused(false);
-  //   Animated.parallel([
-  //     Animated.timing(inputLength, {
-  //       toValue: SEARCH_FULL_WIDTH,
-  //       duration: 250,
-  //       useNativeDriver: false,
-  //     }),
-  //     Animated.timing(cancelPosition, {
-  //       toValue: 0,
-  //       duration: 250,
-  //       useNativeDriver: false,
-  //     }),
-  //     Animated.timing(opacity, {
-  //       toValue: 0,
-  //       duration: 250,
-  //       useNativeDriver: false,
-  //     }),
-  //   ]).start();
-  // };
   return (
     <View className="m-[15] w-[90%] flex-row items-center justify-start">
       <Animated.View
@@ -85,7 +46,7 @@ const UserSearchBar = ({
           style={{
             marginLeft: 10,
           }}
-          className="w-11/12 flex-1 py-1 mt-1"
+          className="mt-1 w-11/12 flex-1 py-1"
           placeholder="Search"
           value={searchPhrase}
           onChangeText={setSearchPhrase}

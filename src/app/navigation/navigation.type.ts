@@ -49,14 +49,9 @@ export type RootStackParamList = {
   };
   CreateCompanyChallengeScreen: undefined;
 
-  ChoosePackageScreen: undefined;
   CreateChallengeScreenMain: undefined;
-  CreateCertifiedChallengeScreen: undefined;
-  CreateCertifiedCompanyChallengeScreen: undefined;
-  CartScreen: {
-    typeOfPackage: TPackageType;
-    initialPrice: string;
-  };
+  CreateCretifiedChallengeScreen: undefined;
+  CreateCretifiedCompanyChallengeScreen: undefined;
 
   ProgressCommentScreen: {
     progressId: string;

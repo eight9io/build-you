@@ -21,6 +21,7 @@ import { useGetUserData } from "../../../hooks/useGetUser";
 import StepOfSteps from "../../../component/common/StepofSteps";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 import Button from "../../../component/common/Buttons/Button";
+import SoftSkillPicker from "../../../component/SoftSkillPicker/SoftSkillPicker";
 
 import CheckedSvg from "./asset/checked.svg";
 import UncheckedSvg from "./asset/uncheck.svg";

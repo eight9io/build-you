@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -46,15 +46,10 @@ import {
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
 import { useDeepLinkStore } from "../store/deep-link-store";
-import { addNotificationListener } from "../utils/notification.util";
-import { useNotificationStore } from "../store/notification-store";
 import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
 import i18n from "../i18n/i18n";
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
-import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
-import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
-import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";
-import CartScreen from "../screen/ChallengesScreen/CartScreen";
+import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateCretifiedChallengeScreen";
 import { IToken } from "../types/auth";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -71,9 +66,9 @@ export const RootNavigation = () => {
     logout,
     _hasHydrated: authStoreHydrated,
   } = useAuthStore();
+
   const { getUserProfileAsync, onLogout: userProfileStoreOnLogout } =
     useUserProfileStore();
-
   const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>();
   const isLoggedin = getAccessToken();
 
@@ -158,10 +153,6 @@ export const RootNavigation = () => {
   }, [authStoreHydrated]);
 
   useEffect(() => {
-    const unsubscribe = addNotificationListener(
-      navigationRef.current,
-      useNotificationStore
-    );
     const getLanguageFromStorage = async () => {
       const language = await getLanguageLocalStorage();
       if (language) {
@@ -171,9 +162,6 @@ export const RootNavigation = () => {
       }
     };
     getLanguageFromStorage();
-    return () => {
-      unsubscribe();
-    };
   }, []);
 
   return (
@@ -379,58 +367,14 @@ export const RootNavigation = () => {
               ),
             })}
           />
+
           <RootStack.Screen
-            name="CreateCertifiedChallengeScreen"
-            component={CreateCertifiedChallengeScreen}
+            name="CreateCretifiedChallengeScreen"
+            component={CreateCretifiedChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
                 <AppTitle title={t("new_challenge_screen.title") || ""} />
-              ),
-              headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Ionicons name="close" size={24} color="#000" />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-          <RootStack.Screen
-            name="CreateCertifiedCompanyChallengeScreen"
-            component={CreateCertifiedCompanyChallengeScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
-              ),
-              headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Ionicons name="close" size={24} color="#000" />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-          <RootStack.Screen
-            name="ChoosePackageScreen"
-            component={ChoosePackageScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t("choose_packages_screen.package") || ""} />
-              ),
-              headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Ionicons name="close" size={24} color="#000" />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-          <RootStack.Screen
-            name="CartScreen"
-            component={CartScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t("cart_screen.title") || "Sumary"} />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>

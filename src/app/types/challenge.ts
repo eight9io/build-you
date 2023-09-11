@@ -18,7 +18,7 @@ export interface ICreateCompanyChallenge {
   type?: string;
   package?: string;
   softSkills?: string[];
-  checkpoint: number
+  checkpoint: number;
 }
 
 export interface IEditChallenge {
@@ -98,7 +98,7 @@ export interface ICreateChallengeForm
   image: string;
 }
 
-export interface ICreateCertifiedChallengeForm
+export interface ICreateCretifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
   achievementTime: string | Date;
   image: string;

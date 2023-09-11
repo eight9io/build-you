@@ -5,11 +5,10 @@ import notifee, {
   EventType,
   Notification,
 } from "@notifee/react-native";
-import messaging, {
-  FirebaseMessagingTypes,
-} from "@react-native-firebase/messaging";
+import { Platform } from "react-native";
+import messaging from "@react-native-firebase/messaging";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { NavigationContainerRef, StackActions } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
 import { RootStackParamList } from "../navigation/navigation.type";
 import {
   INotification,
@@ -64,7 +63,6 @@ export const unregisterForPushNotificationsAsync = async () => {
 };
 
 export const addNotificationListener = (
-  navigation: NavigationContainerRef<RootStackParamList>,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
   // Listen to foreground events
@@ -82,7 +80,6 @@ export const addNotificationListener = (
         break;
     }
   });
-
   return unsubscribe;
 };
 
@@ -90,10 +87,6 @@ export const handleTapOnIncomingNotification = async (
   notification: Notification
 ) => {
   const navigation = NavigationService.getContainer();
-  const payload = notification.data as Record<
-    string,
-    any
-  > as INotificationPayload;
 
   // When the app is launched by tapping on the notification from killed state => notification event will be triggered before navigation is ready
   // => Keep calling handleTapOnIncomingNotification until navigation is ready
@@ -368,4 +361,12 @@ export const getLastNotiIdFromLocalStorage = async () => {
 export const setLastNotiIdToLocalStorage = async (lastNotiId: string) => {
   if (!lastNotiId) return;
   await AsyncStorage.setItem("lastNotiId", lastNotiId);
+};
+
+export const handleAppOpenOnNotificationPressed = async () => {
+  if (Platform.OS === "android") {
+    const initialNotification = await messaging().getInitialNotification();
+    if (initialNotification)
+      handleTapOnIncomingNotification(initialNotification);
+  }
 };

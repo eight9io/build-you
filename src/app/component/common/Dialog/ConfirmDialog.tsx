@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 
@@ -39,7 +39,9 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
     <View>
       {isVisible && (
         <Dialog.Container visible={true}>
-          <Dialog.Title>{title}</Dialog.Title>
+          <Dialog.Title>
+            <Text className="text-black-default">{title}</Text>
+          </Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (
             <Dialog.Button

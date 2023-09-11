@@ -6,10 +6,11 @@ import {
   useIsFocused,
   useNavigation,
 } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
-import { View, FlatList, SafeAreaView, Text } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { View, FlatList, SafeAreaView, Text, Platform } from "react-native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { isDevice } from "expo-device";
 
 import { RootStackParamList } from "../navigation/navigation.type";
 import { IFeedPostProps } from "../types/common";
@@ -34,6 +35,7 @@ import NavButton from "../component/common/Buttons/NavButton";
 import IconSearch from "../component/common/IconSearch/IconSearch";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import AdCard from "../component/Post/AdCard";
+import { handleAppOpenOnNotificationPressed } from "../utils/notification.util";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -132,6 +134,8 @@ export const HomeFeed = () => {
   }, [isFocused]);
 
   useEffect(() => {
+    if (isDevice && Platform.OS === "android")
+      handleAppOpenOnNotificationPressed(); // Handle app open on notification pressed when app is killed on Android
     getInitialFeeds();
   }, []);
 

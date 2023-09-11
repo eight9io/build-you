@@ -13,6 +13,8 @@
 		30EA403B66E4F0132DC523D2 /* Pods_BuildYou.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9837527D787B1E7B09330D /* Pods_BuildYou.framework */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		48EC3B9D226142AC92F8B4FC /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DE39AC6EEC4E26A8E7EEB4 /* noop-file.swift */; };
+		5E12C67DBD304550BD031078 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6168EEB274AE4C5C84C08C9D /* InfoPlist.strings */; };
+		6283D8E7E728462DA162CF50 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68B313DD0D6B410791528C8E /* InfoPlist.strings */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		B9537170C1064470A1CDFA77 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2955A71E1FF043CDB77BC0F3 /* GoogleService-Info.plist */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
@@ -27,6 +29,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BuildYou/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BuildYou/main.m; sourceTree = "<group>"; };
 		2955A71E1FF043CDB77BC0F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "BuildYou/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6168EEB274AE4C5C84C08C9D /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		68B313DD0D6B410791528C8E /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-BuildYou.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildYou.debug.xcconfig"; path = "Target Support Files/Pods-BuildYou/Pods-BuildYou.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-BuildYou.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildYou.release.xcconfig"; path = "Target Support Files/Pods-BuildYou/Pods-BuildYou.release.xcconfig"; sourceTree = "<group>"; };
 		7C9837527D787B1E7B09330D /* Pods_BuildYou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildYou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +68,14 @@
 				A3DE39AC6EEC4E26A8E7EEB4 /* noop-file.swift */,
 			);
 			name = BuildYou;
+			sourceTree = "<group>";
+		};
+		2123BCDB464A4F7080034AA8 /* it.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				6168EEB274AE4C5C84C08C9D /* InfoPlist.strings */,
+			);
+			name = it.lproj;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -117,6 +129,8 @@
 			isa = PBXGroup;
 			children = (
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
+				F17E1BEA885942D5831B022F /* en.lproj */,
+				2123BCDB464A4F7080034AA8 /* it.lproj */,
 			);
 			name = Supporting;
 			path = BuildYou/Supporting;
@@ -137,6 +151,14 @@
 				92DBD88DE9BF7D494EA9DA96 /* BuildYou */,
 			);
 			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		F17E1BEA885942D5831B022F /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				68B313DD0D6B410791528C8E /* InfoPlist.strings */,
+			);
+			name = en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +209,7 @@
 			knownRegions = (
 				en,
 				Base,
+				it,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -207,6 +230,8 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				B9537170C1064470A1CDFA77 /* GoogleService-Info.plist in Resources */,
+				6283D8E7E728462DA162CF50 /* InfoPlist.strings in Resources */,
+				5E12C67DBD304550BD031078 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +372,7 @@
 				CODE_SIGN_ENTITLEMENTS = BuildYou/BuildYou.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = JWQ9T5PFH2;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -366,11 +391,11 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = it.buildyou.buildyou;
-				PRODUCT_NAME = "BuildYou";
+				PRODUCT_NAME = BuildYou;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -384,7 +409,7 @@
 				CODE_SIGN_ENTITLEMENTS = BuildYou/BuildYou.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = JWQ9T5PFH2;
 				INFOPLIST_FILE = BuildYou/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -398,10 +423,10 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = it.buildyou.buildyou;
-				PRODUCT_NAME = "BuildYou";
+				PRODUCT_NAME = BuildYou;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

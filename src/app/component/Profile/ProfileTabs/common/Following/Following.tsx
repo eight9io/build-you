@@ -36,7 +36,7 @@ const Following: FC<IFollowingProps> = ({
                 activeOpacity={0.8}
                 onPress={() =>
                   navigation.navigate("OtherUserProfileScreen", {
-                    userId: item.id
+                    userId: item.id,
                   })
                 }
                 className="mb-5 flex-row items-center gap-3 pr-10"
@@ -67,11 +67,22 @@ const Following: FC<IFollowingProps> = ({
         />
       )}
       {following && following.length == 0 && (
-        <View className=" flex-1 items-center justify-center">
-          <Empty />
-          <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
-            {t("empty_following")}
-          </Text>
+        <View className="mt-2 h-full flex-1 items-center justify-center">
+          <FlatList
+            data={[]}
+            renderItem={() => <></>}
+            showsVerticalScrollIndicator={true}
+            ListFooterComponent={
+              <View className=" justify-cente mt-6 items-center ">
+                <Empty />
+                <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
+                  {t("empty_followers")}
+                </Text>
+              </View>
+            }
+            onRefresh={getFollowingList}
+            refreshing={isRefreshing}
+          />
         </View>
       )}
     </View>

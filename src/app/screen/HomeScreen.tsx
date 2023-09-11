@@ -161,6 +161,7 @@ export const HomeFeed = () => {
           data={feedData}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
+          ListFooterComponent={<View className={clsx("h-16")} />}
           onEndReached={getNewFeed}
           onEndReachedThreshold={3}
           onRefresh={handleScroll}
@@ -231,6 +232,7 @@ export const HomeFeedUnregister = () => {
           data={feedData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id as unknown as string}
+          ListFooterComponent={<View className={clsx("h-16")} />}
           onEndReached={getNewFeed}
           onEndReachedThreshold={0.5}
           onRefresh={handleScroll}

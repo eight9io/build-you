@@ -7,18 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:288098023879:android:459bdbf56ce0d75b1081e2",
+        "mobilesdk_app_id": "1:288098023879:android:97bd8c48ef94237b1081e2",
         "android_client_info": {
           "package_name": "com.buildyou.buildyou"
         }
       },
       "oauth_client": [
         {
-          "client_id": "288098023879-9spmqgolc030qf9gato0i1k8dookktg1.apps.googleusercontent.com",
+          "client_id": "288098023879-8q8mfblcd6kjbvcit4ug7hjf51c8j7n6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.buildyou.buildyou",
-            "certificate_hash": "01043873c14eac070c3c1825d146836391006f6f"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDkZkBsNkFPkahk_ZnqCLNfoDfr2ABQ_qw"
+          "current_key": "AIzaSyCd1vqS3hfSUyo44AfbXNAHO80GjENWQz4"
         }
       ],
       "services": {

@@ -39,7 +39,11 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>28</string>
+    <string>29</string>
+    <key>GMSApiKey</key>
+    <string>AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>

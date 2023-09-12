@@ -3,31 +3,24 @@ import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 
 import clsx from "clsx";
-import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
-import { useForm, Controller, Resolver } from "react-hook-form";
-import Spinner from "react-native-loading-spinner-overlay";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Spinner from "react-native-loading-spinner-overlay";
+import { useForm, Controller, Resolver } from "react-hook-form";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
-import { ICreateChallenge } from "../../../../types/challenge";
-import { useNav } from "../../../../hooks/useNav";
-import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
-import {
-  createChallenge,
-  updateChallengeImage,
-} from "../../../../service/challenge";
+import { useNav } from "../../../../hooks/useNav";
+import { ICreateChallenge } from "../../../../types/challenge";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import httpInstance from "../../../../utils/http";
-import { StackActions } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
 import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 
 interface ICreateCertifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {

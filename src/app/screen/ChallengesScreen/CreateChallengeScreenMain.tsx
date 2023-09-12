@@ -28,11 +28,11 @@ const CreateChallengeCard: FC<ICreateChallengeCardProps> = ({
   onPress,
 }) => {
   return (
-    <View className="items-between flex w-[343px] flex-row rounded-xl bg-white shadow-md">
+    <View className="items-between flex flex-row rounded-xl bg-white shadow-md">
       <Image source={image} className="h-36 w-16 rounded-l-2xl" />
       <View className="flex flex-grow flex-col items-start justify-center px-3">
         <Text className="text-center text-xl font-semibold">{title}</Text>
-        <Text className="w-[230px] break-words font-regular text-[14px]">
+        <Text className="w-[270] break-words font-regular text-[14px]">
           {description}
         </Text>
 
@@ -64,8 +64,8 @@ const CreateChallengeScreenMain = () => {
     else navigation.navigate("CreateChallengeScreen");
   };
   const handleCreateCretifiedChallenge = () => {
-    if (isCompany) navigation.navigate("CreateCretifiedCompanyChallengeScreen");
-    else navigation.navigate("CreateCretifiedChallengeScreen");
+    if (isCompany) navigation.navigate("CreateCertifiedCompanyChallengeScreen");
+    else navigation.navigate("CreateCertifiedChallengeScreen");
   };
   return (
     <SafeAreaView
@@ -91,11 +91,11 @@ const CreateChallengeScreenMain = () => {
           <View className="h-6" />
           <CreateChallengeCard
             image={require("../../common/image/image-cost-challenge.jpg")}
-            title={t("new_challenge_screen.cretified_challenge")}
+            title={t("new_challenge_screen.certified_challenge")}
             description={t(
-              "new_challenge_screen.cretified_challenge_description"
+              "new_challenge_screen.certified_challenge_description"
             )}
-            createText={t("new_challenge_screen.create_cretified_challenge")}
+            createText={t("new_challenge_screen.create_certified_challenge")}
             onPress={handleCreateCretifiedChallenge}
           />
         </View>

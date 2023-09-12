@@ -1,27 +1,28 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import React, { FC, useLayoutEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useForm, Controller, Resolver } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Spinner from "react-native-loading-spinner-overlay";
+import React, { FC, useLayoutEffect, useState } from "react";
+import { useForm, Controller, Resolver } from "react-hook-form";
+import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
+
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { useNav } from "../../../../hooks/useNav";
 import { ICreateCompanyChallenge } from "../../../../types/challenge";
-import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import CustomSwitch from "../../../../component/common/Switch";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
+import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
 
 import { ICreateChallenge } from "../../../../types/challenge";
-import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
 import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
+import { CreateCertifiedCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -42,7 +43,7 @@ interface ICreateChallengeModalProps {
   onClose: () => void;
 }
 
-export const CreateCertifiedCompanyChallengeScreen: FC<
+const CreateCertifiedCompanyChallengeScreen: FC<
   ICreateChallengeModalProps
 > = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -79,15 +80,24 @@ export const CreateCertifiedCompanyChallengeScreen: FC<
       softSkills: [],
     },
     resolver: yupResolver(
-      CreateCompanyChallengeValidationSchema()
+      CreateCertifiedCompanyChallengeValidationSchema()
     ) as unknown as Resolver<ICreateChallengeForm, any>,
     reValidateMode: "onChange",
   });
 
   const onSubmit = async (data: ICreateCompanyChallenge) => {
     setIsLoading(true);
+    const { softSkills, ...restData } = data;
+    const softSkillsWithSkillLabel = softSkills.map((softSkill) => {
+      const { label, ...rest } = softSkill;
+      return {
+        ...rest,
+        skill: label,
+      };
+    });
     setCreateChallengeDataStore({
-      ...data,
+      ...restData,
+      softSkills: softSkillsWithSkillLabel,
       type: "certified",
     });
     setTimeout(() => {
@@ -122,7 +132,6 @@ export const CreateCertifiedCompanyChallengeScreen: FC<
       const { testID, value, ...rest } = softSkill;
       return rest;
     });
-
     setSelectedCompetencedSkill(softSkillsWithoutTestID);
     setValue("softSkills", softSkillsWithoutTestID, {
       shouldValidate: true,

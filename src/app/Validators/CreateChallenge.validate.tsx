@@ -38,7 +38,7 @@ export const CreateChallengeValidationSchema = (): yup.ObjectSchema<
   });
 };
 
-export const CreateCretifiedChallengeValidationSchema = (): yup.ObjectSchema<
+export const CreateCertifiedChallengeValidationSchema = (): yup.ObjectSchema<
   Record<keyof ICreateCretifiedChallengeForm, yup.AnySchema>
 > => {
   const { t } = useTranslation();

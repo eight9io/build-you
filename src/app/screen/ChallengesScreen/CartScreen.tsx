@@ -242,7 +242,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             <View className="flex w-full flex-col items-start justify-start">
               <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
                 {["Intake", "Check", "Closing"].map((item) => (
-                  <Text className="text-center text-md font-semibold leading-none text-neutral-700">
+                  <Text
+                    className="text-center text-md font-semibold leading-none text-neutral-700"
+                    key={item}
+                  >
                     {item}
                   </Text>
                 ))}

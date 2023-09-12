@@ -86,12 +86,10 @@ export default function Login() {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);
-      const currentAccessToken = getAccessToken();
-      const decodeUserId = jwt_decode<IToken>(currentAccessToken).id;
       setupInterceptor(
         getRefreshToken,
         () => {
-          logout(decodeUserId);
+          logout();
           userProfileStoreOnLogout();
         },
         setAccessToken,
@@ -103,10 +101,10 @@ export default function Login() {
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
       const isAccountVerified = checkIsAccountVerified(profile);
 
-      if (!isAccountVerified) {
-        setIsShowVerifiedErrorModal(true);
-        return;
-      }
+      // if (!isAccountVerified) {
+      //   setIsShowVerifiedErrorModal(true);
+      //   return;
+      // }
 
       const navigateToRoute = isCompleteProfile
         ? "HomeScreen"
@@ -134,6 +132,7 @@ export default function Login() {
 
   const handleConfirmError = async () => {
     setIsShowVerifiedErrorModal(false);
+    logout();
   };
 
   return (

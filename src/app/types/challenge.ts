@@ -17,8 +17,13 @@ export interface ICreateCompanyChallenge {
   image?: string;
   type?: string;
   package?: string;
-  softSkills?: string[];
+  softSkills?: ISoftSkill[];
   checkpoint: number;
+}
+
+export interface ISoftSkill {
+  id: string;
+  label: string;
 }
 
 export interface IEditChallenge {

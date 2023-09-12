@@ -26,7 +26,6 @@ const onMessageReceived = async (message) => {
       channelId, // Required for Android to display the notification
     },
   });
-
   await notifee.incrementBadgeCount();
 };
 

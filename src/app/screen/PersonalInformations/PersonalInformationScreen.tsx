@@ -114,7 +114,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
   };
 
   const handleLogOut = () => {
-    logout(userData.id);
+    logout();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

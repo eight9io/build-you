@@ -96,12 +96,10 @@ export const RootNavigation = () => {
           logout();
           userProfileStoreOnLogout();
         }
-        const currentAccessToken = getAccessToken();
-        const decodeUserId = jwt_decode<IToken>(currentAccessToken).id;
         setupInterceptor(
           getRefreshToken,
           () => {
-            logout(decodeUserId);
+            logout();
             userProfileStoreOnLogout();
           },
           setAccessToken,

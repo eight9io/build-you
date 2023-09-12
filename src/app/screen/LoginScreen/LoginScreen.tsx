@@ -86,12 +86,10 @@ export default function Login() {
     setIsLoading(true);
     try {
       const t = await asyncLogin(payload, type);
-      const currentAccessToken = getAccessToken();
-      const decodeUserId = jwt_decode<IToken>(currentAccessToken).id;
       setupInterceptor(
         getRefreshToken,
         () => {
-          logout(decodeUserId);
+          logout();
           userProfileStoreOnLogout();
         },
         setAccessToken,

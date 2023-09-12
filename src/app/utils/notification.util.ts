@@ -21,6 +21,8 @@ import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
+import { useGetOtherUserData } from "../hooks/useGetUser";
+import { serviceGetOtherUserData } from "../service/user";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
@@ -112,16 +114,23 @@ export const handleTapOnIncomingNotification = async (
 
     switch (payload.notificationType) {
       case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-        if (payload.progressId && payload.challengeId) {
-          // navigation.navigate("ProgressCommentScreen", {
-          //   progressId: payload.progressId,
-          //   challengeId: payload.challengeId,
-          // });
-          const pushAction = StackActions.push("ProgressCommentScreen", {
-            progressId: payload.progressId,
-            challengeId: payload.challengeId,
-          });
-          navigation.dispatch(pushAction);
+        if (payload.commentUserId && payload.challengeId) {
+          try {
+            const userCreateChallengeId = payload.commentUserId;
+            const userCreateChallengeData = await serviceGetOtherUserData(
+              userCreateChallengeId
+            );
+            const pushAction = StackActions.push(
+              "OtherUserProfileChallengeDetailsScreen",
+              {
+                challengeId: payload.challengeId,
+                isCompany: userCreateChallengeData.data.companyAccount,
+              }
+            );
+            navigation.dispatch(pushAction);
+          } catch (error) {
+            console.log("error: ", error);
+          }
         }
         break;
       case NOTIFICATION_TYPES.PROGRESS_CREATED:

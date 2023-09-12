@@ -75,22 +75,7 @@ const watchLogin = (config) => (set, get, api) =>
             console.log("Ignore Push Notification", e);
           });
       }
-      if (args.accessToken === null) {
-        unregisterForPushNotificationsAsync()
-          .then((token) => {
-            updateNotificationToken({
-              notificationToken: token,
-              status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
-              deviceType:
-                Platform.OS === "android"
-                  ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-                  : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
-            });
-          })
-          .catch(() => {
-            console.log("Ignore Push Notification");
-          });
-      }
+
       set(args);
     },
     get,

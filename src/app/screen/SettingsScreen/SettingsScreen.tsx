@@ -26,6 +26,7 @@ import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
 import TermsOfServicesScreen from "../PersonalInformations/TermsOfServicesScreen";
 import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
 import CompanyInformationScreen from "../PersonalInformations/CompanyInformationScreen";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -49,6 +50,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
 
   const handleLogout = async () => {
     setIsShowLogoutModal(false);
+    const userLoginType = currentUser?.loginType;
 
     setTimeout(async () => {
       navigation.dispatch(
@@ -58,7 +60,18 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         })
       );
       setLastNotiIdToLocalStorage("");
-      logout(currentUser.id);
+      logout();
+      if (userLoginType === "google") {
+        const googleSignOut = async () => {
+          try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        googleSignOut();
+      }
 
       userProfileStoreOnLogout();
     }, 500);

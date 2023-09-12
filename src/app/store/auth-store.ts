@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import * as Device from "expo-device";
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
@@ -47,7 +48,7 @@ export interface LoginStore {
     type: LOGIN_TYPE
   ) => Promise<AxiosResponse<ILoginResponse>>;
 
-  logout: (currentUserI?: string) => void;
+  logout: () => void;
 }
 
 const watchLogin = (config) => (set, get, api) =>
@@ -158,32 +159,17 @@ export const useAuthStore = create<LoginStore>()(
         return res;
       },
 
-      logout: async (currentUserId: string) => {
+      logout: async () => {
         set({
           accessToken: null,
           refreshToken: null,
         });
-        if (currentUserId) {
-          // const messagingToken = await messaging().getToken({
-          //   appName: "build-you",
-          //   senderId: "288098023879",
-          // });
+        if (Device.isDevice) {
           const messagingToken = await messaging().getToken();
-
           await deletePushNotificatoinToken(messagingToken);
+          useNotificationStore.getState().setListenerIsReady(false);
         }
-        useNotificationStore.getState().setListenerIsReady(false);
         delete httpInstance.defaults.headers.common["Authorization"];
-
-        const googleSignOut = async () => {
-          try {
-            await GoogleSignin.revokeAccess();
-            await GoogleSignin.signOut();
-          } catch (error) {
-            console.error(error);
-          }
-        };
-        googleSignOut();
       },
       setHasHydrated: () => {
         set({

@@ -1,7 +1,6 @@
-CFBundleDisplayName = "BuildYou";
-NSCameraUsageDescription = "BuildYou vorrebbe accedere all tua fotocamera così puoi condividere i tuoi progressi";
-NSPhotoLibraryAddUsageDescription = "BuildYou vorrebbe poter salvare immagini nella tua galleria così puoi tenere traccia dei tuoi progressi";
-NSPhotoLibraryUsageDescription = "BuildYou vorrebbe accedere all tua galleria fotografica così puoi scegliere una foto da usare per i tuoi obiettivi";
+NSCameraUsageDescription = "BuildYou vorrebbe accedere all tua fotocamera così puoi condividere i tuoi progressi.";
+NSPhotoLibraryAddUsageDescription = "BuildYou vorrebbe poter salvare immagini nella tua galleria così puoi tenere traccia dei tuoi progressi.";
+NSPhotoLibraryUsageDescription = "BuildYou vorrebbe accedere all tua galleria fotografica così puoi scegliere una foto da usare per i tuoi obiettivi.";
 NSLocationAlwaysAndWhenInUseUsageDescription = "Consenti a BuildYou di usare la tua posizione per aggiungere più informazioni sui tuoi progressi.";
 NSLocationAlwaysUsageDescription = "Consenti a BuildYou di usare la tua posizione per aggiungere più informazioni sui tuoi progressi.";
 NSLocationWhenInUseUsageDescription = "Consenti a BuildYou di usare la tua posizione per aggiungere più informazioni sui tuoi progressi.";

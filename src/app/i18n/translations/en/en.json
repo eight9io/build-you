@@ -162,7 +162,11 @@
       "birthday_error": "Please select your birth.",
       "occupation": "Occupation",
       "enter_occupation": "Enter your occupation",
-      "occupation_error": "Please select your occupation."
+      "occupation_error": "Please select your occupation.",
+      "web_site": "Web site",
+      "phone": "Phone",
+      "email_contact": "Email contact",
+      "pIva": "VAT number"
     },
     "screen_2": {
       "title": "Tell the others something about you",

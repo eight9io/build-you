@@ -94,6 +94,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
   const videoSrc = userProfile?.video;
   const { t } = useTranslation();
 
+console.log("userProfile", userProfile);
   return (
     <ScrollView className="w-full px-4  ">
       <View className="justify-content: space-between mb-[100px] w-full pt-4 ">
@@ -144,7 +145,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                   "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
-                {t("form_onboarding.screen_1.occupation")}:&nbsp;
+                {t("form_onboarding.screen_1.web_site")}:&nbsp;
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
@@ -159,7 +160,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                   "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
-                {t("form_onboarding.screen_1.occupation")}:&nbsp;
+                {t("form_onboarding.screen_1.phone")}:&nbsp;
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
@@ -174,7 +175,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                   "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
-                {t("form_onboarding.screen_1.occupation")}:&nbsp;
+                {t("form_onboarding.screen_1.email_contact")}:&nbsp;
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
@@ -189,7 +190,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                   "w-[35%] text-md font-semibold  text-gray-dark"
                 )}
               >
-                {t("form_onboarding.screen_1.occupation")}:&nbsp;
+                {t("form_onboarding.screen_1.pIva")}:&nbsp;
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>

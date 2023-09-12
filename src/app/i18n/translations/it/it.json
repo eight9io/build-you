@@ -163,7 +163,11 @@
       "birthday_error": "Selziona data.",
       "occupation": "Professione",
       "enter_occupation": "Inserisci la tua professione",
-      "occupation_error": "Seleziona la professione più coerente."
+      "occupation_error": "Seleziona la professione più coerente.",
+      "web_site": "Sito web",
+      "phone": "Telefono",
+      "email_contact": "Contatto email",
+      "pIva": "Partita IVA"
     },
     "screen_2": {
       "title": "Racconta agli altri qualcosa di te",

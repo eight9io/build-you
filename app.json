@@ -17,8 +17,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
-      "associatedDomains": ["applinks:app.buildyou.it"],
-      "buildNumber": "27",
+      "associatedDomains": [
+        "applinks:app.uat.buildyou.it",
+        "applinks:app.buildyou.it"
+      ],
+      "buildNumber": "28",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"],

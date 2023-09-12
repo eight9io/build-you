@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, SafeAreaView } from "react-native";
+import { View, SafeAreaView, Platform } from "react-native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
@@ -13,7 +13,10 @@ import { RootStackParamList } from "../../navigation/navigation.type";
 
 import { useUserProfileStore } from "../../store/user-store";
 import { useAuthStore } from "../../store/auth-store";
-import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
+import {
+  setLastNotiIdToLocalStorage,
+  unregisterForPushNotificationsAsync,
+} from "../../utils/notification.util";
 
 import Settings from "../../component/Settings";
 import AppTitle from "../../component/common/AppTitle";
@@ -27,6 +30,11 @@ import TermsOfServicesScreen from "../PersonalInformations/TermsOfServicesScreen
 import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
 import CompanyInformationScreen from "../PersonalInformations/CompanyInformationScreen";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { updateNotificationToken } from "../../service/notification";
+import {
+  NOTIFICATION_TOKEN_DEVICE_TYPE,
+  NOTIFICATION_TOKEN_STATUS,
+} from "../../common/enum";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -51,6 +59,20 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const handleLogout = async () => {
     setIsShowLogoutModal(false);
     const userLoginType = currentUser?.loginType;
+    await unregisterForPushNotificationsAsync()
+      .then((token) => {
+        updateNotificationToken({
+          notificationToken: token,
+          status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
+          deviceType:
+            Platform.OS === "android"
+              ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+              : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+        });
+      })
+      .catch(() => {
+        console.log("Ignore Push Notification");
+      });
 
     setTimeout(async () => {
       navigation.dispatch(

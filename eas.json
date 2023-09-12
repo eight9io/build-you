@@ -31,7 +31,7 @@
         "EXPO_LINKEDIN_CLIENT_SECRET": "CCeKiPa73v93opdk",
         "EXPO_API_URL": "https://buildyou-back.stg.startegois.com",
         "EXPO_GOOGLE_MAP_API_KEY": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI",
-        "EXPO_APP_DOMAIN": "https://app.uat.buildyou.it",
+        "EXPO_APP_DOMAIN": "https://app.buildyou.it",
         "EXPO_GOOGLE_WEB_CLIENT_ID": "288098023879-vfa1h4b0fva0alo5h70kv6r3gsb0bm4k.apps.googleusercontent.com"
       }
     },
@@ -50,7 +50,7 @@
         "EXPO_LINKEDIN_CLIENT_SECRET": "CCeKiPa73v93opdk",
         "EXPO_API_URL": "https://buildyou-back.stg.startegois.com",
         "EXPO_GOOGLE_MAP_API_KEY": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI",
-        "EXPO_APP_DOMAIN": "https://app.uat.buildyou.it",
+        "EXPO_APP_DOMAIN": "https://app.buildyou.it",
         "EXPO_GOOGLE_WEB_CLIENT_ID": "288098023879-vfa1h4b0fva0alo5h70kv6r3gsb0bm4k.apps.googleusercontent.com"
       }
     },
@@ -63,7 +63,7 @@
         "EXPO_LINKEDIN_CLIENT_SECRET": "CCeKiPa73v93opdk",
         "EXPO_API_URL": "https://buildyou-back.stg.startegois.com",
         "EXPO_GOOGLE_MAP_API_KEY": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI",
-        "EXPO_APP_DOMAIN": "https://app.uat.buildyou.it",
+        "EXPO_APP_DOMAIN": "https://app.buildyou.it",
         "EXPO_GOOGLE_WEB_CLIENT_ID": "288098023879-vfa1h4b0fva0alo5h70kv6r3gsb0bm4k.apps.googleusercontent.com"
       }
     }

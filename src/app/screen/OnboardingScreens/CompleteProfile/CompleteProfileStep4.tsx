@@ -21,7 +21,6 @@ import { useGetUserData } from "../../../hooks/useGetUser";
 import StepOfSteps from "../../../component/common/StepofSteps";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 import Button from "../../../component/common/Buttons/Button";
-import SoftSkillPicker from "../../../component/SoftSkillPicker/SoftSkillPicker";
 
 import CheckedSvg from "./asset/checked.svg";
 import UncheckedSvg from "./asset/uncheck.svg";
@@ -360,15 +359,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                   multiple={true}
                   mode="SIMPLE"
                   badgeDotColors={["#e76f51"]}
-                  containerProps={{
-                    style: {
-                      zIndex: 10,
-                      height: openDropdown
-                        ? 50 * (fetchedSoftSkills?.length + 1)
-                        : 50,
-                      overflow: "scroll",
-                    },
-                  }}
                   renderListItem={({ item, isSelected }) => {
                     const isSkillAlreadySelected =
                       selectedCompetencedSkill.find(

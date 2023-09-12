@@ -141,9 +141,9 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
                       key={index}
                       title={item.skill as any}
                       onPress={() => addCompetenceSkill(item)}
-                      textClassName="line-[30px] text-center text-md text-gray-dark font-medium"
+                      textClassName="line-[30px] text-center text-md text-gray-dark font-medium line-clamp-2"
                       containerClassName={clsx(
-                        "border-gray-300 ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-3",
+                        "border-gray-300 ml-1 border-[1px] mx-2 my-1.5 h-[55px] max-h-[85px] flex-none px-3 ",
                         {
                           "bg-primary-10": selectedCompetencedSkill.find(
                             (skill) => skill.id === item.id

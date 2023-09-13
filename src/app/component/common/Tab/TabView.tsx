@@ -45,6 +45,8 @@ export const TabView: FC<ITabViewProps> = ({
   activeTabIndex,
   setActiveTabIndex,
 }) => {
+  // remove falsey values from children
+  children = children.filter(Boolean);
   return (
     <View className="flex h-full flex-1 flex-col">
       <View>

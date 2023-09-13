@@ -1,11 +1,19 @@
+// const extractPrefix = (url: string) => {
+//   console.log("url", url);
+//   if (!url || url === null) return "";
+//   try {
+//     const urlObj = new URL(url);
+//     return urlObj.origin;
+//   } catch (error) {
+//     console.log("error", error);
+//     return "";
+//   }
+// };
+// error: url.origin is not implemented 
+
 const extractPrefix = (url: string) => {
-  try {
-    const urlObj = new URL(url);
-    return urlObj.origin;
-  } catch (error) {
-    console.error("Invalid URL:", error);
-    return "";
-  }
+  const match = url.match(/^(https?:\/\/[^/]+)/);
+  return match ? match[1] : "";
 };
 
 export const getSeperateImageUrls = (url: string | null) => {

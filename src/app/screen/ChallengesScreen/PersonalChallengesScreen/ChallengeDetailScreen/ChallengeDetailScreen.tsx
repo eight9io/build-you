@@ -22,6 +22,7 @@ import {
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import CoachTab from "./CoachTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -80,10 +81,12 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           i18n.t("challenge_detail_screen.progress"),
           i18n.t("challenge_detail_screen.description"),
           i18n.t("challenge_detail_screen.participants"),
+          i18n.t("challenge_detail_screen.coach"),
         ]
       : [
           i18n.t("challenge_detail_screen.progress"),
           i18n.t("challenge_detail_screen.description"),
+          i18n.t("challenge_detail_screen.coach"),
         ];
   const statusColor = getChallengeStatusColor(
     challengeStatus,
@@ -205,6 +208,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             {participantList && challengeOwner?.companyAccount && (
               <ParticipantsTab participant={participantList} />
             )}
+            <CoachTab />
           </TabView>
         </View>
       </View>

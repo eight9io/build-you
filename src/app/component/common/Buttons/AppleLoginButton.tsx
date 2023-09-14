@@ -57,11 +57,13 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({
     }>(appleAuthRequestResponse.identityToken);
     const userEmail = appleAuthRequestResponse.email || email;
     const userSub = sub;
+    const userFullName = appleAuthRequestResponse.fullName;
     if (userEmail && userSub) {
       // Save user login data to AsyncStorage to retry if login failed due to network error
       await AsyncStorage.multiSet([
         ["@userAppleEmail", userEmail],
         ["@userAppleSub", userSub],
+        ["@userAppleFullName", JSON.stringify(userFullName)],
       ]);
     }
     onLogin(

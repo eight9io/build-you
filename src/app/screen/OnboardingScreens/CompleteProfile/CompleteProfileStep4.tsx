@@ -30,6 +30,7 @@ import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -219,19 +220,34 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     }
 
     try {
-      await Promise.all([
-        uploadNewVideo(profile?.video),
-        httpInstance.put(`/user/first/update/${userData.id}`, {
-          name: profile?.name,
-          surname: profile?.surname,
-          birth: profile?.birth,
-          occupation: profile?.occupation,
-          bio: profile?.biography,
-          softSkill: softSkills,
-          hardSkill: profile.skills,
-          company: "",
-        }),
-      ]);
+      const isAppleLogin = userData?.loginType === "apple";
+      if (isAppleLogin) {
+        await Promise.all([
+          uploadNewVideo(profile?.video),
+          httpInstance.put(`/user/update/${userData.id}`, {
+            birth: profile?.birth,
+            occupation: profile?.occupation,
+            bio: profile?.biography,
+            softSkill: softSkills,
+            hardSkill: profile.skills,
+            company: "",
+          }),
+        ]);
+      } else {
+        await Promise.all([
+          uploadNewVideo(profile?.video),
+          httpInstance.put(`/user/first/update/${userData.id}`, {
+            name: profile?.name,
+            surname: profile?.surname,
+            birth: profile?.birth,
+            occupation: profile?.occupation,
+            bio: profile?.biography,
+            softSkill: softSkills,
+            hardSkill: profile.skills,
+            company: "",
+          }),
+        ]);
+      }
       await getUserProfileAsync();
       navigation.navigate("CompleteProfileFinishScreen");
     } catch (error) {

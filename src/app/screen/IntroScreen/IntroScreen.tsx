@@ -44,13 +44,13 @@ export const IntroScreen = ({ navigation, route }: any) => {
         <View className="h-[120px]">
           <Swiper className="justify-center">
             <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
-              {t("login_screen.description")}
+              {t("login_screen.description1")}
             </Text>
             <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
-              {t("login_screen.description")}
+              {t("login_screen.description2")}
             </Text>
             <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
-              {t("login_screen.description")}
+              {t("login_screen.description3")}
             </Text>
           </Swiper>
         </View>

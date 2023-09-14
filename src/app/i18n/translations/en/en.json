@@ -137,6 +137,7 @@
   "button.update": "Update",
   "button.edit_companyProfile": "Edit profile",
   "new_challenge_screen.title": "Create a new challenge",
+  "new_challenge_screen.next": "Next",
   "new_challenge_screen.location": "Location",
   "new_challenge_screen.enter_your_location": "Select your location",
   "login": "Login",
@@ -579,7 +580,7 @@
     "closing": "Closing"
   },
   "cart_screen": {
-    "title": "Sumary",
+    "title": "Summary",
     "basic_packages": "Basic packages",
     "basic_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat",
     "premium_packages": "Premium packages",

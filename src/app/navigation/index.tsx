@@ -419,7 +419,7 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("cart_screen.title") || "Sumary"} />
+                <AppTitle title={t("cart_screen.title") || "Summary"} />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>

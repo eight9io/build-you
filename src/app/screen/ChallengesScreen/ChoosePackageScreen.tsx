@@ -1,5 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   View,
@@ -8,20 +8,37 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+
+import { numberToStringPrice } from "../../utils/price";
+
+import { serviceGetAllPackages } from "../../service/package";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
+import { IPackage } from "../../types/package";
 
-const RenderPackageOptions = ({
-  name,
-  description,
-  benefits,
-  price,
-  onPress,
-}) => {
+interface ITypeOfPackage {
+  id: string;
+  name: string;
+  price: number;
+}
+
+function convertPhrases(phrase) {
+  if (phrase === "videocall") {
+    return "Video call";
+  } else if (phrase === "chat") {
+    return "Direct chat";
+  } else {
+    return phrase;
+  }
+}
+
+const RenderPackageOptions = ({ name, type, caption, price, onPress }) => {
   const { t } = useTranslation();
+
   return (
     <View
-      className="flex flex-col items-start justify-start rounded-2xl bg-slate-50 pb-4"
+      className="mt-4 flex flex-col items-start justify-start rounded-2xl bg-slate-50 pb-4"
       style={{
         height: 280,
         width: 300,
@@ -34,11 +51,11 @@ const RenderPackageOptions = ({
       </View>
       <View className="flex w-full flex-col items-center justify-center gap-y-2">
         <Text className="px-2 pt-3 text-center text-md font-normal leading-none text-zinc-500">
-          {description}
+          {caption}
         </Text>
         <View className="flex flex-col items-center justify-start">
           <Text className="text-center text-md font-semibold leading-tight text-orange-500">
-            {benefits}
+            {convertPhrases(type)}
           </Text>
           <View className="flex flex-col items-center justify-start space-y-2 py-2">
             {[
@@ -56,7 +73,7 @@ const RenderPackageOptions = ({
             <View className="w-[164px] border border-neutral-300"></View>
           </View>
           <Text className="text-center text-base font-semibold leading-snug text-orange-500">
-            {price} $
+            {numberToStringPrice(price)} $
           </Text>
         </View>
         <TouchableOpacity
@@ -77,32 +94,48 @@ const RenderPackageOptions = ({
 };
 
 const ChoosePackageScreen = () => {
+  const [packages, setPackages] = useState<IPackage[]>([] as IPackage[]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const res = await serviceGetAllPackages();
+        setPackages(res.data.packages);
+      } catch (error) {
+        console.log("get packages error", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPackages();
+  }, []);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
 
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
 
-  const handleChoosePackage = (typeOfPackage: "basic" | "premium") => {
+  const handleChoosePackage = (typeOfPackage: ITypeOfPackage) => {
+    const packageData = {
+      name: typeOfPackage.name,
+      price: typeOfPackage.price,
+      id: typeOfPackage.id,
+    };
     setCreateChallengeDataStore({
       ...getCreateChallengeDataStore(),
-      package: typeOfPackage,
+      package: packageData,
     });
-    if (typeOfPackage === "basic") {
-      navigation.navigate("CartScreen", {
-        initialPrice: "90.00",
-        typeOfPackage: "basic",
-      });
-    } else {
-      navigation.navigate("CartScreen", {
-        initialPrice: "190.00",
-        typeOfPackage: "premium",
-      });
-    }
+    navigation.navigate("CartScreen", {
+      packageId: typeOfPackage.id,
+      initialPrice: typeOfPackage.price,
+      typeOfPackage: typeOfPackage.name,
+    });
   };
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
+      {loading && <Spinner />}
       <ScrollView>
         <View className="flex flex-1 flex-col items-center justify-start space-y-4 ">
           <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
@@ -112,7 +145,17 @@ const ChoosePackageScreen = () => {
             {t("choose_packages_screen.description")}
           </Text>
           <View className=" flex flex-col">
-            <RenderPackageOptions
+            {packages.length > 0 &&
+              packages.map((item) => (
+                <RenderPackageOptions
+                  name={item.name}
+                  type={item.type}
+                  caption={item.caption}
+                  price={item.price}
+                  onPress={() => handleChoosePackage(item)}
+                />
+              ))}
+            {/* <RenderPackageOptions
               name={t("choose_packages_screen.basic_package")}
               description={t(
                 "choose_packages_screen.basic_package_description"
@@ -130,7 +173,7 @@ const ChoosePackageScreen = () => {
               benefits={t("choose_packages_screen.direct_chat")}
               price={"190.00"}
               onPress={() => handleChoosePackage("premium")}
-            />
+            /> */}
           </View>
         </View>
       </ScrollView>

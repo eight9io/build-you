@@ -32,13 +32,12 @@ interface ICartScreenProps {
   route: Route<
     "CartScreen",
     {
-      typeOfPackage: TPackageType;
-      initialPrice: string;
+      packageId: string;
+      typeOfPackage: string;
+      initialPrice: number;
     }
   >;
 }
-
-export type TPackageType = "basic" | "premium";
 
 const CHECKPOINT_PRICE = 90;
 
@@ -52,7 +51,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
 
-  const { initialPrice, typeOfPackage } = route.params;
+  const { initialPrice, typeOfPackage, packageId } = route.params;
   const { t } = useTranslation();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -64,9 +63,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
   useEffect(() => {
-    setFinalPrice(
-      stringPriceToNumber(initialPrice) + numberOfCheckpoints * CHECKPOINT_PRICE
-    );
+    setFinalPrice(initialPrice + numberOfCheckpoints * CHECKPOINT_PRICE);
   }, [numberOfCheckpoints]);
 
   const handlePay = () => {
@@ -253,7 +250,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               </View>
               <View className="flex w-full items-end ">
                 <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {initialPrice} $
+                  {numberToStringPrice(initialPrice)} $
                 </Text>
               </View>
             </View>

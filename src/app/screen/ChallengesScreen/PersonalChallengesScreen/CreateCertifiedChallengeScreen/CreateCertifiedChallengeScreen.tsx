@@ -146,7 +146,7 @@ const CreateCertifiedChallengeScreen = () => {
       headerRight: () => (
         <TouchableOpacity onPress={handleSubmit(onSubmit)}>
           <Text className="text-base font-normal text-primary-default">
-            {t("new_challenge_screen.create_button").toLocaleUpperCase()}
+            {t("new_challenge_screen.next").toLocaleUpperCase()}
           </Text>
         </TouchableOpacity>
       ),

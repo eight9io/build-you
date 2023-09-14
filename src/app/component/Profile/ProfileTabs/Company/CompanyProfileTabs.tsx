@@ -98,7 +98,7 @@ const CompanyProfileTabs = () => {
             key="1"
           />,
           <Following
-            following={followingList}
+            following={[]}
             isRefreshing={isFollowingRefreshing}
             getFollowingList={getFollowingList}
             key="2"

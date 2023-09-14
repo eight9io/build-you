@@ -94,7 +94,6 @@ const Biography = ({ userProfile }: IBiographyProps) => {
   const videoSrc = userProfile?.video;
   const { t } = useTranslation();
 
-console.log("userProfile", userProfile);
   return (
     <ScrollView className="w-full px-4  ">
       <View className="justify-content: space-between mb-[100px] w-full pt-4 ">

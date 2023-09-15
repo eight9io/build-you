@@ -119,6 +119,7 @@ export default function DeleteAccountScreen() {
             setIsShowModal({ ...isShowModal, isModalDelete: false })
           }
           closeButtonLabel={t("dialog.cancel") || ""}
+          confirmButtonColor="#FF4949"
           confirmButtonLabel={t("dialog.delete") || ""}
           onConfirm={() => handleDeleteAccount()}
         />

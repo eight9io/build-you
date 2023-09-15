@@ -58,7 +58,6 @@ const Followers: FC<IFollowersProps> = ({
                 </View>
                 <Text className="flex w-full flex-row flex-wrap gap-1 pr-[40px]  text-base font-semibold text-basic-black">
                   {item.name + " " + item.surname}
-
                 </Text>
               </TouchableOpacity>
             );
@@ -75,7 +74,7 @@ const Followers: FC<IFollowersProps> = ({
             renderItem={() => <></>}
             showsVerticalScrollIndicator={true}
             ListFooterComponent={
-              <View className=" justify-cente mt-6 items-center ">
+              <View className=" justify-cente mt-6 items-center pt-10">
                 <Empty />
                 <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
                   {t("empty_followers")}

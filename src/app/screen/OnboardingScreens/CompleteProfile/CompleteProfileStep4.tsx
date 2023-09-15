@@ -30,6 +30,7 @@ import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -219,19 +220,34 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     }
 
     try {
-      await Promise.all([
-        uploadNewVideo(profile?.video),
-        httpInstance.put(`/user/update/${userData.id}`, {
-          name: profile?.name,
-          surname: profile?.surname,
-          birth: profile?.birth,
-          occupation: profile?.occupation,
-          bio: profile?.biography,
-          softSkill: softSkills,
-          hardSkill: profile.skills,
-          company: "",
-        }),
-      ]);
+      const isAppleLogin = userData?.loginType === "apple";
+      if (isAppleLogin) {
+        await Promise.all([
+          uploadNewVideo(profile?.video),
+          httpInstance.put(`/user/update/${userData.id}`, {
+            birth: profile?.birth,
+            occupation: profile?.occupation,
+            bio: profile?.biography,
+            softSkill: softSkills,
+            hardSkill: profile.skills,
+            company: "",
+          }),
+        ]);
+      } else {
+        await Promise.all([
+          uploadNewVideo(profile?.video),
+          httpInstance.put(`/user/first/update/${userData.id}`, {
+            name: profile?.name,
+            surname: profile?.surname,
+            birth: profile?.birth,
+            occupation: profile?.occupation,
+            bio: profile?.biography,
+            softSkill: softSkills,
+            hardSkill: profile.skills,
+            company: "",
+          }),
+        ]);
+      }
       await getUserProfileAsync();
       navigation.navigate("CompleteProfileFinishScreen");
     } catch (error) {
@@ -313,6 +329,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 onOutsidePress={() => {
                   setOpenDropdown(false);
                 }}
+                className="z-10"
               >
                 <DropDownPicker
                   value={value}
@@ -354,6 +371,15 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                     borderRadius: 8,
                     overflow: "scroll",
                     zIndex: 10,
+                  }}
+                  containerProps={{
+                    style: {
+                      zIndex: 10,
+                      height: openDropdown
+                        ? 50 * (fetchedSoftSkills?.length + 1)
+                        : 50,
+                      overflow: "scroll",
+                    },
                   }}
                   theme="LIGHT"
                   multiple={true}
@@ -403,28 +429,30 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 />
               </OutsidePressHandler>
               <View>
-                <View>
-                  {numberOfSkillError && (
-                    <View className="flex flex-row items-center justify-start pt-2">
-                      <WarningSvg />
-                      <Text
-                        className="pl-1 text-sm font-normal leading-5 text-red-500"
-                        testID="complete_profile_step_4_error"
-                      >
-                        {t("form_onboarding.screen_4.error") ||
-                          "Please select at least 3 soft skills."}
-                      </Text>
-                    </View>
-                  )}
-                </View>
                 {!openDropdown && (
-                  <View className="w-full flex-col justify-between pt-5">
-                    {renderSelectedSoftSkill(
-                      t,
-                      selectedCompetencedSkill,
-                      changeSkillValue,
-                      skillValueError
-                    )}
+                  <View className="w-full flex-col justify-between ">
+                    <View>
+                      {numberOfSkillError && (
+                        <View className="flex flex-row items-center justify-start pt-2">
+                          <WarningSvg />
+                          <Text
+                            className="pl-1 text-sm font-normal leading-5 text-red-500"
+                            testID="complete_profile_step_4_error"
+                          >
+                            {t("form_onboarding.screen_4.error") ||
+                              "Please select at least 3 soft skills."}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                    <View className="pt-5">
+                      {renderSelectedSoftSkill(
+                        t,
+                        selectedCompetencedSkill,
+                        changeSkillValue,
+                        skillValueError
+                      )}
+                    </View>
                   </View>
                 )}
               </View>

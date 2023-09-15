@@ -74,6 +74,7 @@
     "react-hook-form": "^7.43.9",
     "react-i18next": "^12.2.2",
     "react-native": "0.71.8",
+    "react-native-code-push": "^8.1.0",
     "react-native-controlled-mentions": "^2.2.5",
     "react-native-dialog": "^9.3.0",
     "react-native-dropdown-picker": "^5.4.6",

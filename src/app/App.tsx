@@ -1,3 +1,4 @@
+import codePush from "react-native-code-push";
 import RootNavigation from "./navigation";
 import { MenuProvider } from "react-native-popup-menu";
 import {
@@ -28,7 +29,7 @@ export const App = () => {
       notificationSubscription();
     };
   }, []);
-  
+
   const [fontLoaded] = useFonts({
     OpenSans_300Light,
     OpenSans_400Regular,
@@ -42,8 +43,6 @@ export const App = () => {
   }
   StatusBar.setBarStyle("dark-content", true);
 
-  
-
   return (
     <MenuProvider>
       <EventProvider>
@@ -54,4 +53,4 @@ export const App = () => {
   );
 };
 
-export default App;
+export default codePush(App);

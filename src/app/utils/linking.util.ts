@@ -1,8 +1,8 @@
-import { EXPO_API_APP_DOMAIN } from "@env";
+import { EXPO_APP_DOMAIN } from "@env";
 import * as Linking from "expo-linking";
 
 export const DeepLink = {
-  prefixes: [Linking.createURL("/"), EXPO_API_APP_DOMAIN],
+  prefixes: [Linking.createURL("/"), EXPO_APP_DOMAIN],
   config: {
     screens: {
       NotFound: "*",

@@ -569,7 +569,8 @@
     "video_call": "Videochiamata",
     "intake": "Assunzione",
     "check": "Controllo",
-    "closing": "Chiusura"
+    "closing": "Chiusura",
+    "no_package": "Nessun pacchetto disponibile al momento"
   },
   "cart_screen": {
     "title": "Sommario",

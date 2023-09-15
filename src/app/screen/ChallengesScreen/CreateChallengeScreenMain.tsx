@@ -73,7 +73,7 @@ const CreateChallengeScreenMain = () => {
       testID="user_create_challenge_screen"
     >
       <View className="flex flex-col items-center justify-center pt-8">
-        <Text className="text-center font-regular text-md text-primary-default">
+        <Text className="text-center font-semibold text-lg text-primary-default">
           {t("new_challenge_screen.choose_type")}
         </Text>
         <Text className="text-gray-paragraph px-16 text-center text-base font-normal">

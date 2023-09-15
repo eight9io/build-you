@@ -135,21 +135,38 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               .routes.some((route) => route.name === "Challenges");
             if (isChallengesScreenInStack) {
               navigation.dispatch(StackActions.popToTop());
+              if (isCurrentUserCompany) {
+                const pushAction = StackActions.push("HomeScreen", {
+                  screen: "Challenges",
+                  params: {
+                    screen: "CompanyChallengeDetailScreen",
+                    params: { challengeId: newChallengeId },
+                  },
+                });
+                navigation.dispatch(pushAction);
+              } else {
+                const pushAction = StackActions.push("HomeScreen", {
+                  screen: "Challenges",
+                  params: {
+                    screen: "PersonalChallengeDetailScreen",
+                    params: { challengeId: newChallengeId },
+                  },
+                });
+                navigation.dispatch(pushAction);
+              }
             } else {
               // add ChallengesScreen to the stack
-              navigation.navigate("Challenges");
-            }
-
-            if (isCurrentUserCompany) {
-              navigation.navigate("Challenges", {
-                screen: "CompanyChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
-            } else {
-              navigation.navigate("Challenges", {
-                screen: "PersonalChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
+              if (isCurrentUserCompany) {
+                navigation.navigate("Challenges", {
+                  screen: "CompanyChallengeDetailScreen",
+                  params: { challengeId: newChallengeId },
+                });
+              } else {
+                navigation.navigate("Challenges", {
+                  screen: "PersonalChallengeDetailScreen",
+                  params: { challengeId: newChallengeId },
+                });
+              }
             }
 
             setIsLoading(false);
@@ -271,7 +288,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
                 <View className="flex w-full flex-row items-center justify-between">
                   {["Check"].map((item) => (
-                    <Text className="text-center text-md font-semibold leading-none text-neutral-700">
+                    <Text
+                      className="text-center text-md font-semibold leading-none text-neutral-700"
+                      key={"numberOfCheckCart"}
+                    >
                       {item}
                     </Text>
                   ))}

@@ -95,10 +95,11 @@ const RenderPackageOptions = ({ name, type, caption, price, onPress }) => {
 
 const ChoosePackageScreen = () => {
   const [packages, setPackages] = useState<IPackage[]>([] as IPackage[]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchPackages = async () => {
+      setLoading(true);
       try {
         const res = await serviceGetAllPackages();
         setPackages(res.data.packages);
@@ -135,9 +136,8 @@ const ChoosePackageScreen = () => {
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
-      {loading && <Spinner />}
       <ScrollView>
-        <View className="flex flex-1 flex-col items-center justify-start space-y-4 ">
+        <View className="flex  flex-col items-center justify-start space-y-4 ">
           <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
             {t("choose_packages_screen.title")}
           </Text>
@@ -147,33 +147,23 @@ const ChoosePackageScreen = () => {
           <View className=" flex flex-col">
             {packages.length > 0 &&
               packages.map((item) => (
-                <RenderPackageOptions
-                  name={item.name}
-                  type={item.type}
-                  caption={item.caption}
-                  price={item.price}
-                  onPress={() => handleChoosePackage(item)}
-                />
+                <View key={item?.type}>
+                  <RenderPackageOptions
+                    name={item.name}
+                    type={item.type}
+                    caption={item.caption}
+                    price={item.price}
+                    onPress={() => handleChoosePackage(item)}
+                  />
+                </View>
               ))}
-            {/* <RenderPackageOptions
-              name={t("choose_packages_screen.basic_package")}
-              description={t(
-                "choose_packages_screen.basic_package_description"
-              )}
-              benefits={t("choose_packages_screen.direct_chat")}
-              price={"90.00"}
-              onPress={() => handleChoosePackage("basic")}
-            />
-            <View className="h-4"></View>
-            <RenderPackageOptions
-              name={t("choose_packages_screen.premium_package")}
-              description={t(
-                "choose_packages_screen.premium_package_description"
-              )}
-              benefits={t("choose_packages_screen.direct_chat")}
-              price={"190.00"}
-              onPress={() => handleChoosePackage("premium")}
-            /> */}
+            {packages.length === 0 && !loading && (
+              <View className="flex items-center justify-center">
+                <Text className="text-center text-md font-semibold leading-tight text-primary-default">
+                  {t("choose_packages_screen.no_package")}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

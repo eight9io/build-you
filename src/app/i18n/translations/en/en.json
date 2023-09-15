@@ -577,7 +577,8 @@
     "video_call": "Video call",
     "intake": "Intake",
     "check": "Check",
-    "closing": "Closing"
+    "closing": "Closing",
+    "no_package": "No packages available at the moment"
   },
   "cart_screen": {
     "title": "Summary",

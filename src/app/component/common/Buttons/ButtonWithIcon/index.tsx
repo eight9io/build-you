@@ -15,7 +15,7 @@ const ButtonWithIcon: React.FC<IButtonWithIconProps> = ({ icon, onPress, testID 
     icon === "search" ? <SearchSvg /> : <SettingsSvg />;
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress} testID={testID}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress} testID={testID} className="p-1">
       <View className="flex flex-row items-center">
         {ImageSourceFromAssets}
       </View>

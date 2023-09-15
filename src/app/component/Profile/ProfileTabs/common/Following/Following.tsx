@@ -22,7 +22,7 @@ const Following: FC<IFollowingProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="flex-1 pl-4 ">
+    <View className="flex-1 px-4 ">
       {following && following.length > 0 && (
         <FlatList
           className="pt-4"
@@ -73,7 +73,7 @@ const Following: FC<IFollowingProps> = ({
             renderItem={() => <></>}
             showsVerticalScrollIndicator={true}
             ListFooterComponent={
-              <View className=" justify-cente mt-6 items-center ">
+              <View className=" justify-cente mt-6 items-center pt-10">
                 <Empty />
                 <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
                   {t("empty_followers")}

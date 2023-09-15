@@ -6,26 +6,30 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import jwt_decode from "jwt-decode";
-
-import { useTranslation } from "react-i18next";
-import NavButton from "../../common/Buttons/NavButton";
-import Button from "../../common/Buttons/Button";
-import AppleLoginButton from "../../common/Buttons/AppleLoginButton";
-import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
-import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spinner from "react-native-loading-spinner-overlay";
-import ErrorText from "../../common/ErrorText";
+import { useTranslation } from "react-i18next";
+
+import { setupInterceptor } from "../../../utils/refreshToken.util";
+import { errorMessage } from "../../../utils/statusCode";
+
 import { ISocialLoginForm, IToken } from "../../../types/auth";
-import { LOGIN_TYPE } from "../../../common/enum";
 import { useAuthStore } from "../../../store/auth-store";
 import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../../../store/user-store";
-import { setupInterceptor } from "../../../utils/refreshToken.util";
-import { errorMessage } from "../../../utils/statusCode";
+
+import ErrorText from "../../common/ErrorText";
+import Button from "../../common/Buttons/Button";
+import { LOGIN_TYPE } from "../../../common/enum";
+import NavButton from "../../common/Buttons/NavButton";
+import AppleLoginButton from "../../common/Buttons/AppleLoginButton";
+import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
+import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
+
 import { RootStackParamList } from "../../../navigation/navigation.type";
+import { serviceUpdateMyProfile } from "../../../service/profile";
 
 interface Props {
   modalVisible: boolean;
@@ -65,6 +69,22 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
         setRefreshToken
       );
       const { data: profile } = await getUserProfileAsync();
+      if (type === LOGIN_TYPE.APPLE) {
+        try {
+          const userFullName = await AsyncStorage.getItem("@userAppleFullName");
+          // json parse to get the object
+          if (!userFullName) throw new Error("Cannot get user full name");
+          const userFullNameObj = JSON.parse(userFullName);
+          const userFirstName = userFullNameObj?.familyName;
+          const userLastName = userFullNameObj?.givenName;
+          serviceUpdateMyProfile(profile.id, {
+            name: userFirstName,
+            surname: userLastName,
+          });
+        } catch (error) {
+          console.error("Apple update name error: ", error);
+        }
+      }
       setIsLoading(false); // Important to not crashing app with duplicate modal
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
       const navigateToRoute = isCompleteProfile

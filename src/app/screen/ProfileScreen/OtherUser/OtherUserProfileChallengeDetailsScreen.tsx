@@ -40,6 +40,7 @@ import debounce from "lodash.debounce";
 import { onShareChallengeLink } from "../../../utils/shareLink.uitl";
 import { useAuthStore } from "../../../store/auth-store";
 import { IToken } from "../../../types/auth";
+import Spinner from "react-native-loading-spinner-overlay";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -51,32 +52,53 @@ interface IOtherUserProfileChallengeDetailsScreenProps {
   >;
 }
 
+type ModalState = {
+  challengeData: IChallenge;
+  challengeOwner: any;
+  isChallengePrivate: boolean;
+  isJoined?: boolean;
+  isCurrentUserOwnerOfChallenge: boolean;
+  participantList?: any;
+};
+
 const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
   const { challengeId, isCompanyAccount: isCompany } = route.params;
 
   const [index, setIndex] = useState<number>(0);
-  const [challengeData, setChallengeData] = useState<IChallenge>(
-    {} as IChallenge
-  );
+  // const [challengeData, setChallengeData] = useState<IChallenge>(
+  //   {} as IChallenge
+  // );
   const [isError, setIsError] = useState<boolean>(false);
-  const [challengeOwner, setChallengeOwner] = useState<any>(null);
-  const [participantList, setParticipantList] = useState<any>([]);
-  const [isChallengePrivate, setIsChallengePrivate] = useState<boolean | null>(
-    null
-  );
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
-  const [isJoined, setIsJoined] = useState<boolean | null>(null);
   const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
 
-  const [isCurrentUserOwnerOfChallenge, setIsCurrentUserOwnerOfChallenge] =
-    useState<boolean | null>(null);
-  const [shouldRefesh, setShouldRefresh] = useState<boolean>(true);
+  const [challengeState, setChallengeState] = useState<ModalState>({
+    challengeData: {} as IChallenge,
+    challengeOwner: false,
+    isChallengePrivate: false,
+    isJoined: false,
+    isCurrentUserOwnerOfChallenge: false,
+    participantList: [],
+  });
+
+  const updateModalState = (
+    newState: Partial<ModalState>,
+    key: keyof ModalState
+  ) => {
+    setChallengeState((prevState) => ({
+      ...prevState,
+      [key]: newState[key],
+    }));
+  };
 
   const { getAccessToken } = useAuthStore();
 
@@ -97,6 +119,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const currentUser = getUserProfile();
 
   const getLocalId = async () => {
+    // use this as deep linking require userId on initial load
     const accessToken = getAccessToken();
     const userId = jwt_decode<IToken>(accessToken);
     return userId;
@@ -104,56 +127,69 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const isCurrentUserParticipant = challengeData?.participants?.find(
-    (participant) => participant.id === currentUser?.id
-  );
+  const isCurrentUserParticipant =
+    challengeState?.challengeData?.participants?.find(
+      (participant) => participant.id === currentUser?.id
+    );
 
   const isCurrentUserInCompany =
-    currentUser?.employeeOf?.id === challengeOwner?.id;
+    currentUser?.employeeOf?.id === challengeState.challengeOwner?.id;
 
-  const isCompanyAccount = isCompany || challengeOwner?.companyAccount;
+  const isCompanyAccount =
+    isCompany || challengeState.challengeOwner?.companyAccount;
 
   const challengeStatus =
-    challengeOwner?.id === currentUser?.id
-      ? challengeData?.status
+    challengeState.challengeOwner?.id === currentUser?.id
+      ? challengeState.challengeData?.status
       : isCurrentUserParticipant
       ? isCurrentUserParticipant?.challengeStatus
-      : challengeData.status;
+      : challengeState.challengeData.status;
 
-  const isChallengeCompleted = challengeOwner?.id
+  const isChallengeCompleted = challengeState.challengeOwner?.id
     ? challengeStatus === "done" || challengeStatus === "closed"
     : null;
 
   const statusColor = getChallengeStatusColor(
     challengeStatus,
-    challengeData?.status
+    challengeState.challengeData?.status
   );
+  console.log("render");
 
   const getChallengeData = async () => {
     try {
       const response = await getChallengeById(challengeId);
       const localId = await getLocalId();
 
-      setChallengeData(response.data);
-      setIsChallengePrivate(response.data?.public == false);
-
       const owner = Array.isArray(response.data?.owner)
         ? response.data?.owner[0]
         : response.data?.owner;
 
-      setChallengeOwner(owner);
-      setIsCurrentUserOwnerOfChallenge(
-        owner?.id === currentUser?.id || owner?.id === localId
-      );
+      let stateToUpdate: ModalState = {
+        challengeData: response.data,
+        challengeOwner: owner,
+        isChallengePrivate: response.data?.public == false,
+        isCurrentUserOwnerOfChallenge:
+          owner?.id === currentUser?.id || owner?.id === localId,
+        isJoined: null,
+        participantList: [],
+      };
+
       if (isCompanyAccount || owner?.companyAccount) {
         const getChallengeParticipants = async () => {
           try {
             const response = await getChallengeParticipantsByChallengeId(
               challengeId
             );
-            setParticipantList(response.data);
+            stateToUpdate = {
+              ...stateToUpdate,
+              participantList: response.data,
+            };
+
             if (owner?.id === currentUser?.id) {
-              setIsJoined(true);
+              stateToUpdate = {
+                ...stateToUpdate,
+                isJoined: true,
+              };
               return;
             }
             if (
@@ -165,9 +201,15 @@ const OtherUserProfileChallengeDetailsScreen: FC<
                 }
               })
             ) {
-              setIsJoined(true);
+              stateToUpdate = {
+                ...stateToUpdate,
+                isJoined: true,
+              };
             } else {
-              setIsJoined(false);
+              stateToUpdate = {
+                ...stateToUpdate,
+                isJoined: false,
+              };
             }
           } catch (err) {
             GlobalDialogController.showModal({
@@ -178,26 +220,32 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             });
           }
         };
-        getChallengeParticipants();
+        await getChallengeParticipants();
       }
+      setChallengeState(stateToUpdate);
     } catch (err) {
       setIsError(true);
     }
   };
 
   useEffect(() => {
-    if (!challengeId || !shouldRefesh) return;
+    if (!challengeId || !shouldRefresh) return;
     getChallengeData();
     setShouldRefresh(false);
-  }, [shouldRefesh, challengeId]);
+  }, [shouldRefresh, challengeId]);
 
   useLayoutEffect(() => {
-    if (isJoined || isCurrentUserOwnerOfChallenge) {
+    if (
+      challengeState.isJoined ||
+      challengeState.isCurrentUserOwnerOfChallenge
+    ) {
       navigation.setOptions({
         headerRight: () => (
           <RightPersonalChallengeDetailOptions
-            challengeData={challengeData}
-            shouldRenderEditAndDeleteBtns={isCurrentUserOwnerOfChallenge}
+            challengeData={challengeState.challengeData}
+            shouldRenderEditAndDeleteBtns={
+              challengeState.isCurrentUserOwnerOfChallenge
+            }
             refresh={getChallengeData}
             onEditChallengeBtnPress={handleEditChallengeBtnPress}
             setIsDeleteChallengeDialogVisible={
@@ -213,14 +261,16 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             <View>
               <Button
                 Icon={<ShareIcon />}
-                onPress={() => onShareChallengeLink(challengeData?.id)}
+                onPress={() =>
+                  onShareChallengeLink(challengeState.challengeData?.id)
+                }
               />
             </View>
           );
         },
       });
     }
-  }, [isJoined, isCurrentUserOwnerOfChallenge]);
+  }, [challengeState.isJoined, challengeState.isCurrentUserOwnerOfChallenge]);
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
@@ -230,8 +280,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       GlobalToastController.showModal({
         message: t("toast.joined_success") || "You have joined the challenge!",
       });
-      setIsJoined(true);
-      // setShouldRefresh(true);
+      // setIsJoined(true);
+      updateModalState({ isJoined: true }, "isJoined");
       getChallengeData();
     } catch (error: AxiosError | any) {
       if (error?.response.status == 400) {
@@ -256,7 +306,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       GlobalToastController.showModal({
         message: t("toast.leave_success") || "You have left the challenge!",
       });
-      setIsJoined(false);
+      // setIsJoined(false);
+      updateModalState({ isJoined: false }, "isJoined");
+
       getChallengeData();
     } catch (err) {
       GlobalToastController.showModal({
@@ -267,11 +319,13 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const handleJoinLeaveChallenge = debounce(async () => {
-    if (isJoined) {
+    setIsLoading(true);
+    if (challengeState.isJoined) {
       await handleLeaveChallenge();
     } else {
       await handleJoinChallenge();
     }
+    setIsLoading(false);
   }, 500);
 
   const handleEditChallengeBtnPress = () => {
@@ -279,19 +333,19 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const shouldRenderJoinButton =
-    (currentUser?.id !== challengeOwner?.id &&
+    (currentUser?.id !== challengeState.challengeOwner?.id &&
       isCompanyAccount &&
-      (challengeData?.public ||
-        isJoined != null ||
-        (challengeOwner &&
+      (challengeState.challengeData?.public ||
+        challengeState.isJoined != null ||
+        (challengeState.challengeOwner &&
           currentUser &&
-          challengeOwner.id !== currentUser.id &&
-          isJoined != null))) ||
+          challengeState.challengeOwner.id !== currentUser.id &&
+          challengeState.isJoined != null))) ||
     (!isCompanyAccount && isCurrentUserParticipant);
 
   const handleDeleteChallenge = () => {
-    if (!challengeData) return;
-    deleteChallenge(challengeData.id)
+    if (!challengeState.challengeData) return;
+    deleteChallenge(challengeState.challengeData.id)
       .then((res) => {
         if (res.status === 200) {
           setIsDeleteChallengeDialogVisible(false);
@@ -319,8 +373,8 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   if (
     isError ||
-    (isChallengePrivate &&
-      !isCurrentUserOwnerOfChallenge &&
+    (challengeState.isChallengePrivate &&
+      !challengeState.isCurrentUserOwnerOfChallenge &&
       !isCurrentUserInCompany &&
       !isCurrentUserParticipant)
   ) {
@@ -338,6 +392,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   return (
     <SafeAreaView>
+      {isLoading && <Spinner visible={isLoading} />}
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}
@@ -382,7 +437,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             <CheckCircle fill={statusColor} />
             <View className="flex-1">
               <Text className="text-2xl font-semibold">
-                {challengeData?.goal}
+                {challengeState.challengeData?.goal}
               </Text>
             </View>
           </View>
@@ -393,15 +448,15 @@ const OtherUserProfileChallengeDetailsScreen: FC<
                 <Button
                   isDisabled={false}
                   containerClassName={
-                    isJoined
+                    challengeState.isJoined
                       ? "border border-gray-dark flex items-center justify-center px-5"
                       : "bg-primary-default flex items-center justify-center px-5"
                   }
                   textClassName={`text-center text-md font-semibold ${
-                    isJoined ? "text-gray-dark" : "text-white"
+                    challengeState.isJoined ? "text-gray-dark" : "text-white"
                   } `}
                   title={
-                    isJoined
+                    challengeState.isJoined
                       ? t("challenge_detail_screen.leave")
                       : t("challenge_detail_screen.join")
                   }
@@ -421,18 +476,18 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               </View>
             )}
         </View>
-        {challengeData?.id && (
+        {challengeState.challengeData?.id && (
           <EditChallengeModal
             visible={isEditChallengeModalVisible}
             onClose={handleEditChallengeModalClose}
             onConfirm={handleEditChallengeModalConfirm}
-            challenge={challengeData}
+            challenge={challengeState.challengeData}
           />
         )}
 
         <TabView
           titles={
-            isCompanyAccount || challengeOwner?.companyAccount
+            isCompanyAccount || challengeState.challengeOwner?.companyAccount
               ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
               : CHALLENGE_TABS_TITLE_TRANSLATION
           }
@@ -440,17 +495,18 @@ const OtherUserProfileChallengeDetailsScreen: FC<
           setActiveTabIndex={setIndex}
         >
           <ProgressTab
-            isJoined={isJoined}
+            isJoined={challengeState.isJoined}
             isOtherUserProfile
-            challengeData={challengeData}
+            challengeData={challengeState.challengeData}
             isChallengeCompleted={isChallengeCompleted}
           />
           <DescriptionTab
-            challengeData={challengeData}
-            maxPepleCanJoin={challengeData?.maximumPeople}
+            challengeData={challengeState.challengeData}
+            maxPepleCanJoin={challengeState.challengeData?.maximumPeople}
           />
-          {(isCompanyAccount || challengeOwner?.companyAccount) && (
-            <ParticipantsTab participant={participantList} />
+          {(isCompanyAccount ||
+            challengeState.challengeOwner?.companyAccount) && (
+            <ParticipantsTab participant={challengeState.participantList} />
           )}
         </TabView>
       </View>

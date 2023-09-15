@@ -102,5 +102,7 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>CodePushDeploymentKey</key>
+    <string>K60TOcl0LeY6pFRO94YIWX2MaLMs-UxHeaHiG</string>
   </dict>
 </plist>

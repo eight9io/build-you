@@ -27,6 +27,10 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
         "com.apple.developer.applesignin": ["Default"]
+      },
+      "config": {
+        "usesNonExemptEncryption": false,
+        "googleMapsApiKey": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI"
       }
     },
     "locales": {
@@ -45,7 +49,12 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.FOREGROUND_SERVICE"
       ],
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png",

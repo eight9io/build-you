@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   ChangePasswordForm,
   ILoginResponse,
@@ -9,6 +8,7 @@ import {
 
 import http from "../utils/http";
 import { LINKEDIN_LOGIN } from "../common/constants";
+import { useAppleLoginInfoStore } from "../store/apple-login-store";
 
 export const serviceLogin = (data: LoginForm) => {
   return http.post<ILoginResponse>("/auth/login", data);
@@ -60,8 +60,9 @@ export const linkedInLogin = (token: string) => {
 export const appleLogin = async (payload: ISocialLoginForm) => {
   let { token, email, sub } = payload;
   if (!email) {
-    const userEmailFromStorage = await AsyncStorage.getItem("@userAppleEmail");
-    const userSubFromStorage = await AsyncStorage.getItem("@userAppleSub");
+    const userAppleInfo = useAppleLoginInfoStore.getState().getUserAppleInfo();
+    const userEmailFromStorage = userAppleInfo.email;
+    const userSubFromStorage = userAppleInfo.sub;
     if (sub === userSubFromStorage) {
       // Current login data is the same as the stored one
       email = userEmailFromStorage;

@@ -1,5 +1,4 @@
-import { EXPO_API_APP_DOMAIN } from "@env";
-import Clipboard from "@react-native-clipboard/clipboard";
+import { EXPO_APP_DOMAIN } from "@env";
 import { Alert, View, Button } from "react-native";
 import Share from "react-native-share";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
@@ -20,7 +19,7 @@ export const onShareChallengeLink = (challengeId: string) => {
     try {
       await Share.open({
         title: i18n.t("share_link.join_my_challenge") || "Join my challenge!",
-        url: `${EXPO_API_APP_DOMAIN}/challenge/${challengeId}`,
+        url: `${EXPO_APP_DOMAIN}/challenge/${challengeId}`,
       });
     } catch (error: any) {
       if (

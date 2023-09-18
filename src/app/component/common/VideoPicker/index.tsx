@@ -20,6 +20,7 @@ import PlayButton from "./asset/play-button.svg";
 import CloseButton from "./asset/close-button.svg";
 import ConfirmDialog from "../Dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import Spinner from "react-native-loading-spinner-overlay";
 
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
@@ -85,6 +86,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   useEffect(() => {
     if (!pickedVideo.length) return;
+
     generateThumbnail(pickedVideo[0]);
   }, [pickedVideo]);
 
@@ -95,6 +97,9 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       handleShowPermissionRequiredModal();
       return;
     }
+    setTimeout(() => {
+      setLoading && setLoading(true);
+    }, 100);
 
     let result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Videos,
@@ -102,10 +107,11 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       quality: 0.75,
       allowsMultipleSelection: false,
     });
-
     if (!result.canceled) {
       setLoading && setLoading(true);
       setPickedVideo(result.assets.map((asset) => asset.uri));
+    } else {
+      setLoading && setLoading(false);
     }
   };
 
@@ -136,7 +142,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
             <PlayButton />
           </View>
           <TouchableOpacity
-            className="absolute right-4 top-4"
+            className="absolute right-4 top-4 p-1"
             onPress={removeLocalVideo}
           >
             <CloseButton />

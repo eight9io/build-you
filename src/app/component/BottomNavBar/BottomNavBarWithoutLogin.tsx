@@ -38,6 +38,9 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         headerLeftContainerStyle: {
           paddingLeft: 10,
         },
+        tabBarIconStyle: {
+          width: "100%", // Make sure the tab bar item stretch in large screens
+        },
       }}
     >
       <Tab.Screen

@@ -3,9 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
-import { OnboardingScreen1Validators } from "../../../Validators/Onboarding.validate";
+import {
+  OnboardingScreen1Validators,
+  OnboardingScreen1ValidatorsWithAppleLogin,
+} from "../../../Validators/Onboarding.validate";
 
 import dayjs from "../../../utils/date.util";
 
@@ -25,6 +29,7 @@ import DateTimePicker2 from "../../../component/common/BottomSheet/DateTimePicke
 import { useTranslation } from "react-i18next";
 import { serviceGetListOccupation } from "../../../service/profile";
 import { IOccupation } from "../../../types/auth";
+import { useUserProfileStore } from "../../../store/user-store";
 
 interface CompleteProfileStep1Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -40,13 +45,25 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   >();
 
   const { setProfile } = useCompleteProfileStore();
+  const { userProfile } = useUserProfileStore();
   const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
   useEffect(() => {
     const getOccupationList = async () => {
       const { data } = await serviceGetListOccupation();
       setOccupationList(data);
     };
+    const getAppleUserProfile = async () => {
+      const userEmailFromStorage = await AsyncStorage.getItem(
+        "@userAppleEmail"
+      );
+      const userSubFromStorage = await AsyncStorage.getItem("@userAppleSub");
+      const userTempName = userEmailFromStorage || userSubFromStorage || "";
+      setValue("name", userTempName, { shouldValidate: true });
+      setValue("surname", userTempName, { shouldValidate: true });
+    };
+
     getOccupationList();
+    if (userProfile.loginType === "apple") getAppleUserProfile(); // Set name and surname for apple login
   }, []);
   const {
     control,
@@ -66,7 +83,11 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
       birth: undefined,
       occupation: "",
     },
-    resolver: yupResolver(OnboardingScreen1Validators()),
+    resolver: yupResolver(
+      userProfile.loginType !== "apple"
+        ? OnboardingScreen1Validators()
+        : OnboardingScreen1ValidatorsWithAppleLogin() // Provide different validation for apple login
+    ),
     reValidateMode: "onChange",
   });
 
@@ -144,34 +165,38 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   control={control}
                   name="name"
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <View className="flex flex-col">
-                      <TextInput
-                        label={
-                          t("form_onboarding.screen_1.first_name") ||
-                          "First name"
-                        }
-                        placeholder={
-                          t("form_onboarding.screen_1.enter_first_name") ||
-                          "Enter your first name"
-                        }
-                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        testID="complete_profile_step_1_name_input"
-                      />
-                      {errors.name && (
-                        <View className="flex flex-row pt-2">
-                          <Warning />
-                          <Text
-                            className="pl-1 text-sm font-normal text-red-500"
-                            testID="complete_profile_step_1_name_error_message"
-                          >
-                            {errors.name.message}
-                          </Text>
+                    <>
+                      {userProfile.loginType !== "apple" && (
+                        <View className="flex flex-col">
+                          <TextInput
+                            label={
+                              t("form_onboarding.screen_1.first_name") ||
+                              "First name"
+                            }
+                            placeholder={
+                              t("form_onboarding.screen_1.enter_first_name") ||
+                              "Enter your first name"
+                            }
+                            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            testID="complete_profile_step_1_name_input"
+                          />
+                          {errors.name && (
+                            <View className="flex flex-row pt-2">
+                              <Warning />
+                              <Text
+                                className="pl-1 text-sm font-normal text-red-500"
+                                testID="complete_profile_step_1_name_error_message"
+                              >
+                                {errors.name.message}
+                              </Text>
+                            </View>
+                          )}
                         </View>
                       )}
-                    </View>
+                    </>
                   )}
                 />
               </View>
@@ -180,33 +205,38 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   control={control}
                   name="surname"
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <View className="flex flex-col">
-                      <TextInput
-                        label={
-                          t("form_onboarding.screen_1.last_name") || "Last name"
-                        }
-                        placeholder={
-                          t("form_onboarding.screen_1.enter_last_name") ||
-                          "Enter your last name"
-                        }
-                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        testID="complete_profile_step_1_surname_input"
-                      />
-                      {errors.surname && (
-                        <View className="flex flex-row pt-2">
-                          <Warning />
-                          <Text
-                            className="pl-1 text-sm font-normal text-red-500"
-                            testID="complete_profile_step_1_surname_error_message"
-                          >
-                            {errors.surname.message}
-                          </Text>
+                    <>
+                      {userProfile.loginType !== "apple" && (
+                        <View className="flex flex-col">
+                          <TextInput
+                            label={
+                              t("form_onboarding.screen_1.last_name") ||
+                              "Last name"
+                            }
+                            placeholder={
+                              t("form_onboarding.screen_1.enter_last_name") ||
+                              "Enter your last name"
+                            }
+                            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            testID="complete_profile_step_1_surname_input"
+                          />
+                          {errors.surname && (
+                            <View className="flex flex-row pt-2">
+                              <Warning />
+                              <Text
+                                className="pl-1 text-sm font-normal text-red-500"
+                                testID="complete_profile_step_1_surname_error_message"
+                              >
+                                {errors.surname.message}
+                              </Text>
+                            </View>
+                          )}
                         </View>
                       )}
-                    </View>
+                    </>
                   )}
                 />
               </View>

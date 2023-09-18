@@ -36,6 +36,8 @@ import {
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
 import { LOGIN_TYPE } from "../../common/enum";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { serviceUpdateMyProfile } from "../../service/profile";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -97,6 +99,22 @@ export default function Login() {
       );
 
       const { data: profile } = await getUserProfileAsync();
+      if (type === LOGIN_TYPE.APPLE) {
+        try {
+          const userFullName = await AsyncStorage.getItem("@userAppleFullName");
+          // json parse to get the object
+          if (!userFullName) throw new Error("Cannot get user full name");
+          const userFullNameObj = JSON.parse(userFullName);
+          const userFirstName = userFullNameObj?.familyName;
+          const userLastName = userFullNameObj?.givenName;
+          serviceUpdateMyProfile(profile.id, {
+            name: userFirstName,
+            surname: userLastName,
+          });
+        } catch (error) {
+          console.error("Apple update name error: ", error);
+        }
+      }
       setIsLoading(false); // Important to not crashing app with duplicate modal
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
       const isAccountVerified = checkIsAccountVerified(profile);

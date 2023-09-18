@@ -77,7 +77,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
   };
 
   const handleDeleleAcount = () => {
-    if (userData?.loginType !== "standard") {
+    if (userData?.loginType === "standard") {
       navigation.navigate("DeleteAccountScreen");
     } else {
       setIsDialogVisible(true);

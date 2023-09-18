@@ -1,3 +1,4 @@
+import codePush from "react-native-code-push";
 import RootNavigation from "./navigation";
 import { MenuProvider } from "react-native-popup-menu";
 import {
@@ -52,4 +53,4 @@ export const App = () => {
   );
 };
 
-export default App;
+export default codePush(App);

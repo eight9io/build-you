@@ -36,6 +36,7 @@ import IconSearch from "../component/common/IconSearch/IconSearch";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import AdCard from "../component/Post/AdCard";
 import { handleAppOpenOnNotificationPressed } from "../utils/notification.util";
+import { useAppleLoginInfoStore } from "../store/apple-login-store";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 

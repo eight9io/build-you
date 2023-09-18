@@ -54,7 +54,6 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const { setUserAppleInfo } = useAppleLoginInfoStore();
 
   const currentUser = getUserProfile();
-  console.log("currentUser", currentUser);
 
   const { t } = useTranslation();
 

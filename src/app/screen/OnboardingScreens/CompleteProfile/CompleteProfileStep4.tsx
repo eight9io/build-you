@@ -1,12 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
@@ -30,7 +23,6 @@ import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;

@@ -6,7 +6,8 @@ import {
 import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import jwt_decode from "jwt-decode";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
 
 import Button from "../../common/Buttons/Button";
 import { LOGIN_TYPE } from "../../../common/enum";
@@ -27,6 +28,7 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({
   onError,
 }) => {
   const { t } = useTranslation();
+  const { setUserAppleInfo } = useAppleLoginInfoStore();
   let appleAuthRequestResponse: AppleRequestResponse = null;
   const handleAppleLogin = async () => {
     try {
@@ -58,19 +60,19 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({
     const userEmail = appleAuthRequestResponse.email || email;
     const userSub = sub;
     const userFullName = appleAuthRequestResponse.fullName;
-    console.log("userFullName", userFullName);
     if (userEmail && userSub && !userFullName) {
       // Save user login data to AsyncStorage to retry if login failed due to network error
-      await AsyncStorage.multiSet([
-        ["@userAppleEmail", userEmail],
-        ["@userAppleSub", userSub],
-      ]);
+      setUserAppleInfo({
+        email: userEmail,
+        sub: userSub,
+        fullName: null,
+      });
     } else if (userEmail && userSub && userFullName) {
-      await AsyncStorage.multiSet([
-        ["@userAppleEmail", userEmail],
-        ["@userAppleSub", userSub],
-        ["@userAppleFullName", JSON.stringify(userFullName)],
-      ]);
+      setUserAppleInfo({
+        email: userEmail,
+        sub: userSub,
+        fullName: JSON.stringify(userFullName),
+      });
     }
     onLogin(
       {

@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUserData } from "../types/user";
 import http from "../utils/http";
 

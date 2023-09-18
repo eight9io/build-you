@@ -29,7 +29,6 @@ import {
 } from "../service/notification";
 import { useNotificationStore } from "./notification-store";
 import httpInstance from "../utils/http";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export interface LoginStore {
   accessToken: string | null;

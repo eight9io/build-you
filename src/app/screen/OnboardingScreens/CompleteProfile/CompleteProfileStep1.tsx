@@ -3,7 +3,6 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
 import {
@@ -30,6 +29,7 @@ import { useTranslation } from "react-i18next";
 import { serviceGetListOccupation } from "../../../service/profile";
 import { IOccupation } from "../../../types/auth";
 import { useUserProfileStore } from "../../../store/user-store";
+import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
 
 interface CompleteProfileStep1Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -47,16 +47,19 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
   const { setProfile } = useCompleteProfileStore();
   const { userProfile } = useUserProfileStore();
   const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
+
+  const { getUserAppleInfo } = useAppleLoginInfoStore();
+  const userAppleInfo = getUserAppleInfo();
+
+
   useEffect(() => {
     const getOccupationList = async () => {
       const { data } = await serviceGetListOccupation();
       setOccupationList(data);
     };
     const getAppleUserProfile = async () => {
-      const userEmailFromStorage = await AsyncStorage.getItem(
-        "@userAppleEmail"
-      );
-      const userSubFromStorage = await AsyncStorage.getItem("@userAppleSub");
+      const userEmailFromStorage = userAppleInfo.email;
+      const userSubFromStorage = userAppleInfo.sub;
       const userTempName = userEmailFromStorage || userSubFromStorage || "";
       setValue("name", userTempName, { shouldValidate: true });
       setValue("surname", userTempName, { shouldValidate: true });

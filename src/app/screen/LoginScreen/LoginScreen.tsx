@@ -14,7 +14,6 @@ import Spinner from "react-native-loading-spinner-overlay";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { CommonActions } from "@react-navigation/native";
-import jwt_decode from "jwt-decode";
 
 import ErrorText from "../../component/common/ErrorText";
 import Button from "../../component/common/Buttons/Button";
@@ -36,8 +35,8 @@ import {
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
 import { LOGIN_TYPE } from "../../common/enum";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { serviceUpdateMyProfile } from "../../service/profile";
+import { useAppleLoginInfoStore } from "../../store/apple-login-store";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -74,8 +73,13 @@ export default function Login() {
     getAccessToken,
     setAccessToken,
   } = useAuthStore();
-  const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
-    useUserProfileStore();
+  const {
+    onLogout: userProfileStoreOnLogout,
+    getUserProfileAsync,
+    setUserProfile,
+  } = useUserProfileStore();
+
+  const { getUserAppleInfo } = useAppleLoginInfoStore();
 
   const onSubmit = async (payload: LoginForm) => {
     await handleLogin(payload, LOGIN_TYPE.EMAIL_PASSWORD);
@@ -101,16 +105,20 @@ export default function Login() {
       const { data: profile } = await getUserProfileAsync();
       if (type === LOGIN_TYPE.APPLE) {
         try {
-          const userFullName = await AsyncStorage.getItem("@userAppleFullName");
-          // json parse to get the object
+          const userAppleInfo = getUserAppleInfo();
+          const userFullName = userAppleInfo.fullName;
           if (!userFullName) throw new Error("Cannot get user full name");
           const userFullNameObj = JSON.parse(userFullName);
           const userFirstName = userFullNameObj?.familyName;
           const userLastName = userFullNameObj?.givenName;
-          serviceUpdateMyProfile(profile.id, {
+          if (!userFirstName || !userLastName) {
+            throw new Error("Cannot get user full name");
+          }
+          const newUserInfo = await serviceUpdateMyProfile(profile.id, {
             name: userFirstName,
             surname: userLastName,
           });
+          setUserProfile(newUserInfo.data);
         } catch (error) {
           console.error("Apple update name error: ", error);
         }

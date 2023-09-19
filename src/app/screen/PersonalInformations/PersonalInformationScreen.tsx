@@ -8,7 +8,7 @@ import { useUserProfileStore } from "../../store/user-store";
 import Button from "../../component/common/Buttons/Button";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { LOGIN_TYPE } from "../../common/enum";
-import { LoginForm, ISocialLoginForm } from "../../types/auth";
+import { LoginForm, ISocialLoginForm, IToken } from "../../types/auth";
 import { errorMessage } from "../../utils/statusCode";
 import { useAuthStore } from "../../store/auth-store";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -45,13 +45,12 @@ export default function PersonalInformationScreen({ navigation }: any) {
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const [linkedInModalVisible, setLinkedInModalVisible] =
     useState<boolean>(false);
-  const [errMessage, setErrMessage] = useState("");
+  const [errMessage, setErrMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { t } = useTranslation();
-  const { asyncLogin, getRefreshToken, logout } = useAuthStore();
-  const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
-    useUserProfileStore();
+  const { asyncLogin, logout } = useAuthStore();
+  const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
   const { getUserProfile } = useUserProfileStore();
 
   const userData = getUserProfile();
@@ -65,12 +64,17 @@ export default function PersonalInformationScreen({ navigation }: any) {
     setIsLoading(true);
     try {
       const login = await asyncLogin(payload, type);
-      const res = await serviceDeleteAccount(userData?.id);
-      if (res.status == 200) {
-        handleLogOut();
+      const userIdFromLogin = jwt_decode<IToken>(login.data.authorization);
+      if (userIdFromLogin && userIdFromLogin?.id === userData?.id) {
+        const res = await serviceDeleteAccount(userData?.id);
+        if (res.status == 200) {
+          handleLogOut();
+        }
+      } else {
+        setErrMessage(t("error_wrong_email_or_password"));
+        setIsLoading(false);
       }
     } catch (error) {
-      console.log("error", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }
@@ -132,7 +136,6 @@ export default function PersonalInformationScreen({ navigation }: any) {
   };
 
   const handleLinkedInLoginError = (errorMessage: string) => {
-    console.log("errorMessage", errorMessage);
     setErrMessage(errorMessage);
   };
 
@@ -240,6 +243,9 @@ export default function PersonalInformationScreen({ navigation }: any) {
           )}
         </View>
         <View className="px-5 py-10">
+          {errMessage && (
+            <Text className={clsx("text-md text-red-500")}>{errMessage}</Text>
+          )}
           <Button
             title={t("personal_information.delete_account")}
             containerClassName="bg-gray-medium flex-1"

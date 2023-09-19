@@ -6,15 +6,15 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 
 import { setupInterceptor } from "../../../utils/refreshToken.util";
 import { errorMessage } from "../../../utils/statusCode";
 
-import { ISocialLoginForm, IToken } from "../../../types/auth";
+import { ISocialLoginForm } from "../../../types/auth";
 import { useAuthStore } from "../../../store/auth-store";
+import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
 import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
@@ -52,6 +52,9 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
   const { onLogout: userProfileStoreOnLogout, getUserProfileAsync } =
     useUserProfileStore();
 
+  const { getUserAppleInfo } = useAppleLoginInfoStore();
+  const { setUserProfile } = useUserProfileStore();
+
   const handleRegisterSocial = async (
     payload: ISocialLoginForm,
     type: LOGIN_TYPE
@@ -71,16 +74,20 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       const { data: profile } = await getUserProfileAsync();
       if (type === LOGIN_TYPE.APPLE) {
         try {
-          const userFullName = await AsyncStorage.getItem("@userAppleFullName");
-          // json parse to get the object
+          const userAppleInfo = getUserAppleInfo();
+          const userFullName = userAppleInfo.fullName;
           if (!userFullName) throw new Error("Cannot get user full name");
           const userFullNameObj = JSON.parse(userFullName);
           const userFirstName = userFullNameObj?.familyName;
           const userLastName = userFullNameObj?.givenName;
-          serviceUpdateMyProfile(profile.id, {
+          if (!userFirstName || !userLastName) {
+            throw new Error("Cannot get user full name");
+          }
+          const newUserInfo = await serviceUpdateMyProfile(profile.id, {
             name: userFirstName,
             surname: userLastName,
           });
+          setUserProfile(newUserInfo.data);
         } catch (error) {
           console.error("Apple update name error: ", error);
         }

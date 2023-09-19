@@ -79,6 +79,21 @@ export interface IChallenge {
   progress?: IProgressChallenge[];
   participants?: IUserData[];
   maximumPeople?: number;
+  totalCurrentParticipant?: number;
+  type?: "free" | "chat" | "videocall";
+  package?: IChallengePackage | null;
+  intake?: any;
+  check?: any;
+  closing?: any;
+  // TODO: update type when api ready
+}
+
+export interface IChallengePackage {
+  id: string;
+  name: string;
+  caption: string;
+  price: number;
+  type: "videocall" | "chat";
 }
 
 export interface INumberOfCommentUpdate {

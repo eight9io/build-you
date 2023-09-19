@@ -31,6 +31,7 @@
   "challenge_detail_screen.completed": "Completed",
   "challenge_detail_screen.no_progress_yet": "No progress yet",
   "challenge_detail_screen.not_participants": "No participants at the moment ",
+  "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",

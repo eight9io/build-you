@@ -5,6 +5,7 @@
     "version": "1.2.5",
     "orientation": "portrait",
     "jsEngine": "hermes",
+    "scheme": "it.buildyou.buildyou",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -22,7 +23,8 @@
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"],
-        "CFBundleAllowMixedLocalizations": true
+        "CFBundleAllowMixedLocalizations": true,
+        "LSApplicationQueriesSchemes": ["lyft"]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {

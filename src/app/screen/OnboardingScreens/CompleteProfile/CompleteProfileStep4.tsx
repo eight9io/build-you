@@ -32,12 +32,12 @@ interface IFetchedSkill {
   id: string;
   skill: string;
 }
-interface ISkillProps {
+export interface ISkillProps {
   skill: IFetchedSkill;
   rating: number;
 }
 
-interface IFormValueInput {
+export interface IFormValueInput {
   label: string;
   value: number; //rating
   id: string;
@@ -102,7 +102,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   );
 };
 
-const renderSelectedSoftSkill = (
+export const renderSelectedSoftSkill = (
   t: any,
   selectedCompetencedSkill: IFormValueInput[],
   changeSkillValue: any,

@@ -30,6 +30,7 @@
   "challenge_detail_screen.completed": "Completato",
   "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
   "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
+  "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Sfide",

@@ -23,6 +23,7 @@ import GlobalDialogController from "../../../../component/common/Dialog/GlobalDi
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachTab from "./CoachTab";
+import SkillsTab from "./SkillsTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -82,12 +83,15 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           i18n.t("challenge_detail_screen.description"),
           i18n.t("challenge_detail_screen.participants"),
           i18n.t("challenge_detail_screen.coach"),
+          i18n.t("challenge_detail_screen.skills"),
         ]
       : [
           i18n.t("challenge_detail_screen.progress"),
           i18n.t("challenge_detail_screen.description"),
           i18n.t("challenge_detail_screen.coach"),
+          i18n.t("challenge_detail_screen.skills"),
         ];
+
   const statusColor = getChallengeStatusColor(
     challengeStatus,
     challengeData?.status
@@ -209,6 +213,34 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               <ParticipantsTab participant={participantList} />
             )}
             <CoachTab />
+            <SkillsTab
+              skills={[
+                // TODO: get skills from challengeData
+                {
+                  rating: 0,
+                  skill: {
+                    id: "1",
+                    skill: "Communication",
+                  },
+                },
+                {
+                  rating: 3,
+                  skill: {
+                    id: "1",
+                    skill: "Teamwork",
+                  },
+                },
+                {
+                  rating: 5,
+                  skill: {
+                    id: "1",
+                    skill: "Stress management",
+                  },
+                },
+              ]}
+              challengeIsClosed={isChallengeCompleted}
+              canRateSkills={true} // TODO: detect if user is a coach
+            />
           </TabView>
         </View>
       </View>

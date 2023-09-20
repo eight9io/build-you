@@ -4,6 +4,7 @@
   "close": "Chiudi",
   "search_screen.search": "Cerca nome utente",
   "error_general_message": "Qualcosa è andato storto. Per favore riprova più tardi.",
+  "error_wrong_email_or_password": "Email o password errate. Per favore riprova.",
   "error_network_message": "Per favore controlla la tua connessione internet e riprova.",
   "error_permission_message": "Permesso negato. Per favore riprova più tardi.",
   "login_screen.title": "Mettiti alla prova,\n raggiungi i tuoi obiettivi.",
@@ -30,6 +31,7 @@
   "challenge_detail_screen.completed": "Completato",
   "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
   "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
+  "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Sfide",

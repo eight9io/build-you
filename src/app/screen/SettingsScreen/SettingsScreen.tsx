@@ -6,12 +6,12 @@ import {
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
-import messaging from "@react-native-firebase/messaging";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 
 import { useUserProfileStore } from "../../store/user-store";
+import { useAppleLoginInfoStore } from "../../store/apple-login-store";
 import { useAuthStore } from "../../store/auth-store";
 import {
   setLastNotiIdToLocalStorage,
@@ -51,6 +51,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const { logout } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfile } =
     useUserProfileStore();
+  const { setUserAppleInfo } = useAppleLoginInfoStore();
 
   const currentUser = getUserProfile();
 
@@ -93,6 +94,14 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
           }
         };
         googleSignOut();
+      }
+
+      if (userLoginType === "apple") {
+        setUserAppleInfo({
+          email: null,
+          sub: null,
+          fullName: null,
+        });
       }
 
       userProfileStoreOnLogout();

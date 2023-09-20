@@ -1,36 +1,36 @@
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useEffect, useState } from "react";
+import React from "react";
 import clsx from "clsx";
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import {
-  useWindowDimensions,
-  View,
   SafeAreaView,
+  View,
   Text,
   FlatList,
+  useWindowDimensions,
 } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
+import { useTranslation } from "react-i18next";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { IChallenge } from "../../../types/challenge";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
-import { getChallengeByUserId } from "../../../service/challenge";
-import { sortChallengeByStatus } from "../../../utils/common";
-
+import ChallengeCardCompany from "../../../component/Card/ChallengeCard/ChallengeCardCompany";
+import { IChallenge } from "../../../types/challenge";
 import { useUserProfileStore } from "../../../store/user-store";
-import CurrentUserChallengeCard from "../../../component/Card/ChallengeCard/CurrentUserChallengeCard";
 import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
+import { sortChallengeByStatus } from "../../../utils/common";
+import { getChallengeByUserId } from "../../../service/challenge";
 
-type PersonalChallengesScreenNavigationProp = NativeStackNavigationProp<
+type CompanyChallengesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  "PersonalChallengesScreen"
+  "CompanyChallengesScreen"
 >;
 
 const EmptyChallenges = ({
   navigation,
 }: {
-  navigation: PersonalChallengesScreenNavigationProp;
+  navigation: CompanyChallengesScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
   return (
@@ -42,7 +42,7 @@ const EmptyChallenges = ({
         {t("click") || "Click"}
         <Text
           className={clsx("text-primary-default")}
-          onPress={() => navigation.navigate("CreateChallengeScreen")}
+          onPress={() => navigation.navigate("CreateCompanyChallengeScreen")}
         >
           {" "}
           {t("create") || "Create"}{" "}
@@ -53,68 +53,73 @@ const EmptyChallenges = ({
   );
 };
 
-const PersonalTab = () => {
-  const [personalChallengesList, setPersonalChallengesList] = useState<
+const CompanyTab = () => {
+  const [companyChallengesList, setCompanyChallengesList] = useState<
     IChallenge[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFetchingError, setIsFetchingError] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
+  const { t } = useTranslation();
   const userData = getUserProfile();
-  const navigation = useNavigation<PersonalChallengesScreenNavigationProp>();
+  const navigation = useNavigation<CompanyChallengesScreenNavigationProp>();
 
-  const fetchChallengeData = async () => {
+  const isFocused = useIsFocused();
+
+  const fetchCompanyChallenges = async () => {
     try {
       const res = await getChallengeByUserId(userData?.id);
       // filter out certified challenges
       const personalChallenges = res.data.filter(
         (challenge) => challenge.type === "free"
       );
-      setPersonalChallengesList(sortChallengeByStatus(personalChallenges));
+      setCompanyChallengesList(sortChallengeByStatus(personalChallenges));
       setTimeout(() => {
         setIsLoading(false);
-      }, 300);
-    } catch (err) {
-      setIsFetchingError(true);
+        setIsError(false);
+      }, 500);
+    } catch (error) {
       setIsLoading(false);
+      setIsError(true);
     }
   };
 
   useEffect(() => {
-    fetchChallengeData();
-  }, []);
+    if (!isFocused) return;
+    fetchCompanyChallenges();
+  }, [isFocused]);
 
   return (
     <View className="flex-1">
       {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && !isFetchingError && (
+      {!isLoading && !isError && (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
-          {personalChallengesList.length === 0 ? (
+          {companyChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
             <FlatList
               className="px-4 pt-4"
-              data={personalChallengesList}
+              data={companyChallengesList}
               renderItem={({ item }: { item: IChallenge }) => (
-                <CurrentUserChallengeCard
+                <ChallengeCardCompany
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
+                  isCompanyAccount={userData?.companyAccount ? true : false}
                 />
               )}
               keyExtractor={(item) => item.id}
               ListFooterComponent={<View className="h-20" />}
               refreshing={isLoading}
-              onRefresh={fetchChallengeData}
+              onRefresh={fetchCompanyChallenges}
             />
           )}
         </View>
       )}
-      {!isLoading && isFetchingError && (
+      {isError && (
         <View
-          className={clsx("flex h-full flex-col items-center justify-center")}
+          className={clsx("flex h-3/4 flex-col items-center justify-center")}
         >
           <Text className={clsx("text-md font-medium")}>
             {t("error_general_message") ||
@@ -127,67 +132,70 @@ const PersonalTab = () => {
 };
 
 const CoachingTab = () => {
-  const [coachChallengesList, setCoachChallengesList] = useState<IChallenge[]>(
-    []
-  );
+  const [companyChallengesList, setCompanyChallengesList] = useState<
+    IChallenge[]
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFetchingError, setIsFetchingError] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
+  const { t } = useTranslation();
+  const isFocused = useIsFocused();
+  const navigation = useNavigation<CompanyChallengesScreenNavigationProp>();
 
-  const navigation = useNavigation<PersonalChallengesScreenNavigationProp>();
-
-  const fetchChallengeData = async () => {
+  const fetchCompanyChallenges = async () => {
     try {
       const res = await getChallengeByUserId(userData?.id);
       const coachChallenges = res.data.filter(
         (challenge) => challenge.type !== "free"
       );
-      setCoachChallengesList(sortChallengeByStatus(coachChallenges));
+      setCompanyChallengesList(sortChallengeByStatus(coachChallenges));
       setTimeout(() => {
         setIsLoading(false);
-      }, 300);
-    } catch (err) {
-      setIsFetchingError(true);
+        setIsError(false);
+      }, 500);
+    } catch (error) {
       setIsLoading(false);
+      setIsError(true);
     }
   };
 
   useEffect(() => {
-    fetchChallengeData();
-  }, []);
+    if (!isFocused) return;
+    fetchCompanyChallenges();
+  }, [isFocused]);
 
   return (
     <View className="flex-1">
       {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && !isFetchingError && (
+      {!isLoading && !isError && (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
-          {coachChallengesList.length === 0 ? (
+          {companyChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} />
           ) : (
             <FlatList
               className="px-4 pt-4"
-              data={coachChallengesList}
+              data={companyChallengesList}
               renderItem={({ item }: { item: IChallenge }) => (
-                <CurrentUserChallengeCard
+                <ChallengeCardCompany
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
+                  isCompanyAccount={userData?.companyAccount ? true : false}
                 />
               )}
               keyExtractor={(item) => item.id}
               ListFooterComponent={<View className="h-20" />}
               refreshing={isLoading}
-              onRefresh={fetchChallengeData}
+              onRefresh={fetchCompanyChallenges}
             />
           )}
         </View>
       )}
-      {!isLoading && isFetchingError && (
+      {isError && (
         <View
-          className={clsx("flex h-full flex-col items-center justify-center")}
+          className={clsx("flex h-3/4 flex-col items-center justify-center")}
         >
           <Text className={clsx("text-md font-medium")}>
             {t("error_general_message") ||
@@ -199,27 +207,26 @@ const CoachingTab = () => {
   );
 };
 
-const PersonalChallengesScreen = ({
+const CompanyChallengsScreen = ({
   navigation,
 }: {
-  navigation: PersonalChallengesScreenNavigationProp;
+  navigation: CompanyChallengesScreenNavigationProp;
 }) => {
   const [index, setIndex] = useState<number>(0);
   const [routes] = useState([
-    { key: "personal", title: "Personal" },
+    { key: "company", title: "Company" },
     { key: "coaching", title: "Coaching" },
   ]);
-
   const { t } = useTranslation();
   const layout = useWindowDimensions();
 
-  const MemoizedPersonalTab = React.memo(PersonalTab);
+  const MemoizedCompanyTab = React.memo(CompanyTab);
   const MemoizedCoachingTab = React.memo(CoachingTab);
 
   const renderScene = React.useCallback(({ route }) => {
     switch (route.key) {
-      case "personal":
-        return <MemoizedPersonalTab />;
+      case "company":
+        return <MemoizedCompanyTab />;
       case "coaching":
         return <MemoizedCoachingTab />;
       default:
@@ -251,4 +258,4 @@ const PersonalChallengesScreen = ({
   );
 };
 
-export default PersonalChallengesScreen;
+export default CompanyChallengsScreen;

@@ -4,6 +4,7 @@
   "close": "Close",
   "search_screen.search": "Search user name",
   "error_general_message": "Something went wrong. Please try again later.",
+  "error_wrong_email_or_password": "The email or password is incorrect. Please try again.",
   "error_network_message": "Please check your internet connection and try again.",
   "error_permission_message": "Permission denied. Please try again later.",
   "login_screen.title": "Challenge yourself, reach your goals.",
@@ -31,6 +32,7 @@
   "challenge_detail_screen.no_progress_yet": "No progress yet",
   "challenge_detail_screen.not_participants": "No participants at the moment ",
   "challenge_detail_screen.chat_coach": "chat coach",
+  "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",

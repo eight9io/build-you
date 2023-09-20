@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 
 import { IChallenge } from "../../../../types/challenge";
@@ -24,6 +24,7 @@ import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachTab from "./CoachTab";
 import { ChatCoachTab } from "./ChatCoachTab";
+import SkillsTab from "./SkillsTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -41,22 +42,18 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   setIsNewProgressAdded,
 }) => {
   const { t } = useTranslation();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number>(0);
   const [isJoined, setIsJoined] = useState<boolean>(true);
+  const [participantList, setParticipantList] = useState([]);
+  const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
+
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
-  const [participantList, setParticipantList] = useState([]);
-
   const fetchParticipants = async () => {
     const response = await getChallengeParticipants(challengeId);
     setParticipantList(response.data);
   };
-  useEffect(() => {
-    if (!shouldRefresh) return;
-    fetchParticipants();
-    setShouldRefresh(false);
-  }, [shouldRefresh]);
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
@@ -76,20 +73,35 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
-  const CHALLENGE_TABS_TITLE_TRANSLATION =
-    participantList && challengeOwner?.companyAccount
-      ? [
-        i18n.t("challenge_detail_screen.progress"),
-        i18n.t("challenge_detail_screen.description"),
-        i18n.t("challenge_detail_screen.participants"),
+  useEffect(() => {
+    const CHALLENGE_TABS_TITLE_TRANSLATION =
+      participantList && challengeOwner?.companyAccount
+        ? [
+          i18n.t("challenge_detail_screen.progress"),
+          i18n.t("challenge_detail_screen.description"),
+          i18n.t("challenge_detail_screen.participants"),
+        ]
+        : [
+          i18n.t("challenge_detail_screen.progress"),
+          i18n.t("challenge_detail_screen.description"),
+        ];
+
+    if (challengeData?.type === "certified") {
+      CHALLENGE_TABS_TITLE_TRANSLATION.push(
         i18n.t("challenge_detail_screen.coach"),
-      ]
-      : [
-        i18n.t("challenge_detail_screen.progress"),
-        i18n.t("challenge_detail_screen.description"),
-        challengeData?.type === "certified" && i18n.t("challenge_detail_screen.coach"),
-        challengeData?.type === "certified" && i18n.t("challenge_detail_screen.chat_coach")
-      ];
+        i18n.t("challenge_detail_screen.skills"),
+        i18n.t("challenge_detail_screen.chat_coach")
+      );
+    }
+    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRefresh) return;
+    fetchParticipants();
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
+
   const statusColor = getChallengeStatusColor(
     challengeStatus,
     challengeData?.status
@@ -195,7 +207,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
         <View className="mt-2 flex flex-1">
           <TabView
-            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+            titles={challengeTabTitles}
             activeTabIndex={index}
             setActiveTabIndex={setIndex}
           >
@@ -209,7 +221,35 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             {participantList && challengeOwner?.companyAccount && (
               <ParticipantsTab participant={participantList} />
             )}
-            {challengeData?.type === "certified" && <CoachTab />}
+            <CoachTab />
+            <SkillsTab
+              skills={[
+                // TODO: get skills from challengeData
+                {
+                  rating: 0,
+                  skill: {
+                    id: "1",
+                    skill: "Communication",
+                  },
+                },
+                {
+                  rating: 3,
+                  skill: {
+                    id: "1",
+                    skill: "Teamwork",
+                  },
+                },
+                {
+                  rating: 5,
+                  skill: {
+                    id: "1",
+                    skill: "Stress management",
+                  },
+                },
+              ]}
+              challengeIsClosed={isChallengeCompleted}
+              canRateSkills={true} // TODO: detect if user is a coach
+            />
             {challengeData?.type === "certified" && <ChatCoachTab challengeData={challengeData} />}
           </TabView>
         </View>

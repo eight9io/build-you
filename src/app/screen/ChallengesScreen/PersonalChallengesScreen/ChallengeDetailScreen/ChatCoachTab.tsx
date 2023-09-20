@@ -1,27 +1,8 @@
 import React, { useState, useCallback, useEffect, FC } from "react";
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    View,
-} from "react-native";
-import {
-    Bubble,
-    Composer,
-    GiftedChat,
-    InputToolbar,
-    SystemMessage,
-} from "react-native-gifted-chat";
-
+import { Platform, Text } from "react-native";
+import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
 import SendIcon from "../../../../component/asset/send-icon.svg";
-import { Controller, useForm } from "react-hook-form";
-import TextInputWithMention from "../../../../component/common/Inputs/TextInputWithMention";
-import { IEmployeeDataProps } from "../../../../types/common";
 import { useTranslation } from "react-i18next";
-import ErrorText from "../../../../component/common/ErrorText";
-import PostAvatar from "../../../../component/common/Avatar/PostAvatar";
-import clsx from "clsx";
 import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
 import { IChallenge } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
@@ -29,18 +10,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 interface IChatCoachTabProps {
     challengeData: IChallenge;
 }
-interface IChatInputProps {
-    handleOnSubmit: any;
-}
-
-
 export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
     const [messages, setMessages] = useState([]);
     const { t } = useTranslation();
     const { getUserProfile } = useUserProfileStore();
     const currentUser = getUserProfile();
     const getMessage = () => {
-        // setShouldRefresh(true);
         getMessageByChallengeId(challengeData.id).then((res) => {
             setMessages(
                 res.data.map((item: any) => {
@@ -60,24 +35,22 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
 
     useEffect(() => {
         getMessage();
+        const intervalFetchApi = setInterval(getMessage, 5000);
+        return () => {
+            clearInterval(intervalFetchApi);
+        };
     }, []);
-    console.log(challengeData.id);
-
     const handleSubmit = useCallback((messages) => {
         if (messages.length === 0 || !messages[0].text) {
             return;
         }
-        const message = {
+        sendMessage({
             text: messages[0].text,
             challenge: challengeData.id,
-        };
-
-        sendMessage(message).then((res) => {
+        }).then((res) => {
             getMessage();
-        }
-        );
+        });
     }, []);
-
     return (
         <GiftedChat
             messagesContainerStyle={{
@@ -86,29 +59,32 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
             isCustomViewBottom
             messages={messages}
             onSend={(messages) => handleSubmit(messages)}
-
             renderSend={(props) => {
                 return (
-                    <TouchableOpacity className="mr-3 flex justify-center mb-3
-                   "  onPress={() => {
+                    <TouchableOpacity
+                        className="mb-3 mr-3 flex justify-center
+                   "
+                        onPress={() => {
                             props.onSend({ text: props.text.trim() }, true);
-                        }} >
-                        <SendIcon
-                        />
-                    </TouchableOpacity >
+                        }}
+                    >
+                        <SendIcon />
+                    </TouchableOpacity>
                 );
             }}
-            renderInputToolbar={props => <InputToolbar
-                {...props}
-                containerStyle={{
-                    backgroundColor: "white",
-                    borderColor: "#E8E8E8",
-                    paddingTop: 8,
-                    borderRadius: 10,
-                    borderWidth: 1,
-                    marginHorizontal: 20,
-                }}
-            />}
+            renderInputToolbar={(props) => (
+                <InputToolbar
+                    {...props}
+                    containerStyle={{
+                        backgroundColor: "white",
+                        borderColor: "#E8E8E8",
+                        paddingTop: 8,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        marginHorizontal: 20,
+                    }}
+                />
+            )}
             maxComposerHeight={100}
             placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}
             user={{
@@ -138,8 +114,8 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
                     containerStyle={{
                         right: {
                             maxWidth: "80%",
-                            margin: 10,
-                            // marginBottom: 20
+                            marginRight: 10,
+                            marginBottom: 14,
                         },
                         left: {
                             maxWidth: "80%",
@@ -148,11 +124,9 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
                     wrapperStyle={{
                         right: {
                             backgroundColor: "#fbe1d2",
-                            marginBottom: 6,
                         },
                         left: {
                             backgroundColor: "#E7E9F1",
-                            marginBottom: 6,
                         },
                     }}
                 />

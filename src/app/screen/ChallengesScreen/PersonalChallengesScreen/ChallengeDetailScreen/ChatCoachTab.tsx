@@ -1,6 +1,18 @@
 import React, { useState, useCallback, useEffect, FC } from "react";
-import { Keyboard, Text, View } from "react-native";
-import { Bubble, GiftedChat, SystemMessage } from "react-native-gifted-chat";
+import {
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    Text,
+    View,
+} from "react-native";
+import {
+    Bubble,
+    Composer,
+    GiftedChat,
+    InputToolbar,
+    SystemMessage,
+} from "react-native-gifted-chat";
 
 import SendIcon from "../../../../component/asset/send-icon.svg";
 import { Controller, useForm } from "react-hook-form";
@@ -9,180 +21,144 @@ import { IEmployeeDataProps } from "../../../../types/common";
 import { useTranslation } from "react-i18next";
 import ErrorText from "../../../../component/common/ErrorText";
 import PostAvatar from "../../../../component/common/Avatar/PostAvatar";
-
-interface IChatInputProps {
-    handleOnSubmit: any
+import clsx from "clsx";
+import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
+import { IChallenge } from "../../../../types/challenge";
+import { useUserProfileStore } from "../../../../store/user-store";
+import { TouchableOpacity } from "react-native-gesture-handler";
+interface IChatCoachTabProps {
+    challengeData: IChallenge;
 }
-export const ChatInput: FC<IChatInputProps> = ({
-    handleOnSubmit
-}) => {
+interface IChatInputProps {
+    handleOnSubmit: any;
+}
 
 
-    const { t } = useTranslation();
-    const {
-        control,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm({
-        defaultValues: {
-            comment: "",
-        },
-        reValidateMode: "onSubmit",
-    });
-
-    const onSubmit = (data: { comment: string }) => {
-        handleOnSubmit(data.comment);
-        reset({
-            comment: "",
-        });
-
-        Keyboard.dismiss();
-    };
-
-    return (
-        <View className="flex flex-row   bg-[#FAFBFF] px-4  ">
-            <View className="ml-3 max-h-40 flex-1">
-                <Controller
-                    name={"comment"}
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => {
-                        return (
-                            <TextInputWithMention
-                                placeholder={
-                                    t("chat_input.chat_input_placeholder") || "Type a message"
-                                }
-                                placeholderTextColor={"#C5C8D2"}
-                                rightIcon={<SendIcon />}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                value={value}
-                                onRightIconPress={handleSubmit(onSubmit)}
-                            />
-                        );
-                    }}
-                />
-                {errors.comment ? <ErrorText message={errors.comment.message} /> : null}
-            </View>
-        </View>
-    );
-};
-
-export function ChatCoachTab() {
+export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
     const [messages, setMessages] = useState([]);
     const { t } = useTranslation();
-
+    const { getUserProfile } = useUserProfileStore();
+    const currentUser = getUserProfile();
+    const getMessage = () => {
+        // setShouldRefresh(true);
+        getMessageByChallengeId(challengeData.id).then((res) => {
+            setMessages(
+                res.data.map((item: any) => {
+                    return {
+                        _id: item.id,
+                        text: item.text,
+                        user: {
+                            _id: item.user.id,
+                            name: item.user.name,
+                            avatar: item.user.avatar,
+                        },
+                    };
+                })
+            );
+        });
+    };
 
     useEffect(() => {
-        setMessages([
-            {
-                _id: 1,
-                text: "I'm coach id 1",
-                user: {
-                    _id: 1,
-                    name: "Coach1",
-                    avatar: "https://picsum.photos/id/3/24",
-                },
-            },
-            {
-                _id: 2,
-                text: "I have just finished my first training for Mont Blanc. Totally excited for the whole journey! ",
-                user: {
-                    _id: 2,
-                    name: "User  ",
-                    avatar: "https://picsum.photos/id/3/24",
-                },
-            },
-
-            {
-                _id: 3,
-                text: "Hello id 111",
-                user: {
-                    _id: 1,
-                    name: "React Native",
-                }
-
-            },
-
-            {
-                _id: 4,
-                text: "id 2",
-                user: {
-                    _id: 2,
-                    name: "Rudy Aster ",
-                    avatar: "https://picsum.photos/id/3/24",
-
-                },
-            },
-        ]);
+        getMessage();
     }, []);
+    console.log(challengeData.id);
 
-    const handleSubmit = useCallback((messages = []) => {
-        setMessages((previousMessages) =>
-            GiftedChat.append(previousMessages, messages)
+    const handleSubmit = useCallback((messages) => {
+        if (messages.length === 0 || !messages[0].text) {
+            return;
+        }
+        const message = {
+            text: messages[0].text,
+            challenge: challengeData.id,
+        };
+
+        sendMessage(message).then((res) => {
+            getMessage();
+        }
         );
     }, []);
 
     return (
-        <>
-            <GiftedChat
+        <GiftedChat
+            messagesContainerStyle={{
+                paddingBottom: Platform.OS === "ios" ? 6 : 12,
+            }}
+            isCustomViewBottom
+            messages={messages}
+            onSend={(messages) => handleSubmit(messages)}
 
-                isCustomViewBottom
-                messages={messages}
-                onSend={(messages) => handleSubmit(messages)}
-                user={{
-                    _id: 1,
-
+            renderSend={(props) => {
+                return (
+                    <TouchableOpacity className="mr-3 flex justify-center mb-3
+                   "  onPress={() => {
+                            props.onSend({ text: props.text.trim() }, true);
+                        }} >
+                        <SendIcon
+                        />
+                    </TouchableOpacity >
+                );
+            }}
+            renderInputToolbar={props => <InputToolbar
+                {...props}
+                containerStyle={{
+                    backgroundColor: "white",
+                    borderColor: "#E8E8E8",
+                    paddingTop: 8,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    marginHorizontal: 20,
                 }}
-                infiniteScroll
-                renderTime={() => null}
-                renderBubble={(props) => (
-                    <Bubble
-                        renderUsernameOnMessage
-                        renderUsername={(user) => <Text className="text-gray-dark absolute -bottom-4 left-0 text-sm font-light">{user.name}
-                            <Text className="text-primary-default text-sm"> Coach</Text>
-
-                        </Text>}
-                        {...props}
-                        textStyle={{
-                            right: {
-                                color: "#000",
-                                padding: 8,
-                            },
-                            left: {
-                                color: "#000",
-                                padding: 8
-                            },
-                        }}
-                        containerStyle={{
-                            right: {
-                                maxWidth: '80%',
-                                margin: 10
-                            },
-                            left: {
-                                maxWidth: '80%',
-                            },
-                        }}
-                        wrapperStyle={{
-                            right: {
-                                backgroundColor: "#fbe1d2",
-                                marginBottom: 6
-                            },
-                            left: {
-                                backgroundColor: "#E7E9F1",
-                                marginBottom: 16
-                            },
-                        }}
-                    />
-                )}
-                renderInputToolbar={(props) => (
-                    <ChatInput
-                        handleOnSubmit={handleSubmit}
-                    />
-                )}
-
-            />
-        </>
+            />}
+            maxComposerHeight={100}
+            placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}
+            user={{
+                _id: currentUser?.id,
+            }}
+            renderTime={() => null}
+            renderBubble={(props) => (
+                <Bubble
+                    renderUsernameOnMessage
+                    renderUsername={(user) => (
+                        <Text className="absolute -bottom-4 left-0 text-sm font-light text-gray-dark">
+                            {user.name}
+                            <Text className="text-sm text-primary-default"> Coach</Text>
+                        </Text>
+                    )}
+                    {...props}
+                    textStyle={{
+                        right: {
+                            color: "#000",
+                            padding: 8,
+                        },
+                        left: {
+                            color: "#000",
+                            padding: 8,
+                        },
+                    }}
+                    containerStyle={{
+                        right: {
+                            maxWidth: "80%",
+                            margin: 10,
+                            // marginBottom: 20
+                        },
+                        left: {
+                            maxWidth: "80%",
+                        },
+                    }}
+                    wrapperStyle={{
+                        right: {
+                            backgroundColor: "#fbe1d2",
+                            marginBottom: 6,
+                        },
+                        left: {
+                            backgroundColor: "#E7E9F1",
+                            marginBottom: 6,
+                        },
+                    }}
+                />
+            )}
+            scrollToBottom
+            infiniteScroll
+        />
     );
-
 }

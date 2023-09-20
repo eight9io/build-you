@@ -87,8 +87,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       : [
         i18n.t("challenge_detail_screen.progress"),
         i18n.t("challenge_detail_screen.description"),
-        i18n.t("challenge_detail_screen.coach"),
-        i18n.t("challenge_detail_screen.chat_coach"),
+        challengeData?.type === "certified" && i18n.t("challenge_detail_screen.coach"),
+        challengeData?.type === "certified" && i18n.t("challenge_detail_screen.chat_coach")
       ];
   const statusColor = getChallengeStatusColor(
     challengeStatus,
@@ -209,8 +209,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             {participantList && challengeOwner?.companyAccount && (
               <ParticipantsTab participant={participantList} />
             )}
-            <CoachTab />
-            <ChatCoachTab />
+            {challengeData?.type === "certified" && <CoachTab />}
+            {challengeData?.type === "certified" && <ChatCoachTab challengeData={challengeData} />}
           </TabView>
         </View>
       </View>

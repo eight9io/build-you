@@ -79,6 +79,7 @@ export interface IChallenge {
   progress?: IProgressChallenge[];
   participants?: IUserData[];
   maximumPeople?: number;
+  type?: string;
 }
 
 export interface INumberOfCommentUpdate {

@@ -31,6 +31,7 @@
   "challenge_detail_screen.completed": "Completed",
   "challenge_detail_screen.no_progress_yet": "No progress yet",
   "challenge_detail_screen.not_participants": "No participants at the moment ",
+  "challenge_detail_screen.chat_coach": "chat coach",
   "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
@@ -410,6 +411,9 @@
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
     "delete_comment_success": "Your comment has been deleted successfully"
+  },
+  "chat_input": {
+    "chat_input_placeholder": "Type a message"
   },
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"

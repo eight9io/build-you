@@ -23,6 +23,7 @@ import GlobalDialogController from "../../../../component/common/Dialog/GlobalDi
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachTab from "./CoachTab";
+import { ChatCoachTab } from "./ChatCoachTab";
 import SkillsTab from "./SkillsTab";
 
 interface IChallengeDetailScreenProps {
@@ -66,8 +67,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     challengeOwner?.id === currentUser?.id
       ? challengeData?.status
       : isCurrentUserParticipant
-      ? isCurrentUserParticipant?.challengeStatus
-      : challengeData.status;
+        ? isCurrentUserParticipant?.challengeStatus
+        : challengeData.status;
 
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
@@ -76,19 +77,20 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     const CHALLENGE_TABS_TITLE_TRANSLATION =
       participantList && challengeOwner?.companyAccount
         ? [
-            i18n.t("challenge_detail_screen.progress"),
-            i18n.t("challenge_detail_screen.description"),
-            i18n.t("challenge_detail_screen.participants"),
-          ]
+          i18n.t("challenge_detail_screen.progress"),
+          i18n.t("challenge_detail_screen.description"),
+          i18n.t("challenge_detail_screen.participants"),
+        ]
         : [
-            i18n.t("challenge_detail_screen.progress"),
-            i18n.t("challenge_detail_screen.description"),
-          ];
+          i18n.t("challenge_detail_screen.progress"),
+          i18n.t("challenge_detail_screen.description"),
+        ];
 
     if (challengeData?.type === "certified") {
       CHALLENGE_TABS_TITLE_TRANSLATION.push(
         i18n.t("challenge_detail_screen.coach"),
-        i18n.t("challenge_detail_screen.skills")
+        i18n.t("challenge_detail_screen.skills"),
+        i18n.t("challenge_detail_screen.chat_coach")
       );
     }
     setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
@@ -164,7 +166,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
   return (
     <SafeAreaView>
-      <View className="flex h-full flex-col bg-white py-2">
+      <View className="flex h-full flex-col bg-white pt-2">
         <View className="flex flex-row items-center justify-between px-4">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
             <CheckCircle fill={statusColor} />
@@ -181,9 +183,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                     ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
                     : "bg-primary-default flex items-center justify-center px-5"
                 }
-                textClassName={`text-center text-md font-semibold ${
-                  isJoined ? "text-gray-dark" : "text-white"
-                } `}
+                textClassName={`text-center text-md font-semibold ${isJoined ? "text-gray-dark" : "text-white"
+                  } `}
                 title={
                   isJoined
                     ? i18n.t("challenge_detail_screen.leave")
@@ -249,6 +250,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               challengeIsClosed={isChallengeCompleted}
               canRateSkills={true} // TODO: detect if user is a coach
             />
+            {challengeData?.type === "certified" && <ChatCoachTab challengeData={challengeData} />}
           </TabView>
         </View>
       </View>

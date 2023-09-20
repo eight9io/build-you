@@ -48,8 +48,13 @@ export const completeChallenge = (challengeId: string) => {
 export const deleteChallenge = (id: string) => {
   return http.delete(`/challenge/delete/${id}`);
 };
+
 export const getChallengeByUserId = (userId: string) => {
   return http.get(`/challenge/all/${userId}`);
+};
+
+export const getCertifiedChallengeOfCurrentUser= () => {
+  return http.get(`/challenge/certified/all`);
 };
 
 export const getChallengeParticipants = (challengeId: string) => {

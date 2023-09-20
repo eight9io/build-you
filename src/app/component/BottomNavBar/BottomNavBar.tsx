@@ -12,8 +12,8 @@ import HomeScreen from "../../screen/HomeScreen";
 import NotificationsScreen from "../../screen/NotificationsScreen/NotificationsScreen";
 import PersonalProfileScreen from "../../screen/ProfileScreen/Personal/PersonalProfileScreen";
 import CompanyProfileScreen from "../../screen/ProfileScreen/Company/CompanyProfileScreen";
-import PersonalChallengesNavigator from "../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen";
-import CompanyChallengesScreen from "../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen";
+import PersonalChallengesNavigator from "../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesNavigator";
+import CompanyChallengesScreen from "../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengsNavigator";
 
 import FeedSvg from "./asset/feed.svg";
 import FeedFillSvg from "./asset/feed-fill.svg";

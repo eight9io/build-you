@@ -1,49 +1,48 @@
 {
   "project_info": {
-    "project_number": "288098023879",
-    "project_id": "buildyou",
-    "storage_bucket": "buildyou.appspot.com"
+    "project_number": "182046676611",
+    "project_id": "build-you-e9",
+    "storage_bucket": "build-you-e9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:288098023879:android:97bd8c48ef94237b1081e2",
+        "mobilesdk_app_id": "1:182046676611:android:ce31e508d534ec337e6db6",
         "android_client_info": {
           "package_name": "com.buildyou.buildyou"
         }
       },
       "oauth_client": [
         {
-          "client_id": "288098023879-8q8mfblcd6kjbvcit4ug7hjf51c8j7n6.apps.googleusercontent.com",
+          "client_id": "182046676611-82gevma14c5heurlm7199n9f74di8005.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.buildyou.buildyou",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "cafb63875a61aff9935932906d8c06d37b4cba93"
           }
         },
         {
-          "client_id": "288098023879-hfrhc9f5c7p07898a03n0fba1sme0uvf.apps.googleusercontent.com",
+          "client_id": "182046676611-kjnvhpd4t3hu5g3an7fets5todbobi4b.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCd1vqS3hfSUyo44AfbXNAHO80GjENWQz4"
+          "current_key": "AIzaSyCdWoRr1ZHIsZKcFNR9zlFpLCu0d8rrKfo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "288098023879-dad08l50q4uv8bp1d0sdt38fsc368itp.apps.googleusercontent.com",
+              "client_id": "182046676611-08hpuq5u8s965q3ll1bbg1nut9uri4p1.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "288098023879-i6v73ulr31sfgodmjsfi67mnrgj3po6i.apps.googleusercontent.com",
+              "client_id": "182046676611-uguei0ko32e2i9cobbcicfd9pjsj89ru.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "it.buildyou.buildyou",
-                "app_store_id": "1589215290"
+                "bundle_id": "it.buildyou.buildyou"
               }
             }
           ]

@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>288098023879-i6v73ulr31sfgodmjsfi67mnrgj3po6i.apps.googleusercontent.com</string>
+	<string>182046676611-uguei0ko32e2i9cobbcicfd9pjsj89ru.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.288098023879-i6v73ulr31sfgodmjsfi67mnrgj3po6i</string>
+	<string>com.googleusercontent.apps.182046676611-uguei0ko32e2i9cobbcicfd9pjsj89ru</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>288098023879-9spmqgolc030qf9gato0i1k8dookktg1.apps.googleusercontent.com</string>
+	<string>182046676611-82gevma14c5heurlm7199n9f74di8005.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDi74ayMrmWjQ6Qykm0xkl82_Awi7aqN24</string>
+	<string>AIzaSyAUv-_XkiRAmkscEGQZh8YYJFRTrruXyGk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>288098023879</string>
+	<string>182046676611</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>it.buildyou.buildyou</string>
 	<key>PROJECT_ID</key>
-	<string>buildyou</string>
+	<string>build-you-e9</string>
 	<key>STORAGE_BUCKET</key>
-	<string>buildyou.appspot.com</string>
+	<string>build-you-e9.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:288098023879:ios:45a849897f2a324b1081e2</string>
+	<string>1:182046676611:ios:a1f48ac29bb9057b7e6db6</string>
 </dict>
 </plist>

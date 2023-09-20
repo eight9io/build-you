@@ -80,7 +80,7 @@ export interface IChallenge {
   participants?: IUserData[];
   maximumPeople?: number;
   totalCurrentParticipant?: number;
-  type?: "free" | "chat" | "videocall";
+  type?: "free" | "certified";
   package?: IChallengePackage | null;
   intake?: any;
   check?: any;

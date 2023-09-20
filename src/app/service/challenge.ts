@@ -1,8 +1,10 @@
+import { AxiosResponse } from "axios";
 import {
   ICreateChallenge,
   IEditChallenge,
   ICreateCompanyChallenge,
   IUpdateChallengeImage,
+  IChallenge,
 } from "../types/challenge";
 import http from "../utils/http";
 
@@ -50,11 +52,11 @@ export const deleteChallenge = (id: string) => {
 };
 
 export const getChallengeByUserId = (userId: string) => {
-  return http.get(`/challenge/all/${userId}`);
+  return http.get<IChallenge>(`/challenge/all/${userId}`);
 };
 
-export const getCertifiedChallengeOfCurrentUser= () => {
-  return http.get(`/challenge/certified/all`);
+export const getCertifiedChallengeOfCurrentUser = () => {
+  return http.get<IChallenge>(`/challenge/certified/all`);
 };
 
 export const getChallengeParticipants = (challengeId: string) => {

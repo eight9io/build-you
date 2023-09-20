@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 
 import { IChallenge } from "../../../../types/challenge";
@@ -41,22 +41,18 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   setIsNewProgressAdded,
 }) => {
   const { t } = useTranslation();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number>(0);
   const [isJoined, setIsJoined] = useState<boolean>(true);
+  const [participantList, setParticipantList] = useState([]);
+  const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
+
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
-  const [participantList, setParticipantList] = useState([]);
-
   const fetchParticipants = async () => {
     const response = await getChallengeParticipants(challengeId);
     setParticipantList(response.data);
   };
-  useEffect(() => {
-    if (!shouldRefresh) return;
-    fetchParticipants();
-    setShouldRefresh(false);
-  }, [shouldRefresh]);
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
@@ -76,21 +72,33 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
-  const CHALLENGE_TABS_TITLE_TRANSLATION =
-    participantList && challengeOwner?.companyAccount
-      ? [
-          i18n.t("challenge_detail_screen.progress"),
-          i18n.t("challenge_detail_screen.description"),
-          i18n.t("challenge_detail_screen.participants"),
-          i18n.t("challenge_detail_screen.coach"),
-          i18n.t("challenge_detail_screen.skills"),
-        ]
-      : [
-          i18n.t("challenge_detail_screen.progress"),
-          i18n.t("challenge_detail_screen.description"),
-          i18n.t("challenge_detail_screen.coach"),
-          i18n.t("challenge_detail_screen.skills"),
-        ];
+  useEffect(() => {
+    const CHALLENGE_TABS_TITLE_TRANSLATION =
+      participantList && challengeOwner?.companyAccount
+        ? [
+            i18n.t("challenge_detail_screen.progress"),
+            i18n.t("challenge_detail_screen.description"),
+            i18n.t("challenge_detail_screen.participants"),
+          ]
+        : [
+            i18n.t("challenge_detail_screen.progress"),
+            i18n.t("challenge_detail_screen.description"),
+          ];
+
+    if (challengeData?.type === "certified") {
+      CHALLENGE_TABS_TITLE_TRANSLATION.push(
+        i18n.t("challenge_detail_screen.coach"),
+        i18n.t("challenge_detail_screen.skills")
+      );
+    }
+    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRefresh) return;
+    fetchParticipants();
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
 
   const statusColor = getChallengeStatusColor(
     challengeStatus,
@@ -198,7 +206,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
         <View className="mt-2 flex flex-1">
           <TabView
-            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+            titles={challengeTabTitles}
             activeTabIndex={index}
             setActiveTabIndex={setIndex}
           >

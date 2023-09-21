@@ -7,6 +7,11 @@ import i18n from "../../../i18n/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OutsidePressHandler from "react-native-outside-press";
 
+import {
+  getLanguageLocalStorage,
+  setLanguageLocalStorage,
+} from "../../../utils/language";
+
 const LANGUAGE_OPTIONS = [
   {
     label: "English",
@@ -17,18 +22,6 @@ const LANGUAGE_OPTIONS = [
     value: "it",
   },
 ];
-
-export const getLanguageLocalStorage = async () => {
-  const language = await AsyncStorage.getItem("language");
-  if (language) {
-    return language;
-  }
-  return "it";
-};
-
-export const setLanguageLocalStorage = async (language: string) => {
-  await AsyncStorage.setItem("language", language);
-};
 
 const LanguageSettings = () => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);

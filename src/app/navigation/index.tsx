@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -11,7 +11,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import jwt_decode from "jwt-decode";
+
+import i18n from "../i18n/i18n";
 
 import { RootStackParamList } from "./navigation.type";
 
@@ -35,10 +36,12 @@ import CoachRateChallengeScreen from "../screen/ChallengesScreen/PersonalChallen
 import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
 
 import { useAuthStore } from "../store/auth-store";
+import { useDeepLinkStore } from "../store/deep-link-store";
 import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../store/user-store";
+
 import NavigatorService from "../utils/navigationService";
 import {
   checkTokens,
@@ -46,14 +49,13 @@ import {
   setupInterceptor,
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
-import { useDeepLinkStore } from "../store/deep-link-store";
-import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
-import i18n from "../i18n/i18n";
+import { getLanguageLocalStorage } from "../utils/language";
+
+import CartScreen from "../screen/ChallengesScreen/CartScreen";
+import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
 import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
-import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";
-import CartScreen from "../screen/ChallengesScreen/CartScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

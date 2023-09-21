@@ -141,10 +141,6 @@
   "button.skip": "Skip",
   "button.update": "Update",
   "button.edit_companyProfile": "Edit profile",
-  "new_challenge_screen.title": "Create a new challenge",
-  "new_challenge_screen.next": "Next",
-  "new_challenge_screen.location": "Location",
-  "new_challenge_screen.enter_your_location": "Select your location",
   "login": "Login",
   "forgot_password": "Forgot password?",
   "forgot_password.title": "Forgot password",
@@ -243,7 +239,8 @@
     }
   },
   "new_challenge_screen": {
-    "title": "New challenge",
+    "title": "Create a new challenge",
+    "next": "Next",
     "create_button": "Create",
     "next_button": "Next",
     "choose_type": "Choose the type of challenge",

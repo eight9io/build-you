@@ -16,6 +16,7 @@ import { serviceGetAllPackages } from "../../service/package";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 import { IPackage } from "../../types/package";
+import { getLanguageLocalStorage } from "../../utils/language";
 
 interface ITypeOfPackage {
   id: string;
@@ -99,9 +100,10 @@ const ChoosePackageScreen = () => {
 
   useEffect(() => {
     const fetchPackages = async () => {
+      const currentLanguage = await getLanguageLocalStorage();
       setLoading(true);
       try {
-        const res = await serviceGetAllPackages();
+        const res = await serviceGetAllPackages(currentLanguage);
         setPackages(res.data.packages);
       } catch (error) {
         console.log("get packages error", error);

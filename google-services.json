@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:288098023879:android:97bd8c48ef94237b1081e2",
+        "mobilesdk_app_id": "1:288098023879:android:c6965053e47851df1081e2",
         "android_client_info": {
           "package_name": "com.buildyou.buildyou"
         }
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCd1vqS3hfSUyo44AfbXNAHO80GjENWQz4"
+          "current_key": "AIzaSyB-OV5ba1h6e92tPCGUP2CLL6Bw1uu3xko"
         }
       ],
       "services": {

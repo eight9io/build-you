@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, FC } from "react";
 import { Platform, Text } from "react-native";
-import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
+import { Avatar, Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
 import SendIcon from "../../../../component/asset/send-icon.svg";
 import { useTranslation } from "react-i18next";
 import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
@@ -15,20 +15,31 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
     const { t } = useTranslation();
     const { getUserProfile } = useUserProfileStore();
     const currentUser = getUserProfile();
+    const sortByTime = (data) => {
+        const sortedData = [...data]
+        sortedData.sort((a, b) => {
+            const dateA = new Date(a.createdAt) as any;
+            const dateB = new Date(b.createdAt) as any;
+            return dateB - dateA;
+        });
+        return sortedData;
+    };
     const getMessage = () => {
         getMessageByChallengeId(challengeData.id).then((res) => {
             setMessages(
-                res.data.map((item: any) => {
+                sortByTime(res.data.map((item: any) => {
                     return {
                         _id: item.id,
                         text: item.text,
+                        createdAt: item.createdAt,
                         user: {
                             _id: item.user.id,
                             name: item.user.name,
                             avatar: item.user.avatar,
+                            isCoach: item.user.isCoach,
                         },
                     };
-                })
+                }))
             );
         });
     };
@@ -97,37 +108,62 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
                     renderUsername={(user) => (
                         <Text className="absolute -bottom-4 left-0 text-sm font-light text-gray-dark">
                             {user.name}
-                            <Text className="text-sm text-primary-default"> Coach</Text>
+                            {user?.isCoach && <Text className="text-sm text-primary-default"> Coach</Text>}
                         </Text>
                     )}
                     {...props}
                     textStyle={{
                         right: {
                             color: "#000",
-                            padding: 8,
+                            padding: 6,
                         },
                         left: {
                             color: "#000",
-                            padding: 8,
+                            padding: 6,
                         },
                     }}
                     containerStyle={{
                         right: {
                             maxWidth: "80%",
-                            marginRight: 10,
-                            marginBottom: 14,
+                            marginBottom: 10,
                         },
                         left: {
                             maxWidth: "80%",
+                            marginBottom: 22,
+
                         },
                     }}
                     wrapperStyle={{
                         right: {
                             backgroundColor: "#fbe1d2",
+                            marginRight: 10,
+                            borderTopRightRadius: 10,
+                            borderBottomRightRadius: 10,
                         },
                         left: {
                             backgroundColor: "#E7E9F1",
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 10,
                         },
+                    }}
+                />
+            )}
+            renderAvatar={(props) => (
+                <Avatar
+                    {...props}
+                    containerStyle={{
+                        left: {
+                            marginLeft: 10,
+                            marginBottom: 16,
+                        },
+                    }}
+                    imageStyle={{
+                        left: {
+                            width: 34,
+                            height: 34,
+                            marginRight: -6,
+                        },
+
                     }}
                 />
             )}

@@ -1,11 +1,12 @@
-import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
-import React, { FC, useLayoutEffect, useEffect, useState } from "react";
-import { View, Text, SafeAreaView } from "react-native";
 import jwt_decode from "jwt-decode";
+import { View, Text, SafeAreaView } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+import React, { FC, useLayoutEffect, useEffect, useState } from "react";
+import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 
-import { IChallenge } from "../../../types/challenge";
-import { RootStackParamList } from "../../../navigation/navigation.type";
-import { useUserProfileStore } from "../../../store/user-store";
+import { IChallenge } from "../../../../types/challenge";
+import { RootStackParamList } from "../../../../navigation/navigation.type";
+import { useUserProfileStore } from "../../../../store/user-store";
 
 import {
   deleteChallenge,
@@ -13,29 +14,28 @@ import {
   getChallengeParticipantsByChallengeId,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
-} from "../../../service/challenge";
+} from "../../../../service/challenge";
 
-import Button from "../../../component/common/Buttons/Button";
-import { TabView } from "../../../component/common/Tab/TabView";
-import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
-import ProgressTab from "../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
-import DescriptionTab from "../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
-import ParticipantsTab from "../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
-import { RightPersonalChallengeDetailOptions } from "../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import Button from "../../../../component/common/Buttons/Button";
+import { TabView } from "../../../../component/common/Tab/TabView";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import ProgressTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
+import DescriptionTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
+import ParticipantsTab from "../../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
+import { RightPersonalChallengeDetailOptions } from "../../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 
-import ShareIcon from "../../../../../assets/svg/share.svg";
-import GlobalToastController from "../../../component/common/Toast/GlobalToastController";
+import ShareIcon from "../../../../../../assets/svg/share.svg";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { useTranslation } from "react-i18next";
-import CheckCircle from "../../../../../assets/svg/check_circle.svg";
-import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
-import EditChallengeModal from "../../../component/modal/EditChallengeModal";
-import { getChallengeStatusColor } from "../../../utils/common";
+import CheckCircle from "../../../../../../assets/svg/check_circle.svg";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
+import { getChallengeStatusColor } from "../../../../utils/common";
 import { AxiosError } from "axios";
 import debounce from "lodash.debounce";
-import { onShareChallengeLink } from "../../../utils/shareLink.uitl";
-import { useAuthStore } from "../../../store/auth-store";
-import { IToken } from "../../../types/auth";
-import Spinner from "react-native-loading-spinner-overlay";
+import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
+import { useAuthStore } from "../../../../store/auth-store";
+import { IToken } from "../../../../types/auth";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -62,9 +62,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const { challengeId, isCompanyAccount: isCompany } = route.params;
 
   const [index, setIndex] = useState<number>(0);
-  // const [challengeData, setChallengeData] = useState<IChallenge>(
-  //   {} as IChallenge
-  // );
   const [isError, setIsError] = useState<boolean>(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
 
@@ -133,6 +130,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const isCompanyAccount =
     isCompany || challengeState.challengeOwner?.companyAccount;
 
+  const isCertifiedChallenge =
+    challengeState.challengeData?.type === "certified";
+
   const challengeStatus =
     challengeState.challengeOwner?.id === currentUser?.id
       ? challengeState.challengeData?.status
@@ -148,7 +148,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     challengeStatus,
     challengeState.challengeData?.status
   );
-  console.log("render");
 
   const getChallengeData = async () => {
     try {
@@ -503,6 +502,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             challengeState.challengeOwner?.companyAccount) && (
             <ParticipantsTab participant={challengeState.participantList} />
           )}
+          {/* {isCertifiedChallenge && (
+            <CoachTabViewOnly challengeData={challengeState.challengeData} />
+          )} */}
         </TabView>
       </View>
     </SafeAreaView>

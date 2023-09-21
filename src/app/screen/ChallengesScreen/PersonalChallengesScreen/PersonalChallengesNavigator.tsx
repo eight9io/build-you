@@ -11,7 +11,7 @@ import PersonalChallengesScreen from "./PersonalChallengesScreen";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import PersonalChallengeDetailScreen from "./PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
-import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();

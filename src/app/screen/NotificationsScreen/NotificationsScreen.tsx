@@ -15,7 +15,7 @@ import NavButton from "../../component/common/Buttons/NavButton";
 import Notification from "../../component/Notification";
 import { useNotificationStore } from "../../store/notification-store";
 import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
-import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";

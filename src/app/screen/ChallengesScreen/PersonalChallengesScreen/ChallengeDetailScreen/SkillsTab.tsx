@@ -1,13 +1,19 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 
 import { useNav } from "../../../../hooks/useNav";
+import {
+  serviceGetSkillsToRate,
+  servicePostRatingSkills,
+} from "../../../../service/challenge";
 
 import SkillCompetenceProcess from "../../../../component/Profile/ProfileTabs/Users/Skills/SkillCompetenceProcess";
 import Button, {
   FillButton,
 } from "../../../../component/common/Buttons/Button";
+import { IChallenge } from "../../../../types/challenge";
+import { useUserProfileStore } from "../../../../store/user-store";
 
 interface ISoftSkillProps {
   rating: number;
@@ -17,31 +23,43 @@ interface ISoftSkillProps {
   };
 }
 interface ISkillsTabProps {
-  skills: ISoftSkillProps[] | undefined;
-  challengeIsClosed?: boolean;
-  canRateSkills?: boolean;
+  challengeData: IChallenge;
 }
 
-const SkillsTab: FC<ISkillsTabProps> = ({
-  skills,
-  challengeIsClosed,
-  canRateSkills,
-}) => {
+const SkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
+  const [skills, setSkills] = React.useState<ISoftSkillProps[]>([]);
   const { t } = useTranslation();
   const navigation = useNav();
 
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  const canCurrentUserRateSkills = currentUser.id === challengeData?.coach;
+
   const handleOpenRateSkillsModal = () => {
     navigation.navigate("CoachRateChallengeScreen", {
-      challengeId: "1",
-      userId: "1",
+      challengeId: challengeData.id,
+      userId: currentUser.id,
     });
   };
 
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await serviceGetSkillsToRate(challengeData.id);
+        console.log("response", response.data);
+        setSkills(response.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchSkills();
+  }, []);
+
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
-      {canRateSkills && (
+      {canCurrentUserRateSkills && (
         <Button
-          isDisabled={challengeIsClosed || false}
           containerClassName="bg-primary-default flex-none px-1"
           textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
           disabledContainerClassName="bg-gray-light flex-none px-1"

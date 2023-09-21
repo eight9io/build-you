@@ -13,6 +13,7 @@ import {
 } from "../../../../service/challenge";
 
 import ParticipantsTab from "./ParticipantsTab";
+import CompanyCoachTab from "./CompanyCoachTab";
 import TabView from "../../../../component/common/Tab/TabView";
 import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
@@ -22,6 +23,13 @@ import CheckCircle from "./assets/check_circle.svg";
 import Button from "../../../../component/common/Buttons/Button";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/navigation.type";
+import CompanySkillsTab from "./CompanySkillsTab";
+
+export type ChallengeCompanyDetailScreenNavigationProps =
+  NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
 
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -50,6 +58,11 @@ export const ChallengeCompanyDetailScreen: FC<
   const { getUserProfile } = useUserProfileStore();
 
   const currentUser = getUserProfile();
+
+  const navigation =
+    useNavigation<
+      NavigationProp<ChallengeCompanyDetailScreenNavigationProps>
+    >();
 
   const fetchParticipants = async () => {
     const response = await getChallengeParticipants(challengeId);
@@ -218,6 +231,11 @@ export const ChallengeCompanyDetailScreen: FC<
             />
             <DescriptionTab challengeData={challengeData} />
             <ParticipantsTab participant={participantList as any} />
+            <CompanyCoachTab navigation={navigation} />
+            <CompanySkillsTab
+              navigation={navigation}
+              challengeId={challengeData?.id}
+            />
           </TabView>
         </View>
       </View>

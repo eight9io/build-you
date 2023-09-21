@@ -1,28 +1,24 @@
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import React, { useState, ReactNode } from "react";
+import { NavigationProp } from "@react-navigation/native";
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState, useEffect, ReactNode, FC } from "react";
-import { Image } from "expo-image";
 
-import { IUserData } from "../../../../types/user";
 import {
   CheckpointType,
   IChallengeState,
   IChallengeTouchpointStatus,
 } from "../../../../types/challenge";
-
-import { useNav } from "../../../../hooks/useNav";
+import { ChallengeCompanyDetailScreenNavigationProps } from "./ChallengeCompanyDetailScreen";
 
 import DefaultAvatar from "../../../../common/svg/default-avatar.svg";
 import TouchPointCircle from "../../../../common/svg/touchpoint-circle.svg";
 import TouchPointCheckCircle from "../../../../common/svg/check-circle-24.svg";
 import TouchPointRetangle from "../../../../common/svg/touchpoint-rectangle.svg";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import { serviceGetOtherUserData } from "../../../../service/user";
 
-interface ICoachTabProps {
-  coachID: string;
-}
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+
+interface ICoachTabProps {}
 
 export const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
   switch (status) {
@@ -60,37 +56,20 @@ const EmptyCoachBanner = (translation) => {
   );
 };
 
-const CoachBanner = ({ coachData }: { coachData: IUserData }) => {
-  const navigation = useNav();
-
-  const handleOpenCoachProfile = () => {
-    navigation.navigate("OtherUserProfileScreen", { userId: coachData?.id });
-  };
-
+const CoachBanner = ({ coachName, coachAvatar, translation, specialize }) => {
   return (
     <View className="flex flex-row items-center justify-between rounded-lg bg-gray-light p-4">
       <View className="flex flex-row items-center">
-        {coachData?.avatar ? (
-          <Image
-            source={{ uri: coachData?.avatar }}
-            style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
-        ) : (
-          <DefaultAvatar />
-        )}
+        <DefaultAvatar />
         <View className="ml-4" />
         <View className="flex flex-col items-start">
-          <Text className="text-black text-md font-semibold">
-            {coachData.name} {coachData.surname}
-          </Text>
-          <Text className="w-44 text-md text-gray-dark">
-            {coachData?.occupation?.name}
-          </Text>
+          <Text className="text-black text-md font-semibold">{coachName}</Text>
+          <Text className="text-md text-gray-dark">{specialize}</Text>
         </View>
       </View>
       <TouchableOpacity
         className="flex flex-row items-center justify-center rounded-full bg-white p-2 px-6 "
-        onPress={handleOpenCoachProfile}
+        onPress={() => {}}
       >
         <Text className="font-semibold text-primary-default">Profile</Text>
       </TouchableOpacity>
@@ -203,13 +182,15 @@ const TouchPointProgress = ({
   );
 };
 
-const CoachTab: FC<ICoachTabProps> = ({ coachID }) => {
+const CompanyCoachTab = ({
+  navigation,
+}: {
+  navigation: NavigationProp<ChallengeCompanyDetailScreenNavigationProps>;
+}) => {
   const [
     isChangeTouchpointStatusModalVisible,
     setChangeTouchpointStatusModalVisible,
   ] = useState<boolean>(false);
-  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
-
   const { t } = useTranslation();
 
   const handleOpenChangeTouchpointStatusModal = () => {
@@ -220,21 +201,8 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID }) => {
     setChangeTouchpointStatusModalVisible(false);
   };
 
-  const getCoachData = async () => {
-    try {
-      const response = await serviceGetOtherUserData(coachID);
-      setCoachData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getCoachData();
-  }, [coachID]);
-
   return (
-    <View className="w-screen">
+    <View className="flex flex-col p-4">
       <ConfirmDialog
         isVisible={isChangeTouchpointStatusModalVisible}
         title="Are you sure?"
@@ -242,28 +210,28 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID }) => {
         onConfirm={() => {}}
         onClosed={handleCloseChangeTouchpointStatusModal}
       />
-      <View className="p-4">
-        {coachData?.id ? (
-          <CoachBanner coachData={coachData} />
-        ) : (
-          <EmptyCoachBanner translation={t} />
-        )}
-        <View className="flex flex-col">
-          <Text className="mt-6 text-md font-semibold text-primary-default">
-            Touchpoints of your challenge
-          </Text>
-          <TouchPointProgress
-            numberOfChecks={3}
-            currentTouchpoint="check-2"
-            currentTouchpointStatus="in-progress"
-            handleOpenChangeTouchpointStatusModal={
-              handleOpenChangeTouchpointStatusModal
-            }
-          />
-        </View>
+      {/* <EmptyCoachBanner translation={t} /> */}
+      <CoachBanner
+        translation={t}
+        coachAvatar={"https://i.pravatar.cc/300"}
+        coachName={"Rudy Aster"}
+        specialize={"Personal Trainer"}
+      />
+      <View className="flex flex-col">
+        <Text className="mt-6 text-md font-semibold text-primary-default">
+          Touchpoints of your challenge
+        </Text>
+        <TouchPointProgress
+          numberOfChecks={3}
+          currentTouchpoint="check-2"
+          currentTouchpointStatus="in-progress"
+          handleOpenChangeTouchpointStatusModal={
+            handleOpenChangeTouchpointStatusModal
+          }
+        />
       </View>
     </View>
   );
 };
 
-export default CoachTab;
+export default CompanyCoachTab;

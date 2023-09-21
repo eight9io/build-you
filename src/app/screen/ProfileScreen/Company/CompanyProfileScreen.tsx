@@ -17,7 +17,7 @@ import { serviceGetMyProfile } from "../../../service/auth";
 import { useUserProfileStore } from "../../../store/user-store";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import NavButton from "../../../component/common/Buttons/NavButton";
-import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 
 import { useGetListEmployee } from "../../../hooks/useGetCompany";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";

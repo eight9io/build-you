@@ -15,7 +15,10 @@ import { TabView, TabBar } from "react-native-tab-view";
 import { IChallenge } from "../../../types/challenge";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
-import { getChallengeByUserId } from "../../../service/challenge";
+import {
+  getChallengeByUserId,
+  serviceGetAllChallengeByCoachId,
+} from "../../../service/challenge";
 import { sortChallengeByStatus } from "../../../utils/common";
 
 import { useUserProfileStore } from "../../../store/user-store";
@@ -126,7 +129,7 @@ const PersonalTab = () => {
   );
 };
 
-const CoachingTab = () => {
+const CertifiedTab = () => {
   const [coachChallengesList, setCoachChallengesList] = useState<IChallenge[]>(
     []
   );
@@ -199,29 +202,119 @@ const CoachingTab = () => {
   );
 };
 
+const CoachTab = () => {
+  const [coachChallengesList, setCoachChallengesList] = useState<IChallenge[]>(
+    []
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isFetchingError, setIsFetchingError] = useState<boolean>(false);
+
+  const { t } = useTranslation();
+  const { getUserProfile } = useUserProfileStore();
+  // current user is coach
+  const userData = getUserProfile();
+  const navigation = useNavigation<PersonalChallengesScreenNavigationProp>();
+
+  const fetchChallengeData = async () => {
+    try {
+      const res = await serviceGetAllChallengeByCoachId(userData?.id);
+      setCoachChallengesList(sortChallengeByStatus(res.data));
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
+    } catch (err) {
+      setIsFetchingError(true);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchChallengeData();
+  }, []);
+
+  return (
+    <View className="flex-1">
+      {isLoading && <SkeletonLoadingChallengesScreen />}
+      {!isLoading && !isFetchingError && (
+        <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
+          {coachChallengesList.length === 0 ? (
+            <EmptyChallenges navigation={navigation} />
+          ) : (
+            <FlatList
+              className="px-4 pt-4"
+              data={coachChallengesList}
+              renderItem={({ item }: { item: IChallenge }) => (
+                <CurrentUserChallengeCard
+                  item={item}
+                  imageSrc={item?.image}
+                  navigation={navigation}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+              ListFooterComponent={<View className="h-20" />}
+              refreshing={isLoading}
+              onRefresh={fetchChallengeData}
+            />
+          )}
+        </View>
+      )}
+      {!isLoading && isFetchingError && (
+        <View
+          className={clsx("flex h-full flex-col items-center justify-center")}
+        >
+          <Text className={clsx("text-md font-medium")}>
+            {t("error_general_message") ||
+              "Something went wrong. Please try again later."}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
 const PersonalChallengesScreen = ({
   navigation,
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
   const [index, setIndex] = useState<number>(0);
-  const [routes] = useState([
+  const [routes, setRoutes] = useState([
     { key: "personal", title: "Personal" },
-    { key: "coaching", title: "Coaching" },
+    { key: "certified", title: "Certified" },
   ]);
+
+  const { getUserProfile } = useUserProfileStore();
+  const userData = getUserProfile();
+  const isUserCoach = userData?.isCoach;
+
+  useEffect(() => {
+    if (isUserCoach) {
+      setRoutes([
+        { key: "personal", title: "Personal" },
+        { key: "certified", title: "Certified" },
+        {
+          key: "coach",
+          title: "Coach",
+        },
+      ]);
+    }
+  }, [isUserCoach]);
 
   const { t } = useTranslation();
   const layout = useWindowDimensions();
 
   const MemoizedPersonalTab = React.memo(PersonalTab);
-  const MemoizedCoachingTab = React.memo(CoachingTab);
+  const MemoizedCertifiedTab = React.memo(CertifiedTab);
+  const MemoizedCoachTab = React.memo(CoachTab);
 
   const renderScene = React.useCallback(({ route }) => {
     switch (route.key) {
       case "personal":
         return <MemoizedPersonalTab />;
-      case "coaching":
-        return <MemoizedCoachingTab />;
+      case "certified":
+        return <MemoizedCertifiedTab />;
+      case "coach":
+        return <MemoizedCoachTab />;
       default:
         return null;
     }

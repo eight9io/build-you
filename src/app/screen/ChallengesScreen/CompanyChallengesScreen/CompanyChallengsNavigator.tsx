@@ -10,7 +10,7 @@ import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
-import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import CompanyChallengsScreen from "./CompnayChallengsScreen";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();

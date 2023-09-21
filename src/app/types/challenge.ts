@@ -1,5 +1,19 @@
 import { IUserData } from "./user";
 
+export type IChallengeTouchpointStatus =
+  | "init"
+  | "open"
+  | "in-progress"
+  | "closed";
+
+export type CheckType<N extends number> = N extends infer Num
+  ? Num extends number
+    ? `check-${Num}`
+    : never
+  : never;
+
+export type CheckpointType = "intake" | CheckType<number> | "closing";
+
 export interface ICreateChallenge {
   goal: string;
   benefits: string;
@@ -85,6 +99,7 @@ export interface IChallenge {
   intake?: any;
   check?: any;
   closing?: any;
+  coach?: string;
   // TODO: update type when api ready
 }
 
@@ -123,4 +138,11 @@ export interface ICreateCretifiedChallengeForm
   achievementTime: string | Date;
   image: string;
   softSkills: string[];
+}
+
+export interface IChallengeState {
+  numberOfChecks: number;
+  currentTouchpoint: CheckpointType;
+  currentTouchpointStatus: IChallengeTouchpointStatus;
+  handleOpenChangeTouchpointStatusModal: () => void;
 }

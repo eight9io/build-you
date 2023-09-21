@@ -95,6 +95,8 @@ export type RootStackParamList = {
   BottomNavBar: undefined;
   SplashScreen: undefined;
   NotFound: undefined;
+
+  ChallengeCompanyDetailScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

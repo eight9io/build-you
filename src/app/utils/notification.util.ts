@@ -21,13 +21,12 @@ import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
-import { useGetOtherUserData } from "../hooks/useGetUser";
 import { serviceGetOtherUserData } from "../service/user";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
 export const registerForPushNotificationsAsync = async () => {
-  if (!Device.isDevice) {
+  if (Platform.OS === "ios" && !Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
@@ -41,7 +40,6 @@ export const registerForPushNotificationsAsync = async () => {
     }
 
     const token = await messaging().getToken();
-    console.log("Token --->:", token);
 
     return token;
   } else {

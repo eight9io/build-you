@@ -50,40 +50,9 @@ export interface LoginStore {
   logout: () => void;
 }
 
-const watchLogin = (config) => (set, get, api) =>
-  config(
-    (args: LoginStore) => {
-      if (typeof args.accessToken === "string") {
-        const oldState = get();
-        if (typeof oldState.accessToken === "string") {
-          set(args);
-          return;
-        }
-        registerForPushNotificationsAsync()
-          .then((token) => {
-            updateNotificationToken({
-              notificationToken: token,
-              status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
-              deviceType:
-                Platform.OS === "android"
-                  ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-                  : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
-            });
-          })
-          .catch((e) => {
-            console.log("Ignore Push Notification", e);
-          });
-      }
-
-      set(args);
-    },
-    get,
-    api
-  );
-
 export const useAuthStore = create<LoginStore>()(
   persist(
-    watchLogin((set, get) => ({
+    (set, get) => ({
       accessToken: null,
       refreshToken: null,
       _hasHydrated: false,
@@ -135,6 +104,20 @@ export const useAuthStore = create<LoginStore>()(
           accessToken: res.data.authorization,
           refreshToken: res.data.refresh,
         });
+        registerForPushNotificationsAsync()
+          .then((token) => {
+            updateNotificationToken({
+              notificationToken: token,
+              status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
+              deviceType:
+                Platform.OS === "android"
+                  ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+                  : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+            });
+          })
+          .catch((e) => {
+            console.log("Ignore Push Notification", e);
+          });
         // setTimeout(
         //   () =>
 
@@ -152,6 +135,21 @@ export const useAuthStore = create<LoginStore>()(
           const messagingToken = await messaging().getToken();
           await deletePushNotificatoinToken(messagingToken);
           useNotificationStore.getState().setListenerIsReady(false);
+          unregisterForPushNotificationsAsync()
+            .then((token) => {
+              console.log(token);
+              updateNotificationToken({
+                notificationToken: token,
+                status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
+                deviceType:
+                  Platform.OS === "android"
+                    ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+                    : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+              });
+            })
+            .catch(() => {
+              console.log("Ignore Push Notification");
+            });
         }
         delete httpInstance.defaults.headers.common["Authorization"];
       },
@@ -160,7 +158,7 @@ export const useAuthStore = create<LoginStore>()(
           _hasHydrated: true,
         });
       },
-    })),
+    }),
     {
       name: "auth-storage",
       storage: createJSONStorage(() => AsyncStorage),

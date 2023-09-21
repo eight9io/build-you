@@ -161,7 +161,7 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
                         left: {
                             width: 34,
                             height: 34,
-                            marginRight: -6,
+                            marginRight: -10,
                         },
 
                     }}

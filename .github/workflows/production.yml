@@ -23,22 +23,6 @@ jobs:
       - name: Install project dependencies
         run: yarn
 
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "name=dir::$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      # - name: Restore node_modules from cache
-      #   uses: actions/cache@v3
-      #   id: yarn-cache
-      #   with:
-      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-
-
-      # - name: Install dependencies
-      #   run: yarn install --frozen-lockfile
-
   #  Android Build
   android-build:
     name: Android Build
@@ -58,22 +42,6 @@ jobs:
       - name: Install project dependencies
         run: yarn
 
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      # - name: Restore node_modules from cache
-      #   uses: actions/cache@v3
-      #   id: yarn-cache
-      #   with:
-      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-
-
-      # - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
-      #   run: yarn install --frozen-lockfile
-
       - name: Set up our JDK environment # setup JDK environment: mandatory as we need to build  android project
         uses: actions/setup-java@v3
         with:
@@ -81,36 +49,18 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           cache: gradle
 
-      # - name: Cache Gradle Wrapper
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      # - name: Cache Gradle Dependencies
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.gradle/caches
-      #     key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-caches-
+      - name: Prepare ENV
+        run: |
+          echo "$ENV_PROD" | base64 --decode > ".env"
+          cat .env
+          echo "$IOS_GOOGLE_SERVICE_PROD" | base64 --decode > "GoogleService-Info.plist"
+          cat GoogleService-Info.plist
+          echo "$ANDROID_GOOGLE_SERVICE_PROD" | base64 --decode > "google-services.json"
+          cat google-services.json
+          npx expo prebuild
 
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
-
-      # - name: Prepare Key
-      #   shell: bash
-      #   env:
-      #     ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY }}
-      #     ANDROID_ALIAS: ${{ secrets.ANDROID_ALIAS }}
-      #     ANDROID_KEY_STORE_PASSWORD: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
-      #     ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-
-      #   run: |
-      #     sed -ie 's|${ANDROID_ALIAS}|"'$ANDROID_ALIAS'"|g' android/gradle.properties
-      #     sed -ie 's|${ANDROID_KEY_STORE_PASSWORD}|"'$ANDROID_KEY_STORE_PASSWORD'"|g' android/gradle.properties
-      #     sed -ie 's|${ANDROID_KEY_PASSWORD}|"'$ANDROID_KEY_PASSWORD'"|g' android/gradle.properties
-      #     sed -ie 's|${MONGODB_URI}|"'$MONGODB_URI_STAGING'"|g' android/gradle.properties
 
       - name: Generate App AAB
         run: |
@@ -126,13 +76,13 @@ jobs:
           keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.ANDROID_FIREBASE_APP_ID}}
-          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
-          groups: testers
-          file: ${{steps.sign_app.outputs.signedReleaseFile}}
+      # - name: Upload artifact to Firebase App Distribution
+      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
+      #   with:
+      #     appId: ${{secrets.ANDROID_FIREBASE_APP_ID}}
+      #     serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+      #     groups: testers
+      #     file: ${{steps.sign_app.outputs.signedReleaseFile}}
 
   # #  iOS Build
   # ios-build:

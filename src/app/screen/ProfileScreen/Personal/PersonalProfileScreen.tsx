@@ -19,6 +19,8 @@ import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 
+import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
+
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
@@ -65,7 +67,16 @@ const PersonalProfileScreen = () => {
         component={Profile}
         options={({ navigation }) => ({
           headerShown: true,
+          contentStyle: {
+            display: "flex",
+            justifyContent: "center",
+          },
           headerTitle: () => <AppTitle title={t("profile_title")} />,
+          headerLeft: () => (
+            <View className="">
+              <BuildYouLogo width={90} />
+            </View>
+          ),
           headerRight: (props) => (
             <ButtonWithIcon
               icon="setting"

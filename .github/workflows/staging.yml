@@ -24,21 +24,91 @@ jobs:
         run: yarn
 
   #  Android Build
-  android-build:
-    name: Android Build
-    runs-on: ubuntu-latest
+  # android-build:
+  #   name: Android Build
+  #   runs-on: ubuntu-latest
+  #   needs: setup
+
+  #   steps:
+  #     - name: Check out Git repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Prepare ENV
+  #       run: |
+  #         echo $ENV_STAGING | base64 --decode >> ".env"
+  #         echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
+  #         echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
+  #       shell: bash
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: "yarn"
+
+  #     - name: Install project dependencies
+  #       run: yarn
+
+  #     - name: Set up our JDK environment
+  #       uses: actions/setup-java@v3
+  #       with:
+  #         distribution: "zulu"
+  #         java-version: ${{ env.JAVA_VERSION }}
+  #         cache: gradle
+
+  #     - name: Prebuild Expo
+  #       run: npx expo prebuild
+  #       shell: bash
+
+  #     - name: Make Gradlew Executable
+  #       run: cd android && chmod +x ./gradlew
+
+  #     - name: Generate App APK
+  #       run: |
+  #         cd android && ./gradlew assembleRelease --no-daemon
+
+  #     - name: Sign APK
+  #       id: sign_app
+  #       uses: r0adkll/sign-android-release@v1
+  #       with:
+  #         releaseDirectory: android/app/build/outputs/apk/release
+  #         signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
+  #         alias: ${{ secrets.ANDROID_ALIAS_STAGING }}
+  #         keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD_STAGING }}
+  #         keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
+
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: Signed app bundle
+  #         path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+  #     - name: Upload artifact to Firebase App Distribution
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1
+  #       with:
+  #         appId: ${{secrets.ANDROID_FIREBASE_APP_ID_STAGING}}
+  #         serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
+  #         groups: testers
+  #         file: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+  # #  iOS Build
+  ios-build:
+    name: iOS Build
+    runs-on: macos-latest
     needs: setup
+    # defaults:
+    #   run:
+    #     working-directory: ios
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Prepare ENV
-        run: |
-          echo $ENV_STAGING | base64 --decode >> ".env"
-          echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
-          echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
-        shell: bash
+      # - name: Prepare ENV
+      #   run: |
+      #     echo $ENV_STAGING | base64 --decode >> ".env"
+      #     echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
+      #     echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
+      #   shell: bash
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -49,110 +119,58 @@ jobs:
       - name: Install project dependencies
         run: yarn
 
-      - name: Set up our JDK environment
-        uses: actions/setup-java@v3
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
         with:
-          distribution: "zulu"
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: gradle
+          ruby-version: 3.2.2
+          bundler-cache: true
 
-      - name: Prebuild Expo
-        run: npx expo prebuild
-        shell: bash
-
-      - name: Make Gradlew Executable
-        run: cd android && chmod +x ./gradlew
-
-      - name: Generate App APK
-        run: |
-          cd android && ./gradlew assembleRelease --no-daemon
-
-      - name: Sign APK
-        id: sign_app
-        uses: r0adkll/sign-android-release@v1
+      - name: Restore Pods cache
+        uses: actions/cache@v3
         with:
-          releaseDirectory: android/app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
-          alias: ${{ secrets.ANDROID_ALIAS_STAGING }}
-          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD_STAGING }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Signed app bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+      - name: Install Pods
+        run: cd ios && pod install --repo-update && cd ..
 
-      - name: Upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
+      - name: Build IOS App
+        uses: yukiarrr/ios-build-action@v1.11.0
         with:
-          appId: ${{secrets.ANDROID_FIREBASE_APP_ID_STAGING}}
+          project-path: ios/BuildYou.xcodeproj
+          p12-base64: ${{ secrets.STAGING_BUILD_CERTIFICATE_BASE64 }}
+          mobileprovision-base64: ${{ secrets.STAGING_BUILD_PROVISION_PROFILE_BASE64 }}
+          code-signing-identity: "iOS Distribution"
+          team-id: JWQ9T5PFH2
+          export-method: ad-hoc
+          export-options: ios/ExportOptions.plist
+          certificate-password: ${{ secrets.STAGING_P12_PASSWORD }}
+          workspace-path: ios/BuildYou.xcworkspace
+          scheme: BuildYou
+          output-path: output.ipa
+
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Signed app bundle
+      #     path: output.ipa
+
+      - name: Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
+        with:
+          appId: ${{secrets.IOS_FIREBASE_APP_ID_STAGING}}
           serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
           groups: testers
-          file: ${{steps.sign_app.outputs.signedReleaseFile}}
+          file: output.ipa
 
-  # #  iOS Build
-  # ios-build:
-  #   name: IOS Production Build
-  #   runs-on: macos-latest
-  #   defaults:
-  #     run:
-  #       working-directory: ios
-
-  #   steps:
-  #     - name: Check out Git repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Get yarn cache directory path
-  #       id: yarn-cache-dir-path
-  #       run: echo "::set-output name=dir::$(yarn cache dir)"
-  #     - name: Restore node_modules from cache
-  #       uses: actions/cache@v3
-  #       id: yarn-cache
-  #       with:
-  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
-
-  #     - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
-  #       run: yarn install --frozen-lockfile
-
-  #     - name: Setup Ruby (bundle)
-  #       uses: ruby/setup-ruby@v1
-  #       with:
-  #         ruby-version: 3.2.2
-  #         bundler-cache: true
-
-  #     - name: Restore Pods cache
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: |
-  #           ios/Pods
-  #           ~/Library/Caches/CocoaPods
-  #           ~/.cocoapods
-  #         key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-pods-
-
-  #     - name: Install Pods
-  #       run: cd ios && pod install --repo-update && cd ..
-
-  #     - name: Build IOS App
-  #       uses: yukiarrr/ios-build-action@v1.4.0
-  #       with:
-  #         project-path: ios/MyApp.xcodeproj
-  #         p12-base64: ${{ secrets.IOS_P12_BASE64 }}
-  #         mobileprovision-base64: ${{ secrets.IOS_MOBILE_PROVISION_BASE64 }}
-  #         code-signing-identity: "iPhone Distribution"
-  #         team-id: ${{ secrets.IOS_TEAM_ID }}
-  #         certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
-  #         workspace-path: ios/MyApp.xcworkspace
-  #         scheme: MyApp
-
-  #     - name: "Upload app to TestFlight"
-  #       uses: apple-actions/upload-testflight-build@v1
-  #       with:
-  #         app-path: "output.ipa"
-  #         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-  #         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-  #         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      # - name: "Upload app to TestFlight"
+      #   uses: apple-actions/upload-testflight-build@v1
+      #   with:
+      #     app-path: "output.ipa"
+      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

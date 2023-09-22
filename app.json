@@ -2,7 +2,7 @@
   "expo": {
     "name": "BuildYou",
     "slug": "build-you",
-    "version": "1.2.10",
+    "version": "1.3.1",
     "orientation": "portrait",
     "jsEngine": "hermes",
     "scheme": "it.buildyou.buildyou",
@@ -19,7 +19,7 @@
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
       "associatedDomains": ["applinks:app.buildyou.it"],
-      "buildNumber": "5",
+      "buildNumber": "40",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"],
@@ -44,7 +44,7 @@
         "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.buildyou.buildyou",
-      "versionCode": 30,
+      "versionCode": 40,
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS",

@@ -31,6 +31,7 @@
   "challenge_detail_screen.completed": "Completato",
   "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
   "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
+  "challenge_detail_screen.chat_coach": "Allenatore di chat",
   "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
@@ -567,7 +568,9 @@
     "occupation": "Professione",
     "enter_occupation": "Inserisci la tua professione",
     "biography": "Biografia",
-    "your_biography": "Tua biografia"
+    "your_biography": "Tua biografia",
+    "phone": "Numero di telefono",
+    "enter_phone": "Inserisci il tuo numero di telefono"
   },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",

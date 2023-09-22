@@ -570,7 +570,9 @@
     "occupation": "Occupation",
     "enter_occupation": "Enter your occupation",
     "biography": "Biography",
-    "your_biography": "Your biography"
+    "your_biography": "Your biography",
+    "phone": "Phone number",
+    "enter_phone": "Enter your phone number"
   },
   "not_found": "Not found",
   "invalid_date": "Invalid date",

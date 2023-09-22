@@ -28,6 +28,7 @@ export const EditProfileValidators = () => {
       .array()
       .min(3, t("form_onboarding.screen_3.error") as string),
     isShowCompany: yup.boolean(),
+    phone: yup.string(),
   });
 };
 

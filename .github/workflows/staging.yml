@@ -1,4 +1,4 @@
-name: Production Build You App Building
+name: Staging Build You App Building
 
 on: workflow_dispatch
 
@@ -35,9 +35,9 @@ jobs:
 
       - name: Prepare ENV
         run: |
-          echo $ENV_PROD | base64 --decode >> ".env"
-          echo $IOS_GOOGLE_SERVICE_PROD | base64 --decode >> "GoogleService-Info.plist"
-          echo $ANDROID_GOOGLE_SERVICE_PROD | base64 --decode >> "google-services.json"
+          echo $ENV_STAGING | base64 --decode >> ".env"
+          echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
+          echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
         shell: bash
 
       - name: Set up Node.js
@@ -63,19 +63,19 @@ jobs:
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
-      - name: Generate App AAB
+      - name: Generate App APK
         run: |
-          cd android && ./gradlew bundleRelease --no-daemon
+          cd android && ./gradlew assembleRelease --no-daemon
 
-      - name: Sign AAB
+      - name: Sign APK
         id: sign_app
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: android/app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-          alias: ${{ secrets.ANDROID_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          releaseDirectory: android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
+          alias: ${{ secrets.ANDROID_ALIAS_STAGING }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD_STAGING }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
 
       - uses: actions/upload-artifact@v2
         with:
@@ -85,8 +85,8 @@ jobs:
       - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.ANDROID_FIREBASE_APP_ID}}
-          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+          appId: ${{secrets.ANDROID_FIREBASE_APP_ID_STAGING}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
           groups: testers
           file: ${{steps.sign_app.outputs.signedReleaseFile}}
 

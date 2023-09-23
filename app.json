@@ -2,7 +2,7 @@
   "expo": {
     "name": "BuildYou",
     "slug": "build-you",
-    "version": "1.2.19",
+    "version": "1.3.1",
     "orientation": "portrait",
     "jsEngine": "hermes",
     "scheme": "it.buildyou.buildyou",
@@ -19,7 +19,7 @@
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
       "associatedDomains": ["applinks:app.buildyou.it"],
-      "buildNumber": "5",
+      "buildNumber": "40",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"],
@@ -31,8 +31,7 @@
         "com.apple.developer.applesignin": ["Default"]
       },
       "config": {
-        "usesNonExemptEncryption": false,
-        "googleMapsApiKey": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI"
+        "usesNonExemptEncryption": false
       }
     },
     "locales": {
@@ -44,7 +43,7 @@
         "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.buildyou.buildyou",
-      "versionCode": 39,
+      "versionCode": 40,
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS",
@@ -53,11 +52,7 @@
         "android.permission.FOREGROUND_SERVICE"
       ],
       "googleServicesFile": "./google-services.json",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI"
-        }
-      }
+      "config": {}
     },
     "web": {
       "favicon": "./assets/favicon.png",

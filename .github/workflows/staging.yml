@@ -139,13 +139,16 @@ jobs:
       - name: Install Pods
         run: cd ios && pod install --repo-update && cd ..
 
+      - name: Install Pods
+        run: cd ios && pod install --repo-update && cd ..
+
       - name: Build IOS App
         uses: yukiarrr/ios-build-action@v1.11.0
         with:
           project-path: ios/BuildYou.xcodeproj
           p12-base64: ${{ secrets.STAGING_BUILD_CERTIFICATE_BASE64 }}
           mobileprovision-base64: ${{ secrets.STAGING_BUILD_PROVISION_PROFILE_BASE64 }}
-          code-signing-identity: "iPhone Distribution"
+          code-signing-identity: "iOS Distribution"
           team-id: JWQ9T5PFH2
           export-method: ad-hoc
           export-options: ios/ExportOptions.plist
@@ -153,15 +156,6 @@ jobs:
           workspace-path: ios/BuildYou.xcworkspace
           scheme: BuildYou
           output-path: output.ipa
-
-      - name: Install Pods
-        run: cd ios && pod install --repo-update && cd ..
-
-      - name: Build IOS App
-        uses: yukiarrr/ios-build-action@v1.4.0
-        with:
-          name: Signed app bundle
-          path: output.ipa
 
       - name: Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2

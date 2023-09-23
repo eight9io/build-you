@@ -2,7 +2,7 @@
   "expo": {
     "name": "BuildYou",
     "slug": "build-you",
-    "version": "1.2.10",
+    "version": "1.2.15",
     "orientation": "portrait",
     "jsEngine": "hermes",
     "scheme": "it.buildyou.buildyou",
@@ -44,7 +44,7 @@
         "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.buildyou.buildyou",
-      "versionCode": 30,
+      "versionCode": 35,
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS",

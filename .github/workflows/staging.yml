@@ -152,16 +152,16 @@ jobs:
           scheme: BuildYou
           export-method: ad-hoc
           export-options: ios/ExportOptions.plist
-          # output-path: output.ipa
+          output-path: output.ipa
           # build-destination: "generic/platform=iOS"
 
-      # - name: Firebase App Distribution
-      #   uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
-      #   with:
-      #     appId: ${{secrets.IOS_FIREBASE_APP_ID_STAGING}}
-      #     serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
-      #     groups: testers
-      #     file: output.ipa
+      - name: Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
+        with:
+          appId: ${{secrets.IOS_FIREBASE_APP_ID_STAGING}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
+          groups: testers
+          file: output.ipa
 
       # - name: "Upload app to TestFlight"
       #   uses: apple-actions/upload-testflight-build@v1

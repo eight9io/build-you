@@ -154,7 +154,11 @@ jobs:
           scheme: BuildYou
           output-path: output.ipa
 
-      - uses: actions/upload-artifact@v2
+      - name: Install Pods
+        run: cd ios && pod install --repo-update && cd ..
+
+      - name: Build IOS App
+        uses: yukiarrr/ios-build-action@v1.4.0
         with:
           name: Signed app bundle
           path: output.ipa

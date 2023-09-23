@@ -6,12 +6,11 @@ import {
 
 import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, Alert } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import jwt_decode from "jwt-decode";
 
 import { RootStackParamList } from "./navigation.type";
 
@@ -50,7 +49,6 @@ import { getLanguageLocalStorage } from "../component/Settings/components/Langua
 import i18n from "../i18n/i18n";
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
 import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateCretifiedChallengeScreen";
-import { IToken } from "../types/auth";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

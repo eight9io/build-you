@@ -103,12 +103,12 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Prepare ENV
-        run: |
-          echo $ENV_STAGING | base64 --decode >> ".env"
-          echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
-          echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
-        shell: bash
+      # - name: Prepare ENV
+      #   run: |
+      #     echo $ENV_STAGING | base64 --decode >> ".env"
+      #     echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
+      #     echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
+      #   shell: bash
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -139,9 +139,6 @@ jobs:
       - name: Install Pods
         run: cd ios && pod install --repo-update && cd ..
 
-      - name: Install Pods
-        run: cd ios && pod install --repo-update && cd ..
-
       - name: Build IOS App
         uses: yukiarrr/ios-build-action@v1.11.0
         with:
@@ -156,6 +153,7 @@ jobs:
           workspace-path: ios/BuildYou.xcworkspace
           scheme: BuildYou
           output-path: output.ipa
+          build-destination: "generic/platform=iOS"
 
       - name: Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2

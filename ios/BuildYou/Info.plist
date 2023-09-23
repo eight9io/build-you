@@ -42,8 +42,6 @@
     <string>5</string>
     <key>CodePushDeploymentKey</key>
     <string>K60TOcl0LeY6pFRO94YIWX2MaLMs-UxHeaHiG</string>
-    <key>GMSApiKey</key>
-    <string>AIzaSyC8uZeFFl34B2wPTTjTBx_gKx5t4wl09dI</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSApplicationQueriesSchemes</key>

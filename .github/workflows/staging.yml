@@ -9,7 +9,7 @@ env:
 jobs:
   setup:
     name: Install NodeJS Dependency
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
   #  Android Build
   # android-build:
   #   name: Android Build
-  #   runs-on: ubuntu-latest
+  #   runs-on: macos-latest
   #   needs: setup
 
   #   steps:
@@ -83,7 +83,7 @@ jobs:
   #         path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
   #     - name: Upload artifact to Firebase App Distribution
-  #       uses: wzieba/Firebase-Distribution-Github-Action@v1
+  #       uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
   #       with:
   #         appId: ${{secrets.ANDROID_FIREBASE_APP_ID_STAGING}}
   #         serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
@@ -152,18 +152,30 @@ jobs:
           scheme: BuildYou
           export-method: ad-hoc
           export-options: ios/ExportOptions.plist
-          # output-path: output.ipa
-          # build-destination: "generic/platform=iOS"
+          output-path: app.ipa
 
-      # - name: Firebase App Distribution
-      #   uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
-      #   with:
-      #     appId: ${{secrets.IOS_FIREBASE_APP_ID_STAGING}}
-      #     serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT_STAGING}}
-      #     groups: testers
-      #     file: output.ipa
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Upload Sign Artifact
+          path: app.ipa
+          retention-days: 1
+          if-no-files-found: error
 
-      # - name: "Upload app to TestFlight"
+      - name: Distrbute Firebase # app id can be found in GoogleService-Info.plist
+        run: |
+          echo $CREDENTIAL_FILE_CONTENT_STAGING > "~/credential.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="~/credential.json"
+          npx firebase-tools \
+            appdistribution:distribute app.ipa \
+            --app "$IOS_FIREBASE_APP_ID_STAGING" \
+            --groups "testers" \
+            $( (( $INPUT_DEBUG )) && printf %s '--debug' )
+        shell: bash
+        env:
+          CREDENTIAL_FILE_CONTENT_STAGING: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
+
+        # - name: "Upload app to TestFlight"
       #   uses: apple-actions/upload-testflight-build@v1
       #   with:
       #     app-path: "output.ipa"

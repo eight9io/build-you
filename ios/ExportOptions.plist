@@ -7,11 +7,11 @@
         <key>teamID</key>
         <string>JWQ9T5PFH2</string>
         <key>signingStyle</key>
-        <string>automatic</string>
+        <string>manual</string>
         <key>provisioningProfiles</key>
         <dict>
             <key>it.buildyou.buildyou</key>
-            <string>BuildYou</string>
+            <string>adhoc</string>
         </dict>
     </dict>
 </plist>

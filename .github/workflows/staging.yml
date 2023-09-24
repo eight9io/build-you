@@ -103,12 +103,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # - name: Prepare ENV
-      #   run: |
-      #     echo $ENV_STAGING | base64 --decode >> ".env"
-      #     echo $IOS_GOOGLE_SERVICE_STAGING | base64 --decode >> "GoogleService-Info.plist"
-      #     echo $ANDROID_GOOGLE_SERVICE_STAGING | base64 --decode >> "google-services.json"
-      #   shell: bash
+      - name: Build Cache
+        uses: mikehardy/buildcache-action@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -139,6 +135,7 @@ jobs:
       - name: Install Pods
         run: cd ios && pod install --repo-update && cd ..
 
+      # https://github.com/mikehardy/buildcache-action
       - name: Build IOS App
         uses: yukiarrr/ios-build-action@v1.11.0
         with:
@@ -157,28 +154,47 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Upload Sign Artifact
+          name: app.ipa
           path: app.ipa
           retention-days: 1
           if-no-files-found: error
 
+  ios-distribute:
+    name: iOS Distribute
+    needs: ios-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: app.ipa
+
       - name: Distrbute Firebase # app id can be found in GoogleService-Info.plist
         run: |
-          echo $CREDENTIAL_FILE_CONTENT_STAGING > "~/credential.json"
-          export GOOGLE_APPLICATION_CREDENTIALS="~/credential.json"
+          echo $CREDENTIAL_FILE_CONTENT_STAGING > "$RUNNER_TEMP/credential.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
           npx firebase-tools \
             appdistribution:distribute app.ipa \
-            --app "$IOS_FIREBASE_APP_ID_STAGING" \
+            --app $IOS_FIREBASE_APP_ID_STAGING \
             --groups "testers" \
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )
         shell: bash
         env:
           CREDENTIAL_FILE_CONTENT_STAGING: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
+          IOS_FIREBASE_APP_ID_STAGING: ${{ secrets.IOS_FIREBASE_APP_ID_STAGING }}
 
-        # - name: "Upload app to TestFlight"
-      #   uses: apple-actions/upload-testflight-build@v1
-      #   with:
-      #     app-path: "output.ipa"
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+  # - name: "Upload app to TestFlight"
+  #   uses: apple-actions/upload-testflight-build@v1
+  #   with:
+  #     app-path: "output.ipa"
+  #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+  #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+  #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

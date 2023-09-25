@@ -6,36 +6,38 @@ import {
   StackActions,
   useNavigation,
 } from "@react-navigation/native";
+import { AxiosResponse } from "axios";
 import { useTranslation } from "react-i18next";
+import Spinner from "react-native-loading-spinner-overlay";
 
-import { stringPriceToNumber, numberToStringPrice } from "../../utils/price";
-
-import PlusSVG from "../../component/asset/plus.svg";
-import MinusSVG from "../../component/asset/minus.svg";
-import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 import {
   createChallenge,
   createCompanyChallenge,
   updateChallengeImage,
 } from "../../service/challenge";
-import { AxiosResponse } from "axios";
-import GlobalToastController from "../../component/common/Toast/GlobalToastController";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
-import { RootStackParamList } from "../../navigation/navigation.type";
 import httpInstance from "../../utils/http";
-import Spinner from "react-native-loading-spinner-overlay";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import { numberToStringPrice } from "../../utils/price";
+
+import { IPackage } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
+
 import { useUserProfileStore } from "../../store/user-store";
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
+import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
+
+import { RootStackParamList } from "../../navigation/navigation.type";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import GlobalToastController from "../../component/common/Toast/GlobalToastController";
+
+import PlusSVG from "../../component/asset/plus.svg";
+import MinusSVG from "../../component/asset/minus.svg";
 
 interface ICartScreenProps {
   route: Route<
     "CartScreen",
     {
-      packageId: string;
-      typeOfPackage: string;
-      initialPrice: number;
+      choosenPackage: IPackage;
     }
   >;
 }
@@ -52,7 +54,12 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
 
-  const { initialPrice, typeOfPackage, packageId } = route.params;
+  const { choosenPackage } = route.params;
+  const {
+    price: initialPrice,
+    name: typeOfPackage,
+    id: packgeId,
+  } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
     useNewCreateOrDeleteChallengeStore();
@@ -255,7 +262,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
           <View className="flex w-full flex-col items-start justify-center gap-y-2">
             <Text className="text-start text-md font-normal leading-none text-zinc-500">
-              {t("cart_screen.basic_package_description")}
+              {choosenPackage?.caption}
             </Text>
             <View className="flex w-full flex-col items-start justify-start">
               <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
@@ -286,7 +293,8 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         >
           <View className="flex w-full flex-col items-start justify-center gap-y-2">
             <Text className="text-start text-md font-normal leading-none text-zinc-500">
-              Buy more Check touchpoints:
+              {t("cart_screen.select_checkpoints") ||
+                "Select the number of Check points:"}
             </Text>
             <View className="flex w-full flex-col items-start justify-start">
               <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">

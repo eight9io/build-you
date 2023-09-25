@@ -46,7 +46,7 @@ const RenderPackageOptions = ({ name, type, caption, price, onPress }) => {
       }}
     >
       <View className="flex w-full items-center justify-center rounded-tl-3xl border-b border-slate-200 py-3">
-        <Text className="text-md font-semibold leading-tight text-black-default">
+        <Text className="text-md font-semibold uppercase leading-tight text-black-default">
           {name}
         </Text>
       </View>
@@ -123,20 +123,18 @@ const ChoosePackageScreen = () => {
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
 
-  const handleChoosePackage = (typeOfPackage: ITypeOfPackage) => {
+  const handleChoosePackage = (choosenPackage: IPackage) => {
     const packageData = {
-      name: typeOfPackage.name,
-      price: typeOfPackage.price,
-      id: typeOfPackage.id,
+      name: choosenPackage.name,
+      price: choosenPackage.price,
+      id: choosenPackage.id,
     };
     setCreateChallengeDataStore({
       ...getCreateChallengeDataStore(),
       package: packageData,
     });
     navigation.navigate("CartScreen", {
-      packageId: typeOfPackage.id,
-      initialPrice: typeOfPackage.price,
-      typeOfPackage: typeOfPackage.name,
+      choosenPackage: choosenPackage,
     });
   };
 

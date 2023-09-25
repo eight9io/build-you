@@ -601,7 +601,7 @@
     "intake": "Intake",
     "check": "Check",
     "closing": "Closing",
-    "buy_more": "Buy more Check touchpoints",
+    "select_checkpoints": "Select the number of checkpoints:",
     "minimum_checkpoint_error": "At least 1 checkpoint is required",
     "total": "Total",
     "pay": "Pay"

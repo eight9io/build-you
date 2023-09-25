@@ -1,5 +1,5 @@
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RouteProp } from "@react-navigation/native";
+import { IPackage } from "../types/package";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -58,9 +58,7 @@ export type RootStackParamList = {
   CreateCertifiedChallengeScreen: undefined;
   CreateCertifiedCompanyChallengeScreen: undefined;
   CartScreen: {
-    packageId: string;
-    typeOfPackage: string;
-    initialPrice: number;
+    choosenPackage: IPackage;
   };
 
   ProgressCommentScreen: {

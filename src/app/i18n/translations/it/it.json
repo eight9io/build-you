@@ -599,7 +599,7 @@
     "intake": "Assunzione",
     "check": "Controllo",
     "closing": "Chiusura",
-    "buy_more": "Acquista più punti di controllo",
+    "select_checkpoints": "Seleziona il numero di checkpoint",
     "minimum_checkpoint_error": "È richiesto almeno 1 punto di controllo",
     "total": "Totale",
     "pay": "Paga"

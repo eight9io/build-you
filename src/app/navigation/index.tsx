@@ -270,7 +270,9 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
+                <AppTitle
+                  title={t("new_challenge_screen.new_challenge") || ""}
+                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -343,7 +345,9 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
+                <AppTitle
+                  title={t("new_challenge_screen.new_challenge") || ""}
+                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity
@@ -361,7 +365,11 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
+                <AppTitle
+                  title={
+                    t("new_challenge_screen.new_challenge") || "New challenge"
+                  }
+                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -376,7 +384,12 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
+                <AppTitle
+                  title={
+                    t("new_challenge_screen.new_certified_challenge") ||
+                    "New certified challenge"
+                  }
+                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -391,7 +404,12 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
+                <AppTitle
+                  title={
+                    t("new_challenge_screen.new_certified_challenge") ||
+                    "New certified challenge"
+                  }
+                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -406,7 +424,9 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-                <AppTitle title={t("choose_packages_screen.package") || ""} />
+                <AppTitle
+                  title={t("choose_packages_screen.package") || "Packages"}
+                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>

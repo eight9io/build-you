@@ -11,7 +11,6 @@ import {
   FlatList,
 } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
-
 import { IChallenge } from "../../../types/challenge";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
@@ -24,6 +23,9 @@ import { sortChallengeByStatus } from "../../../utils/common";
 import { useUserProfileStore } from "../../../store/user-store";
 import CurrentUserChallengeCard from "../../../component/Card/ChallengeCard/CurrentUserChallengeCard";
 import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
+import { useNewCreateOrDeleteChallengeStore } from "../../../store/new-challenge-create-store";
+import ChallengeCard from "../../../component/Card/ChallengeCard/ChallengeCard";
+import CertifiedChallengeCard from "../../../component/Card/ChallengeCard/CertifiedChallengeCard";
 
 type PersonalChallengesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,10 +34,19 @@ type PersonalChallengesScreenNavigationProp = NativeStackNavigationProp<
 
 const EmptyChallenges = ({
   navigation,
+  type,
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
+  type?: "free" | "certified";
 }) => {
   const { t } = useTranslation();
+
+  const handleNavigateToCreateChallengeScreen = () => {
+    if (type === "free") navigation.navigate("CreateChallengeScreen");
+    else if (type === "certified")
+      navigation.navigate("CreateCertifiedChallengeScreen");
+    else navigation.navigate("CreateChallengeScreen");
+  };
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
       <Text className={clsx("text-lg")}>
@@ -45,7 +56,7 @@ const EmptyChallenges = ({
         {t("click") || "Click"}
         <Text
           className={clsx("text-primary-default")}
-          onPress={() => navigation.navigate("CreateChallengeScreen")}
+          onPress={handleNavigateToCreateChallengeScreen}
         >
           {" "}
           {t("create") || "Create"}{" "}
@@ -95,7 +106,7 @@ const PersonalTab = () => {
       {!isLoading && !isFetchingError && (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
           {personalChallengesList.length === 0 ? (
-            <EmptyChallenges navigation={navigation} />
+            <EmptyChallenges navigation={navigation} type="free" />
           ) : (
             <FlatList
               className="px-4 pt-4"
@@ -167,8 +178,8 @@ const CertifiedTab = () => {
       {isLoading && <SkeletonLoadingChallengesScreen />}
       {!isLoading && !isFetchingError && (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
-          {coachChallengesList.length === 0 ? (
-            <EmptyChallenges navigation={navigation} />
+          {coachChallengesList?.length === 0 ? (
+            <EmptyChallenges navigation={navigation} type="certified" />
           ) : (
             <FlatList
               className="px-4 pt-4"
@@ -244,7 +255,7 @@ const CoachTab = () => {
               className="px-4 pt-4"
               data={coachChallengesList}
               renderItem={({ item }: { item: IChallenge }) => (
-                <CurrentUserChallengeCard
+                <CertifiedChallengeCard
                   item={item}
                   imageSrc={item?.image}
                   navigation={navigation}
@@ -284,6 +295,11 @@ const PersonalChallengesScreen = ({
   ]);
 
   const { getUserProfile } = useUserProfileStore();
+  const { getNewChallengeId, getDeletedChallengeId } =
+    useNewCreateOrDeleteChallengeStore();
+  const newChallengeId = getNewChallengeId();
+  const deletedChallengeId = getDeletedChallengeId();
+
   const userData = getUserProfile();
   const isUserCoach = userData?.isCoach;
 
@@ -307,18 +323,21 @@ const PersonalChallengesScreen = ({
   const MemoizedCertifiedTab = React.memo(CertifiedTab);
   const MemoizedCoachTab = React.memo(CoachTab);
 
-  const renderScene = React.useCallback(({ route }) => {
-    switch (route.key) {
-      case "personal":
-        return <MemoizedPersonalTab />;
-      case "certified":
-        return <MemoizedCertifiedTab />;
-      case "coach":
-        return <MemoizedCoachTab />;
-      default:
-        return null;
-    }
-  }, []);
+  const renderScene = React.useCallback(
+    ({ route }) => {
+      switch (route.key) {
+        case "personal":
+          return <MemoizedPersonalTab />;
+        case "certified":
+          return <MemoizedCertifiedTab />;
+        case "coach":
+          return <MemoizedCoachTab />;
+        default:
+          return null;
+      }
+    },
+    [newChallengeId, deletedChallengeId]
+  );
 
   return (
     <SafeAreaView className={clsx("flex-1 bg-white")}>

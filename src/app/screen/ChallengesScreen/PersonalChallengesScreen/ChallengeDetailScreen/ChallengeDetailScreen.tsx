@@ -22,9 +22,9 @@ import {
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import CoachTab from "./CoachTab";
-import { ChatCoachTab } from "./ChatCoachTab";
-import SkillsTab from "./SkillsTab";
+import CoachTab from "../../CoachChallengesScreen/PersonalCoach/CoachTab";
+import { ChatCoachTab } from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
+import SkillsTab from "../../CoachChallengesScreen/PersonalCoach/SkillsTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -62,6 +62,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isCurrentUserParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
   );
+  const isCurrentUserChallengeOnwer = challengeOwner?.id === currentUser?.id;
 
   const challengeStatus =
     challengeOwner?.id === currentUser?.id
@@ -174,7 +175,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               <Text className="text-2xl font-semibold">{goal}</Text>
             </View>
           </View>
-          {challengeOwner?.id !== currentUser?.id && !isChallengeCompleted && (
+          {isCurrentUserChallengeOnwer && !isChallengeCompleted && (
             <View className="ml-2 h-9">
               <Button
                 isDisabled={false}

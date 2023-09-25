@@ -80,10 +80,10 @@ const CoachBanner = ({ coachData }: { coachData: IUserData }) => {
         )}
         <View className="ml-4" />
         <View className="flex flex-col items-start">
-          <Text className="text-black text-md font-semibold">
+          <Text className="text-black text-md font-semibold ">
             {coachData.name} {coachData.surname}
           </Text>
-          <Text className="w-44 text-md text-gray-dark">
+          <Text className="w-44 text-sm capitalize text-gray-dark">
             {coachData?.occupation?.name}
           </Text>
         </View>
@@ -221,11 +221,12 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID }) => {
   };
 
   const getCoachData = async () => {
+    if (!coachID) return;
     try {
       const response = await serviceGetOtherUserData(coachID);
       setCoachData(response.data);
     } catch (error) {
-      console.log(error);
+      console.log("get coach data error", error);
     }
   };
 

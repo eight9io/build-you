@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, FC } from "react";
-import { Platform, Text } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
 import {
   Avatar,
   Bubble,
@@ -11,7 +11,8 @@ import { useTranslation } from "react-i18next";
 import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
 import { IChallenge } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { IUserData } from "../../../../types/user";
+
 interface IChatCoachTabProps {
   challengeData: IChallenge;
 }
@@ -53,7 +54,7 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
 
   useEffect(() => {
     getMessage();
-    const intervalFetchApi = setInterval(getMessage, 15000);
+    const intervalFetchApi = setInterval(getMessage, 5000);
     return () => {
       clearInterval(intervalFetchApi);
     };
@@ -169,7 +170,7 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
             left: {
               width: 34,
               height: 34,
-              marginRight: -12,
+              marginRight: -10,
             },
           }}
         />

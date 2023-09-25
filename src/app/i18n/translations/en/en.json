@@ -239,7 +239,8 @@
     }
   },
   "new_challenge_screen": {
-    "title": "Create a new challenge",
+    "new_challenge": "New challenge",
+    "new_certified_challenge": "New certified challenge",
     "next": "Next",
     "create_button": "Create",
     "next_button": "Next",

@@ -1,4 +1,4 @@
 export interface IMessage {
-    challenge: string;
-    text: string;
+  challenge: string;
+  text: string;
 }

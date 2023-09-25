@@ -40,7 +40,12 @@ interface IBottomNavBarProps {
   navigation: NativeStackNavigationProp<RootStackParamList, "BottomNavBar">;
 }
 
-const SCREENS_TO_HIDE_TAB_BAR = ["PersonalChallengeDetailScreen", "ProgressCommentScreen", "MainSearchScreen",];
+const SCREENS_TO_HIDE_TAB_BAR = [
+  "PersonalChallengeDetailScreen",
+  "ProgressCommentScreen",
+  "MainSearchScreen",
+  "PersonalCoachChallengeDetailScreen",
+];
 
 const EmptyScreen = () => null;
 
@@ -68,7 +73,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       if (data.length > 0) {
         setNewestNotificationId(`${data[0]?.id}`);
       }
-    } catch (_) { }
+    } catch (_) {}
   };
 
   useEffect(() => {

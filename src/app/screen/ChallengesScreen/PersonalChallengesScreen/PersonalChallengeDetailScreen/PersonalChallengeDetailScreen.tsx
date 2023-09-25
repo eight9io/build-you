@@ -26,6 +26,7 @@ import TaskAltIconGray from "./assets/task-alt-gray.svg";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
+import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -239,11 +240,15 @@ const PersonalChallengeDetailScreen = ({
   const challengeId = route?.params?.challengeId;
 
   const { getUserProfile } = useUserProfileStore();
+  const { setDeletedChallengeId } = useNewCreateOrDeleteChallengeStore();
+
   const currentUser = getUserProfile();
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
+
+  const isCurrentUserChallengeOnwer = challengeOwner?.id === currentUser?.id;
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -251,7 +256,7 @@ const PersonalChallengeDetailScreen = ({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
           challengeData={challengeData}
-          shouldRenderEditAndDeleteBtns={challengeOwner?.id === currentUser?.id}
+          shouldRenderEditAndDeleteBtns={isCurrentUserChallengeOnwer}
           shouldRenderCompleteBtn={isJoinedLocal}
           refresh={refresh}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
@@ -289,6 +294,7 @@ const PersonalChallengeDetailScreen = ({
     deleteChallenge(challengeData.id)
       .then((res) => {
         if (res.status === 200) {
+          setDeletedChallengeId(challengeData.id);
           setIsDeleteChallengeDialogVisible(false);
           GlobalToastController.showModal({
             message:

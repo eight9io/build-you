@@ -12,6 +12,7 @@ import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScree
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import PersonalChallengeDetailScreen from "./PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
+import PersonalCoachChallengeDetailScreen from "../CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -33,7 +34,6 @@ const PersonalChallengesNavigator = () => {
           headerTitle: () => <AppTitle title={t("top_nav.challenges")} />,
         })}
       />
-
       <PersonalChallengesStack.Screen
         name="PersonalChallengeDetailScreen"
         component={PersonalChallengeDetailScreen}
@@ -48,7 +48,20 @@ const PersonalChallengesNavigator = () => {
           ),
         })}
       />
-
+      <PersonalChallengesStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("top_nav.challenges") as string}
+              onPress={() => navigation.navigate("PersonalChallengesScreen")}
+              withBackIcon
+            />
+          ),
+        })}
+      />
       <PersonalChallengesStack.Screen
         name="OtherUserProfileScreen"
         component={OtherUserProfileScreen}
@@ -66,7 +79,6 @@ const PersonalChallengesNavigator = () => {
           ),
         })}
       />
-
       <PersonalChallengesStack.Screen
         name="OtherUserProfileChallengeDetailsScreen"
         component={OtherUserProfileChallengeDetailsScreen}
@@ -82,7 +94,6 @@ const PersonalChallengesNavigator = () => {
           ),
         })}
       />
-
       <PersonalChallengesStack.Screen
         name="ProgressCommentScreen"
         component={ProgressCommentScreen}

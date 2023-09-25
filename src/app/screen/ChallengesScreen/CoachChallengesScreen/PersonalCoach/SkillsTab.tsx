@@ -47,7 +47,6 @@ const SkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
     const fetchSkills = async () => {
       try {
         const response = await serviceGetSkillsToRate(challengeData.id);
-        console.log("response", response.data);
         setSkills(response.data);
       } catch (error) {
         console.log("error", error);

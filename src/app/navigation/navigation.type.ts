@@ -97,6 +97,9 @@ export type RootStackParamList = {
   NotFound: undefined;
 
   ChallengeCompanyDetailScreen: undefined;
+  PersonalCoachChallengeDetailScreen: {
+    challengeId: string;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

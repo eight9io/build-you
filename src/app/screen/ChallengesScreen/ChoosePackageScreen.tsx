@@ -104,7 +104,11 @@ const ChoosePackageScreen = () => {
       setLoading(true);
       try {
         const res = await serviceGetAllPackages(currentLanguage);
-        setPackages(res.data.packages);
+        const sortedPackages = res.data.packages.sort(
+          (a, b) => a.price - b.price
+        );
+
+        setPackages(sortedPackages);
       } catch (error) {
         console.log("get packages error", error);
       } finally {

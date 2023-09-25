@@ -240,7 +240,8 @@
     }
   },
   "new_challenge_screen": {
-    "title": "Crea una nuova sfida",
+    "new_challenge": "Nuova sfida",
+    "new_certified_challenge": "Nuova sfida certificata",
     "next": "Avanti",
     "create_button": "Crea",
     "next_button": "Avanti",

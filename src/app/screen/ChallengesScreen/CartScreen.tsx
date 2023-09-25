@@ -27,6 +27,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { ICreateCompanyChallenge } from "../../types/challenge";
 import { useUserProfileStore } from "../../store/user-store";
+import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 
 interface ICartScreenProps {
   route: Route<
@@ -52,6 +53,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
 
   const { initialPrice, typeOfPackage, packageId } = route.params;
+
+  const { setNewChallengeId: setNewChallengeIdToStore } =
+    useNewCreateOrDeleteChallengeStore();
+
   const { t } = useTranslation();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -113,6 +118,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       }
 
       newChallengeId = challengeCreateResponse.data.id;
+      setNewChallengeIdToStore(newChallengeId);
       // If challenge created successfully, upload image
       if (challengeCreateResponse.status === 200 || 201) {
         setNewChallengeId(challengeCreateResponse.data.id);
@@ -243,9 +249,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         >
           <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
             <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
-              {typeOfPackage === "basic"
-                ? t("cart_screen.basic_packages")
-                : t("cart_screen.premium_packages")}
+              {typeOfPackage}
             </Text>
           </View>
 

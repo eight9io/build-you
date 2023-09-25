@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,13 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useUserProfileStore } from "../../store/user-store";
+
+import InfoSvg from "../../common/svg/info.svg";
+import Button from "../../component/common/Buttons/Button";
+import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog";
 
 interface ICreateChallengeCardProps {
   image: ImageSourcePropType;
@@ -18,6 +23,11 @@ interface ICreateChallengeCardProps {
   description: string;
   createText: string;
   onPress: () => void;
+}
+
+interface IRightCoachChallengeDetailOptionsProps {
+  userPackageInfo: any;
+  handleShow: () => void;
 }
 
 const CreateChallengeCard: FC<ICreateChallengeCardProps> = ({
@@ -51,7 +61,20 @@ const CreateChallengeCard: FC<ICreateChallengeCardProps> = ({
   );
 };
 
+export const RightCreateChallengeScreenMainOptions: FC<
+  IRightCoachChallengeDetailOptionsProps
+> = ({ userPackageInfo, handleShow }) => {
+  return (
+    <View className="-mt-1 flex  pr-3">
+      <Button Icon={<InfoSvg fill={"#6C6E76"} />} onPress={handleShow} />
+    </View>
+  );
+};
+
 const CreateChallengeScreenMain = () => {
+  const [isShowPackageRemain, setIsShowPackageRemain] =
+    useState<boolean>(false);
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const { t } = useTranslation();
@@ -67,13 +90,45 @@ const CreateChallengeScreenMain = () => {
     if (isCompany) navigation.navigate("CreateCertifiedCompanyChallengeScreen");
     else navigation.navigate("CreateCertifiedChallengeScreen");
   };
+
+  const userPackageInfo = {
+    basic: 9,
+    premium: 19,
+    checks: 24,
+    credits: 100000,
+  };
+
+  useLayoutEffect(() => {
+    if (!isCompany) return;
+    navigation.setOptions({
+      headerRight: () => (
+        <RightCreateChallengeScreenMainOptions
+          userPackageInfo={userPackageInfo}
+          handleShow={() => {
+            setIsShowPackageRemain(true);
+          }}
+        />
+      ),
+    });
+  }, []);
+
   return (
     <SafeAreaView
       className="flex-1 bg-white"
       testID="user_create_challenge_screen"
     >
+      {isCompany && (
+        <PackageInfoDialog
+          isVisible={isShowPackageRemain}
+          onClosed={() => setIsShowPackageRemain(false)}
+          basicPackage={"9"}
+          credits="100000"
+          numberOfChecks={24}
+          premiumPackage="10"
+        />
+      )}
       <View className="flex flex-col items-center justify-center pt-8">
-        <Text className="text-center font-semibold text-lg text-primary-default">
+        <Text className="text-center text-lg font-semibold text-primary-default">
           {t("new_challenge_screen.choose_type")}
         </Text>
         <Text className="text-gray-paragraph px-16 text-center text-base font-normal">

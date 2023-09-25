@@ -363,6 +363,12 @@
       "delete_success_title": "Sfida cancellata",
       "delete_success_description": "Sfida cancellata con successo"
     },
+    "package_info": {
+      "basic": "Pacchetti base (chiamata audio):",
+      "premium": "Pacchetti premium (chiamata video):",
+      "number_of_checks": "Numero di controlli:",
+      "credits": "Crediti:"
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
     "complete": "Completa",

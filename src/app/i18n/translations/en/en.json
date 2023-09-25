@@ -362,6 +362,12 @@
       "delete_success_title": "Challenge deleted",
       "delete_success_description": "Your challenge has been deleted successfully"
     },
+    "package_info": {
+      "basic": "Basic packages (chat):",
+      "premium": "Premium packages (video call):",
+      "number_of_checks": "Number of checks:",
+      "credits": "Credits:"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "complete": "Complete",

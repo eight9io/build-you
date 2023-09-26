@@ -3,12 +3,11 @@ import httpInstance from "../utils/http";
 import {
   ICreateProgress,
   ICreateProgressComment,
-  ICreateProgressLike,
   IProgressComment,
   IProgressLike,
   IUpdateProgress,
 } from "../types/progress";
-import { getImageExtension } from "../utils/uploadUserImage";
+import { getImageExtension } from "../utils/image";
 import { IUploadMediaWithId } from "../types/media";
 import { Platform } from "react-native";
 import { IProgressChallenge } from "../types/challenge";

@@ -1,5 +1,19 @@
 import { IUserData } from "./user";
 
+export type IChallengeTouchpointStatus =
+  | "init"
+  | "open"
+  | "in-progress"
+  | "closed";
+
+export type CheckType<N extends number> = N extends infer Num
+  ? Num extends number
+    ? `check-${Num}`
+    : never
+  : never;
+
+export type CheckpointType = "intake" | CheckType<number> | "closing";
+
 export interface ICreateChallenge {
   goal: string;
   benefits: string;
@@ -15,6 +29,15 @@ export interface ICreateCompanyChallenge {
   maximumPeople: number | undefined;
   public: boolean;
   image?: string;
+  type?: string;
+  package?: string;
+  softSkills?: ISoftSkill[];
+  checkpoint: number;
+}
+
+export interface ISoftSkill {
+  id: string;
+  label: string;
 }
 
 export interface IEditChallenge {
@@ -70,6 +93,22 @@ export interface IChallenge {
   progress?: IProgressChallenge[];
   participants?: IUserData[];
   maximumPeople?: number;
+  totalCurrentParticipant?: number;
+  type?: "free" | "certified";
+  package?: IChallengePackage | null;
+  intake?: any;
+  check?: any;
+  closing?: any;
+  coach?: string;
+  // TODO: update type when api ready
+}
+
+export interface IChallengePackage {
+  id: string;
+  name: string;
+  caption: string;
+  price: number;
+  type: "videocall" | "chat";
 }
 
 export interface INumberOfCommentUpdate {
@@ -99,4 +138,11 @@ export interface ICreateCretifiedChallengeForm
   achievementTime: string | Date;
   image: string;
   softSkills: string[];
+}
+
+export interface IChallengeState {
+  numberOfChecks: number;
+  currentTouchpoint: CheckpointType;
+  currentTouchpointStatus: IChallengeTouchpointStatus;
+  handleOpenChangeTouchpointStatusModal: () => void;
 }

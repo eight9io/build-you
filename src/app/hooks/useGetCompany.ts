@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { serviceGetEmployeeList } from "../service/company";
-import { useEmployeeListStore } from "../store/company-data";
+import { useEmployeeListStore } from "../store/company-data-store";
 import { useUserProfileStore } from "../store/user-store";
 
 export const useGetListEmployee = () => {

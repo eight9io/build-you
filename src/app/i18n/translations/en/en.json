@@ -31,6 +31,8 @@
   "challenge_detail_screen.completed": "Completed",
   "challenge_detail_screen.no_progress_yet": "No progress yet",
   "challenge_detail_screen.not_participants": "No participants at the moment ",
+  "challenge_detail_screen.chat_coach": "chat coach",
+  "challenge_detail_screen.rate_skills": "Rate skills",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
@@ -139,9 +141,6 @@
   "button.skip": "Skip",
   "button.update": "Update",
   "button.edit_companyProfile": "Edit profile",
-  "new_challenge_screen.title": "Create a new challenge",
-  "new_challenge_screen.location": "Location",
-  "new_challenge_screen.enter_your_location": "Select your location",
   "login": "Login",
   "forgot_password": "Forgot password?",
   "forgot_password.title": "Forgot password",
@@ -240,16 +239,19 @@
     }
   },
   "new_challenge_screen": {
-    "title": "New challenge",
+    "new_challenge": "New challenge",
+    "new_certified_challenge": "New certified challenge",
+    "next": "Next",
     "create_button": "Create",
+    "next_button": "Next",
     "choose_type": "Choose the type of challenge",
     "choose_type_description": "Choose which challenge is right for you and start your personal growth.",
     "free_challenge": "Free challenge",
     "free_challenge_description": "Create your own challenge and let the community support you.",
     "create_free_challenge": "Create free challenge",
-    "cretified_challenge": "Certified challenge",
-    "cretified_challenge_description": "Create your own challenge and be followed by a professional coach.",
-    "create_cretified_challenge": "Create certified challenge",
+    "certified_challenge": "Certified challenge",
+    "certified_challenge_description": "Create your own challenge and be followed by a professional coach.",
+    "create_certified_challenge": "Create certified challenge",
     "description": "Create a new challenge for yourself with a concrete goal and time to reach it.",
     "your_goal": "Your goal",
     "your_goal_placeholder": "Set a concrete goal",
@@ -360,6 +362,12 @@
       "delete_success_title": "Challenge deleted",
       "delete_success_description": "Your challenge has been deleted successfully"
     },
+    "package_info": {
+      "basic": "Basic packages (chat):",
+      "premium": "Premium packages (video call):",
+      "number_of_checks": "Number of checks:",
+      "credits": "Credits:"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "complete": "Complete",
@@ -407,6 +415,9 @@
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
     "delete_comment_success": "Your comment has been deleted successfully"
+  },
+  "chat_input": {
+    "chat_input_placeholder": "Type a message"
   },
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"
@@ -566,8 +577,39 @@
     "occupation": "Occupation",
     "enter_occupation": "Enter your occupation",
     "biography": "Biography",
-    "your_biography": "Your biography"
+    "your_biography": "Your biography",
+    "phone": "Phone number",
+    "enter_phone": "Enter your phone number"
   },
   "not_found": "Not found",
-  "invalid_date": "Invalid date"
+  "invalid_date": "Invalid date",
+  "choose_packages_screen": {
+    "package": "Package",
+    "title": "Choose the support type of the coach",
+    "description": "At the end of the challenge the coach will certify the soft skills you have acquired",
+    "basic_package": "Basic package",
+    "basic_package_description": "A coach will follow you during your challenge through 3 touchpoints.",
+    "direct_chat": "Direct chat",
+    "premium_package": "Premium package",
+    "premium_package_description": "A coach will follow you during your challenge through 3 touchpoints.",
+    "video_call": "Video call",
+    "intake": "Intake",
+    "check": "Check",
+    "closing": "Closing",
+    "no_package": "No packages available at the moment"
+  },
+  "cart_screen": {
+    "title": "Summary",
+    "basic_packages": "Basic packages",
+    "basic_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat",
+    "premium_packages": "Premium packages",
+    "premium_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat and video call",
+    "intake": "Intake",
+    "check": "Check",
+    "closing": "Closing",
+    "select_checkpoints": "Select the number of checkpoints:",
+    "minimum_checkpoint_error": "At least 1 checkpoint is required",
+    "total": "Total",
+    "pay": "Pay"
+  }
 }

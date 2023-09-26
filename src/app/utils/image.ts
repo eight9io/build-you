@@ -1,4 +1,16 @@
-// TODO use https://developer.mozilla.org/en-US/docs/Web/API/URL
+// const extractPrefix = (url: string) => {
+//   console.log("url", url);
+//   if (!url || url === null) return "";
+//   try {
+//     const urlObj = new URL(url);
+//     return urlObj.origin;
+//   } catch (error) {
+//     console.log("error", error);
+//     return "";
+//   }
+// };
+// error: url.origin is not implemented 
+
 const extractPrefix = (url: string) => {
   const match = url.match(/^(https?:\/\/[^/]+)/);
   return match ? match[1] : "";
@@ -19,4 +31,9 @@ export const getSeperateImageUrls = (url: string | null) => {
     }
   }
   return imageUrls.filter((url) => url !== "");
+};
+
+export const getImageExtension = (uri: string) => {
+  const uriSplit = uri.split(".");
+  return uriSplit[uriSplit.length - 1];
 };

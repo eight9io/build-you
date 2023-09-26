@@ -41,6 +41,7 @@ const Button: FC<IButtonProps> = ({
         {title && (
           <Text
             className={clsx(isDisabled ? disabledTextClassName : textClassName)}
+            numberOfLines={2} ellipsizeMode="tail"
           >
             {title}
           </Text>

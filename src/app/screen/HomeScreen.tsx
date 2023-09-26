@@ -22,7 +22,7 @@ import { useChallengeUpdateStore } from "../store/challenge-update-store";
 
 import OtherUserProfileScreen from "./ProfileScreen/OtherUser/OtherUserProfileScreen";
 
-import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import MainSearchScreen from "./MainSearchScreen/MainSearchScreen";
 import ProgressCommentScreen from "./ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 import CompanyChallengeDetailScreen from "./ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";

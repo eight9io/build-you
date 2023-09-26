@@ -36,7 +36,7 @@ const Notification: React.FC<INotificationProps> = ({
           renderItem={({ item, index }) => {
             return <NotiItem notification={item} key={index} />;
           }}
-          keyExtractor={(item) => item.createdAt.toString()} // TODO: change to id
+          keyExtractor={(item) => item.createdAt.toString()}
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           ListFooterComponent={<View className="h-20" />}

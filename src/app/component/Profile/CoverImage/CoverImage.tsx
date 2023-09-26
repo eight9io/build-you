@@ -12,7 +12,7 @@ import CameraSvg from "./asset/camera.svg";
 import {
   getImageFromUserDevice,
   uploadNewCover,
-} from "../../../utils/uploadUserImage";
+} from "../../../service/upload-image";
 import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 

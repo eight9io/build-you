@@ -69,7 +69,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
         />
       )}
       {participant.length == 0 && (
-        <View className=" flex-1 items-center justify-center">
+        <View className=" flex-1 items-center pt-16">
           <Empty />
           <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
             {t("challenge_detail_screen.not_participants")}

@@ -1,9 +1,29 @@
-import { ISelectOption } from "../types/common";
+type Location = {
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
+  vicinity: string;
+};
 
-// TODO add typescript
-export const extractNearbyAddresses = (data: any) => {
+type ISelectOption = {
+  key: string;
+  label: string;
+};
+
+type ExtractedData = {
+  nextPageToken: string;
+  addresses: ISelectOption[];
+};
+
+export const extractNearbyAddresses = (data: {
+  results: Location[];
+  next_page_token: string;
+}): ExtractedData => {
   const { results, next_page_token } = data;
-  const addresses: ISelectOption[] = results.map((location: any) => {
+  const addresses: ISelectOption[] = results.map((location) => {
     return {
       key: `${location.geometry.location.lat},${location.geometry.location.lng}`,
       label: location.vicinity,

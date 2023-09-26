@@ -5,6 +5,7 @@ import clsx from "clsx";
 interface ISkillCompetenceProcessProps {
   skillName?: string;
   skillCompetence?: number;
+  skillGaugeClassName?: string;
 }
 
 const skillCompetenceProcess = (skillCompetence: number | undefined) => {
@@ -27,6 +28,7 @@ const skillCompetenceProcess = (skillCompetence: number | undefined) => {
 const SkillCompetenceProcess: React.FC<ISkillCompetenceProcessProps> = ({
   skillName,
   skillCompetence,
+  skillGaugeClassName,
 }) => {
   const skillCompetenceWidth = skillCompetenceProcess(skillCompetence);
   return (
@@ -39,7 +41,8 @@ const SkillCompetenceProcess: React.FC<ISkillCompetenceProcessProps> = ({
           <View
             className={clsx(
               `h-2.5 rounded-full bg-gray-medium`,
-              skillCompetenceWidth
+              skillCompetenceWidth,
+              skillGaugeClassName
             )}
           ></View>
         </View>

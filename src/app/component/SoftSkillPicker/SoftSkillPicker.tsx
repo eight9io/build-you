@@ -7,10 +7,7 @@ import OutsidePressHandler from "react-native-outside-press";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
-import CheckedSvg from "../asset/checked.svg";
-import UncheckedSvg from "../asset/uncheck.svg";
 import WarningSvg from "../../component/asset/warning.svg";
-import i18n from "../../i18n/i18n";
 import httpInstance from "../../utils/http";
 
 interface IFetchedSkill {
@@ -24,15 +21,8 @@ interface ISkillProps {
 
 interface IFormValueInput {
   label: string;
-  value: number; //rating
   id: string;
   testID?: string;
-}
-
-interface IRenderSoftSkillProgress {
-  item: IFormValueInput;
-  changeSkillValue: any;
-  skillValueError: boolean;
 }
 
 interface ISoftSkillPickerProps {
@@ -40,86 +30,19 @@ interface ISoftSkillPickerProps {
   setOpenDropdown: any;
   value: string[];
   setValue: any;
-  skillValueError?: boolean;
   numberOfSkillError?: boolean;
   selectedCompetencedSkill: IFormValueInput[];
   setSelectedCompetencedSkill: any;
-  shouldRenderSelectedSoftSkill?: boolean;
   dropDrownDirection?: "TOP" | "BOTTOM";
 }
 
-const MAX_PROGRESS_VALUE = 5;
-
-const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
-  item,
-  changeSkillValue,
-  skillValueError,
-}) => {
-  const randomId = Math.random().toString();
-  return (
-    <View className="flex w-full flex-col">
-      <View className="flex w-full flex-row items-center justify-between">
-        <View>
-          <Text className="w-44 text-h6 font-medium leading-6 text-black-default">
-            {item.label}
-          </Text>
-        </View>
-        <View className="flex flex-1 flex-row  justify-end">
-          {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
-            <TouchableOpacity
-              className="pr-4"
-              key={`${randomId}${index}`}
-              onPress={() => changeSkillValue(item?.label, index + 1)}
-              testID={`${item.testID}_progress_${index}`}
-            >
-              {index < item?.value ? (
-                <CheckedSvg />
-              ) : (
-                <UncheckedSvg className="text-gray-light" />
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      {skillValueError && item?.value === 0 && (
-        <View className="flex flex-row items-center">
-          <WarningSvg />
-          <Text
-            className="pl-1 text-sm text-red-500"
-            testID={`${item.testID}_error`}
-          >
-            {i18n.t("form_onboarding.screen_4.error_rate") ||
-              "Please rate from 1 to 5"}
-          </Text>
-        </View>
-      )}
-    </View>
-  );
-};
-
-const renderSelectedSoftSkill = (
-  selectedCompetencedSkill: IFormValueInput[],
-  changeSkillValue: any,
-  skillValueError: boolean
-) => {
-  const randomId = Math.random().toString();
-  return (
-    <View className="flex flex-col flex-wrap">
-      {selectedCompetencedSkill.map((item, index) => (
-        <View className="pb-6" key={`${randomId}${index}`}>
-          {renderSoftSkillProgress({ item, changeSkillValue, skillValueError })}
-        </View>
-      ))}
-    </View>
-  );
-};
+const MIN_SOFT_SKILLS = 3;
 
 const convertFetchedSoftSkillToSkillProps = (
   fetchedSoftSkills: IFetchedSkill[]
 ): IFormValueInput[] => {
   return fetchedSoftSkills.map((item, index) => ({
     label: item?.skill,
-    value: 0,
     id: item?.id,
     testID: `soft_skill_dropdown_picker_item_${index}`,
   }));
@@ -130,11 +53,9 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
   setOpenDropdown,
   value,
   setValue,
-  skillValueError,
   numberOfSkillError,
   selectedCompetencedSkill,
   setSelectedCompetencedSkill,
-  shouldRenderSelectedSoftSkill = true,
   dropDrownDirection = "BOTTOM",
 }) => {
   const { t } = useTranslation();
@@ -170,20 +91,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
     }
     setSelectedCompetencedSkill([...selectedCompetencedSkill, skill]);
   };
-
-  const changeSkillValue = (skill: string, value: number) => {
-    const newSelectedCompetencedSkill = selectedCompetencedSkill.map((item) => {
-      if (item.label === skill) {
-        return {
-          ...item,
-          value,
-        };
-      }
-      return item;
-    });
-    setSelectedCompetencedSkill(newSelectedCompetencedSkill);
-  };
-
   return (
     <OutsidePressHandler
       onOutsidePress={() => {
@@ -201,6 +108,7 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
           setItems={setFetchedSoftSkills}
           testID="soft_skill_dropdown_picker"
           dropDownDirection={dropDrownDirection}
+          listMode="SCROLLVIEW"
           placeholder={
             selectedCompetencedSkill.length == 0
               ? t("form_onboarding.screen_4.select_soft_skill") ||
@@ -231,12 +139,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
           multiple={true}
           mode="SIMPLE"
           badgeDotColors={["#e76f51"]}
-          containerProps={{
-            style: {
-              zIndex: 10,
-              height: openDropdown ? 50 * (fetchedSoftSkills?.length + 1) : 50,
-            },
-          }}
           renderListItem={({ item, isSelected }) => {
             const isSkillAlreadySelected = selectedCompetencedSkill.find(
               (selected) => selected.label === item.label
@@ -275,27 +177,16 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
           }}
         />
         <View>
-          <View>
-            {numberOfSkillError && (
-              <View className="flex flex-row items-center justify-start pt-2">
-                <WarningSvg />
-                <Text
-                  className="pl-1 text-sm font-normal leading-5 text-red-500"
-                  testID="complete_profile_step_4_error"
-                >
-                  {t("form_onboarding.screen_4.error") ||
-                    "Please select at least 3 soft skills."}
-                </Text>
-              </View>
-            )}
-          </View>
-          {shouldRenderSelectedSoftSkill && (
-            <View className="w-full flex-col justify-between pt-5">
-              {renderSelectedSoftSkill(
-                selectedCompetencedSkill,
-                changeSkillValue,
-                skillValueError
-              )}
+          {numberOfSkillError && (
+            <View className="flex flex-row items-center justify-start pt-2">
+              <WarningSvg />
+              <Text
+                className="pl-1 text-sm font-normal leading-5 text-red-500"
+                testID="complete_profile_step_4_error"
+              >
+                {t("form_onboarding.screen_4.error") ||
+                  `Please select at least ${MIN_SOFT_SKILLS}  soft skills.`}
+              </Text>
             </View>
           )}
         </View>

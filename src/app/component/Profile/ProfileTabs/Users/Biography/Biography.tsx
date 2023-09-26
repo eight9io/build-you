@@ -14,6 +14,7 @@ import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
 import { IUserData } from "../../../../../types/user";
 import { useTranslation } from "react-i18next";
+import { useUserProfileStore } from "../../../../../store/user-store";
 interface IBiographyProps {
   userProfile: IUserData | null;
 }
@@ -88,6 +89,9 @@ export const VideoWithPlayButton = ({
 };
 
 const Biography = ({ userProfile }: IBiographyProps) => {
+  const { getUserProfile } = useUserProfileStore();
+  const myProfile = getUserProfile();
+
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;
   const occupation = userProfile?.occupation;
@@ -167,6 +171,11 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               </Text>
             </View>
           )}
+
+
+
+
+          {/* ============ */}
           {userProfile?.emailContact && (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text

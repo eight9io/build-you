@@ -34,6 +34,7 @@ export interface IUserData {
   pIva?: string;
   loginType?: ILoginType;
   isVerified?: boolean;
+  isCoach?: boolean;
 }
 
 export type ILoginType =

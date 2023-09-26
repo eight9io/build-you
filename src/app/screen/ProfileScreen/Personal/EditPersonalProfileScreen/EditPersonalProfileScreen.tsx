@@ -140,6 +140,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     bio: string;
     hardSkill: IHardSkillProps[];
     isShowCompany: boolean;
+    phone: string;
   }>({
     defaultValues: {
       name: userData?.name || "",
@@ -149,6 +150,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       bio: userData?.bio || "",
       hardSkill: userData?.hardSkill || [],
       isShowCompany: userData?.isShowCompany || false,
+      phone: userData?.phone || "",
     },
     resolver: yupResolver(EditProfileValidators()),
   });
@@ -467,7 +469,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                         value={value}
                         multiline={true}
                         numberOfLines={4}
-                        // className="h-32"
+                      // className="h-32"
                       />
                     </View>
                   )}
@@ -500,7 +502,39 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   </View>
                 </>
               )}
+              <View className="pt-6">
+                <Controller
+                  control={control}
+                  name="phone"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.phone") ||
+                          "Phone number"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_phone") ||
+                          "Enter your phone number"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
 
+                      />
+                      {errors.phone && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.phone.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
               <Button
                 title={t("button.update") || "Update"}
                 containerClassName="mb-4  bg-primary-default mt-10 mb-"

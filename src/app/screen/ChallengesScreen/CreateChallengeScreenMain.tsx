@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect, useState } from "react";
+import { FC, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,9 @@ import { useUserProfileStore } from "../../store/user-store";
 import InfoSvg from "../../common/svg/info.svg";
 import Button from "../../component/common/Buttons/Button";
 import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog";
+import { IPackage, IPackageResponse } from "../../types/package";
+import { serviceGetAllPackages } from "../../service/package";
+import { getLanguageLocalStorage } from "../../utils/language";
 
 interface ICreateChallengeCardProps {
   image: ImageSourcePropType;
@@ -26,7 +29,6 @@ interface ICreateChallengeCardProps {
 }
 
 interface IRightCoachChallengeDetailOptionsProps {
-  userPackageInfo: any;
   handleShow: () => void;
 }
 
@@ -63,7 +65,7 @@ const CreateChallengeCard: FC<ICreateChallengeCardProps> = ({
 
 export const RightCreateChallengeScreenMainOptions: FC<
   IRightCoachChallengeDetailOptionsProps
-> = ({ userPackageInfo, handleShow }) => {
+> = ({ handleShow }) => {
   return (
     <View className="-mt-1 flex  pr-3">
       <Button Icon={<InfoSvg fill={"#6C6E76"} />} onPress={handleShow} />
@@ -74,6 +76,10 @@ export const RightCreateChallengeScreenMainOptions: FC<
 const CreateChallengeScreenMain = () => {
   const [isShowPackageRemain, setIsShowPackageRemain] =
     useState<boolean>(false);
+
+  const [packages, setPackages] = useState<IPackageResponse>(
+    {} as IPackageResponse
+  );
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -91,25 +97,30 @@ const CreateChallengeScreenMain = () => {
     else navigation.navigate("CreateCertifiedChallengeScreen");
   };
 
-  const userPackageInfo = {
-    basic: 9,
-    premium: 19,
-    checks: 24,
-    credits: 100000,
-  };
-
   useLayoutEffect(() => {
     if (!isCompany) return;
     navigation.setOptions({
       headerRight: () => (
         <RightCreateChallengeScreenMainOptions
-          userPackageInfo={userPackageInfo}
           handleShow={() => {
             setIsShowPackageRemain(true);
           }}
         />
       ),
     });
+  }, []);
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      const currentLanguage = await getLanguageLocalStorage();
+      try {
+        const res = await serviceGetAllPackages(currentLanguage);
+        setPackages(res.data);
+      } catch (error) {
+        console.log("get packages error", error);
+      }
+    };
+    fetchPackages();
   }, []);
 
   return (
@@ -121,10 +132,7 @@ const CreateChallengeScreenMain = () => {
         <PackageInfoDialog
           isVisible={isShowPackageRemain}
           onClosed={() => setIsShowPackageRemain(false)}
-          basicPackage={"9"}
-          credits="100000"
-          numberOfChecks={24}
-          premiumPackage="10"
+          packages={packages}
         />
       )}
       <View className="flex flex-col items-center justify-center pt-8">

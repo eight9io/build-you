@@ -148,7 +148,6 @@ export default function Login() {
         setIsLoading(false);
         return;
       }
-      console.log("error", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }

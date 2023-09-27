@@ -3,22 +3,25 @@ import { View, Text } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import { stringToPriceWithCommas } from "../../../utils/price";
+import {
+  numberToPriceWithCommas,
+  stringToPriceWithCommas,
+} from "../../../utils/price";
 
 interface IPackageInfoDialogProps {
-  basicPackage: string;
-  premiumPackage: string;
-  numberOfChecks: number;
-  credits: string;
+  packages: {
+    avalaibleChatPackage: number;
+    availableCallPackage: number;
+    availableChats: number;
+    availableCalls: number;
+    availableCredits: number;
+  };
   isVisible: boolean;
   onClosed: () => void;
 }
 
 const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
-  basicPackage,
-  premiumPackage,
-  numberOfChecks,
-  credits,
+  packages,
   onClosed,
   isVisible,
 }) => {
@@ -65,19 +68,22 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
             <View className="flex flex-col items-start justify-center p-2 pb-0">
               {renderPackageInfo({
                 title: t("dialog.package_info.basic"),
-                value: basicPackage,
+                value: packages.avalaibleChatPackage || 0,
               })}
               {renderPackageInfo({
                 title: t("dialog.package_info.premium"),
-                value: premiumPackage,
+                value: packages.availableCallPackage || 0,
               })}
               {renderPackageInfo({
                 title: t("dialog.package_info.number_of_checks"),
-                value: numberOfChecks,
+                value:
+                  `${packages?.availableChats + packages?.availableCalls}` || 0,
               })}
               {renderPackageInfo({
                 title: t("dialog.package_info.credits"),
-                value: `$${stringToPriceWithCommas(credits)}`,
+                value: `$${numberToPriceWithCommas(
+                  packages?.availableCredits
+                )}`,
               })}
             </View>
           </Dialog.Description>

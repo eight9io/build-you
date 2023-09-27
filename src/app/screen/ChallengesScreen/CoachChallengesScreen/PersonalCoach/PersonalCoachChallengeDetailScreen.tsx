@@ -20,7 +20,7 @@ import ShareIcon from "../assets/share.svg";
 import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import CoachTab from "./CoachTab";
-import SkillsTab from "./SkillsTab";
+import SkillsTab from "./CoachSkillsTab";
 import { ChatCoachTab } from "./ChatCoachTab";
 import { getChallengeById } from "../../../../service/challenge";
 
@@ -77,7 +77,6 @@ const PersonalCoachChallengeDetailScreen = ({
     });
   }, []);
 
-
   const getChallengeData = async () => {
     setIsScreenLoading(true);
     try {
@@ -131,7 +130,10 @@ const PersonalCoachChallengeDetailScreen = ({
             />
             <DescriptionTab challengeData={challengeData} />
 
-            <CoachTab coachID={challengeData?.coach} />
+            <CoachTab
+              coachID={challengeData?.coach}
+              challengeId={challengeId}
+            />
             <SkillsTab challengeData={challengeData} />
             {challengeData?.type === "certified" && (
               <ChatCoachTab challengeData={challengeData} />

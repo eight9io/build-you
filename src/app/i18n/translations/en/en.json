@@ -410,7 +410,9 @@
     "completed_challenge_success": "Challenge has been completed successfully !",
     "delete_challenge_success": "Deleted Challenge successfully !",
     "copied_to_clipboard": "Copied to clipboard",
-    "copied_to_clipboard_error": "Error when copying to clipboard"
+    "copied_to_clipboard_error": "Error when copying to clipboard",
+    "open_touchpoint_success": "Update touchpoint status successfully!",
+    "open_touchpoint_error": "Update touchpoint status failed!. Please try again later."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

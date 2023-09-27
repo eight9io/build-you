@@ -5,7 +5,6 @@ import { View, Text, SafeAreaView } from "react-native";
 
 import { IChallenge } from "../../../../types/challenge";
 import i18n from "../../../../i18n/i18n";
-import TabView from "../../../../component/common/Tab/TabView";
 import DescriptionTab from "./DescriptionTab";
 import ProgressTab from "./ProgressTab";
 
@@ -13,18 +12,20 @@ import CheckCircle from "./assets/check_circle.svg";
 
 import { getChallengeStatusColor } from "../../../../utils/common";
 import { useUserProfileStore } from "../../../../store/user-store";
-import Button from "../../../../component/common/Buttons/Button";
 import {
   getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
-import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+
+import PersonalSkillsTab from "./PersonalSkillsTab";
+import TabView from "../../../../component/common/Tab/TabView";
+import Button from "../../../../component/common/Buttons/Button";
 import CoachTab from "../../CoachChallengesScreen/PersonalCoach/CoachTab";
 import { ChatCoachTab } from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
-import SkillsTab from "../../CoachChallengesScreen/PersonalCoach/SkillsTab";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -223,8 +224,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             {participantList && challengeOwner?.companyAccount && (
               <ParticipantsTab participant={participantList} />
             )}
-            <CoachTab coachID={challengeData?.coach} />
-            <SkillsTab challengeData={challengeData} />
+            <CoachTab
+              coachID={challengeData?.coach}
+              challengeId={challengeId}
+            />
+            <PersonalSkillsTab challengeData={challengeData} />
             {challengeData?.type === "certified" && (
               <ChatCoachTab challengeData={challengeData} />
             )}

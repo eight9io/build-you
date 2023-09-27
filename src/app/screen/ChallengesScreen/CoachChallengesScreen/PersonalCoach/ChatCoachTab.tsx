@@ -54,7 +54,7 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
 
   useEffect(() => {
     getMessage();
-    const intervalFetchApi = setInterval(getMessage, 5000);
+    const intervalFetchApi = setInterval(getMessage, 20000);
     return () => {
       clearInterval(intervalFetchApi);
     };

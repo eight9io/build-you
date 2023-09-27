@@ -7,10 +7,10 @@ export interface IPackage {
 }
 
 export interface IPackageResponse {
-  availableCalls: string;
-  availableChats: string;
-  availableCredits: string;
-  availablePremiumPackage: string;
-  avalaibleBasicPackage: string;
+  avalaibleChatPackage: number;
+  availableCallPackage: number;
+  availableChats: number;
+  availableCalls: number;
+  availableCredits: number;
   packages: IPackage[];
 }

@@ -4,7 +4,6 @@ export const errorMessage = (error: any, type: string) => {
   const OBJ_STATUS_CODE = i18n.t(`errorMessage:${type}`, {
     returnObjects: true,
   }) as Array<any>;
-  console.log("OBJ_STATUS_CODE", OBJ_STATUS_CODE);
   const responseBody = error.response?.data;
   for (const key in OBJ_STATUS_CODE) {
     if (responseBody?.statusCode == key) {

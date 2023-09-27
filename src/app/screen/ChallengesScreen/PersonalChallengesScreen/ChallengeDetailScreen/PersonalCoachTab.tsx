@@ -240,7 +240,7 @@ const TouchPointProgress = ({
   );
 };
 
-const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
+const PersonalCoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
   const [
     isChangeTouchpointStatusModalVisible,
     setChangeTouchpointStatusModalVisible,
@@ -347,4 +347,4 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
   );
 };
 
-export default CoachTab;
+export default PersonalCoachTab;

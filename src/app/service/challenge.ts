@@ -1,10 +1,10 @@
-import { AxiosResponse } from "axios";
 import {
   ICreateChallenge,
   IEditChallenge,
   ICreateCompanyChallenge,
   IUpdateChallengeImage,
   IChallenge,
+  CheckpointType,
 } from "../types/challenge";
 import http from "../utils/http";
 import { ISkillProps } from "../screen/OnboardingScreens/CompleteProfile/CompleteProfileStep4";
@@ -110,5 +110,21 @@ export const servicePostRatingSkills = (
     challenge: challengeId,
     skillsRating: skills,
     user: userId,
+  });
+};
+
+export const serviceGetCertifiedChallengeStatus = (challengeId: string) => {
+  return http.get(`/challenge/status/${challengeId}`);
+};
+
+export const serviceOpenTouchpoint = (
+  challengeId: string,
+  status: CheckpointType
+) => {
+  // only challenge creator can open touchpoint
+  const extractedStatus = status.split("-")[0];
+  return http.put(`challenge/touchpoint/open`, {
+    phase: extractedStatus,
+    challengeId: challengeId,
   });
 };

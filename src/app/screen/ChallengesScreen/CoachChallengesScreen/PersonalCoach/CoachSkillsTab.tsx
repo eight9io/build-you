@@ -26,7 +26,7 @@ interface ISkillsTabProps {
   challengeData: IChallenge;
 }
 
-const SkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
+const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
   const [skills, setSkills] = React.useState<ISoftSkillProps[]>([]);
   const { t } = useTranslation();
   const navigation = useNav();
@@ -83,4 +83,4 @@ const SkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
   );
 };
 
-export default SkillsTab;
+export default CoachSkillsTab;

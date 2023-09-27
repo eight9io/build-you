@@ -411,7 +411,9 @@
     "completed_challenge_success": "La sfida è stata completata con successo !",
     "delete_challenge_success": "Sfida eliminata con successo !",
     "copied_to_clipboard": "Copiato negli appunti",
-    "copied_to_clipboard_error": "Errore durante la copia negli appunti"
+    "copied_to_clipboard_error": "Errore durante la copia negli appunti",
+    "open_touchpoint_success": "Aggiornamento riuscito!",
+    "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",

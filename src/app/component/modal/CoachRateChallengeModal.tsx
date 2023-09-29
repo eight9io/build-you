@@ -163,7 +163,6 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
         message: t("toast.rate_skills_success") || "Rate skills successfully!",
       });
     } catch (error) {
-      console.log("CoachRateChallengeScreen - Error rating skills:", error);
       GlobalToastController.showModal({
         message:
           t("form_onboarding.screen_4.error_rate") ||
@@ -205,12 +204,12 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
           setRatedCompetencedSkill(ratedSoffSkills);
         } else {
           console.log(
-            "CoachRateChallengeScreen - Error fetching rated skills:",
+            "CoachRateChallengeModal - Error fetching rated skills:",
             ratedSoffSkillsValue.reason
           );
         }
       } catch (error) {
-        console.log("CoachRateChallengeScreen - Error fetching data:", error);
+        console.log("CoachRateChallengeModal - Error fetching data:", error);
       } finally {
         setTimeout(() => {
           setIsLoading(false);

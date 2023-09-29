@@ -31,11 +31,6 @@ export type RootStackParamList = {
   EditPersonalProfileScreen: undefined;
   EditCompanyProfileScreen: undefined;
 
-  CoachRateChallengeScreen: {
-    challengeOwnerId: string;
-    challengeId: string;
-  };
-
   CompleteProfileScreen: undefined;
   CompleteProfileStep1Screen: undefined;
   CompleteProfileStep2Screen: undefined;

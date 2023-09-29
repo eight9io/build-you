@@ -32,7 +32,6 @@ import CompleteProfileScreen from "../screen/OnboardingScreens/CompleteProfile/C
 import EditCompanyProfileScreen from "../screen/ProfileScreen/Company/EditCompanyProfileScreen/EditCompanyProfileScreen";
 import EditPersonalProfileScreen from "../screen/ProfileScreen/Personal/EditPersonalProfileScreen/EditPersonalProfileScreen";
 import CreateChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen";
-import CoachRateChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CoachRateChallengeScreen/CoachRateChallengeScreen";
 import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
 
 import { useAuthStore } from "../store/auth-store";
@@ -442,25 +441,6 @@ export const RootNavigation = () => {
               headerShown: true,
               headerTitle: () => (
                 <AppTitle title={t("cart_screen.title") || "Summary"} />
-              ),
-              headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <Ionicons name="close" size={24} color="#000" />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-          <RootStack.Screen
-            name="CoachRateChallengeScreen"
-            component={CoachRateChallengeScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <AppTitle
-                  title={
-                    t("challenge_detail_screen.rate_skills") || "Rate skills"
-                  }
-                />
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>

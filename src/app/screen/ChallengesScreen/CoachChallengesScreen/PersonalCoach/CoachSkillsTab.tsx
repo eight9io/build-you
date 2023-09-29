@@ -71,12 +71,12 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
           setRatedCompetencedSkill(ratedSoffSkills);
         } else {
           console.log(
-            "CoachRateChallengeScreen - Error fetching rated skills:",
+            " Error fetching rated skills:",
             ratedSoffSkillsValue.reason
           );
         }
       } catch (error) {
-        console.log("CoachRateChallengeScreen - Error fetching data:", error);
+        console.log(" Error fetching data:", error);
       }
     };
     if (challengeData?.id && shouldRefresh) {

@@ -55,7 +55,6 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
 
   const skillsToRate: ISoftSkill[] =
     extractSkillsFromChallengeData(challengeData);
-  console.log(skillsToRate);
   return (
     <ScrollView className="h-full px-4 pt-4">
       <SingleDescription

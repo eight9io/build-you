@@ -413,7 +413,9 @@
     "copied_to_clipboard": "Copiato negli appunti",
     "copied_to_clipboard_error": "Errore durante la copia negli appunti",
     "open_touchpoint_success": "Aggiornamento riuscito!",
-    "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi."
+    "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi.",
+    "rate_skills_success": "Valutazione competenze riuscita!",
+    "rate_skills_error": "Valutazione competenze fallita! Riprova più tardi."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
@@ -554,7 +556,8 @@
     "the_benefits": "I benefici",
     "the_reason": "Il motivo",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
-    "participants": "Partecipanti"
+    "participants": "Partecipanti",
+    "soft_skills": "Abilità trasversale"
   },
   "challenge_progress_tab": {
     "do_you_want_to_confirm_rating": "Vuoi confermare la tua valutazione?",

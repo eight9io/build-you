@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -35,13 +35,15 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   const handleConfirm = () => {
     onConfirm && onConfirm();
   };
-
+  const isAndroid = Platform.OS === "android";
   return (
     <View>
       {isVisible && (
         <Dialog.Container visible={true}>
           <Dialog.Title>
-            <Text className={clsx("text-black-default")}>{title}</Text>
+            <Text className={clsx(isAndroid && "text-black-default")}>
+              {title}
+            </Text>
           </Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (

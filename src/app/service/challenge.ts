@@ -117,14 +117,40 @@ export const serviceGetCertifiedChallengeStatus = (challengeId: string) => {
   return http.get(`/challenge/status/${challengeId}`);
 };
 
-export const serviceOpenTouchpoint = (
-  challengeId: string,
-  status: CheckpointType
-) => {
+export const serviceOpenTouchpoint = (challengeId: string) => {
   // only challenge creator can open touchpoint
-  const extractedStatus = status.split("-")[0];
-  return http.put(`challenge/touchpoint/open`, {
-    phase: extractedStatus,
-    challengeId: challengeId,
+  return http.put(`challenge/touchpoint/open/${challengeId}`);
+};
+
+export const serviceCloseTouchpoint = (challengeId: string) => {
+  // only challenge coach can close touchpoint
+  return http.put(`challenge/touchpoint/close/${challengeId}`);
+};
+
+export const serviceRateSoftSkillCertifiedChallenge = (
+  challengeId: string,
+  userId: string,
+  skill: {
+    id: string;
+    rating: number;
+  }[]
+) => {
+  // change id in skill to skillId
+  const skillToSend = skill.map((item) => {
+    return {
+      skillId: item.id,
+      rating: item.rating,
+    };
   });
+  return http.post(`/challenge/skills/rate`, {
+    challenge: challengeId,
+    user: userId,
+    skillsRating: skillToSend,
+  });
+};
+
+export const serviceGetRatedSoftSkillCertifiedChallenge = (
+  challengeId: string
+) => {
+  return http.get(`/challenge/skills/rating/${challengeId}`);
 };

@@ -26,6 +26,7 @@ import { ChatCoachTab } from "../../CoachChallengesScreen/PersonalCoach/ChatCoac
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
+import PersonalCoachTab from "./PersonalCoachTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -224,11 +225,14 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             {participantList && challengeOwner?.companyAccount && (
               <ParticipantsTab participant={participantList} />
             )}
-            <CoachTab
+            <PersonalCoachTab
               coachID={challengeData?.coach}
               challengeId={challengeId}
             />
-            <PersonalSkillsTab challengeData={challengeData} />
+            <PersonalSkillsTab
+              challengeData={challengeData}
+              setShouldRefresh={setShouldRefresh}
+            />
             {challengeData?.type === "certified" && (
               <ChatCoachTab challengeData={challengeData} />
             )}

@@ -2,6 +2,7 @@ import {
   IUnformatedCertifiedChallengeState,
   IChallengeTouchpointStatus,
   CheckpointType,
+  IChallenge,
 } from "../types/challenge";
 
 export const formatChallengeStatePayload = (
@@ -19,8 +20,10 @@ export const formatChallengeStatePayload = (
     }
     touchpoints.push("closing");
 
-    let currentTouchpoint: CheckpointType =
-      completedCheckpoint === 0 ? "intake" : touchpoints[completedCheckpoint];
+    let currentTouchpoint =
+      completedCheckpoint === 0 && payload.intakeStatus != "closed"
+        ? "intake"
+        : touchpoints[completedCheckpoint];
 
     let status: IChallengeTouchpointStatus;
     if (currentTouchpoint === "intake") {
@@ -48,4 +51,11 @@ export const formatChallengeStatePayload = (
       totalChecks: 0,
     };
   }
+};
+
+export const extractSkillsFromChallengeData = (challenge: IChallenge) => {
+  if (!challenge?.softSkill) {
+    return [];
+  }
+  return challenge?.softSkill.map((item) => item.skill);
 };

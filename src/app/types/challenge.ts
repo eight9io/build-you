@@ -1,3 +1,4 @@
+import { string } from "yup";
 import { IUserData } from "./user";
 
 export type IChallengeTouchpointStatus =
@@ -37,7 +38,20 @@ export interface ICreateCompanyChallenge {
 
 export interface ISoftSkill {
   id: string;
-  label: string;
+  label?: string;
+  skill?: string;
+  rating?: number;
+}
+
+export interface ISoftSkillFromChallenge {
+  challenge: {
+    id: string;
+  };
+  id: string;
+  skill: {
+    id: string;
+    label: string;
+  };
 }
 
 export interface IEditChallenge {
@@ -100,6 +114,7 @@ export interface IChallenge {
   check?: any;
   closing?: any;
   coach?: string;
+  softSkill?: ISoftSkillFromChallenge[];
   // TODO: update type when api ready
 }
 

@@ -32,7 +32,7 @@ export type RootStackParamList = {
   EditCompanyProfileScreen: undefined;
 
   CoachRateChallengeScreen: {
-    userId: string;
+    challengeOwnerId: string;
     challengeId: string;
   };
 

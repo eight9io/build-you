@@ -21,8 +21,8 @@ import TouchPointCheckCircle from "../../../../common/svg/check-circle-24.svg";
 import TouchPointRetangle from "../../../../common/svg/touchpoint-rectangle.svg";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import {
+  serviceCloseTouchpoint,
   serviceGetCertifiedChallengeStatus,
-  serviceOpenTouchpoint,
 } from "../../../../service/challenge";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 
@@ -31,12 +31,12 @@ interface ICoachTabProps {
   challengeId: string;
 }
 
-export const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
+const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
   switch (status) {
     case "init":
       return <TouchPointCircle fill={"#C5C8D2"} />;
     case "open":
-      return <TouchPointCircle fill={"#6C6E76"} />;
+      return <TouchPointCircle fill={"#C5C8D2"} />;
     case "in-progress":
       return <TouchPointCircle fill={"#FFC632"} />;
     case "closed":
@@ -44,13 +44,13 @@ export const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
   }
 };
 
-export const getButtonColor = (status: IChallengeTouchpointStatus) => {
+const getButtonColor = (status: IChallengeTouchpointStatus) => {
   switch (status) {
-    case "open":
-      return "bg-primary-default";
     case "in-progress":
-      return "bg-secondary-dark";
+      return "bg-primary-default";
     case "closed":
+      return "bg-gray-medium";
+    default:
       return "bg-gray-medium";
   }
 };
@@ -179,7 +179,6 @@ const TouchPointProgress = ({
       name: CheckpointType;
       status: IChallengeTouchpointStatus;
     },
-    status: IChallengeTouchpointStatus,
     isLastIndex: boolean
   ): ReactNode => {
     return (
@@ -197,7 +196,7 @@ const TouchPointProgress = ({
             <Text
               className={clsx(
                 "text-md capitalize",
-                touchpoint.status === "init" ? "" : "font-semibold"
+                touchpoint.status === "in-progress" ? "font-semibold" : ""
               )}
             >
               {translateCheckpointToText(touchpoint.name)}
@@ -205,18 +204,28 @@ const TouchPointProgress = ({
           </View>
         </View>
 
-        {touchpoint.status !== "init" && (
+        {touchpoint.status === "in-progress" && (
           <TouchableOpacity
             className={clsx(
               "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
               getButtonColor(touchpoint.status)
             )}
-            disabled={touchpoint.status !== "open"}
             onPress={handleOpenChangeTouchpointStatusModal}
           >
-            <Text className="font-semibold capitalize text-white">
-              {touchpoint.status}
-            </Text>
+            <Text className="font-semibold capitalize text-white">Close</Text>
+          </TouchableOpacity>
+        )}
+
+        {touchpoint.status === "closed" && (
+          <TouchableOpacity
+            className={clsx(
+              "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
+              getButtonColor(touchpoint.status)
+            )}
+            disabled={true}
+            onPress={handleOpenChangeTouchpointStatusModal}
+          >
+            <Text className="font-semibold capitalize text-white">Closed </Text>
           </TouchableOpacity>
         )}
       </View>
@@ -232,7 +241,7 @@ const TouchPointProgress = ({
             key={index}
             className="flex flex-row items-center justify-between"
           >
-            {renderProgress(touchpoint, currentTouchpointStatus, isLastIndex)}
+            {renderProgress(touchpoint, isLastIndex)}
           </View>
         );
       })}
@@ -268,10 +277,7 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
   const onConfirmChangeTouchpointStatusModal = async () => {
     handleCloseChangeTouchpointStatusModal();
     try {
-      const response = await serviceOpenTouchpoint(
-        challengeId,
-        currentTouchpoint
-      );
+      const response = await serviceCloseTouchpoint(challengeId);
       if (response) {
         GlobalToastController.showModal({
           message: t("toast.open_touchpoint_success") as string,
@@ -314,7 +320,7 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
     <View className="w-screen">
       <ConfirmDialog
         isVisible={isChangeTouchpointStatusModalVisible}
-        title={`Do you really want to start the ${
+        title={`Do you really want to close the ${
           translateCheckpointToText(currentTouchpoint) || ""
         } Phase?`}
         onConfirm={onConfirmChangeTouchpointStatusModal}

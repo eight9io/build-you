@@ -20,7 +20,7 @@ import ShareIcon from "../assets/share.svg";
 import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import CoachTab from "./CoachTab";
-import SkillsTab from "./CoachSkillsTab";
+import CoachSkillsTab from "./CoachSkillsTab";
 import { ChatCoachTab } from "./ChatCoachTab";
 import { getChallengeById } from "../../../../service/challenge";
 
@@ -62,7 +62,6 @@ const PersonalCoachChallengeDetailScreen = ({
     {} as IChallenge
   );
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
-  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
@@ -82,17 +81,16 @@ const PersonalCoachChallengeDetailScreen = ({
     try {
       await getChallengeById(challengeId).then((res) => {
         setChallengeData(res.data);
-        setIsScreenLoading(false);
       });
     } catch (error) {
-      console.log("error", error);
-      setIsScreenLoading(false);
+      console.log("CoachChallengeDetailScreen - Error fetching data:", error);
     }
+    setIsScreenLoading(false);
   };
 
   useEffect(() => {
     getChallengeData();
-  }, [isNewProgressAdded]);
+  }, []);
 
   const CHALLENGE_TABS_TITLE_TRANSLATION = [
     t("challenge_detail_screen.progress"),
@@ -126,7 +124,6 @@ const PersonalCoachChallengeDetailScreen = ({
               isJoined={false}
               isChallengeCompleted={false}
               challengeData={challengeData}
-              setShouldRefresh={setIsNewProgressAdded}
             />
             <DescriptionTab challengeData={challengeData} />
 
@@ -134,7 +131,7 @@ const PersonalCoachChallengeDetailScreen = ({
               coachID={challengeData?.coach}
               challengeId={challengeId}
             />
-            <SkillsTab challengeData={challengeData} />
+            <CoachSkillsTab challengeData={challengeData} />
             {challengeData?.type === "certified" && (
               <ChatCoachTab challengeData={challengeData} />
             )}

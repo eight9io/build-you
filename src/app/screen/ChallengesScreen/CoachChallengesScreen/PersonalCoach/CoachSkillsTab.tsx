@@ -1,63 +1,102 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 
 import { useNav } from "../../../../hooks/useNav";
 import {
+  serviceGetRatedSoftSkillCertifiedChallenge,
   serviceGetSkillsToRate,
   servicePostRatingSkills,
 } from "../../../../service/challenge";
+import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
 import SkillCompetenceProcess from "../../../../component/Profile/ProfileTabs/Users/Skills/SkillCompetenceProcess";
 import Button, {
   FillButton,
 } from "../../../../component/common/Buttons/Button";
-import { IChallenge } from "../../../../types/challenge";
+import {
+  IChallenge,
+  IChallengeOwner,
+  ISoftSkill,
+} from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
+import CoachRateChallengeModal from "../../../../component/modal/CoachRateChallengeModal";
 
-interface ISoftSkillProps {
-  rating: number;
-  skill: {
-    id: string;
-    skill: string;
-  };
-}
 interface ISkillsTabProps {
   challengeData: IChallenge;
 }
 
 const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
-  const [skills, setSkills] = React.useState<ISoftSkillProps[]>([]);
+  const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
+    ISoftSkill[]
+  >([]);
+  const [isRateSkillsModalVisible, setIsRateSkillsModalVisible] =
+    useState<boolean>(false);
+
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+
   const { t } = useTranslation();
-  const navigation = useNav();
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
 
   const canCurrentUserRateSkills = currentUser.id === challengeData?.coach;
 
+  const challengeOwner = (challengeData?.owner?.[0] as IChallengeOwner) ?? null;
+
   const handleOpenRateSkillsModal = () => {
-    navigation.navigate("CoachRateChallengeScreen", {
-      challengeId: challengeData.id,
-      userId: currentUser.id,
-    });
+    setIsRateSkillsModalVisible(true);
   };
 
+  const skillsToRate: ISoftSkill[] =
+    extractSkillsFromChallengeData(challengeData);
+
   useEffect(() => {
-    const fetchSkills = async () => {
+    const getData = async () => {
       try {
-        const response = await serviceGetSkillsToRate(challengeData.id);
-        setSkills(response.data);
+        const [ratedSoffSkillsValue] = await Promise.allSettled([
+          serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
+        ]);
+
+        if (ratedSoffSkillsValue.status === "fulfilled") {
+          const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
+            (item) => {
+              return {
+                id: item.skill.id,
+                skill: item.skill.skill,
+                rating: item.rating,
+              };
+            }
+          );
+          setRatedCompetencedSkill(ratedSoffSkills);
+        } else {
+          console.log(
+            "CoachRateChallengeScreen - Error fetching rated skills:",
+            ratedSoffSkillsValue.reason
+          );
+        }
       } catch (error) {
-        console.log("error", error);
+        console.log("CoachRateChallengeScreen - Error fetching data:", error);
       }
     };
-    fetchSkills();
-  }, []);
+    if (challengeData?.id && shouldRefresh) {
+      getData();
+      setShouldRefresh(false);
+    }
+  }, [challengeData?.id, shouldRefresh]);
+
+  console.log(shouldRefresh);
 
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
-      {canCurrentUserRateSkills && (
+      <CoachRateChallengeModal
+        isVisible={isRateSkillsModalVisible}
+        setIsVisible={setIsRateSkillsModalVisible}
+        challengeData={challengeData}
+        challengeOwner={challengeOwner}
+        setShouldParentRefresh={setShouldRefresh}
+      />
+      {canCurrentUserRateSkills && ratedCompetencedSkill?.length === 0 && (
         <Button
           containerClassName="bg-primary-default flex-none px-1"
           textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
@@ -68,10 +107,13 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
         />
       )}
       <View className="mt-4 flex flex-col">
-        {skills?.map((skill: ISoftSkillProps, index) => {
+        {(ratedCompetencedSkill?.length === 0
+          ? skillsToRate
+          : ratedCompetencedSkill
+        )?.map((skill: ISoftSkill, index) => {
           return (
             <SkillCompetenceProcess
-              skillName={skill.skill.skill}
+              skillName={skill.skill}
               skillCompetence={skill.rating}
               key={index}
               skillGaugeClassName="bg-success-default"

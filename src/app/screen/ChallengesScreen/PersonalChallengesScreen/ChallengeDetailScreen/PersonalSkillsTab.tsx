@@ -1,77 +1,66 @@
-import React, { FC, useEffect } from "react";
-import { View, Text, ScrollView } from "react-native";
+import React, { FC, useEffect, useState } from "react";
+import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 
-import { useNav } from "../../../../hooks/useNav";
-import {
-  serviceGetSkillsToRate,
-  servicePostRatingSkills,
-} from "../../../../service/challenge";
+import { serviceGetRatedSoftSkillCertifiedChallenge } from "../../../../service/challenge";
+import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
 import SkillCompetenceProcess from "../../../../component/Profile/ProfileTabs/Users/Skills/SkillCompetenceProcess";
-import Button, {
-  FillButton,
-} from "../../../../component/common/Buttons/Button";
-import { IChallenge } from "../../../../types/challenge";
-import { useUserProfileStore } from "../../../../store/user-store";
+import { IChallenge, ISoftSkill } from "../../../../types/challenge";
 
-interface ISoftSkillProps {
-  rating: number;
-  skill: {
-    id: string;
-    skill: string;
-  };
-}
 interface ISkillsTabProps {
   challengeData: IChallenge;
 }
 
 const PersonalSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
-  const [skills, setSkills] = React.useState<ISoftSkillProps[]>([]);
-  const { t } = useTranslation();
-  const navigation = useNav();
+  const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
+    ISoftSkill[]
+  >([]);
 
-  const { getUserProfile } = useUserProfileStore();
-  const currentUser = getUserProfile();
-
-  const canCurrentUserRateSkills = currentUser.id === challengeData?.coach;
-
-  const handleOpenRateSkillsModal = () => {
-    navigation.navigate("CoachRateChallengeScreen", {
-      challengeId: challengeData.id,
-      userId: currentUser.id,
-    });
-  };
+  const skillsToRate: ISoftSkill[] =
+    extractSkillsFromChallengeData(challengeData);
 
   useEffect(() => {
-    const fetchSkills = async () => {
+    const getData = async () => {
       try {
-        const response = await serviceGetSkillsToRate(challengeData.id);
-        setSkills(response.data);
+        const [ratedSoffSkillsValue] = await Promise.allSettled([
+          serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
+        ]);
+
+        if (ratedSoffSkillsValue.status === "fulfilled") {
+          const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
+            (item) => {
+              return {
+                id: item.skill.id,
+                skill: item.skill.skill,
+                rating: item.rating,
+              };
+            }
+          );
+          setRatedCompetencedSkill(ratedSoffSkills);
+        } else {
+          console.log(
+            "CoachRateChallengeScreen - Error fetching rated skills:",
+            ratedSoffSkillsValue.reason
+          );
+        }
       } catch (error) {
-        console.log("error", error);
+        console.log("CoachRateChallengeScreen - Error fetching data:", error);
       }
     };
-    fetchSkills();
-  }, []);
+    getData();
+  }, [challengeData?.id]);
 
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
-      {canCurrentUserRateSkills && (
-        <Button
-          containerClassName="bg-primary-default flex-none px-1"
-          textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
-          disabledContainerClassName="bg-gray-light flex-none px-1"
-          disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
-          title={t("challenge_detail_screen.rate_skills") as string}
-          onPress={handleOpenRateSkillsModal}
-        />
-      )}
       <View className="mt-4 flex flex-col">
-        {skills?.map((skill: ISoftSkillProps, index) => {
+        {(ratedCompetencedSkill?.length === 0
+          ? skillsToRate
+          : ratedCompetencedSkill
+        )?.map((skill: ISoftSkill, index) => {
           return (
             <SkillCompetenceProcess
-              skillName={skill.skill.skill}
+              skillName={skill.skill}
               skillCompetence={skill.rating}
               key={index}
               skillGaugeClassName="bg-success-default"

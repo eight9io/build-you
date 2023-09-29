@@ -412,7 +412,9 @@
     "copied_to_clipboard": "Copied to clipboard",
     "copied_to_clipboard_error": "Error when copying to clipboard",
     "open_touchpoint_success": "Update touchpoint status successfully!",
-    "open_touchpoint_error": "Update touchpoint status failed!. Please try again later."
+    "open_touchpoint_error": "Update touchpoint status failed!. Please try again later.",
+    "rate_skills_success": "Rate skills successfully!",
+    "rate_skills_error": "Rate skills failed!. Please try again later."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
@@ -556,7 +558,8 @@
     "the_benefits": "The benefits",
     "the_reason": "The reason",
     "time_to_reach_goal": "Time to reach goal",
-    "participants": "Participants"
+    "participants": "Participants",
+    "soft_skills": "Soft skills"
   },
   "challenge_progress_tab": {
     "do_you_want_to_confirm_rating": "Do you want to confirm your rating?",

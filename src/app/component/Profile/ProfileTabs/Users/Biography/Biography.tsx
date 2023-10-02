@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import clsx from "clsx";
 
-import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+import { Video, ResizeMode, AVPlaybackStatus, VideoFullscreenUpdate } from "expo-av";
 
 import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
@@ -32,6 +32,7 @@ export const VideoWithPlayButton = ({
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [resizeMode, setResizeMode] = React.useState(ResizeMode.COVER);
 
   useEffect(() => {
     if (status && status.isLoaded && status.isPlaying) {
@@ -58,13 +59,22 @@ export const VideoWithPlayButton = ({
             borderRadius: 12,
           }}
           useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
+          resizeMode={resizeMode}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
           onLoadStart={() => {
             setIsLoading(true);
           }}
           onReadyForDisplay={() => {
             setIsLoading(false);
+          }}
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
           }}
         />
       )}

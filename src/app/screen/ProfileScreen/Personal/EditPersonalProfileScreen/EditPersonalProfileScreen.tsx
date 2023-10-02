@@ -124,7 +124,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-  useGetUserData();
   const {
     control,
     handleSubmit,
@@ -140,6 +139,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     bio: string;
     hardSkill: IHardSkillProps[];
     isShowCompany: boolean;
+    city: string;
   }>({
     defaultValues: {
       name: userData?.name || "",
@@ -149,6 +149,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       bio: userData?.bio || "",
       hardSkill: userData?.hardSkill || [],
       isShowCompany: userData?.isShowCompany || false,
+      city: userData?.city || "",
     },
     resolver: yupResolver(EditProfileValidators()),
   });
@@ -189,6 +190,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     )?.id;
     setIsLoading(true);
     try {
+      console.log(data?.city)
       await Promise.all([
         uploadNewVideo(pickedVideo[0]?.uri),
         serviceUpdateMyProfile(userData?.id, {
@@ -199,6 +201,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           occupation: IdOccupation,
           hardSkill: arrayMyHardSkills,
           isShowCompany: data.isShowCompany,
+          city: data?.city,
         }),
       ]);
       const res = await serviceGetMyProfile();
@@ -310,7 +313,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-
               <View className="pt-3">
                 <Controller
                   control={control}
@@ -319,7 +321,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                     <View className="flex flex-col">
                       <TextInput
                         label={
-                          t("edit_personal_profile_screen.last_name") || "Last name"
+                          t("edit_personal_profile_screen.last_name") ||
+                          "Last name"
                         }
                         placeholder={
                           t("edit_personal_profile_screen.enter_last_name") ||
@@ -353,8 +356,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                           t("edit_personal_profile_screen.birth") || "Birthday"
                         }
                         placeholder={
-                          t("edit_personal_profile_screen.select_your_birthday") ||
-                          "Select your birth"
+                          t(
+                            "edit_personal_profile_screen.select_your_birthday"
+                          ) || "Select your birth"
                         }
                         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                         rightIcon={
@@ -417,7 +421,37 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="city"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.city") || "Last name"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_your_city") ||
+                          "Where do you base?"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                      {errors.city && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.city.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
               <View>
                 <Text className="py-4 text-md font-semibold text-primary-default">
                   {t("video_profile")}
@@ -446,7 +480,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   </Text>
                 )}
               </View>
-
               <View className="pt-3">
                 <Controller
                   control={control}
@@ -455,7 +488,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                     <View className="flex flex-col">
                       <TextInput
                         label={
-                          t("edit_personal_profile_screen.biography") || "Biography"
+                          t("edit_personal_profile_screen.biography") ||
+                          "Biography"
                         }
                         placeholder={
                           t("edit_personal_profile_screen.your_biography") ||
@@ -473,13 +507,11 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-
               <HardSkillSection
                 setOpenModal={() => setIsShowAddHardSkillModal(true)}
                 hardSkill={arrayMyHardSkills || []}
                 setArrayMyHardSkills={setArrayMyHardSkills}
               />
-
               {userData?.employeeOf && (
                 <>
                   <Text className="pt-4 text-base font-semibold text-primary-default">
@@ -500,7 +532,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   </View>
                 </>
               )}
-
               <Button
                 title={t("button.update") || "Update"}
                 containerClassName="mb-4  bg-primary-default mt-10 mb-"

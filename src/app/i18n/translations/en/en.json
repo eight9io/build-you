@@ -566,7 +566,9 @@
     "occupation": "Occupation",
     "enter_occupation": "Enter your occupation",
     "biography": "Biography",
-    "your_biography": "Your biography"
+    "your_biography": "Your biography",
+    "city": "City",
+    "enter_your_city": "Where do you base?"
   },
   "not_found": "Not found",
   "invalid_date": "Invalid date"

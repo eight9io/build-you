@@ -21,3 +21,5 @@ iOS Build Script:
 set -o pipefail && xcodebuild -workspace ios/BuildYou.xcworkspace -scheme BuildYou -configuration Release -destination 'generic/platform=iOS' -archivePath build/app.xcarchive clean archive
 
 xcodebuild -exportArchive -exportOptionsPlist ios/ExportOptions.plist -archivePath build/app.xcarchive -exportPath build/app.ipa
+
+cat app.json | grep -o '"version": "[^"]_' | grep -o '[^"]_$'

@@ -1,5 +1,5 @@
 export interface ISelectOption {
-  key: number;
+  key: number | string;
   label: string;
 }
 

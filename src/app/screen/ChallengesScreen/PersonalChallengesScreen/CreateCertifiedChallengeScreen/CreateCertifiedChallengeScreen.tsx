@@ -16,7 +16,6 @@ import { ICreateChallenge } from "../../../../types/challenge";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
 import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
@@ -45,13 +44,6 @@ const CreateCertifiedChallengeScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isShowModal, setIsShowModal] = useState<boolean>(false);
-  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean | null>(
-    null
-  );
-  const [newChallengeId, setNewChallengeId] = useState<string | undefined>(
-    undefined
-  );
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
 
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
@@ -79,6 +71,7 @@ const CreateCertifiedChallengeScreen = () => {
       image: "",
       softSkills: [],
     },
+    reValidateMode: "onChange",
     resolver: yupResolver(
       CreateCertifiedChallengeValidationSchema()
     ) as unknown as Resolver<ICreateCertifiedChallengeForm, any>,
@@ -124,23 +117,6 @@ const CreateCertifiedChallengeScreen = () => {
     }, 500);
   };
 
-  const handleCloseModal = (newChallengeId: string | undefined) => {
-    setIsShowModal(false);
-    if (isRequestSuccess && newChallengeId) {
-      onClose();
-
-      navigation.navigate("HomeScreen", {
-        screen: "Challenges",
-        params: {
-          screen: "PersonalChallengeDetailScreen",
-          params: {
-            challengeId: newChallengeId,
-          },
-        },
-      });
-    }
-  };
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -169,23 +145,6 @@ const CreateCertifiedChallengeScreen = () => {
       className="flex-1 bg-white"
       testID="user_create_challenge_screen"
     >
-      <ConfirmDialog
-        title={
-          isRequestSuccess
-            ? t("dialog.success_title") || "Success"
-            : t("dialog.err_title") || "Error"
-        }
-        description={
-          isRequestSuccess
-            ? t("dialog.create_challenge_success") ||
-              "Your challenge has been created successfully !"
-            : t("error_general_message") ||
-              "Something went wrong. Please try again later."
-        }
-        isVisible={isShowModal}
-        onClosed={() => handleCloseModal(newChallengeId)}
-        closeButtonLabel={t("dialog.got_it") || "Got it"}
-      />
       <KeyboardAwareFlatList
         data={[]}
         keyboardShouldPersistTaps="handled"

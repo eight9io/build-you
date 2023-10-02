@@ -1,6 +1,12 @@
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import React, { useState, useEffect, ReactNode, FC } from "react";
 import { Image } from "expo-image";
 
@@ -29,6 +35,11 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 interface ICoachTabProps {
   coachID: string;
   challengeId: string;
+  challengeState: ICertifiedChallengeState;
+  setChallengeState: React.Dispatch<
+    React.SetStateAction<ICertifiedChallengeState>
+  >;
+  isChallengeCompleted?: boolean;
 }
 
 const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
@@ -249,14 +260,19 @@ const TouchPointProgress = ({
   );
 };
 
-const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
+const CoachTab: FC<ICoachTabProps> = ({
+  coachID,
+  challengeId,
+  challengeState,
+  setChallengeState,
+  isChallengeCompleted,
+}) => {
   const [
     isChangeTouchpointStatusModalVisible,
     setChangeTouchpointStatusModalVisible,
   ] = useState<boolean>(false);
   const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
-  const [challengeState, setChallengeState] =
-    useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
@@ -276,6 +292,12 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
 
   const onConfirmChangeTouchpointStatusModal = async () => {
     handleCloseChangeTouchpointStatusModal();
+    if (currentTouchpoint == "closing" && !isChallengeCompleted) {
+      GlobalToastController.showModal({
+        message: t("toast.cannot_close_touchpoint_error") as string,
+      });
+      return;
+    }
     try {
       const response = await serviceCloseTouchpoint(challengeId);
       if (response) {
@@ -293,12 +315,14 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
 
   const getChallengeStatus = async () => {
     if (!challengeId) return;
+    setRefreshing(true);
     try {
       const response = await serviceGetCertifiedChallengeStatus(challengeId);
       setChallengeState(response.data);
     } catch (error) {
       console.log("error", error);
     }
+    setRefreshing(false);
   };
 
   useEffect(() => {
@@ -317,39 +341,48 @@ const CoachTab: FC<ICoachTabProps> = ({ coachID, challengeId }) => {
   }, [coachID, challengeId]);
 
   return (
-    <View className="w-screen">
-      <ConfirmDialog
-        isVisible={isChangeTouchpointStatusModalVisible}
-        title={`Do you really want to close the ${
-          translateCheckpointToText(currentTouchpoint) || ""
-        } Phase?`}
-        onConfirm={onConfirmChangeTouchpointStatusModal}
-        confirmButtonLabel="Yes"
-        closeButtonLabel="No"
-        onClosed={handleCloseChangeTouchpointStatusModal}
-      />
-
-      <View className="p-4">
-        {coachData?.id ? (
-          <CoachBanner coachData={coachData} />
-        ) : (
-          <EmptyCoachBanner translation={t} />
-        )}
-        <View className="flex flex-col">
-          <Text className="mt-6 text-md font-semibold text-primary-default">
-            Touchpoints of your challenge
-          </Text>
-          <TouchPointProgress
-            currentTouchpoint={currentTouchpoint}
-            currentTouchpointStatus={currentTouchpointStatus}
-            totalChecks={totalChecks}
-            handleOpenChangeTouchpointStatusModal={
-              handleOpenChangeTouchpointStatusModal
-            }
+    <FlatList
+      data={[]}
+      renderItem={({ item }) => <View />}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <View className="w-screen">
+          <ConfirmDialog
+            isVisible={isChangeTouchpointStatusModalVisible}
+            title={`Do you really want to close the ${
+              translateCheckpointToText(currentTouchpoint) || ""
+            } Phase?`}
+            onConfirm={onConfirmChangeTouchpointStatusModal}
+            confirmButtonLabel="Yes"
+            closeButtonLabel="No"
+            onClosed={handleCloseChangeTouchpointStatusModal}
           />
+
+          <View className="p-4">
+            {coachData?.id ? (
+              <CoachBanner coachData={coachData} />
+            ) : (
+              <EmptyCoachBanner translation={t} />
+            )}
+            <View className="flex flex-col">
+              <Text className="mt-6 text-md font-semibold text-primary-default">
+                Touchpoints of your challenge
+              </Text>
+              <TouchPointProgress
+                currentTouchpoint={currentTouchpoint}
+                currentTouchpointStatus={currentTouchpointStatus}
+                totalChecks={totalChecks}
+                handleOpenChangeTouchpointStatusModal={
+                  handleOpenChangeTouchpointStatusModal
+                }
+              />
+            </View>
+          </View>
         </View>
-      </View>
-    </View>
+      }
+      refreshing={refreshing}
+      onRefresh={getChallengeStatus}
+    />
   );
 };
 

@@ -30,13 +30,10 @@ interface ISoftSkillPickerProps {
   setOpenDropdown: any;
   value: string[];
   setValue: any;
-  numberOfSkillError?: boolean;
   selectedCompetencedSkill: IFormValueInput[];
   setSelectedCompetencedSkill: any;
   dropDrownDirection?: "TOP" | "BOTTOM";
 }
-
-const MIN_SOFT_SKILLS = 3;
 
 const convertFetchedSoftSkillToSkillProps = (
   fetchedSoftSkills: IFetchedSkill[]
@@ -53,7 +50,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
   setOpenDropdown,
   value,
   setValue,
-  numberOfSkillError,
   selectedCompetencedSkill,
   setSelectedCompetencedSkill,
   dropDrownDirection = "BOTTOM",
@@ -176,20 +172,6 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
             );
           }}
         />
-        <View>
-          {numberOfSkillError && (
-            <View className="flex flex-row items-center justify-start pt-2">
-              <WarningSvg />
-              <Text
-                className="pl-1 text-sm font-normal leading-5 text-red-500"
-                testID="complete_profile_step_4_error"
-              >
-                {t("form_onboarding.screen_4.error") ||
-                  `Please select at least ${MIN_SOFT_SKILLS}  soft skills.`}
-              </Text>
-            </View>
-          )}
-        </View>
       </View>
     </OutsidePressHandler>
   );

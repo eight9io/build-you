@@ -8,6 +8,7 @@ import httpInstance from "../../../../utils/http";
 import {
   deleteChallenge,
   completeChallenge,
+  getChallengeById,
 } from "../../../../service/challenge";
 
 import { RootStackParamList } from "../../../../navigation/navigation.type";
@@ -234,8 +235,10 @@ const PersonalChallengeDetailScreen = ({
     useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
-  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+
+  // use for refresh screen when add new progress, refetch participant list,  edit challenge
+  const [shouldScreenRefresh, setShouldScreenRefresh] =
+    useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
@@ -266,16 +269,19 @@ const PersonalChallengeDetailScreen = ({
     });
   }, [challengeData, isJoinedLocal]);
 
-  const refresh = () => {
-    setShouldRefresh(true);
-    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
-      setChallengeData(res.data);
-    });
+  const refresh = async () => {
+    try {
+      await getChallengeById(challengeId).then((res) => {
+        setChallengeData(res.data);
+      });
+    } catch (error) {
+      console.error("CoachChallengeDetailScreen - Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
     refresh();
-  }, [isNewProgressAdded]);
+  }, [shouldScreenRefresh]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -341,11 +347,10 @@ const PersonalChallengeDetailScreen = ({
       {challengeData?.id && (
         <>
           <ChallengeDetailScreen
-            shouldRefresh={shouldRefresh}
-            setShouldRefresh={setShouldRefresh}
             challengeData={challengeData}
             setIsJoinedLocal={setIsJoinedLocal}
-            setIsNewProgressAdded={setIsNewProgressAdded}
+            shouldScreenRefresh={shouldScreenRefresh}
+            setShouldScreenRefresh={setShouldScreenRefresh}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

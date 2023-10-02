@@ -9,7 +9,10 @@ import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
 import { useUserProfileStore } from "../../../../store/user-store";
 
-import { IChallenge } from "../../../../types/challenge";
+import {
+  ICertifiedChallengeState,
+  IChallenge,
+} from "../../../../types/challenge";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
 
 import TabView from "../../../../component/common/Tab/TabView";
@@ -23,6 +26,7 @@ import CoachTab from "./CoachTab";
 import CoachSkillsTab from "./CoachSkillsTab";
 import { ChatCoachTab } from "./ChatCoachTab";
 import { getChallengeById } from "../../../../service/challenge";
+import { isObjectEmpty } from "../../../../utils/common";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -62,10 +66,20 @@ const PersonalCoachChallengeDetailScreen = ({
     {} as IChallenge
   );
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
+  const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
+  const [challengeState, setChallengeState] =
+    useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
   const challengeId = route?.params?.challengeId;
 
   const { t } = useTranslation();
+
+  const isChallengeInProgress =
+    !isObjectEmpty(challengeState) &&
+    challengeState.intakeStatus !== "open" &&
+    challengeState.closingStatus !== "closed";
+
+  const isChallengeCompleted = challengeData.status === "closed";
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -90,15 +104,25 @@ const PersonalCoachChallengeDetailScreen = ({
 
   useEffect(() => {
     getChallengeData();
+    const CHALLENGE_TABS_TITLE_TRANSLATION = [
+      t("challenge_detail_screen.progress"),
+      t("challenge_detail_screen.description"),
+      t("challenge_detail_screen.coach"),
+      t("challenge_detail_screen.skills"),
+    ];
+    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
   }, []);
 
-  const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-    t("challenge_detail_screen.coach"),
-    t("challenge_detail_screen.skills"),
-    t("challenge_detail_screen.chat_coach"),
-  ];
+  useEffect(() => {
+    if (isChallengeInProgress) {
+      setChallengeTabTitles((prev) => [
+        ...prev,
+        t("challenge_detail_screen.chat_coach"),
+      ]);
+    } else {
+      setChallengeTabTitles((prev) => prev.slice(0, 4));
+    }
+  }, [isChallengeInProgress]);
 
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
@@ -116,7 +140,7 @@ const PersonalCoachChallengeDetailScreen = ({
 
         <View className="mt-2 flex flex-1">
           <TabView
-            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+            titles={challengeTabTitles}
             activeTabIndex={index}
             setActiveTabIndex={setIndex}
           >
@@ -130,8 +154,14 @@ const PersonalCoachChallengeDetailScreen = ({
             <CoachTab
               coachID={challengeData?.coach}
               challengeId={challengeId}
+              challengeState={challengeState}
+              setChallengeState={setChallengeState}
+              isChallengeCompleted={isChallengeCompleted}
             />
-            <CoachSkillsTab challengeData={challengeData} />
+            <CoachSkillsTab
+              challengeData={challengeData}
+              challengeState={challengeState}
+            />
             {challengeData?.type === "certified" && (
               <ChatCoachTab challengeData={challengeData} />
             )}

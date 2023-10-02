@@ -79,7 +79,8 @@ export const CreateCertifiedChallengeValidationSchema = (): yup.ObjectSchema<
             id: yup.string().required(),
           })
         )
-        .min(3, t("new_challenge_screen.soft_skill_required") as string),
+        .min(1, t("new_challenge_screen.soft_skill_required") as string)
+        .max(3, t("new_challenge_screen.soft_skill_required") as string),
     });
 };
 export const CreateCompanyChallengeValidationSchema = () => {

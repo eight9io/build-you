@@ -98,25 +98,6 @@ const ChoosePackageScreen = () => {
   const [packages, setPackages] = useState<IPackage[]>([] as IPackage[]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchPackages = async () => {
-      const currentLanguage = await getLanguageLocalStorage();
-      setLoading(true);
-      try {
-        const res = await serviceGetAllPackages(currentLanguage);
-        const sortedPackages = res.data.packages.sort(
-          (a, b) => a.price - b.price
-        );
-
-        setPackages(sortedPackages);
-      } catch (error) {
-        console.log("get packages error", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPackages();
-  }, []);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
 
@@ -138,6 +119,25 @@ const ChoosePackageScreen = () => {
     });
   };
 
+  useEffect(() => {
+    const fetchPackages = async () => {
+      const currentLanguage = await getLanguageLocalStorage();
+      setLoading(true);
+      try {
+        const res = await serviceGetAllPackages(currentLanguage);
+        const sortedPackages = res.data.packages.sort(
+          (a, b) => a.price - b.price
+        );
+
+        setPackages(sortedPackages);
+      } catch (error) {
+        console.error("get packages error", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPackages();
+  }, []);
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
       <ScrollView>

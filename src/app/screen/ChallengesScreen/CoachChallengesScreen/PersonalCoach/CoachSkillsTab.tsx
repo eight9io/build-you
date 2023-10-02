@@ -15,6 +15,7 @@ import Button, {
   FillButton,
 } from "../../../../component/common/Buttons/Button";
 import {
+  ICertifiedChallengeState,
   IChallenge,
   IChallengeOwner,
   ISoftSkill,
@@ -24,9 +25,13 @@ import CoachRateChallengeModal from "../../../../component/modal/CoachRateChalle
 
 interface ISkillsTabProps {
   challengeData: IChallenge;
+  challengeState: ICertifiedChallengeState;
 }
 
-const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
+const CoachSkillsTab: FC<ISkillsTabProps> = ({
+  challengeData,
+  challengeState,
+}) => {
   const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
     ISoftSkill[]
   >([]);
@@ -40,8 +45,6 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
 
-  const canCurrentUserRateSkills = currentUser.id === challengeData?.coach;
-
   const challengeOwner = (challengeData?.owner?.[0] as IChallengeOwner) ?? null;
 
   const handleOpenRateSkillsModal = () => {
@@ -50,6 +53,10 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
 
   const skillsToRate: ISoftSkill[] =
     extractSkillsFromChallengeData(challengeData);
+
+  const isChallengeEnded = challengeState.closingStatus === "closed";
+  const canCurrentUserRateSkills =
+    currentUser.id === challengeData?.coach && isChallengeEnded;
 
   useEffect(() => {
     const getData = async () => {
@@ -70,13 +77,13 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
           );
           setRatedCompetencedSkill(ratedSoffSkills);
         } else {
-          console.log(
+          console.error(
             " Error fetching rated skills:",
             ratedSoffSkillsValue.reason
           );
         }
       } catch (error) {
-        console.log(" Error fetching data:", error);
+        console.error(" Error fetching data:", error);
       }
     };
     if (challengeData?.id && shouldRefresh) {
@@ -84,8 +91,6 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
       setShouldRefresh(false);
     }
   }, [challengeData?.id, shouldRefresh]);
-
-  console.log(shouldRefresh);
 
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
@@ -105,6 +110,13 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
           title={t("challenge_detail_screen.rate_skills") as string}
           onPress={handleOpenRateSkillsModal}
         />
+      )}
+      {!canCurrentUserRateSkills && (
+        <View className="flex flex-row items-center justify-between px-4">
+          <Text className="text-md  text-danger-default">
+            {t("challenge_detail_screen.can_not_rate_skills")}
+          </Text>
+        </View>
       )}
       <View className="mt-4 flex flex-col">
         {(ratedCompetencedSkill?.length === 0

@@ -36,7 +36,8 @@ const EmptyChallenges = ({
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
       <Text className={clsx("text-lg")}>
-        {t("empty_challenge") || "You have no challenges at the moment."}
+        {t("challenge_screen.empty_challenge") ||
+          "You have no challenges at the moment."}
       </Text>
       <Text className={clsx("text-lg")}>
         {t("click") || "Click"}
@@ -47,7 +48,8 @@ const EmptyChallenges = ({
           {" "}
           {t("create") || "Create"}{" "}
         </Text>
-        {t("to_create_new_challenge") || "to create new challenge"}
+        {t("challenge_screen.to_create_new_challenge") ||
+          "to create new challenge"}
       </Text>
     </View>
   );

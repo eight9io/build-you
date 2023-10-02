@@ -50,7 +50,8 @@ const EmptyChallenges = ({
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
       <Text className={clsx("text-lg")}>
-        {t("empty_challenge") || "You have no challenges at the moment."}
+        {t("challenge_screen.empty_challenge") ||
+          "You have no challenges at the moment."}
       </Text>
       <Text className={clsx("text-lg")}>
         {t("click") || "Click"}
@@ -61,7 +62,32 @@ const EmptyChallenges = ({
           {" "}
           {t("create") || "Create"}{" "}
         </Text>
-        {t("to_create_new_challenge") || "to create new challenge"}
+        {t("challenge_screen.to_create_new_challenge") ||
+          "to create new challenge"}
+      </Text>
+    </View>
+  );
+};
+
+const CoachEmptyChallenges = ({
+  navigation,
+}: {
+  navigation: PersonalChallengesScreenNavigationProp;
+}) => {
+  const { t } = useTranslation();
+
+  const handleNavigateToCreateChallengeScreen = () => {
+    navigation.navigate("CreateChallengeScreen");
+  };
+  return (
+    <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
+      <Text className={clsx("text-lg")}>
+        {t("challenge_screen.coach_empty_challenge") ||
+          "You have no challenges at the moment."}
+      </Text>
+      <Text className={clsx("text-lg")}>
+        {t("challenge_screen.coach_empty_challenge_description") ||
+          "You have to be assinged for a challenge by the admin"}
       </Text>
     </View>
   );
@@ -249,7 +275,7 @@ const CoachTab = () => {
       {!isLoading && !isFetchingError && (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
           {coachChallengesList.length === 0 ? (
-            <EmptyChallenges navigation={navigation} />
+            <CoachEmptyChallenges navigation={navigation} />
           ) : (
             <FlatList
               className="px-4 pt-4"

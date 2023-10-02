@@ -33,6 +33,7 @@
   "challenge_detail_screen.not_participants": "No participants at the moment ",
   "challenge_detail_screen.chat_coach": "chat coach",
   "challenge_detail_screen.rate_skills": "Rate skills",
+  "challenge_detail_screen.can_not_rate_skills": "Coach can not rate skills when challenge is not completed",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
@@ -272,7 +273,7 @@
     "min_people_required": "Minimum number of people is 2",
     "is_public_required": "Please select challenge privacy",
     "challenge_status_description": "Everyone can join your public challenge while only user from your company can join your private challenge.",
-    "soft_skill_required": "Please select at least 3 soft skills."
+    "soft_skill_required": "Please select at least 1 and no more than 3 soft skills."
   },
   "new_progress_modal": {
     "title": "New progress",
@@ -413,6 +414,7 @@
     "copied_to_clipboard_error": "Error when copying to clipboard",
     "open_touchpoint_success": "Update touchpoint status successfully!",
     "open_touchpoint_error": "Update touchpoint status failed!. Please try again later.",
+    "cannot_close_touchpoint_error": "You cannot close this touchpoint, when the challenge is not completed.",
     "rate_skills_success": "Rate skills successfully!",
     "rate_skills_error": "Rate skills failed!. Please try again later."
   },
@@ -550,10 +552,8 @@
   },
   "private": "Private",
   "public": "Public",
-  "empty_challenge": "You have no challenge at the moment",
   "create": "Create",
   "click": "Click",
-  "to_create_new_challenge": "to create new challenge",
   "challenge_description_tab": {
     "the_benefits": "The benefits",
     "the_reason": "The reason",
@@ -616,5 +616,11 @@
     "minimum_checkpoint_error": "At least 1 checkpoint is required",
     "total": "Total",
     "pay": "Pay"
+  },
+  "challenge_screen": {
+    "empty_challenge": "You have no challenge at the moment",
+    "coach_empty_challenge": "You have no coaching challenge at the moment",
+    "coach_empty_challenge_description": "You have to be assinged for a challenge by the admin",
+    "to_create_new_challenge": "to create new challenge"
   }
 }

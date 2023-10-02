@@ -33,6 +33,7 @@
   "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
   "challenge_detail_screen.chat_coach": "Allenatore di chat",
   "challenge_detail_screen.rate_skills": "Rate skills",
+  "challenge_detail_screen.can_not_rate_skills": "Il coach non può valutare le competenze quando la sfida non è completata",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Sfide",
@@ -273,7 +274,7 @@
     "min_people_required": "Il numero minimo di persone è 2",
     "is_public_required": "Seleziona la privacy della sfida, per favore",
     "challenge_status_description": "Tutti possono partecipare alla tua sfida pubblica, mentre solo gli utenti della tua azienda possono partecipare alla tua sfida privata.",
-    "soft_skill_required": "Seleziona almeno 3 soft skills, per favore."
+    "soft_skill_required": "Ti prego di selezionare almeno 1 e non più di 3 competenze trasversali."
   },
   "new_progress_modal": {
     "title": "Nuovo progresso",
@@ -414,6 +415,7 @@
     "copied_to_clipboard_error": "Errore durante la copia negli appunti",
     "open_touchpoint_success": "Aggiornamento riuscito!",
     "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi.",
+    "cannot_close_touchpoint_error": "Non puoi chiudere questo touchpoint quando la sfida non è completata.",
     "rate_skills_success": "Valutazione competenze riuscita!",
     "rate_skills_error": "Valutazione competenze fallita! Riprova più tardi."
   },
@@ -548,10 +550,8 @@
   },
   "private": "Privata",
   "public": "Pubblica",
-  "empty_challenge": "Non hai sfide al momento",
   "create": "Crea",
   "click": "Clicca",
-  "to_create_new_challenge": "per creare una nuova sfida",
   "challenge_description_tab": {
     "the_benefits": "I benefici",
     "the_reason": "Il motivo",
@@ -614,5 +614,11 @@
     "minimum_checkpoint_error": "È richiesto almeno 1 punto di controllo",
     "total": "Totale",
     "pay": "Paga"
+  },
+  "challenge_screen": {
+    "empty_challenge": "Al momento non hai alcuna sfida",
+    "coach_empty_challenge": "Al momento non hai alcuna sfida di coaching",
+    "coach_empty_challenge_description": "Devi essere assegnato a una sfida dall'amministratore",
+    "to_create_new_challenge": "per creare una nuova sfida"
   }
 }

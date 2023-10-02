@@ -3,14 +3,19 @@ import { AxiosError } from "axios";
 import { FC, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 
-import { IChallenge } from "../../../../types/challenge";
-import i18n from "../../../../i18n/i18n";
+import {
+  ICertifiedChallengeState,
+  IChallenge,
+} from "../../../../types/challenge";
 import DescriptionTab from "./DescriptionTab";
 import ProgressTab from "./ProgressTab";
 
 import CheckCircle from "./assets/check_circle.svg";
 
-import { getChallengeStatusColor } from "../../../../utils/common";
+import {
+  getChallengeStatusColor,
+  isObjectEmpty,
+} from "../../../../utils/common";
 import { useUserProfileStore } from "../../../../store/user-store";
 import {
   getChallengeParticipants,
@@ -30,28 +35,30 @@ import PersonalCoachTab from "./PersonalCoachTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
-  shouldRefresh: boolean;
-  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  shouldScreenRefresh?: boolean;
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
+  setShouldScreenRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
-  shouldRefresh,
-  setShouldRefresh,
   challengeData,
+  shouldScreenRefresh,
   setIsJoinedLocal,
-  setIsNewProgressAdded,
+  setShouldScreenRefresh,
 }) => {
   const { t } = useTranslation();
   const [index, setIndex] = useState<number>(0);
   const [isJoined, setIsJoined] = useState<boolean>(true);
   const [participantList, setParticipantList] = useState([]);
   const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
+  const [challengeState, setChallengeState] =
+    useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
 
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+
   const fetchParticipants = async () => {
     const response = await getChallengeParticipants(challengeId);
     setParticipantList(response.data);
@@ -60,6 +67,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
+
+  const challengeCoach = challengeData?.coach;
 
   const isCurrentUserParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
@@ -76,34 +85,13 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
-  useEffect(() => {
-    const CHALLENGE_TABS_TITLE_TRANSLATION =
-      participantList && challengeOwner?.companyAccount
-        ? [
-            i18n.t("challenge_detail_screen.progress"),
-            i18n.t("challenge_detail_screen.description"),
-            i18n.t("challenge_detail_screen.participants"),
-          ]
-        : [
-            i18n.t("challenge_detail_screen.progress"),
-            i18n.t("challenge_detail_screen.description"),
-          ];
+  const isCertifiedChallenge = challengeData?.type === "certified";
 
-    if (challengeData?.type === "certified") {
-      CHALLENGE_TABS_TITLE_TRANSLATION.push(
-        i18n.t("challenge_detail_screen.coach"),
-        i18n.t("challenge_detail_screen.skills"),
-        i18n.t("challenge_detail_screen.chat_coach")
-      );
-    }
-    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
-  }, []);
-
-  useEffect(() => {
-    if (!shouldRefresh) return;
-    fetchParticipants();
-    setShouldRefresh(false);
-  }, [shouldRefresh]);
+  const isChallengeInProgress =
+    !isObjectEmpty(challengeState) &&
+    challengeCoach &&
+    challengeState.intakeStatus !== "open" &&
+    challengeState.closingStatus !== "closed";
 
   const statusColor = getChallengeStatusColor(
     challengeStatus,
@@ -167,6 +155,46 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     }
   };
 
+  useEffect(() => {
+    const CHALLENGE_TABS_TITLE_TRANSLATION =
+      participantList && challengeOwner?.companyAccount
+        ? [
+            t("challenge_detail_screen.progress"),
+            t("challenge_detail_screen.description"),
+            t("challenge_detail_screen.participants"),
+          ]
+        : [
+            t("challenge_detail_screen.progress"),
+            t("challenge_detail_screen.description"),
+          ];
+
+    if (challengeData?.type === "certified") {
+      CHALLENGE_TABS_TITLE_TRANSLATION.push(
+        t("challenge_detail_screen.coach"),
+        t("challenge_detail_screen.skills")
+      );
+    }
+    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
+  }, []);
+
+  useEffect(() => {
+    if (isChallengeInProgress) {
+      setChallengeTabTitles((prev) => [
+        ...prev,
+        t("challenge_detail_screen.chat_coach"),
+      ]);
+    }
+  }, [isChallengeInProgress]);
+
+  useEffect(() => {
+    if (!shouldScreenRefresh) return;
+    fetchParticipants();
+  }, [shouldScreenRefresh]);
+
+  useEffect(() => {
+    fetchParticipants();
+  }, []);
+
   return (
     <SafeAreaView>
       <View className="flex h-full flex-col bg-white pt-2">
@@ -177,7 +205,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               <Text className="text-2xl font-semibold">{goal}</Text>
             </View>
           </View>
-          {isCurrentUserChallengeOnwer && !isChallengeCompleted && (
+          {!isCurrentUserChallengeOnwer && !isChallengeCompleted && (
             <View className="ml-2 h-9">
               <Button
                 isDisabled={false}
@@ -191,8 +219,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                 } `}
                 title={
                   isJoined
-                    ? i18n.t("challenge_detail_screen.leave")
-                    : i18n.t("challenge_detail_screen.join")
+                    ? t("challenge_detail_screen.leave")
+                    : t("challenge_detail_screen.join")
                 }
                 onPress={handleJoinLeaveChallenge}
               />
@@ -203,7 +231,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               <Button
                 containerClassName="border border-gray-dark flex items-center justify-center px-5"
                 textClassName={`text-center text-md font-semibold text-gray-dark `}
-                title={i18n.t("challenge_detail_screen.completed")}
+                title={t("challenge_detail_screen.completed")}
               />
             </View>
           )}
@@ -219,21 +247,24 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               isJoined={isJoined}
               isChallengeCompleted={isChallengeCompleted}
               challengeData={challengeData}
-              setShouldRefresh={setIsNewProgressAdded}
+              setShouldRefresh={setShouldScreenRefresh}
             />
             <DescriptionTab challengeData={challengeData} />
             {participantList && challengeOwner?.companyAccount && (
-              <ParticipantsTab participant={participantList} />
+              <ParticipantsTab
+                participant={participantList}
+                fetchParticipants={fetchParticipants}
+              />
             )}
             <PersonalCoachTab
-              coachID={challengeData?.coach}
+              coachID={challengeCoach}
               challengeId={challengeId}
+              challengeState={challengeState}
+              setChallengeState={setChallengeState}
+              setShouldParentRefresh={setShouldScreenRefresh}
             />
-            <PersonalSkillsTab
-              challengeData={challengeData}
-              setShouldRefresh={setShouldRefresh}
-            />
-            {challengeData?.type === "certified" && (
+            <PersonalSkillsTab challengeData={challengeData} />
+            {isCertifiedChallenge && isChallengeInProgress && (
               <ChatCoachTab challengeData={challengeData} />
             )}
           </TabView>

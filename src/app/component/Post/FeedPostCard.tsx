@@ -17,7 +17,7 @@ import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 
 import BackSvg from "../asset/back.svg";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { Video } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
 import LikeButtonUnregister from "./LikeButtonUnregister";
 import CommentButtonUnregister from "./CommentButtonUnregister";
 import { useChallengeUpdateStore } from "../../store/challenge-update-store";
@@ -102,8 +102,11 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
         {video && (
           <Video
             className={clsx("aspect-square w-full rounded-t-xl")}
-            source={{ uri: video }}
+            source={{
+              uri: video,
+            }}
             useNativeControls
+            resizeMode={ResizeMode.COVER}
           />
         )}
         <View

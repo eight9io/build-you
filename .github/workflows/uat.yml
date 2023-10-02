@@ -61,11 +61,11 @@ jobs:
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
-      - name: Generate App APK
+      - name: Generate App AAB
         run: |
           cd android && ./gradlew assembleRelease --no-daemon
 
-      - name: Sign APK
+      - name: Sign AAB
         id: sign_app
         uses: r0adkll/sign-android-release@v1
         with:

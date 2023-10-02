@@ -28,10 +28,11 @@ export const EditProfileValidators = () => {
       .array()
       .min(3, t("form_onboarding.screen_3.error") as string),
     isShowCompany: yup.boolean(),
+    city: yup.string(),
   });
 };
 
-export const OnboardingScreen4Validators = () => { };
+export const OnboardingScreen4Validators = () => {};
 
 export const EditCompanyProfileValidators = () => {
   const { t } = useTranslation();

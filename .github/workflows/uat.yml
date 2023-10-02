@@ -1,4 +1,4 @@
-name: Staging Build You App Building
+name: UAT Build You App Building
 
 on: workflow_dispatch
 
@@ -35,8 +35,7 @@ jobs:
 
       - name: Prepare ENV
         run: |
-          echo $ENV_STAGING | base64 --decode >> ".env"
-
+          echo $ENV_UAT | base64 --decode >> ".env"
         shell: bash
 
       - name: Set up Node.js
@@ -80,6 +79,8 @@ jobs:
         with:
           name: app-release.aab
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          retention-days: 1
+          if-no-files-found: error
 
   android-distribute:
     name: Android Distribute
@@ -106,14 +107,14 @@ jobs:
           npx firebase-tools \
             appdistribution:distribute android/app/build/outputs/bundle/release/app-release.aab \
             --app $ANDROID_FIREBASE_APP_ID_STAGING \
-            --groups "testers" \
+            --groups "testersUAT" \
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )
         shell: bash
         env:
           CREDENTIAL_FILE_CONTENT_STAGING: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
           ANDROID_FIREBASE_APP_ID_STAGING: ${{ secrets.ANDROID_FIREBASE_APP_ID_STAGING }}
 
-  # #  iOS Build
+  #  iOS Build
   ios-build:
     name: iOS Build
     runs-on: macos-latest
@@ -207,17 +208,9 @@ jobs:
           npx firebase-tools \
             appdistribution:distribute app.ipa \
             --app $IOS_FIREBASE_APP_ID_STAGING \
-            --groups "testers" \
+            --groups "testersUAT" \
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )
         shell: bash
         env:
           CREDENTIAL_FILE_CONTENT_STAGING: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
           IOS_FIREBASE_APP_ID_STAGING: ${{ secrets.IOS_FIREBASE_APP_ID_STAGING }}
-
-  # - name: "Upload app to TestFlight"
-  #   uses: apple-actions/upload-testflight-build@v1
-  #   with:
-  #     app-path: "output.ipa"
-  #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-  #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-  #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

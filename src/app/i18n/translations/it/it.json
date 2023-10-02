@@ -558,7 +558,9 @@
     "occupation": "Professione",
     "enter_occupation": "Inserisci la tua professione",
     "biography": "Biografia",
-    "your_biography": "Tua biografia"
+    "your_biography": "Tua biografia",
+    "city": "Città",
+    "enter_your_city": "Inserisci la tua città"
   },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida"

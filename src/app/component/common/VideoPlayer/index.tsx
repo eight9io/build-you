@@ -2,7 +2,12 @@ import React, { FC, useEffect } from "react";
 import { View, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 
-import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+import {
+  Video,
+  ResizeMode,
+  AVPlaybackStatus,
+  VideoFullscreenUpdate,
+} from "expo-av";
 import PlayButton from "../../asset/play-button.svg";
 
 interface IVideoPlayerProps {
@@ -14,6 +19,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
     {} as AVPlaybackStatus
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
+  const [resizeMode, setResizeMode] = React.useState(ResizeMode.COVER);
 
   useEffect(() => {
     if (status && status.isLoaded && status.isPlaying) {
@@ -38,8 +44,17 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
             borderRadius: 12,
           }}
           useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
+          resizeMode={resizeMode}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
+          }}
         />
       )}
       {src && (
@@ -55,8 +70,17 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
             borderRadius: 12,
           }}
           useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
+          resizeMode={resizeMode}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
+          }}
         />
       )}
       {!isVideoPlayed && (

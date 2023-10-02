@@ -105,7 +105,7 @@ jobs:
           echo $CREDENTIAL_FILE_CONTENT_STAGING > "$RUNNER_TEMP/credential.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
           npx firebase-tools \
-            appdistribution:distribute android/app/build/outputs/bundle/release/app-release.aab \
+            appdistribution:distribute app-release.aab \
             --app $ANDROID_FIREBASE_APP_ID_STAGING \
             --groups "testersUAT" \
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )

@@ -100,7 +100,7 @@ export interface IChallenge {
   reasons: string;
   achievementTime: Date;
   image?: string | null;
-  status?: "open" | "closed";
+  status?: "open" | "closed" | "done";
   public?: boolean;
   createdAt?: Date;
   updatedAt?: Date;

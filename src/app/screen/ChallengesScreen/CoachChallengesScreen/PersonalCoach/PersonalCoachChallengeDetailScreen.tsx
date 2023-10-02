@@ -66,7 +66,6 @@ const PersonalCoachChallengeDetailScreen = ({
     {} as IChallenge
   );
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
-  const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
@@ -104,25 +103,15 @@ const PersonalCoachChallengeDetailScreen = ({
 
   useEffect(() => {
     getChallengeData();
-    const CHALLENGE_TABS_TITLE_TRANSLATION = [
-      t("challenge_detail_screen.progress"),
-      t("challenge_detail_screen.description"),
-      t("challenge_detail_screen.coach"),
-      t("challenge_detail_screen.skills"),
-    ];
-    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
   }, []);
 
-  useEffect(() => {
-    if (isChallengeInProgress) {
-      setChallengeTabTitles((prev) => [
-        ...prev,
-        t("challenge_detail_screen.chat_coach"),
-      ]);
-    } else {
-      setChallengeTabTitles((prev) => prev.slice(0, 4));
-    }
-  }, [isChallengeInProgress]);
+  const CHALLENGE_TABS_TITLE_TRANSLATION = [
+    t("challenge_detail_screen.progress"),
+    t("challenge_detail_screen.description"),
+    t("challenge_detail_screen.coach"),
+    t("challenge_detail_screen.skills"),
+    t("challenge_detail_screen.chat_coach"),
+  ];
 
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
@@ -140,7 +129,7 @@ const PersonalCoachChallengeDetailScreen = ({
 
         <View className="mt-2 flex flex-1">
           <TabView
-            titles={challengeTabTitles}
+            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
             activeTabIndex={index}
             setActiveTabIndex={setIndex}
           >
@@ -163,7 +152,10 @@ const PersonalCoachChallengeDetailScreen = ({
               challengeState={challengeState}
             />
             {challengeData?.type === "certified" && (
-              <ChatCoachTab challengeData={challengeData} />
+              <ChatCoachTab
+                challengeData={challengeData}
+                isChallengeInProgress={isChallengeInProgress}
+              />
             )}
           </TabView>
         </View>

@@ -15,8 +15,12 @@ import { IUserData } from "../../../../types/user";
 
 interface IChatCoachTabProps {
   challengeData: IChallenge;
+  isChallengeInProgress: boolean;
 }
-export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
+export const ChatCoachTab: FC<IChatCoachTabProps> = ({
+  challengeData,
+  isChallengeInProgress,
+}) => {
   const [messages, setMessages] = useState([]);
   const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
@@ -75,6 +79,7 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
       messagesContainerStyle={{
         paddingBottom: Platform.OS === "ios" ? 6 : 12,
       }}
+      disableComposer={isChallengeInProgress}
       isCustomViewBottom
       messages={messages}
       onSend={(messages) => handleSubmit(messages)}
@@ -179,4 +184,4 @@ export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
       infiniteScroll
     />
   );
-}
+};

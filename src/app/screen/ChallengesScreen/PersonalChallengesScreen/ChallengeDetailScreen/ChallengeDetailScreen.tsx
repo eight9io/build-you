@@ -171,20 +171,12 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     if (challengeData?.type === "certified") {
       CHALLENGE_TABS_TITLE_TRANSLATION.push(
         t("challenge_detail_screen.coach"),
-        t("challenge_detail_screen.skills")
+        t("challenge_detail_screen.skills"),
+        t("challenge_detail_screen.chat_coach")
       );
     }
     setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
   }, []);
-
-  useEffect(() => {
-    if (isChallengeInProgress) {
-      setChallengeTabTitles((prev) => [
-        ...prev,
-        t("challenge_detail_screen.chat_coach"),
-      ]);
-    }
-  }, [isChallengeInProgress]);
 
   useEffect(() => {
     if (!shouldScreenRefresh) return;
@@ -265,7 +257,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             />
             <PersonalSkillsTab challengeData={challengeData} />
             {isCertifiedChallenge && isChallengeInProgress && (
-              <ChatCoachTab challengeData={challengeData} />
+              <ChatCoachTab
+                challengeData={challengeData}
+                isChallengeInProgress={isChallengeInProgress}
+              />
             )}
           </TabView>
         </View>

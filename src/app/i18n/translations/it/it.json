@@ -563,5 +563,13 @@
     "enter_your_city": "Inserisci la tua città"
   },
   "not_found": "Non trovato",
-  "invalid_date": "Data non valida"
+  "invalid_date": "Data non valida",
+  "notification": {
+    "new_challenge": "ha creato una nuova sfida",
+    "new_progress": "ha creato un nuovo progresso in {{challengeGoal}}",
+    "new_comment": "ha commentato il tuo aggiornamento",
+    "new_mention": "ti ha menzionato in un commento",
+    "new_follower": "ha iniziato a seguirti",
+    "new_employee": "ti ha aggiunto come dipendente"
+  }
 }

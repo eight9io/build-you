@@ -87,9 +87,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
   const isCertifiedChallenge = challengeData?.type === "certified";
 
+  console.log("challengeState: ", challengeState.intakeStatus);
   const isChallengeInProgress =
     !isObjectEmpty(challengeState) &&
     challengeCoach &&
+    challengeState.intakeStatus !== "init" &&
     challengeState.intakeStatus !== "open" &&
     challengeState.closingStatus !== "closed";
 

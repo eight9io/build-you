@@ -36,8 +36,11 @@ jobs:
       - name: Prepare ENV
         run: |
           echo $ENV_STAGING | base64 --decode >> ".env"
-
         shell: bash
+        env:
+          ANDROID_SIGNING_KEY_STAGING: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
+          ANDROID_ALIAS_STAGING: ${{ secrets.ANDROID_ALIAS_STAGING }}
+          ANDROID_KEY_PASSWORD_STAGING: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

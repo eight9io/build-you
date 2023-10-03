@@ -138,6 +138,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "yarn"
 
+      - name: Prepare ENV
+        run: |
+          echo $ENV_UAT | base64 --decode >> ".env"
+        shell: bash
+
       - name: Install project dependencies
         run: yarn
 

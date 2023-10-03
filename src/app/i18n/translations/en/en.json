@@ -571,5 +571,13 @@
     "enter_your_city": "Where do you base?"
   },
   "not_found": "Not found",
-  "invalid_date": "Invalid date"
+  "invalid_date": "Invalid date",
+  "notification": {
+    "new_challenge": "has added a new challenge",
+    "new_progress": "has added a new progress in {{challengeGoal}}",
+    "new_comment": "has commented on your update",
+    "new_mention": "has mentioned you in a comment",
+    "new_follower": "has started following you",
+    "new_employee": "has added you as an employee"
+  }
 }

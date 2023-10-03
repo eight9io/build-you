@@ -79,7 +79,6 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
       messagesContainerStyle={{
         paddingBottom: Platform.OS === "ios" ? 6 : 12,
       }}
-      disableComposer={isChallengeInProgress}
       isCustomViewBottom
       messages={messages}
       onSend={(messages) => handleSubmit(messages)}
@@ -97,17 +96,21 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
         );
       }}
       renderInputToolbar={(props) => (
-        <InputToolbar
-          {...props}
-          containerStyle={{
-            backgroundColor: "white",
-            borderColor: "#E8E8E8",
-            paddingTop: 8,
-            borderRadius: 10,
-            borderWidth: 1,
-            marginHorizontal: 20,
-          }}
-        />
+        <>
+          {isChallengeInProgress && (
+            <InputToolbar
+              {...props}
+              containerStyle={{
+                backgroundColor: "white",
+                borderColor: "#E8E8E8",
+                paddingTop: 8,
+                borderRadius: 10,
+                borderWidth: 1,
+                marginHorizontal: 20,
+              }}
+            />
+          )}
+        </>
       )}
       maxComposerHeight={100}
       placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}

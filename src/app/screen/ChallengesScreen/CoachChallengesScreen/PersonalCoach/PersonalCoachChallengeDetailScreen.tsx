@@ -75,6 +75,7 @@ const PersonalCoachChallengeDetailScreen = ({
 
   const isChallengeInProgress =
     !isObjectEmpty(challengeState) &&
+    challengeState.intakeStatus !== "init" &&
     challengeState.intakeStatus !== "open" &&
     challengeState.closingStatus !== "closed";
 

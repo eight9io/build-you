@@ -8,7 +8,12 @@ import {
 } from "react-native";
 import clsx from "clsx";
 
-import { Video, ResizeMode, AVPlaybackStatus, VideoFullscreenUpdate } from "expo-av";
+import {
+  Video,
+  ResizeMode,
+  AVPlaybackStatus,
+  VideoFullscreenUpdate,
+} from "expo-av";
 
 import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
@@ -143,7 +148,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
-                {occupation.name}
+                {occupation}
               </Text>
             </View>
           )}

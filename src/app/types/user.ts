@@ -1,4 +1,4 @@
-import { ICompanyData } from "./company";
+import { ICompanyData, ICompanyDataUser } from "./company";
 
 export interface IUserData {
   id: string;
@@ -12,7 +12,7 @@ export interface IUserData {
   occupationDetail?: string;
   bio?: string;
   video?: string;
-  employeeOf?: ICompanyData;
+  employeeOf?: ICompanyData | ICompanyDataUser;
   status?: string;
   avatar?: string;
   hardSkill?: IHardSkillProps[];

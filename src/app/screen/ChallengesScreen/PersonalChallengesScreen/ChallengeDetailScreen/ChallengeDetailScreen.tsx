@@ -219,7 +219,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               />
             </View>
           )}
-          {isChallengeCompleted && (
+          {!isCurrentUserChallengeOnwer && isChallengeCompleted && (
             <View className="ml-2 h-9">
               <Button
                 containerClassName="border border-gray-dark flex items-center justify-center px-5"

@@ -69,9 +69,9 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
           const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
             (item) => {
               return {
-                id: item.skill.id,
-                skill: item.skill.skill,
-                rating: item.rating,
+                id: item.skillId,
+                skill: item.skillName,
+                rating: item.skillRating,
               };
             }
           );
@@ -92,6 +92,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
     }
   }, [challengeData?.id, shouldRefresh]);
 
+  console.log(ratedCompetencedSkill)
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
       <CoachRateChallengeModal

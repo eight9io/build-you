@@ -152,6 +152,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
         id: item.id,
         rating: item.rating,
       }));
+
       await serviceRateSoftSkillCertifiedChallenge(
         challengeId,
         challengeOwnerId,
@@ -163,11 +164,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
         message: t("toast.rate_skills_success") || "Rate skills successfully!",
       });
     } catch (error) {
-      GlobalToastController.showModal({
-        message:
-          t("form_onboarding.screen_4.error_rate") ||
-          "There was an error saving your rating",
-      });
+      setIsVisible(false);
     }
   };
 
@@ -190,14 +187,13 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
         const [ratedSoffSkillsValue] = await Promise.allSettled([
           serviceGetRatedSoftSkillCertifiedChallenge(challengeId),
         ]);
-
         if (ratedSoffSkillsValue.status === "fulfilled") {
           const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
             (item) => {
               return {
-                id: item.skill.id,
-                skill: item.skill.skill,
-                rating: item.rating,
+                id: item.skillId,
+                skill: item.skillName,
+                rating: item.skillRating,
               };
             }
           );

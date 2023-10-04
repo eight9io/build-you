@@ -87,7 +87,6 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
   const isCertifiedChallenge = challengeData?.type === "certified";
 
-  console.log("challengeState: ", challengeState.intakeStatus);
   const isChallengeInProgress =
     !isObjectEmpty(challengeState) &&
     challengeCoach &&
@@ -258,7 +257,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               setShouldParentRefresh={setShouldScreenRefresh}
             />
             <PersonalSkillsTab challengeData={challengeData} />
-            {isCertifiedChallenge && isChallengeInProgress && (
+            {isCertifiedChallenge && (
               <ChatCoachTab
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}

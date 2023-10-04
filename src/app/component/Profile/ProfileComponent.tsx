@@ -83,12 +83,12 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
           {userData?.name} {userData?.surname}
         </Text>
       </View>
-      {userData?.isShowCompany && userData?.employeeOf?.name && (
+      {userData?.isShowCompany && userData?.employeeOf?.user?.name && (
         <View className={clsx(" mb-3 flex-row gap-2 px-4")}>
           <IconCompany />
 
           <Text className={clsx(" text-[14px]  font-medium ")}>
-            {userData?.employeeOf?.name}
+            {userData?.employeeOf?.user?.name}
           </Text>
         </View>
       )}

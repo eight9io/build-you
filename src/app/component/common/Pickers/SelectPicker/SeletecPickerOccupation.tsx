@@ -16,6 +16,7 @@ import TextInput from "../../Inputs/TextInput";
 import Warning from "../../../../component/asset/warning.svg";
 
 import { EditProfileOccupationValidators } from "../../../../Validators/EditProfile.validate";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface ISelectPickerProps {
   occupationList: IOccupation[];
@@ -158,10 +159,15 @@ const SeletecPickerOccupation: FC<ISelectPickerProps> = ({
           onBackButtonPress={handleCloseCustomInput}
           backdropColor={"#85868C"}
           backdropOpacity={0.3}
-          style={{ margin: 0, justifyContent: "flex-end", zIndex: 1000 }}
+          style={{
+            margin: 0,
+            justifyContent: "flex-end",
+            zIndex: 100,
+            position: "relative",
+          }}
         >
           <TouchableOpacity
-            style={{ height: "65%", backgroundColor: "transparent" }}
+            style={{ height: "40%", backgroundColor: "transparent" }}
             activeOpacity={0}
             onPressOut={handleCloseCustomInput}
           ></TouchableOpacity>
@@ -209,16 +215,16 @@ const SeletecPickerOccupation: FC<ISelectPickerProps> = ({
                     </View>
                   )}
                 />
-                <View className="absolute bottom-[-120px] h-12 w-full bg-white px-4">
-                  <Button
-                    title={t("save") || "Save"}
-                    onPress={() => onSubmitCustomOccupation(getValues())}
-                    containerClassName="bg-primary-default flex-1"
-                    textClassName="text-white"
-                  />
-                </View>
               </View>
             </BottomSheet2>
+          </View>
+          <View className="absolute bottom-10 h-12 w-full bg-white px-4">
+            <Button
+              title={t("save") || "Save"}
+              onPress={() => onSubmitCustomOccupation(getValues())}
+              containerClassName="bg-primary-default flex-1"
+              textClassName="text-white"
+            />
           </View>
         </Modal>
       )}

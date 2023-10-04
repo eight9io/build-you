@@ -219,6 +219,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           httpInstance.put(`/user/update/${userData.id}`, {
             birth: profile?.birth,
             occupation: profile?.occupation,
+            occupationDetail: profile?.occupationDetail,
             bio: profile?.biography,
             softSkill: softSkills,
             hardSkill: profile.skills,
@@ -226,6 +227,17 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           }),
         ]);
       } else {
+        console.log({
+          name: profile?.name,
+          surname: profile?.surname,
+          birth: profile?.birth,
+          occupation: profile?.occupation,
+          occupationDetail: profile?.occupationDetail,
+          bio: profile?.biography,
+          softSkill: softSkills,
+          hardSkill: profile.skills,
+          company: "",
+        });
         await Promise.all([
           uploadNewVideo(profile?.video),
           httpInstance.put(`/user/first/update/${userData.id}`, {
@@ -233,6 +245,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
             surname: profile?.surname,
             birth: profile?.birth,
             occupation: profile?.occupation,
+            occupationDetail: profile?.occupationDetail,
             bio: profile?.biography,
             softSkill: softSkills,
             hardSkill: profile.skills,

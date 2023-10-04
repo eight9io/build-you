@@ -557,10 +557,14 @@
     "birthday_error": "Seleziona il tuo compleanno.",
     "occupation": "Professione",
     "enter_occupation": "Inserisci la tua professione",
+    "occupation_error": "Seleziona la professione più coerente.",
     "biography": "Biografia",
     "your_biography": "Tua biografia",
     "city": "Città",
-    "enter_your_city": "Inserisci la tua città"
+    "enter_your_city": "Inserisci la tua città",
+    "company": "Azienda",
+    "enter_your_company": "Inserisci la tua azienda",
+    "enter_your_company_error": "Per favore inserisci il nome della tua azienda."
   },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",

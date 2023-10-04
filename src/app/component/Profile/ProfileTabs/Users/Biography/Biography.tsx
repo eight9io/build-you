@@ -106,6 +106,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;
   const occupation = userProfile?.occupation;
+  const city = userProfile?.city;
   const videoSrc = userProfile?.video;
   const { t } = useTranslation();
 
@@ -150,6 +151,19 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               <Text className={clsx("text-md text-gray-dark")}>
                 {occupation}
               </Text>
+            </View>
+          )}
+          {city && (
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
+              <Text
+                className={clsx(
+                  "w-[35%] text-md font-semibold  text-gray-dark"
+                )}
+              >
+                {t("form_onboarding.screen_1.city")}:&nbsp;
+              </Text>
+
+              <Text className={clsx("text-md text-gray-dark")}>{city}</Text>
             </View>
           )}
           {userProfile?.webSite && (

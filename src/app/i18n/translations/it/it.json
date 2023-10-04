@@ -170,7 +170,8 @@
       "web_site": "Sito web",
       "phone": "Telefono",
       "email_contact": "Contatto email",
-      "pIva": "Partita IVA"
+      "pIva": "Partita IVA",
+      "city": "Città"
     },
     "screen_2": {
       "title": "Racconta agli altri qualcosa di te",

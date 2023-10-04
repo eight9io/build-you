@@ -169,7 +169,8 @@
       "web_site": "Web site",
       "phone": "Phone",
       "email_contact": "Email contact",
-      "pIva": "VAT number"
+      "pIva": "VAT number",
+      "city": "City"
     },
     "screen_2": {
       "title": "Tell the others something about you",

@@ -76,9 +76,6 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
   }, []);
   return (
     <GiftedChat
-      messagesContainerStyle={{
-        paddingBottom: Platform.OS === "ios" ? 6 : 12,
-      }}
       isCustomViewBottom
       messages={messages}
       onSend={(messages) => handleSubmit(messages)}
@@ -107,6 +104,7 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
                 borderRadius: 10,
                 borderWidth: 1,
                 marginHorizontal: 20,
+                marginBottom: Platform.OS === "ios" ? 0 : 16,
               }}
             />
           )}

@@ -18,11 +18,15 @@ import {
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
 
-import { NotificationStore } from "../store/notification-store";
+import {
+  NotificationStore,
+  useNotificationStore,
+} from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
 import { serviceGetOtherUserData } from "../service/user";
 import i18n from "../i18n/i18n";
+import { useUserProfileStore } from "../store/user-store";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
@@ -77,6 +81,18 @@ export const addNotificationListener = (
             // Clear the notification from the notification tray and decrement the badge count
             await clearNotification(event.detail.notification.id);
           useNotificationStore.getState().refreshNumOfNewNotifications(); // reset the new notification flag
+        }
+        break;
+      case EventType.DELIVERED:
+        // If the app is in foreground and the user is in chat tab => cancel the delivered notification
+        const shouldDisplayNewMessageNotification =
+          useNotificationStore.getState().shouldDisplayNewMessageNotification;
+        if (
+          event.detail.notification.data.notificationType ===
+            NOTIFICATION_TYPES.NEW_MESSAGE &&
+          !shouldDisplayNewMessageNotification
+        ) {
+          await notifee.cancelNotification(event.detail.notification.id);
         }
         break;
     }
@@ -215,6 +231,50 @@ export const handleTapOnIncomingNotification = async (
           navigation.dispatch(pushAction);
         }
         break;
+      case NOTIFICATION_TYPES.NEW_MESSAGE: {
+        // TODO: Handle navigation with company account
+        const currentRouteParams = navigation.getCurrentRoute().params as {
+          challengeId: string;
+        };
+        const shouldDisplayNewMessageNotification =
+          useNotificationStore.getState().shouldDisplayNewMessageNotification;
+        // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+        // and the challengeId is the same as the incoming notification
+        // => navigate to chat tab if the user is not in chat tab
+        // => do nothing if the user is in chat tab
+        if (
+          currentRouteParams &&
+          currentRouteParams.challengeId === payload.challengeId
+        ) {
+          if (shouldDisplayNewMessageNotification) {
+            // user is not in chat tab
+            // Trigger the navigation to chat tab
+            navigation.setParams({
+              hasNewMessage: true,
+            });
+          }
+          return;
+        }
+        if (payload.challengeId && payload.coachId) {
+          try {
+            const { id: currentUserId } =
+              useUserProfileStore.getState().userProfile;
+            const pushAction = StackActions.push(
+              payload.coachId === currentUserId
+                ? "PersonalCoachChallengeDetailScreen"
+                : "PersonalChallengeDetailScreen",
+              {
+                challengeId: payload.challengeId,
+                hasNewMessage: true,
+              }
+            );
+            navigation.dispatch(pushAction);
+          } catch (error) {
+            console.log("error: ", error);
+          }
+        }
+        break;
+      }
     }
   }
 };
@@ -250,6 +310,20 @@ export const handleTapOnNotification = async (
               challengeId: notification.challengeId,
             });
           break;
+        case "PersonalCoachChallengeDetailScreen":
+          if (notification.challengeId)
+            navigation.navigate("PersonalCoachChallengeDetailScreen", {
+              challengeId: notification.challengeId,
+              hasNewMessage: true,
+            });
+          break;
+        case "PersonalChallengeDetailScreen":
+          if (notification.challengeId)
+            navigation.navigate("PersonalChallengeDetailScreen", {
+              challengeId: notification.challengeId,
+              hasNewMessage: true,
+            });
+          break;
       }
       if (!notification.isRead) {
         await setNotificationIsRead([notification.id.toString()]);
@@ -258,7 +332,6 @@ export const handleTapOnNotification = async (
       console.log("error: ", error);
     }
   };
-
   switch (notification.type) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       handleNavigation("OtherUserProfileChallengeDetailsScreen", notification);
@@ -277,6 +350,16 @@ export const handleTapOnNotification = async (
       break;
     case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
       handleNavigation("OtherUserProfileScreen", notification);
+      break;
+    case NOTIFICATION_TYPES.NEW_MESSAGE:
+      // TODO: Handle navigation with company account
+      const { id: currentUserId } = useUserProfileStore.getState().userProfile;
+      handleNavigation(
+        currentUserId === notification.challengeCoachId
+          ? "PersonalCoachChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        notification
+      );
       break;
   }
 };
@@ -300,6 +383,8 @@ export const getNotificationContent = (
       return i18n.t("notification.new_follower");
     case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
       return i18n.t("notification.new_employee");
+    case NOTIFICATION_TYPES.NEW_MESSAGE:
+      return i18n.t("notification.new_message");
   }
 };
 
@@ -341,6 +426,7 @@ export const mapNotificationResponses = (
       isRead: response.isRead,
       challengeId: response.challenge?.id,
       challengeGoal: response.challenge?.goal,
+      challengeCoachId: response.challenge?.coach?.id,
       progressId: response.progress?.id,
     };
   });
@@ -377,6 +463,32 @@ export const handleAppOpenOnNotificationPressed = async () => {
     if (initialNotification)
       handleTapOnIncomingNotification(initialNotification);
   }
+};
+
+export const displayNotificationOnForeground = async (message) => {
+  const channelId = await notifee.createChannel({
+    id: "default",
+    name: "Default Channel",
+  });
+
+  // If the app is in foreground and the user is in chat tab => do not display the notification
+  const shouldDisplayNewMessageNotification =
+    useNotificationStore.getState().shouldDisplayNewMessageNotification;
+  if (
+    message.data.notificationType === NOTIFICATION_TYPES.NEW_MESSAGE &&
+    !shouldDisplayNewMessageNotification
+  )
+    return;
+
+  await notifee.displayNotification({
+    title: message.notification.title,
+    body: message.notification.body,
+    data: message.data,
+    android: {
+      channelId, // Required for Android to display the notification
+    },
+  });
+  await notifee.incrementBadgeCount();
 };
 
 export const setBadgeCount = (count: number) => {

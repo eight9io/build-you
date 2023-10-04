@@ -386,4 +386,4 @@ const CoachTab: FC<ICoachTabProps> = ({
   );
 };
 
-export default CoachTab;
+export default React.memo(CoachTab);

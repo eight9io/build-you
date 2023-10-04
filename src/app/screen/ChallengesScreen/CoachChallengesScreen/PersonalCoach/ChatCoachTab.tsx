@@ -12,18 +12,24 @@ import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
 import { IChallenge } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { IUserData } from "../../../../types/user";
+import { useFocusEffect } from "@react-navigation/native";
+import { useNotificationStore } from "../../../../store/notification-store";
 
 interface IChatCoachTabProps {
   challengeData: IChallenge;
   isChallengeInProgress: boolean;
 }
-export const ChatCoachTab: FC<IChatCoachTabProps> = ({
+const ChatCoachTab: FC<IChatCoachTabProps> = ({
   challengeData,
   isChallengeInProgress,
 }) => {
   const [messages, setMessages] = useState([]);
   const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
+  const {
+    getShouldDisplayNewMessageNotification,
+    setShouldDisplayNewMessageNotification,
+  } = useNotificationStore();
   const currentUser = getUserProfile();
   const sortByTime = (data) => {
     const sortedData = [...data];
@@ -74,8 +80,25 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
       getMessage();
     });
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Screen was focused => Do nothing
+      return () => {
+        // Screen was unfocused => Enable new message notification if user go to another screen from chat tab
+        const shouldDisplayNewMessageNotification =
+          getShouldDisplayNewMessageNotification();
+        if (!shouldDisplayNewMessageNotification)
+          setShouldDisplayNewMessageNotification(true);
+      };
+    }, [])
+  );
+
   return (
     <GiftedChat
+      messagesContainerStyle={{
+        paddingBottom: Platform.OS === "ios" ? 6 : 12,
+      }}
       isCustomViewBottom
       messages={messages}
       onSend={(messages) => handleSubmit(messages)}
@@ -104,7 +127,6 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
                 borderRadius: 10,
                 borderWidth: 1,
                 marginHorizontal: 20,
-                marginBottom: Platform.OS === "ios" ? 0 : 16,
               }}
             />
           )}
@@ -186,3 +208,5 @@ export const ChatCoachTab: FC<IChatCoachTabProps> = ({
     />
   );
 };
+
+export default React.memo(ChatCoachTab);

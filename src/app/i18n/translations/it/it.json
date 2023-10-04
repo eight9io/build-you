@@ -606,6 +606,8 @@
     "new_comment": "ha commentato il tuo aggiornamento",
     "new_mention": "ti ha menzionato in un commento",
     "new_follower": "ha iniziato a seguirti",
-    "new_employee": "ti ha aggiunto come dipendente"
-  }
+    "new_employee": "ti ha aggiunto come dipendente",
+    "new_message": "ha inviato un messaggio"
+  },
+  "top_nav.create_challenge": "Crea sfida"
 }

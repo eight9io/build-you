@@ -138,4 +138,4 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   );
 };
 
-export default CoachSkillsTab;
+export default React.memo(CoachSkillsTab);

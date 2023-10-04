@@ -645,6 +645,8 @@
     "new_comment": "has commented on your update",
     "new_mention": "has mentioned you in a comment",
     "new_follower": "has started following you",
-    "new_employee": "has added you as an employee"
-  }
+    "new_employee": "has added you as an employee",
+    "new_message": "has sent a message"
+  },
+  "top_nav.create_challenge": "Create challenge"
 }

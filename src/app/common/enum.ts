@@ -5,6 +5,7 @@ export enum NOTIFICATION_TYPES {
   CHALLENGE_CREATED = "ChallengeCreated",
   PROGRESS_CREATED = "ProgressCreated",
   ADDEDASEMPLOYEE = "AddedAsEmployee",
+  NEW_MESSAGE = "Message",
 }
 
 export enum NOTIFICATION_TOKEN_STATUS {
@@ -27,4 +28,13 @@ export enum LOGIN_TYPE {
   LINKEDIN = "linkedin",
   APPLE = "apple",
   EMAIL_PASSWORD = "email_password",
+}
+
+export enum CHALLENGE_TABS_KEY {
+  PROGRESS = "progress",
+  DESCRIPTION = "description",
+  COACH = "coach",
+  SKILLS = "skills",
+  CHAT = "chat",
+  PARTICIPANTS = "participants",
 }

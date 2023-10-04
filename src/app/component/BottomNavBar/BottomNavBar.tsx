@@ -32,7 +32,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
 import { getNotifications } from "../../service/notification";
-import CreateChallengeScreenMain from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
+import CreateChallengeScreen from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
 
 const Tab = createBottomTabNavigator();
 
@@ -175,7 +175,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Create Challenge"
-        component={CreateChallengeScreenMain}
+        component={CreateChallengeScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
@@ -197,6 +197,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
               </Text>
             </View>
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen

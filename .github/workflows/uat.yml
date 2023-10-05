@@ -1,14 +1,24 @@
 name: UAT Build You App Building
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - "main"
 
 env:
   NODE_VERSION: 20.5.0
   JAVA_VERSION: 11.0.20
+  ENV: ${{ secrets.ENV_UAT}}
+  ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
+  ANDROID_ALIAS: ${{ secrets.ANDROID_ALIAS_STAGING }}
+  ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
+  CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
+  ANDROID_FIREBASE_APP_ID: ${{ secrets.ANDROID_FIREBASE_APP_ID_STAGING }}
+  IOS_FIREBASE_APP_ID: ${{ secrets.IOS_FIREBASE_APP_ID_STAGING }}
 
 jobs:
   setup:
-    name: Install NodeJS Dependency
+    name: Build App
     runs-on: macos-latest
     steps:
       - name: Check out Git repository
@@ -23,29 +33,13 @@ jobs:
       - name: Install project dependencies
         run: yarn
 
-  #  Android Build
-  android-build:
-    name: Android Build
-    runs-on: macos-latest
-    needs: setup
-
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
+      #  Android Build
       - name: Prepare ENV
         run: |
-          echo $ENV_UAT | base64 --decode >> ".env"
+          echo $ENV | base64 --decode > ".env"
+          echo $ANDROID_SIGNING_KEY | base64 --decode >> "android/app/build-you.jks"
+          echo .env
         shell: bash
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - name: Install project dependencies
-        run: yarn
 
       - name: Set up our JDK environment
         uses: actions/setup-java@v3
@@ -61,83 +55,21 @@ jobs:
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
-      - name: Generate App AAB
+      - name: Generate App APK
         run: |
-          cd android && ./gradlew assembleRelease --no-daemon
-
-      - name: Sign AAB
-        id: sign_app
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: android/app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
-          alias: ${{ secrets.ANDROID_ALIAS_STAGING }}
-          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD_STAGING }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: app-release.aab
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
-          retention-days: 1
-          if-no-files-found: error
-
-  android-distribute:
-    name: Android Distribute
-    needs: android-build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - uses: actions/download-artifact@v2
-        with:
-          name: app-release.aab
-
-      - name: Distrbute Firebase
-        run: |
-          echo $CREDENTIAL_FILE_CONTENT_STAGING > "$RUNNER_TEMP/credential.json"
+          echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
+          cd android && ./gradlew bundleRelease --no-daemon
           npx firebase-tools \
-            appdistribution:distribute app-release.aab \
-            --app $ANDROID_FIREBASE_APP_ID_STAGING \
+            appdistribution:distribute app/build/outputs/apk/release/app-release.apk \
+            --app $ANDROID_FIREBASE_APP_ID \
             --groups "testersUAT" \
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )
-        shell: bash
-        env:
-          CREDENTIAL_FILE_CONTENT_STAGING: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
-          ANDROID_FIREBASE_APP_ID_STAGING: ${{ secrets.ANDROID_FIREBASE_APP_ID_STAGING }}
+          cd ..
 
-  #  iOS Build
-  ios-build:
-    name: iOS Build
-    runs-on: macos-latest
-    needs: setup
-    # defaults:
-    #   run:
-    #     working-directory: ios
-
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
+      #  iOS Build
       - name: Build Cache
         uses: mikehardy/buildcache-action@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - name: Install project dependencies
-        run: yarn
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
@@ -175,42 +107,13 @@ jobs:
           export-options: ios/ExportOptions.plist
           output-path: app.ipa
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: app.ipa
-          path: app.ipa
-          retention-days: 1
-          if-no-files-found: error
-
-  ios-distribute:
-    name: iOS Distribute
-    needs: ios-build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "yarn"
-
-      - uses: actions/download-artifact@v2
-        with:
-          name: app.ipa
-
       - name: Distrbute Firebase # app id can be found in GoogleService-Info.plist
         run: |
-          echo $CREDENTIAL_FILE_CONTENT_STAGING > "$RUNNER_TEMP/credential.json"
+          echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
           npx firebase-tools \
             appdistribution:distribute app.ipa \
-            --app $IOS_FIREBASE_APP_ID_STAGING \
+            --app $IOS_FIREBASE_APP_ID \
             --groups "testersUAT" \
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )
         shell: bash
-        env:
-          CREDENTIAL_FILE_CONTENT_STAGING: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
-          IOS_FIREBASE_APP_ID_STAGING: ${{ secrets.IOS_FIREBASE_APP_ID_STAGING }}

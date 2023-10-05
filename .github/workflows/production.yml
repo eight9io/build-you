@@ -39,6 +39,10 @@ jobs:
           echo $IOS_GOOGLE_SERVICE_PROD | base64 --decode >> "GoogleService-Info.plist"
           echo $ANDROID_GOOGLE_SERVICE_PROD | base64 --decode >> "google-services.json"
         shell: bash
+        env:
+          ANDROID_SIGNING_KEY_STAGING: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
+          ANDROID_ALIAS_STAGING: ${{ secrets.ANDROID_ALIAS_STAGING }}
+          ANDROID_KEY_PASSWORD_STAGING: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

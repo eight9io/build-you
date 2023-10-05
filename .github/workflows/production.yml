@@ -61,21 +61,21 @@ jobs:
         run: npx expo prebuild
         shell: bash
 
-      # - name: Make Gradlew Executable
-      #   run: cd android && chmod +x ./gradlew
+      - name: Make Gradlew Executable
+        run: cd android && chmod +x ./gradlew
 
-      # - name: Generate App AAB
-      #   run: |
-      #     cd android && ./gradlew bundleRelease --no-daemon
-      #     echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
-      #     export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
-      #     cd android && ./gradlew bundleRelease --no-daemon
-      #     npx firebase-tools \
-      #       appdistribution:distribute app/build/outputs/bundle/release/app-release.aab \
-      #       --app $ANDROID_FIREBASE_APP_ID \
-      #       --groups "testers" \
-      #       $( (( $INPUT_DEBUG )) && printf %s '--debug' )
-      #     cd ..
+      - name: Generate App AAB
+        run: |
+          cd android && ./gradlew bundleRelease --no-daemon
+          echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
+          cd android && ./gradlew bundleRelease --no-daemon
+          npx firebase-tools \
+            appdistribution:distribute app/build/outputs/bundle/release/app-release.aab \
+            --app $ANDROID_FIREBASE_APP_ID \
+            --groups "testers" \
+            $( (( $INPUT_DEBUG )) && printf %s '--debug' )
+          cd ..
 
       #  iOS Build
       - name: Build Cache

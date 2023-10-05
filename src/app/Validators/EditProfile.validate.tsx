@@ -40,7 +40,10 @@ export const EditProfileOccupationValidators = () => {
   const { t } = useTranslation();
 
   return yup.object().shape({
-    occupation: yup.string().trim(),
+    occupation: yup
+      .string()
+      .trim()
+      .required(t("occupation_error") as string),
   });
 };
 

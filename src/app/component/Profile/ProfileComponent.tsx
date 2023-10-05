@@ -10,7 +10,8 @@ import { OutlineButton } from "../common/Buttons/Button";
 import ProfileAvatar from "../common/Avatar/ProfileAvatar/ProfileAvatar";
 
 import { IUserData } from "../../types/user";
-import { useUserProfileStore } from "../../store/user-store";
+import { ICompanyDataUser } from "../../types/company";
+
 import ProfileTabs from "./ProfileTabs/Users/ProfileTabs";
 import IconCompany from "./ProfileTabs/common/asset/company.svg";
 
@@ -71,6 +72,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   navigation,
   setIsLoading,
 }) => {
+  const userCompany = userData?.employeeOf as ICompanyDataUser;
   return (
     <View className={clsx("relative h-full w-full flex-1 flex-col bg-white")}>
       <TopSectionProfile
@@ -83,12 +85,12 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
           {userData?.name} {userData?.surname}
         </Text>
       </View>
-      {userData?.isShowCompany && userData?.employeeOf?.name && (
+      {userData?.isShowCompany && userCompany?.name && (
         <View className={clsx(" mb-3 flex-row gap-2 px-4")}>
           <IconCompany />
 
           <Text className={clsx(" text-[14px]  font-medium ")}>
-            {userData?.employeeOf?.name}
+            {userCompany?.name}
           </Text>
         </View>
       )}

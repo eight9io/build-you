@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 import clsx from "clsx";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Spinner from "react-native-loading-spinner-overlay";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { IHardSkill, IHardSkillProps } from "../../../../types/user";
@@ -26,7 +27,7 @@ import { EditProfileValidators } from "../../../../Validators/EditProfile.valida
 import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import { IOccupation } from "../../../../types/auth";
+import { IOccupation } from "../../../../types/user";
 import CustomSwitch from "../../../../component/common/Switch";
 import VideoPicker from "../../../../component/common/VideoPicker";
 import { IUploadMediaWithId } from "../../../../types/media";
@@ -36,7 +37,10 @@ import { VideoWithPlayButton } from "../../../../component/Profile/ProfileTabs/U
 import CalendarIcon from "./asset/calendar-icon.svg";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { serviceGetMyProfile } from "../../../../service/auth";
-import Spinner from "react-native-loading-spinner-overlay";
+import SeletecPickerOccupation from "../../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
+import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPicker/SelectPickerCompany";
+import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
+import { serviceGetAllCompany } from "../../../../service/company";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -97,24 +101,23 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
 };
 
 const EditPersonalProfileScreen = ({ navigation }: any) => {
-  const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
-
-  useEffect(() => {
-    const getOccupationList = async () => {
-      const { data } = await serviceGetListOccupation();
-      setOccupationList(data);
-    };
-    getOccupationList();
-  }, []);
   const [showDateTimePicker, setShowDateTimePicker] = useState<boolean>(false);
   const [showOccupationPicker, setShowOccupationPicker] =
     useState<boolean>(false);
+  const [showCompanyPicker, setShowCompanyPicker] = useState<boolean>(false);
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
-    number | undefined
-  >();
+    number | null
+  >(null);
+  const [selectedCompanyIndex, setSelectedCompanyIndex] = useState<
+    number | null
+  >(null);
+  const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
+  const [companyList, setCompanyList] = useState<ICompanyDataUser[]>([]);
+
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
   const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
+  const [otherOccupation, setOtherOccupation] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [videoLoading, setVideoLoading] = useState<boolean>(false);
@@ -124,6 +127,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
+
   const {
     control,
     handleSubmit,
@@ -136,6 +140,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     surname: string;
     birth: any;
     occupation: string;
+    occupationDetail: string;
+    employeeOf: ICompanyDataUser;
     bio: string;
     hardSkill: IHardSkillProps[];
     isShowCompany: boolean;
@@ -145,11 +151,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       name: userData?.name || "",
       surname: userData?.surname || "",
       birth: userData?.birth || undefined,
-      occupation: userData?.occupation?.name || "",
+      occupation: userData?.occupation,
+      occupationDetail: userData?.occupationDetail || "",
       bio: userData?.bio || "",
       hardSkill: userData?.hardSkill || [],
       isShowCompany: userData?.isShowCompany || false,
       city: userData?.city || "",
+      employeeOf: userData?.employeeOf || undefined,
     },
     resolver: yupResolver(EditProfileValidators()),
   });
@@ -162,21 +170,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   const occupation = getValues("occupation");
   const birth = getValues("birth");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const handleDatePicked = (date?: Date) => {
-    if (date) {
-      setValue("birth", date);
-      setSelectedDate(date);
-    }
-    setShowDateTimePicker(false);
-  };
-
-  const handleOccupationPicked = (index: number) => {
-    if (index >= 0) {
-      setSelectedOccupationIndex(index);
-      setValue("occupation", occupationList[index].name);
-    }
-    setShowOccupationPicker(false);
-  };
 
   const { setUserProfile } = useUserProfileStore();
 
@@ -185,12 +178,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       setVideoLoadingError(true);
       return;
     }
-    const IdOccupation = occupationList.find(
-      (item) => item.name === data.occupation
-    )?.id;
     setIsLoading(true);
     try {
-      console.log(data?.city)
       await Promise.all([
         uploadNewVideo(pickedVideo[0]?.uri),
         serviceUpdateMyProfile(userData?.id, {
@@ -198,7 +187,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           surname: data.surname,
           bio: data.bio,
           birth: data.birth,
-          occupation: IdOccupation,
+          occupation: otherOccupation,
+          occupationDetail: otherOccupation,
+          employeeOf: data?.employeeOf?.id,
           hardSkill: arrayMyHardSkills,
           isShowCompany: data.isShowCompany,
           city: data?.city,
@@ -219,6 +210,37 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     }
   };
 
+  const handleDatePicked = (date?: Date) => {
+    if (date) {
+      setValue("birth", date);
+      setSelectedDate(date);
+    }
+    setShowDateTimePicker(false);
+  };
+
+  const handleOccupationPicked = (value: number | string) => {
+    if (typeof value !== "number") {
+      setValue("occupation", value.toUpperCase());
+      setOtherOccupation(value.toUpperCase());
+      return;
+    }
+    if (value >= 0) {
+      setSelectedOccupationIndex(value);
+      setValue("occupation", occupationList[value].name);
+      setValue("occupationDetail", occupationList[value].name);
+      setOtherOccupation(occupationList[value].name);
+    }
+    setShowOccupationPicker(false);
+  };
+
+  const handleCompanyPicked = (value: number) => {
+    if (value >= 0) {
+      setSelectedCompanyIndex(value);
+      setValue("employeeOf", companyList[value]);
+    }
+    setShowCompanyPicker(false);
+  };
+
   useEffect(() => {
     if (!videoLoading) {
       setVideoLoadingError(false);
@@ -237,6 +259,36 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       setArrayMyHardSkills(hardSkill);
     }
   }, [userData?.hardSkill]);
+
+  useEffect(() => {
+    const getOccupationList = async () => {
+      const { data } = await serviceGetListOccupation();
+      // find value have name = "ALTRO" in data and put it to the end of array
+      const index = data.findIndex((item) => item.name === "ALTRO");
+      const temp = data[index];
+      data.splice(index, 1);
+      data.push(temp);
+      setOccupationList(data);
+    };
+    getOccupationList();
+  }, []);
+
+  useEffect(() => {
+    const getCompanyList = async () => {
+      try {
+        const res = await serviceGetAllCompany();
+        const companyUserList = res.data.map((item: ICompanyData) => {
+          return {
+            ...item.user,
+          };
+        });
+        setCompanyList(companyUserList);
+      } catch (error) {
+        console.error("Error get company list", error);
+      }
+    };
+    getCompanyList();
+  }, []);
 
   return (
     <SafeAreaView className="h-full bg-white">
@@ -268,14 +320,25 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
             minimumDate={dayjs().subtract(100, "years").startOf("day").toDate()}
           />
 
-          <SelectPicker
+          <SeletecPickerOccupation
+            occupationList={occupationList}
             title={t("edit_personal_profile_screen.occupation") || "Occupation"}
             show={showOccupationPicker}
-            data={occupationList}
             selectedIndex={selectedOccupationIndex}
             onSelect={handleOccupationPicked}
             onCancel={() => {
               setShowOccupationPicker(false);
+            }}
+          />
+
+          <SeletecPickerCompany
+            companyList={companyList}
+            title={t("edit_personal_profile_screen.company") || "Company"}
+            show={showCompanyPicker}
+            selectedIndex={selectedCompanyIndex}
+            onSelect={handleCompanyPicked}
+            onCancel={() => {
+              setShowCompanyPicker(false);
             }}
           />
 
@@ -417,6 +480,30 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                           </Text>
                         </View>
                       )}
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  name="employeeOf"
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.company") || "Company"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.company") ||
+                          "Enter your company"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        onPress={() => setShowCompanyPicker(true)}
+                        value={value?.name}
+                      />
                     </View>
                   )}
                 />

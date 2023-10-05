@@ -170,7 +170,8 @@
       "web_site": "Sito web",
       "phone": "Telefono",
       "email_contact": "Contatto email",
-      "pIva": "Partita IVA"
+      "pIva": "Partita IVA",
+      "city": "Città"
     },
     "screen_2": {
       "title": "Racconta agli altri qualcosa di te",
@@ -557,11 +558,23 @@
     "birthday_error": "Seleziona il tuo compleanno.",
     "occupation": "Professione",
     "enter_occupation": "Inserisci la tua professione",
+    "occupation_error": "Seleziona la professione più coerente.",
     "biography": "Biografia",
     "your_biography": "Tua biografia",
     "city": "Città",
-    "enter_your_city": "Inserisci la tua città"
+    "enter_your_city": "Inserisci la tua città",
+    "company": "Azienda",
+    "enter_your_company": "Inserisci la tua azienda",
+    "enter_your_company_error": "Per favore inserisci il nome della tua azienda."
   },
   "not_found": "Non trovato",
-  "invalid_date": "Data non valida"
+  "invalid_date": "Data non valida",
+  "notification": {
+    "new_challenge": "ha creato una nuova sfida",
+    "new_progress": "ha creato un nuovo progresso in {{challengeGoal}}",
+    "new_comment": "ha commentato il tuo aggiornamento",
+    "new_mention": "ti ha menzionato in un commento",
+    "new_follower": "ha iniziato a seguirti",
+    "new_employee": "ti ha aggiunto come dipendente"
+  }
 }

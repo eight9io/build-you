@@ -240,7 +240,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
-                {userData?.occupation.name}
+                {userData?.occupation}
               </Text>
             </View>
           )}

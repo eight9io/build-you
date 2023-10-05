@@ -7,6 +7,7 @@ interface IUserDataUpload {
   surname: string;
   birth: string;
   occupation?: any;
+  occupationDetail?: string;
   biography?: string;
   video?: string;
   skills?: IHardSkillProps[];
@@ -32,6 +33,7 @@ export const useCompleteProfileStore = create<CompleteProfileStore>(
       surname: "",
       birth: "",
       occupation: "",
+      occupationDetail: "",
       biography: "",
       video: "",
       skills: [],

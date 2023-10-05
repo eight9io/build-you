@@ -169,7 +169,8 @@
       "web_site": "Web site",
       "phone": "Phone",
       "email_contact": "Email contact",
-      "pIva": "VAT number"
+      "pIva": "VAT number",
+      "city": "City"
     },
     "screen_2": {
       "title": "Tell the others something about you",
@@ -565,11 +566,23 @@
     "birthday_error": "Please select your birth.",
     "occupation": "Occupation",
     "enter_occupation": "Enter your occupation",
+    "occupation_error": "Please select your occupation.",
     "biography": "Biography",
     "your_biography": "Your biography",
     "city": "City",
-    "enter_your_city": "Where do you base?"
+    "enter_your_city": "Where do you base?",
+    "company": "Company",
+    "enter_your_company": "Enter your company",
+    "enter_your_company_error": "Please enter your company"
   },
   "not_found": "Not found",
-  "invalid_date": "Invalid date"
+  "invalid_date": "Invalid date",
+  "notification": {
+    "new_challenge": "has added a new challenge",
+    "new_progress": "has added a new progress in {{challengeGoal}}",
+    "new_comment": "has commented on your update",
+    "new_mention": "has mentioned you in a comment",
+    "new_follower": "has started following you",
+    "new_employee": "has added you as an employee"
+  }
 }

@@ -23,12 +23,35 @@ export const EditProfileValidators = () => {
     occupation: yup
       .string()
       .required(t("form_onboarding.screen_1.occupation_error") as string),
+
     bio: yup.string(),
     hardSkill: yup
       .array()
       .min(3, t("form_onboarding.screen_3.error") as string),
+
+    occupationDetail: yup.string(),
     isShowCompany: yup.boolean(),
     city: yup.string(),
+    employeeOf: yup.mixed(),
+  });
+};
+
+export const EditProfileOccupationValidators = () => {
+  const { t } = useTranslation();
+
+  return yup.object().shape({
+    occupation: yup
+      .string()
+      .trim()
+      .required(t("occupation_error") as string),
+  });
+};
+
+export const EditProfileCompanyValidators = () => {
+  const { t } = useTranslation();
+
+  return yup.object().shape({
+    company: yup.string().trim(),
   });
 };
 

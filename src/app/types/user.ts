@@ -1,3 +1,5 @@
+import { ICompanyData, ICompanyDataUser } from "./company";
+
 export interface IUserData {
   id: string;
   email: string;
@@ -5,21 +7,12 @@ export interface IUserData {
   surname: string;
   birth?: string;
   role?: string;
-  occupation?: {
-    id: string;
-    name: string;
-  };
+  occupation?: string;
+  // if occupation is 'ALTRO' then get occupation from occupationDetail
+  occupationDetail?: string;
   bio?: string;
   video?: string;
-  employeeOf?: {
-    id: string;
-    piva: string;
-    email: string;
-    ragioneSociale: string;
-    creditiTotali: number;
-    creditiDisponibili: number;
-    name: string;
-  };
+  employeeOf?: ICompanyData | ICompanyDataUser;
   status?: string;
   avatar?: string;
   hardSkill?: IHardSkillProps[];
@@ -60,4 +53,9 @@ export interface ISearchUserData {
   id: string;
   name: string;
   surname: string;
+}
+
+export interface IOccupation {
+  id: string;
+  name: string;
 }

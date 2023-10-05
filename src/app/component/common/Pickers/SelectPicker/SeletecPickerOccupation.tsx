@@ -74,7 +74,7 @@ const SeletecPickerOccupation: FC<ISelectPickerProps> = ({
   };
 
   const onSubmitCustomOccupation = (data: any) => {
-    if (!data.occupation) {
+    if (!data.occupation || data?.occupation.trim() === "") {
       setCustomOccupationError(true);
       return;
     }

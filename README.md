@@ -1,3 +1,7 @@
+[![Production Build You App Building](https://github.com/eight9io/build-you/actions/workflows/production.yml/badge.svg)](https://github.com/eight9io/build-you/actions/workflows/production.yml)
+[![Staging Build You App Building](https://github.com/eight9io/build-you/actions/workflows/staging.yml/badge.svg)](https://github.com/eight9io/build-you/actions/workflows/staging.yml)
+[![Staging Build You App Building](https://github.com/eight9io/build-you/actions/workflows/staging.yml/badge.svg)](https://github.com/eight9io/build-you/actions/workflows/staging.yml)
+
 Convert file to base64
 openssl base64 < PATH
 

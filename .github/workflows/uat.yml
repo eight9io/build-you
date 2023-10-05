@@ -1,20 +1,28 @@
 name: UAT Build You App Building
 
-on:
-  push:
-    branches:
-      - "main"
+on: workflow_dispatch
 
 env:
   NODE_VERSION: 20.5.0
   JAVA_VERSION: 11.0.20
+  RUBY_VERSION: 3.2.2
   ENV: ${{ secrets.ENV_UAT}}
-  ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
+  # USED IN BUILD GRADLE
   ANDROID_ALIAS: ${{ secrets.ANDROID_ALIAS_STAGING }}
+  ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_STAGING }}
   ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_STAGING }}
+  # ------
   CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT_STAGING }}
   ANDROID_FIREBASE_APP_ID: ${{ secrets.ANDROID_FIREBASE_APP_ID_STAGING }}
   IOS_FIREBASE_APP_ID: ${{ secrets.IOS_FIREBASE_APP_ID_STAGING }}
+
+  # iOS
+  EXPORT_METHOD: "ad-hoc"
+  EXPORT_OPTIONS: "ios/ExportOptions.plist"
+  P12_BASE64: ${{ secrets.STAGING_BUILD_CERTIFICATE_BASE64 }}
+  MOBILE_PROVISION_BASE64: ${{ secrets.STAGING_BUILD_PROVISION_PROFILE_BASE64 }}
+  CERTIFICATE_PASSWORD: ${{ secrets.STAGING_P12_PASSWORD }}
+  # ------
 
 jobs:
   setup:
@@ -59,7 +67,7 @@ jobs:
         run: |
           echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
-          cd android && ./gradlew bundleRelease --no-daemon
+          cd android && ./gradlew assembleRelease --no-daemon
           npx firebase-tools \
             appdistribution:distribute app/build/outputs/apk/release/app-release.apk \
             --app $ANDROID_FIREBASE_APP_ID \
@@ -74,7 +82,7 @@ jobs:
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.2
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
       - name: Restore Pods cache
@@ -96,15 +104,15 @@ jobs:
         uses: yukiarrr/ios-build-action@v1.11.0
         with:
           project-path: ios/BuildYou.xcodeproj
-          p12-base64: ${{ secrets.STAGING_BUILD_CERTIFICATE_BASE64 }}
-          mobileprovision-base64: ${{ secrets.STAGING_BUILD_PROVISION_PROFILE_BASE64 }}
+          p12-base64: ${{ env.P12_BASE64 }}
+          mobileprovision-base64: ${{ env.MOBILE_PROVISION_BASE64 }}
           code-signing-identity: "iPhone Distribution"
           team-id: JWQ9T5PFH2
-          certificate-password: ${{ secrets.STAGING_P12_PASSWORD }}
+          certificate-password: ${{ env.CERTIFICATE_PASSWORD }}
           workspace-path: ios/BuildYou.xcworkspace
           scheme: BuildYou
-          export-method: ad-hoc
-          export-options: ios/ExportOptions.plist
+          export-method: ${{ env.EXPORT_METHOD }}
+          export-options: ${{ env.EXPORT_OPTIONS }}
           output-path: app.ipa
 
       - name: Distrbute Firebase # app id can be found in GoogleService-Info.plist

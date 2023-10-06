@@ -11,6 +11,7 @@
 // };
 // error: url.origin is not implemented 
 
+// TODO use https://developer.mozilla.org/en-US/docs/Web/API/URL
 const extractPrefix = (url: string) => {
   const match = url.match(/^(https?:\/\/[^/]+)/);
   return match ? match[1] : "";

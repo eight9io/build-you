@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
+<<<<<<< HEAD
 import { FC, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 
@@ -7,21 +8,36 @@ import {
   ICertifiedChallengeState,
   IChallenge,
 } from "../../../../types/challenge";
+=======
+import { FC, useEffect, useState } from "react";
+import { View, Text, SafeAreaView } from "react-native";
+
+import { IChallenge } from "../../../../types/challenge";
+import i18n from "../../../../i18n/i18n";
+import TabView from "../../../../component/common/Tab/TabView";
+>>>>>>> main
 import DescriptionTab from "./DescriptionTab";
 import ProgressTab from "./ProgressTab";
 
 import CheckCircle from "./assets/check_circle.svg";
 
+<<<<<<< HEAD
 import {
   getChallengeStatusColor,
   isObjectEmpty,
 } from "../../../../utils/common";
 import { useUserProfileStore } from "../../../../store/user-store";
+=======
+import { getChallengeStatusColor } from "../../../../utils/common";
+import { useUserProfileStore } from "../../../../store/user-store";
+import Button from "../../../../component/common/Buttons/Button";
+>>>>>>> main
 import {
   getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
+<<<<<<< HEAD
 
 import PersonalSkillsTab from "./PersonalSkillsTab";
 import TabView from "../../../../component/common/Tab/TabView";
@@ -58,22 +74,64 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+=======
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+
+interface IChallengeDetailScreenProps {
+  challengeData: IChallenge;
+  shouldRefresh: boolean;
+  setShouldRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
+  shouldRefresh,
+  setShouldRefresh,
+  challengeData,
+  setIsJoinedLocal,
+  setIsNewProgressAdded,
+}) => {
+  const { t } = useTranslation();
+  const [index, setIndex] = useState(0);
+  const [isJoined, setIsJoined] = useState<boolean>(true);
+  const { goal, id: challengeId } = challengeData;
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const [participantList, setParticipantList] = useState([]);
+>>>>>>> main
 
   const fetchParticipants = async () => {
     const response = await getChallengeParticipants(challengeId);
     setParticipantList(response.data);
   };
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    if (!shouldRefresh) return;
+    fetchParticipants();
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
+>>>>>>> main
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
 
+<<<<<<< HEAD
   const challengeCoach = challengeData?.coach;
 
   const isCurrentUserParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
   );
   const isCurrentUserChallengeOnwer = challengeOwner?.id === currentUser?.id;
+=======
+  const isCurrentUserParticipant = challengeData?.participants?.find(
+    (participant) => participant.id === currentUser?.id
+  );
+>>>>>>> main
 
   const challengeStatus =
     challengeOwner?.id === currentUser?.id
@@ -85,6 +143,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
+<<<<<<< HEAD
   const isCertifiedChallenge = challengeData?.type === "certified";
 
   const isChallengeInProgress =
@@ -94,6 +153,19 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     challengeState.intakeStatus !== "open" &&
     challengeState.closingStatus !== "closed";
 
+=======
+  const CHALLENGE_TABS_TITLE_TRANSLATION =
+    participantList && challengeOwner?.companyAccount
+      ? [
+          i18n.t("challenge_detail_screen.progress"),
+          i18n.t("challenge_detail_screen.description"),
+          i18n.t("challenge_detail_screen.participants"),
+        ]
+      : [
+          i18n.t("challenge_detail_screen.progress"),
+          i18n.t("challenge_detail_screen.description"),
+        ];
+>>>>>>> main
   const statusColor = getChallengeStatusColor(
     challengeStatus,
     challengeData?.status
@@ -156,6 +228,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     }
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     const CHALLENGE_TABS_TITLE_TRANSLATION =
       participantList && challengeOwner?.companyAccount
@@ -191,6 +264,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   return (
     <SafeAreaView>
       <View className="flex h-full flex-col bg-white pt-2">
+=======
+  return (
+    <SafeAreaView>
+      <View className="flex h-full flex-col bg-white py-2">
+>>>>>>> main
         <View className="flex flex-row items-center justify-between px-4">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
             <CheckCircle fill={statusColor} />
@@ -198,7 +276,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               <Text className="text-2xl font-semibold">{goal}</Text>
             </View>
           </View>
+<<<<<<< HEAD
           {!isCurrentUserChallengeOnwer && !isChallengeCompleted && (
+=======
+          {challengeOwner?.id !== currentUser?.id && !isChallengeCompleted && (
+>>>>>>> main
             <View className="ml-2 h-9">
               <Button
                 isDisabled={false}
@@ -212,19 +294,32 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                 } `}
                 title={
                   isJoined
+<<<<<<< HEAD
                     ? t("challenge_detail_screen.leave")
                     : t("challenge_detail_screen.join")
+=======
+                    ? i18n.t("challenge_detail_screen.leave")
+                    : i18n.t("challenge_detail_screen.join")
+>>>>>>> main
                 }
                 onPress={handleJoinLeaveChallenge}
               />
             </View>
           )}
+<<<<<<< HEAD
           {!isCurrentUserChallengeOnwer && isChallengeCompleted && (
+=======
+          {isChallengeCompleted && (
+>>>>>>> main
             <View className="ml-2 h-9">
               <Button
                 containerClassName="border border-gray-dark flex items-center justify-center px-5"
                 textClassName={`text-center text-md font-semibold text-gray-dark `}
+<<<<<<< HEAD
                 title={t("challenge_detail_screen.completed")}
+=======
+                title={i18n.t("challenge_detail_screen.completed")}
+>>>>>>> main
               />
             </View>
           )}
@@ -232,7 +327,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
         <View className="mt-2 flex flex-1">
           <TabView
+<<<<<<< HEAD
             titles={challengeTabTitles}
+=======
+            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+>>>>>>> main
             activeTabIndex={index}
             setActiveTabIndex={setIndex}
           >
@@ -240,6 +339,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               isJoined={isJoined}
               isChallengeCompleted={isChallengeCompleted}
               challengeData={challengeData}
+<<<<<<< HEAD
               setShouldRefresh={setShouldScreenRefresh}
             />
             <DescriptionTab challengeData={challengeData} />
@@ -262,6 +362,13 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
+=======
+              setShouldRefresh={setIsNewProgressAdded}
+            />
+            <DescriptionTab challengeData={challengeData} />
+            {participantList && challengeOwner?.companyAccount && (
+              <ParticipantsTab participant={participantList} />
+>>>>>>> main
             )}
           </TabView>
         </View>

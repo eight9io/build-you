@@ -76,7 +76,11 @@ const Following: FC<IFollowingProps> = ({
               <View className=" justify-cente mt-6 items-center pt-10">
                 <Empty />
                 <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
+<<<<<<< HEAD
                   {t("empty_following")}
+=======
+                  {t("empty_followers")}
+>>>>>>> main
                 </Text>
               </View>
             }

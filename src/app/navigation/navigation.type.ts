@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { RouteProp } from "@react-navigation/native";
 import { IPackage } from "../types/package";
+=======
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+>>>>>>> main
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -48,6 +53,7 @@ export type RootStackParamList = {
   };
   CreateCompanyChallengeScreen: undefined;
 
+<<<<<<< HEAD
   ChoosePackageScreen: undefined;
   CreateChallengeScreenMain: undefined;
   CreateCertifiedChallengeScreen: undefined;
@@ -55,6 +61,11 @@ export type RootStackParamList = {
   CartScreen: {
     choosenPackage: IPackage;
   };
+=======
+  CreateChallengeScreenMain: undefined;
+  CreateCretifiedChallengeScreen: undefined;
+  CreateCretifiedCompanyChallengeScreen: undefined;
+>>>>>>> main
 
   ProgressCommentScreen: {
     progressId: string;
@@ -88,12 +99,23 @@ export type RootStackParamList = {
   BottomNavBar: undefined;
   SplashScreen: undefined;
   NotFound: undefined;
+<<<<<<< HEAD
 
   ChallengeCompanyDetailScreen: undefined;
   PersonalCoachChallengeDetailScreen: {
     challengeId: string;
   };
+=======
+>>>>>>> main
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =
   RouteProp<RootStackParamList, RouteName>;
+<<<<<<< HEAD
+=======
+
+// TODO: move this into seperate to avoid cycle dependcy when importing type
+export const useNav = () => {
+  return useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+};
+>>>>>>> main

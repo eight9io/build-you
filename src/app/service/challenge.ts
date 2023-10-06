@@ -1,13 +1,11 @@
 import {
+  IChallenge,
   ICreateChallenge,
   IEditChallenge,
   ICreateCompanyChallenge,
   IUpdateChallengeImage,
-  IChallenge,
-  CheckpointType,
 } from "../types/challenge";
 import http from "../utils/http";
-import { ISkillProps } from "../screen/OnboardingScreens/CompleteProfile/CompleteProfileStep4";
 
 export const createChallenge = (data: ICreateChallenge) => {
   return http.post("/challenge/create", data);

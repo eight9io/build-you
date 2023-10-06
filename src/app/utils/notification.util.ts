@@ -21,13 +21,13 @@ import { UseBoundStore, StoreApi } from "zustand";
 import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
-import { useGetOtherUserData } from "../hooks/useGetUser";
 import { serviceGetOtherUserData } from "../service/user";
+import i18n from "../i18n/i18n";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
 export const registerForPushNotificationsAsync = async () => {
-  if (!Device.isDevice) {
+  if (Platform.OS === "ios" && !Device.isDevice) {
     console.log("Must use physical device for Push Notifications");
     throw new Error("simulator");
   }
@@ -41,7 +41,6 @@ export const registerForPushNotificationsAsync = async () => {
     }
 
     const token = await messaging().getToken();
-    console.log("Token --->:", token);
 
     return token;
   } else {
@@ -288,19 +287,19 @@ export const getNotificationContent = (
 ) => {
   switch (notificationType) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-      return `has added a new challenge`;
+      return i18n.t("notification.new_challenge");
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
-      return `has added a new progress in ${
-        contentPayload?.challengeGoal || "a challenge"
-      }`;
+      return i18n.t("notification.new_progress", {
+        challengeGoal: contentPayload.challengeGoal,
+      });
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      return `commented on your update`;
+      return i18n.t("notification.new_comment");
     case NOTIFICATION_TYPES.NEW_MENTION:
-      return `mentioned you in a comment`;
+      return i18n.t("notification.new_mention");
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      return `has started following you`;
+      return i18n.t("notification.new_follower");
     case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
-      return `has added you as an employee`;
+      return i18n.t("notification.new_employee");
   }
 };
 

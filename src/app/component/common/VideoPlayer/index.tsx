@@ -2,7 +2,16 @@ import React, { FC, useEffect } from "react";
 import { View, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 
+<<<<<<< HEAD
 import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+=======
+import {
+  Video,
+  ResizeMode,
+  AVPlaybackStatus,
+  VideoFullscreenUpdate,
+} from "expo-av";
+>>>>>>> main
 import PlayButton from "../../asset/play-button.svg";
 
 interface IVideoPlayerProps {
@@ -14,6 +23,10 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
     {} as AVPlaybackStatus
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
+<<<<<<< HEAD
+=======
+  const [resizeMode, setResizeMode] = React.useState(ResizeMode.COVER);
+>>>>>>> main
 
   useEffect(() => {
     if (status && status.isLoaded && status.isPlaying) {
@@ -38,8 +51,22 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
             borderRadius: 12,
           }}
           useNativeControls
+<<<<<<< HEAD
           resizeMode={ResizeMode.CONTAIN}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+=======
+          resizeMode={resizeMode}
+          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
+          }}
+>>>>>>> main
         />
       )}
       {src && (
@@ -55,8 +82,22 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
             borderRadius: 12,
           }}
           useNativeControls
+<<<<<<< HEAD
           resizeMode={ResizeMode.CONTAIN}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+=======
+          resizeMode={resizeMode}
+          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
+          }}
+>>>>>>> main
         />
       )}
       {!isVideoPlayed && (

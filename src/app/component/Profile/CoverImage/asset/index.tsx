@@ -6,7 +6,11 @@ import { Image } from "expo-image";
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
+<<<<<<< HEAD
 } from "../../../../service/upload-image";
+=======
+} from "../../../../utils/uploadUserImage";
+>>>>>>> main
 
 import DefaultAvatar from "./asset/default-avatar.svg";
 import ConfirmDialog from "../../../common/Dialog/ConfirmDialog";

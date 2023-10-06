@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
+<<<<<<< HEAD
           "client_id": "182046676611-82gevma14c5heurlm7199n9f74di8005.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.buildyou.buildyou",
             "certificate_hash": "cafb63875a61aff9935932906d8c06d37b4cba93"
+=======
+          "client_id": "182046676611-7o5afqniu00if94subvcfcb0kkq1julm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buildyou.buildyou",
+            "certificate_hash": "89ac4239ad0dde6875d2dd9b86903e932e6777aa"
+>>>>>>> main
           }
         },
         {
@@ -51,4 +59,8 @@
     }
   ],
   "configuration_version": "1"
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

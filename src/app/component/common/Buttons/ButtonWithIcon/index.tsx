@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import clsx from "clsx";
+>>>>>>> main
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import SearchSvg from "./asset/search.svg";

@@ -1,7 +1,13 @@
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import React, { FC, useCallback, useMemo } from "react";
+<<<<<<< HEAD
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+=======
+import { StyleSheet, Text, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+>>>>>>> main
 
 interface IBottomSheet2Props {
   onClose: () => void;

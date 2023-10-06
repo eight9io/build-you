@@ -8,7 +8,10 @@ import httpInstance from "../../../../utils/http";
 import {
   deleteChallenge,
   completeChallenge,
+<<<<<<< HEAD
   getChallengeById,
+=======
+>>>>>>> main
 } from "../../../../service/challenge";
 
 import { RootStackParamList } from "../../../../navigation/navigation.type";
@@ -27,7 +30,10 @@ import TaskAltIconGray from "./assets/task-alt-gray.svg";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
+<<<<<<< HEAD
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
+=======
+>>>>>>> main
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -119,6 +125,13 @@ export const RightPersonalChallengeDetailOptions: FC<
               t("toast.completed_challenge_success") ||
               "Challenge has been completed successfully !",
           });
+<<<<<<< HEAD
+=======
+          // setTimeout(() => {
+          //   setIsCompletedChallengeSuccess(true);
+          //   setShouldRefresh(true);
+          // }, 600);
+>>>>>>> main
         }
       })
       .catch((err) => {
@@ -235,31 +248,46 @@ const PersonalChallengeDetailScreen = ({
     useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
+<<<<<<< HEAD
 
   // use for refresh screen when add new progress, refetch participant list,  edit challenge
   const [shouldScreenRefresh, setShouldScreenRefresh] =
     useState<boolean>(false);
+=======
+  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+>>>>>>> main
 
   const challengeId = route?.params?.challengeId;
 
   const { getUserProfile } = useUserProfileStore();
+<<<<<<< HEAD
   const { setDeletedChallengeId } = useNewCreateOrDeleteChallengeStore();
 
+=======
+>>>>>>> main
   const currentUser = getUserProfile();
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
 
+<<<<<<< HEAD
   const isCurrentUserChallengeOnwer = challengeOwner?.id === currentUser?.id;
 
+=======
+>>>>>>> main
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
     navigation.setOptions({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
           challengeData={challengeData}
+<<<<<<< HEAD
           shouldRenderEditAndDeleteBtns={isCurrentUserChallengeOnwer}
+=======
+          shouldRenderEditAndDeleteBtns={challengeOwner?.id === currentUser?.id}
+>>>>>>> main
           shouldRenderCompleteBtn={isJoinedLocal}
           refresh={refresh}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
@@ -269,6 +297,7 @@ const PersonalChallengeDetailScreen = ({
     });
   }, [challengeData, isJoinedLocal]);
 
+<<<<<<< HEAD
   const refresh = async () => {
     try {
       await getChallengeById(challengeId).then((res) => {
@@ -277,11 +306,22 @@ const PersonalChallengeDetailScreen = ({
     } catch (error) {
       console.error("CoachChallengeDetailScreen - Error fetching data:", error);
     }
+=======
+  const refresh = () => {
+    setShouldRefresh(true);
+    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
+      setChallengeData(res.data);
+    });
+>>>>>>> main
   };
 
   useEffect(() => {
     refresh();
+<<<<<<< HEAD
   }, [shouldScreenRefresh]);
+=======
+  }, [isNewProgressAdded]);
+>>>>>>> main
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -300,7 +340,10 @@ const PersonalChallengeDetailScreen = ({
     deleteChallenge(challengeData.id)
       .then((res) => {
         if (res.status === 200) {
+<<<<<<< HEAD
           setDeletedChallengeId(challengeData.id);
+=======
+>>>>>>> main
           setIsDeleteChallengeDialogVisible(false);
           GlobalToastController.showModal({
             message:
@@ -320,7 +363,11 @@ const PersonalChallengeDetailScreen = ({
       });
   };
   return (
+<<<<<<< HEAD
     <SafeAreaView className="bg-[#FAFBFF]">
+=======
+    <SafeAreaView>
+>>>>>>> main
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}
@@ -347,10 +394,18 @@ const PersonalChallengeDetailScreen = ({
       {challengeData?.id && (
         <>
           <ChallengeDetailScreen
+<<<<<<< HEAD
             challengeData={challengeData}
             setIsJoinedLocal={setIsJoinedLocal}
             shouldScreenRefresh={shouldScreenRefresh}
             setShouldScreenRefresh={setShouldScreenRefresh}
+=======
+            shouldRefresh={shouldRefresh}
+            setShouldRefresh={setShouldRefresh}
+            challengeData={challengeData}
+            setIsJoinedLocal={setIsJoinedLocal}
+            setIsNewProgressAdded={setIsNewProgressAdded}
+>>>>>>> main
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

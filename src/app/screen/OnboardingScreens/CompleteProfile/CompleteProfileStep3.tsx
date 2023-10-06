@@ -1,7 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
+<<<<<<< HEAD
 import { View, Text, ScrollView } from "react-native";
 
 import clsx from "clsx";
+=======
+import { View, Text, ScrollView, FlatList } from "react-native";
+
+import clsx from "clsx";
+import { useForm, Controller, set } from "react-hook-form";
+>>>>>>> main
 import { useTranslation } from "react-i18next";
 
 import httpInstance from "../../../utils/http";

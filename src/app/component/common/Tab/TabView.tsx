@@ -1,5 +1,9 @@
 import clsx from "clsx";
+<<<<<<< HEAD
 import { FC, ReactNode } from "react";
+=======
+import { FC, ReactNode, useState } from "react";
+>>>>>>> main
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 interface ITabTitleProps {
@@ -45,8 +49,11 @@ export const TabView: FC<ITabViewProps> = ({
   activeTabIndex,
   setActiveTabIndex,
 }) => {
+<<<<<<< HEAD
   // remove falsey values from children
   children = children.filter(Boolean);
+=======
+>>>>>>> main
   return (
     <View className="flex h-full flex-1 flex-col">
       <View>

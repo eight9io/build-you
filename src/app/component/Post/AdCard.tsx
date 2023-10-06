@@ -1,5 +1,9 @@
 import clsx from "clsx";
+<<<<<<< HEAD
 import { Video } from "expo-av";
+=======
+import { ResizeMode, Video } from "expo-av";
+>>>>>>> main
 import React, { FC } from "react";
 import { Image } from "expo-image";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
@@ -58,6 +62,10 @@ const AdVideo = ({ name, video, onPress }) => {
           <Video
             source={{ uri: video }}
             className={clsx("aspect-square w-full rounded-t-xl")}
+<<<<<<< HEAD
+=======
+            resizeMode={ResizeMode.COVER}
+>>>>>>> main
           />
         )}
         <View className="absolute bottom-0 left-0 right-0 p-3">

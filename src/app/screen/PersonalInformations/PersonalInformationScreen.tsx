@@ -1,10 +1,13 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import jwt_decode from "jwt-decode";
 
-import { useUserProfileStore } from "../../store/user-store";
+import {
+  checkIsCompleteProfileOrCompany,
+  useUserProfileStore,
+} from "../../store/user-store";
 import Button from "../../component/common/Buttons/Button";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { LOGIN_TYPE } from "../../common/enum";

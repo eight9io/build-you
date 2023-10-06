@@ -32,12 +32,20 @@ interface IFetchedSkill {
   id: string;
   skill: string;
 }
+<<<<<<< HEAD
 export interface ISkillProps {
+=======
+interface ISkillProps {
+>>>>>>> main
   skill: IFetchedSkill;
   rating: number;
 }
 
+<<<<<<< HEAD
 export interface IFormValueInput {
+=======
+interface IFormValueInput {
+>>>>>>> main
   label: string;
   value: number; //rating
   id: string;
@@ -72,7 +80,11 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
         <View className="flex flex-1 flex-row  justify-end">
           {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
             <TouchableOpacity
+<<<<<<< HEAD
               className="pr-3"
+=======
+              className="pr-4"
+>>>>>>> main
               key={`${randomId}${index}`}
               onPress={() => changeSkillValue(item?.label, index + 1)}
               testID={`${item.testID}_progress_${index}`}
@@ -102,7 +114,11 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   );
 };
 
+<<<<<<< HEAD
 export const renderSelectedSoftSkill = (
+=======
+const renderSelectedSoftSkill = (
+>>>>>>> main
   t: any,
   selectedCompetencedSkill: IFormValueInput[],
   changeSkillValue: any,
@@ -219,6 +235,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           httpInstance.put(`/user/update/${userData.id}`, {
             birth: profile?.birth,
             occupation: profile?.occupation,
+<<<<<<< HEAD
+=======
+            occupationDetail: profile?.occupationDetail,
+>>>>>>> main
             bio: profile?.biography,
             softSkill: softSkills,
             hardSkill: profile.skills,
@@ -226,6 +246,20 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           }),
         ]);
       } else {
+<<<<<<< HEAD
+=======
+        console.log({
+          name: profile?.name,
+          surname: profile?.surname,
+          birth: profile?.birth,
+          occupation: profile?.occupation,
+          occupationDetail: profile?.occupationDetail,
+          bio: profile?.biography,
+          softSkill: softSkills,
+          hardSkill: profile.skills,
+          company: "",
+        });
+>>>>>>> main
         await Promise.all([
           uploadNewVideo(profile?.video),
           httpInstance.put(`/user/first/update/${userData.id}`, {
@@ -233,6 +267,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
             surname: profile?.surname,
             birth: profile?.birth,
             occupation: profile?.occupation,
+<<<<<<< HEAD
+=======
+            occupationDetail: profile?.occupationDetail,
+>>>>>>> main
             bio: profile?.biography,
             softSkill: softSkills,
             hardSkill: profile.skills,

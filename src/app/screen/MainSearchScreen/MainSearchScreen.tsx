@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+=======
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
+>>>>>>> main
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -14,6 +22,10 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 
+<<<<<<< HEAD
+=======
+import NavButton from "../../component/common/Buttons/NavButton";
+>>>>>>> main
 import { useDebounce } from "../../hooks/useDebounce";
 import { ISearchUserData } from "../../types/user";
 import { servieGetUserOnSearch } from "../../service/search";

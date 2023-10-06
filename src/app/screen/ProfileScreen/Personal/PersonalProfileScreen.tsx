@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
@@ -18,6 +18,8 @@ import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+
+import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -65,7 +67,16 @@ const PersonalProfileScreen = () => {
         component={Profile}
         options={({ navigation }) => ({
           headerShown: true,
+          contentStyle: {
+            display: "flex",
+            justifyContent: "center",
+          },
           headerTitle: () => <AppTitle title={t("profile_title")} />,
+          headerLeft: () => (
+            <View className="">
+              <BuildYouLogo width={90} />
+            </View>
+          ),
           headerRight: (props) => (
             <ButtonWithIcon
               icon="setting"

@@ -25,11 +25,20 @@ export const getNearbyLocations = async (
     // Radius in meters, showing results within this distance from the specified location.
     params.append("radius", GOOGLE_MAP_API.DEFAULT_RADIUS.toString());
   }
-  const response = await axios.get(
-    GOOGLE_MAP_API.NEARBY_SEARCH_ENDPOINT + "?" + params.toString(),
-    {
-      baseURL: GOOGLE_MAP_API.BASE_URL,
-    }
-  );
-  return extractNearbyAddresses(response.data);
+  try {
+    const response = await axios.get(
+      GOOGLE_MAP_API.NEARBY_SEARCH_ENDPOINT + "?" + params.toString(),
+      {
+        baseURL: GOOGLE_MAP_API.BASE_URL,
+        headers: {
+          "X-Ios-Bundle-Identifier": "it.buildyou.buildyou",
+          "X-Android-Package": "com.buildyou.buildyou",
+          "X-Android-Cert": process.env.EXPO_ANDROID_CERT,
+        },
+      }
+    );
+    return extractNearbyAddresses(response.data);
+  } catch (error) {
+    console.error("error: ", error);
+  }
 };

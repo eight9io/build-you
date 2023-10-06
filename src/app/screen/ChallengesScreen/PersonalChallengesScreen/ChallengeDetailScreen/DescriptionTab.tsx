@@ -3,9 +3,14 @@ import clsx from "clsx";
 import { Text, View, ScrollView } from "react-native";
 
 import dayjs from "../../../../utils/date.util";
+<<<<<<< HEAD
 import { IChallenge, ISoftSkill } from "../../../../types/challenge";
 import { useTranslation } from "react-i18next";
 import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
+=======
+import { IChallenge } from "../../../../types/challenge";
+import { useTranslation } from "react-i18next";
+>>>>>>> main
 
 interface ISingleDescriptionProps {
   title: string;
@@ -33,6 +38,7 @@ const SingleDescription: FC<ISingleDescriptionProps> = ({
   );
 };
 
+<<<<<<< HEAD
 const renderSkills = (skills: ISoftSkill[]) => {
   return skills.map((skill: ISoftSkill, index) => {
     return (
@@ -45,6 +51,8 @@ const renderSkills = (skills: ISoftSkill[]) => {
   });
 };
 
+=======
+>>>>>>> main
 export const DescriptionTab: FC<IDescriptionTabProps> = ({
   challengeData,
   maxPepleCanJoin,
@@ -52,9 +60,12 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
   const { t } = useTranslation();
   const { id, achievementTime, benefits, image, goal, reasons } = challengeData;
   const date = new Date(achievementTime);
+<<<<<<< HEAD
 
   const skillsToRate: ISoftSkill[] =
     extractSkillsFromChallengeData(challengeData);
+=======
+>>>>>>> main
   return (
     <ScrollView className="h-full px-4 pt-4">
       <SingleDescription
@@ -80,6 +91,7 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
           }/${maxPepleCanJoin}`}
         />
       )}
+<<<<<<< HEAD
       {skillsToRate.length > 0 && (
         <View
           className={clsx("mb-4 flex flex-col border-b border-gray-70 pb-4")}
@@ -90,6 +102,8 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
           {renderSkills(skillsToRate)}
         </View>
       )}
+=======
+>>>>>>> main
     </ScrollView>
   );
 };

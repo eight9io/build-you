@@ -154,39 +154,3 @@ export interface ICreateCretifiedChallengeForm
   image: string;
   softSkills: string[];
 }
-
-export interface ICertifiedChallengeState {
-  id: string;
-  name: string | null;
-  achievementTime: string;
-  benefits: string;
-  goal: string;
-  owner: {
-    id: string;
-    name: string;
-    surname: string;
-    avatar: string;
-    companyAccount: boolean;
-  }[];
-  reasons: string;
-  status: string;
-  public: boolean;
-  createdAt: string;
-  updatedAt: string;
-  maximumPeople: number | null;
-  type: string;
-  intakeStatus: IChallengeTouchpointStatus;
-  checkStatus: IChallengeTouchpointStatus;
-  closingStatus: IChallengeTouchpointStatus;
-  checkpoint: number;
-  completedCheckpoint: number;
-  coach: string;
-}
-
-export interface IUnformatedCertifiedChallengeState {
-  checkpoint: number;
-  checkStatus: IChallengeTouchpointStatus;
-  intakeStatus: IChallengeTouchpointStatus;
-  closingStatus: IChallengeTouchpointStatus;
-  completedCheckpoint: number;
-}

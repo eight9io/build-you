@@ -127,10 +127,10 @@ export default function Login() {
       const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
       const isAccountVerified = checkIsAccountVerified(profile);
 
-      // if (!isAccountVerified) {
-      //   setIsShowVerifiedErrorModal(true);
-      //   return;
-      // }
+      if (!isAccountVerified) {
+        setIsShowVerifiedErrorModal(true);
+        return;
+      }
 
       const navigateToRoute = isCompleteProfile
         ? "HomeScreen"

@@ -8,13 +8,26 @@ import {
 } from "react-native";
 import clsx from "clsx";
 
+<<<<<<< HEAD
 import { Video, ResizeMode, AVPlaybackStatus } from "expo-av";
+=======
+import {
+  Video,
+  ResizeMode,
+  AVPlaybackStatus,
+  VideoFullscreenUpdate,
+} from "expo-av";
+>>>>>>> main
 
 import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
 import { IUserData } from "../../../../../types/user";
 import { useTranslation } from "react-i18next";
+<<<<<<< HEAD
 import { useUserProfileStore } from "../../../../../store/user-store";
+=======
+import { getUserOccupationCondition } from "../../../../../utils/profile";
+>>>>>>> main
 interface IBiographyProps {
   userProfile: IUserData | null;
 }
@@ -33,6 +46,10 @@ export const VideoWithPlayButton = ({
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+<<<<<<< HEAD
+=======
+  const [resizeMode, setResizeMode] = React.useState(ResizeMode.COVER);
+>>>>>>> main
 
   useEffect(() => {
     if (status && status.isLoaded && status.isPlaying) {
@@ -59,7 +76,11 @@ export const VideoWithPlayButton = ({
             borderRadius: 12,
           }}
           useNativeControls
+<<<<<<< HEAD
           resizeMode={ResizeMode.CONTAIN}
+=======
+          resizeMode={resizeMode}
+>>>>>>> main
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
           onLoadStart={() => {
             setIsLoading(true);
@@ -67,6 +88,18 @@ export const VideoWithPlayButton = ({
           onReadyForDisplay={() => {
             setIsLoading(false);
           }}
+<<<<<<< HEAD
+=======
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
+          }}
+>>>>>>> main
         />
       )}
       {!isVideoPlayed && !isLoading && (
@@ -89,6 +122,7 @@ export const VideoWithPlayButton = ({
 };
 
 const Biography = ({ userProfile }: IBiographyProps) => {
+<<<<<<< HEAD
   const { getUserProfile } = useUserProfileStore();
   const myProfile = getUserProfile();
 
@@ -96,6 +130,14 @@ const Biography = ({ userProfile }: IBiographyProps) => {
   const bio = userProfile?.bio;
   const occupation = userProfile?.occupation;
   const videoSrc = userProfile?.video;
+=======
+  const hardSkill = userProfile?.hardSkill;
+  const bio = userProfile?.bio;
+  const occupation = getUserOccupationCondition(userProfile);
+  const city = userProfile?.city;
+  const videoSrc = userProfile?.video;
+
+>>>>>>> main
   const { t } = useTranslation();
 
   return (
@@ -137,10 +179,30 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
+<<<<<<< HEAD
                 {occupation.name}
               </Text>
             </View>
           )}
+=======
+                {occupation}
+              </Text>
+            </View>
+          )}
+          {city && (
+            <View className="flex w-full flex-row flex-wrap pr-[30px]">
+              <Text
+                className={clsx(
+                  "w-[35%] text-md font-semibold  text-gray-dark"
+                )}
+              >
+                {t("form_onboarding.screen_1.city")}:&nbsp;
+              </Text>
+
+              <Text className={clsx("text-md text-gray-dark")}>{city}</Text>
+            </View>
+          )}
+>>>>>>> main
           {userProfile?.webSite && (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
@@ -171,11 +233,14 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               </Text>
             </View>
           )}
+<<<<<<< HEAD
 
 
 
 
           {/* ============ */}
+=======
+>>>>>>> main
           {userProfile?.emailContact && (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text

@@ -14,17 +14,18 @@ import { isDevice } from "expo-device";
 
 import { RootStackParamList } from "../navigation/navigation.type";
 import { IFeedPostProps } from "../types/common";
-import { serviceGetFeed, serviceGetFeedUnregistered } from "../service/feed";
 
 import { useGetListFollowing } from "../hooks/useGetUser";
+import { handleAppOpenOnNotificationPressed } from "../utils/notification.util";
+import { serviceGetFeed, serviceGetFeedUnregistered } from "../service/feed";
+
 import { useUserProfileStore } from "../store/user-store";
 import { useChallengeUpdateStore } from "../store/challenge-update-store";
 
-import OtherUserProfileScreen from "./ProfileScreen/OtherUser/OtherUserProfileScreen";
-
-import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import MainSearchScreen from "./MainSearchScreen/MainSearchScreen";
+import OtherUserProfileScreen from "./ProfileScreen/OtherUser/OtherUserProfileScreen";
 import ProgressCommentScreen from "./ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import CompanyChallengeDetailScreen from "./ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 
 import AppTitle from "../component/common/AppTitle";
@@ -35,8 +36,8 @@ import NavButton from "../component/common/Buttons/NavButton";
 import IconSearch from "../component/common/IconSearch/IconSearch";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import AdCard from "../component/Post/AdCard";
-import { handleAppOpenOnNotificationPressed } from "../utils/notification.util";
-import { useAppleLoginInfoStore } from "../store/apple-login-store";
+
+import BuildYouLogo from "../common/svg/buildYou_logo_top_app.svg";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -262,7 +263,16 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
         component={HomeFeed}
         options={({ navigation }) => ({
           headerShown: true,
+          contentStyle: {
+            display: "flex",
+            justifyContent: "center",
+          },
           headerTitle: () => <AppTitle title={t("your_feed.header")} />,
+          headerLeft: () => (
+            <View className="">
+              <BuildYouLogo width={90} />
+            </View>
+          ),
           headerRight: (props) => (
             <NavButton
               withIcon

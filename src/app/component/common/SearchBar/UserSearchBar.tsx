@@ -46,7 +46,11 @@ const UserSearchBar = ({
           style={{
             marginLeft: 10,
           }}
+<<<<<<< HEAD
           className="mt-1 w-11/12 flex-1 py-1"
+=======
+          className="w-11/12 flex-1 py-1 mt-1"
+>>>>>>> main
           placeholder="Search"
           value={searchPhrase}
           onChangeText={setSearchPhrase}

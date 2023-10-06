@@ -16,7 +16,6 @@ import PersonalChallengesNavigator from "../../screen/ChallengesScreen/PersonalC
 import CompanyChallengesScreen from "../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengsNavigator";
 
 import FeedSvg from "./asset/feed.svg";
-import InfoSvg from "./asset/info.svg";
 import FeedFillSvg from "./asset/feed-fill.svg";
 import CreateSvg from "./asset/create.svg";
 import CreateFillSvg from "./asset/create-fill.svg";
@@ -47,8 +46,6 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "MainSearchScreen",
   "PersonalCoachChallengeDetailScreen",
 ];
-
-const EmptyScreen = () => null;
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();

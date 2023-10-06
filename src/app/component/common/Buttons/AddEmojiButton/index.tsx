@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 
+=======
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import clsx from "clsx";
+
+import Button from "../Button";
+>>>>>>> main
 import AddEmojiIcon from "../asset/add-emoji.svg";
 import WarningSvg from "../../../asset/warning.svg";
 import { useTranslation } from "react-i18next";

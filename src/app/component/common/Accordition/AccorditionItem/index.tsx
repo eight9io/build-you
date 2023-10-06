@@ -1,6 +1,10 @@
 import React from "react";
 import ArrowRight from "./assets/arrowRight.svg";
+<<<<<<< HEAD
 import { TouchableOpacity, View, Text } from "react-native";
+=======
+import { TouchableOpacity, Linking, View, Text } from "react-native";
+>>>>>>> main
 import clsx from "clsx";
 
 interface IAccorditionItemProps {

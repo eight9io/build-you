@@ -111,16 +111,18 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
+      <View className="mx-4 pb-1 mt-[-6]">
+        <Header
+          title={t("add_hard_skill_modal.title") as string}
+          leftBtn={<Close fill={"black"} />}
+          rightBtn={t("add_hard_skill_modal.save_button").toLocaleUpperCase()}
+          onRightBtnPress={changeHardSkill}
+          onLeftBtnPress={onClose}
+        />
+      </View>
+
       <ScrollView showsVerticalScrollIndicator>
         <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
-          <Header
-            title={t("add_hard_skill_modal.title") as string}
-            leftBtn={<Close fill={"black"} />}
-            rightBtn={t("add_hard_skill_modal.save_button").toLocaleUpperCase()}
-            onRightBtnPress={changeHardSkill}
-            onLeftBtnPress={onClose}
-          />
-
           <View className=" px-4 py-6 ">
             <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
               {t("add_hard_skill_modal.caption")}
@@ -141,9 +143,9 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
                       key={index}
                       title={item.skill as any}
                       onPress={() => addCompetenceSkill(item)}
-                      textClassName="line-[30px] text-center text-md text-gray-dark font-medium line-clamp-2"
+                      textClassName="line-[30px] text-center text-md text-gray-dark font-medium"
                       containerClassName={clsx(
-                        "border-gray-300 ml-1 border-[1px] mx-2 my-1.5 h-[55px] max-h-[85px] flex-none px-3 ",
+                        "border-gray-300 ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-3",
                         {
                           "bg-primary-10": selectedCompetencedSkill.find(
                             (skill) => skill.id === item.id

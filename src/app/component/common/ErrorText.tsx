@@ -2,6 +2,10 @@ import { Text, View } from "react-native";
 import React from "react";
 import clsx from "clsx";
 import Ionicons from "@expo/vector-icons/Ionicons";
+<<<<<<< HEAD
+=======
+import IconErr from "../asset/IconErr.svg";
+>>>>>>> main
 interface Props {
   message: any;
   containerClassName?: string;

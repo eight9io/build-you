@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React from "react";
+=======
+import React, { useState, useEffect, useMemo } from "react";
+>>>>>>> main
 import { View } from "react-native";
 import { Image } from "expo-image";
 import clsx from "clsx";

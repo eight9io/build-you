@@ -30,7 +30,11 @@ const NavButton: FC<INavButtonProps> = ({
       testID={testID}
     >
       {withBackIcon && <BackIcon />}
+<<<<<<< HEAD
       {withIcon && icon && icon}
+=======
+      {withIcon && icon}
+>>>>>>> main
       <Text
         className={clsx(
           "pl-[5px] text-center text-h6 font-normal text-primary-default",

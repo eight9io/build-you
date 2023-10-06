@@ -12,3 +12,5 @@ export const serviceAddEmployee = (newEmployee: any, companyId: any) =>
     email: newEmployee,
     companyUser: companyId,
   });
+
+export const serviceGetAllCompany = () => http.get("user/company/all");

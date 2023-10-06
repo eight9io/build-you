@@ -9,14 +9,26 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
+<<<<<<< HEAD
 import { ICreateChallengeForm } from "../../../../types/challenge";
 // import { useNav } from "../../../../navigation/navigation.type";
+=======
+import {
+  ICreateChallenge,
+  ICreateChallengeForm,
+} from "../../../../types/challenge";
+import { useNav } from "../../../../navigation/navigation.type";
+>>>>>>> main
 import { CreateChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
 import {
   createChallenge,
   updateChallengeImage,
 } from "../../../../service/challenge";
+<<<<<<< HEAD
+=======
+import Header from "../../../../component/common/Header";
+>>>>>>> main
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
@@ -26,7 +38,10 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+<<<<<<< HEAD
 import { useNav } from "../../../../hooks/useNav";
+=======
+>>>>>>> main
 
 const CreateChallengeScreen = () => {
   const onClose = () => {

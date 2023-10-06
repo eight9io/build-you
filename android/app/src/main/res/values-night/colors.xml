@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="alert_background">#16161c</color>
-    <color name="alert_text">#ffffff</color>
+  <color name="alert_background">#16161c</color>
+  <color name="alert_text">#ffffff</color>
 </resources>
-=======
-<resources/>
->>>>>>> main

@@ -3,10 +3,7 @@
     <item name="android:textColor">@android:color/black</item>
     <item name="android:editTextStyle">@style/ResetEditText</item>
     <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
-<<<<<<< HEAD
     <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
-=======
->>>>>>> main
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
   </style>
@@ -18,12 +15,9 @@
   <style name="Theme.App.SplashScreen" parent="AppTheme">
     <item name="android:windowBackground">@drawable/splashscreen</item>
   </style>
-<<<<<<< HEAD
   <style name="AlertDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
     <item name="android:background">@color/alert_background</item>
     <item name="android:textColor">@color/alert_text</item>
     <item name="android:textColorPrimary">@color/alert_text</item>
-</style>
-=======
->>>>>>> main
+  </style>
 </resources>

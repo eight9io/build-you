@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Appearance, Platform } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -28,6 +28,10 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   confirmButtonTestID,
 }) => {
   const { t } = useTranslation();
+  const colorScheme = Appearance.getColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const isIOS = Platform.OS === "ios";
+
   const handleCancel = () => {
     onClosed && onClosed();
   };
@@ -41,7 +45,14 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
       {isVisible && (
         <Dialog.Container visible={true}>
           <Dialog.Title>
-            <Text className={clsx("text-black-default")}>{title}</Text>
+            <Text
+              className={clsx(
+                "text-black-default",
+                isIOS && isDarkMode ? "text-white" : ""
+              )}
+            >
+              {title}
+            </Text>{" "}
           </Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (

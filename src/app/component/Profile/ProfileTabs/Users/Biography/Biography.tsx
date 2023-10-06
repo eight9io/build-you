@@ -19,6 +19,7 @@ import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
 import { IUserData } from "../../../../../types/user";
 import { useTranslation } from "react-i18next";
+import { getUserOccupationCondition } from "../../../../../utils/profile";
 interface IBiographyProps {
   userProfile: IUserData | null;
 }
@@ -105,9 +106,10 @@ export const VideoWithPlayButton = ({
 const Biography = ({ userProfile }: IBiographyProps) => {
   const hardSkill = userProfile?.hardSkill;
   const bio = userProfile?.bio;
-  const occupation = userProfile?.occupation;
+  const occupation = getUserOccupationCondition(userProfile);
   const city = userProfile?.city;
   const videoSrc = userProfile?.video;
+
   const { t } = useTranslation();
 
   return (

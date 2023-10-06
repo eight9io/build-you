@@ -11,12 +11,10 @@ import Button from "../../Buttons/Button";
 import BottomSheet2 from "../../BottomSheet/BottomSheet";
 import BottomSheetOption from "../../Buttons/BottomSheetOption";
 import { IOccupation } from "../../../../types/user";
-import { serviceGetListOccupation } from "../../../../service/profile";
 import TextInput from "../../Inputs/TextInput";
 import Warning from "../../../../component/asset/warning.svg";
 
 import { EditProfileOccupationValidators } from "../../../../Validators/EditProfile.validate";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface ISelectPickerProps {
   occupationList: IOccupation[];
@@ -84,8 +82,12 @@ const SeletecPickerOccupation: FC<ISelectPickerProps> = ({
   };
 
   useEffect(() => {
-    setSelected(selectedIndex || 0);
-  }, [selectedIndex]);
+    if (selectedIndex) {
+      setSelected(selectedIndex || 0);
+    } else {
+      if (occupationList?.length > 0) setSelected(occupationList?.length - 1);
+    }
+  }, [selectedIndex, occupationList]);
 
   return (
     <View>

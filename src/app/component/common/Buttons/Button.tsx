@@ -27,7 +27,7 @@ const Button: FC<IButtonProps> = ({
 }) => {
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.9}
       className={clsx(
         "h-12 flex-1 rounded-full",
         isDisabled ? disabledContainerClassName : containerClassName
@@ -36,7 +36,7 @@ const Button: FC<IButtonProps> = ({
       disabled={isDisabled}
       testID={testID}
     >
-      <View className="flex-1 flex-row items-center justify-center">
+      <View className="flex-1 flex-row items-center justify-center active:bg-black-default">
         {Icon && Icon}
         {title && (
           <Text

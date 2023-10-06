@@ -3,6 +3,7 @@ import { t } from "i18next";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import { serviceGetEmployeeList } from "../service/company";
 import { serviceGetListFollowing } from "../service/profile";
+import { IOccupation, IUserData } from "../types/user";
 
 export const fetchNewFollowingData = (id: any, setFollowingList: any) => {
   return serviceGetListFollowing(id)
@@ -38,4 +39,16 @@ export const fetchListEmployee = async (
           (t("error_general_message") as string) || "Something went wrong",
       });
     });
+};
+
+export const getUserOccupationCondition = (userProfile: IUserData) => {
+  if (!userProfile) return "";
+  if (
+    userProfile?.occupation &&
+    userProfile?.occupation?.name.toLocaleUpperCase() !== "ALTRO"
+  ) {
+    return userProfile.occupation.name;
+  } else {
+    return userProfile.occupationDetail;
+  }
 };

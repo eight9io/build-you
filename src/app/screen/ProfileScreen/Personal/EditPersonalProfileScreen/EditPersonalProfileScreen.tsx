@@ -41,6 +41,7 @@ import SeletecPickerOccupation from "../../../../component/common/Pickers/Select
 import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPicker/SelectPickerCompany";
 import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
 import { serviceGetAllCompany } from "../../../../service/company";
+import { getUserOccupationCondition } from "../../../../utils/profile";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -151,7 +152,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       name: userData?.name || "",
       surname: userData?.surname || "",
       birth: userData?.birth || undefined,
-      occupation: userData?.occupation,
+      occupation: getUserOccupationCondition(userData),
       occupationDetail: userData?.occupationDetail || "",
       bio: userData?.bio || "",
       hardSkill: userData?.hardSkill || [],

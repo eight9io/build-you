@@ -47,7 +47,7 @@ jobs:
           echo $ANDROID_SIGNING_KEY | base64 --decode >> "android/app/build-you.jks"
           echo $IOS_GOOGLE_SERVICE_PROD | base64 --decode >> "GoogleService-Info.plist"
           echo $ANDROID_GOOGLE_SERVICE_PROD | base64 --decode >> "google-services.json"
-          sed -i '' 's/adhoc/"it.buildyou.buildyou AppStore"/g' ios/BuildYou.xcodeproj/project.pbxproj
+          sed -i '' 's/adhoc/it.buildyou.buildyou AppStore/g' ios/BuildYou.xcodeproj/project.pbxproj
         shell: bash
 
       - name: Set up our JDK environment

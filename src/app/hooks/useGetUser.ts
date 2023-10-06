@@ -38,16 +38,24 @@ export const useGetOtherUserData = (
   if (!userId || userId === null) return null;
 
   const fetchingUserData = async () => {
-    await serviceGetOtherUserData(userId)
-      .then((res) => {
-        setOtherUserData(res.data);
-      })
-      .catch(() => {
-        GlobalDialogController.showModal({
-          title: t("dialog.err_title"),
-          message: t("user_not_found"),
+    try {
+      await serviceGetOtherUserData(userId)
+        .then((res) => {
+          setOtherUserData(res.data);
+        })
+        .catch(() => {
+          GlobalDialogController.showModal({
+            title: t("dialog.err_title"),
+            message: t("user_not_found"),
+          });
         });
+    } catch (error) {
+      setOtherUserData(null);
+      GlobalDialogController.showModal({
+        title: t("dialog.err_title"),
+        message: t("user_not_found"),
       });
+    }
   };
 
   useEffect(() => {

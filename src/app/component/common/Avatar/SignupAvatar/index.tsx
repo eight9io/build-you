@@ -9,11 +9,7 @@ import CameraSvg from "./asset/camera.svg";
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
-<<<<<<< HEAD
 } from "../../../../service/upload-image";
-=======
-} from "../../../../utils/uploadUserImage";
->>>>>>> main
 import ConfirmDialog from "../../Dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 

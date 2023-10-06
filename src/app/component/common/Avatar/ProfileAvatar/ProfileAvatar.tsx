@@ -1,26 +1,12 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
 import { View, TouchableOpacity, Pressable, Linking } from "react-native";
-=======
-import {
-  View,
-  TouchableOpacity,
-  Pressable,
-  ImageSourcePropType,
-  Linking,
-} from "react-native";
->>>>>>> main
 import clsx from "clsx";
 import { Image } from "expo-image";
 
 import {
   getImageFromUserDevice,
   uploadNewAvatar,
-<<<<<<< HEAD
 } from "../../../../service/upload-image";
-=======
-} from "../../../../utils/uploadUserImage";
->>>>>>> main
 
 import DefaultAvatar from "../../../asset/default-avatar.svg";
 import IconUploadAvatar from "./asset/uploadAvatar.svg";

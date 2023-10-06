@@ -1,9 +1,5 @@
 import { FC } from "react";
-<<<<<<< HEAD
-import { View, Text, Platform } from "react-native";
-=======
 import { View, Text, Appearance, Platform } from "react-native";
->>>>>>> main
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -32,13 +28,10 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   confirmButtonTestID,
 }) => {
   const { t } = useTranslation();
-<<<<<<< HEAD
-=======
   const colorScheme = Appearance.getColorScheme();
   const isDarkMode = colorScheme === "dark";
   const isIOS = Platform.OS === "ios";
 
->>>>>>> main
   const handleCancel = () => {
     onClosed && onClosed();
   };
@@ -46,21 +39,11 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   const handleConfirm = () => {
     onConfirm && onConfirm();
   };
-<<<<<<< HEAD
-  const isAndroid = Platform.OS === "android";
-=======
-
->>>>>>> main
   return (
     <View>
       {isVisible && (
         <Dialog.Container visible={true}>
           <Dialog.Title>
-<<<<<<< HEAD
-            <Text className={clsx(isAndroid && "text-black-default")}>
-              {title}
-            </Text>
-=======
             <Text
               className={clsx(
                 "text-black-default",
@@ -69,7 +52,6 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
             >
               {title}
             </Text>{" "}
->>>>>>> main
           </Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (

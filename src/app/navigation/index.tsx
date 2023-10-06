@@ -6,21 +6,14 @@ import {
 
 import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
-<<<<<<< HEAD
 import { TouchableOpacity, Text } from "react-native";
-=======
-import { TouchableOpacity, Text, Alert } from "react-native";
->>>>>>> main
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-<<<<<<< HEAD
 import i18n from "../i18n/i18n";
 
-=======
->>>>>>> main
 import { RootStackParamList } from "./navigation.type";
 
 import Header from "../component/common/Header";
@@ -42,18 +35,11 @@ import CreateChallengeScreen from "../screen/ChallengesScreen/PersonalChallenges
 import CreateCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
 
 import { useAuthStore } from "../store/auth-store";
-<<<<<<< HEAD
 import { useDeepLinkStore } from "../store/deep-link-store";
-=======
->>>>>>> main
 import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../store/user-store";
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 import NavigatorService from "../utils/navigationService";
 import {
   checkTokens,
@@ -61,7 +47,6 @@ import {
   setupInterceptor,
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
-<<<<<<< HEAD
 import { getLanguageLocalStorage } from "../utils/language";
 
 import CartScreen from "../screen/ChallengesScreen/CartScreen";
@@ -69,13 +54,6 @@ import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen"
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
 import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
-=======
-import { useDeepLinkStore } from "../store/deep-link-store";
-import { getLanguageLocalStorage } from "../component/Settings/components/LanguageSettings";
-import i18n from "../i18n/i18n";
-import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
-import CreateCretifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateChallengeScreen/CreateCretifiedChallengeScreen";
->>>>>>> main
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -91,15 +69,9 @@ export const RootNavigation = () => {
     logout,
     _hasHydrated: authStoreHydrated,
   } = useAuthStore();
-<<<<<<< HEAD
   const { getUserProfileAsync, onLogout: userProfileStoreOnLogout } =
     useUserProfileStore();
 
-=======
-
-  const { getUserProfileAsync, onLogout: userProfileStoreOnLogout } =
-    useUserProfileStore();
->>>>>>> main
   const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>();
   const isLoggedin = getAccessToken();
 
@@ -296,13 +268,9 @@ export const RootNavigation = () => {
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-<<<<<<< HEAD
                 <AppTitle
                   title={t("new_challenge_screen.new_challenge") || ""}
                 />
-=======
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
->>>>>>> main
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -350,10 +318,6 @@ export const RootNavigation = () => {
               ),
             })}
           />
-<<<<<<< HEAD
-=======
-
->>>>>>> main
           <RootStack.Screen
             name="ForgotPasswordScreen"
             component={ForgotPassword}
@@ -373,23 +337,15 @@ export const RootNavigation = () => {
               ),
             })}
           />
-<<<<<<< HEAD
-=======
-
->>>>>>> main
           <RootStack.Screen
             name="CreateChallengeScreen"
             component={CreateChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-<<<<<<< HEAD
                 <AppTitle
                   title={t("new_challenge_screen.new_challenge") || ""}
                 />
-=======
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
->>>>>>> main
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity
@@ -401,25 +357,17 @@ export const RootNavigation = () => {
               ),
             })}
           />
-<<<<<<< HEAD
-=======
-
->>>>>>> main
           <RootStack.Screen
             name="CreateCompanyChallengeScreen"
             component={CreateCompanyChallengeScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (
-<<<<<<< HEAD
                 <AppTitle
                   title={
                     t("new_challenge_screen.new_challenge") || "New challenge"
                   }
                 />
-=======
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
->>>>>>> main
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -428,7 +376,6 @@ export const RootNavigation = () => {
               ),
             })}
           />
-<<<<<<< HEAD
           <RootStack.Screen
             name="CreateCertifiedChallengeScreen"
             component={CreateCertifiedChallengeScreen}
@@ -493,16 +440,6 @@ export const RootNavigation = () => {
               headerShown: true,
               headerTitle: () => (
                 <AppTitle title={t("cart_screen.title") || "Summary"} />
-=======
-
-          <RootStack.Screen
-            name="CreateCretifiedChallengeScreen"
-            component={CreateCretifiedChallengeScreen}
-            options={({ navigation }) => ({
-              headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t("new_challenge_screen.title") || ""} />
->>>>>>> main
               ),
               headerLeft: ({}) => (
                 <TouchableOpacity onPress={() => navigation.goBack()}>

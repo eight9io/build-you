@@ -17,13 +17,8 @@ import SignupAvatar from "../../../component/common/Avatar/SignupAvatar";
 import TextInput from "../../../component/common/Inputs/TextInput";
 
 import CalendarIcon from "./asset/calendar-icon.svg";
-<<<<<<< HEAD
-import SelectPicker from "../../../component/common/Pickers/SelectPicker";
-import Button from "../../../component/common/Buttons/Button";
-=======
 import Button from "../../../component/common/Buttons/Button";
 import SeletecPickerOccupation from "../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
->>>>>>> main
 
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 
@@ -32,11 +27,7 @@ import Warning from "../../../component/asset/warning.svg";
 import DateTimePicker2 from "../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
 import { useTranslation } from "react-i18next";
 import { serviceGetListOccupation } from "../../../service/profile";
-<<<<<<< HEAD
-import { IOccupation } from "../../../types/auth";
-=======
 import { IOccupation } from "../../../types/user";
->>>>>>> main
 import { useUserProfileStore } from "../../../store/user-store";
 import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
 
@@ -49,11 +40,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 }) => {
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [showOccupationPicker, setShowOccupationPicker] = useState(false);
-<<<<<<< HEAD
-=======
   const [otherOccupation, setOtherOccupation] = useState<string | null>(null);
 
->>>>>>> main
   const [selectedOccupationIndex, setSelectedOccupationIndex] = useState<
     number | undefined
   >();
@@ -64,8 +52,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const { getUserAppleInfo } = useAppleLoginInfoStore();
   const userAppleInfo = getUserAppleInfo();
-<<<<<<< HEAD
 
+  const { t } = useTranslation();
 
   useEffect(() => {
     const getOccupationList = async () => {
@@ -83,10 +71,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     getOccupationList();
     if (userProfile.loginType === "apple") getAppleUserProfile(); // Set name and surname for apple login
   }, []);
-=======
-  const { t } = useTranslation();
 
->>>>>>> main
   const {
     control,
     handleSubmit,
@@ -113,11 +98,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     reValidateMode: "onChange",
   });
 
-<<<<<<< HEAD
-  const { t } = useTranslation();
-
-=======
->>>>>>> main
   const occupation = getValues("occupation");
   const birth = getValues("birth");
   const handleDatePicked = (date?: Date) => {
@@ -128,24 +108,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     setShowDateTimePicker(false);
   };
 
-<<<<<<< HEAD
-  const handleOccupationPicked = (index: number) => {
-    if (index >= 0) {
-      setSelectedOccupationIndex(index);
-      setValue("occupation", occupationList[index].name);
-    }
-    setShowOccupationPicker(false);
-  };
-
-  const handleSubmitForm = (data: any) => {
-    const IdOccupation = occupationList.find(
-      (item) => item.name === data.occupation
-    )?.id;
-    setProfile({ ...data, occupation: IdOccupation });
-    navigation.navigate("CompleteProfileStep2Screen");
-  };
-
-=======
   const handleOccupationPicked = (value: number | string) => {
     if (typeof value !== "number") {
       setValue("occupation", value.toUpperCase());
@@ -192,7 +154,6 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
     getOccupationList();
   }, []);
 
->>>>>>> main
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   return (
     <View className="" testID="complete_profile_step_1">
@@ -206,27 +167,17 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         minimumDate={dayjs().subtract(100, "years").startOf("day").toDate()}
       />
 
-<<<<<<< HEAD
-      <SelectPicker
-        title={t("form_onboarding.screen_1.occupation") || "Occupation"}
-        show={showOccupationPicker}
-        data={occupationList}
-=======
       <SeletecPickerOccupation
         occupationList={occupationList}
         title={t("edit_personal_profile_screen.occupation") || "Occupation"}
         show={showOccupationPicker}
->>>>>>> main
         selectedIndex={selectedOccupationIndex}
         onSelect={handleOccupationPicked}
         onCancel={() => {
           setShowOccupationPicker(false);
         }}
       />
-<<<<<<< HEAD
-=======
 
->>>>>>> main
       <ScrollView className="h-full w-full">
         <View className=" flex w-full flex-col items-center justify-start">
           <View className="pt-2">

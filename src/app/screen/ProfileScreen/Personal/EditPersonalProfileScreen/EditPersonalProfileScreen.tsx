@@ -262,13 +262,17 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     const getOccupationList = async () => {
-      const { data } = await serviceGetListOccupation();
-      // find value have name = "ALTRO" in data and put it to the end of array
-      const index = data.findIndex((item) => item.name === "ALTRO");
-      const temp = data[index];
-      data.splice(index, 1);
-      data.push(temp);
-      setOccupationList(data);
+      try {
+        const { data } = await serviceGetListOccupation();
+        // find value have name = "ALTRO" in data and put it to the end of array
+        const index = data.findIndex((item) => item.name === "ALTRO");
+        const temp = data[index];
+        data.splice(index, 1);
+        data.push(temp);
+        setOccupationList(data);
+      } catch (error) {
+        console.error("Error get occupation list", error);
+      }
     };
     getOccupationList();
   }, []);

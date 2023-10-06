@@ -71,7 +71,7 @@ export const CreateCertifiedChallengeValidationSchema = (): yup.ObjectSchema<
         .string()
         .required(t("new_challenge_screen.image_required") as string),
 
-        softSkills: yup
+      softSkills: yup
         .array()
         .of(
           yup.object().shape({

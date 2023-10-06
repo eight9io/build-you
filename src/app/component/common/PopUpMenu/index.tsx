@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Text, View } from "react-native";
-=======
-import { StyleSheet, Text, View } from "react-native";
->>>>>>> main
 import React, { FC } from "react";
 import {
   Menu,

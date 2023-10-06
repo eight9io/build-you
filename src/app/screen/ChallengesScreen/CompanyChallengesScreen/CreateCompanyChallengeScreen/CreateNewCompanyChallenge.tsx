@@ -15,16 +15,9 @@ import dayjs from "dayjs";
 import Spinner from "react-native-loading-spinner-overlay";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-<<<<<<< HEAD
 import { useNav } from "../../../../hooks/useNav";
 import { ICreateCompanyChallenge } from "../../../../types/challenge";
 import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
-=======
-import { useNav } from "../../../../navigation/navigation.type";
-import { ICreateCompanyChallenge } from "../../../../types/challenge";
-import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
-import Header from "../../../../component/common/Header";
->>>>>>> main
 import CustomSwitch from "../../../../component/common/Switch";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";

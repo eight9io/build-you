@@ -1,10 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-<<<<<<< HEAD
-import dayjs from "dayjs";
-=======
->>>>>>> main
 import { useIsFocused } from "@react-navigation/native";
 
 import {
@@ -253,16 +249,9 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             a: { createdAt: string | number | Date },
             b: { createdAt: string | number | Date }
           ) => {
-<<<<<<< HEAD
-            const aCreatedAt = dayjs(a.createdAt);
-            const bCreatedAt = dayjs(b.createdAt);
-            return bCreatedAt.unix() - aCreatedAt.unix();
-=======
             return (
-              // TODO use dayjs.diff
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
             );
->>>>>>> main
           }
         );
 

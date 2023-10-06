@@ -14,11 +14,7 @@ import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
 import { useUserProfileStore } from "../../../store/user-store";
 import { serviceAddEmployee } from "../../../service/company";
 import { fetchListEmployee } from "../../../utils/profile";
-<<<<<<< HEAD
 import { useEmployeeListStore } from "../../../store/company-data-store";
-=======
-import { useEmployeeListStore } from "../../../store/company-data";
->>>>>>> main
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 interface IAddNewEmployeeModalProps {

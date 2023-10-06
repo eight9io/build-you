@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import clsx from "clsx";
->>>>>>> main
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import SearchSvg from "./asset/search.svg";
@@ -13,12 +9,21 @@ interface IButtonWithIconProps {
   testID?: string;
 }
 
-const ButtonWithIcon: React.FC<IButtonWithIconProps> = ({ icon, onPress, testID }) => {
+const ButtonWithIcon: React.FC<IButtonWithIconProps> = ({
+  icon,
+  onPress,
+  testID,
+}) => {
   const ImageSourceFromAssets =
     icon === "search" ? <SearchSvg /> : <SettingsSvg />;
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress} testID={testID} className="p-1">
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={onPress}
+      testID={testID}
+      className="p-1"
+    >
       <View className="flex flex-row items-center">
         {ImageSourceFromAssets}
       </View>

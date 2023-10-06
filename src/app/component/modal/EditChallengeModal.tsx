@@ -6,11 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-<<<<<<< HEAD
 import { useNav } from "../../hooks/useNav";
-=======
-import { useNav } from "../../navigation/navigation.type";
->>>>>>> main
 import { IChallenge, IEditChallenge } from "../../types/challenge";
 import { EditChallengeValidationSchema } from "../../Validators/EditChallenge.validate";
 

@@ -6,18 +6,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-<<<<<<< HEAD
 import { Text, Animated, TouchableOpacity, Platform, View } from "react-native";
-=======
-import {
-  Text,
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-  Platform,
-  View,
-} from "react-native";
->>>>>>> main
 import IconClose from "../../../component/asset/icon-close.svg";
 import GlobalToastController, {
   GlobalToastRef,

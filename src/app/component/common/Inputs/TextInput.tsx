@@ -71,10 +71,6 @@ export const TextInput: FC<ITextInputProps> = (props) => {
                 textAlignVertical={multiline ? "top" : "center"}
                 autoCapitalize="none"
                 multiline={multiline}
-<<<<<<< HEAD
-
-=======
->>>>>>> main
               />
             </View>
             {rightIcon ? (

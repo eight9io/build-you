@@ -1,13 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Keyboard,
-  Button,
-  Animated,
-  Dimensions,
-} from "react-native";
+import { TextInput, View, Animated, Dimensions } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
@@ -46,11 +38,7 @@ const UserSearchBar = ({
           style={{
             marginLeft: 10,
           }}
-<<<<<<< HEAD
           className="mt-1 w-11/12 flex-1 py-1"
-=======
-          className="w-11/12 flex-1 py-1 mt-1"
->>>>>>> main
           placeholder="Search"
           value={searchPhrase}
           onChangeText={setSearchPhrase}

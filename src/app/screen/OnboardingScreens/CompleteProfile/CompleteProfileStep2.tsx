@@ -2,10 +2,6 @@ import React, { FC, useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
-<<<<<<< HEAD
-=======
-import Spinner from "react-native-loading-spinner-overlay";
->>>>>>> main
 
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
 import { uploadNewVideo } from "../../../utils/uploadVideo";

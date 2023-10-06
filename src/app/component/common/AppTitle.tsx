@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 import { Text } from "react-native";
 import clsx from "clsx";
-=======
-import { FC } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import clsx from "clsx";
-import NavButton from "./Buttons/NavButton";
->>>>>>> main
 import { useTranslation } from "react-i18next";
 
 interface IAppTitleProps {

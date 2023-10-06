@@ -5,8 +5,6 @@ import clsx from "clsx";
 
 import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
 
-<<<<<<< HEAD
-import { IEmployeeDataProps } from "../../../../types/common";
 import { IUserData } from "../../../../types/user";
 
 import { fetchListEmployee } from "../../../../utils/profile";
@@ -15,15 +13,6 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import Skills from "../Users/Skills";
 import ChallengesTab from "./Challenges/ChallengesTab";
 import Biography from "../Users/Biography/Biography";
-=======
-import Skills from "../Users/Skills";
-import ChallengesTab from "./Challenges/ChallengesTab";
-import { IUserData } from "../../../../types/user";
-import Biography from "../Users/Biography/Biography";
-
-import { fetchListEmployee } from "../../../../utils/profile";
-import { useUserProfileStore } from "../../../../store/user-store";
->>>>>>> main
 import EmployeesCompany from "./EmployeesCompany";
 import SkeletonLoadingCommon from "../../../common/SkeletonLoadings/SkeletonLoadingCommon";
 
@@ -64,22 +53,6 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
 
   useEffect(() => {
     if (!otherUserData?.id) return;
-<<<<<<< HEAD
-    fetchListEmployee(otherUserData?.id, (res: IEmployeeDataProps[]) => {
-      if (
-        !!res?.find((item: any) => item?.id === userProfile?.id) ||
-        otherUserData?.id === userProfile?.id
-      ) {
-        setIsCurrentUserInCompany(true);
-      } else {
-        setIsCurrentUserInCompany(false);
-      }
-      return setEmployeeList(res);
-    });
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
-=======
     //TODO add typescript
     const fetchEmployee = async (userId: string) => {
       try {
@@ -102,7 +75,6 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
       }
     };
     fetchEmployee(otherUserData?.id);
->>>>>>> main
   }, []);
 
   const titles = isCurrentUserInCompany
@@ -130,11 +102,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
           className={clsx("h-full flex-1 bg-gray-50")}
           renderItem={() => <View></View>}
           ListHeaderComponent={
-<<<<<<< HEAD
-            <>
-=======
             <View>
->>>>>>> main
               {otherUserData !== null && isCurrentUserInCompany !== null && (
                 <TabViewFlatlist
                   titles={titles}
@@ -165,11 +133,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                   </Text>
                 </View>
               )}
-<<<<<<< HEAD
-            </>
-=======
             </View>
->>>>>>> main
           }
         />
       )}

@@ -10,12 +10,8 @@ import { OutlineButton } from "../common/Buttons/Button";
 import ProfileAvatar from "../common/Avatar/ProfileAvatar/ProfileAvatar";
 
 import { IUserData } from "../../types/user";
-<<<<<<< HEAD
-import { useUserProfileStore } from "../../store/user-store";
-=======
 import { ICompanyDataUser } from "../../types/company";
 
->>>>>>> main
 import ProfileTabs from "./ProfileTabs/Users/ProfileTabs";
 import IconCompany from "./ProfileTabs/common/asset/company.svg";
 
@@ -76,10 +72,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
   navigation,
   setIsLoading,
 }) => {
-<<<<<<< HEAD
-=======
   const userCompany = userData?.employeeOf as ICompanyDataUser;
->>>>>>> main
   return (
     <View className={clsx("relative h-full w-full flex-1 flex-col bg-white")}>
       <TopSectionProfile
@@ -92,20 +85,12 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
           {userData?.name} {userData?.surname}
         </Text>
       </View>
-<<<<<<< HEAD
-      {userData?.isShowCompany && userData?.employeeOf?.name && (
-=======
       {userData?.isShowCompany && userCompany?.name && (
->>>>>>> main
         <View className={clsx(" mb-3 flex-row gap-2 px-4")}>
           <IconCompany />
 
           <Text className={clsx(" text-[14px]  font-medium ")}>
-<<<<<<< HEAD
-            {userData?.employeeOf?.name}
-=======
             {userCompany?.name}
->>>>>>> main
           </Text>
         </View>
       )}

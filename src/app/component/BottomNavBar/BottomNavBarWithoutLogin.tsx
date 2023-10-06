@@ -3,11 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, Platform } from "react-native";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-<<<<<<< HEAD
 import { HomeFeedUnregister } from "../../screen/HomeScreen";
-=======
-import HomeScreen, { HomeFeedUnregister } from "../../screen/HomeScreen";
->>>>>>> main
 import FeedSvg from "./asset/feed.svg";
 import CreateSvg from "./asset/create.svg";
 import ChallengesSvg from "./asset/challenges.svg";

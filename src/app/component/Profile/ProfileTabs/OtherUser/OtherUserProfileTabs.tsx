@@ -53,20 +53,27 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
   useEffect(() => {
     if (!otherUserData?.id) return;
     //TODO add typescript
-    fetchListEmployee(otherUserData?.id, (res: any) => {
-      if (
-        !!res?.find((item: any) => item?.id === userProfile?.id) ||
-        otherUserData?.id === userProfile?.id
-      ) {
-        setIsCurrentUserInCompany(true);
-      } else {
-        setIsCurrentUserInCompany(false);
+    const fetchEmployee = async (userId: string) => {
+      try {
+        fetchListEmployee(userId, (res: any) => {
+          if (
+            !!res?.find((item: any) => item?.id === userProfile?.id) ||
+            otherUserData?.id === userProfile?.id
+          ) {
+            setIsCurrentUserInCompany(true);
+          } else {
+            setIsCurrentUserInCompany(false);
+          }
+          return setEmployeeList(res);
+        });
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      } catch (error) {
+        console.log(error);
       }
-      return setEmployeeList(res);
-    });
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
+    };
+    fetchEmployee(otherUserData?.id);
   }, []);
 
   const titles = isCurrentUserInCompany
@@ -94,7 +101,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
           className={clsx("h-full flex-1 bg-gray-50")}
           renderItem={() => <View></View>}
           ListHeaderComponent={
-            <>
+            <View>
               {otherUserData !== null && isCurrentUserInCompany !== null && (
                 <TabViewFlatlist
                   titles={titles}
@@ -125,7 +132,7 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
                   </Text>
                 </View>
               )}
-            </>
+            </View>
           }
         />
       )}

@@ -65,7 +65,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
     <View className="flex w-full flex-col">
       <View className="flex w-full flex-row items-center justify-between">
         <View>
-          <Text className="w-44 text-h6 font-medium leading-6 text-black-default">
+          <Text className="w-40 text-h6 font-medium leading-6 text-black-default">
             {item.label}
           </Text>
         </View>

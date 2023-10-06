@@ -7,7 +7,7 @@ export interface IUserData {
   surname: string;
   birth?: string;
   role?: string;
-  occupation?: string;
+  occupation?: IOccupation;
   // if occupation is 'ALTRO' then get occupation from occupationDetail
   occupationDetail?: string;
   bio?: string;

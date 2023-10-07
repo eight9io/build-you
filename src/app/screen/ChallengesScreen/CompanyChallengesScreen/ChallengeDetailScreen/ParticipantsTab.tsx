@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import Empty from "./assets/emptyFollow.svg";
@@ -13,9 +13,15 @@ interface IParticipantsTabProps {
     name: string;
     challengeStatus?: string;
   }[];
+  fetchParticipants?: () => void;
 }
 
-const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
+const ParticipantsTab: FC<IParticipantsTabProps> = ({
+  participant = [],
+  fetchParticipants,
+}) => {
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -66,10 +72,16 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
             );
           }}
           ListFooterComponent={<View className="h-20" />}
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+            fetchParticipants && fetchParticipants();
+            setRefreshing(false);
+          }}
         />
       )}
       {participant.length == 0 && (
-        <View className=" flex-1 items-center justify-center">
+        <View className=" flex-1 items-center pt-16">
           <Empty />
           <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
             {t("challenge_detail_screen.not_participants")}

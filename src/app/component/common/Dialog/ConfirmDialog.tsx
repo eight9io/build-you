@@ -39,7 +39,6 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   const handleConfirm = () => {
     onConfirm && onConfirm();
   };
-
   return (
     <View>
       {isVisible && (

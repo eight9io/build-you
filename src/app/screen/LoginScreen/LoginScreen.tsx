@@ -148,7 +148,6 @@ export default function Login() {
         setIsLoading(false);
         return;
       }
-      console.log("error", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }
@@ -158,6 +157,7 @@ export default function Login() {
 
   const handleConfirmError = async () => {
     setIsShowVerifiedErrorModal(false);
+    logout();
   };
 
   return (

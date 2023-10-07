@@ -5,13 +5,14 @@ import clsx from "clsx";
 
 import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
 
-import Skills from "../Users/Skills";
-import ChallengesTab from "./Challenges/ChallengesTab";
 import { IUserData } from "../../../../types/user";
-import Biography from "../Users/Biography/Biography";
 
 import { fetchListEmployee } from "../../../../utils/profile";
 import { useUserProfileStore } from "../../../../store/user-store";
+
+import Skills from "../Users/Skills";
+import ChallengesTab from "./Challenges/ChallengesTab";
+import Biography from "../Users/Biography/Biography";
 import EmployeesCompany from "./EmployeesCompany";
 import SkeletonLoadingCommon from "../../../common/SkeletonLoadings/SkeletonLoadingCommon";
 

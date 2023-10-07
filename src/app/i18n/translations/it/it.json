@@ -31,6 +31,9 @@
   "challenge_detail_screen.completed": "Completato",
   "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
   "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
+  "challenge_detail_screen.chat_coach": "Allenatore di chat",
+  "challenge_detail_screen.rate_skills": "Rate skills",
+  "challenge_detail_screen.can_not_rate_skills": "Il coach non può valutare le competenze quando la sfida non è completata",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Sfide",
@@ -86,7 +89,7 @@
     }
   ],
   "register_screen.loading": "  Creando il tuo account... ",
-  "modal_skill.title": "Completa profilo",
+  "modal_skill.title": "Inserisci il tuo nome",
   "modal_skill.step": "Steps",
   "modal_skill.of": "di",
   "modal_skill.skip": "Salta",
@@ -156,14 +159,14 @@
       "title": "Parlaci di te",
       "avatar_error": "Seleziona una immagine",
       "first_name": "Nome",
-      "enter_first_name": "Inserisci il tuo name",
+      "enter_first_name": "Inserisci il tuo nome",
       "first_name_error": "Inserisci il tuo nome.",
       "last_name": "Cognome",
       "enter_last_name": "Inserisci il tuo cognome",
       "last_name_error": "Inserisci il tuo cognome.",
       "birth": "Data di nascita",
       "select_your_birthday": "Seleziona data",
-      "birthday_error": "Selziona data.",
+      "birthday_error": "Seleziona data.",
       "occupation": "Professione",
       "enter_occupation": "Inserisci la tua professione",
       "occupation_error": "Seleziona la professione più coerente.",
@@ -242,28 +245,41 @@
     }
   },
   "new_challenge_screen": {
-    "title": "Nuova sfida",
+    "new_challenge": "Nuova sfida",
+    "new_certified_challenge": "Nuova sfida certificata",
+    "next": "Avanti",
     "create_button": "Crea",
+    "next_button": "Avanti",
+    "choose_type": "Scegli il tipo di sfida",
+    "choose_type_description": "Scegli quale sfida fa per te e inizia la tua crescita personale.",
+    "free_challenge": "Sfida gratuita",
+    "free_challenge_description": "Crea la tua sfida e lascia che la comunità ti supporti.",
+    "create_free_challenge": "Crea sfida gratuita",
+    "certified_challenge": "Sfida certificata",
+    "certified_challenge_description": "Crea la tua sfida e sii seguito da un coach professionista.",
+    "create_certified_challenge": "Crea sfida certificata",
+    "title": "Nuova sfida",
     "description": "Crea una nuova sfida per te stesso con un obiettivo concreto e tempo per raggiungerlo.",
     "your_goal": "Tuo obiettivo",
     "your_goal_placeholder": "Imposta un obiettivo concreto",
     "benefits": "I benefici",
     "benefits_placeholder": "Elenca i vantaggi che otterrai al raggiungimento",
     "reasons": "Il motivo",
-    "max_people": "Numero max partecipanti",
+    "max_people": "Numero massimo partecipanti",
     "max_people_placeholder": "Inserisci il numero di persone",
     "reasons_placeholder": "Indica i motivi che ti spingono a realizzarlo",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
-    "time_to_reach_goal_placeholder": "Indica la data",
-    "your_goal_required": "Imposta il tuo obiettivo",
-    "benefits_required": "Elenca i vantaggi",
-    "reasons_required": "Indica i motivi",
-    "time_to_reach_goal_required": "Seleziona la data",
-    "image_required": "Carica un'immagine",
-    "max_people_required": "Indica il numero massimo di persone",
+    "time_to_reach_goal_placeholder": "Seleziona una data",
+    "your_goal_required": "Imposta il tuo obiettivo, per favore",
+    "benefits_required": "Elenca i vantaggi, per favore",
+    "reasons_required": "Indica i motivi, per favore",
+    "time_to_reach_goal_required": "Seleziona la data, per favore",
+    "image_required": "Carica un'immagine, per favore",
+    "max_people_required": "Indica il numero massimo di persone, per favore",
     "min_people_required": "Il numero minimo di persone è 2",
-    "is_public_required": "Per favore seleziona la privacy della sfida",
-    "challenge_status_description": "Tutti possono partecipare alla tua sfida pubblica mentre solo gli utenti della tua azienda possono partecipare alla tua sfida privata."
+    "is_public_required": "Seleziona la privacy della sfida, per favore",
+    "challenge_status_description": "Tutti possono partecipare alla tua sfida pubblica, mentre solo gli utenti della tua azienda possono partecipare alla tua sfida privata.",
+    "soft_skill_required": "Ti prego di selezionare almeno 1 e non più di 3 competenze trasversali."
   },
   "new_progress_modal": {
     "title": "Nuovo progresso",
@@ -353,6 +369,12 @@
       "delete_success_title": "Sfida cancellata",
       "delete_success_description": "Sfida cancellata con successo"
     },
+    "package_info": {
+      "basic": "Pacchetti base (chiamata audio):",
+      "premium": "Pacchetti premium (chiamata video):",
+      "number_of_checks": "Numero di controlli:",
+      "credits": "Crediti:"
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
     "complete": "Completa",
@@ -395,11 +417,19 @@
     "completed_challenge_success": "La sfida è stata completata con successo !",
     "delete_challenge_success": "Sfida eliminata con successo !",
     "copied_to_clipboard": "Copiato negli appunti",
-    "copied_to_clipboard_error": "Errore durante la copia negli appunti"
+    "copied_to_clipboard_error": "Errore durante la copia negli appunti",
+    "open_touchpoint_success": "Aggiornamento riuscito!",
+    "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi.",
+    "cannot_close_touchpoint_error": "Non puoi chiudere questo touchpoint quando la sfida non è completata.",
+    "rate_skills_success": "Valutazione competenze riuscita!",
+    "rate_skills_error": "Valutazione competenze fallita! Riprova più tardi."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
     "delete_comment_success": "Il tuo commento è stato eliminato con successo"
+  },
+  "chat_input": {
+    "chat_input_placeholder": "Scrivi un messaggio"
   },
   "delete_progress": {
     "delete_success": "I tuoi progressi sono stati eliminati con successo"
@@ -536,7 +566,8 @@
     "the_benefits": "I benefici",
     "the_reason": "Il motivo",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
-    "participants": "Partecipanti"
+    "participants": "Partecipanti",
+    "soft_skills": "Abilità trasversale"
   },
   "challenge_progress_tab": {
     "do_you_want_to_confirm_rating": "Vuoi confermare la tua valutazione?",
@@ -550,7 +581,7 @@
   "edit_personal_profile_screen": {
     "hard_skills": "Hard skills",
     "first_name": "Nome",
-    "enter_first_name": "Inserisci il tuo name",
+    "enter_first_name": "Inserisci il tuo nome",
     "last_name": "Cognome",
     "enter_last_name": "Inserisci il tuo cognome",
     "birth": "Data di nascita",

@@ -12,8 +12,8 @@ import HomeScreen from "../../screen/HomeScreen";
 import NotificationsScreen from "../../screen/NotificationsScreen/NotificationsScreen";
 import PersonalProfileScreen from "../../screen/ProfileScreen/Personal/PersonalProfileScreen";
 import CompanyProfileScreen from "../../screen/ProfileScreen/Company/CompanyProfileScreen";
-import PersonalChallengesNavigator from "../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesScreen";
-import CompanyChallengesScreen from "../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengesScreen";
+import PersonalChallengesNavigator from "../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesNavigator";
+import CompanyChallengesScreen from "../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengsNavigator";
 
 import FeedSvg from "./asset/feed.svg";
 import FeedFillSvg from "./asset/feed-fill.svg";
@@ -26,13 +26,13 @@ import NotificationIcon from "./asset/noti.svg";
 import NotificationFillIcon from "./asset/noti-fill.svg";
 import NewNotificationIcon from "../asset/new-notification-icon.svg";
 
-import { useGetUserData } from "../../hooks/useGetUser";
 import { useUserProfileStore } from "../../store/user-store";
 import { useNotificationStore } from "../../store/notification-store";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
 import { getNotifications } from "../../service/notification";
+import CreateChallengeScreenMain from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,9 +40,12 @@ interface IBottomNavBarProps {
   navigation: NativeStackNavigationProp<RootStackParamList, "BottomNavBar">;
 }
 
-const SCREENS_TO_HIDE_TAB_BAR = ["ProgressCommentScreen", "MainSearchScreen"];
-
-const EmptyScreen = () => null;
+const SCREENS_TO_HIDE_TAB_BAR = [
+  "PersonalChallengeDetailScreen",
+  "ProgressCommentScreen",
+  "MainSearchScreen",
+  "PersonalCoachChallengeDetailScreen",
+];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
@@ -80,7 +83,6 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
     (lastNotiId !== null &&
       newestNotiId !== null &&
       lastNotiId.toString() !== newestNotiId.toString());
-
 
   return (
     <Tab.Navigator
@@ -173,21 +175,18 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       />
       <Tab.Screen
         name="Create Challenge"
-        component={EmptyScreen}
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            if (isCompany) navigation.navigate("CreateCompanyChallengeScreen");
-            else navigation.navigate("CreateChallengeScreen");
-          },
-        })}
+        component={CreateChallengeScreenMain}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
               className={clsx("flex flex-col items-center justify-center")}
               testID="bottom_nav_bar_create_challenge_btn"
             >
-              <CreateSvg fill={"#6C6E76"} />
+              {focused ? (
+                <CreateFillSvg fill={"#FF7B1C"} />
+              ) : (
+                <CreateSvg fill={"#6C6E76"} />
+              )}
               <Text
                 className={clsx(
                   "pt-1.5 text-xs font-semibold text-gray-bottomBar",

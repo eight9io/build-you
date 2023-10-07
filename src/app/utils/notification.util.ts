@@ -378,3 +378,12 @@ export const handleAppOpenOnNotificationPressed = async () => {
       handleTapOnIncomingNotification(initialNotification);
   }
 };
+
+export const setBadgeCount = (count: number) => {
+  if (isNaN(count)) return;
+  return notifee.setBadgeCount(count);
+};
+
+export const decrementBadgeCount = () => {
+  return notifee.decrementBadgeCount();
+};

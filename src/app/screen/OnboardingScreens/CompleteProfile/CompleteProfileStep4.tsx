@@ -32,12 +32,12 @@ interface IFetchedSkill {
   id: string;
   skill: string;
 }
-interface ISkillProps {
+export interface ISkillProps {
   skill: IFetchedSkill;
   rating: number;
 }
 
-interface IFormValueInput {
+export interface IFormValueInput {
   label: string;
   value: number; //rating
   id: string;
@@ -72,7 +72,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
         <View className="flex flex-1 flex-row  justify-end">
           {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
             <TouchableOpacity
-              className="pr-4"
+              className="pr-3"
               key={`${randomId}${index}`}
               onPress={() => changeSkillValue(item?.label, index + 1)}
               testID={`${item.testID}_progress_${index}`}
@@ -102,7 +102,7 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   );
 };
 
-const renderSelectedSoftSkill = (
+export const renderSelectedSoftSkill = (
   t: any,
   selectedCompetencedSkill: IFormValueInput[],
   changeSkillValue: any,

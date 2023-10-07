@@ -13,6 +13,7 @@ import {
 } from "../../../../service/challenge";
 
 import ParticipantsTab from "./ParticipantsTab";
+import CompanyCoachTab from "./CompanyCoachTab";
 import TabView from "../../../../component/common/Tab/TabView";
 import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
@@ -22,6 +23,13 @@ import CheckCircle from "./assets/check_circle.svg";
 import Button from "../../../../component/common/Buttons/Button";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/navigation.type";
+import CompanySkillsTab from "./CompanySkillsTab";
+
+export type ChallengeCompanyDetailScreenNavigationProps =
+  NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
 
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -39,22 +47,23 @@ export const ChallengeCompanyDetailScreen: FC<
   setIsNewProgressAdded,
 }) => {
   const { t } = useTranslation();
-  // const [isJoined, setIsJoined] = useState(true);
-  const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-    t("challenge_detail_screen.participants"),
-  ];
+  const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
+  const [participantList, setParticipantList] = useState(
+    challengeData?.participants || []
+  );
+  const [index, setIndex] = useState<number>(0);
 
-  const [index, setIndex] = useState(0);
-  const { goal, id: challengeId, owner } = challengeData;
+  const { goal, id: challengeId } = challengeData;
 
   const { getUserProfile } = useUserProfileStore();
 
   const currentUser = getUserProfile();
-  const [participantList, setParticipantList] = useState(
-    challengeData?.participants || []
-  );
+
+  const navigation =
+    useNavigation<
+      NavigationProp<ChallengeCompanyDetailScreenNavigationProps>
+    >();
+
   const fetchParticipants = async () => {
     const response = await getChallengeParticipants(challengeId);
     setParticipantList(response.data);
@@ -68,7 +77,7 @@ export const ChallengeCompanyDetailScreen: FC<
     (participant: any) => participant.id === currentUser?.id
   );
 
-  const [isJoined, setIsJoined] = useState(
+  const [isJoined, setIsJoined] = useState<boolean>(
     isCurrentUserOwner || !!isCurrentUserParticipant
   );
   const challengeStatus =
@@ -137,6 +146,22 @@ export const ChallengeCompanyDetailScreen: FC<
   };
 
   useEffect(() => {
+    const CHALLENGE_TABS_TITLE_TRANSLATION = [
+      t("challenge_detail_screen.progress"),
+      t("challenge_detail_screen.description"),
+      t("challenge_detail_screen.participants"),
+    ];
+
+    if (challengeData?.type === "certified") {
+      CHALLENGE_TABS_TITLE_TRANSLATION.push(
+        t("challenge_detail_screen.coach"),
+        t("challenge_detail_screen.skills")
+      );
+    }
+    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
+  }, []);
+
+  useEffect(() => {
     if (!shouldRefresh) return;
     fetchParticipants();
     setShouldRefresh(false);
@@ -193,7 +218,7 @@ export const ChallengeCompanyDetailScreen: FC<
 
         <View className="mt-3 flex flex-1">
           <TabView
-            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
+            titles={challengeTabTitles}
             activeTabIndex={index}
             setActiveTabIndex={setIndex}
           >
@@ -206,6 +231,11 @@ export const ChallengeCompanyDetailScreen: FC<
             />
             <DescriptionTab challengeData={challengeData} />
             <ParticipantsTab participant={participantList as any} />
+            <CompanyCoachTab navigation={navigation} />
+            <CompanySkillsTab
+              navigation={navigation}
+              challengeId={challengeData?.id}
+            />
           </TabView>
         </View>
       </View>

@@ -31,6 +31,9 @@
   "challenge_detail_screen.completed": "Completed",
   "challenge_detail_screen.no_progress_yet": "No progress yet",
   "challenge_detail_screen.not_participants": "No participants at the moment ",
+  "challenge_detail_screen.chat_coach": "chat coach",
+  "challenge_detail_screen.rate_skills": "Rate skills",
+  "challenge_detail_screen.can_not_rate_skills": "Coach can not rate skills when challenge is not completed",
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
@@ -241,6 +244,10 @@
     }
   },
   "new_challenge_screen": {
+    "new_challenge": "New challenge",
+    "new_certified_challenge": "New certified challenge",
+    "next": "Next",
+    "next_button": "Next",
     "title": "New challenge",
     "create_button": "Create",
     "choose_type": "Choose the type of challenge",
@@ -248,9 +255,9 @@
     "free_challenge": "Free challenge",
     "free_challenge_description": "Create your own challenge and let the community support you.",
     "create_free_challenge": "Create free challenge",
-    "cretified_challenge": "Certified challenge",
-    "cretified_challenge_description": "Create your own challenge and be followed by a professional coach.",
-    "create_cretified_challenge": "Create certified challenge",
+    "certified_challenge": "Certified challenge",
+    "certified_challenge_description": "Create your own challenge and be followed by a professional coach.",
+    "create_certified_challenge": "Create certified challenge",
     "description": "Create a new challenge for yourself with a concrete goal and time to reach it.",
     "your_goal": "Your goal",
     "your_goal_placeholder": "Set a concrete goal",
@@ -271,7 +278,7 @@
     "min_people_required": "Minimum number of people is 2",
     "is_public_required": "Please select challenge privacy",
     "challenge_status_description": "Everyone can join your public challenge while only user from your company can join your private challenge.",
-    "soft_skill_required": "Please select at least 3 soft skills."
+    "soft_skill_required": "Please select at least 1 and no more than 3 soft skills."
   },
   "new_progress_modal": {
     "title": "New progress",
@@ -361,6 +368,12 @@
       "delete_success_title": "Challenge deleted",
       "delete_success_description": "Your challenge has been deleted successfully"
     },
+    "package_info": {
+      "basic": "Basic packages (chat):",
+      "premium": "Premium packages (video call):",
+      "number_of_checks": "Number of checks:",
+      "credits": "Credits:"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "complete": "Complete",
@@ -403,11 +416,19 @@
     "completed_challenge_success": "Challenge has been completed successfully !",
     "delete_challenge_success": "Deleted Challenge successfully !",
     "copied_to_clipboard": "Copied to clipboard",
-    "copied_to_clipboard_error": "Error when copying to clipboard"
+    "copied_to_clipboard_error": "Error when copying to clipboard",
+    "open_touchpoint_success": "Update touchpoint status successfully!",
+    "open_touchpoint_error": "Update touchpoint status failed!. Please try again later.",
+    "cannot_close_touchpoint_error": "You cannot close this touchpoint, when the challenge is not completed.",
+    "rate_skills_success": "Rate skills successfully!",
+    "rate_skills_error": "Rate skills failed!. Please try again later."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
     "delete_comment_success": "Your comment has been deleted successfully"
+  },
+  "chat_input": {
+    "chat_input_placeholder": "Type a message"
   },
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"
@@ -544,7 +565,8 @@
     "the_benefits": "The benefits",
     "the_reason": "The reason",
     "time_to_reach_goal": "Time to reach goal",
-    "participants": "Participants"
+    "participants": "Participants",
+    "soft_skills": "Soft skills"
   },
   "challenge_progress_tab": {
     "do_you_want_to_confirm_rating": "Do you want to confirm your rating?",
@@ -566,6 +588,46 @@
     "birthday_error": "Please select your birth.",
     "occupation": "Occupation",
     "enter_occupation": "Enter your occupation",
+    "occupation_error": "Please select your occupation.",
+    "biography": "Biography",
+    "your_biography": "Your biography",
+    "phone": "Phone number",
+    "enter_phone": "Enter your phone number"
+  },
+  "choose_packages_screen": {
+    "package": "Package",
+    "title": "Choose the support type of the coach",
+    "description": "At the end of the challenge the coach will certify the soft skills you have acquired",
+    "basic_package": "Basic package",
+    "basic_package_description": "A coach will follow you during your challenge through 3 touchpoints.",
+    "direct_chat": "Direct chat",
+    "premium_package": "Premium package",
+    "premium_package_description": "A coach will follow you during your challenge through 3 touchpoints.",
+    "video_call": "Video call",
+    "intake": "Intake",
+    "check": "Check",
+    "closing": "Closing",
+    "no_package": "No packages available at the moment"
+  },
+  "cart_screen": {
+    "title": "Summary",
+    "basic_packages": "Basic packages",
+    "basic_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat",
+    "premium_packages": "Premium packages",
+    "premium_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat and video call",
+    "intake": "Intake",
+    "check": "Check",
+    "closing": "Closing",
+    "select_checkpoints": "Select the number of checkpoints:",
+    "minimum_checkpoint_error": "At least 1 checkpoint is required",
+    "total": "Total",
+    "pay": "Pay"
+  },
+  "challenge_screen": {
+    "empty_challenge": "You have no challenge at the moment",
+    "coach_empty_challenge": "You have no coaching challenge at the moment",
+    "coach_empty_challenge_description": "You have to be assinged for a challenge by the admin",
+    "to_create_new_challenge": "to create new challenge",
     "occupation_error": "Please select your occupation.",
     "biography": "Biography",
     "your_biography": "Your biography",

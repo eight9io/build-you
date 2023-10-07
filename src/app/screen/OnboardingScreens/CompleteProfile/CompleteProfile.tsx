@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 
 import {
   NativeStackNavigationProp,
@@ -7,15 +7,11 @@ import {
 } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
-import StepOfSteps from "../../../component/common/StepofSteps";
-import Button from "../../../component/common/Buttons/Button";
-
 import CompleteProfileStep1 from "./CompleteProfileStep1";
 import CompleteProfileStep2 from "./CompleteProfileStep2";
 import CompleteProfileStep3 from "./CompleteProfileStep3";
 import CompleteProfileStep4 from "./CompleteProfileStep4";
 import CompleteProfileFinish from "./CompleteProfileFinish";
-import Header from "../../../component/common/Header";
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

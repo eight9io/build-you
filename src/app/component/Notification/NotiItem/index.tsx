@@ -10,7 +10,7 @@ import {
 } from "../../../utils/notification.util";
 import { INotification } from "../../../types/notification";
 import dayjs from "../../../utils/date.util";
-import { useNav } from "../../../navigation/navigation.type";
+import { useNav } from "../../../hooks/useNav";
 import { setNotificationIsRead } from "../../../service/notification";
 interface INotiItemProps {
   notification: INotification;

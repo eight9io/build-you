@@ -1,5 +1,5 @@
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RouteProp } from "@react-navigation/native";
+import { IPackage } from "../types/package";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -48,7 +48,13 @@ export type RootStackParamList = {
   };
   CreateCompanyChallengeScreen: undefined;
 
+  ChoosePackageScreen: undefined;
   CreateChallengeScreenMain: undefined;
+  CreateCertifiedChallengeScreen: undefined;
+  CreateCertifiedCompanyChallengeScreen: undefined;
+  CartScreen: {
+    choosenPackage: IPackage;
+  };
   CreateCretifiedChallengeScreen: undefined;
   CreateCretifiedCompanyChallengeScreen: undefined;
 
@@ -84,12 +90,12 @@ export type RootStackParamList = {
   BottomNavBar: undefined;
   SplashScreen: undefined;
   NotFound: undefined;
+
+  ChallengeCompanyDetailScreen: undefined;
+  PersonalCoachChallengeDetailScreen: {
+    challengeId: string;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =
   RouteProp<RootStackParamList, RouteName>;
-
-// TODO: move this into seperate to avoid cycle dependcy when importing type
-export const useNav = () => {
-  return useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-};

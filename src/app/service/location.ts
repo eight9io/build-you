@@ -39,6 +39,6 @@ export const getNearbyLocations = async (
     );
     return extractNearbyAddresses(response.data);
   } catch (error) {
-    console.error('error: ', error);
+    console.error("error: ", error);
   }
 };

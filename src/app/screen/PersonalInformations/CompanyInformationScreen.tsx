@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import React, { Component } from "react";
+import React from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import { useUserProfileStore } from "../../store/user-store";

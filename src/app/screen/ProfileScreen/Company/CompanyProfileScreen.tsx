@@ -18,9 +18,7 @@ import { useUserProfileStore } from "../../../store/user-store";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
-import Button from "../../../component/common/Buttons/Button";
 
-import ShareIcon from "../../../../../assets/svg/share.svg";
 import { useGetListEmployee } from "../../../hooks/useGetCompany";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 

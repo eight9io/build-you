@@ -10,6 +10,10 @@ module.exports = (() => {
     babelTransformerPath: require.resolve("react-native-svg-transformer"),
   };
   config.transformer.minifierPath = require.resolve("metro-minify-esbuild");
+  config.transformer.minifierConfig = {
+    // ESBuild options...
+    // drop: ["console"],
+  };
 
   config.resolver = {
     ...resolver,

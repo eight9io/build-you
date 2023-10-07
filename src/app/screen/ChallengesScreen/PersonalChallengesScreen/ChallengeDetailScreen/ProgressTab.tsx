@@ -250,7 +250,6 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             b: { createdAt: string | number | Date }
           ) => {
             return (
-              // TODO use dayjs.diff
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
             );
           }

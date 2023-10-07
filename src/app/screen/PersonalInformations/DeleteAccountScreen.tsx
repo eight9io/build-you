@@ -24,7 +24,7 @@ import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { serviceLogin } from "../../service/auth";
 import { serviceDeleteAccount } from "../../service/profile";
 import { useAuthStore } from "../../store/auth-store";
-import { useNav } from "../../navigation/navigation.type";
+import { useNav } from "../../hooks/useNav";
 
 export default function DeleteAccountScreen() {
   const { logout } = useAuthStore();

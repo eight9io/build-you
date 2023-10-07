@@ -15,14 +15,12 @@ import {
   serviceGetListOccupation,
   serviceUpdateMyProfile,
 } from "../../../../service/profile";
-import { useGetUserData } from "../../../../hooks/useGetUser";
 import { useUserProfileStore } from "../../../../store/user-store";
 
 import Warning from "../../../../component/asset/warning.svg";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import PencilEditSvg from "../../../../component/asset/pencil-edit.svg";
 import Button from "../../../../component/common/Buttons/Button";
-import SelectPicker from "../../../../component/common/Pickers/SelectPicker";
 import { EditProfileValidators } from "../../../../Validators/EditProfile.validate";
 import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
@@ -128,7 +126,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
-
   const {
     control,
     handleSubmit,
@@ -589,7 +586,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                         value={value}
                         multiline={true}
                         numberOfLines={4}
-                        // className="h-32"
                       />
                     </View>
                   )}

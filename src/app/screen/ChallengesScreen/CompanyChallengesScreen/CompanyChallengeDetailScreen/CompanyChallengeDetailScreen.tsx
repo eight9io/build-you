@@ -2,7 +2,6 @@ import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 
 import httpInstance from "../../../../utils/http";
 import {

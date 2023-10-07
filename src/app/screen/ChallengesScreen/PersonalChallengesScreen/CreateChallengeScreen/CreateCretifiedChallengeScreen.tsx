@@ -10,8 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { ICreateChallenge } from "../../../../types/challenge";
-import { useNav } from "../../../../navigation/navigation.type";
-import { CreateCretifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
+import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
 import {
   createChallenge,
@@ -27,6 +26,7 @@ import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
+import { useNav } from "../../../../hooks/useNav";
 
 interface ICreateCretifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -85,7 +85,7 @@ const CreateCretifiedChallengeScreen = () => {
       softSkills: [],
     },
     resolver: yupResolver(
-      CreateCretifiedChallengeValidationSchema()
+      CreateCertifiedChallengeValidationSchema()
     ) as unknown as Resolver<ICreateCretifiedChallengeForm, any>,
   });
 

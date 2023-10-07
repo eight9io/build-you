@@ -27,3 +27,7 @@ set -o pipefail && xcodebuild -workspace ios/BuildYou.xcworkspace -scheme BuildY
 xcodebuild -exportArchive -exportOptionsPlist ios/ExportOptions.plist -archivePath build/app.xcarchive -exportPath build/app.ipa
 
 cat app.json | grep -o '"version": "[^"]_' | grep -o '[^"]_$'
+
+CodePush:
+ios: appcenter codepush release-react -a E9-Digital/BuildYou-Production -d Production -m --plist-file ios/BuildYou/Info.plist
+android: appcenter codepush release-react -a E9-Digital/BuildYou-Production-1 -d Production -m

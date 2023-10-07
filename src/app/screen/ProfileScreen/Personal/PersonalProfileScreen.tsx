@@ -16,7 +16,7 @@ import AppTitle from "../../../component/common/AppTitle";
 import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
-import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";

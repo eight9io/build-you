@@ -1,5 +1,19 @@
 import { IUserData } from "./user";
 
+export type IChallengeTouchpointStatus =
+  | "init"
+  | "open"
+  | "in-progress"
+  | "closed";
+
+export type CheckType<N extends number> = N extends infer Num
+  ? Num extends number
+    ? `check-${Num}`
+    : never
+  : never;
+
+export type CheckpointType = "intake" | CheckType<number> | "closing";
+
 export interface ICreateChallenge {
   goal: string;
   benefits: string;
@@ -15,6 +29,28 @@ export interface ICreateCompanyChallenge {
   maximumPeople: number | undefined;
   public: boolean;
   image?: string;
+  type?: string;
+  package?: string;
+  softSkills?: ISoftSkill[];
+  checkpoint: number;
+}
+
+export interface ISoftSkill {
+  id: string;
+  label?: string;
+  skill?: string;
+  rating?: number;
+}
+
+export interface ISoftSkillFromChallenge {
+  challenge: {
+    id: string;
+  };
+  id: string;
+  skill: {
+    id: string;
+    label: string;
+  };
 }
 
 export interface IEditChallenge {
@@ -63,13 +99,30 @@ export interface IChallenge {
   reasons: string;
   achievementTime: Date;
   image?: string | null;
-  status?: string;
+  status?: "open" | "closed" | "done";
   public?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   progress?: IProgressChallenge[];
   participants?: IUserData[];
   maximumPeople?: number;
+  totalCurrentParticipant?: number;
+  type?: "free" | "certified";
+  package?: IChallengePackage | null;
+  intake?: any;
+  check?: any;
+  closing?: any;
+  coach?: string;
+  softSkill?: ISoftSkillFromChallenge[];
+  // TODO: update type when api ready
+}
+
+export interface IChallengePackage {
+  id: string;
+  name: string;
+  caption: string;
+  price: number;
+  type: "videocall" | "chat";
 }
 
 export interface INumberOfCommentUpdate {
@@ -99,4 +152,40 @@ export interface ICreateCretifiedChallengeForm
   achievementTime: string | Date;
   image: string;
   softSkills: string[];
+}
+
+export interface ICertifiedChallengeState {
+  id: string;
+  name: string | null;
+  achievementTime: string;
+  benefits: string;
+  goal: string;
+  owner: {
+    id: string;
+    name: string;
+    surname: string;
+    avatar: string;
+    companyAccount: boolean;
+  }[];
+  reasons: string;
+  status: string;
+  public: boolean;
+  createdAt: string;
+  updatedAt: string;
+  maximumPeople: number | null;
+  type: string;
+  intakeStatus: IChallengeTouchpointStatus;
+  checkStatus: IChallengeTouchpointStatus;
+  closingStatus: IChallengeTouchpointStatus;
+  checkpoint: number;
+  completedCheckpoint: number;
+  coach: string;
+}
+
+export interface IUnformatedCertifiedChallengeState {
+  checkpoint: number;
+  checkStatus: IChallengeTouchpointStatus;
+  intakeStatus: IChallengeTouchpointStatus;
+  closingStatus: IChallengeTouchpointStatus;
+  completedCheckpoint: number;
 }

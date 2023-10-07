@@ -19,7 +19,6 @@ import Button from "../../../../common/Buttons/Button";
 import PlayButton from "./asset/play-button.svg";
 import { IUserData } from "../../../../../types/user";
 import { useTranslation } from "react-i18next";
-import { useUserProfileStore } from "../../../../../store/user-store";
 import { getUserOccupationCondition } from "../../../../../utils/profile";
 interface IBiographyProps {
   userProfile: IUserData | null;

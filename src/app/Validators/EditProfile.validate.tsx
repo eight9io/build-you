@@ -23,6 +23,7 @@ export const EditProfileValidators = () => {
     occupation: yup
       .string()
       .required(t("form_onboarding.screen_1.occupation_error") as string),
+
     bio: yup.string(),
     hardSkill: yup
       .array()
@@ -32,7 +33,6 @@ export const EditProfileValidators = () => {
     isShowCompany: yup.boolean(),
     city: yup.string(),
     employeeOf: yup.mixed(),
-    phone: yup.string(),
   });
 };
 

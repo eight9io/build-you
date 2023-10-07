@@ -4,6 +4,7 @@ import { Controller, set, useForm } from "react-hook-form";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Spinner from "react-native-loading-spinner-overlay";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { IHardSkill, IHardSkillProps } from "../../../../types/user";
@@ -34,7 +35,6 @@ import { VideoWithPlayButton } from "../../../../component/Profile/ProfileTabs/U
 import CalendarIcon from "./asset/calendar-icon.svg";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { serviceGetMyProfile } from "../../../../service/auth";
-import Spinner from "react-native-loading-spinner-overlay";
 import SeletecPickerOccupation from "../../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
 import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPicker/SelectPickerCompany";
 import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
@@ -137,14 +137,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     name: string;
     surname: string;
     birth: any;
-    occupation: any;
+    occupation: string;
     occupationDetail: string;
     employeeOf: ICompanyDataUser;
     bio: string;
     hardSkill: IHardSkillProps[];
     isShowCompany: boolean;
     city: string;
-    phone: string;
   }>({
     defaultValues: {
       name: userData?.name || "",
@@ -157,7 +156,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       isShowCompany: userData?.isShowCompany || false,
       city: userData?.city || "",
       employeeOf: userData?.employeeOf || undefined,
-      phone: userData?.phone || "",
     },
     resolver: yupResolver(EditProfileValidators()),
   });
@@ -262,17 +260,13 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     const getOccupationList = async () => {
-      try {
-        const { data } = await serviceGetListOccupation();
-        // find value have name = "ALTRO" in data and put it to the end of array
-        const index = data.findIndex((item) => item.name === "ALTRO");
-        const temp = data[index];
-        data.splice(index, 1);
-        data.push(temp);
-        setOccupationList(data);
-      } catch (error) {
-        console.error("Error get occupation list", error);
-      }
+      const { data } = await serviceGetListOccupation();
+      // find value have name = "ALTRO" in data and put it to the end of array
+      const index = data.findIndex((item) => item.name === "ALTRO");
+      const temp = data[index];
+      data.splice(index, 1);
+      data.push(temp);
+      setOccupationList(data);
     };
     getOccupationList();
   }, []);
@@ -488,6 +482,61 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
+              <View className="pt-3">
+                <Controller
+                  name="employeeOf"
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.company") || "Company"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.company") ||
+                          "Enter your company"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        onPress={() => setShowCompanyPicker(true)}
+                        value={value?.name}
+                      />
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="city"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.city") || "Last name"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_your_city") ||
+                          "Where do you base?"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                      {errors.city && (
+                        <View className="flex flex-row pt-2">
+                          <Warning />
+                          <Text className="pl-1 text-sm font-normal text-red-500">
+                            {errors.city.message}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                />
+              </View>
               <View>
                 <Text className="py-4 text-md font-semibold text-primary-default">
                   {t("video_profile")}
@@ -542,13 +591,11 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-
               <HardSkillSection
                 setOpenModal={() => setIsShowAddHardSkillModal(true)}
                 hardSkill={arrayMyHardSkills || []}
                 setArrayMyHardSkills={setArrayMyHardSkills}
               />
-
               {userData?.employeeOf && (
                 <>
                   <Text className="pt-4 text-base font-semibold text-primary-default">
@@ -569,38 +616,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   </View>
                 </>
               )}
-              <View className="pt-6">
-                <Controller
-                  control={control}
-                  name="phone"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <View className="flex flex-col">
-                      <TextInput
-                        label={
-                          t("edit_personal_profile_screen.phone") ||
-                          "Phone number"
-                        }
-                        placeholder={
-                          t("edit_personal_profile_screen.enter_phone") ||
-                          "Enter your phone number"
-                        }
-                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                      />
-                      {errors.phone && (
-                        <View className="flex flex-row pt-2">
-                          <Warning />
-                          <Text className="pl-1 text-sm font-normal text-red-500">
-                            {errors.phone.message}
-                          </Text>
-                        </View>
-                      )}
-                    </View>
-                  )}
-                />
-              </View>
               <Button
                 title={t("button.update") || "Update"}
                 containerClassName="mb-4  bg-primary-default mt-10 mb-"

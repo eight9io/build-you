@@ -44,7 +44,7 @@ export const fetchListEmployee = async (
 export const getUserOccupationCondition = (userProfile: IUserData) => {
   if (!userProfile) return "";
   if (
-    userProfile?.occupation?.name &&
+    userProfile?.occupation &&
     userProfile?.occupation?.name.toLocaleUpperCase() !== "ALTRO"
   ) {
     return userProfile.occupation.name;

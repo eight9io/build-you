@@ -52,25 +52,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
   const { getUserAppleInfo } = useAppleLoginInfoStore();
   const userAppleInfo = getUserAppleInfo();
-
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const getOccupationList = async () => {
-      const { data } = await serviceGetListOccupation();
-      setOccupationList(data);
-    };
-    const getAppleUserProfile = async () => {
-      const userEmailFromStorage = userAppleInfo.email;
-      const userSubFromStorage = userAppleInfo.sub;
-      const userTempName = userEmailFromStorage || userSubFromStorage || "";
-      setValue("name", userTempName, { shouldValidate: true });
-      setValue("surname", userTempName, { shouldValidate: true });
-    };
-
-    getOccupationList();
-    if (userProfile.loginType === "apple") getAppleUserProfile(); // Set name and surname for apple login
-  }, []);
 
   const {
     control,

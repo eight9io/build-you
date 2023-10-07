@@ -27,7 +27,6 @@ export interface IUserData {
   pIva?: string;
   loginType?: ILoginType;
   isVerified?: boolean;
-  isCoach?: boolean;
   city?: string;
 }
 

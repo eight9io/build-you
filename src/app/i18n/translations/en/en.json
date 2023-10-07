@@ -588,6 +588,7 @@
     "birthday_error": "Please select your birth.",
     "occupation": "Occupation",
     "enter_occupation": "Enter your occupation",
+    "occupation_error": "Please select your occupation.",
     "biography": "Biography",
     "your_biography": "Your biography",
     "phone": "Phone number",

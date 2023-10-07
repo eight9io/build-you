@@ -20,6 +20,7 @@ import { serviceDeleteAccount } from "../../service/profile";
 import { CommonActions } from "@react-navigation/native";
 import LinkedInModal from "../../component/modal/LinkedInModal";
 import Spinner from "react-native-loading-spinner-overlay";
+import { getUserOccupationCondition } from "../../utils/profile";
 
 const getGoogleToken = async () => {
   const { idToken } = await GoogleSignin.signIn();
@@ -59,6 +60,8 @@ export default function PersonalInformationScreen({ navigation }: any) {
   const userData = getUserProfile();
 
   let linkedinToken = null;
+
+  const occupation = getUserOccupationCondition(userData);
 
   const handleLoginOnDeleteAccount = async (
     payload: LoginForm | ISocialLoginForm,
@@ -229,7 +232,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
               </Text>
             </View>
           )}
-          {userData?.occupation && (
+          {occupation && (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -240,7 +243,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
               </Text>
 
               <Text className={clsx("text-md text-gray-dark")}>
-                {userData?.occupation.name}
+                {occupation}
               </Text>
             </View>
           )}

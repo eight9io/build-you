@@ -14,12 +14,8 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import { TouchableOpacity } from "react-native-gesture-handler";
 interface IChatCoachTabProps {
   challengeData: IChallenge;
-  isChallengeInProgress: boolean;
 }
-export function ChatCoachTab({
-  challengeData,
-  isChallengeInProgress,
-}: IChatCoachTabProps) {
+export function ChatCoachTab({ challengeData }: IChatCoachTabProps) {
   const [messages, setMessages] = useState([]);
   const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
@@ -75,6 +71,9 @@ export function ChatCoachTab({
   }, []);
   return (
     <GiftedChat
+      messagesContainerStyle={{
+        paddingBottom: Platform.OS === "ios" ? 6 : 12,
+      }}
       isCustomViewBottom
       messages={messages}
       onSend={(messages) => handleSubmit(messages)}
@@ -92,22 +91,17 @@ export function ChatCoachTab({
         );
       }}
       renderInputToolbar={(props) => (
-        <>
-          {isChallengeInProgress && (
-            <InputToolbar
-              {...props}
-              containerStyle={{
-                backgroundColor: "white",
-                borderColor: "#E8E8E8",
-                paddingTop: 8,
-                borderRadius: 10,
-                borderWidth: 1,
-                marginHorizontal: 20,
-                marginBottom: Platform.OS === "ios" ? 0 : 16,
-              }}
-            />
-          )}
-        </>
+        <InputToolbar
+          {...props}
+          containerStyle={{
+            backgroundColor: "white",
+            borderColor: "#E8E8E8",
+            paddingTop: 8,
+            borderRadius: 10,
+            borderWidth: 1,
+            marginHorizontal: 20,
+          }}
+        />
       )}
       maxComposerHeight={100}
       placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}

@@ -1,11 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  Platform,
-} from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
 import {
   NavigationProp,
   Route,
@@ -386,7 +380,6 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         style={{
           height: 48,
           width: 344,
-          marginBottom: Platform.OS === "ios" ? 0 : 20,
         }}
         onPress={onSumitCertifiedChallenge}
       >

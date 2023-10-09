@@ -1,5 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -366,4 +366,4 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   );
 };
 
-export default ProgressTab;
+export default React.memo(ProgressTab);

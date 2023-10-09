@@ -24,6 +24,7 @@ export type RootStackParamList = {
   PersonalChallengesScreen: undefined;
   PersonalChallengeDetailScreen: {
     challengeId: string;
+    hasNewMessage?: boolean;
   };
   RegisterScreen: undefined;
   SkillStepThreeScreen: undefined;
@@ -94,6 +95,7 @@ export type RootStackParamList = {
   ChallengeCompanyDetailScreen: undefined;
   PersonalCoachChallengeDetailScreen: {
     challengeId: string;
+    hasNewMessage?: boolean;
   };
 };
 

@@ -23,6 +23,8 @@ import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/Skele
 
 import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 import ProgressCommentScreen from "../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import PersonalChallengeDetailScreen from "../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import PersonalCoachChallengeDetailScreen from "../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -161,6 +163,35 @@ const NotificationsScreen = () => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <NotificationsStack.Screen
+        name="PersonalChallengeDetailScreen"
+        component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <NotificationsStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}

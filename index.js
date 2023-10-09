@@ -6,27 +6,16 @@ import { H } from "highlight.run";
 
 import App from "./src/app/App";
 import { expo } from "./app.json";
-import { handleAppOpenOnNotificationPressed } from "./src/app/utils/notification.util";
+import {
+  displayNotificationOnForeground,
+  handleAppOpenOnNotificationPressed,
+} from "./src/app/utils/notification.util";
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
 
 const onMessageReceived = async (message) => {
-  // await notifee.getBadgeCount();
-  const channelId = await notifee.createChannel({
-    id: "default",
-    name: "Default Channel",
-  });
-
-  await notifee.displayNotification({
-    title: message.notification.title,
-    body: message.notification.body,
-    data: message.data,
-    android: {
-      channelId, // Required for Android to display the notification
-    },
-  });
-  await notifee.incrementBadgeCount();
+  displayNotificationOnForeground(message);
 };
 
 

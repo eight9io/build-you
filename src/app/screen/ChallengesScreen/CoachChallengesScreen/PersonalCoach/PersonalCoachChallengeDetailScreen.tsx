@@ -1,4 +1,10 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react";
+import React, {
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { SafeAreaView, View, Text } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,15 +13,12 @@ import { useTranslation } from "react-i18next";
 
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
-import { useUserProfileStore } from "../../../../store/user-store";
-
 import {
   ICertifiedChallengeState,
   IChallenge,
 } from "../../../../types/challenge";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
 
-import TabView from "../../../../component/common/Tab/TabView";
 import Button from "../../../../component/common/Buttons/Button";
 
 import ShareIcon from "../assets/share.svg";
@@ -24,9 +27,12 @@ import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/Pr
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import CoachTab from "./CoachTab";
 import CoachSkillsTab from "./CoachSkillsTab";
-import { ChatCoachTab } from "./ChatCoachTab";
+import ChatCoachTab from "./ChatCoachTab";
 import { getChallengeById } from "../../../../service/challenge";
+import { useNotificationStore } from "../../../../store/notification-store";
 import { isObjectEmpty } from "../../../../utils/common";
+import CustomTabView from "../../../../component/common/Tab/CustomTabView";
+import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -66,12 +72,66 @@ const PersonalCoachChallengeDetailScreen = ({
     {} as IChallenge
   );
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
+  const { setShouldDisplayNewMessageNotification } = useNotificationStore();
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
   const challengeId = route?.params?.challengeId;
+  const hasNewMessage = route?.params?.hasNewMessage;
 
   const { t } = useTranslation();
+  const [tabRoutes] = useState([
+    {
+      key: CHALLENGE_TABS_KEY.PROGRESS,
+      title: t("challenge_detail_screen.progress"),
+    },
+    {
+      key: CHALLENGE_TABS_KEY.DESCRIPTION,
+      title: t("challenge_detail_screen.description"),
+    },
+    {
+      key: CHALLENGE_TABS_KEY.COACH,
+      title: t("challenge_detail_screen.coach"),
+    },
+    {
+      key: CHALLENGE_TABS_KEY.SKILLS,
+      title: t("challenge_detail_screen.skills"),
+    },
+    {
+      key: CHALLENGE_TABS_KEY.CHAT,
+      title: t("challenge_detail_screen.chat_coach"),
+    },
+  ]);
+
+  const setTabIndex = (nextIndex: number) => {
+    if (index === nextIndex) return;
+    if (chatTabIndex === null || chatTabIndex === undefined)
+      return setIndex(nextIndex);
+    if (nextIndex === chatTabIndex)
+      // Disable new message notification if user switch to chat tab
+      setShouldDisplayNewMessageNotification(false);
+    else if (index === chatTabIndex)
+      // Enable new message notification if user switch to another tab from chat tab
+      setShouldDisplayNewMessageNotification(true);
+
+    setIndex(nextIndex);
+  };
+
+  const chatTabIndex = useMemo(() => {
+    const index = tabRoutes.findIndex(
+      (route) => route.key === CHALLENGE_TABS_KEY.CHAT
+    );
+    if (index === -1) return null;
+    return index;
+  }, [t]);
+
+  useEffect(() => {
+    if (chatTabIndex && hasNewMessage) {
+      // Set chat tab as active tab if this screen is opened from new message notification
+      // Wrap in setTimeout to wait for tab indicator fully initialized (prevent tab indicator not moving to the correct position)
+      setTimeout(() => setTabIndex(chatTabIndex), 100);
+    }
+  }, [chatTabIndex, route]);
 
   const isChallengeInProgress =
     !isObjectEmpty(challengeState) &&
@@ -106,13 +166,48 @@ const PersonalCoachChallengeDetailScreen = ({
     getChallengeData();
   }, []);
 
-  const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-    t("challenge_detail_screen.coach"),
-    t("challenge_detail_screen.skills"),
-    t("challenge_detail_screen.chat_coach"),
-  ];
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case CHALLENGE_TABS_KEY.PROGRESS:
+        return (
+          <ProgressTab
+            isJoined={false}
+            isChallengeCompleted={false}
+            challengeData={challengeData}
+          />
+        );
+      case CHALLENGE_TABS_KEY.DESCRIPTION:
+        return <DescriptionTab challengeData={challengeData} />;
+      case CHALLENGE_TABS_KEY.COACH:
+        return (
+          <CoachTab
+            coachID={challengeData?.coach}
+            challengeId={challengeId}
+            challengeState={challengeState}
+            setChallengeState={setChallengeState}
+            isChallengeCompleted={isChallengeCompleted}
+          />
+        );
+      case CHALLENGE_TABS_KEY.SKILLS:
+        return (
+          <CoachSkillsTab
+            challengeData={challengeData}
+            challengeState={challengeState}
+          />
+        );
+      case CHALLENGE_TABS_KEY.CHAT:
+        return (
+          <>
+            {challengeData?.type === "certified" && (
+              <ChatCoachTab
+                challengeData={challengeData}
+                isChallengeInProgress={isChallengeInProgress}
+              />
+            )}
+          </>
+        );
+    }
+  };
 
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
@@ -129,36 +224,12 @@ const PersonalCoachChallengeDetailScreen = ({
         </View>
 
         <View className="mt-2 flex flex-1">
-          <TabView
-            titles={CHALLENGE_TABS_TITLE_TRANSLATION}
-            activeTabIndex={index}
-            setActiveTabIndex={setIndex}
-          >
-            <ProgressTab
-              isJoined={false}
-              isChallengeCompleted={false}
-              challengeData={challengeData}
-            />
-            <DescriptionTab challengeData={challengeData} />
-
-            <CoachTab
-              coachID={challengeData?.coach}
-              challengeId={challengeId}
-              challengeState={challengeState}
-              setChallengeState={setChallengeState}
-              isChallengeCompleted={isChallengeCompleted}
-            />
-            <CoachSkillsTab
-              challengeData={challengeData}
-              challengeState={challengeState}
-            />
-            {challengeData?.type === "certified" && (
-              <ChatCoachTab
-                challengeData={challengeData}
-                isChallengeInProgress={isChallengeInProgress}
-              />
-            )}
-          </TabView>
+          <CustomTabView
+            routes={tabRoutes}
+            renderScene={renderScene}
+            index={index}
+            setIndex={setTabIndex}
+          />
         </View>
       </View>
     </SafeAreaView>

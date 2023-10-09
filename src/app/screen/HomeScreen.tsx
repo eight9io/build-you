@@ -38,6 +38,8 @@ import GlobalDialogController from "../component/common/Dialog/GlobalDialogContr
 import AdCard from "../component/Post/AdCard";
 
 import BuildYouLogo from "../common/svg/buildYou_logo_top_app.svg";
+import PersonalChallengeDetailScreen from "./ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import PersonalCoachChallengeDetailScreen from "./ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -373,6 +375,37 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <HomeScreenStack.Screen
+        name="PersonalChallengeDetailScreen"
+        component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <HomeScreenStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}

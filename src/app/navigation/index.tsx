@@ -46,6 +46,7 @@ import {
 } from "../utils/refreshToken.util";
 import { DeepLink } from "../utils/linking.util";
 import { getLanguageLocalStorage } from "../utils/language";
+import i18n from "../i18n/i18n";
 
 import CartScreen from "../screen/ChallengesScreen/CartScreen";
 import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";

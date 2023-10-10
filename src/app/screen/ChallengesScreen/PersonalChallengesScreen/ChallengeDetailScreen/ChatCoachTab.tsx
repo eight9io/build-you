@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, FC } from "react";
+import React, { useState, useCallback, useEffect, FC, useMemo } from "react";
 import { Platform, Text } from "react-native";
 import {
   Avatar,
@@ -170,7 +170,6 @@ export function ChatCoachTab({
           {...props}
           containerStyle={{
             left: {
-              marginLeft: 10,
               marginBottom: 16,
             },
           }}

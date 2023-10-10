@@ -41,3 +41,7 @@ export const setNotificationIsRead = async (notificationIds: string[]) => {
 export const deletePushNotificatoinToken = async (token: string) => {
   return await httpInstance.delete(`/notification/push/delete/${token}`);
 };
+
+export const serviceChangeNotiLanguage = async (language: "en" | "it") => {
+  return await httpInstance.put(`/user/update/lang/${language}`);
+};

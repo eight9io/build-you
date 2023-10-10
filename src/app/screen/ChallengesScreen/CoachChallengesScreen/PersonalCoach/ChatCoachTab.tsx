@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
 import { IChallenge } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
-import { IUserData } from "../../../../types/user";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNotificationStore } from "../../../../store/notification-store";
 
@@ -69,6 +68,7 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
       clearInterval(intervalFetchApi);
     };
   }, []);
+
   const handleSubmit = useCallback((messages) => {
     if (messages.length === 0 || !messages[0].text) {
       return;
@@ -191,7 +191,6 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
           {...props}
           containerStyle={{
             left: {
-              marginLeft: 10,
               marginBottom: 16,
             },
           }}

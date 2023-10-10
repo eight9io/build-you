@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View, Text, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import i18n from "../../../i18n/i18n";
 import OutsidePressHandler from "react-native-outside-press";
 
+import i18n from "../../../i18n/i18n";
 import {
   getLanguageLocalStorage,
   setLanguageLocalStorage,
 } from "../../../utils/language";
+import { serviceChangeNotiLanguage } from "../../../service/notification";
 
 const LANGUAGE_OPTIONS = [
   {
@@ -33,12 +34,22 @@ const LanguageSettings = () => {
   const handleSelectLanguage = (language: string) => {
     setOpenDropdown(false);
     if (language === "en") {
-      i18n.changeLanguage("en");
-      setLanguageLocalStorage("en");
+      try {
+        i18n.changeLanguage("en");
+        setLanguageLocalStorage("en");
+        serviceChangeNotiLanguage("en");
+      } catch (error) {
+        console.log(error);
+      }
     }
     if (language === "it") {
-      i18n.changeLanguage("it");
-      setLanguageLocalStorage("it");
+      try {
+        i18n.changeLanguage("it");
+        setLanguageLocalStorage("it");
+        serviceChangeNotiLanguage("it");
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

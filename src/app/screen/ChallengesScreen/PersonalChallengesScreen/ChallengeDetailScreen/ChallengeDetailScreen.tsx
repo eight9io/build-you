@@ -166,11 +166,10 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isCertifiedChallenge = challengeData?.type === "certified";
 
   const isChallengeInProgress =
-    !isObjectEmpty(challengeState) &&
-    challengeCoach &&
-    challengeState.intakeStatus !== "init" &&
-    challengeState.intakeStatus !== "open" &&
-    challengeState.closingStatus !== "closed";
+    (!isObjectEmpty(challengeState) &&
+      challengeState.intakeStatus === "in-progress") ||
+    challengeState.checkStatus === "in-progress" ||
+    challengeState.closingStatus === "in-progress";
 
   const statusColor = getChallengeStatusColor(
     challengeStatus,
@@ -335,7 +334,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           )}
         </View>
 
-        <View className="mt-2 flex flex-1">
+        <View className="mt-2 flex flex-1 bg-gray-veryLight">
           <CustomTabView
             routes={tabRoutes}
             renderScene={renderScene}

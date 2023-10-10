@@ -21,6 +21,7 @@ interface ISelectPickerProps {
   show: boolean;
   title?: string;
   selectedIndex?: number;
+  currentOccupation?: string;
   onSelect: (value: number | string) => void;
   onCancel: () => void;
   onLoadMore?: () => void;
@@ -34,6 +35,7 @@ const SeletecPickerOccupation: FC<ISelectPickerProps> = ({
   onSelect,
   onCancel,
   onLoadMore,
+  currentOccupation,
 }) => {
   const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
   const [customOccupationError, setCustomOccupationError] =
@@ -84,6 +86,11 @@ const SeletecPickerOccupation: FC<ISelectPickerProps> = ({
   useEffect(() => {
     if (selectedIndex) {
       setSelected(selectedIndex || 0);
+    } else if (currentOccupation) {
+      const index = occupationList.findIndex(
+        (item) => item.name === currentOccupation
+      );
+      setSelected(index);
     } else {
       if (occupationList?.length > 0) setSelected(occupationList?.length - 1);
     }

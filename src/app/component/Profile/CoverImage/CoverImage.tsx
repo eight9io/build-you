@@ -102,7 +102,11 @@ const CoverImage: React.FC<ICoverImageProps> = ({
         </View>
 
         {!isOtherUser && (
-          <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handlePickImage}
+            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+          >
             <View className={clsx("absolute bottom-[80px] right-4  ")}>
               <CameraSvg />
             </View>

@@ -114,7 +114,11 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
         </View>
       </Pressable>
       {!isOtherUser && (
-        <TouchableOpacity activeOpacity={0.8} onPress={handlePickImage}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={handlePickImage}
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+        >
           <View
             className={clsx(
               "absolute bottom-[-40px] right-0 h-7 w-7 items-center justify-center rounded-full bg-primary-default"

@@ -596,7 +596,9 @@
     "enter_your_city": "Inserisci la tua città",
     "company": "Azienda",
     "enter_your_company": "Inserisci la tua azienda",
-    "enter_your_company_error": "Per favore inserisci il nome della tua azienda."
+    "enter_your_company_error": "Per favore inserisci il nome della tua azienda.",
+    "phone": "Telefono",
+    "enter_phone": "Inserisci il tuo telefono"
   },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",

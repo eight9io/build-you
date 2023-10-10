@@ -11,7 +11,7 @@ import {
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
-import { CompanyTag } from "./ChallengeCard";
+import { CertifiedChallengeTag, CompanyTag } from "./ChallengeCard";
 import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
 import { serviceGetChallengeRating } from "../../../service/challenge";
@@ -56,6 +56,8 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
     (participant) => participant.id === currentUser?.id
   );
 
+  const isCertifiedChallenge = item?.type === "certified";
+
   const challengeStatus =
     challengeOwner.id === currentUser?.id
       ? item.status
@@ -90,6 +92,13 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
         {companyName && (
           <View className={clsx("absolute top-6 z-10 flex w-full items-end")}>
             <CompanyTag companyName={companyName} />
+          </View>
+        )}
+        {isCertifiedChallenge && (
+          <View
+            className={clsx("absolute left-4 top-6 z-10 flex w-full items-start")}
+          >
+            <CertifiedChallengeTag />
           </View>
         )}
         {imageSrc && (

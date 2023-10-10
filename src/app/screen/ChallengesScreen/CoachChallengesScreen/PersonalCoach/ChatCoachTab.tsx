@@ -1,23 +1,46 @@
 import React, { useState, useCallback, useEffect, FC } from "react";
-import { Platform, Text, TouchableOpacity } from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 import {
   Avatar,
   Bubble,
   GiftedChat,
   InputToolbar,
 } from "react-native-gifted-chat";
-import SendIcon from "../../../../component/asset/send-icon.svg";
 import { useTranslation } from "react-i18next";
-import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
-import { IChallenge } from "../../../../types/challenge";
-import { useUserProfileStore } from "../../../../store/user-store";
 import { useFocusEffect } from "@react-navigation/native";
+
+import { IChallenge } from "../../../../types/challenge";
+
+import { useUserProfileStore } from "../../../../store/user-store";
 import { useNotificationStore } from "../../../../store/notification-store";
+
+import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
+
+import SendIcon from "../../../../component/asset/send-icon.svg";
+import EmptyChat from "../../../../common/svg/empty-chat.svg";
 
 interface IChatCoachTabProps {
   challengeData: IChallenge;
   isChallengeInProgress: boolean;
 }
+
+export const EmptyChatHolder = () => {
+  const { t } = useTranslation();
+  return (
+    <View
+      className="flex flex-1 items-center justify-center"
+      style={{
+        transform: [{ scaleY: -1 }],
+      }}
+    >
+      <EmptyChat />
+      <Text className="w-64 pt-2 text-base text-gray-dark">
+        {t("chat_input.chat_input_empty") || "You don't have any message yet!"}
+      </Text>
+    </View>
+  );
+};
+
 const ChatCoachTab: FC<IChatCoachTabProps> = ({
   challengeData,
   isChallengeInProgress,
@@ -39,6 +62,7 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
     });
     return sortedData;
   };
+
   const getMessage = () => {
     getMessageByChallengeId(challengeData.id).then((res) => {
       setMessages(
@@ -146,7 +170,7 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
             <Text className="absolute -bottom-4 left-0 text-sm font-light text-gray-dark">
               {user.name}
               {user?.isCoach && (
-                <Text className="text-sm text-primary-default"> Coach</Text>
+                <Text className="text-sm text-primary-default">Coach</Text>
               )}
             </Text>
           )}
@@ -203,6 +227,7 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
           }}
         />
       )}
+      renderChatEmpty={() => <EmptyChatHolder />}
       scrollToBottom
       infiniteScroll
     />

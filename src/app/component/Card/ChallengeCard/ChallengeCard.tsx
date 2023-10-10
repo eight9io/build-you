@@ -17,6 +17,7 @@ import { StackActions } from "@react-navigation/native";
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
+import CertifiedTag from "../../../common/svg/certified_tag.svg";
 
 export interface IChallengeCardProps {
   item: IChallenge;
@@ -47,6 +48,14 @@ export const CompanyTag = ({
   );
 };
 
+export const CertifiedChallengeTag = () => {
+  return (
+    <View className="flex-1">
+      <CertifiedTag />
+    </View>
+  );
+};
+
 const ChallengeCard: React.FC<IChallengeCardProps> = ({
   item,
   imageSrc,
@@ -61,6 +70,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
     ? item?.owner[0]
     : item?.owner;
   const companyName = challengeOwner.companyAccount && challengeOwner?.name;
+  const isCertifiedChallenge = item?.type === "certified";
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -133,6 +143,15 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
         {(isCompanyAccount || companyName) && (
           <View className={clsx("absolute top-6 z-10 flex w-full items-end")}>
             <CompanyTag companyName={companyName} />
+          </View>
+        )}
+        {isCertifiedChallenge && (
+          <View
+            className={clsx(
+              "absolute left-4 top-6 z-10 flex w-full items-start"
+            )}
+          >
+            <CertifiedChallengeTag />
           </View>
         )}
         {imageSrc && (

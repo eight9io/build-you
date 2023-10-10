@@ -428,7 +428,8 @@
     "delete_comment_success": "Your comment has been deleted successfully"
   },
   "chat_input": {
-    "chat_input_placeholder": "Type a message"
+    "chat_input_placeholder": "Type a message",
+    "chat_input_empty": "You don't have any message yet!"
   },
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"
@@ -592,7 +593,11 @@
     "biography": "Biography",
     "your_biography": "Your biography",
     "phone": "Phone number",
-    "enter_phone": "Enter your phone number"
+    "enter_phone": "Enter your phone number",
+    "city": "City",
+    "enter_your_city": "Enter your city",
+    "company": "Company",
+    "enter_your_company": "Enter your company"
   },
   "choose_packages_screen": {
     "package": "Package",

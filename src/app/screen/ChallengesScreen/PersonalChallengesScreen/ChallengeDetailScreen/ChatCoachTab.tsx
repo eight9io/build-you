@@ -12,6 +12,7 @@ import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
 import { IChallenge } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { EmptyChatHolder } from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
 interface IChatCoachTabProps {
   challengeData: IChallenge;
   isChallengeInProgress: boolean;
@@ -182,6 +183,7 @@ export function ChatCoachTab({
           }}
         />
       )}
+      renderChatEmpty={() => <EmptyChatHolder />}
       scrollToBottom
       infiniteScroll
     />

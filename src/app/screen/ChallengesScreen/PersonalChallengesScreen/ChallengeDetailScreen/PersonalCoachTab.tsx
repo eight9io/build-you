@@ -223,7 +223,10 @@ const TouchPointProgress = ({
               "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
               getButtonColor(touchpoint.status)
             )}
-            disabled={touchpoint.status === "closed"}
+            disabled={
+              touchpoint.status === "closed" ||
+              touchpoint.status === "in-progress"
+            }
             onPress={handleOpenChangeTouchpointStatusModal}
           >
             <Text className="font-semibold capitalize text-white">

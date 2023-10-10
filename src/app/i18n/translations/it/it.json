@@ -429,7 +429,8 @@
     "delete_comment_success": "Il tuo commento è stato eliminato con successo"
   },
   "chat_input": {
-    "chat_input_placeholder": "Scrivi un messaggio"
+    "chat_input_placeholder": "Scrivi un messaggio",
+    "chat_input_empty": "Non puoi inviare un messaggio vuoto"
   },
   "delete_progress": {
     "delete_success": "I tuoi progressi sono stati eliminati con successo"

@@ -127,6 +127,7 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
                 borderRadius: 10,
                 borderWidth: 1,
                 marginHorizontal: 20,
+                marginBottom: Platform.OS === "ios" ? 0 : 16,
               }}
             />
           )}

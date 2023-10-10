@@ -64,12 +64,12 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   return (
     <View className="flex w-full flex-col">
       <View className="flex w-full flex-row items-center justify-between">
-        <View>
-          <Text className="w-40 text-h6 font-medium leading-6 text-black-default">
+        <View className="flex-1 pr-2">
+          <Text className="text-h6 font-medium leading-6 text-black-default">
             {item.label}
           </Text>
         </View>
-        <View className="flex flex-1 flex-row  justify-end">
+        <View className="flex flex-row  justify-end">
           {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
             <TouchableOpacity
               className="pr-3"

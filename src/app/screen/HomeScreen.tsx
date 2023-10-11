@@ -40,6 +40,7 @@ import AdCard from "../component/Post/AdCard";
 import BuildYouLogo from "../common/svg/buildYou_logo_top_app.svg";
 import PersonalChallengeDetailScreen from "./ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "./ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
+import { useNotificationStore } from "../store/notification-store";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -139,7 +140,7 @@ export const HomeFeed = () => {
 
   useEffect(() => {
     if (isDevice && Platform.OS === "android")
-      handleAppOpenOnNotificationPressed(); // Handle app open on notification pressed when app is killed on Android
+      handleAppOpenOnNotificationPressed(useNotificationStore); // Handle app open on notification pressed when app is killed on Android
     getInitialFeeds();
   }, []);
 

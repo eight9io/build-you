@@ -18,10 +18,7 @@ import {
 import { NOTIFICATION_TYPES, SORT_ORDER } from "../common/enum";
 import { UseBoundStore, StoreApi } from "zustand";
 
-import {
-  NotificationStore,
-  useNotificationStore,
-} from "../store/notification-store";
+import { NotificationStore } from "../store/notification-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NavigationService from "./navigationService";
 import { serviceGetOtherUserData } from "../service/user";
@@ -76,7 +73,10 @@ export const addNotificationListener = (
     switch (event.type) {
       case EventType.PRESS: // User pressed on the notification
         if (event.detail.notification) {
-          await handleTapOnIncomingNotification(event.detail.notification);
+          await handleTapOnIncomingNotification(
+            event.detail.notification,
+            useNotificationStore
+          );
           if (event.detail.notification.id)
             // Clear the notification from the notification tray and decrement the badge count
             await clearNotification(event.detail.notification.id);
@@ -101,7 +101,8 @@ export const addNotificationListener = (
 };
 
 export const handleTapOnIncomingNotification = async (
-  notification: Notification
+  notification: Notification,
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
 ) => {
   const navigation = NavigationService.getContainer();
 
@@ -118,7 +119,7 @@ export const handleTapOnIncomingNotification = async (
     }
     MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT--;
     return setTimeout(
-      () => handleTapOnIncomingNotification(notification),
+      () => handleTapOnIncomingNotification(notification, useNotificationStore),
       RETRY_DELAY
     ); // retry after a delay (prevent stack overflow)
   } else {
@@ -457,15 +458,23 @@ export const setLastNotiIdToLocalStorage = async (lastNotiId: string) => {
   await AsyncStorage.setItem("lastNotiId", lastNotiId);
 };
 
-export const handleAppOpenOnNotificationPressed = async () => {
+export const handleAppOpenOnNotificationPressed = async (
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+) => {
   if (Platform.OS === "android") {
     const initialNotification = await messaging().getInitialNotification();
     if (initialNotification)
-      handleTapOnIncomingNotification(initialNotification);
+      handleTapOnIncomingNotification(
+        initialNotification,
+        useNotificationStore
+      );
   }
 };
 
-export const displayNotificationOnForeground = async (message) => {
+export const displayNotificationOnForeground = async (
+  message,
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+) => {
   const channelId = await notifee.createChannel({
     id: "default",
     name: "Default Channel",

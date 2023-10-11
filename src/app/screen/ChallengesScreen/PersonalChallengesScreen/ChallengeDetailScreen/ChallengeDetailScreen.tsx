@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 import {
   ICertifiedChallengeState,
@@ -32,13 +32,14 @@ import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen
 import PersonalCoachTab from "./PersonalCoachTab";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
+import { NavigationRouteProps } from "../../../../navigation/navigation.type";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldScreenRefresh?: boolean;
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
-  hasNewMessage?: string;
+  route?: NavigationRouteProps<"PersonalChallengeDetailScreen">;
   setShouldScreenRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -47,14 +48,13 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   shouldScreenRefresh,
   setIsJoinedLocal,
   setIsNewProgressAdded,
-  hasNewMessage,
+  route,
   setShouldScreenRefresh,
 }) => {
   const { t } = useTranslation();
   const [index, setIndex] = useState<number>(0);
   const [isJoined, setIsJoined] = useState<boolean>(true);
   const [participantList, setParticipantList] = useState([]);
-  const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
   const { setShouldDisplayNewMessageNotification } = useNotificationStore();
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
@@ -123,12 +123,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   }, [tabRoutes, t]);
 
   useEffect(() => {
-    if (chatTabIndex && hasNewMessage) {
+    if (chatTabIndex && route?.params?.hasNewMessage) {
       // Set chat tab as active tab if this screen is opened from new message notification
-      // Wrap in setTimeout to wait for tab indicator fully initialized (prevent tab indicator not moving to the correct position)
-      setTimeout(() => setTabIndex(chatTabIndex), 100);
+      setTabIndex(chatTabIndex);
     }
-  }, [chatTabIndex, hasNewMessage]);
+  }, [chatTabIndex, route]);
 
   useEffect(() => {
     const tempTabRoutes = [...tabRoutes];

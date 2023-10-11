@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import {
   TabView,
@@ -26,6 +26,14 @@ export const CustomTabView: FC<ITabViewProps> = ({
   index,
   setIndex,
 }) => {
+  const [animationEnabled, setAnimationEnabled] = useState<boolean>(false);
+
+  useEffect(() => {
+    // This is a hack to fix tab indicator not sync with current active tab
+    // due to tab indicator's animation delay when we change tab index immediately after tab view is rendered
+    setTimeout(() => setAnimationEnabled(true), 0);
+  }, []);
+
   return (
     <TabView
       navigationState={{ index, routes }}
@@ -34,6 +42,7 @@ export const CustomTabView: FC<ITabViewProps> = ({
       initialLayout={{
         width: Dimensions.get("window").width,
       }}
+      animationEnabled={animationEnabled}
       renderTabBar={(props) => (
         <TabBar
           {...props}

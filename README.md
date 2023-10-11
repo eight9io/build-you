@@ -13,7 +13,8 @@ Get Key SHA-1
 keytool -list -v -keystore PATH -alias KEY_STORE_ALIAS -storepass PASS -keypass PASS
 
 Android SHA-1:
-Debug: 5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25
+Debug: 5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25 (RN default)
+19:75:B1:CF:EA:04:16:B5:9C:3B:0A:D2:BD:D1:6D:DE:6C:F4:1B:8C
 
 Staging: 89:AC:42:39:AD:0D:DE:68:75:D2:DD:9B:86:90:3E:93:2E:67:77:AA
 

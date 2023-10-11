@@ -1,19 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
 
-import { useNav } from "../../../../hooks/useNav";
-import {
-  serviceGetRatedSoftSkillCertifiedChallenge,
-  serviceGetSkillsToRate,
-  servicePostRatingSkills,
-} from "../../../../service/challenge";
+import { serviceGetRatedSoftSkillCertifiedChallenge } from "../../../../service/challenge";
 import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
 import SkillCompetenceProcess from "../../../../component/Profile/ProfileTabs/Users/Skills/SkillCompetenceProcess";
-import Button, {
-  FillButton,
-} from "../../../../component/common/Buttons/Button";
+import Button from "../../../../component/common/Buttons/Button";
 import {
   ICertifiedChallengeState,
   IChallenge,
@@ -58,6 +51,10 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   const canCurrentUserRateSkills =
     currentUser.id === challengeData?.coach && isChallengeEnded;
 
+  const isChallengeRated = ratedCompetencedSkill.every(
+    (item) => !item.isRating
+  );
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -72,6 +69,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
                 id: item.skillId,
                 skill: item.skillName,
                 rating: item.skillRating,
+                isRating: item.isRating,
               };
             }
           );
@@ -92,7 +90,6 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
     }
   }, [challengeData?.id, shouldRefresh]);
 
-  console.log(ratedCompetencedSkill)
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
       <CoachRateChallengeModal
@@ -101,8 +98,9 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
         challengeData={challengeData}
         challengeOwner={challengeOwner}
         setShouldParentRefresh={setShouldRefresh}
+        ratedCompetencedSkill={ratedCompetencedSkill}
       />
-      {canCurrentUserRateSkills && ratedCompetencedSkill?.length === 0 && (
+      {canCurrentUserRateSkills && !isChallengeRated && (
         <Button
           containerClassName="bg-primary-default flex-none px-1"
           textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
@@ -112,7 +110,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
           onPress={handleOpenRateSkillsModal}
         />
       )}
-      {!canCurrentUserRateSkills && (
+      {!canCurrentUserRateSkills && isChallengeRated && (
         <View className="flex flex-row items-center justify-between px-4">
           <Text className="text-md  text-danger-default">
             {t("challenge_detail_screen.can_not_rate_skills")}

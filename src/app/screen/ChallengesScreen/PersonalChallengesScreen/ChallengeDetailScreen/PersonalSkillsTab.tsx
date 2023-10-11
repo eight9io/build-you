@@ -31,21 +31,21 @@ const PersonalSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
           const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
             (item) => {
               return {
-                id: item.skill.id,
-                skill: item.skill.skill,
-                rating: item.rating,
+                id: item.skillId,
+                skill: item.skillName,
+                rating: item.skillRating,
               };
             }
           );
           setRatedCompetencedSkill(ratedSoffSkills);
         } else {
-          console.log(
+          console.error(
             "Error fetching rated skills:",
             ratedSoffSkillsValue.reason
           );
         }
       } catch (error) {
-        console.log("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       }
     };
     getData();

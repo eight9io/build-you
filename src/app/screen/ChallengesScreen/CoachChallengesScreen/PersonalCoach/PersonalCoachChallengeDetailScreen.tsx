@@ -77,7 +77,6 @@ const PersonalCoachChallengeDetailScreen = ({
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
   const challengeId = route?.params?.challengeId;
-  const hasNewMessage = route?.params?.hasNewMessage;
 
   const { t } = useTranslation();
   const [tabRoutes] = useState([
@@ -126,10 +125,9 @@ const PersonalCoachChallengeDetailScreen = ({
   }, [t]);
 
   useEffect(() => {
-    if (chatTabIndex && hasNewMessage) {
+    if (chatTabIndex && route?.params?.hasNewMessage) {
       // Set chat tab as active tab if this screen is opened from new message notification
-      // Wrap in setTimeout to wait for tab indicator fully initialized (prevent tab indicator not moving to the correct position)
-      setTimeout(() => setTabIndex(chatTabIndex), 100);
+      setTabIndex(chatTabIndex);
     }
   }, [chatTabIndex, route]);
 

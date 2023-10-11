@@ -40,6 +40,7 @@ export interface ISoftSkill {
   label?: string;
   skill?: string;
   rating?: number;
+  isRating?: boolean;
 }
 
 export interface ISoftSkillFromChallenge {

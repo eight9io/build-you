@@ -1,0 +1,34 @@
+name: Production Build You App Building
+
+on: workflow_dispatch
+
+env:
+  NODE_VERSION: 20.5.0
+  JAVA_VERSION: 11.0.20
+  RUBY_VERSION: 3.2.2
+  ENV: ${{ secrets.ENV_PROD}}
+  APPCENTER_TOKEN: ${{ secrets.APPCENTER_TOKEN }}
+
+jobs:
+  setup:
+    name: Build App
+    runs-on: macos-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install project dependencies
+        run: yarn
+
+      - name: Prepare ENV
+        run: |
+          echo $ENV | base64 --decode >> ".env"
+          appcenter codepush release-react -a E9-Digital/BuildYou-Production -d Production -m --plist-file ios/BuildYou/Info.plist --token $APPCENTER_TOKEN
+          appcenter codepush release-react -a E9-Digital/BuildYou-Production-1 -d Production -m --token $APPCENTER_TOKEN
+        shell: bash

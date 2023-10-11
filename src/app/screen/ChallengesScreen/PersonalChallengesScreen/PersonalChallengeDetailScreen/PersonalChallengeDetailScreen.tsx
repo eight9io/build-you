@@ -240,7 +240,6 @@ const PersonalChallengeDetailScreen = ({
     useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
-  const hasNewMessage = route?.params?.hasNewMessage;
 
   const { getUserProfile } = useUserProfileStore();
   const { setDeletedChallengeId } = useNewCreateOrDeleteChallengeStore();
@@ -349,7 +348,7 @@ const PersonalChallengeDetailScreen = ({
           <ChallengeDetailScreen
             challengeData={challengeData}
             setIsJoinedLocal={setIsJoinedLocal}
-            hasNewMessage={hasNewMessage}
+            route={route}
             shouldScreenRefresh={shouldScreenRefresh}
             setShouldScreenRefresh={setShouldScreenRefresh}
           />

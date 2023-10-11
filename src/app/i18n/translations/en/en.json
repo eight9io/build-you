@@ -428,7 +428,8 @@
     "delete_comment_success": "Your comment has been deleted successfully"
   },
   "chat_input": {
-    "chat_input_placeholder": "Type a message"
+    "chat_input_placeholder": "Type a message",
+    "chat_input_empty": "You don't have any message yet!"
   },
   "delete_progress": {
     "delete_success": "Your progress has been deleted successfully"
@@ -591,8 +592,17 @@
     "occupation_error": "Please select your occupation.",
     "biography": "Biography",
     "your_biography": "Your biography",
+    "city": "City",
+    "enter_your_city": "Where do you base?",
+    "company": "Company",
+    "enter_your_company": "Enter your company",
+    "enter_your_company_error": "Please enter your company",
     "phone": "Phone number",
-    "enter_phone": "Enter your phone number"
+    "enter_phone": "Enter your phone number",
+    "city": "City",
+    "enter_your_city": "Enter your city",
+    "company": "Company",
+    "enter_your_company": "Enter your company"
   },
   "choose_packages_screen": {
     "package": "Package",
@@ -645,6 +655,8 @@
     "new_comment": "has commented on your update",
     "new_mention": "has mentioned you in a comment",
     "new_follower": "has started following you",
-    "new_employee": "has added you as an employee"
-  }
+    "new_employee": "has added you as an employee",
+    "new_message": "has sent a message"
+  },
+  "top_nav.create_challenge": "Create challenge"
 }

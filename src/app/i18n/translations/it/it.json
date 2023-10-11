@@ -429,7 +429,8 @@
     "delete_comment_success": "Il tuo commento è stato eliminato con successo"
   },
   "chat_input": {
-    "chat_input_placeholder": "Scrivi un messaggio"
+    "chat_input_placeholder": "Scrivi un messaggio",
+    "chat_input_empty": "Non puoi inviare un messaggio vuoto"
   },
   "delete_progress": {
     "delete_success": "I tuoi progressi sono stati eliminati con successo"
@@ -596,7 +597,9 @@
     "enter_your_city": "Inserisci la tua città",
     "company": "Azienda",
     "enter_your_company": "Inserisci la tua azienda",
-    "enter_your_company_error": "Per favore inserisci il nome della tua azienda."
+    "enter_your_company_error": "Per favore inserisci il nome della tua azienda.",
+    "phone": "Telefono",
+    "enter_phone": "Inserisci il tuo telefono"
   },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",
@@ -606,6 +609,8 @@
     "new_comment": "ha commentato il tuo aggiornamento",
     "new_mention": "ti ha menzionato in un commento",
     "new_follower": "ha iniziato a seguirti",
-    "new_employee": "ti ha aggiunto come dipendente"
-  }
+    "new_employee": "ti ha aggiunto come dipendente",
+    "new_message": "ha inviato un messaggio"
+  },
+  "top_nav.create_challenge": "Crea sfida"
 }

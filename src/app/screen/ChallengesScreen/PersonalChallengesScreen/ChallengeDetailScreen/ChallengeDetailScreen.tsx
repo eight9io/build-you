@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
-import { FC, useEffect, useLayoutEffect, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
-
 import {
   ICertifiedChallengeState,
   IChallenge,
@@ -24,18 +23,22 @@ import {
 } from "../../../../service/challenge";
 
 import PersonalSkillsTab from "./PersonalSkillsTab";
-import TabView from "../../../../component/common/Tab/TabView";
 import Button from "../../../../component/common/Buttons/Button";
-import { ChatCoachTab } from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
+import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
+import { useNotificationStore } from "../../../../store/notification-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import PersonalCoachTab from "./PersonalCoachTab";
+import CustomTabView from "../../../../component/common/Tab/CustomTabView";
+import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldScreenRefresh?: boolean;
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
+  hasNewMessage?: string;
   setShouldScreenRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -43,6 +46,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
   shouldScreenRefresh,
   setIsJoinedLocal,
+  setIsNewProgressAdded,
+  hasNewMessage,
   setShouldScreenRefresh,
 }) => {
   const { t } = useTranslation();
@@ -50,9 +55,20 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const [isJoined, setIsJoined] = useState<boolean>(true);
   const [participantList, setParticipantList] = useState([]);
   const [challengeTabTitles, setChallengeTabTitles] = useState<string[]>([]);
+  const { setShouldDisplayNewMessageNotification } = useNotificationStore();
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+  const [tabRoutes, setTabRoutes] = useState([
+    {
+      key: CHALLENGE_TABS_KEY.PROGRESS,
+      title: t("challenge_detail_screen.progress"),
+    },
+    {
+      key: CHALLENGE_TABS_KEY.DESCRIPTION,
+      title: t("challenge_detail_screen.description"),
+    },
+  ]);
 
   const { goal, id: challengeId } = challengeData;
   const { getUserProfile } = useUserProfileStore();
@@ -84,14 +100,76 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
+  const setTabIndex = (nextIndex: number) => {
+    if (index === nextIndex) return;
+    if (chatTabIndex === null || chatTabIndex === undefined)
+      return setIndex(nextIndex);
+    if (nextIndex === chatTabIndex)
+      // Disable new message notification if user switch to chat tab
+      setShouldDisplayNewMessageNotification(false);
+    else if (index === chatTabIndex)
+      // Enable new message notification if user switch to another tab from chat tab
+      setShouldDisplayNewMessageNotification(true);
+
+    setIndex(nextIndex);
+  };
+
+  const chatTabIndex = useMemo(() => {
+    const index = tabRoutes.findIndex(
+      (route) => route.key === CHALLENGE_TABS_KEY.CHAT
+    );
+    if (index === -1) return null;
+    return index;
+  }, [tabRoutes, t]);
+
+  useEffect(() => {
+    if (chatTabIndex && hasNewMessage) {
+      // Set chat tab as active tab if this screen is opened from new message notification
+      // Wrap in setTimeout to wait for tab indicator fully initialized (prevent tab indicator not moving to the correct position)
+      setTimeout(() => setTabIndex(chatTabIndex), 100);
+    }
+  }, [chatTabIndex, hasNewMessage]);
+
+  useEffect(() => {
+    const tempTabRoutes = [...tabRoutes];
+
+    if (participantList && challengeOwner?.companyAccount)
+      tempTabRoutes.push({
+        key: CHALLENGE_TABS_KEY.PARTICIPANTS,
+        title: t("challenge_detail_screen.participants"),
+      });
+
+    if (challengeData?.type === "certified") {
+      tempTabRoutes.push(
+        {
+          key: CHALLENGE_TABS_KEY.SKILLS,
+          title: t("challenge_detail_screen.skills"),
+        },
+        {
+          key: CHALLENGE_TABS_KEY.COACH,
+          title: t("challenge_detail_screen.coach"),
+        },
+        {
+          key: CHALLENGE_TABS_KEY.CHAT,
+          title: t("challenge_detail_screen.chat_coach"),
+        }
+      );
+    }
+    setTabRoutes(tempTabRoutes);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRefresh) return;
+    fetchParticipants();
+    setShouldRefresh(false);
+  }, [shouldRefresh]);
   const isCertifiedChallenge = challengeData?.type === "certified";
 
   const isChallengeInProgress =
-    !isObjectEmpty(challengeState) &&
-    challengeCoach &&
-    challengeState.intakeStatus !== "init" &&
-    challengeState.intakeStatus !== "open" &&
-    challengeState.closingStatus !== "closed";
+    (!isObjectEmpty(challengeState) &&
+      challengeState.intakeStatus === "in-progress") ||
+    challengeState.checkStatus === "in-progress" ||
+    challengeState.closingStatus === "in-progress";
 
   const statusColor = getChallengeStatusColor(
     challengeStatus,
@@ -156,29 +234,6 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   };
 
   useEffect(() => {
-    const CHALLENGE_TABS_TITLE_TRANSLATION =
-      participantList && challengeOwner?.companyAccount
-        ? [
-            t("challenge_detail_screen.progress"),
-            t("challenge_detail_screen.description"),
-            t("challenge_detail_screen.participants"),
-          ]
-        : [
-            t("challenge_detail_screen.progress"),
-            t("challenge_detail_screen.description"),
-          ];
-
-    if (challengeData?.type === "certified") {
-      CHALLENGE_TABS_TITLE_TRANSLATION.push(
-        t("challenge_detail_screen.coach"),
-        t("challenge_detail_screen.skills"),
-        t("challenge_detail_screen.chat_coach")
-      );
-    }
-    setChallengeTabTitles(CHALLENGE_TABS_TITLE_TRANSLATION);
-  }, []);
-
-  useEffect(() => {
     if (!shouldScreenRefresh) return;
     fetchParticipants();
   }, [shouldScreenRefresh]);
@@ -186,6 +241,56 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   useEffect(() => {
     fetchParticipants();
   }, []);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case CHALLENGE_TABS_KEY.PROGRESS:
+        return (
+          <ProgressTab
+            isJoined={isJoined}
+            isChallengeCompleted={isChallengeCompleted}
+            challengeData={challengeData}
+            setShouldRefresh={setShouldScreenRefresh}
+          />
+        );
+      case CHALLENGE_TABS_KEY.DESCRIPTION:
+        return <DescriptionTab challengeData={challengeData} />;
+      case CHALLENGE_TABS_KEY.PARTICIPANTS:
+        return (
+          <>
+            {participantList && challengeOwner?.companyAccount && (
+              <ParticipantsTab
+                participant={participantList}
+                fetchParticipants={fetchParticipants}
+              />
+            )}
+          </>
+        );
+      case CHALLENGE_TABS_KEY.SKILLS:
+        return <PersonalSkillsTab challengeData={challengeData} />;
+      case CHALLENGE_TABS_KEY.COACH:
+        return (
+          <PersonalCoachTab
+            coachID={challengeCoach}
+            challengeId={challengeId}
+            challengeState={challengeState}
+            setChallengeState={setChallengeState}
+            setShouldParentRefresh={setShouldScreenRefresh}
+          />
+        );
+      case CHALLENGE_TABS_KEY.CHAT:
+        return (
+          <>
+            {isCertifiedChallenge && (
+              <ChatCoachTab
+                challengeData={challengeData}
+                isChallengeInProgress={isChallengeInProgress}
+              />
+            )}
+          </>
+        );
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -229,40 +334,13 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           )}
         </View>
 
-        <View className="mt-2 flex flex-1">
-          <TabView
-            titles={challengeTabTitles}
-            activeTabIndex={index}
-            setActiveTabIndex={setIndex}
-          >
-            <ProgressTab
-              isJoined={isJoined}
-              isChallengeCompleted={isChallengeCompleted}
-              challengeData={challengeData}
-              setShouldRefresh={setShouldScreenRefresh}
-            />
-            <DescriptionTab challengeData={challengeData} />
-            {participantList && challengeOwner?.companyAccount && (
-              <ParticipantsTab
-                participant={participantList}
-                fetchParticipants={fetchParticipants}
-              />
-            )}
-            <PersonalCoachTab
-              coachID={challengeCoach}
-              challengeId={challengeId}
-              challengeState={challengeState}
-              setChallengeState={setChallengeState}
-              setShouldParentRefresh={setShouldScreenRefresh}
-            />
-            <PersonalSkillsTab challengeData={challengeData} />
-            {isCertifiedChallenge && (
-              <ChatCoachTab
-                challengeData={challengeData}
-                isChallengeInProgress={isChallengeInProgress}
-              />
-            )}
-          </TabView>
+        <View className="mt-2 flex flex-1 bg-gray-veryLight">
+          <CustomTabView
+            routes={tabRoutes}
+            renderScene={renderScene}
+            index={index}
+            setIndex={setTabIndex}
+          />
         </View>
       </View>
     </SafeAreaView>

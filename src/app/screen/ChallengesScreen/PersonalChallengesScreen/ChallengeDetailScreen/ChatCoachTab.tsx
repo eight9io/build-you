@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, FC } from "react";
+import React, { useState, useCallback, useEffect, FC, useMemo } from "react";
 import { Platform, Text } from "react-native";
 import {
   Avatar,
@@ -12,6 +12,7 @@ import { getMessageByChallengeId, sendMessage } from "../../../../service/chat";
 import { IChallenge } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { EmptyChatHolder } from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
 interface IChatCoachTabProps {
   challengeData: IChallenge;
   isChallengeInProgress: boolean;
@@ -75,6 +76,9 @@ export function ChatCoachTab({
   }, []);
   return (
     <GiftedChat
+      messagesContainerStyle={{
+        paddingBottom: Platform.OS === "ios" ? 6 : 12,
+      }}
       isCustomViewBottom
       messages={messages}
       onSend={(messages) => handleSubmit(messages)}
@@ -167,7 +171,6 @@ export function ChatCoachTab({
           {...props}
           containerStyle={{
             left: {
-              marginLeft: 10,
               marginBottom: 16,
             },
           }}
@@ -180,6 +183,7 @@ export function ChatCoachTab({
           }}
         />
       )}
+      renderChatEmpty={() => <EmptyChatHolder />}
       scrollToBottom
       infiniteScroll
     />

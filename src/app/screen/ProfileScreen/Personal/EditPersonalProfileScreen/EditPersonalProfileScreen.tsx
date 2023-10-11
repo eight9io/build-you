@@ -126,6 +126,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
+
+  const currentOccupation = getUserOccupationCondition(userData);
+
   const {
     control,
     handleSubmit,
@@ -144,6 +147,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     hardSkill: IHardSkillProps[];
     isShowCompany: boolean;
     city: string;
+    phone: string;
   }>({
     defaultValues: {
       name: userData?.name || "",
@@ -156,6 +160,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       isShowCompany: userData?.isShowCompany || false,
       city: userData?.city || "",
       employeeOf: userData?.employeeOf || undefined,
+      phone: userData?.phone || "",
     },
     resolver: yupResolver(EditProfileValidators()),
   });
@@ -191,6 +196,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           hardSkill: arrayMyHardSkills,
           isShowCompany: data.isShowCompany,
           city: data?.city,
+          phone: data?.phone,
         }),
       ]);
       const res = await serviceGetMyProfile();
@@ -327,6 +333,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
             onCancel={() => {
               setShowOccupationPicker(false);
             }}
+            currentOccupation={currentOccupation}
           />
 
           <SeletecPickerCompany
@@ -445,6 +452,31 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                           </Text>
                         </View>
                       )}
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="phone"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.phone") || "Phone"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_phone") ||
+                          "Enter your last name"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        keyboardType="phone-pad"
+                        maxLength={14}
+                      />
                     </View>
                   )}
                 />

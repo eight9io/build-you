@@ -21,6 +21,8 @@ import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfil
 
 import { useGetListEmployee } from "../../../hooks/useGetCompany";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import PersonalChallengeDetailScreen from "../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -134,6 +136,35 @@ const CompanyProfileScreen = () => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CompanyStack.Screen
+        name="PersonalChallengeDetailScreen"
+        component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <CompanyStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}

@@ -28,6 +28,7 @@ export interface IUserData {
   loginType?: ILoginType;
   isVerified?: boolean;
   city?: string;
+  isCoach?: boolean;
 }
 
 export type ILoginType =

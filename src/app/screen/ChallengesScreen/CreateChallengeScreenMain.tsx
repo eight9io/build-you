@@ -19,7 +19,24 @@ import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog";
 import { IPackage, IPackageResponse } from "../../types/package";
 import { serviceGetAllPackages } from "../../service/package";
 import { getLanguageLocalStorage } from "../../utils/language";
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack";
+import NavButton from "../../component/common/Buttons/NavButton";
+import PersonalChallengeDetailScreen from "./PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import PersonalCoachChallengeDetailScreen from "./CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
+import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
+import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
+import ProgressCommentScreen from "./ProgressCommentScreen/ProgressCommentScreen";
+import AppTitle from "../../component/common/AppTitle";
 
+const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
+
+export type CreateChallengeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "CreateChallengeScreenMain"
+>;
 interface ICreateChallengeCardProps {
   image: ImageSourcePropType;
   title: string;
@@ -167,4 +184,100 @@ const CreateChallengeScreenMain = () => {
   );
 };
 
-export default CreateChallengeScreenMain;
+const CreateChallengeScreen = () => {
+  const { t } = useTranslation();
+  return (
+    <CreateChallengeStack.Navigator
+      screenOptions={{
+        headerBackVisible: false,
+        headerTitleAlign: "center",
+        headerShown: true,
+      }}
+    >
+      <CreateChallengeStack.Screen
+        name="CreateChallengeScreenMain"
+        component={CreateChallengeScreenMain}
+        options={() => ({
+          headerTitle: () => <AppTitle title={t("top_nav.create_challenge")} />,
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="OtherUserProfileScreen"
+        component={OtherUserProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="OtherUserProfileChallengeDetailsScreen"
+        component={OtherUserProfileChallengeDetailsScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CreateChallengeStack.Screen
+        name="ProgressCommentScreen"
+        component={ProgressCommentScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => "",
+          headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CreateChallengeStack.Screen
+        name="PersonalChallengeDetailScreen"
+        component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+    </CreateChallengeStack.Navigator>
+  );
+};
+
+export default CreateChallengeScreen;

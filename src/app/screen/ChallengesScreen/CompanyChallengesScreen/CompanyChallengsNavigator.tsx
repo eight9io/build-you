@@ -96,6 +96,8 @@ const CompanyChallengesNavigator = () => {
           ),
         })}
       />
+      
+      {/* TODO: Add challenge detail screens to navigate through new message notification */}
     </CompanyChallengesStack.Navigator>
   );
 };

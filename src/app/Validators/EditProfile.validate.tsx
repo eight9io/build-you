@@ -33,6 +33,7 @@ export const EditProfileValidators = () => {
     isShowCompany: yup.boolean(),
     city: yup.string(),
     employeeOf: yup.mixed(),
+    phone: yup.string(),
   });
 };
 

@@ -6,25 +6,19 @@ import {
   Text,
   Modal,
   SafeAreaView,
-  ActivityIndicator,
   ScrollView,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import { Image } from "expo-image";
 
-import {
-  serviceRateSoftSkillCertifiedChallenge,
-  getChallengeById,
-  serviceGetRatedSoftSkillCertifiedChallenge,
-} from "../../service/challenge";
-import { serviceGetOtherUserData } from "../../service/user";
+import { serviceRateSoftSkillCertifiedChallenge } from "../../service/challenge";
 
 import { IChallenge, IChallengeOwner, ISoftSkill } from "../../types/challenge";
-import { IUserData } from "../../types/user";
 
 import { extractSkillsFromChallengeData } from "../../utils/challenge";
 
+import Header from "../common/Header";
 import Button from "../common/Buttons/Button";
 import GlobalToastController from "../common/Toast/GlobalToastController";
 
@@ -32,7 +26,6 @@ import DefaultAvatar from "../asset/default-avatar.svg";
 import CheckedSvg from "../../component/asset/checked.svg";
 import UncheckedSvg from "../../component/asset/uncheck.svg";
 import WarningSvg from "../../component/asset/warning.svg";
-import Header from "../common/Header";
 
 interface ICoachRateChallengeModalProps {
   isVisible: boolean;
@@ -40,6 +33,7 @@ interface ICoachRateChallengeModalProps {
   challengeOwner: IChallengeOwner;
   challengeData: IChallenge;
   setShouldParentRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  ratedCompetencedSkill: ISoftSkill[];
 }
 
 interface IRenderSoftSkillProgress {
@@ -124,18 +118,16 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   challengeOwner,
   challengeData,
   setShouldParentRefresh,
+  ratedCompetencedSkill,
 }) => {
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
     ISoftSkill[]
   >([]);
-  const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
-    ISoftSkill[]
-  >([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
 
   const { t } = useTranslation();
-  const isChallengeRated = ratedCompetencedSkill.length > 0;
+  const isChallengeRated = ratedCompetencedSkill.every((item) => item.isRating);
   const challengeOwnerId = challengeOwner?.id;
   const challengeId = challengeData?.id;
 
@@ -182,38 +174,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const [ratedSoffSkillsValue] = await Promise.allSettled([
-          serviceGetRatedSoftSkillCertifiedChallenge(challengeId),
-        ]);
-        if (ratedSoffSkillsValue.status === "fulfilled") {
-          const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
-            (item) => {
-              return {
-                id: item.skillId,
-                skill: item.skillName,
-                rating: item.skillRating,
-              };
-            }
-          );
-          setRatedCompetencedSkill(ratedSoffSkills);
-        } else {
-          console.log(
-            "CoachRateChallengeModal - Error fetching rated skills:",
-            ratedSoffSkillsValue.reason
-          );
-        }
-      } catch (error) {
-        console.log("CoachRateChallengeModal - Error fetching data:", error);
-      } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
-      }
-    };
     if (challengeId) {
-      getData();
       const skillsToRate: ISoftSkill[] =
         extractSkillsFromChallengeData(challengeData);
       setSelectedCompetencedSkill(skillsToRate);
@@ -244,59 +205,54 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
           />
         </View>
 
-        {!isLoading && (
-          <View className="relative flex-1 bg-white">
-            <ScrollView className="flex-1">
-              <View className="flex flex-col items-center ">
-                <View
-                  className={clsx("mt-5 rounded-full border-4 border-white")}
-                >
-                  {!challengeOwner?.avatar && (
-                    <View
-                      className={clsx(
-                        "z-10 h-[100px] w-[100px] rounded-full  bg-white"
-                      )}
-                    >
-                      <DefaultAvatar width={100} height={100} />
-                    </View>
-                  )}
-                  {challengeOwner?.avatar && (
-                    <Image
-                      className={clsx("h-[100px] w-[100px] rounded-full")}
-                      source={challengeOwner?.avatar}
-                    />
-                  )}
-                </View>
-                <Text className="font-open-sans leading-140 text-xl font-medium">
-                  {challengeOwner?.name} {challengeOwner?.surname}
-                </Text>
-              </View>
-
-              <View className="w-full flex-col justify-between px-5 pt-6">
-                {renderSelectedSoftSkill(
-                  t,
-                  isChallengeRated
-                    ? ratedCompetencedSkill
-                    : selectedCompetencedSkill,
-                  changeSkillValue,
-                  skillValueError
+        <View className="relative flex-1 bg-white">
+          <ScrollView className="flex-1">
+            <View className="flex flex-col items-center ">
+              <View className={clsx("mt-5 rounded-full border-4 border-white")}>
+                {!challengeOwner?.avatar && (
+                  <View
+                    className={clsx(
+                      "z-10 h-[100px] w-[100px] rounded-full  bg-white"
+                    )}
+                  >
+                    <DefaultAvatar width={100} height={100} />
+                  </View>
+                )}
+                {challengeOwner?.avatar && (
+                  <Image
+                    className={clsx("h-[100px] w-[100px] rounded-full")}
+                    source={challengeOwner?.avatar}
+                  />
                 )}
               </View>
-            </ScrollView>
-            {!isChallengeRated && (
-              <View className="absolute bottom-6 w-full">
-                <Button
-                  testID="complete_profile_step_4_next_button"
-                  title={t("save") || "Save"}
-                  containerClassName=" bg-primary-default my-5 mx-5 "
-                  textClassName="text-white text-md leading-6 font-semibold"
-                  onPress={handleSummitRatingSkills}
-                />
-              </View>
-            )}
-          </View>
-        )}
-        {isLoading && <ActivityIndicator size={"large"} className="pt-10" />}
+              <Text className="font-open-sans leading-140 text-xl font-medium">
+                {challengeOwner?.name} {challengeOwner?.surname}
+              </Text>
+            </View>
+
+            <View className="w-full flex-col justify-between px-5 pt-6">
+              {renderSelectedSoftSkill(
+                t,
+                isChallengeRated
+                  ? ratedCompetencedSkill
+                  : selectedCompetencedSkill,
+                changeSkillValue,
+                skillValueError
+              )}
+            </View>
+          </ScrollView>
+          {!isChallengeRated && (
+            <View className="absolute bottom-6 w-full">
+              <Button
+                testID="complete_profile_step_4_next_button"
+                title={t("save") || "Save"}
+                containerClassName=" bg-primary-default my-5 mx-5 "
+                textClassName="text-white text-md leading-6 font-semibold"
+                onPress={handleSummitRatingSkills}
+              />
+            </View>
+          )}
+        </View>
       </SafeAreaView>
     </Modal>
   );

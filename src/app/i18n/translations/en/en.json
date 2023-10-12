@@ -598,11 +598,7 @@
     "enter_your_company": "Enter your company",
     "enter_your_company_error": "Please enter your company",
     "phone": "Phone number",
-    "enter_phone": "Enter your phone number",
-    "city": "City",
-    "enter_your_city": "Enter your city",
-    "company": "Company",
-    "enter_your_company": "Enter your company"
+    "enter_phone": "Enter your phone number"
   },
   "choose_packages_screen": {
     "package": "Package",

@@ -1,4 +1,7 @@
-import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 import { FC, useEffect } from "react";
 import Button from "./Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -6,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { ISocialLoginForm, LoginForm } from "../../../types/auth";
 import { LOGIN_TYPE } from "../../../common/enum";
 import { errorMessage } from "../../../utils/statusCode";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface IGoogleLoginButtonProps {
   title?: string;
@@ -42,6 +46,10 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({
       } else {
         console.error("Error", error);
         onError && onError(errorMessage(error, "err_login"));
+        CrashlyticService({
+          errorType: "Google Logout Error",
+          error,
+        });
       }
     }
   };

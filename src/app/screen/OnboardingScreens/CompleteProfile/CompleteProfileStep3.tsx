@@ -14,6 +14,7 @@ import StepOfSteps from "../../../component/common/StepofSteps";
 import Button from "../../../component/common/Buttons/Button";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 import AddSkillModal from "../../../component/modal/AddSkill";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface CompleteProfileStep3Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -43,6 +44,10 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         setFetchedHardSkills(response.data);
       } catch (error) {
         console.error(error);
+        CrashlyticService({
+          errorType: "Get Hard Skill Error",
+          error: error,
+        });
       }
     };
     fetchSkills();

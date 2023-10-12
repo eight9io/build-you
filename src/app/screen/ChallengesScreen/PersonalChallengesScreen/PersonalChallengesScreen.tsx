@@ -50,8 +50,7 @@ const EmptyChallenges = ({
   return (
     <View className={clsx("flex h-3/4 flex-col items-center justify-center")}>
       <Text className={clsx("text-lg")}>
-        {t("challenge_screen.empty_challenge") ||
-          "You have no challenges at the moment."}
+        {t("challenge_screen.empty_challenge")}
       </Text>
       <Text className={clsx("text-lg")}>
         {t("click") || "Click"}

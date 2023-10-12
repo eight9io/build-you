@@ -23,6 +23,7 @@ import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/Skele
 
 import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 import ProgressCommentScreen from "../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import { CrashlyticService } from "../../service/crashlytic";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -70,6 +71,10 @@ const Notifications = () => {
         button: t("dialog.ok"),
       });
       console.error(error);
+      CrashlyticService({
+        errorType: "Fetch Notification Error",
+        error: error,
+      });
     }
   };
 

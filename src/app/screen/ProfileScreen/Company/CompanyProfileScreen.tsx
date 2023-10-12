@@ -21,6 +21,7 @@ import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfil
 
 import { useGetListEmployee } from "../../../hooks/useGetCompany";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -51,6 +52,10 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
       })
       .catch((err) => {
         console.error("err", err);
+        CrashlyticService({
+          errorType: "Fetch My Company Profile Error",
+          error: err,
+        });
       });
   }, []);
 

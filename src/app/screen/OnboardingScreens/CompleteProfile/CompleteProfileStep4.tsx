@@ -23,6 +23,7 @@ import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -227,17 +228,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           }),
         ]);
       } else {
-        console.log({
-          name: profile?.name,
-          surname: profile?.surname,
-          birth: profile?.birth,
-          occupation: profile?.occupation,
-          occupationDetail: profile?.occupationDetail,
-          bio: profile?.biography,
-          softSkill: softSkills,
-          hardSkill: profile.skills,
-          company: "",
-        });
         await Promise.all([
           uploadNewVideo(profile?.video),
           httpInstance.put(`/user/first/update/${userData.id}`, {
@@ -301,6 +291,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         );
       } catch (error) {
         console.error(error);
+        CrashlyticService({
+          errorType: "Get Soft Skill List Error",
+          error: error,
+        });
       }
     };
     fetchSkills();

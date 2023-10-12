@@ -21,6 +21,7 @@ import CloseButton from "./asset/close-button.svg";
 import ConfirmDialog from "../Dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import Spinner from "react-native-loading-spinner-overlay";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface IVideoPickerProps {
   isSelectedImage?: boolean | null;
@@ -78,9 +79,13 @@ const VideoPicker: FC<IVideoPickerProps> = ({
         return;
       }
       setThumbnailImage(uri);
-    } catch (e) {
+    } catch (error) {
       setLoading && setLoading(false);
-      console.error("generateThumbnail", e);
+      console.error("generateThumbnail", error);
+      CrashlyticService({
+        errorType: "Generate thumbnail error in VideoPicker",
+        error,
+      });
     }
   };
 

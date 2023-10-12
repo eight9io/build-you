@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
 import httpInstance from "../../utils/http";
+import { CrashlyticService } from "../../service/crashlytic";
 
 interface IFetchedSkill {
   id: string;
@@ -67,6 +68,10 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
         );
       } catch (error) {
         console.error(error);
+        CrashlyticService({
+          errorType: "Get Soft Skill List Error",
+          error,
+        });
       }
     };
     fetchSkills();

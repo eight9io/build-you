@@ -9,6 +9,7 @@ import { serviceGetMyProfile } from "../service/auth";
 import { serviceGetListFollowing } from "../service/profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
 import { useTranslation } from "react-i18next";
+import { CrashlyticService } from "../service/crashlytic";
 
 export const useGetUserData = (setLoading?: any) => {
   const { setUserProfile } = useUserProfileStore();
@@ -21,6 +22,10 @@ export const useGetUserData = (setLoading?: any) => {
       })
       .catch((err) => {
         console.error("err", err);
+        CrashlyticService({
+          errorType: "Get User Data Error",
+          error: err,
+        });
       });
     setLoading && setLoading(false);
   };

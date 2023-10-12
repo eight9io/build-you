@@ -3,6 +3,7 @@ import { GOOGLE_MAP_API } from "../common/constants";
 import { extractNearbyAddresses } from "../utils/googleMap.util";
 import { ISelectOption } from "../types/common";
 import axios from "axios";
+import { CrashlyticService } from "./crashlytic";
 
 export const getNearbyLocations = async (
   coords: string,
@@ -40,5 +41,9 @@ export const getNearbyLocations = async (
     return extractNearbyAddresses(response.data);
   } catch (error) {
     console.error("error: ", error);
+    CrashlyticService({
+      errorType: "Get Nearby Locations Error",
+      error: error,
+    });
   }
 };

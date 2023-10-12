@@ -26,6 +26,7 @@ import {
 } from "@react-navigation/native";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 import GlobalToastController from "../Toast/GlobalToastController";
+import { CrashlyticService } from "../../../service/crashlytic";
 interface ISingleCommentProps {
   comment: IProgressComment;
   onDeleteCommentSuccess: () => void;
@@ -122,6 +123,10 @@ const SingleComment: FC<ISingleCommentProps> = ({
         button: t("dialog.ok"),
       });
       console.error(error);
+      CrashlyticService({
+        errorType: "Delete comment error",
+        error,
+      });
     }
   };
 

@@ -14,6 +14,7 @@ import {
   serviceGetListFollower,
   serviceGetListFollowing,
 } from "../../../../service/profile";
+import { CrashlyticService } from "../../../../service/crashlytic";
 
 const CompanyProfileTabs = () => {
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -37,7 +38,11 @@ const CompanyProfileTabs = () => {
       );
       setFollowerList(followerList);
     } catch (error) {
-      console.log("getFollowerList", error);
+      console.error("getFollowerList", error);
+      CrashlyticService({
+        errorType: "Fetch Follower List Error",
+        error,
+      });
     }
     setIsFollowerRefreshing(false);
   };
@@ -50,7 +55,11 @@ const CompanyProfileTabs = () => {
       );
       setFollowingList(followingList);
     } catch (error) {
-      console.log("fetchFollowingList", error);
+      console.error("fetchFollowingList", error);
+      CrashlyticService({
+        errorType: "Fetch Following List Error",
+        error,
+      });
     }
     setIsFollowingRefreshing(false);
   };

@@ -155,9 +155,9 @@ PODS:
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.1.1)
-  - hermes-engine (0.71.13):
-    - hermes-engine/Pre-built (= 0.71.13)
-  - hermes-engine/Pre-built (0.71.13)
+  - hermes-engine (0.71.8):
+    - hermes-engine/Pre-built (= 0.71.8)
+  - hermes-engine/Pre-built (0.71.8)
   - JWT (3.0.0-beta.14):
     - Base64 (~> 1.1.2)
   - libaom (3.0.0):
@@ -1015,4 +1015,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a8ff88e42fd13fdab441a53d9c9a5461d9ed7e52
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

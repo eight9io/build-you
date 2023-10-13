@@ -234,6 +234,7 @@ export const handleTapOnIncomingNotification = async (
         break;
       case NOTIFICATION_TYPES.NEW_MESSAGE: {
         // TODO: Handle navigation with company account
+        const currentRouteName = navigation.getCurrentRoute().name;
         const currentRouteParams = navigation.getCurrentRoute().params as {
           challengeId: string;
         };
@@ -245,6 +246,8 @@ export const handleTapOnIncomingNotification = async (
         // => do nothing if the user is in chat tab
         if (
           currentRouteParams &&
+          (currentRouteName === "PersonalChallengeDetailScreen" ||
+            currentRouteName === "PersonalCoachChallengeDetailScreen") &&
           currentRouteParams.challengeId === payload.challengeId
         ) {
           if (shouldDisplayNewMessageNotification) {

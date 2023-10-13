@@ -258,6 +258,13 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       });
       return;
     }
+    if (user?.id === userId) {
+      // User click on his own post on feed
+      navigation.navigate("PersonalChallengeDetailScreen", {
+        challengeId: challenge?.id,
+      });
+      return;
+    }
     navigation.navigate("OtherUserProfileChallengeDetailsScreen", {
       challengeId: challenge?.id,
     });

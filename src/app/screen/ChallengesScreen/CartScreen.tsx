@@ -136,66 +136,57 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             },
             image
           )) as AxiosResponse;
-          if (challengeImageResponse.status === 200 || 201) {
-            GlobalToastController.showModal({
-              message:
-                t("toast.create_challenge_success") ||
-                "Your challenge has been created successfully !",
-            });
+          GlobalToastController.showModal({
+            message:
+              t("toast.create_challenge_success") ||
+              "Your challenge has been created successfully !",
+          });
 
-            const isChallengesScreenInStack = navigation
-              .getState()
-              .routes.some((route) => route.name === "Challenges");
-            if (isChallengesScreenInStack) {
-              navigation.dispatch(StackActions.popToTop());
-              if (isCurrentUserCompany) {
-                const pushAction = StackActions.push("HomeScreen", {
-                  screen: "Challenges",
-                  params: {
-                    screen: "CompanyChallengeDetailScreen",
-                    params: { challengeId: newChallengeId },
-                  },
-                });
-                navigation.dispatch(pushAction);
-              } else {
-                const pushAction = StackActions.push("HomeScreen", {
-                  screen: "Challenges",
-                  params: {
-                    screen: "PersonalChallengeDetailScreen",
-                    params: { challengeId: newChallengeId },
-                  },
-                });
-                navigation.dispatch(pushAction);
-              }
-            } else {
-              // add ChallengesScreen to the stack
-              if (isCurrentUserCompany) {
-                navigation.navigate("Challenges", {
+          const isChallengesScreenInStack = navigation
+            .getState()
+            .routes.some((route) => route.name === "Challenges");
+          if (isChallengesScreenInStack) {
+            console.log("isChallengesScreenInStack");
+            navigation.dispatch(StackActions.popToTop());
+            if (isCurrentUserCompany) {
+              const pushAction = StackActions.push("HomeScreen", {
+                screen: "Challenges",
+                params: {
                   screen: "CompanyChallengeDetailScreen",
                   params: { challengeId: newChallengeId },
-                });
-              } else {
-                navigation.navigate("Challenges", {
+                },
+              });
+              navigation.dispatch(pushAction);
+            } else {
+              const pushAction = StackActions.push("HomeScreen", {
+                screen: "Challenges",
+                params: {
                   screen: "PersonalChallengeDetailScreen",
                   params: { challengeId: newChallengeId },
-                });
-              }
+                },
+              });
+              navigation.dispatch(pushAction);
             }
-
-            setIsLoading(false);
-            return;
+          } else {
+            // add ChallengesScreen to the stack
+            navigation.navigate("HomeScreen", {
+              screen: "Challenges",
+            });
+            if (isCurrentUserCompany) {
+              navigation.navigate("Challenges", {
+                screen: "CompanyChallengeDetailScreen",
+                params: { challengeId: newChallengeId },
+              });
+            } else {
+              navigation.navigate("Challenges", {
+                screen: "PersonalChallengeDetailScreen",
+                params: { challengeId: newChallengeId },
+              });
+            }
           }
-          setIsRequestSuccess(false);
-          setIsShowModal(true);
-          httpInstance.delete(
-            `/challenge/delete/${challengeCreateResponse.data.id}`
-          );
-          GlobalDialogController.showModal({
-            title: t("dialog.err_title"),
-            message:
-              t("error_general_message") ||
-              "Something went wrong. Please try again later!",
-          });
+
+          setIsLoading(false);
+          return;
         }
         setIsLoading(false);
         setIsRequestSuccess(true);
@@ -204,11 +195,26 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
       setIsLoading(false);
-      GlobalDialogController.showModal({
-        title: t("dialog.err_title"),
-        message:
-          t("error_general_message") ||
-          "Something went wrong. Please try again later!",
+      navigation.navigate("HomeScreen", {
+        screen: "CreateChallengeScreenMain",
+      });
+      if (error.response && error.response.status === 400) {
+        setTimeout(() => {
+          GlobalDialogController.showModal({
+            title: t("dialog.err_title"),
+            message: error.response.data.message,
+          }),
+            1500;
+        });
+        return;
+      }
+      setTimeout(() => {
+        GlobalToastController.showModal({
+          message:
+            t("error_general_message") ||
+            "Something went wrong. Please try again later!",
+        }),
+          1500;
       });
     }
   };

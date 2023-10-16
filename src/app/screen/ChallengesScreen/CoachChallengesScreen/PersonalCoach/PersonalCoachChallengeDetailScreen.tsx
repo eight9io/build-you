@@ -33,6 +33,7 @@ import { useNotificationStore } from "../../../../store/notification-store";
 import { isObjectEmpty } from "../../../../utils/common";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
+import CompanySkillsTab from "./CompanySkillsTab";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -77,6 +78,8 @@ const PersonalCoachChallengeDetailScreen = ({
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
   const challengeId = route?.params?.challengeId;
+
+  const isCompanyChallenge = challengeData?.owner?.[0].companyAccount;
 
   const { t } = useTranslation();
   const [tabRoutes] = useState([
@@ -188,10 +191,19 @@ const PersonalCoachChallengeDetailScreen = ({
         );
       case CHALLENGE_TABS_KEY.SKILLS:
         return (
-          <CoachSkillsTab
-            challengeData={challengeData}
-            challengeState={challengeState}
-          />
+          <>
+            {isCompanyChallenge ? (
+              <CompanySkillsTab
+                challengeData={challengeData}
+                challengeState={challengeState}
+              />
+            ) : (
+              <CoachSkillsTab
+                challengeData={challengeData}
+                challengeState={challengeState}
+              />
+            )}
+          </>
         );
       case CHALLENGE_TABS_KEY.CHAT:
         return (

@@ -2,15 +2,20 @@ import clsx from "clsx";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import Empty from "./assets/emptyFollow.svg";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+
+import { ISoftSkill } from "../../../../types/challenge";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
+
 import MarkDone from "./assets/mark_done.svg";
+import Empty from "./assets/emptyFollow.svg";
+
 interface IParticipantsTabProps {
   participant?: {
     id: string | number;
     avatar: string;
     name: string;
+    surname: string;
     challengeStatus?: string;
   }[];
   fetchParticipants?: () => void;
@@ -61,7 +66,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
                     )}
                   </View>
                   <Text className="ml-3 text-base font-semibold text-basic-black">
-                    {item.name}
+                    {item?.name} {item?.surname}
                   </Text>
                 </View>
                 <View className="pr-3">

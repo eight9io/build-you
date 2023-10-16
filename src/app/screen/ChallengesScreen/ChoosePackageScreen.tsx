@@ -112,7 +112,7 @@ const ChoosePackageScreen = () => {
     };
     setCreateChallengeDataStore({
       ...getCreateChallengeDataStore(),
-      package: packageData,
+      package: packageData.id,
     });
     navigation.navigate("CartScreen", {
       choosenPackage: choosenPackage,

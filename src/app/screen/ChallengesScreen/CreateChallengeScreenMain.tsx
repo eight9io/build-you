@@ -30,6 +30,7 @@ import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileS
 import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import ProgressCommentScreen from "./ProgressCommentScreen/ProgressCommentScreen";
 import AppTitle from "../../component/common/AppTitle";
+import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -105,6 +106,9 @@ const CreateChallengeScreenMain = () => {
   const currentUser = getUserProfile();
   const isCompany = currentUser?.companyAccount;
 
+  const { getNewChallengeId } = useNewCreateOrDeleteChallengeStore();
+  const newChallengeId = getNewChallengeId();
+
   const handleCreateFreeChallenge = () => {
     if (isCompany) navigation.navigate("CreateCompanyChallengeScreen");
     else navigation.navigate("CreateChallengeScreen");
@@ -134,11 +138,11 @@ const CreateChallengeScreenMain = () => {
         const res = await serviceGetAllPackages(currentLanguage);
         setPackages(res.data);
       } catch (error) {
-        console.log("get packages error", error);
+        console.error("get packages error", error);
       }
     };
     fetchPackages();
-  }, []);
+  }, [newChallengeId]);
 
   return (
     <SafeAreaView

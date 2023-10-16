@@ -1,13 +1,12 @@
 import clsx from "clsx";
-import { t } from "i18next";
 import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
 import React, { FC, useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 
 import {
   ICertifiedChallengeState,
   IChallenge,
-  IChallengeOwner,
   ISoftSkill,
 } from "../../../../types/challenge";
 
@@ -16,12 +15,12 @@ import {
   serviceGetRatedSoftSkillCertifiedChallenge,
 } from "../../../../service/challenge";
 
-import Empty from "../../../../common/svg/empty-list.svg";
-import RatedParticipant from "./assets/rated-participant.svg";
 import CoachRateChallengeModal from "../../../../component/modal/CoachRateChallengeModal";
-import { useTranslation } from "react-i18next";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { IUserData } from "../../../../types/user";
+
+import RatedParticipant from "../assets/rated-participant.svg";
+import Empty from "../../../../common/svg/empty-list.svg";
 
 interface IParticipantWithRatingSkills {
   id: number;
@@ -83,7 +82,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
 
   useEffect(() => {
     fetchParticipantsCertifiedChallenge();
-  }, []);
+  }, [shouldRefresh]);
 
   useEffect(() => {
     const getData = async () => {

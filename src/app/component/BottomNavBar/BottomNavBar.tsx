@@ -42,6 +42,7 @@ interface IBottomNavBarProps {
 
 const SCREENS_TO_HIDE_TAB_BAR = [
   "PersonalChallengeDetailScreen",
+  "CompanyChallengeDetailScreen",
   "ProgressCommentScreen",
   "MainSearchScreen",
   "PersonalCoachChallengeDetailScreen",

@@ -96,9 +96,10 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
         isVisible={isRateSkillsModalVisible}
         setIsVisible={setIsRateSkillsModalVisible}
         challengeData={challengeData}
-        challengeOwner={challengeOwner}
+        userToRate={challengeOwner}
         setShouldParentRefresh={setShouldRefresh}
         ratedCompetencedSkill={ratedCompetencedSkill}
+        canCurrentUserRateSkills={canCurrentUserRateSkills}
       />
       {canCurrentUserRateSkills && !isChallengeRated && (
         <Button

@@ -2,7 +2,7 @@ import { ICompanyData, ICompanyDataUser } from "./company";
 
 export interface IUserData {
   id: string;
-  email: string;
+  email?: string;
   name: string;
   surname: string;
   birth?: string;

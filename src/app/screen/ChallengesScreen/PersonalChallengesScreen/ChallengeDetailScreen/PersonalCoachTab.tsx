@@ -66,7 +66,7 @@ const getButtonColor = (status: IChallengeTouchpointStatus) => {
   }
 };
 
-const translateCheckpointToText = (checkpoint: CheckpointType) => {
+export const translateCheckpointToText = (checkpoint: CheckpointType) => {
   if (!checkpoint) return;
   const match = checkpoint.match(/check-(\d+)/);
   if (match) {
@@ -103,7 +103,7 @@ const EmptyCoachBanner = (translation) => {
   );
 };
 
-const CoachBanner = ({ coachData }: { coachData: IUserData }) => {
+export const CoachBanner = ({ coachData }: { coachData: IUserData }) => {
   const navigation = useNav();
 
   const handleOpenCoachProfile = () => {
@@ -141,7 +141,7 @@ const CoachBanner = ({ coachData }: { coachData: IUserData }) => {
   );
 };
 
-const TouchPointProgress = ({
+export const TouchPointProgress = ({
   currentTouchpoint,
   currentTouchpointStatus,
   totalChecks,

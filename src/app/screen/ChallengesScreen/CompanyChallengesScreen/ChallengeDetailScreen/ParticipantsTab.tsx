@@ -2,7 +2,11 @@ import clsx from "clsx";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
 
 import { ISoftSkill } from "../../../../types/challenge";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
@@ -12,7 +16,7 @@ import Empty from "./assets/emptyFollow.svg";
 
 interface IParticipantsTabProps {
   participant?: {
-    id: string | number;
+    id: string;
     avatar: string;
     name: string;
     surname: string;
@@ -30,6 +34,13 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const handlePushToOtherUserProfile = (userId: string) => {
+    const pushAction = StackActions.push("OtherUserProfileScreen", {
+      userId,
+    });
+    navigation.dispatch(pushAction);
+  };
+
   return (
     <View className={clsx("flex-1 px-4")}>
       {participant.length > 0 && (
@@ -43,11 +54,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate("OtherUserProfileScreen", {
-                    userId: item.id as string,
-                  })
-                }
+                onPress={() => handlePushToOtherUserProfile(item?.id)}
                 className="mb-5 flex-row items-center justify-between gap-3"
               >
                 <View className="flex-row items-center">

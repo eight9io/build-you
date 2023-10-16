@@ -20,7 +20,6 @@ import {
 
 import ParticipantsTab from "./ParticipantsTab";
 import CompanyCoachTab from "./CompanyCoachTab";
-import TabView from "../../../../component/common/Tab/TabView";
 import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 

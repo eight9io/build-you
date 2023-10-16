@@ -34,6 +34,7 @@ import { isObjectEmpty } from "../../../../utils/common";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import CompanySkillsTab from "./CompanySkillsTab";
+import { useTabIndex } from "../../../../hooks/useTabIndex";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -68,7 +69,6 @@ const PersonalCoachChallengeDetailScreen = ({
   route: any;
   navigation: CoachChallengeDetailScreenNavigationProp;
 }) => {
-  const [index, setIndex] = useState<number>(0);
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
@@ -105,34 +105,7 @@ const PersonalCoachChallengeDetailScreen = ({
     },
   ]);
 
-  const setTabIndex = (nextIndex: number) => {
-    if (index === nextIndex) return;
-    if (chatTabIndex === null || chatTabIndex === undefined)
-      return setIndex(nextIndex);
-    if (nextIndex === chatTabIndex)
-      // Disable new message notification if user switch to chat tab
-      setShouldDisplayNewMessageNotification(false);
-    else if (index === chatTabIndex)
-      // Enable new message notification if user switch to another tab from chat tab
-      setShouldDisplayNewMessageNotification(true);
-
-    setIndex(nextIndex);
-  };
-
-  const chatTabIndex = useMemo(() => {
-    const index = tabRoutes.findIndex(
-      (route) => route.key === CHALLENGE_TABS_KEY.CHAT
-    );
-    if (index === -1) return null;
-    return index;
-  }, [t]);
-
-  useEffect(() => {
-    if (chatTabIndex && route?.params?.hasNewMessage) {
-      // Set chat tab as active tab if this screen is opened from new message notification
-      setTabIndex(chatTabIndex);
-    }
-  }, [chatTabIndex, route]);
+  const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
   const isChallengeInProgress =
     (!isObjectEmpty(challengeState) &&

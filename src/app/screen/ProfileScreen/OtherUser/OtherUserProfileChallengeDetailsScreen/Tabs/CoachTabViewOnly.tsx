@@ -1,72 +1,96 @@
-import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, FC } from "react";
+import { Image } from "expo-image";
 
-import DefaultAvatar from "../../../../common/svg/default-avatar.svg";
-import TouchPointCircle from "../../../../common/svg/touchpoint-circle.svg";
-import TouchPointCheckCircle from "../../../../common/svg/check-circle-24.svg";
-import TouchPointRetangle from "../../../../common/svg/touchpoint-rectangle.svg";
+import DefaultAvatar from "../../../../../common/svg/default-avatar.svg";
+import { useNav } from "../../../../../hooks/useNav";
+import { IUserData } from "../../../../../types/user";
+import { serviceGetOtherUserData } from "../../../../../service/user";
+import { TFunction } from "i18next";
+interface ICoachTabProps {
+  coachID: string;
+}
 
-interface ICoachTabViewOnlyProps {}
-
-const EmptyCoachBanner = (translation) => {
+const EmptyCoachBanner = () => {
+  const { t } = useTranslation();
   return (
     <View className="flex flex-row items-center rounded-lg bg-gray-light p-4">
       <DefaultAvatar />
       <View className="ml-4" />
       <Text className="text-md font-semibold text-gray-dark">
-        Waiting for coach...
+        {t("challenge_detail_screen_tab.coach.waiting_for_coach")}
       </Text>
     </View>
   );
 };
 
-const CoachBanner = ({ coachName, coachAvatar, translation, specialize }) => {
+const CoachBanner = ({ coachData }: { coachData: IUserData }) => {
+  const navigation = useNav();
+  const { t } = useTranslation();
+
+  const handleOpenCoachProfile = () => {
+    navigation.push("OtherUserProfileScreen", { userId: coachData?.id });
+  };
+
   return (
     <View className="flex flex-row items-center justify-between rounded-lg bg-gray-light p-4">
       <View className="flex flex-row items-center">
-        <DefaultAvatar />
+        {coachData?.avatar ? (
+          <Image
+            source={{ uri: coachData?.avatar }}
+            style={{ width: 40, height: 40, borderRadius: 20 }}
+          />
+        ) : (
+          <DefaultAvatar />
+        )}
         <View className="ml-4" />
         <View className="flex flex-col items-start">
-          <Text className="text-black text-md font-semibold">{coachName}</Text>
-          <Text className="text-md text-gray-dark">{specialize}</Text>
+          <Text className="text-black text-md font-semibold ">
+            {coachData.name} {coachData.surname}
+          </Text>
+          <Text className="w-44 text-sm capitalize text-gray-dark">
+            {coachData?.occupation?.name}
+          </Text>
         </View>
       </View>
       <TouchableOpacity
         className="flex flex-row items-center justify-center rounded-full bg-white p-2 px-6 "
-        onPress={() => {}}
+        onPress={handleOpenCoachProfile}
       >
-        <Text className="font-semibold text-primary-default">Profile</Text>
+        <Text className="font-semibold text-primary-default">
+          {t("challenge_detail_screen_tab.coach.profile")}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-const CoachTabViewOnly = () => {
-  const [
-    isChangeTouchpointStatusModalVisible,
-    setChangeTouchpointStatusModalVisible,
-  ] = useState<boolean>(false);
+const CoachTabViewOnly: FC<ICoachTabProps> = ({ coachID }) => {
+  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
   const { t } = useTranslation();
 
-  const handleOpenChangeTouchpointStatusModal = () => {
-    setChangeTouchpointStatusModalVisible(true);
-  };
+  useEffect(() => {
+    const getCoachData = async () => {
+      if (!coachID) return;
+      try {
+        const response = await serviceGetOtherUserData(coachID);
+        setCoachData(response.data);
+      } catch (error) {
+        console.error("get coach data error", error);
+      }
+    };
 
-  const handleCloseChangeTouchpointStatusModal = () => {
-    setChangeTouchpointStatusModalVisible(false);
-  };
+    getCoachData();
+  }, [coachID]);
 
   return (
-    <View className="flex flex-col p-4">
-      {/* <EmptyCoachBanner translation={t} /> */}
-      <CoachBanner
-        translation={t}
-        coachAvatar={"https://i.pravatar.cc/300"}
-        coachName={"Rudy Aster"}
-        specialize={"Personal Trainer"}
-      />
+    <View className="p-4">
+      {coachData?.id ? (
+        <CoachBanner coachData={coachData} />
+      ) : (
+        <EmptyCoachBanner />
+      )}
     </View>
   );
 };

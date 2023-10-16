@@ -52,7 +52,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
     currentUser.id === challengeData?.coach && isChallengeEnded;
 
   const isChallengeRated = ratedCompetencedSkill.every(
-    (item) => !item.isRating
+    (item) => item.isRating === true
   );
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
           onPress={handleOpenRateSkillsModal}
         />
       )}
-      {!canCurrentUserRateSkills && isChallengeRated && (
+      {!canCurrentUserRateSkills && !isChallengeRated && (
         <View className="flex flex-row items-center justify-between px-4">
           <Text className="text-md  text-danger-default">
             {t("challenge_detail_screen.can_not_rate_skills")}

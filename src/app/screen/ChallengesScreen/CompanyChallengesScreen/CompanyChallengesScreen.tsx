@@ -21,8 +21,8 @@ import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonL
 import { sortChallengeByStatusFromResponse } from "../../../utils/common";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
-import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import { useTranslation } from "react-i18next";
+import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 

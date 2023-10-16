@@ -36,6 +36,7 @@ import debounce from "lodash.debounce";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 import { useAuthStore } from "../../../../store/auth-store";
 import { IToken } from "../../../../types/auth";
+import CoachTabViewOnly from "./Tabs/CoachTabViewOnly";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -81,6 +82,19 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     isCurrentUserOwnerOfChallenge: false,
     participantList: [],
   });
+  const { t } = useTranslation();
+  const [challengeTabsTitle, setChallengeTabsTitle] = useState<string[]>(
+    isCompany || challengeState.challengeOwner?.companyAccount
+      ? [
+          t("challenge_detail_screen.progress"),
+          t("challenge_detail_screen.description"),
+          t("challenge_detail_screen.participants"),
+        ]
+      : [
+          t("challenge_detail_screen.progress"),
+          t("challenge_detail_screen.description"),
+        ]
+  );
 
   const updateModalState = (
     newState: Partial<ModalState>,
@@ -93,19 +107,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const { getAccessToken } = useAuthStore();
-
-  const { t } = useTranslation();
-
-  const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-  ];
-
-  const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-    t("challenge_detail_screen.participants"),
-  ];
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -215,6 +216,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
           }
         };
         await getChallengeParticipants();
+      }
+      if (stateToUpdate.challengeData.type === "certified") {
+        setChallengeTabsTitle([
+          ...challengeTabsTitle,
+          t("challenge_detail_screen.coach"),
+        ]);
       }
       setChallengeState(stateToUpdate);
     } catch (err) {
@@ -480,11 +487,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         )}
 
         <TabView
-          titles={
-            isCompanyAccount || challengeState.challengeOwner?.companyAccount
-              ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
-              : CHALLENGE_TABS_TITLE_TRANSLATION
-          }
+          titles={challengeTabsTitle}
           activeTabIndex={index}
           setActiveTabIndex={setIndex}
         >
@@ -502,9 +505,9 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             challengeState.challengeOwner?.companyAccount) && (
             <ParticipantsTab participant={challengeState.participantList} />
           )}
-          {/* {isCertifiedChallenge && (
-            <CoachTabViewOnly challengeData={challengeState.challengeData} />
-          )} */}
+          {isCertifiedChallenge && (
+            <CoachTabViewOnly coachID={challengeState.challengeData.coach} />
+          )}
         </TabView>
       </View>
     </SafeAreaView>

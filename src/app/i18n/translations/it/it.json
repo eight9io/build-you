@@ -655,5 +655,11 @@
     "new_employee": "ti ha aggiunto come dipendente",
     "new_message": "ha inviato un messaggio"
   },
-  "top_nav.create_challenge": "Crea sfida"
+  "top_nav.create_challenge": "Crea sfida",
+  "challenge_detail_screen_tab": {
+    "coach": {
+      "waiting_for_coach": "Waiting for coach...",
+      "profile": "Profile"
+    }
+  }
 }

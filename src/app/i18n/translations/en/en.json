@@ -35,7 +35,21 @@
     "chat_coach": "Chat coach",
     "rate_skills": "Rate skills",
     "can_not_rate_skills": "Coach can not rate skills when challenge is not completed",
-    "empty_participants_list": "No participants at the moment"
+    "request_video_call": "Request video call",
+    "empty_participants_list": "No participants at the moment",
+    "coach_calendar": "Coach calendar",
+    "add": "Add",
+    "propose": "Propose",
+    "proposing_time": "Proposing time",
+    "coach_proposing_time": "Coach proposing time",
+    "number_of_vote": "Number of vote",
+    "option": "Option",
+    "empty_proposing_time": "You have no proposing time at the moment",
+    "empty_confirmed_time": "You don't have a video call appointment at the moment",
+    "confirmed": "Confirmed",
+    "open_meeting": "Open meeting",
+    "link": "Link",
+    "vote": "Vote"
   },
   "bottom_nav": {
     "feed": "Feed",
@@ -376,6 +390,10 @@
       "premium": "Premium packages (video call):",
       "number_of_checks": "Number of checks:",
       "credits": "Credits:"
+    },
+    "proposing_time": {
+      "title": "Do you want to submit these proposing time?",
+      "description": "You cannot undo this action"
     },
     "cancel": "Cancel",
     "close": "Close",

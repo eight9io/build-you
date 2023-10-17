@@ -37,4 +37,5 @@ export enum CHALLENGE_TABS_KEY {
   SKILLS = "skills",
   CHAT = "chat",
   PARTICIPANTS = "participants",
+  COACH_CALDENDAR = "coach_calendar",
 }

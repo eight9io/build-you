@@ -18,7 +18,7 @@ import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 
 import { ICreateChallenge } from "../../../../types/challenge";
 import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";

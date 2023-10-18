@@ -23,6 +23,7 @@ import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChal
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
 import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { RouteProp } from "@react-navigation/native";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,6 +33,7 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 interface IProfileProps {
+  route: RouteProp<RootStackParamList, "ProfileScreen">;
   navigation: ProfileScreenNavigationProp;
 }
 
@@ -46,6 +48,7 @@ const Profile: React.FC<IProfileProps> = ({ route, navigation }: any) => {
 
       <View className="h-full ">
         <ProfileComponent
+          route={route}
           userData={userData}
           navigation={navigation}
           setIsLoading={setIsLoading}

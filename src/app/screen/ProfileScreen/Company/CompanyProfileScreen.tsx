@@ -7,6 +7,7 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import Spinner from "react-native-loading-spinner-overlay";
+import { RouteProp } from "@react-navigation/native";
 
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
@@ -34,9 +35,10 @@ type CompanyScreenNavigationProp = NativeStackNavigationProp<
 
 interface ICompanyProps {
   navigation: CompanyScreenNavigationProp;
+  route: RouteProp<RootStackParamList, "CompanyProfileScreen">;
 }
 
-const Company: React.FC<ICompanyProps> = ({ navigation }) => {
+const Company: React.FC<ICompanyProps> = ({ navigation, route }) => {
   useGetListEmployee();
   const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
     useState<boolean>(true);
@@ -64,6 +66,7 @@ const Company: React.FC<ICompanyProps> = ({ navigation }) => {
       {isLoading && <Spinner visible={isLoading} />}
       <View className="h-full ">
         <CompanyComponent
+          route={route}
           userData={userData}
           navigation={navigation}
           setIsLoading={setIsLoading}

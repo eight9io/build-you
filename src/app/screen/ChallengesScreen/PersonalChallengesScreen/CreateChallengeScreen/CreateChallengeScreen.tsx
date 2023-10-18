@@ -20,7 +20,7 @@ import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";

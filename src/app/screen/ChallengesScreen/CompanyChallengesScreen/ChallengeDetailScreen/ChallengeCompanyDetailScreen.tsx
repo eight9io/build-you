@@ -2,11 +2,18 @@ import { View, Text, SafeAreaView } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import {
   ICertifiedChallengeState,
   IChallenge,
 } from "../../../../types/challenge";
+import {
+  NavigationRouteProps,
+  RootStackParamList,
+} from "../../../../navigation/navigation.type";
+import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
+
 import {
   getChallengeStatusColor,
   isObjectEmpty,
@@ -17,28 +24,23 @@ import {
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
+import { useTabIndex } from "../../../../hooks/useTabIndex";
 
 import ParticipantsTab from "./ParticipantsTab";
 import CompanyCoachTab from "./CompanyCoachTab";
-import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
-import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
-
-import CheckCircle from "./assets/check_circle.svg";
+import CompanySkillsTab from "./CompanySkillsTab";
+import CompanyCoachCalendarTabCoachView from "./CompanyCoachCalendarTabCoachView";
+import CompanyCoachCalendarTabCompanyView from "./CompanyCoachCalendarTabCompanyView";
 
 import Button from "../../../../component/common/Buttons/Button";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import {
-  NavigationRouteProps,
-  RootStackParamList,
-} from "../../../../navigation/navigation.type";
-import CompanySkillsTab from "./CompanySkillsTab";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
-import { useTabIndex } from "../../../../hooks/useTabIndex";
-import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
+import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
+
+import CheckCircle from "./assets/check_circle.svg";
 
 export type ChallengeCompanyDetailScreenNavigationProps =
   NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
@@ -78,6 +80,8 @@ export const ChallengeCompanyDetailScreen: FC<
   const currentUser = getUserProfile();
 
   const isCertifiedChallenge = challengeData?.type === "certified";
+  const isVideoChallenge = challengeData?.package?.type === "videocall";
+  const isCurrentUserCoach = currentUser.isCoach;
 
   const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
@@ -175,27 +179,55 @@ export const ChallengeCompanyDetailScreen: FC<
   useEffect(() => {
     const tempTabRoutes = [...tabRoutes];
 
-    if (participantList && challengeOwner?.companyAccount)
-      tempTabRoutes.push({
-        key: CHALLENGE_TABS_KEY.PARTICIPANTS,
-        title: t("challenge_detail_screen.participants"),
-      });
+    if (challengeOwner?.companyAccount)
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.PARTICIPANTS
+        )
+      )
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.PARTICIPANTS,
+          title: t("challenge_detail_screen.participants"),
+        });
 
     if (isCertifiedChallenge) {
-      tempTabRoutes.push(
-        {
-          key: CHALLENGE_TABS_KEY.SKILLS,
-          title: t("challenge_detail_screen.skills"),
-        },
-        {
-          key: CHALLENGE_TABS_KEY.COACH,
-          title: t("challenge_detail_screen.coach"),
-        },
-        {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.SKILLS
+        )
+      )
+        tempTabRoutes.push(
+          {
+            key: CHALLENGE_TABS_KEY.SKILLS,
+            title: t("challenge_detail_screen.skills"),
+          },
+          {
+            key: CHALLENGE_TABS_KEY.COACH,
+            title: t("challenge_detail_screen.coach"),
+          }
+        );
+    }
+    if (isVideoChallenge) {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALDENDAR
+        )
+      ) {
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.COACH_CALDENDAR,
+          title: t("challenge_detail_screen.coach_calendar"),
+        });
+      }
+    } else {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.CHAT
+        )
+      )
+        tempTabRoutes.push({
           key: CHALLENGE_TABS_KEY.CHAT,
           title: t("challenge_detail_screen.chat_coach"),
-        }
-      );
+        });
     }
     setTabRoutes(tempTabRoutes);
   }, []);
@@ -253,13 +285,15 @@ export const ChallengeCompanyDetailScreen: FC<
             )}
           </>
         );
+      case CHALLENGE_TABS_KEY.COACH_CALDENDAR:
+        return <CompanyCoachCalendarTabCompanyView />;
     }
   };
 
   return (
     <SafeAreaView>
-      <View className="flex h-full flex-col bg-white pt-4">
-        <View className="flex flex-row items-center justify-between px-4">
+      <View className="flex h-full flex-col bg-gray-veryLight ">
+        <View className="flex flex-row items-center justify-between bg-white px-4 pb-3 pt-4">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
             <CheckCircle
               fill={getChallengeStatusColor(
@@ -305,7 +339,7 @@ export const ChallengeCompanyDetailScreen: FC<
           )}
         </View>
 
-        <View className="mt-3 flex flex-1">
+        <View className="flex flex-1">
           <CustomTabView
             routes={tabRoutes}
             renderScene={renderScene}

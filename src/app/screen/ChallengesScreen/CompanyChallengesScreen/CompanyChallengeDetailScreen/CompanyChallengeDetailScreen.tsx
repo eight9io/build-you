@@ -295,7 +295,7 @@ const CompanyChallengeDetailScreen = ({
   }, [shouldScreenRefresh]);
 
   return (
-    <SafeAreaView className="bg-white pt-3">
+    <SafeAreaView className="bg-gray-veryLight pt-3">
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}

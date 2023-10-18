@@ -138,7 +138,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const isCertifiedChallenge =
     challengeState.challengeData?.type === "certified";
-  console.log(challengeState.challengeData?.type);
 
   const challengeStatus =
     challengeState.challengeOwner?.id === currentUser?.id

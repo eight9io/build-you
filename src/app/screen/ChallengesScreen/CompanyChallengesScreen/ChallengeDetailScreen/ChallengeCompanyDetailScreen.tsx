@@ -38,7 +38,7 @@ import CompanySkillsTab from "./CompanySkillsTab";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
-import { ChatCoachTab } from "../../PersonalChallengesScreen/ChallengeDetailScreen/ChatCoachTab";
+import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
 
 export type ChallengeCompanyDetailScreenNavigationProps =
   NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
@@ -46,7 +46,7 @@ export type ChallengeCompanyDetailScreenNavigationProps =
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldScreenRefresh: boolean;
-  route: NavigationRouteProps<"ChallengeCompanyDetailScreen">;
+  route: NavigationRouteProps<"CompanyChallengeDetailScreen">;
   setShouldScreenRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

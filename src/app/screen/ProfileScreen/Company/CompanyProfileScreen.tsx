@@ -23,6 +23,7 @@ import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/
 import PersonalChallengeDetailScreen from "../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
+import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -162,6 +163,21 @@ const CompanyProfileScreen = () => {
       <CompanyStack.Screen
         name="PersonalCoachChallengeDetailScreen"
         component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <CompanyStack.Screen
+        name="CompanyChallengeDetailScreen"
+        component={CompanyChallengeDetailScreen}
         options={({ navigation }) => ({
           headerTitle: () => "",
           headerLeft: () => (

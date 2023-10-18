@@ -14,6 +14,8 @@ import { ICompanyDataUser } from "../../types/company";
 
 import ProfileTabs from "./ProfileTabs/Users/ProfileTabs";
 import IconCompany from "./ProfileTabs/common/asset/company.svg";
+import { RootStackParamList } from "../../navigation/navigation.type";
+import { RouteProp } from "@react-navigation/native";
 
 export interface ITopSectionProfileProps {
   navigation: any;
@@ -22,6 +24,7 @@ export interface ITopSectionProfileProps {
 }
 
 export interface IProfileComponentProps {
+  route: RouteProp<RootStackParamList, "ProfileScreen">;
   userData: IUserData | null;
   navigation: any;
   setIsLoading: (value: boolean) => void;
@@ -68,6 +71,7 @@ export const TopSectionProfile: FC<ITopSectionProfileProps> = ({
 };
 
 const ProfileComponent: FC<IProfileComponentProps> = ({
+  route,
   userData,
   navigation,
   setIsLoading,
@@ -94,7 +98,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
           </Text>
         </View>
       )}
-      <ProfileTabs />
+      <ProfileTabs route={route} />
     </View>
   );
 };

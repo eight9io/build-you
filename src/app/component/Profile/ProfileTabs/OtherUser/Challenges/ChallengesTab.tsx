@@ -77,7 +77,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [userId, isCurrentUserInCompany]);
 
   if (!userId) {
     return (
@@ -88,10 +88,11 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   }
 
   return (
-    <View className="h-full px-6">
+    <View className="h-full px-2">
       {otherUserChallenge.length > 0 && (
         <FlatList
-          className=" pt-4"
+          contentContainerStyle={{ paddingBottom: 100 }}
+          className="px-4 pt-4"
           data={otherUserChallenge}
           renderItem={({ item }: { item: IChallenge }) => (
             <ChallengeCard

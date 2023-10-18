@@ -1,10 +1,12 @@
 import clsx from "clsx";
 
 import { useTranslation } from "react-i18next";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { View, Text } from "react-native";
+import { RouteProp } from "@react-navigation/native";
 
 import { IUserData } from "../../../types/user";
+import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import CompanyProfileTabs from "../ProfileTabs/Company/CompanyProfileTabs";
 
@@ -14,9 +16,11 @@ interface ICompanyProfileComponentProps {
   userData: IUserData | null;
   navigation: any;
   setIsLoading: (value: boolean) => void;
+  route: RouteProp<RootStackParamList, "CompanyProfileScreen">;
 }
 
 const CompanyProfileComponent: FC<ICompanyProfileComponentProps> = ({
+  route,
   userData,
   navigation,
   setIsLoading,
@@ -34,7 +38,7 @@ const CompanyProfileComponent: FC<ICompanyProfileComponentProps> = ({
           {userData?.name} {userData?.surname}
         </Text>
       </View>
-      <CompanyProfileTabs />
+      <CompanyProfileTabs route={route} />
     </View>
   );
 };

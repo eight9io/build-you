@@ -38,7 +38,7 @@ import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/Pr
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
-import { ChatCoachTab } from "../../PersonalChallengesScreen/ChallengeDetailScreen/ChatCoachTab";
+import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
 
 import CheckCircle from "./assets/check_circle.svg";
 
@@ -48,7 +48,7 @@ export type ChallengeCompanyDetailScreenNavigationProps =
 interface ICompanyChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldScreenRefresh: boolean;
-  route: NavigationRouteProps<"ChallengeCompanyDetailScreen">;
+  route: NavigationRouteProps<"CompanyChallengeDetailScreen">;
   setShouldScreenRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

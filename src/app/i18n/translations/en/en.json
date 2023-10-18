@@ -478,6 +478,7 @@
     "content_3": "Add new employee",
     "content_4": "to add employee to your company."
   },
+  "empty_participant": "No participants at the moment",
   "image_picker": {
     "image_permission_required": "Permission denied. Please enable it your phone settings.",
     "upload_a_video": "Upload a video",

@@ -35,6 +35,7 @@ import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import CompanySkillsTab from "./CompanySkillsTab";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
+import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -73,7 +74,6 @@ const PersonalCoachChallengeDetailScreen = ({
     {} as IChallenge
   );
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
-  const { setShouldDisplayNewMessageNotification } = useNotificationStore();
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
@@ -82,7 +82,7 @@ const PersonalCoachChallengeDetailScreen = ({
   const isCompanyChallenge = challengeData?.owner?.[0].companyAccount;
 
   const { t } = useTranslation();
-  const [tabRoutes] = useState([
+  const [tabRoutes, setTabRoutes] = useState([
     {
       key: CHALLENGE_TABS_KEY.PROGRESS,
       title: t("challenge_detail_screen.progress"),
@@ -99,10 +99,6 @@ const PersonalCoachChallengeDetailScreen = ({
       key: CHALLENGE_TABS_KEY.SKILLS,
       title: t("challenge_detail_screen.skills"),
     },
-    {
-      key: CHALLENGE_TABS_KEY.CHAT,
-      title: t("challenge_detail_screen.chat_coach"),
-    },
   ]);
 
   const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
@@ -114,6 +110,8 @@ const PersonalCoachChallengeDetailScreen = ({
     challengeState.closingStatus === "in-progress";
 
   const isChallengeCompleted = challengeData.status === "closed";
+  const isChatChallenge = challengeData?.package?.type === "chat";
+  const isVideoChallenge = challengeData?.package?.type === "videocall";
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -139,6 +137,34 @@ const PersonalCoachChallengeDetailScreen = ({
   useEffect(() => {
     getChallengeData();
   }, []);
+
+  useEffect(() => {
+    const tempTabRoutes = [...tabRoutes];
+    if (isVideoChallenge) {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALDENDAR
+        )
+      ) {
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.COACH_CALDENDAR,
+          title: t("challenge_detail_screen.coach_calendar"),
+        });
+      }
+    } else if (isChatChallenge) {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.CHAT
+        )
+      ) {
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.CHAT,
+          title: t("challenge_detail_screen.chat_coach"),
+        });
+      }
+    }
+    setTabRoutes(tempTabRoutes);
+  }, [isVideoChallenge, isChatChallenge]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -189,6 +215,8 @@ const PersonalCoachChallengeDetailScreen = ({
             )}
           </>
         );
+      case CHALLENGE_TABS_KEY.COACH_CALDENDAR:
+        return <CompanyCoachCalendarTabCoachView />;
     }
   };
 

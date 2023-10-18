@@ -286,22 +286,14 @@ export const ChallengeCompanyDetailScreen: FC<
           </>
         );
       case CHALLENGE_TABS_KEY.COACH_CALDENDAR:
-        return (
-          <>
-            {isCurrentUserCoach ? (
-              <CompanyCoachCalendarTabCoachView />
-            ) : (
-              <CompanyCoachCalendarTabCompanyView />
-            )}
-          </>
-        );
+        return <CompanyCoachCalendarTabCompanyView />;
     }
   };
 
   return (
     <SafeAreaView>
-      <View className="flex h-full flex-col bg-gray-veryLight pt-4">
-        <View className="flex flex-row items-center justify-between px-4">
+      <View className="flex h-full flex-col bg-gray-veryLight ">
+        <View className="flex flex-row items-center justify-between bg-white px-4 pb-3 pt-4">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
             <CheckCircle
               fill={getChallengeStatusColor(
@@ -347,7 +339,7 @@ export const ChallengeCompanyDetailScreen: FC<
           )}
         </View>
 
-        <View className="mt-3 flex flex-1">
+        <View className="flex flex-1">
           <CustomTabView
             routes={tabRoutes}
             renderScene={renderScene}

@@ -37,6 +37,7 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
+import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -261,9 +262,16 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       case CHALLENGE_TABS_KEY.COACH_CALENDAR:
         return (
           <>
-            {isCertifiedChallenge && (
-              <IndividualCoachCalendarTab isCoach={false} />
-            )}
+            {isCertifiedChallenge ? (
+              challengeOwner.companyAccount ? (
+                <CompanyCoachCalendarTabCoachView />
+              ) : (
+                <IndividualCoachCalendarTab
+                  isCoach={false}
+                  isChallengeInProgress={isChallengeInProgress}
+                />
+              )
+            ) : null}
           </>
         );
     }

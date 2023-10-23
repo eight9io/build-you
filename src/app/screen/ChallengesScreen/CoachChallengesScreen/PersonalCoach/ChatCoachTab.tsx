@@ -69,14 +69,14 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
         sortByTime(
           res.data.map((item: any) => {
             return {
-              _id: item.id,
-              text: item.text,
-              createdAt: item.createdAt,
+              _id: item.message.id,
+              text: item.message.text,
+              createdAt: item.message.createdAt,
               user: {
                 _id: item.user.id,
                 name: item.user.name,
                 avatar: item.user.avatar,
-                isCoach: item.user.isCoach,
+                isCoach: item.message.coach,
               },
             };
           })

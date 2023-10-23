@@ -37,7 +37,7 @@ export enum CHALLENGE_TABS_KEY {
   SKILLS = "skills",
   CHAT = "chat",
   PARTICIPANTS = "participants",
-  COACH_CALDENDAR = "coach_calendar",
+  COACH_CALENDAR = "coach_calendar",
 }
 
 export enum PROFILE_TABS_KEY {
@@ -47,4 +47,9 @@ export enum PROFILE_TABS_KEY {
   EMPLOYEES = "employees",
   SKILLS = "skills",
   CHALLENGES = "challenges",
+}
+
+export enum COACH_CALENDAR_TABS_KEY {
+  UPCOMING = "upcoming",
+  PAST = "past",
 }

@@ -210,11 +210,11 @@ export const ChallengeCompanyDetailScreen: FC<
     if (isVideoChallenge) {
       if (
         !tempTabRoutes.find(
-          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALDENDAR
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
         )
       ) {
         tempTabRoutes.push({
-          key: CHALLENGE_TABS_KEY.COACH_CALDENDAR,
+          key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
           title: t("challenge_detail_screen.coach_calendar"),
         });
       }
@@ -285,7 +285,7 @@ export const ChallengeCompanyDetailScreen: FC<
             )}
           </>
         );
-      case CHALLENGE_TABS_KEY.COACH_CALDENDAR:
+      case CHALLENGE_TABS_KEY.COACH_CALENDAR:
         return <CompanyCoachCalendarTabCompanyView />;
     }
   };

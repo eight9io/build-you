@@ -222,7 +222,10 @@ const PersonalCoachChallengeDetailScreen = ({
             {isCompanyChallenge ? (
               <CompanyCoachCalendarTabCoachView />
             ) : (
-              <IndividualCoachCalendarTab isCoach={true} />
+              <IndividualCoachCalendarTab
+                isCoach={true}
+                isChallengeInProgress
+              />
             )}
           </>
         );

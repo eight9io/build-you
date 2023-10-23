@@ -15,11 +15,13 @@ import UpcomingRequestTab from "./UpcomingRequestTab";
 import PastRequestTab from "./PastRequestTab";
 interface IIndividualCoachCalendarTabProps {
   isCoach: boolean;
+  isChallengeInProgress: boolean;
 }
 
-export const IndividualCoachCalendarTab: FC<
-  IIndividualCoachCalendarTabProps
-> = ({ isCoach }) => {
+export const IndividualCoachCalendarTab: FC<IIndividualCoachCalendarTabProps> = ({
+  isCoach,
+  isChallengeInProgress,
+}) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const isFocused = useIsFocused();
@@ -51,6 +53,7 @@ export const IndividualCoachCalendarTab: FC<
               ) as string
             }
             onPress={() => setIsModalVisible(true)}
+            isDisabled={!isChallengeInProgress}
           />
           <VideoCallScheduleModal
             isVisible={isModalVisible}

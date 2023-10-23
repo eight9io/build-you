@@ -681,6 +681,23 @@
     "coach": {
       "waiting_for_coach": "Waiting for coach...",
       "profile": "Profile"
+    },
+    "coach_calendar": {
+      "title": "Coach calendar",
+      "book_video_call_btn": "Book video call",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "book_video_call": "Book video call",
+      "reschedule_video_call": "Reschedule video call",
+      "cancel_video_call": "Cancel video call",
+      "empty_schedule": "You haven't scheduled a video call",
+      "request_video_call": "Request video call",
+      "time": "Time",
+      "date": "Date",
+      "schedule_detail_modal_title": "Detail",
+      "note": "Note",
+      "edit": "Edit",
+      "delete": "Delete"
     }
   }
 }

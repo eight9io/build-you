@@ -36,6 +36,7 @@ import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import CompanySkillsTab from "./CompanySkillsTab";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
 import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
+import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -143,11 +144,11 @@ const PersonalCoachChallengeDetailScreen = ({
     if (isVideoChallenge) {
       if (
         !tempTabRoutes.find(
-          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALDENDAR
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
         )
       ) {
         tempTabRoutes.push({
-          key: CHALLENGE_TABS_KEY.COACH_CALDENDAR,
+          key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
           title: t("challenge_detail_screen.coach_calendar"),
         });
       }
@@ -215,8 +216,16 @@ const PersonalCoachChallengeDetailScreen = ({
             )}
           </>
         );
-      case CHALLENGE_TABS_KEY.COACH_CALDENDAR:
-        return <CompanyCoachCalendarTabCoachView />;
+      case CHALLENGE_TABS_KEY.COACH_CALENDAR:
+        return (
+          <>
+            {isCompanyChallenge ? (
+              <CompanyCoachCalendarTabCoachView />
+            ) : (
+              <IndividualCoachCalendarTab isCoach={true} />
+            )}
+          </>
+        );
     }
   };
 

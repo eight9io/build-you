@@ -36,6 +36,7 @@ import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
+import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -115,12 +116,18 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
         {
           key: CHALLENGE_TABS_KEY.COACH,
           title: t("challenge_detail_screen.coach"),
-        },
-        {
-          key: CHALLENGE_TABS_KEY.CHAT,
-          title: t("challenge_detail_screen.chat_coach"),
         }
       );
+      if (challengeData.package.type === "chat")
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.CHAT,
+          title: t("challenge_detail_screen.chat_coach"),
+        });
+      else if (challengeData.package.type === "videocall")
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
+          title: t("challenge_detail_screen_tab.coach_calendar.title"),
+        });
     }
     setTabRoutes(tempTabRoutes);
   }, []);
@@ -248,6 +255,14 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
+            )}
+          </>
+        );
+      case CHALLENGE_TABS_KEY.COACH_CALENDAR:
+        return (
+          <>
+            {isCertifiedChallenge && (
+              <IndividualCoachCalendarTab isCoach={false} />
             )}
           </>
         );

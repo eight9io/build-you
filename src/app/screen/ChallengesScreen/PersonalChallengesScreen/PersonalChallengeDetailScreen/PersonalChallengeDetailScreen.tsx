@@ -260,7 +260,7 @@ const PersonalChallengeDetailScreen = ({
           challengeData={challengeData}
           shouldRenderEditAndDeleteBtns={isCurrentUserChallengeOnwer}
           shouldRenderCompleteBtn={isJoinedLocal}
-          refresh={refresh}
+          refresh={getChallengeData}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
           setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
@@ -268,7 +268,7 @@ const PersonalChallengeDetailScreen = ({
     });
   }, [challengeData, isJoinedLocal]);
 
-  const refresh = async () => {
+  const getChallengeData = async () => {
     try {
       await getChallengeById(challengeId).then((res) => {
         setChallengeData(res.data);
@@ -279,8 +279,15 @@ const PersonalChallengeDetailScreen = ({
   };
 
   useEffect(() => {
-    refresh();
+    if (shouldScreenRefresh) {
+      getChallengeData();
+      setShouldScreenRefresh(false);
+    }
   }, [shouldScreenRefresh]);
+
+  useEffect(() => {
+    getChallengeData();
+  }, []);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -290,7 +297,7 @@ const PersonalChallengeDetailScreen = ({
   };
 
   const handleEditChallengeModalConfirm = () => {
-    refresh();
+    getChallengeData();
     setIsEditChallengeModalVisible(false);
   };
 
@@ -318,6 +325,7 @@ const PersonalChallengeDetailScreen = ({
         }, 600);
       });
   };
+
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
       <ConfirmDialog

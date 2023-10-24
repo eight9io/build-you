@@ -1,11 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
+
 import {
   ICertifiedChallengeState,
   IChallenge,
 } from "../../../../types/challenge";
+import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
+import { NavigationRouteProps } from "../../../../navigation/navigation.type";
+
 import DescriptionTab from "./DescriptionTab";
 import ProgressTab from "./ProgressTab";
 
@@ -22,23 +26,23 @@ import {
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
 
+import { useTabIndex } from "../../../../hooks/useTabIndex";
+
+import PersonalCoachTab from "./PersonalCoachTab";
 import PersonalSkillsTab from "./PersonalSkillsTab";
 import Button from "../../../../component/common/Buttons/Button";
+import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
-import { useNotificationStore } from "../../../../store/notification-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
-import PersonalCoachTab from "./PersonalCoachTab";
-import CustomTabView from "../../../../component/common/Tab/CustomTabView";
-import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
-import { NavigationRouteProps } from "../../../../navigation/navigation.type";
+import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
+import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldScreenRefresh?: boolean;
   setIsJoinedLocal?: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsNewProgressAdded?: React.Dispatch<React.SetStateAction<boolean>>;
   route?: NavigationRouteProps<"PersonalChallengeDetailScreen">;
   setShouldScreenRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -47,18 +51,14 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   challengeData,
   shouldScreenRefresh,
   setIsJoinedLocal,
-  setIsNewProgressAdded,
   route,
   setShouldScreenRefresh,
 }) => {
   const { t } = useTranslation();
-  const [index, setIndex] = useState<number>(0);
   const [isJoined, setIsJoined] = useState<boolean>(true);
   const [participantList, setParticipantList] = useState([]);
-  const { setShouldDisplayNewMessageNotification } = useNotificationStore();
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
   const [tabRoutes, setTabRoutes] = useState([
     {
       key: CHALLENGE_TABS_KEY.PROGRESS,
@@ -69,8 +69,9 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       title: t("challenge_detail_screen.description"),
     },
   ]);
+  const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
-  const { goal, id: challengeId } = challengeData;
+  const { goal, id: challengeId, coach: challengeCoach } = challengeData;
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
 
@@ -82,8 +83,6 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
-
-  const challengeCoach = challengeData?.coach;
 
   const isCurrentUserParticipant = challengeData?.participants?.find(
     (participant) => participant.id === currentUser?.id
@@ -100,68 +99,57 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
-  const setTabIndex = (nextIndex: number) => {
-    if (index === nextIndex) return;
-    if (chatTabIndex === null || chatTabIndex === undefined)
-      return setIndex(nextIndex);
-    if (nextIndex === chatTabIndex)
-      // Disable new message notification if user switch to chat tab
-      setShouldDisplayNewMessageNotification(false);
-    else if (index === chatTabIndex)
-      // Enable new message notification if user switch to another tab from chat tab
-      setShouldDisplayNewMessageNotification(true);
-
-    setIndex(nextIndex);
-  };
-
-  const chatTabIndex = useMemo(() => {
-    const index = tabRoutes.findIndex(
-      (route) => route.key === CHALLENGE_TABS_KEY.CHAT
-    );
-    if (index === -1) return null;
-    return index;
-  }, [tabRoutes, t]);
-
-  useEffect(() => {
-    if (chatTabIndex && route?.params?.hasNewMessage) {
-      // Set chat tab as active tab if this screen is opened from new message notification
-      setTabIndex(chatTabIndex);
-    }
-  }, [chatTabIndex, route]);
-
   useEffect(() => {
     const tempTabRoutes = [...tabRoutes];
 
-    if (participantList && challengeOwner?.companyAccount)
-      tempTabRoutes.push({
-        key: CHALLENGE_TABS_KEY.PARTICIPANTS,
-        title: t("challenge_detail_screen.participants"),
-      });
-
-    if (challengeData?.type === "certified") {
-      tempTabRoutes.push(
-        {
-          key: CHALLENGE_TABS_KEY.SKILLS,
-          title: t("challenge_detail_screen.skills"),
-        },
-        {
-          key: CHALLENGE_TABS_KEY.COACH,
-          title: t("challenge_detail_screen.coach"),
-        },
-        {
-          key: CHALLENGE_TABS_KEY.CHAT,
-          title: t("challenge_detail_screen.chat_coach"),
-        }
+    if (participantList && challengeOwner?.companyAccount) {
+      const isParticipantsTabAlreadyExist = tempTabRoutes.find(
+        (tab) => tab.key === CHALLENGE_TABS_KEY.PARTICIPANTS
       );
+      if (!isParticipantsTabAlreadyExist)
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.PARTICIPANTS,
+          title: t("challenge_detail_screen.participants"),
+        });
+    }
+    if (isCertifiedChallenge) {
+      const isSkillsTabAlreadyExist = tempTabRoutes.find(
+        (tab) => tab.key === CHALLENGE_TABS_KEY.SKILLS
+      );
+      if (!isSkillsTabAlreadyExist)
+        tempTabRoutes.push(
+          {
+            key: CHALLENGE_TABS_KEY.SKILLS,
+            title: t("challenge_detail_screen.skills"),
+          },
+          {
+            key: CHALLENGE_TABS_KEY.COACH,
+            title: t("challenge_detail_screen.coach"),
+          }
+        );
+      if (challengeData.package.type === "chat") {
+        const isChatTabAlreadyExist = tempTabRoutes.find(
+          (tab) => tab.key === CHALLENGE_TABS_KEY.CHAT
+        );
+        if (!isChatTabAlreadyExist)
+          tempTabRoutes.push({
+            key: CHALLENGE_TABS_KEY.CHAT,
+            title: t("challenge_detail_screen.chat_coach"),
+          });
+      } else if (challengeData.package.type === "videocall") {
+        const isCoachCalendarTabAlreadyExist = tempTabRoutes.find(
+          (tab) => tab.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
+        );
+        if (!isCoachCalendarTabAlreadyExist)
+          tempTabRoutes.push({
+            key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
+            title: t("challenge_detail_screen_tab.coach_calendar.title"),
+          });
+      }
     }
     setTabRoutes(tempTabRoutes);
   }, []);
 
-  useEffect(() => {
-    if (!shouldRefresh) return;
-    fetchParticipants();
-    setShouldRefresh(false);
-  }, [shouldRefresh]);
   const isCertifiedChallenge = challengeData?.type === "certified";
 
   const isChallengeInProgress =
@@ -275,6 +263,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             challengeState={challengeState}
             setChallengeState={setChallengeState}
             setShouldParentRefresh={setShouldScreenRefresh}
+            isCurrentUserChallengeOnwer={isCurrentUserChallengeOnwer}
           />
         );
       case CHALLENGE_TABS_KEY.CHAT:
@@ -286,6 +275,21 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                 isChallengeInProgress={isChallengeInProgress}
               />
             )}
+          </>
+        );
+      case CHALLENGE_TABS_KEY.COACH_CALENDAR:
+        return (
+          <>
+            {isCertifiedChallenge ? (
+              challengeOwner.companyAccount ? (
+                <CompanyCoachCalendarTabCoachView />
+              ) : (
+                <IndividualCoachCalendarTab
+                  isCoach={false}
+                  isChallengeInProgress={isChallengeInProgress}
+                />
+              )
+            ) : null}
           </>
         );
     }

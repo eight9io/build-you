@@ -234,6 +234,7 @@ export const handleTapOnIncomingNotification = async (
         break;
       case NOTIFICATION_TYPES.NEW_MESSAGE: {
         // TODO: Handle navigation with company account
+        const currentRouteName = navigation.getCurrentRoute().name;
         const currentRouteParams = navigation.getCurrentRoute().params as {
           challengeId: string;
         };
@@ -245,6 +246,9 @@ export const handleTapOnIncomingNotification = async (
         // => do nothing if the user is in chat tab
         if (
           currentRouteParams &&
+          (currentRouteName === "PersonalChallengeDetailScreen" ||
+            currentRouteName === "CompanyChallengeDetailScreen" ||
+            currentRouteName === "PersonalCoachChallengeDetailScreen") &&
           currentRouteParams.challengeId === payload.challengeId
         ) {
           if (shouldDisplayNewMessageNotification) {
@@ -258,11 +262,13 @@ export const handleTapOnIncomingNotification = async (
         }
         if (payload.challengeId && payload.coachId) {
           try {
-            const { id: currentUserId } =
+            const { id: currentUserId, companyAccount } =
               useUserProfileStore.getState().userProfile;
             const pushAction = StackActions.push(
               payload.coachId === currentUserId
                 ? "PersonalCoachChallengeDetailScreen"
+                : companyAccount
+                ? "CompanyChallengeDetailScreen"
                 : "PersonalChallengeDetailScreen",
               {
                 challengeId: payload.challengeId,
@@ -325,6 +331,13 @@ export const handleTapOnNotification = async (
               hasNewMessage: true,
             });
           break;
+        case "CompanyChallengeDetailScreen":
+          if (notification.challengeId)
+            navigation.navigate("CompanyChallengeDetailScreen", {
+              challengeId: notification.challengeId,
+              hasNewMessage: true,
+            });
+          break;
       }
       if (!notification.isRead) {
         await setNotificationIsRead([notification.id.toString()]);
@@ -353,11 +366,13 @@ export const handleTapOnNotification = async (
       handleNavigation("OtherUserProfileScreen", notification);
       break;
     case NOTIFICATION_TYPES.NEW_MESSAGE:
-      // TODO: Handle navigation with company account
-      const { id: currentUserId } = useUserProfileStore.getState().userProfile;
+      const { id: currentUserId, companyAccount } =
+        useUserProfileStore.getState().userProfile;
       handleNavigation(
         currentUserId === notification.challengeCoachId
           ? "PersonalCoachChallengeDetailScreen"
+          : companyAccount
+          ? "CompanyChallengeDetailScreen"
           : "PersonalChallengeDetailScreen",
         notification
       );

@@ -26,14 +26,16 @@ import DefaultAvatar from "../asset/default-avatar.svg";
 import CheckedSvg from "../../component/asset/checked.svg";
 import UncheckedSvg from "../../component/asset/uncheck.svg";
 import WarningSvg from "../../component/asset/warning.svg";
+import { IUserData } from "../../types/user";
 
 interface ICoachRateChallengeModalProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  challengeOwner: IChallengeOwner;
+  userToRate: IUserData;
   challengeData: IChallenge;
   setShouldParentRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   ratedCompetencedSkill: ISoftSkill[];
+  canCurrentUserRateSkills: boolean;
 }
 
 interface IRenderSoftSkillProgress {
@@ -115,10 +117,11 @@ const renderSelectedSoftSkill = (
 const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   isVisible,
   setIsVisible,
-  challengeOwner,
+  userToRate,
   challengeData,
   setShouldParentRefresh,
   ratedCompetencedSkill,
+  canCurrentUserRateSkills,
 }) => {
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
     ISoftSkill[]
@@ -128,7 +131,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
 
   const { t } = useTranslation();
   const isChallengeRated = ratedCompetencedSkill.every((item) => item.isRating);
-  const challengeOwnerId = challengeOwner?.id;
+  const challengeOwnerId = userToRate?.id;
   const challengeId = challengeData?.id;
 
   const handleSummitRatingSkills = async () => {
@@ -161,6 +164,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   };
 
   const changeSkillValue = (skill: string, value: number) => {
+    if (!canCurrentUserRateSkills) return;
     const newSelectedCompetencedSkill = selectedCompetencedSkill.map((item) => {
       if (item.skill === skill) {
         return {
@@ -209,7 +213,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
           <ScrollView className="flex-1">
             <View className="flex flex-col items-center ">
               <View className={clsx("mt-5 rounded-full border-4 border-white")}>
-                {!challengeOwner?.avatar && (
+                {!userToRate?.avatar && (
                   <View
                     className={clsx(
                       "z-10 h-[100px] w-[100px] rounded-full  bg-white"
@@ -218,17 +222,24 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
                     <DefaultAvatar width={100} height={100} />
                   </View>
                 )}
-                {challengeOwner?.avatar && (
+                {userToRate?.avatar && (
                   <Image
                     className={clsx("h-[100px] w-[100px] rounded-full")}
-                    source={challengeOwner?.avatar}
+                    source={userToRate?.avatar.trim()}
                   />
                 )}
               </View>
               <Text className="font-open-sans leading-140 text-xl font-medium">
-                {challengeOwner?.name} {challengeOwner?.surname}
+                {userToRate?.name} {userToRate?.surname}
               </Text>
             </View>
+            {!canCurrentUserRateSkills && !isChallengeRated && (
+              <View className="flex flex-row items-center justify-between px-4 pt-4">
+                <Text className="text-md  text-danger-default">
+                  {t("challenge_detail_screen.can_not_rate_skills")}
+                </Text>
+              </View>
+            )}
 
             <View className="w-full flex-col justify-between px-5 pt-6">
               {renderSelectedSoftSkill(
@@ -241,7 +252,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
               )}
             </View>
           </ScrollView>
-          {!isChallengeRated && (
+          {!isChallengeRated && canCurrentUserRateSkills && (
             <View className="absolute bottom-6 w-full">
               <Button
                 testID="complete_profile_step_4_next_button"

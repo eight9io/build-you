@@ -25,6 +25,7 @@ import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 import ProgressCommentScreen from "../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 import PersonalChallengeDetailScreen from "../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
+import CompanyChallengeDetailScreen from "../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -189,6 +190,21 @@ const NotificationsScreen = () => {
       <NotificationsStack.Screen
         name="PersonalCoachChallengeDetailScreen"
         component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <NotificationsStack.Screen
+        name="CompanyChallengeDetailScreen"
+        component={CompanyChallengeDetailScreen}
         options={({ navigation }) => ({
           headerTitle: () => "",
           headerLeft: () => (

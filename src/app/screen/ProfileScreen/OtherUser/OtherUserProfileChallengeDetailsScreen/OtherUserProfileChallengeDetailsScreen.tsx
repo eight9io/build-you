@@ -1,12 +1,21 @@
 import jwt_decode from "jwt-decode";
+import { AxiosError } from "axios";
+import debounce from "lodash.debounce";
+import { useTranslation } from "react-i18next";
 import { View, Text, SafeAreaView } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 
+import { IToken } from "../../../../types/auth";
 import { IChallenge } from "../../../../types/challenge";
+import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
+
+import { useAuthStore } from "../../../../store/auth-store";
 import { useUserProfileStore } from "../../../../store/user-store";
+
+import { useTabIndex } from "../../../../hooks/useTabIndex";
 
 import {
   deleteChallenge,
@@ -15,27 +24,24 @@ import {
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
+import { getChallengeStatusColor } from "../../../../utils/common";
+import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
+import CoachTabViewOnly from "./Tabs/CoachTabViewOnly";
 import Button from "../../../../component/common/Buttons/Button";
-import { TabView } from "../../../../component/common/Tab/TabView";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 import ProgressTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import ParticipantsTab from "../../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import { RightPersonalChallengeDetailOptions } from "../../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 
-import ShareIcon from "../../../../../../assets/svg/share.svg";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { useTranslation } from "react-i18next";
-import CheckCircle from "../../../../../../assets/svg/check_circle.svg";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
-import { getChallengeStatusColor } from "../../../../utils/common";
-import { AxiosError } from "axios";
-import debounce from "lodash.debounce";
-import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
-import { useAuthStore } from "../../../../store/auth-store";
-import { IToken } from "../../../../types/auth";
+import CustomTabView from "../../../../component/common/Tab/CustomTabView";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+
+import ShareIcon from "../../../../../../assets/svg/share.svg";
+import CheckCircle from "../../../../../../assets/svg/check_circle.svg";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -59,9 +65,9 @@ type ModalState = {
 const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
+  const { t } = useTranslation();
   const { challengeId, isCompanyAccount: isCompany } = route.params;
 
-  const [index, setIndex] = useState<number>(0);
   const [isError, setIsError] = useState<boolean>(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
 
@@ -72,6 +78,19 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     useState<boolean>(false);
   const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
+
+  const [tabRoutes, setTabRoutes] = useState([
+    {
+      key: CHALLENGE_TABS_KEY.PROGRESS,
+      title: t("challenge_detail_screen.progress"),
+    },
+    {
+      key: CHALLENGE_TABS_KEY.DESCRIPTION,
+      title: t("challenge_detail_screen.description"),
+    },
+  ]);
+
+  const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
   const [challengeState, setChallengeState] = useState<ModalState>({
     challengeData: {} as IChallenge,
@@ -93,19 +112,6 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   const { getAccessToken } = useAuthStore();
-
-  const { t } = useTranslation();
-
-  const CHALLENGE_TABS_TITLE_TRANSLATION = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-  ];
-
-  const CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY = [
-    t("challenge_detail_screen.progress"),
-    t("challenge_detail_screen.description"),
-    t("challenge_detail_screen.participants"),
-  ];
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -221,6 +227,37 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       setIsError(true);
     }
   };
+
+  useEffect(() => {
+    if (isCompany || challengeState.challengeOwner?.companyAccount) {
+      // check if participants tab is already added
+      if (
+        tabRoutes.find((tab) => tab.key === CHALLENGE_TABS_KEY.PARTICIPANTS) ===
+        undefined
+      )
+        setTabRoutes((prev) => [
+          ...prev,
+          {
+            key: CHALLENGE_TABS_KEY.PARTICIPANTS,
+            title: t("challenge_detail_screen.participants"),
+          },
+        ]);
+    }
+    if (challengeState.challengeData?.type === "certified") {
+      // check if coach tab is already added
+      if (
+        tabRoutes.find((tab) => tab.key === CHALLENGE_TABS_KEY.COACH) ===
+        undefined
+      )
+        setTabRoutes((prev) => [
+          ...prev,
+          {
+            key: CHALLENGE_TABS_KEY.COACH,
+            title: t("challenge_detail_screen.coach"),
+          },
+        ]);
+    }
+  }, [isCompany, challengeState]);
 
   useEffect(() => {
     if (!challengeId || !shouldRefresh) return;
@@ -384,6 +421,33 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     );
   }
 
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case CHALLENGE_TABS_KEY.PROGRESS:
+        return (
+          <ProgressTab
+            isJoined={challengeState.isJoined}
+            isOtherUserProfile
+            challengeData={challengeState.challengeData}
+            isChallengeCompleted={isChallengeCompleted}
+          />
+        );
+      case CHALLENGE_TABS_KEY.DESCRIPTION:
+        return (
+          <DescriptionTab
+            challengeData={challengeState.challengeData}
+            maxPepleCanJoin={challengeState.challengeData?.maximumPeople}
+          />
+        );
+      case CHALLENGE_TABS_KEY.PARTICIPANTS:
+        return <ParticipantsTab participant={challengeState.participantList} />;
+      case CHALLENGE_TABS_KEY.COACH:
+        return (
+          <CoachTabViewOnly coachID={challengeState.challengeData.coach} />
+        );
+    }
+  };
+
   return (
     <SafeAreaView>
       {isLoading && <Spinner visible={isLoading} />}
@@ -478,34 +542,12 @@ const OtherUserProfileChallengeDetailsScreen: FC<
             challenge={challengeState.challengeData}
           />
         )}
-
-        <TabView
-          titles={
-            isCompanyAccount || challengeState.challengeOwner?.companyAccount
-              ? CHALLENGE_TABS_TITLE_TRANSLATION_COMPANY
-              : CHALLENGE_TABS_TITLE_TRANSLATION
-          }
-          activeTabIndex={index}
-          setActiveTabIndex={setIndex}
-        >
-          <ProgressTab
-            isJoined={challengeState.isJoined}
-            isOtherUserProfile
-            challengeData={challengeState.challengeData}
-            isChallengeCompleted={isChallengeCompleted}
-          />
-          <DescriptionTab
-            challengeData={challengeState.challengeData}
-            maxPepleCanJoin={challengeState.challengeData?.maximumPeople}
-          />
-          {(isCompanyAccount ||
-            challengeState.challengeOwner?.companyAccount) && (
-            <ParticipantsTab participant={challengeState.participantList} />
-          )}
-          {/* {isCertifiedChallenge && (
-            <CoachTabViewOnly challengeData={challengeState.challengeData} />
-          )} */}
-        </TabView>
+        <CustomTabView
+          routes={tabRoutes}
+          renderScene={renderScene}
+          index={index}
+          setIndex={setTabIndex}
+        />
       </View>
     </SafeAreaView>
   );

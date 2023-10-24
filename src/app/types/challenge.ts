@@ -41,6 +41,7 @@ export interface ISoftSkill {
   skill?: string;
   rating?: number;
   isRating?: boolean;
+  isRated?: boolean;
 }
 
 export interface ISoftSkillFromChallenge {
@@ -89,6 +90,7 @@ export interface IChallengeOwner {
   name: string;
   surname: string;
   companyAccount?: boolean;
+  email?: string;
 }
 
 export interface IChallenge {
@@ -189,4 +191,13 @@ export interface IUnformatedCertifiedChallengeState {
   intakeStatus: IChallengeTouchpointStatus;
   closingStatus: IChallengeTouchpointStatus;
   completedCheckpoint: number;
+}
+
+export interface IProposingTime {
+  id?: string;
+  index: number;
+  dateTime: string;
+  numberOfVotes?: number;
+  isConfirmed?: boolean;
+  meetingUrl?: string;
 }

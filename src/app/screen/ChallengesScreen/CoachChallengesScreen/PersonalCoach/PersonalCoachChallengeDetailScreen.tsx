@@ -33,6 +33,10 @@ import { useNotificationStore } from "../../../../store/notification-store";
 import { isObjectEmpty } from "../../../../utils/common";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
+import CompanySkillsTab from "./CompanySkillsTab";
+import { useTabIndex } from "../../../../hooks/useTabIndex";
+import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
+import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -67,19 +71,19 @@ const PersonalCoachChallengeDetailScreen = ({
   route: any;
   navigation: CoachChallengeDetailScreenNavigationProp;
 }) => {
-  const [index, setIndex] = useState<number>(0);
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
-  const { setShouldDisplayNewMessageNotification } = useNotificationStore();
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
   const challengeId = route?.params?.challengeId;
 
+  const isCompanyChallenge = challengeData?.owner?.[0].companyAccount;
+
   const { t } = useTranslation();
-  const [tabRoutes] = useState([
+  const [tabRoutes, setTabRoutes] = useState([
     {
       key: CHALLENGE_TABS_KEY.PROGRESS,
       title: t("challenge_detail_screen.progress"),
@@ -96,40 +100,9 @@ const PersonalCoachChallengeDetailScreen = ({
       key: CHALLENGE_TABS_KEY.SKILLS,
       title: t("challenge_detail_screen.skills"),
     },
-    {
-      key: CHALLENGE_TABS_KEY.CHAT,
-      title: t("challenge_detail_screen.chat_coach"),
-    },
   ]);
 
-  const setTabIndex = (nextIndex: number) => {
-    if (index === nextIndex) return;
-    if (chatTabIndex === null || chatTabIndex === undefined)
-      return setIndex(nextIndex);
-    if (nextIndex === chatTabIndex)
-      // Disable new message notification if user switch to chat tab
-      setShouldDisplayNewMessageNotification(false);
-    else if (index === chatTabIndex)
-      // Enable new message notification if user switch to another tab from chat tab
-      setShouldDisplayNewMessageNotification(true);
-
-    setIndex(nextIndex);
-  };
-
-  const chatTabIndex = useMemo(() => {
-    const index = tabRoutes.findIndex(
-      (route) => route.key === CHALLENGE_TABS_KEY.CHAT
-    );
-    if (index === -1) return null;
-    return index;
-  }, [t]);
-
-  useEffect(() => {
-    if (chatTabIndex && route?.params?.hasNewMessage) {
-      // Set chat tab as active tab if this screen is opened from new message notification
-      setTabIndex(chatTabIndex);
-    }
-  }, [chatTabIndex, route]);
+  const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
   const isChallengeInProgress =
     (!isObjectEmpty(challengeState) &&
@@ -138,6 +111,8 @@ const PersonalCoachChallengeDetailScreen = ({
     challengeState.closingStatus === "in-progress";
 
   const isChallengeCompleted = challengeData.status === "closed";
+  const isChatChallenge = challengeData?.package?.type === "chat";
+  const isVideoChallenge = challengeData?.package?.type === "videocall";
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -164,6 +139,34 @@ const PersonalCoachChallengeDetailScreen = ({
     getChallengeData();
   }, []);
 
+  useEffect(() => {
+    const tempTabRoutes = [...tabRoutes];
+    if (isVideoChallenge) {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
+        )
+      ) {
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
+          title: t("challenge_detail_screen.coach_calendar"),
+        });
+      }
+    } else if (isChatChallenge) {
+      if (
+        !tempTabRoutes.find(
+          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.CHAT
+        )
+      ) {
+        tempTabRoutes.push({
+          key: CHALLENGE_TABS_KEY.CHAT,
+          title: t("challenge_detail_screen.chat_coach"),
+        });
+      }
+    }
+    setTabRoutes(tempTabRoutes);
+  }, [isVideoChallenge, isChatChallenge]);
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case CHALLENGE_TABS_KEY.PROGRESS:
@@ -188,10 +191,19 @@ const PersonalCoachChallengeDetailScreen = ({
         );
       case CHALLENGE_TABS_KEY.SKILLS:
         return (
-          <CoachSkillsTab
-            challengeData={challengeData}
-            challengeState={challengeState}
-          />
+          <>
+            {isCompanyChallenge ? (
+              <CompanySkillsTab
+                challengeData={challengeData}
+                challengeState={challengeState}
+              />
+            ) : (
+              <CoachSkillsTab
+                challengeData={challengeData}
+                challengeState={challengeState}
+              />
+            )}
+          </>
         );
       case CHALLENGE_TABS_KEY.CHAT:
         return (
@@ -200,6 +212,19 @@ const PersonalCoachChallengeDetailScreen = ({
               <ChatCoachTab
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
+              />
+            )}
+          </>
+        );
+      case CHALLENGE_TABS_KEY.COACH_CALENDAR:
+        return (
+          <>
+            {isCompanyChallenge ? (
+              <CompanyCoachCalendarTabCoachView />
+            ) : (
+              <IndividualCoachCalendarTab
+                isCoach={true}
+                isChallengeInProgress
               />
             )}
           </>

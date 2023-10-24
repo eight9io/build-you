@@ -23,7 +23,7 @@ import PencilEditSvg from "../../../../component/asset/pencil-edit.svg";
 import Button from "../../../../component/common/Buttons/Button";
 import { EditProfileValidators } from "../../../../Validators/EditProfile.validate";
 import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import { IOccupation } from "../../../../types/user";
 import CustomSwitch from "../../../../component/common/Switch";

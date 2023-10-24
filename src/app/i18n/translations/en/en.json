@@ -14,26 +14,44 @@
   "login_screen.register": "Register for free ",
   "login_screen.login": "Log in",
   "login_screen.explore_no_account": "Explore without account",
-  "challenge_detail_screen.title": "Challenge",
-  "challenge_detail_screen.builder": "Builder",
-  "challenge_detail_screen.progress": "Progress",
-  "challenge_detail_screen.edit_progress": "Edit Progress",
-  "challenge_detail_screen.description": "Description",
-  "challenge_detail_screen.skills": "Skills",
-  "challenge_detail_screen.coach": "Coach",
-  "challenge_detail_screen.participants": "Participants",
-  "challenge_detail_screen.upload_new_progress": "Add new progress",
-  "challenge_detail_screen.new_progress": "New progress",
-  "challenge_detail_screen.new_progress_post": "POST",
-  "challenge_detail_screen.add_new_employees": "Add new employees",
-  "challenge_detail_screen.join": "Join",
-  "challenge_detail_screen.leave": "Leave",
-  "challenge_detail_screen.completed": "Completed",
-  "challenge_detail_screen.no_progress_yet": "No progress yet",
-  "challenge_detail_screen.not_participants": "No participants at the moment ",
-  "challenge_detail_screen.chat_coach": "chat coach",
-  "challenge_detail_screen.rate_skills": "Rate skills",
-  "challenge_detail_screen.can_not_rate_skills": "Coach can not rate skills when challenge is not completed",
+  "challenge_detail_screen": {
+    "title": "Challenge",
+    "builder": "Builder",
+    "progress": "Progress",
+    "edit_progress": "Edit Progress",
+    "description": "Description",
+    "skills": "Skills",
+    "coach": "Coach",
+    "participants": "Participants",
+    "upload_new_progress": "Add new progress",
+    "new_progress": "New progress",
+    "new_progress_post": "POST",
+    "add_new_employees": "Add new employees",
+    "join": "Join",
+    "leave": "Leave",
+    "completed": "Completed",
+    "no_progress_yet": "No progress yet",
+    "not_participants": "No participants at the moment",
+    "chat_coach": "Chat coach",
+    "rate_skills": "Rate skills",
+    "can_not_rate_skills": "Coach can not rate skills when challenge is not completed",
+    "request_video_call": "Request video call",
+    "empty_participants_list": "No participants at the moment",
+    "coach_calendar": "Coach calendar",
+    "add": "Add",
+    "propose": "Propose",
+    "proposing_time": "Proposing time",
+    "coach_proposing_time": "Coach proposing time",
+    "number_of_vote": "Number of vote",
+    "option": "Option",
+    "empty_proposing_time": "You have no proposing time at the moment",
+    "empty_confirmed_time": "You don't have a video call appointment at the moment",
+    "confirmed": "Confirmed",
+    "open_meeting": "Open meeting",
+    "link": "Link",
+    "vote": "Vote",
+    "confirm": "Confirm"
+  },
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Challenges",
@@ -374,6 +392,10 @@
       "number_of_checks": "Number of checks:",
       "credits": "Credits:"
     },
+    "proposing_time": {
+      "title": "Do you want to submit these proposing time?",
+      "description": "You cannot undo this action"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "complete": "Complete",
@@ -457,6 +479,7 @@
     "content_3": "Add new employee",
     "content_4": "to add employee to your company."
   },
+  "empty_participant": "No participants at the moment",
   "image_picker": {
     "image_permission_required": "Permission denied. Please enable it your phone settings.",
     "upload_a_video": "Upload a video",
@@ -554,7 +577,8 @@
     "no_biography": "No biography yet"
   },
   "skill_tab": {
-    "self_declared": "Self-declared"
+    "self_declared": "Self-declared",
+    "certified": "Certified"
   },
   "private": "Private",
   "public": "Public",
@@ -598,11 +622,7 @@
     "enter_your_company": "Enter your company",
     "enter_your_company_error": "Please enter your company",
     "phone": "Phone number",
-    "enter_phone": "Enter your phone number",
-    "city": "City",
-    "enter_your_city": "Enter your city",
-    "company": "Company",
-    "enter_your_company": "Enter your company"
+    "enter_phone": "Enter your phone number"
   },
   "choose_packages_screen": {
     "package": "Package",
@@ -658,5 +678,28 @@
     "new_employee": "has added you as an employee",
     "new_message": "has sent a message"
   },
-  "top_nav.create_challenge": "Create challenge"
+  "top_nav.create_challenge": "Create challenge",
+  "challenge_detail_screen_tab": {
+    "coach": {
+      "waiting_for_coach": "Waiting for coach...",
+      "profile": "Profile"
+    },
+    "coach_calendar": {
+      "title": "Coach calendar",
+      "book_video_call_btn": "Book video call",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "book_video_call": "Book video call",
+      "reschedule_video_call": "Reschedule video call",
+      "cancel_video_call": "Cancel video call",
+      "empty_schedule": "You haven't scheduled a video call",
+      "request_video_call": "Request video call",
+      "time": "Time",
+      "date": "Date",
+      "schedule_detail_modal_title": "Detail",
+      "note": "Note",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  }
 }

@@ -46,6 +46,7 @@ export type RootStackParamList = {
   CompanyChallengesScreen: undefined;
   CompanyChallengeDetailScreen: {
     challengeId: string;
+    hasNewMessage?: boolean;
   };
   CreateCompanyChallengeScreen: undefined;
 

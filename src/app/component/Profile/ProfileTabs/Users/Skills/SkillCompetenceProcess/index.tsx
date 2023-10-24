@@ -6,6 +6,7 @@ interface ISkillCompetenceProcessProps {
   skillName?: string;
   skillCompetence?: number;
   skillGaugeClassName?: string;
+  color?: "bg-gray-medium" | "bg-success-default";
 }
 
 const skillCompetenceProcess = (skillCompetence: number | undefined) => {
@@ -29,6 +30,7 @@ const SkillCompetenceProcess: React.FC<ISkillCompetenceProcessProps> = ({
   skillName,
   skillCompetence,
   skillGaugeClassName,
+  color = "bg-gray-medium",
 }) => {
   const skillCompetenceWidth = skillCompetenceProcess(skillCompetence);
   return (
@@ -40,9 +42,10 @@ const SkillCompetenceProcess: React.FC<ISkillCompetenceProcessProps> = ({
         <View className="h-2.5 w-full rounded-full bg-gray-light">
           <View
             className={clsx(
-              `h-2.5 rounded-full bg-gray-medium`,
+              `h-2.5 rounded-full`,
               skillCompetenceWidth,
-              skillGaugeClassName
+              skillGaugeClassName,
+              color
             )}
           ></View>
         </View>

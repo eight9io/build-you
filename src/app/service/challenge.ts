@@ -62,6 +62,10 @@ export const getChallengeParticipants = (challengeId: string) => {
   return http.get(`/challenge/participant/all/${challengeId}`);
 };
 
+export const getCertifiedChallengeParticipants = (challengeId: string) => {
+  return http.get(`/challenge/certified/participant/all/${challengeId}`);
+};
+
 export const getChallengeParticipantsByChallengeId = (challengeId: string) => {
   return http.get(`/challenge/participant/all/${challengeId}`);
 };

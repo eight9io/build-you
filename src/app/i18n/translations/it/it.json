@@ -14,26 +14,44 @@
   "login_screen.register": "Registrati gratis ",
   "login_screen.login": "Accedi",
   "login_screen.explore_no_account": "Esplora senza account",
-  "challenge_detail_screen.title": "Challenge",
-  "challenge_detail_screen.builder": "Builder",
-  "challenge_detail_screen.progress": "Progresso",
-  "challenge_detail_screen.edit_progress": "Modifica progresso",
-  "challenge_detail_screen.description": "Descrizione",
-  "challenge_detail_screen.skills": "Skills",
-  "challenge_detail_screen.coach": "Coach",
-  "challenge_detail_screen.participants": "Partecipanti",
-  "challenge_detail_screen.upload_new_progress": "Aggiungi nuovo progresso",
-  "challenge_detail_screen.new_progress": "Nuovo progresso",
-  "challenge_detail_screen.new_progress_post": "POST",
-  "challenge_detail_screen.add_new_employees": "Aggiungi nuovo impiegato",
-  "challenge_detail_screen.join": "Entra",
-  "challenge_detail_screen.leave": "Lascia",
-  "challenge_detail_screen.completed": "Completato",
-  "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
-  "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
-  "challenge_detail_screen.chat_coach": "Allenatore di chat",
-  "challenge_detail_screen.rate_skills": "Rate skills",
-  "challenge_detail_screen.can_not_rate_skills": "Il coach non può valutare le competenze quando la sfida non è completata",
+  "challenge_detail_screen": {
+    "title": "Challenge",
+    "builder": "Builder",
+    "progress": "Progresso",
+    "edit_progress": "Modifica progresso",
+    "description": "Descrizione",
+    "skills": "Skills",
+    "coach": "Coach",
+    "participants": "Partecipanti",
+    "upload_new_progress": "Aggiungi nuovo progresso",
+    "new_progress": "Nuovo progresso",
+    "new_progress_post": "POST",
+    "add_new_employees": "Aggiungi nuovo impiegato",
+    "join": "Entra",
+    "leave": "Lascia",
+    "completed": "Completato",
+    "no_progress_yet": "Non ancora progressi",
+    "not_participants": "Nessun partecipante al momento",
+    "chat_coach": "Allenatore di chat",
+    "rate_skills": "Rate skills",
+    "can_not_rate_skills": "Il coach non può valutare le competenze quando la sfida non è completata",
+    "request_video_call": "Richiedi una videochiamata",
+    "empty_participants_list": "Non ci sono partecipanti al momento",
+    "coach_calendar": "Calendario del coach",
+    "add": "Aggiungi",
+    "propose": "Proporre",
+    "proposing_time": "Tempo per la proposta",
+    "coach_proposing_time": "Tempo per la proposta del coach",
+    "number_of_vote": "Numero di voti",
+    "option": "Opzione",
+    "empty_proposing_time": "Al momento non hai nessun tempo per la proposta",
+    "empty_confirmed_time": "Al momento non hai un appuntamento per una videochiamata",
+    "confirmed": "Confermato",
+    "open_meeting": "Incontro aperto",
+    "link": "Link",
+    "vote": "Vota",
+    "confirm": ""
+  },
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Sfide",
@@ -69,7 +87,6 @@
   "register_screen.policy": "Ho letto e approvo ",
   "register_screen.policy_link": "Privacy Policy",
   "register_screen.terms_link": "Termini",
-  "register_screen.conditions_link": "Condizioni",
   "and": "e",
   "policy": [
     {
@@ -375,6 +392,10 @@
       "number_of_checks": "Numero di controlli:",
       "credits": "Crediti:"
     },
+    "proposing_time": {
+      "title": "Desideri inviare questi tempi di proposta?",
+      "description": "Questa azione non può essere annullata"
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
     "complete": "Completa",
@@ -458,6 +479,7 @@
     "content_3": "Aggiungi nuovo dipendente",
     "content_4": "per aggiungere un dipendente alla tua azienda."
   },
+  "empty_participant": "Non ci sono partecipanti al momento",
   "image_picker": {
     "image_permission_required": "Permesso negato. Si prega di abilitarlo nelle impostazioni del telefono.",
     "upload_a_video": "Carica un video",
@@ -555,7 +577,8 @@
     "no_biography": "Nessuna biografia al momento"
   },
   "skill_tab": {
-    "self_declared": "Auto-dichiarate"
+    "self_declared": "Auto-dichiarate",
+    "certified": "Certificato"
   },
   "private": "Privata",
   "public": "Pubblica",
@@ -601,6 +624,49 @@
     "phone": "Telefono",
     "enter_phone": "Inserisci il tuo telefono"
   },
+  "choose_packages_screen": {
+    "package": "Pacchetto",
+    "title": "Scegli il tipo di supporto del coach",
+    "description": "Alla fine della sfida, il coach certificherà le competenze trasversali acquisite",
+    "basic_package": "Pacchetto base",
+    "basic_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto.",
+    "direct_chat": "Chat diretta",
+    "premium_package": "Pacchetto premium",
+    "premium_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto.",
+    "video_call": "Videochiamata",
+    "intake": "Valutazione",
+    "check": "Verifica",
+    "closing": "Chiusura",
+    "no_package": "Al momento non sono disponibili pacchetti"
+  },
+  "cart_screen": {
+    "title": "Summary",
+    "basic_packages": "Basic packages",
+    "basic_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat",
+    "premium_packages": "Premium packages",
+    "premium_package_description": "A coach will follow you through your challenge through 3 touchpoint with direct chat and video call",
+    "intake": "Intake",
+    "check": "Check",
+    "closing": "Closing",
+    "select_checkpoints": "Select the number of checkpoints:",
+    "minimum_checkpoint_error": "At least 1 checkpoint is required",
+    "total": "Total",
+    "pay": "Pay"
+  },
+  "challenge_screen": {
+    "empty_challenge": "Al momento non hai nessuna sfida",
+    "coach_empty_challenge": "Al momento non hai nessuna sfida di coaching",
+    "coach_empty_challenge_description": "Devi essere assegnato a una sfida dall'amministratore",
+    "to_create_new_challenge": "per creare una nuova sfida",
+    "occupation_error": "Seleziona la tua occupazione, per favore.",
+    "biography": "Biografia",
+    "your_biography": "La tua biografia",
+    "city": "Città",
+    "enter_your_city": "Dove ti trovi?",
+    "company": "Azienda",
+    "enter_your_company": "Inserisci il nome della tua azienda",
+    "enter_your_company_error": "Inserisci il nome della tua azienda, per favore"
+  },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",
   "notification": {
@@ -612,5 +678,28 @@
     "new_employee": "ti ha aggiunto come dipendente",
     "new_message": "ha inviato un messaggio"
   },
-  "top_nav.create_challenge": "Crea sfida"
+  "top_nav.create_challenge": "Crea sfida",
+  "challenge_detail_screen_tab": {
+    "coach": {
+      "waiting_for_coach": "Waiting for coach...",
+      "profile": "Profile"
+    },
+    "coach_calendar": {
+      "title": "Coach calendar",
+      "book_video_call_btn": "Book video call",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "book_video_call": "Book video call",
+      "reschedule_video_call": "Reschedule video call",
+      "cancel_video_call": "Cancel video call",
+      "empty_schedule": "You haven't scheduled a video call",
+      "request_video_call": "Request video call",
+      "time": "Time",
+      "date": "Date",
+      "schedule_detail_modal_title": "Detail",
+      "note": "Note",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  }
 }

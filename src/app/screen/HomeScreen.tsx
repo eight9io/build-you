@@ -25,7 +25,6 @@ import { useChallengeUpdateStore } from "../store/challenge-update-store";
 import MainSearchScreen from "./MainSearchScreen/MainSearchScreen";
 import OtherUserProfileScreen from "./ProfileScreen/OtherUser/OtherUserProfileScreen";
 import ProgressCommentScreen from "./ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
-import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
 import CompanyChallengeDetailScreen from "./ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 
 import AppTitle from "../component/common/AppTitle";
@@ -41,6 +40,7 @@ import BuildYouLogo from "../common/svg/buildYou_logo_top_app.svg";
 import PersonalChallengeDetailScreen from "./ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "./ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import { useNotificationStore } from "../store/notification-store";
+import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 

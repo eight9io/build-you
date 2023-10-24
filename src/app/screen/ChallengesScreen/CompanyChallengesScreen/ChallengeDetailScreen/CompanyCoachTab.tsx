@@ -1,48 +1,35 @@
-import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import React, { useState, ReactNode } from "react";
-import { NavigationProp } from "@react-navigation/native";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, FC } from "react";
+import { View, Text, FlatList } from "react-native";
 
-import {
-  CheckpointType,
-  IChallengeState,
-  IChallengeTouchpointStatus,
-} from "../../../../types/challenge";
-import { ChallengeCompanyDetailScreenNavigationProps } from "./ChallengeCompanyDetailScreen";
+import { ICertifiedChallengeState } from "../../../../types/challenge";
 
 import DefaultAvatar from "../../../../common/svg/default-avatar.svg";
-import TouchPointCircle from "../../../../common/svg/touchpoint-circle.svg";
-import TouchPointCheckCircle from "../../../../common/svg/check-circle-24.svg";
-import TouchPointRetangle from "../../../../common/svg/touchpoint-rectangle.svg";
 
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import {
+  CoachBanner,
+  TouchPointProgress,
+  translateCheckpointToText,
+} from "../../PersonalChallengesScreen/ChallengeDetailScreen/PersonalCoachTab";
+import { IUserData } from "../../../../types/user";
+import { formatChallengeStatePayload } from "../../../../utils/challenge";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import {
+  serviceGetCertifiedChallengeStatus,
+  serviceOpenTouchpoint,
+} from "../../../../service/challenge";
+import { serviceGetOtherUserData } from "../../../../service/user";
 
-interface ICoachTabProps {}
-
-export const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
-  switch (status) {
-    case "init":
-      return <TouchPointCircle fill={"#C5C8D2"} />;
-    case "open":
-      return <TouchPointCircle fill={"#6C6E76"} />;
-    case "in-progress":
-      return <TouchPointCircle fill={"#FFC632"} />;
-    case "closed":
-      return <TouchPointCheckCircle />;
-  }
-};
-
-export const getButtonColor = (status: IChallengeTouchpointStatus) => {
-  switch (status) {
-    case "open":
-      return "bg-primary-default";
-    case "in-progress":
-      return "bg-secondary-dark";
-    case "closed":
-      return "bg-gray-medium";
-  }
-};
+interface ICompanyCoachTabProps {
+  coachID: string;
+  challengeId: string;
+  challengeState: ICertifiedChallengeState;
+  setChallengeState: React.Dispatch<
+    React.SetStateAction<ICertifiedChallengeState>
+  >;
+  setShouldParentRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const EmptyCoachBanner = (translation) => {
   return (
@@ -56,142 +43,27 @@ const EmptyCoachBanner = (translation) => {
   );
 };
 
-const CoachBanner = ({ coachName, coachAvatar, translation, specialize }) => {
-  return (
-    <View className="flex flex-row items-center justify-between rounded-lg bg-gray-light p-4">
-      <View className="flex flex-row items-center">
-        <DefaultAvatar />
-        <View className="ml-4" />
-        <View className="flex flex-col items-start">
-          <Text className="text-black text-md font-semibold">{coachName}</Text>
-          <Text className="text-md text-gray-dark">{specialize}</Text>
-        </View>
-      </View>
-      <TouchableOpacity
-        className="flex flex-row items-center justify-center rounded-full bg-white p-2 px-6 "
-        onPress={() => {}}
-      >
-        <Text className="font-semibold text-primary-default">Profile</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const TouchPointProgress = ({
-  numberOfChecks,
-  currentTouchpoint,
-  currentTouchpointStatus,
-  handleOpenChangeTouchpointStatusModal,
-}: IChallengeState) => {
-  const defaultTouchpoint: {
-    name: CheckpointType;
-    status: IChallengeTouchpointStatus;
-  }[] = [
-    {
-      name: "intake",
-      status: "init",
-    },
-    {
-      name: "closing",
-      status: "init",
-    },
-  ];
-  // add number of checks
-  for (let i = 0; i < numberOfChecks; i++) {
-    defaultTouchpoint.splice(-1, 0, {
-      name: `check-${i + 1}`,
-      status: "init",
-    });
-  }
-
-  // update current touchpoint status
-  // update previous touchpoint status to closed and current touchpoint status to currenttouchpointstatus
-  const currentTouchpointIndex = defaultTouchpoint.findIndex(
-    (touchpoint) => touchpoint.name === currentTouchpoint
-  );
-  if (currentTouchpointIndex !== -1) {
-    for (let i = 0; i < currentTouchpointIndex; i++) {
-      defaultTouchpoint[i].status = "closed";
-    }
-    defaultTouchpoint[currentTouchpointIndex].status = currentTouchpointStatus;
-  }
-
-  const renderProgress = (
-    touchpoint: {
-      name: CheckpointType;
-      status: IChallengeTouchpointStatus;
-    },
-    status: IChallengeTouchpointStatus,
-    isLastIndex: boolean
-  ): ReactNode => {
-    return (
-      <View className="flex w-full flex-row items-start justify-between">
-        <View className="flex flex-row">
-          <View className="flex flex-col items-center justify-center">
-            {renderTouchpointCircle(touchpoint.status)}
-            {!isLastIndex && (
-              <View className="py-2">
-                <TouchPointRetangle />
-              </View>
-            )}
-          </View>
-          <View className="pl-3 pt-1">
-            <Text
-              className={clsx(
-                "text-md capitalize",
-                touchpoint.status === "init" ? "" : "font-semibold"
-              )}
-            >
-              {touchpoint.name}
-            </Text>
-          </View>
-        </View>
-
-        {touchpoint.status !== "init" && (
-          <TouchableOpacity
-            className={clsx(
-              "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
-              getButtonColor(touchpoint.status)
-            )}
-            disabled={touchpoint.status !== "open"}
-            onPress={handleOpenChangeTouchpointStatusModal}
-          >
-            <Text className="font-semibold capitalize text-white">
-              {touchpoint.status}
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  };
-
-  return (
-    <View className="flex flex-col py-4">
-      {defaultTouchpoint.map((touchpoint, index) => {
-        const isLastIndex = index === defaultTouchpoint.length - 1;
-        return (
-          <View
-            key={index}
-            className="flex flex-row items-center justify-between"
-          >
-            {renderProgress(touchpoint, currentTouchpointStatus, isLastIndex)}
-          </View>
-        );
-      })}
-    </View>
-  );
-};
-
-const CompanyCoachTab = ({
-  navigation,
-}: {
-  navigation: NavigationProp<ChallengeCompanyDetailScreenNavigationProps>;
+const CompanyCoachTab: FC<ICompanyCoachTabProps> = ({
+  coachID,
+  challengeId,
+  challengeState,
+  setChallengeState,
+  setShouldParentRefresh,
 }) => {
   const [
     isChangeTouchpointStatusModalVisible,
     setChangeTouchpointStatusModalVisible,
   ] = useState<boolean>(false);
+  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   const { t } = useTranslation();
+
+  const {
+    currentTouchpoint,
+    status: currentTouchpointStatus,
+    totalChecks,
+  } = formatChallengeStatePayload(challengeState);
 
   const handleOpenChangeTouchpointStatusModal = () => {
     setChangeTouchpointStatusModalVisible(true);
@@ -201,36 +73,102 @@ const CompanyCoachTab = ({
     setChangeTouchpointStatusModalVisible(false);
   };
 
+  const onConfirmChangeTouchpointStatusModal = async () => {
+    handleCloseChangeTouchpointStatusModal();
+    try {
+      const response = await serviceOpenTouchpoint(challengeId);
+      if (response) {
+        GlobalToastController.showModal({
+          message: t("toast.open_touchpoint_success") as string,
+        });
+        getChallengeStatusOnRefresh();
+      }
+    } catch (error) {
+      GlobalToastController.showModal({
+        message: t("toast.open_touchpoint_error") as string,
+      });
+    }
+  };
+
+  const getChallengeStatusOnRefresh = async () => {
+    if (!challengeId) return;
+    setRefreshing(true);
+    setShouldParentRefresh && setShouldParentRefresh(true);
+    try {
+      const response = await serviceGetCertifiedChallengeStatus(challengeId);
+      setChallengeState(response.data);
+    } catch (error) {
+      console.error("error", error);
+    }
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    const getCoachData = async () => {
+      if (!coachID) return;
+      try {
+        const response = await serviceGetOtherUserData(coachID);
+        setCoachData(response.data);
+      } catch (error) {
+        console.error("get coach data error", error);
+      }
+    };
+    const getChallengeStatus = async () => {
+      if (!challengeId) return;
+      try {
+        const response = await serviceGetCertifiedChallengeStatus(challengeId);
+        setChallengeState(response.data);
+      } catch (error) {
+        console.error("error", error);
+      }
+    };
+    getCoachData();
+    getChallengeStatus();
+  }, [coachID, challengeId]);
+
   return (
-    <View className="flex flex-col p-4">
-      <ConfirmDialog
-        isVisible={isChangeTouchpointStatusModalVisible}
-        title="Are you sure?"
-        description="You cannot undo this action"
-        onConfirm={() => {}}
-        onClosed={handleCloseChangeTouchpointStatusModal}
-      />
-      {/* <EmptyCoachBanner translation={t} /> */}
-      <CoachBanner
-        translation={t}
-        coachAvatar={"https://i.pravatar.cc/300"}
-        coachName={"Rudy Aster"}
-        specialize={"Personal Trainer"}
-      />
-      <View className="flex flex-col">
-        <Text className="mt-6 text-md font-semibold text-primary-default">
-          Touchpoints of your challenge
-        </Text>
-        <TouchPointProgress
-          numberOfChecks={3}
-          currentTouchpoint="check-2"
-          currentTouchpointStatus="in-progress"
-          handleOpenChangeTouchpointStatusModal={
-            handleOpenChangeTouchpointStatusModal
-          }
-        />
-      </View>
-    </View>
+    <FlatList
+      data={[]}
+      renderItem={({ item }) => <View />}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <View className="w-screen">
+          <ConfirmDialog
+            isVisible={isChangeTouchpointStatusModalVisible}
+            title={`Do you really want to start the ${
+              translateCheckpointToText(currentTouchpoint) || ""
+            } Phase?`}
+            onConfirm={onConfirmChangeTouchpointStatusModal}
+            confirmButtonLabel="Yes"
+            closeButtonLabel="No"
+            onClosed={handleCloseChangeTouchpointStatusModal}
+          />
+
+          <View className="p-4">
+            {coachData?.id ? (
+              <CoachBanner coachData={coachData} />
+            ) : (
+              <EmptyCoachBanner translation={t} />
+            )}
+            <View className="flex flex-col">
+              <Text className="mt-6 text-md font-semibold text-primary-default">
+                Touchpoints of your challenge
+              </Text>
+              <TouchPointProgress
+                currentTouchpoint={currentTouchpoint}
+                currentTouchpointStatus={currentTouchpointStatus}
+                totalChecks={totalChecks}
+                handleOpenChangeTouchpointStatusModal={
+                  handleOpenChangeTouchpointStatusModal
+                }
+              />
+            </View>
+          </View>
+        </View>
+      }
+      refreshing={refreshing}
+      onRefresh={getChallengeStatusOnRefresh}
+    />
   );
 };
 

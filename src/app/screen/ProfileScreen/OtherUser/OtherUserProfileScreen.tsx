@@ -27,8 +27,13 @@ import { useGetOtherUserData } from "../../../hooks/useGetUser";
 import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
 import { fetchNewFollowingData } from "../../../utils/profile";
 import { AxiosError } from "axios";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface IOtherUserProfileComponentProps {
+  route: Route<
+    "OtherUserProfileScreen",
+    { userId: string; isFollowing?: boolean; isFollower?: boolean }
+  >;
   userId: string | null | undefined;
   navigation: any;
 }
@@ -135,6 +140,7 @@ interface IOtherUserProfileScreenProps {
 }
 
 const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
+  route,
   userId,
   navigation,
 }) => {
@@ -159,17 +165,17 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
     }, 2000);
   }
   return (
-    <View className={clsx("relative mb-24 h-full flex-1 flex-col bg-white")}>
+    <View className={clsx("relative h-full flex-1 flex-col bg-white")}>
       {otherUserData && (
-        <View>
+        <View className="relative h-full flex-1 flex-col">
           <TopSectionOtherProfile otherUserData={otherUserData} />
-          <View className={clsx("bg-white px-4 pb-3 pt-12")}>
+          <View className={clsx("bg-white px-4 pb-2 pt-12")}>
             <Text className={clsx("text-[26px] font-medium")}>
               {otherUserData?.name} {otherUserData?.surname}
             </Text>
           </View>
           {otherUserData?.isShowCompany && otherUserData?.employeeOf?.name && (
-            <View className={clsx("my-4 flex-row gap-2 px-4 pt-1")}>
+            <View className={clsx(" flex-row gap-2 px-4 pt-1")}>
               <IconCompany />
 
               <Text className={clsx(" text-[14px]  font-medium ")}>
@@ -177,7 +183,7 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
               </Text>
             </View>
           )}
-          <OtherUserProfileTabs otherUserData={otherUserData} />
+          <OtherUserProfileTabs otherUserData={otherUserData} route={route} />
         </View>
       )}
     </View>
@@ -192,13 +198,13 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
 
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">
-      <FlatList
-        data={[]}
-        renderItem={() => <View></View>}
-        ListHeaderComponent={
-          <OtherUserProfileComponent userId={userId} navigation={navigation} />
-        }
-      />
+      <View className="h-full">
+        <OtherUserProfileComponent
+          route={route}
+          userId={userId}
+          navigation={navigation}
+        />
+      </View>
     </SafeAreaView>
   );
 };

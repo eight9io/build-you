@@ -219,39 +219,17 @@ const CompanyChallengeDetailScreen = ({
     undefined
   );
 
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  // use for refresh screen when add new progress, refetch participant list,  edit challenge
+  const [shouldScreenRefresh, setShouldScreenRefresh] =
+    useState<boolean>(false);
   const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
 
   const [isDeleteChallengeDialogVisible, setIsDeleteChallengeDialogVisible] =
     useState<boolean>(false);
   const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
-  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
-
-  useLayoutEffect(() => {
-    // Set header options, must set it manually to handle the onPress event inside the screen
-    navigation.setOptions({
-      headerRight: () => (
-        <RightCompanyChallengeDetailOptions
-          shouldRefresh={shouldRefresh}
-          challengeData={challengeData}
-          setShouldRefresh={setShouldRefresh}
-          onEditChallengeBtnPress={handleEditChallengeBtnPress}
-          setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
-        />
-      ),
-    });
-  }, [challengeData]);
-
-  useEffect(() => {
-    if (!challengeId && !shouldRefresh) return;
-    if (isFirstLoad) setIsFirstLoad(false);
-    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
-      setChallengeData(res.data);
-    });
-  }, [isNewProgressAdded, shouldRefresh]);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -261,7 +239,7 @@ const CompanyChallengeDetailScreen = ({
   };
 
   const handleEditChallengeModalConfirm = () => {
-    setShouldRefresh(true);
+    setShouldScreenRefresh(true);
     setIsEditChallengeModalVisible(false);
   };
 
@@ -287,8 +265,37 @@ const CompanyChallengeDetailScreen = ({
         }, 600);
       });
   };
+
+  useLayoutEffect(() => {
+    // Set header options, must set it manually to handle the onPress event inside the screen
+    navigation.setOptions({
+      headerRight: () => (
+        <RightCompanyChallengeDetailOptions
+          shouldRefresh={shouldScreenRefresh}
+          challengeData={challengeData}
+          setShouldRefresh={setShouldScreenRefresh}
+          onEditChallengeBtnPress={handleEditChallengeBtnPress}
+          setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
+        />
+      ),
+    });
+  }, [challengeData]);
+
+  useEffect(() => {
+    if (!challengeId && !shouldScreenRefresh) return;
+    if (isFirstLoad) setIsFirstLoad(false);
+    try {
+      httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
+        setChallengeData(res.data);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    setShouldScreenRefresh(false);
+  }, [shouldScreenRefresh]);
+
   return (
-    <SafeAreaView className="bg-white pt-3">
+    <SafeAreaView className="bg-gray-veryLight pt-3">
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}
@@ -330,10 +337,10 @@ const CompanyChallengeDetailScreen = ({
       {challengeData && (
         <>
           <ChallengeCompanyDetailScreen
+            route={route}
             challengeData={challengeData}
-            shouldRefresh={shouldRefresh}
-            setShouldRefresh={setShouldRefresh}
-            setIsNewProgressAdded={setIsNewProgressAdded}
+            shouldScreenRefresh={shouldScreenRefresh}
+            setShouldScreenRefresh={setShouldScreenRefresh}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

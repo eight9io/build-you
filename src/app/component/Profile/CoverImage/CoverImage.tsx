@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ImageSourcePropType,
   Linking,
+  Platform,
 } from "react-native";
 
 import CameraSvg from "./asset/camera.svg";
@@ -73,46 +74,81 @@ const CoverImage: React.FC<ICoverImageProps> = ({
         onClosed={() => setIsErrDialog(false)}
         closeButtonLabel={t("close") || ""}
       />
-      <View className="relative">
-        <View
-          className={clsx("z-100 relative rounded-full border-white bg-white")}
-        >
-          <Image
-            className={clsx("absolute left-0  top-0  h-[115px] w-full")}
-            source={require("./asset/Cover-loading.png")}
-          />
-          {!newAvatarUpload && !src && (
+      {!isOtherUser && Platform.OS === "android" ? (
+        <TouchableOpacity className="relative" onPress={handlePickImage}>
+          <View
+            className={clsx(
+              "z-100 relative rounded-full border-white bg-white"
+            )}
+          >
             <Image
-              className={clsx(" h-[115px] w-full")}
+              className={clsx("absolute left-0  top-0  h-[115px] w-full")}
               source={require("./asset/Cover-loading.png")}
             />
-          )}
-          {!newAvatarUpload && src && (
+            {!newAvatarUpload && !src && (
+              <Image
+                className={clsx(" h-[115px] w-full")}
+                source={require("./asset/Cover-loading.png")}
+              />
+            )}
+            {!newAvatarUpload && src && (
+              <Image
+                className={clsx(" z-100 h-[115px] w-full")}
+                source={src as ImageSourcePropType}
+              />
+            )}
+            {newAvatarUpload && (
+              <Image
+                className={clsx(" z-100 h-[115px] w-full")}
+                source={{ uri: newAvatarUpload }}
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <View className="relative">
+          <View
+            className={clsx(
+              "z-100 relative rounded-full border-white bg-white"
+            )}
+          >
             <Image
-              className={clsx(" z-100 h-[115px] w-full")}
-              source={src as ImageSourcePropType}
+              className={clsx("absolute left-0  top-0  h-[115px] w-full")}
+              source={require("./asset/Cover-loading.png")}
             />
-          )}
-          {newAvatarUpload && (
-            <Image
-              className={clsx(" z-100 h-[115px] w-full")}
-              source={{ uri: newAvatarUpload }}
-            />
+            {!newAvatarUpload && !src && (
+              <Image
+                className={clsx(" h-[115px] w-full")}
+                source={require("./asset/Cover-loading.png")}
+              />
+            )}
+            {!newAvatarUpload && src && (
+              <Image
+                className={clsx(" z-100 h-[115px] w-full")}
+                source={src as ImageSourcePropType}
+              />
+            )}
+            {newAvatarUpload && (
+              <Image
+                className={clsx(" z-100 h-[115px] w-full")}
+                source={{ uri: newAvatarUpload }}
+              />
+            )}
+          </View>
+          {!isOtherUser && Platform.OS === "ios" && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handlePickImage}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            >
+              <View className={clsx("absolute bottom-[80px] right-4  ")}>
+                <CameraSvg />
+              </View>
+            </TouchableOpacity>
           )}
         </View>
+      )}
 
-        {!isOtherUser && (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={handlePickImage}
-            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-          >
-            <View className={clsx("absolute bottom-[80px] right-4  ")}>
-              <CameraSvg />
-            </View>
-          </TouchableOpacity>
-        )}
-      </View>
       <ConfirmDialog
         title={t("dialog.alert_title") || ""}
         description={t("image_picker.image_permission_required") || ""}

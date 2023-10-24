@@ -23,6 +23,7 @@ import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -64,12 +65,12 @@ const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
   return (
     <View className="flex w-full flex-col">
       <View className="flex w-full flex-row items-center justify-between">
-        <View>
-          <Text className="w-40 text-h6 font-medium leading-6 text-black-default">
+        <View className="flex-1 pr-2">
+          <Text className="text-h6 font-medium leading-6 text-black-default">
             {item.label}
           </Text>
         </View>
-        <View className="flex flex-1 flex-row  justify-end">
+        <View className="flex flex-row  justify-end">
           {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
             <TouchableOpacity
               className="pr-3"
@@ -227,17 +228,6 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
           }),
         ]);
       } else {
-        console.log({
-          name: profile?.name,
-          surname: profile?.surname,
-          birth: profile?.birth,
-          occupation: profile?.occupation,
-          occupationDetail: profile?.occupationDetail,
-          bio: profile?.biography,
-          softSkill: softSkills,
-          hardSkill: profile.skills,
-          company: "",
-        });
         await Promise.all([
           uploadNewVideo(profile?.video),
           httpInstance.put(`/user/first/update/${userData.id}`, {
@@ -301,6 +291,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         );
       } catch (error) {
         console.error(error);
+        CrashlyticService({
+          errorType: "Get Soft Skill List Error",
+          error: error,
+        });
       }
     };
     fetchSkills();

@@ -12,6 +12,7 @@ import NavButton from "../common/Buttons/NavButton";
 import { useTranslation } from "react-i18next";
 import { serviceGetPrivacy } from "../../service/settings";
 import WebView from "react-native-webview";
+import { CrashlyticService } from "../../service/crashlytic";
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -23,19 +24,20 @@ export default function PolicyModal({
   setModalVisible,
 }: Props) {
   const { t } = useTranslation();
-  const [content, setContent] = useState<any>()
+  const [content, setContent] = useState<any>();
   const getContent = () => {
     serviceGetPrivacy()
       .then((res) => {
-        setContent(res.data.privacy)
-
+        setContent(res.data.privacy);
       })
       .catch((err) => {
         console.error("err", err);
+        CrashlyticService({
+          errorType: "Get Privacy Error",
+        });
       });
-
-  }
-  getContent()
+  };
+  getContent();
   return (
     <Modal
       animationType="slide"

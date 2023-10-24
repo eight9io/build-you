@@ -13,6 +13,7 @@ import Button from "../../common/Buttons/Button";
 import { LOGIN_TYPE } from "../../../common/enum";
 import { ISocialLoginForm, LoginForm } from "../../../types/auth";
 import { errorMessage } from "../../../utils/statusCode";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface IAppleLoginButtonProps {
   title?: string;
@@ -49,6 +50,10 @@ const AppleLoginButton: FC<IAppleLoginButtonProps> = ({
         console.log("User canceled Apple Sign in.");
       } else {
         console.error("Error", error);
+        CrashlyticService({
+          errorType: "Apple Login Error",
+          error,
+        });
         onError && onError(errorMessage(error, "err_login"));
       }
       return;

@@ -40,6 +40,7 @@ import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPic
 import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
 import { serviceGetAllCompany } from "../../../../service/company";
 import { getUserOccupationCondition } from "../../../../utils/profile";
+import { CrashlyticService } from "../../../../service/crashlytic";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -289,6 +290,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
         setCompanyList(companyUserList);
       } catch (error) {
         console.error("Error get company list", error);
+        CrashlyticService({
+          errorType: "Get Company List Error",
+          error: error,
+        });
       }
     };
     getCompanyList();

@@ -26,6 +26,7 @@ import ProgressCommentScreen from "../ChallengesScreen/ProgressCommentScreen/Pro
 import PersonalChallengeDetailScreen from "../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import CompanyChallengeDetailScreen from "../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { CrashlyticService } from "../../service/crashlytic";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -73,6 +74,10 @@ const Notifications = () => {
         button: t("dialog.ok"),
       });
       console.error(error);
+      CrashlyticService({
+        errorType: "Fetch Notification Error",
+        error: error,
+      });
     }
   };
 

@@ -24,6 +24,7 @@ import NavigationService from "./navigationService";
 import { serviceGetOtherUserData } from "../service/user";
 import i18n from "../i18n/i18n";
 import { useUserProfileStore } from "../store/user-store";
+import { CrashlyticService } from "../service/crashlytic";
 
 let MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10;
 let RETRY_DELAY = 1000; // milliseconds
@@ -145,7 +146,11 @@ export const handleTapOnIncomingNotification = async (
             );
             navigation.dispatch(pushAction);
           } catch (error) {
-            console.log("error: ", error);
+            console.error("error: ", error);
+            CrashlyticService({
+              errorType: "Handle Tap On Incoming Notification Error",
+              error: error,
+            });
           }
         }
         break;
@@ -343,7 +348,11 @@ export const handleTapOnNotification = async (
         await setNotificationIsRead([notification.id.toString()]);
       }
     } catch (error) {
-      console.log("error: ", error);
+      console.error("error: ", error);
+      CrashlyticService({
+        errorType: "Handle Tap On Notification Error",
+        error: error,
+      });
     }
   };
   switch (notification.type) {
@@ -419,17 +428,6 @@ export const mapNotificationResponses = (
   responses: INotificationResponse[]
 ): INotification[] => {
   const transformedData: INotification[] = responses.map((response) => {
-    // const extractUserInfoRegex = /@\[([^\(]+)\(([^)]+)\)/;
-    // const match = response.body.match(extractUserInfoRegex);
-    // let username = '';
-    // let userId = '';
-    // if (match) {
-    //   username = match[1];
-    //   userId = match[2];
-    // } else {
-    //   console.log('No match found');
-    //   throw new Error('Something went wrong');
-    // }
     return {
       id: response.id,
       type: response.title,

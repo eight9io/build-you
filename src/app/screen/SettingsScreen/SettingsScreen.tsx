@@ -35,6 +35,7 @@ import {
   NOTIFICATION_TOKEN_DEVICE_TYPE,
   NOTIFICATION_TOKEN_STATUS,
 } from "../../common/enum";
+import { CrashlyticService } from "../../service/crashlytic";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -91,6 +92,10 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
             await GoogleSignin.signOut();
           } catch (error) {
             console.error(error);
+            CrashlyticService({
+              errorType: "Google Sign Out Error",
+              error: error,
+            });
           }
         };
         googleSignOut();

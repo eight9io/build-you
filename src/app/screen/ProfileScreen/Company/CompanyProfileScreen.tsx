@@ -25,6 +25,7 @@ import PersonalChallengeDetailScreen from "../../ChallengesScreen/PersonalChalle
 import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -56,6 +57,10 @@ const Company: React.FC<ICompanyProps> = ({ navigation, route }) => {
       })
       .catch((err) => {
         console.error("err", err);
+        CrashlyticService({
+          errorType: "Fetch My Company Profile Error",
+          error: err,
+        });
       });
   }, []);
 

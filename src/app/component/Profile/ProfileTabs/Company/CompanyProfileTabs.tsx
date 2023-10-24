@@ -12,6 +12,7 @@ import {
 } from "../../../../service/profile";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
 import { useUserProfileStore } from "../../../../store/user-store";
+import { CrashlyticService } from "../../../../service/crashlytic";
 
 import Employees from "./Employees/Employees";
 import Followers from "../common/Followers/Followers";
@@ -65,7 +66,11 @@ const CompanyProfileTabs: FC<ICompanyProfileTabsProps> = ({ route }) => {
       );
       setFollowerList(followerList);
     } catch (error) {
-      console.log("getFollowerList", error);
+      console.error("getFollowerList", error);
+      CrashlyticService({
+        errorType: "Fetch Follower List Error",
+        error,
+      });
     }
     setIsFollowerRefreshing(false);
   };
@@ -78,7 +83,11 @@ const CompanyProfileTabs: FC<ICompanyProfileTabsProps> = ({ route }) => {
       );
       setFollowingList(followingList);
     } catch (error) {
-      console.log("fetchFollowingList", error);
+      console.error("fetchFollowingList", error);
+      CrashlyticService({
+        errorType: "Fetch Following List Error",
+        error,
+      });
     }
     setIsFollowingRefreshing(false);
   };

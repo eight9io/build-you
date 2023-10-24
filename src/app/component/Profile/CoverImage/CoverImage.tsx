@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ImageSourcePropType,
   Linking,
+  Platform,
 } from "react-native";
 
 import CameraSvg from "./asset/camera.svg";
@@ -73,7 +74,7 @@ const CoverImage: React.FC<ICoverImageProps> = ({
         onClosed={() => setIsErrDialog(false)}
         closeButtonLabel={t("close") || ""}
       />
-      {!isOtherUser ? (
+      {!isOtherUser && Platform.OS === "android" ? (
         <TouchableOpacity className="relative" onPress={handlePickImage}>
           <View
             className={clsx(
@@ -134,6 +135,17 @@ const CoverImage: React.FC<ICoverImageProps> = ({
               />
             )}
           </View>
+          {!isOtherUser && Platform.OS === "ios" && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handlePickImage}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            >
+              <View className={clsx("absolute bottom-[80px] right-4  ")}>
+                <CameraSvg />
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
       )}
 

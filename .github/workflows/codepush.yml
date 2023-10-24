@@ -1,4 +1,4 @@
-name: Production Build You App Building
+name: CodePush Build You App Building
 
 on: workflow_dispatch
 

@@ -19,7 +19,7 @@
     "ios": {
       "bundleIdentifier": "it.buildyou.buildyou",
       "associatedDomains": ["applinks:app.buildyou.it"],
-      "buildNumber": "45",
+      "buildNumber": "46",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"],

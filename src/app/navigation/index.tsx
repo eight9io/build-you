@@ -68,8 +68,11 @@ export const RootNavigation = () => {
     logout,
     _hasHydrated: authStoreHydrated,
   } = useAuthStore();
-  const { getUserProfileAsync, onLogout: userProfileStoreOnLogout } =
-    useUserProfileStore();
+  const {
+    getUserProfileAsync,
+    onLogout: userProfileStoreOnLogout,
+    getUserAllChallengeIdsAsync,
+  } = useUserProfileStore();
 
   const navigationRef = useRef<NavigationContainerRef<RootStackParamList>>();
   const isLoggedin = getAccessToken();
@@ -115,6 +118,8 @@ export const RootNavigation = () => {
             let navigateToRoute = isCompleteProfile
               ? "HomeScreen"
               : "CompleteProfileScreen";
+
+            getUserAllChallengeIdsAsync(profile?.id);
             if (isCompleteProfile && isNavigationReadyRef?.current) {
               return profile;
             } else if (!isCompleteProfile) {

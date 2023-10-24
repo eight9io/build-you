@@ -51,7 +51,6 @@ const SCREENS_TO_HIDE_TAB_BAR = [
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
   const isAndroid = Platform.OS === "android";
-  // useGetUserData();
   const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
   const [lastNotiId, setLastNotiId] = useState<string>("");
   const { getNewestNotificationId, setNewestNotificationId } =

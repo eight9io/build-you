@@ -125,7 +125,7 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
                   }
                   placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                   onBlur={onBlur}
-                  onChangeText={(text) => onChange(text)}
+                  onChangeText={onChange}
                   value={value}
                 />
               </View>

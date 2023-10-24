@@ -152,7 +152,7 @@ export const HomeFeed = () => {
       return (
         <FeedPostCard
           itemFeedPostCard={item}
-          userId={userData?.id}
+          currentUserId={userData?.id}
           isFocused={true}
           navigation={navigation}
           challgeneUpdateLike={challgeneUpdateLike}

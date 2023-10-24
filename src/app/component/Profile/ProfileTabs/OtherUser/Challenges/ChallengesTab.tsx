@@ -37,8 +37,9 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   // const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { getUserProfile } = useUserProfileStore();
+  const { getUserProfile, getUserAllChallengeIds } = useUserProfileStore();
   const userProfile = getUserProfile();
+  const currentUserAllChallengeIds = getUserAllChallengeIds();
 
   useEffect(() => {
     if (!userId || isCurrentUserInCompany == null) return;
@@ -101,6 +102,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
               isFromOtherUser
               imageSrc={`${item.image}`}
               navigation={navigation}
+              currentUserAllChallengeIds={currentUserAllChallengeIds}
             />
           )}
           keyExtractor={(item) => item.id}

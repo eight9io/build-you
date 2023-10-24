@@ -1,27 +1,29 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+import { useIsFocused } from "@react-navigation/native";
 import { SafeAreaView, View, Text, FlatList } from "react-native";
-
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+
+import { IChallenge } from "../../../types/challenge";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
-import CompanyChallengeDetailScreen from "./CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
-import ChallengeCardCompany from "../../../component/Card/ChallengeCard/ChallengeCardCompany";
-import { t } from "i18next";
+import httpInstance from "../../../utils/http";
+import { sortChallengeByStatusFromResponse } from "../../../utils/common";
+
+import { useUserProfileStore } from "../../../store/user-store";
+
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
-import { IChallenge } from "../../../types/challenge";
-import { useUserProfileStore } from "../../../store/user-store";
-import { useIsFocused } from "@react-navigation/native";
-import httpInstance from "../../../utils/http";
-import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
-import { sortChallengeByStatusFromResponse } from "../../../utils/common";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
+import ChallengeCardCompany from "../../../component/Card/ChallengeCard/ChallengeCardCompany";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
-import { useTranslation } from "react-i18next";
+import CompanyChallengeDetailScreen from "./CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
 import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();

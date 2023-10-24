@@ -26,6 +26,7 @@ export interface IChallengeCardProps {
   navigation?: any;
   handlePress?: () => void;
   isFromOtherUser?: boolean;
+  currentUserAllChallengeIds?: string[];
 }
 
 export const CompanyTag = ({
@@ -63,6 +64,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
   navigation,
   handlePress,
   isFromOtherUser = false,
+  currentUserAllChallengeIds,
 }) => {
   const [ratedValue, setRatedValue] = useState<number>(0);
 
@@ -86,6 +88,12 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
 
   const onPress = () => {
     if (navigation) {
+      if (currentUserAllChallengeIds?.includes(item.id)) {
+        navigation.navigate("PersonalChallengeDetailScreen", {
+          challengeId: item.id,
+        });
+        return;
+      }
       if (isCompanyAccount && !isFromOtherUser) {
         return navigation.navigate("CompanyChallengeDetailScreen", {
           challengeId: item.id,

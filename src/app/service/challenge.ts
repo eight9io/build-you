@@ -156,3 +156,8 @@ export const serviceGetRatedSoftSkillCertifiedChallenge = (
 ) => {
   return http.get(`/challenge/skills/rating/${challengeId}`);
 };
+
+export const serviceGetAllUSerChallenges = (userId: string) => {
+  if (!userId) return null;
+  return http.get(`/challenge/participant/${userId}`);
+};

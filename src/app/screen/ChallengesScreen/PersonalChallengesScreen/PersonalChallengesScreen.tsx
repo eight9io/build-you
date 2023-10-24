@@ -24,7 +24,6 @@ import { useUserProfileStore } from "../../../store/user-store";
 import CurrentUserChallengeCard from "../../../component/Card/ChallengeCard/CurrentUserChallengeCard";
 import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
 import { useNewCreateOrDeleteChallengeStore } from "../../../store/new-challenge-create-store";
-import ChallengeCard from "../../../component/Card/ChallengeCard/ChallengeCard";
 import CertifiedChallengeCard from "../../../component/Card/ChallengeCard/CertifiedChallengeCard";
 
 type PersonalChallengesScreenNavigationProp = NativeStackNavigationProp<

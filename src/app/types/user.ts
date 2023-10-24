@@ -29,6 +29,15 @@ export interface IUserData {
   isVerified?: boolean;
   city?: string;
   isCoach?: boolean;
+  ratedSkill?: IRatedSkill[];
+}
+
+export interface IRatedSkill {
+  rating: number;
+  skill: {
+    id: string;
+    skill: string;
+  };
 }
 
 export type ILoginType =

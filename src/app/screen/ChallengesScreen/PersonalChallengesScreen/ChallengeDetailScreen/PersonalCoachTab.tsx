@@ -36,6 +36,7 @@ interface ICoachTabProps {
   coachID: string;
   challengeId: string;
   challengeState: ICertifiedChallengeState;
+  isCurrentUserChallengeOnwer: boolean;
   setChallengeState: React.Dispatch<
     React.SetStateAction<ICertifiedChallengeState>
   >;
@@ -146,11 +147,13 @@ export const TouchPointProgress = ({
   currentTouchpointStatus,
   totalChecks,
   handleOpenChangeTouchpointStatusModal,
+  isCurrentUserChallengeOnwer = true,
 }: {
   currentTouchpoint: CheckpointType;
   currentTouchpointStatus: IChallengeTouchpointStatus;
   totalChecks: number;
   handleOpenChangeTouchpointStatusModal: () => void;
+  isCurrentUserChallengeOnwer?: boolean;
 }) => {
   const defaultTouchpoint: {
     name: CheckpointType;
@@ -217,7 +220,7 @@ export const TouchPointProgress = ({
           </View>
         </View>
 
-        {touchpoint.status !== "init" && (
+        {isCurrentUserChallengeOnwer && touchpoint.status !== "init" && (
           <TouchableOpacity
             className={clsx(
               "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
@@ -234,6 +237,22 @@ export const TouchPointProgress = ({
             </Text>
           </TouchableOpacity>
         )}
+
+        {!isCurrentUserChallengeOnwer &&
+          touchpoint.status === "in-progress" && (
+            <TouchableOpacity
+              className={clsx(
+                "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
+                getButtonColor(touchpoint.status)
+              )}
+              disabled={true}
+              onPress={handleOpenChangeTouchpointStatusModal}
+            >
+              <Text className="font-semibold capitalize text-white">
+                {touchpoint.status}
+              </Text>
+            </TouchableOpacity>
+          )}
       </View>
     );
   };
@@ -261,6 +280,7 @@ const PersonalCoachTab: FC<ICoachTabProps> = ({
   challengeState,
   setChallengeState,
   setShouldParentRefresh,
+  isCurrentUserChallengeOnwer,
 }) => {
   const [
     isChangeTouchpointStatusModalVisible,
@@ -373,6 +393,7 @@ const PersonalCoachTab: FC<ICoachTabProps> = ({
                 handleOpenChangeTouchpointStatusModal={
                   handleOpenChangeTouchpointStatusModal
                 }
+                isCurrentUserChallengeOnwer={isCurrentUserChallengeOnwer}
               />
             </View>
           </View>

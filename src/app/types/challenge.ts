@@ -192,3 +192,12 @@ export interface IUnformatedCertifiedChallengeState {
   closingStatus: IChallengeTouchpointStatus;
   completedCheckpoint: number;
 }
+
+export interface IProposingTime {
+  id?: string;
+  index: number;
+  dateTime: string;
+  numberOfVotes?: number;
+  isConfirmed?: boolean;
+  meetingUrl?: string;
+}

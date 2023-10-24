@@ -125,7 +125,12 @@ const ProfileTabs: FC<IProfileTabsProps> = ({ route }) => {
           />
         );
       case PROFILE_TABS_KEY.SKILLS:
-        return <Skills skills={userProfile?.softSkill} />;
+        return (
+          <Skills
+            skills={userProfile?.softSkill}
+            ratedSkill={userProfile?.ratedSkill}
+          />
+        );
     }
   };
 

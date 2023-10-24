@@ -1,33 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
 import { openUrlInApp } from "../../../../utils/inAppBrowser";
-
-import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
+import { IProposingTime } from "../../../../types/challenge";
 
 import LinkSvg from "./assets/link.svg";
 import EmptySvg from "./assets/emptyFollow.svg";
-import DeleteSvg from "./assets/delete.svg";
 import Button from "../../../../component/common/Buttons/Button";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import { useTranslation } from "react-i18next";
-import clsx from "clsx";
-
-interface IProposingTime {
-  id: string;
-  index: number;
-  dateTime: string;
-  numberOfVotes?: number;
-  isConfirmed?: boolean;
-  meetingUrl?: string;
-}
-
-interface IProposingTimeTag {
-  translate: (key: string) => string;
-  index: number;
-  dateTime: string;
-  onDelete: (index: number) => void;
-}
 
 interface IProposedTimeTag {
   translate: (key: string) => string;

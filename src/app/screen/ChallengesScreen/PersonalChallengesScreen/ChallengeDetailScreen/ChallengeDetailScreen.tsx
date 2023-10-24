@@ -102,33 +102,50 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   useEffect(() => {
     const tempTabRoutes = [...tabRoutes];
 
-    if (participantList && challengeOwner?.companyAccount)
-      tempTabRoutes.push({
-        key: CHALLENGE_TABS_KEY.PARTICIPANTS,
-        title: t("challenge_detail_screen.participants"),
-      });
-
-    if (isCertifiedChallenge) {
-      tempTabRoutes.push(
-        {
-          key: CHALLENGE_TABS_KEY.SKILLS,
-          title: t("challenge_detail_screen.skills"),
-        },
-        {
-          key: CHALLENGE_TABS_KEY.COACH,
-          title: t("challenge_detail_screen.coach"),
-        }
+    if (participantList && challengeOwner?.companyAccount) {
+      const isParticipantsTabAlreadyExist = tempTabRoutes.find(
+        (tab) => tab.key === CHALLENGE_TABS_KEY.PARTICIPANTS
       );
-      if (challengeData.package.type === "chat")
+      if (!isParticipantsTabAlreadyExist)
         tempTabRoutes.push({
-          key: CHALLENGE_TABS_KEY.CHAT,
-          title: t("challenge_detail_screen.chat_coach"),
+          key: CHALLENGE_TABS_KEY.PARTICIPANTS,
+          title: t("challenge_detail_screen.participants"),
         });
-      else if (challengeData.package.type === "videocall")
-        tempTabRoutes.push({
-          key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
-          title: t("challenge_detail_screen_tab.coach_calendar.title"),
-        });
+    }
+    if (isCertifiedChallenge) {
+      const isSkillsTabAlreadyExist = tempTabRoutes.find(
+        (tab) => tab.key === CHALLENGE_TABS_KEY.SKILLS
+      );
+      if (!isSkillsTabAlreadyExist)
+        tempTabRoutes.push(
+          {
+            key: CHALLENGE_TABS_KEY.SKILLS,
+            title: t("challenge_detail_screen.skills"),
+          },
+          {
+            key: CHALLENGE_TABS_KEY.COACH,
+            title: t("challenge_detail_screen.coach"),
+          }
+        );
+      if (challengeData.package.type === "chat") {
+        const isChatTabAlreadyExist = tempTabRoutes.find(
+          (tab) => tab.key === CHALLENGE_TABS_KEY.CHAT
+        );
+        if (!isChatTabAlreadyExist)
+          tempTabRoutes.push({
+            key: CHALLENGE_TABS_KEY.CHAT,
+            title: t("challenge_detail_screen.chat_coach"),
+          });
+      } else if (challengeData.package.type === "videocall") {
+        const isCoachCalendarTabAlreadyExist = tempTabRoutes.find(
+          (tab) => tab.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
+        );
+        if (!isCoachCalendarTabAlreadyExist)
+          tempTabRoutes.push({
+            key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
+            title: t("challenge_detail_screen_tab.coach_calendar.title"),
+          });
+      }
     }
     setTabRoutes(tempTabRoutes);
   }, []);
@@ -246,6 +263,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             challengeState={challengeState}
             setChallengeState={setChallengeState}
             setShouldParentRefresh={setShouldScreenRefresh}
+            isCurrentUserChallengeOnwer={isCurrentUserChallengeOnwer}
           />
         );
       case CHALLENGE_TABS_KEY.CHAT:

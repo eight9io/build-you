@@ -49,7 +49,8 @@
     "confirmed": "Confermato",
     "open_meeting": "Incontro aperto",
     "link": "Link",
-    "vote": "Vota"
+    "vote": "Vota",
+    "confirm": ""
   },
   "bottom_nav": {
     "feed": "Feed",
@@ -576,7 +577,8 @@
     "no_biography": "Nessuna biografia al momento"
   },
   "skill_tab": {
-    "self_declared": "Auto-dichiarate"
+    "self_declared": "Auto-dichiarate",
+    "certified": "Certificato"
   },
   "private": "Privata",
   "public": "Pubblica",

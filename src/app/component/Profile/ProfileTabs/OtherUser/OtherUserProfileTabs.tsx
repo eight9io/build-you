@@ -110,7 +110,12 @@ const OtherUserProfileTabs: FC<IOtherUserProfileTabsProps> = ({
       case PROFILE_TABS_KEY.EMPLOYEES:
         return <EmployeesCompany employeeList={employeeList} />;
       case PROFILE_TABS_KEY.SKILLS:
-        return <Skills skills={otherUserData?.softSkill} />;
+        return (
+          <Skills
+            skills={otherUserData?.softSkill}
+            ratedSkill={otherUserData?.ratedSkill}
+          />
+        );
       case PROFILE_TABS_KEY.CHALLENGES:
         return (
           <ChallengesTab

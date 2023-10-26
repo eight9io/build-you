@@ -118,8 +118,8 @@ android {
         applicationId 'com.buildyou.buildyou'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 46
-        versionName "1.4.1"
+        versionCode 47
+        versionName "1.4.2"
     }
 
     splits {

@@ -29,7 +29,6 @@ import CoachTab from "./CoachTab";
 import CoachSkillsTab from "./CoachSkillsTab";
 import ChatCoachTab from "./ChatCoachTab";
 import { getChallengeById } from "../../../../service/challenge";
-import { useNotificationStore } from "../../../../store/notification-store";
 import { isObjectEmpty } from "../../../../utils/common";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
@@ -77,10 +76,14 @@ const PersonalCoachChallengeDetailScreen = ({
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
+  const [shouldScreenRefresh, setShouldScreenRefresh] =
+    useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
-  const isCompanyChallenge = challengeData?.owner?.[0].companyAccount;
+  const isCompanyChallenge = Array.isArray(challengeData?.owner)
+    ? challengeData?.owner[0]
+    : challengeData?.owner;
 
   const { t } = useTranslation();
   const [tabRoutes, setTabRoutes] = useState([
@@ -140,6 +143,12 @@ const PersonalCoachChallengeDetailScreen = ({
   }, []);
 
   useEffect(() => {
+    if (shouldScreenRefresh) {
+      setShouldScreenRefresh(false);
+    }
+  }, [shouldScreenRefresh]);
+
+  useEffect(() => {
     const tempTabRoutes = [...tabRoutes];
     if (isVideoChallenge) {
       if (
@@ -187,6 +196,7 @@ const PersonalCoachChallengeDetailScreen = ({
             challengeState={challengeState}
             setChallengeState={setChallengeState}
             isChallengeCompleted={isChallengeCompleted}
+            setShouldScreenRefresh={setShouldScreenRefresh}
           />
         );
       case CHALLENGE_TABS_KEY.SKILLS:
@@ -220,7 +230,11 @@ const PersonalCoachChallengeDetailScreen = ({
         return (
           <>
             {isCompanyChallenge ? (
-              <CompanyCoachCalendarTabCoachView />
+              <CompanyCoachCalendarTabCoachView
+                challengeId={challengeId}
+                challengeState={challengeState}
+                shouldScreenRefresh={shouldScreenRefresh}
+              />
             ) : (
               <IndividualCoachCalendarTab
                 isCoach={true}

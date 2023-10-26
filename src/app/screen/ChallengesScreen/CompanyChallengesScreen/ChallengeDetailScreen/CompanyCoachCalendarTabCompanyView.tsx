@@ -4,17 +4,31 @@ import clsx from "clsx";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
 import { openUrlInApp } from "../../../../utils/inAppBrowser";
-import { IProposingTime } from "../../../../types/challenge";
 
 import LinkSvg from "./assets/link.svg";
 import EmptySvg from "./assets/emptyFollow.svg";
 import Button from "../../../../component/common/Buttons/Button";
+import { ICertifiedChallengeState } from "../../../../types/challenge";
+import {
+  createVoteScheduleVideoCall,
+  getAllScheduleVideoCall,
+} from "../../../../service/schedule";
+import { getInprogressState } from "./CompanyCoachCalendarTabCoachView";
+
+import {
+  IProposedScheduleTime,
+  IProposingScheduleTime,
+} from "../../../../types/schedule";
+import { useErrorModal } from "../../../../hooks/useErrorModal";
+import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 
 interface IProposedTimeTag {
   translate: (key: string) => string;
-  item: IProposingTime;
+  item: IProposedScheduleTime;
+  index: number;
   isSelected: boolean;
-  setSelectedOption: (item: IProposingTime) => void;
+  setSelectedOption: (item: IProposedScheduleTime) => void;
 }
 
 const EmptyVideoCall = ({ translate }) => {
@@ -35,7 +49,7 @@ const ConfirmedRequestedCall = ({
   confirmedOption,
 }: {
   translate: (key: string) => string;
-  confirmedOption: IProposingTime;
+  confirmedOption: IProposedScheduleTime;
 }) => {
   const url = "https://meet.google.com/abc-defg-hij";
 
@@ -43,7 +57,7 @@ const ConfirmedRequestedCall = ({
     openUrlInApp(url);
   };
 
-  const dateTimeObject = new Date(confirmedOption.dateTime);
+  const dateTimeObject = new Date(confirmedOption.proposal);
 
   return (
     <View className="my-4 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
@@ -113,10 +127,11 @@ const EmptyProposingTime = ({
 const ProposedTimeTag: FC<IProposedTimeTag> = ({
   translate,
   item,
+  index,
   isSelected,
   setSelectedOption,
 }) => {
-  const dateTimeObject = new Date(item?.dateTime);
+  const dateTimeObject = new Date(item?.proposal);
 
   const time = dateTimeObject.toLocaleTimeString([], {
     hour: "2-digit",
@@ -139,11 +154,10 @@ const ProposedTimeTag: FC<IProposedTimeTag> = ({
     >
       <View className="flex w-full flex-row items-center justify-between">
         <Text className="text-md font-normal leading-tight text-orange-500">
-          {translate("challenge_detail_screen.option")} {item?.index}
+          {translate("challenge_detail_screen.option")} {index}
         </Text>
         <Text className="text-md font-semibold leading-snug text-zinc-500">
-          {translate("challenge_detail_screen.number_of_vote")}:
-          {item?.numberOfVotes}
+          {translate("challenge_detail_screen.number_of_vote")}:{item?.votes}
         </Text>
       </View>
 
@@ -160,50 +174,106 @@ const ProposedTimeTag: FC<IProposedTimeTag> = ({
   );
 };
 
-const mock_proposingOptions = [
-  {
-    dateTime: "2023-10-18T09:49:26.000Z",
-    id: "1",
-    index: 1,
-    numberOfVotes: 2,
-    isConfirmed: false,
-  },
-  {
-    dateTime: "2023-10-19T04:49:34.000Z",
-    id: "2",
-    index: 2,
-    numberOfVotes: 10,
-    isConfirmed: true,
-  },
-];
+interface ICompanyCoachCalendarTabCompanyViewProps {
+  challengeId: string;
+  challengeState: ICertifiedChallengeState;
+}
 
-const CompanyCoachCalendarTabCoachView = () => {
-  const [proposingOptions, setProposingOptions] = useState<IProposingTime[]>(
-    mock_proposingOptions as IProposingTime[]
-  );
-  const [selectedOption, setSelectedOption] = useState<IProposingTime>(null);
-  const [confirmedOption, setConfirmedOption] = useState<IProposingTime>(null);
+const CompanyCoachCalendarTabCompanyView: FC<
+  ICompanyCoachCalendarTabCompanyViewProps
+> = ({ challengeId, challengeState }) => {
+  const [proposingOptions, setProposingOptions] = useState<
+    IProposedScheduleTime[]
+  >([] as IProposedScheduleTime[]);
+  const [selectedOption, setSelectedOption] =
+    useState<IProposedScheduleTime>(null);
+  const [confirmedOption, setConfirmedOption] =
+    useState<IProposedScheduleTime>(null);
+
+  const [isCoachProposed, setIsCoachProposed] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
-  const handleVote = () => {
-    // call api
+  const currentChallengeState = getInprogressState(challengeState);
+
+  const {
+    isErrorModalOpen,
+    erroModalTitle,
+    errorModalDescription,
+    openErrorModal,
+    closeErrorModal,
+  } = useErrorModal();
+
+  const getScheduledVideocall = async () => {
+    if (!challengeId || !currentChallengeState) return;
+    try {
+      const res = await getAllScheduleVideoCall(challengeId);
+      if (res?.data && res?.data.length > 0) {
+        const scheduledOptions = res?.data.find((item) => {
+          return (
+            item.schedule?.phase === currentChallengeState &&
+            (currentChallengeState === "check"
+              ? item.schedule?.check === challengeState.checkpoint
+              : true)
+          );
+        });
+        const confirmedOption = scheduledOptions?.proposals.find(
+          (item) => item?.isConfirmed > 0
+        );
+        if (confirmedOption) setConfirmedOption(confirmedOption);
+        if (scheduledOptions?.proposals?.length > 0) {
+          setProposingOptions(scheduledOptions?.proposals);
+          setIsCoachProposed(true);
+        }
+      }
+    } catch (error) {
+      openErrorModal({
+        title: t("dialog.proposing_time.error_title"),
+        description: t("dialog.proposing_time.error_description"),
+      });
+    }
+  };
+
+  const handleVote = async () => {
+    try {
+      const res = await createVoteScheduleVideoCall(selectedOption.id);
+
+      if (res.status === 201) {
+        getScheduledVideocall();
+        GlobalToastController.showModal({
+          message: t("toast.vote_proposing_time_success") as string,
+        });
+      }
+    } catch (error) {
+      if (error.response?.data.statusCode == 403) {
+        openErrorModal({
+          title: t("dialog.proposing_time.error_title"),
+          description: t("dialog.proposing_time.error_description"),
+        });
+      } else {
+        openErrorModal({
+          title: t("error"),
+          description: t("error_general_message"),
+        });
+      }
+    }
   };
 
   useEffect(() => {
-    if (proposingOptions.length > 0) {
-      const confirmedOption = proposingOptions.find(
-        (item) => item.isConfirmed === true
-      );
-      if (!confirmedOption) {
-        setConfirmedOption(confirmedOption);
-      }
-    }
-  }),
-    [proposingOptions];
+    getScheduledVideocall();
+  }, [challengeId, currentChallengeState]);
 
   return (
     <ScrollView className="relative flex h-full flex-1 flex-col p-4">
+      <ErrorDialog
+        title={erroModalTitle}
+        description={errorModalDescription}
+        isVisible={isErrorModalOpen}
+        confirmButtonLabel="Okay"
+        onConfirm={closeErrorModal}
+        onClosed={closeErrorModal}
+      />
+
       <View className="flex flex-col rounded-lg py-2">
         <Text className="text-md font-semibold leading-tight text-zinc-500">
           {t("challenge_detail_screen.request_video_call")}
@@ -217,36 +287,41 @@ const CompanyCoachCalendarTabCoachView = () => {
           <EmptyVideoCall translate={t} />
         )}
       </View>
-      <View className="flex flex-1">
-        <View className="flex flex-row justify-between pb-2">
-          <Text className="text-md font-semibold leading-tight text-zinc-500">
-            {t("challenge_detail_screen.coach_proposing_time")}
-          </Text>
-        </View>
-        {proposingOptions.length > 0 ? (
-          proposingOptions.map((item) => (
-            <ProposedTimeTag
-              translate={t}
-              key={item.index}
-              item={item}
-              isSelected={selectedOption?.id === item.id}
-              setSelectedOption={setSelectedOption}
+      {!confirmedOption && (
+        <View className="flex flex-1">
+          <View className="flex flex-row justify-between pb-2">
+            <Text className="text-md font-semibold leading-tight text-zinc-500">
+              {t("challenge_detail_screen.coach_proposing_time")}
+            </Text>
+          </View>
+          {proposingOptions.length > 0 ? (
+            proposingOptions.map((item, index) => (
+              <View key={item?.id}>
+                <ProposedTimeTag
+                  translate={t}
+                  key={index}
+                  index={index + 1}
+                  item={item}
+                  isSelected={selectedOption?.id === item.id}
+                  setSelectedOption={setSelectedOption}
+                />
+              </View>
+            ))
+          ) : (
+            <EmptyProposingTime translate={t} />
+          )}
+          {proposingOptions.length > 0 && (
+            <Button
+              title={t("challenge_detail_screen.vote")}
+              containerClassName="flex-1 bg-primary-default my-5 "
+              textClassName="text-white text-md leading-6"
+              onPress={handleVote}
             />
-          ))
-        ) : (
-          <EmptyProposingTime translate={t} />
-        )}
-      </View>
-      {proposingOptions.length > 0 && (
-        <Button
-          title={t("challenge_detail_screen.vote")}
-          containerClassName="flex-1 bg-primary-default my-5 "
-          textClassName="text-white text-md leading-6"
-          onPress={handleVote}
-        />
+          )}
+        </View>
       )}
     </ScrollView>
   );
 };
 
-export default CompanyCoachCalendarTabCoachView;
+export default CompanyCoachCalendarTabCompanyView;

@@ -282,7 +282,11 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           <>
             {isCertifiedChallenge ? (
               challengeOwner.companyAccount ? (
-                <CompanyCoachCalendarTabCoachView />
+                <CompanyCoachCalendarTabCoachView
+                  shouldScreenRefresh={shouldScreenRefresh}
+                  challengeId={challengeId}
+                  challengeState={challengeState}
+                />
               ) : (
                 <IndividualCoachCalendarTab
                   isCoach={false}

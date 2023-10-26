@@ -40,6 +40,7 @@ interface ICoachTabProps {
     React.SetStateAction<ICertifiedChallengeState>
   >;
   isChallengeCompleted?: boolean;
+  setShouldScreenRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const renderTouchpointCircle = (status: IChallengeTouchpointStatus) => {
@@ -266,6 +267,7 @@ const CoachTab: FC<ICoachTabProps> = ({
   challengeState,
   setChallengeState,
   isChallengeCompleted,
+  setShouldScreenRefresh,
 }) => {
   const [
     isChangeTouchpointStatusModalVisible,
@@ -305,6 +307,7 @@ const CoachTab: FC<ICoachTabProps> = ({
           message: t("toast.open_touchpoint_success") as string,
         });
         getChallengeStatus();
+        setShouldScreenRefresh(true);
       }
     } catch (error) {
       GlobalToastController.showModal({

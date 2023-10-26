@@ -29,7 +29,6 @@ import { useTabIndex } from "../../../../hooks/useTabIndex";
 import ParticipantsTab from "./ParticipantsTab";
 import CompanyCoachTab from "./CompanyCoachTab";
 import CompanySkillsTab from "./CompanySkillsTab";
-import CompanyCoachCalendarTabCoachView from "./CompanyCoachCalendarTabCoachView";
 import CompanyCoachCalendarTabCompanyView from "./CompanyCoachCalendarTabCompanyView";
 
 import Button from "../../../../component/common/Buttons/Button";
@@ -286,7 +285,12 @@ export const ChallengeCompanyDetailScreen: FC<
           </>
         );
       case CHALLENGE_TABS_KEY.COACH_CALENDAR:
-        return <CompanyCoachCalendarTabCompanyView />;
+        return (
+          <CompanyCoachCalendarTabCompanyView
+            challengeId={challengeId}
+            challengeState={challengeState}
+          />
+        );
     }
   };
 

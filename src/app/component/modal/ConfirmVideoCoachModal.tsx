@@ -14,7 +14,7 @@ import ErrorText from "../common/ErrorText";
 import { confirmProposalByCoach } from "../../service/schedule";
 import GlobalToastController from "../common/Toast/GlobalToastController";
 
-interface Props {
+interface IConfirmVideoCoachModalProps {
   modalVisible: boolean;
   openErrorModal: (value: { title: string; description: string }) => void;
   setModalVisible: (value: boolean) => void;
@@ -28,7 +28,7 @@ export default function ConfirmVideoCoachModal({
   modalVisible,
   setModalVisible,
   setConfirmedOption,
-}: Props) {
+}: IConfirmVideoCoachModalProps) {
   const { t } = useTranslation();
   const [selectedDatetime, setSelectedDatetime] = useState<Date | null>(null);
 
@@ -57,7 +57,7 @@ export default function ConfirmVideoCoachModal({
       });
 
       if (res.status === 201) {
-        setConfirmedOption(selectedOption);
+        setConfirmedOption({ ...selectedOption, meetingUrl: getValues("url") });
         GlobalToastController.showModal({
           message: t("toast.proposing_time_success") as string,
         });

@@ -117,6 +117,7 @@ export const RightPersonalChallengeDetailOptions: FC<
             message:
               t("toast.completed_challenge_success") ||
               "Challenge has been completed successfully !",
+            isScreenHasBottomNav: false,
           });
         }
       })

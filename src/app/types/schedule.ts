@@ -2,6 +2,7 @@ export interface IProposingScheduleTime {
   id?: string;
   proposal: string | Date; // proposal time
   index?: number;
+  meetingUrl?: string;
 }
 
 export interface IScheduleProposal {

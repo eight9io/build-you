@@ -30,6 +30,7 @@ import {
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
 import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
+import PopUpMenu from "../../../../component/common/PopUpMenu";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;
@@ -72,20 +73,38 @@ const ConfirmedRequestedCall = ({
   translate: (key: string) => string;
   confirmedOption: IProposingScheduleTime;
 }) => {
-  const url = "https://meet.google.com/abc-defg-hij";
-
   const handleOpenLink = async () => {
-    openUrlInApp(url);
+    openUrlInApp(confirmedOption.meetingUrl);
   };
-
   const dateTimeObject = new Date(confirmedOption.proposal);
 
+  const handleEdit = () => {};
+
+  const handleDelete = () => {};
+
   return (
-    <View className="my-4 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
-      <View className="inline-flex items-start justify-between self-stretch">
+    <View className="my-4 flex-1 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
+      <View className="flex w-full flex-row items-center justify-between">
         <Text className="text-md font-semibold leading-tight text-green-500">
           {translate("challenge_detail_screen.confirmed")}
         </Text>
+        <View>
+          <PopUpMenu
+            iconColor="#6C6E76"
+            options={[
+              {
+                // text: translate("pop_up_menu.edit"),
+                text: "Edit - not implemented",
+                onPress: handleEdit,
+              },
+              {
+                // text: translate("pop_up_menu.delete"),
+                text: "Delete - not implemented",
+                onPress: handleDelete,
+              },
+            ]}
+          />
+        </View>
       </View>
       <View className="my-2 h-px self-stretch border border-slate-100"></View>
       <View className="flex flex-row items-end justify-between self-stretch">
@@ -332,6 +351,7 @@ const CompanyCoachCalendarTabCoachView: FC<
       setIsCoachProposed(true);
       GlobalToastController.showModal({
         message: t("toast.proposing_time_success") as string,
+        isScreenHasBottomNav: false,
       });
     } catch (error) {
       openErrorModal({

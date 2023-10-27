@@ -6,6 +6,7 @@ export type GlobalToastRef = {
 
 export interface IGlobalToastProps {
   message?: string;
+  isScreenHasBottomNav?: boolean;
 }
 
 export default class GlobalToastController {

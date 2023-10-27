@@ -13,12 +13,16 @@ import GlobalToastController, {
   IGlobalToastProps,
 } from "./GlobalToastController";
 import clsx from "clsx";
+import { useNavigation } from "@react-navigation/native";
 
 const duration = 2000;
 const Toast = () => {
   const fadeAnim = new Animated.Value(0);
   const [toastVisible, setToastVisible] = useState<boolean>(false);
   const [message, setMessage] = useState("");
+  const [isScreenHasBottomNav, setIsScreenHasBottomNav] =
+    useState<boolean>(true);
+
   const toastRef = useRef<GlobalToastRef>();
   useLayoutEffect(() => {
     GlobalToastController.setModalRef(toastRef);
@@ -32,6 +36,7 @@ const Toast = () => {
         if (notification.message) {
           setMessage(notification.message);
         }
+        setIsScreenHasBottomNav(notification.isScreenHasBottomNav);
       },
     }),
     []
@@ -67,7 +72,10 @@ const Toast = () => {
       style={[{ opacity: fadeAnim }]}
       className={clsx(
         "absolute  left-[20px] right-[20px]  z-[2000]  flex-row justify-between rounded-xl bg-[#24252B] pb-[22px] pl-[16px] pr-[10px] pt-[10px] ",
-        Platform.OS === "ios" ? "bottom-[120px] " : "bottom-[100px] "
+        Platform.OS === "ios" && isScreenHasBottomNav
+          ? "bottom-[120px] "
+          : "bottom-[100px] ",
+        !isScreenHasBottomNav && "bottom-[40px] "
       )}
     >
       <Text className="mt-3  w-[90%] text-h6 text-white">{message}</Text>

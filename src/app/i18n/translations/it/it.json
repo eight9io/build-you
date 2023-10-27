@@ -50,7 +50,8 @@
     "open_meeting": "Incontro aperto",
     "link": "Link",
     "vote": "Vota",
-    "confirm": ""
+    "confirm": "Conferma",
+    "voted_waiting": "Votato. Attendi fino alla conferma del coach."
   },
   "bottom_nav": {
     "feed": "Feed",
@@ -151,6 +152,14 @@
       "required": "Per favore ripeti la tua password.",
       "type": "repeat_password",
       "placeholder": "Ripeti password"
+    },
+    {
+      "label": "URL",
+      "name": "url",
+      "error": "URL non valido.",
+      "required": "Si prega di inserire il tuo URL.",
+      "type": "url",
+      "placeholder": "Inserisci il tuo URL"
     }
   ],
   "register_screen.err_policy": "Si prega di accettare la nostra politica sulla privacy",
@@ -449,7 +458,9 @@
     "proposing_time_success": "Proposta inviata con successo!",
     "proposing_time_error": "Proposta non inviata! Riprova più tardi.",
     "confirm_time_success": "Tempo confermato con successo!",
-    "confirm_time_error": "Tempo non confermato! Riprova più tardi."
+    "confirm_time_error": "Tempo non confermato! Riprova più tardi.",
+    "vote_proposing_time_success": "Voto per la proposta dell'orario effettuato con successo!",
+    "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
@@ -707,5 +718,12 @@
       "edit": "Edit",
       "delete": "Delete"
     }
+  },
+  "confirm_time_modal": {
+    "confirm": "Conferma",
+    "option": "Opzione",
+    "title": "Conferma orario",
+    "link_video_call": "Link videochiamata",
+    "link_video_call_placeholder": "Inserisci il link della videochiamata"
   }
 }

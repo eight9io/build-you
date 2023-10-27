@@ -170,6 +170,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       await serviceAddChallengeParticipant(challengeId);
       GlobalToastController.showModal({
         message: t("toast.joined_success") || "You have joined the challenge!",
+        isScreenHasBottomNav: false,
       });
       setIsJoined(true);
       setIsJoinedLocal && setIsJoinedLocal(true);
@@ -199,6 +200,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       await serviceRemoveChallengeParticipant(challengeId);
       GlobalToastController.showModal({
         message: t("toast.leave_success") || "You have left the challenge!",
+        isScreenHasBottomNav: false,
       });
       setIsJoined(false);
       setIsJoinedLocal && setIsJoinedLocal(false);

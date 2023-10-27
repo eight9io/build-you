@@ -394,7 +394,9 @@
     },
     "proposing_time": {
       "title": "Do you want to submit these proposing time?",
-      "description": "You cannot undo this action"
+      "description": "You cannot undo this action",
+      "error_title": "Error",
+      "error_description": "Chat and video call are available only when a phase is in progress."
     },
     "cancel": "Cancel",
     "close": "Close",
@@ -443,7 +445,13 @@
     "open_touchpoint_error": "Update touchpoint status failed!. Please try again later.",
     "cannot_close_touchpoint_error": "You cannot close this touchpoint, when the challenge is not completed.",
     "rate_skills_success": "Rate skills successfully!",
-    "rate_skills_error": "Rate skills failed!. Please try again later."
+    "rate_skills_error": "Rate skills failed!. Please try again later.",
+    "proposing_time_success": "Proposing time successfully!",
+    "proposing_time_error": "Proposing time failed!. Please try again later.",
+    "confirm_time_success": "Confirm time successfully!",
+    "confirm_time_error": "Confirm time failed!. Please try again later.",
+    "vote_proposing_time_success": "Vote proposing time successfully!",
+    "vote_proposing_time_error": "Vote proposing time failed!. Please try again later."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
@@ -701,5 +709,11 @@
       "edit": "Edit",
       "delete": "Delete"
     }
+  },
+  "confirm_time_modal": {
+    "confirm": "Confirm",
+    "title": "Confirm time",
+    "link_video_call": "Link video call",
+    "link_video_call_placeholder": "Enter link video call"
   }
 }

@@ -37,12 +37,11 @@ const CertifiedChallengeCard: React.FC<ICertifiedChallengeCardProps> = ({
     : item?.owner;
   const companyName = challengeOwner.companyAccount && challengeOwner?.name;
 
-  const { getUserProfile } = useUserProfileStore();
-  const currentUser = getUserProfile();
   const { getChallengeRatingUpdate } = useChallengeUpdateStore();
   const challengeRatingUpdate = getChallengeRatingUpdate();
 
   const isCertifiedChallenge = item?.type === "certified";
+  const challengeStatus = item.status;
 
   const onPress = () => {
     if (navigation) {
@@ -53,15 +52,6 @@ const CertifiedChallengeCard: React.FC<ICertifiedChallengeCardProps> = ({
       return;
     }
   };
-  // find participants status with current user
-  const isCurrentUserParticipant = item?.participants?.find(
-    (participant) => participant.id === currentUser?.id
-  );
-
-  const challengeStatus =
-    challengeOwner.id === currentUser?.id
-      ? item.status
-      : isCurrentUserParticipant?.challengeStatus;
 
   useEffect(() => {
     const fetchChallengeRating = async () => {

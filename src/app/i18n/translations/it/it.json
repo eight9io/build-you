@@ -394,7 +394,9 @@
     },
     "proposing_time": {
       "title": "Desideri inviare questi tempi di proposta?",
-      "description": "Questa azione non può essere annullata"
+      "description": "Questa azione non può essere annullata",
+      "error_title": "Errore",
+      "error_description": "Chat e videochiamata sono disponibili solo quando una fase è in corso."
     },
     "cancel": "Cancella",
     "close": "Chiudi",
@@ -443,7 +445,11 @@
     "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi.",
     "cannot_close_touchpoint_error": "Non puoi chiudere questo touchpoint quando la sfida non è completata.",
     "rate_skills_success": "Valutazione competenze riuscita!",
-    "rate_skills_error": "Valutazione competenze fallita! Riprova più tardi."
+    "rate_skills_error": "Valutazione competenze fallita! Riprova più tardi.",
+    "proposing_time_success": "Proposta inviata con successo!",
+    "proposing_time_error": "Proposta non inviata! Riprova più tardi.",
+    "confirm_time_success": "Tempo confermato con successo!",
+    "confirm_time_error": "Tempo non confermato! Riprova più tardi."
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",

@@ -15,20 +15,18 @@ import {
 } from "../../../../service/schedule";
 import { getInprogressState } from "./CompanyCoachCalendarTabCoachView";
 
-import {
-  IProposedScheduleTime,
-  IProposingScheduleTime,
-} from "../../../../types/schedule";
+import { IProposalTime } from "../../../../types/schedule";
 import { useErrorModal } from "../../../../hooks/useErrorModal";
 import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { set } from "react-native-reanimated";
 
 interface IProposedTimeTag {
   translate: (key: string) => string;
-  item: IProposedScheduleTime;
+  item: IProposalTime;
   index: number;
   isSelected: boolean;
-  setSelectedOption: (item: IProposedScheduleTime) => void;
+  handleSelectProposedTime?: (item: IProposalTime) => void;
 }
 
 const EmptyVideoCall = ({ translate }) => {
@@ -49,7 +47,7 @@ const ConfirmedRequestedCall = ({
   confirmedOption,
 }: {
   translate: (key: string) => string;
-  confirmedOption: IProposedScheduleTime;
+  confirmedOption: IProposalTime;
 }) => {
   const url = "https://meet.google.com/abc-defg-hij";
 
@@ -129,7 +127,7 @@ const ProposedTimeTag: FC<IProposedTimeTag> = ({
   item,
   index,
   isSelected,
-  setSelectedOption,
+  handleSelectProposedTime,
 }) => {
   const dateTimeObject = new Date(item?.proposal);
 
@@ -150,7 +148,7 @@ const ProposedTimeTag: FC<IProposedTimeTag> = ({
         "my-2 flex-col items-start justify-start rounded-lg border border-transparent bg-white p-4 shadow-sm",
         isSelected && "border border-orange-500"
       )}
-      onPress={() => setSelectedOption(item)}
+      onPress={() => handleSelectProposedTime && handleSelectProposedTime(item)}
     >
       <View className="flex w-full flex-row items-center justify-between">
         <Text className="text-md font-normal leading-tight text-orange-500">
@@ -182,15 +180,15 @@ interface ICompanyCoachCalendarTabCompanyViewProps {
 const CompanyCoachCalendarTabCompanyView: FC<
   ICompanyCoachCalendarTabCompanyViewProps
 > = ({ challengeId, challengeState }) => {
-  const [proposingOptions, setProposingOptions] = useState<
-    IProposedScheduleTime[]
-  >([] as IProposedScheduleTime[]);
-  const [selectedOption, setSelectedOption] =
-    useState<IProposedScheduleTime>(null);
-  const [confirmedOption, setConfirmedOption] =
-    useState<IProposedScheduleTime>(null);
+  const [proposingOptions, setProposingOptions] = useState<IProposalTime[]>(
+    [] as IProposalTime[]
+  );
+  const [selectedOptions, setSelectedOptions] = useState<IProposalTime[]>([]);
+  const [confirmedOption, setConfirmedOption] = useState<IProposalTime>(null);
 
   const [isCoachProposed, setIsCoachProposed] = useState<boolean>(false);
+  const [isCurrentUserVotedProposedTime, setIsCurrentUserVotedProposedTime] =
+    useState<boolean>(false);
 
   const { t } = useTranslation();
 
@@ -217,9 +215,16 @@ const CompanyCoachCalendarTabCompanyView: FC<
               : true)
           );
         });
+        const proposedTimeVotedByUser = scheduledOptions?.proposals.filter(
+          (item) => item?.isVotedByCurrentUser
+        );
         const confirmedOption = scheduledOptions?.proposals.find(
           (item) => item?.isConfirmed > 0
         );
+        if (proposedTimeVotedByUser?.length > 0) {
+          setIsCurrentUserVotedProposedTime(true);
+          setSelectedOptions(proposedTimeVotedByUser);
+        }
         if (confirmedOption) setConfirmedOption(confirmedOption);
         if (scheduledOptions?.proposals?.length > 0) {
           setProposingOptions(scheduledOptions?.proposals);
@@ -236,12 +241,26 @@ const CompanyCoachCalendarTabCompanyView: FC<
 
   const handleVote = async () => {
     try {
-      const res = await createVoteScheduleVideoCall(selectedOption.id);
+      // Handle multiple selected options
+      const promises = selectedOptions.map((option) =>
+        createVoteScheduleVideoCall(option.id)
+      );
+      const results = await Promise.allSettled(promises);
 
-      if (res.status === 201) {
+      // Check if all requests were successful
+      const allSucceeded = results.every(
+        (result) => result.status === "fulfilled" && result.value.status === 201
+      );
+
+      if (allSucceeded) {
         getScheduledVideocall();
         GlobalToastController.showModal({
           message: t("toast.vote_proposing_time_success") as string,
+        });
+      } else {
+        openErrorModal({
+          title: t("error"),
+          description: t("error_general_message"),
         });
       }
     } catch (error) {
@@ -257,6 +276,17 @@ const CompanyCoachCalendarTabCompanyView: FC<
         });
       }
     }
+  };
+
+  const handleSelectProposedTime = (item: IProposalTime) => {
+    setSelectedOptions((prev) => {
+      const isSelected = prev?.some((option) => option.id === item.id);
+      if (isSelected) {
+        return prev?.filter((option) => option.id !== item.id);
+      } else {
+        return [...prev, item];
+      }
+    });
   };
 
   useEffect(() => {
@@ -287,7 +317,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
           <EmptyVideoCall translate={t} />
         )}
       </View>
-      {!confirmedOption && (
+      {!confirmedOption && !isCurrentUserVotedProposedTime && (
         <View className="flex flex-1">
           <View className="flex flex-row justify-between pb-2">
             <Text className="text-md font-semibold leading-tight text-zinc-500">
@@ -302,8 +332,10 @@ const CompanyCoachCalendarTabCompanyView: FC<
                   key={index}
                   index={index + 1}
                   item={item}
-                  isSelected={selectedOption?.id === item.id}
-                  setSelectedOption={setSelectedOption}
+                  isSelected={selectedOptions?.some(
+                    (option) => option.id === item.id
+                  )}
+                  handleSelectProposedTime={handleSelectProposedTime}
                 />
               </View>
             ))
@@ -316,8 +348,42 @@ const CompanyCoachCalendarTabCompanyView: FC<
               containerClassName="flex-1 bg-primary-default my-5 "
               textClassName="text-white text-md leading-6"
               onPress={handleVote}
+              isDisabled={selectedOptions?.length === 0}
+              disabledContainerClassName="flex-1 bg-gray-300 my-5 "
+              disabledTextClassName="text-white text-md leading-6"
             />
           )}
+        </View>
+      )}
+      {!confirmedOption && isCurrentUserVotedProposedTime && (
+        <View className="flex flex-1">
+          <View className="flex flex-row justify-between pb-2">
+            <Text className="text-md font-semibold leading-tight text-zinc-500">
+              {t("challenge_detail_screen.coach_proposing_time")}
+            </Text>
+          </View>
+          {proposingOptions.length > 0 ? (
+            proposingOptions.map((item, index) => (
+              <View key={item?.id}>
+                <ProposedTimeTag
+                  translate={t}
+                  key={index}
+                  index={index + 1}
+                  item={item}
+                  isSelected={selectedOptions?.some(
+                    (option) => option.id === item.id
+                  )}
+                />
+              </View>
+            ))
+          ) : (
+            <EmptyProposingTime translate={t} />
+          )}
+          <View className="flex flex-row justify-between pb-2">
+            <Text className="text-md leading-tight text-zinc-500">
+              {t("challenge_detail_screen.voted_waiting")}
+            </Text>
+          </View>
         </View>
       )}
     </ScrollView>

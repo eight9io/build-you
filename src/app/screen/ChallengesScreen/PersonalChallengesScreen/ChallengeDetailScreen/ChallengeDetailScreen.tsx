@@ -38,6 +38,7 @@ import GlobalDialogController from "../../../../component/common/Dialog/GlobalDi
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
 import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
+import CompanyCoachCalendarTabCompanyView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCompanyView";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -282,8 +283,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           <>
             {isCertifiedChallenge ? (
               challengeOwner.companyAccount ? (
-                <CompanyCoachCalendarTabCoachView
-                  shouldScreenRefresh={shouldScreenRefresh}
+                <CompanyCoachCalendarTabCompanyView
                   challengeId={challengeId}
                   challengeState={challengeState}
                 />

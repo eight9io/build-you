@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import Header from "../common/Header";
 import NavButton from "../common/Buttons/NavButton";
-import { IProposedScheduleTime } from "../../types/schedule";
+import { IProposingScheduleTime } from "../../types/schedule";
 
 import { ConfirmVideoCallUrlValidationSchema } from "../../Validators/validators";
 import TextInput from "../common/Inputs/TextInput";
@@ -18,8 +18,8 @@ interface Props {
   modalVisible: boolean;
   openErrorModal: (value: { title: string; description: string }) => void;
   setModalVisible: (value: boolean) => void;
-  selectedOption: IProposedScheduleTime;
-  setConfirmedOption: (value: IProposedScheduleTime) => void;
+  selectedOption: IProposingScheduleTime;
+  setConfirmedOption: (value: IProposingScheduleTime) => void;
 }
 
 export default function ConfirmVideoCoachModal({
@@ -108,7 +108,7 @@ export default function ConfirmVideoCoachModal({
           }
           containerStyle="mb-4"
         />
-        <View className="flex flex-col p-3">
+        <View className="flex flex-col p-2">
           <View className="flex flex-col">
             <Text className=" text-md font-normal leading-tight text-orange-500">
               {t("confirm_time_modal.option")}

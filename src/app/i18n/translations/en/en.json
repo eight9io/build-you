@@ -50,7 +50,8 @@
     "open_meeting": "Open meeting",
     "link": "Link",
     "vote": "Vote",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "voted_waiting": "You already voted. Please wait until the coach confirms the time."
   },
   "bottom_nav": {
     "feed": "Feed",
@@ -151,6 +152,14 @@
       "required": "Please repeat your password.",
       "type": "repeat_password",
       "placeholder": "Repeat your password"
+    },
+    {
+      "label": "URL",
+      "name": "url",
+      "error": "URL is invalid.",
+      "required": "Please fill in your URL.",
+      "type": "url",
+      "placeholder": "Enter your URL"
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
@@ -712,6 +721,7 @@
   },
   "confirm_time_modal": {
     "confirm": "Confirm",
+    "option": "Option",
     "title": "Confirm time",
     "link_video_call": "Link video call",
     "link_video_call_placeholder": "Enter link video call"

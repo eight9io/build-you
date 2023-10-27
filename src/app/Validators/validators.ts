@@ -45,8 +45,8 @@ export const ConfirmVideoCallUrlValidationSchema = () => {
   return yup.object().shape({
     url: yup
       .string()
-      .url(t("form.0.error") as string)
-      .required(t("form.0.required") as string)
-      .notOneOf([""], t("form.0.required") as string),
+      .url(t("form.5.error") as string)
+      .required(t("form.5.required") as string)
+      .notOneOf([""], t("form.5.required") as string),
   });
 };

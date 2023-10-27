@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
 import {
-  IProposedScheduleTime,
+  IProposalTime,
   IProposingScheduleTime,
 } from "../../../../types/schedule";
 
@@ -31,19 +31,19 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
 import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
 
-export interface IProposedScheduleTimeTag {
+export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;
   index: number;
-  dateTime: Date;
+  dateTime: Date | string;
   onDelete: (index: number) => void;
 }
 
 export interface IProposedTimeTag {
   translate: (key: string) => string;
-  item: IProposedScheduleTime;
+  item: IProposalTime;
   index: number;
   isSelected: boolean;
-  setSelectedOption: (item: IProposedScheduleTime) => void;
+  setSelectedOption: (item: IProposingScheduleTime) => void;
 }
 
 interface ICompanyCoachCalendarTabCoachViewProps {
@@ -70,7 +70,7 @@ const ConfirmedRequestedCall = ({
   confirmedOption,
 }: {
   translate: (key: string) => string;
-  confirmedOption: IProposedScheduleTime;
+  confirmedOption: IProposingScheduleTime;
 }) => {
   const url = "https://meet.google.com/abc-defg-hij";
 
@@ -145,7 +145,7 @@ const EmptyProposingTime = ({
   );
 };
 
-const ProposingTimeTag: FC<IProposedScheduleTimeTag> = ({
+const ProposingTimeTag: FC<IProposingScheduleTimeTag> = ({
   translate,
   index,
   dateTime,
@@ -255,13 +255,13 @@ const CompanyCoachCalendarTabCoachView: FC<
     IProposingScheduleTime[]
   >([] as IProposingScheduleTime[]);
   const [confirmedOption, setConfirmedOption] =
-    useState<IProposedScheduleTime>(null);
-  const [proposedOptions, setProposedOptions] = useState<
-    IProposedScheduleTime[]
-  >([] as IProposedScheduleTime[]);
+    useState<IProposingScheduleTime>(null);
+  const [proposedOptions, setProposedOptions] = useState<IProposalTime[]>(
+    [] as IProposalTime[]
+  );
   const [isCoachProposed, setIsCoachProposed] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] =
-    useState<IProposedScheduleTime>(null);
+    useState<IProposingScheduleTime>(null);
 
   const [isShowDateTimePicker, setIsShowDateTimePicker] =
     useState<boolean>(false);
@@ -316,7 +316,9 @@ const CompanyCoachCalendarTabCoachView: FC<
   const handleSubmitProposingTime = async () => {
     try {
       const options = proposingOptions.map((item) =>
-        item.proposal.toISOString()
+        typeof item.proposal === "string"
+          ? item.proposal
+          : (item.proposal as Date)?.toISOString()
       );
       const res = await creatProposalScheduleVideoCall({
         challengeId,
@@ -343,7 +345,6 @@ const CompanyCoachCalendarTabCoachView: FC<
   const getScheduledVideocall = async () => {
     if (!challengeId || !currentChallengeState) return;
     try {
-      console.log("run");
       const res = await getAllScheduleVideoCall(challengeId);
       if (res?.data && res?.data.length > 0) {
         const scheduledOptions = res?.data.find(
@@ -370,12 +371,12 @@ const CompanyCoachCalendarTabCoachView: FC<
       });
     }
   };
+
   useEffect(() => {
     getScheduledVideocall();
   }, [challengeId, currentChallengeState]);
 
   useEffect(() => {
-    console.log(shouldScreenRefresh);
     if (shouldScreenRefresh) {
       getScheduledVideocall();
     }
@@ -480,7 +481,7 @@ const CompanyCoachCalendarTabCoachView: FC<
                 <View key={item?.id}>
                   <ProposedTimeTag
                     translate={t}
-                    key={item.index}
+                    key={item?.id}
                     index={index + 1}
                     item={item}
                     isSelected={selectedOption?.id === item.id}

@@ -1,18 +1,41 @@
-export interface IProposedScheduleTime {
-  id: string;
-  challenge: string;
+export interface IProposingScheduleTime {
+  id?: string;
   proposal: string | Date; // proposal time
-  schedule: string;
-  user: string;
-  isConfirmed: number;
-  votes: number;
-  createdAt: string;
-  updatedAt: string;
   index?: number;
 }
 
-export interface IProposingScheduleTime {
-  id?: string;
-  index?: number;
-  proposal: Date; // proposal time
+export interface IScheduleProposal {
+  id: string;
+  challenge: string;
+  status: string;
+  proposals: IProposalTime[];
+  phase: string;
+  check: number;
+}
+
+export interface IProposalTime {
+  id: string;
+  schedule: string;
+  user: string;
+  proposal: string;
+  isConfirmed: number;
+  isVotedByCurrentUser: boolean;
+  votes: number;
+  meetingUrl: string;
+  votedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IProposedScheduleTime {
+  schedule: {
+    check: null | number;
+    createdAt: string;
+    id: string;
+    meetingUrl: null;
+    phase: "intake" | "check" | "closing";
+    stato: string;
+    updatedAt: string;
+  };
+  proposals: IProposalTime[];
 }

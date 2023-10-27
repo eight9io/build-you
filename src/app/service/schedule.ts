@@ -1,3 +1,6 @@
+import { AxiosResponse } from "axios";
+
+import { IProposedScheduleTime, IScheduleProposal } from "../types/schedule";
 import http from "../utils/http";
 
 export const creatProposalScheduleVideoCall = ({
@@ -19,7 +22,9 @@ export const creatProposalScheduleVideoCall = ({
   });
 };
 
-export const getAllScheduleVideoCall = (challengeId: string) => {
+export const getAllScheduleVideoCall = (
+  challengeId: string
+): Promise<AxiosResponse<IProposedScheduleTime[]>> => {
   return http.get(`/schedule/proposal/all/${challengeId}`);
 };
 

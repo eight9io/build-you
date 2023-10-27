@@ -48,22 +48,25 @@ const Skills: FC<ISkillsProps> = ({ skills, ratedSkill }) => {
   return (
     <ScrollView>
       <View className={clsx("mb-[10px] flex w-full flex-col px-4 pr-4 pt-4 ")}>
-        <Text className={clsx("text-h6 font-medium")}>
-          {t("skill_tab.certified") || "Certified"}
-        </Text>
-
-        <View className={clsx("mt-4 flex flex-col")}>
-          {uniqueRatedSkills?.map((skill: ISoftSkillProps, index) => {
-            return (
-              <SkillCompetenceProcess
-                skillName={skill.skill.skill}
-                skillCompetence={skill.rating}
-                key={index}
-                color="bg-success-default"
-              />
-            );
-          })}
-        </View>
+        {uniqueRatedSkills.length > 0 && (
+          <>
+            <Text className={clsx("text-h6 font-medium")}>
+              {t("skill_tab.certified") || "Certified"}
+            </Text>
+            <View className={clsx("mt-4 flex flex-col")}>
+              {uniqueRatedSkills?.map((skill: ISoftSkillProps, index) => {
+                return (
+                  <SkillCompetenceProcess
+                    skillName={skill.skill.skill}
+                    skillCompetence={skill.rating}
+                    key={index}
+                    color="bg-success-default"
+                  />
+                );
+              })}
+            </View>
+          </>
+        )}
       </View>
       <View className={clsx("mb-[100px] flex w-full flex-col px-4 pr-4 pt-4 ")}>
         <Text className={clsx("text-h6 font-medium")}>

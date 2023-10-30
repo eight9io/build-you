@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 import { IUserData } from "../types/user";
 import { serviceGetMe } from "../service/profile";
-import { serviceGetAllUSerChallenges } from "../service/challenge";
+import { serviceGetAllUserChallenges } from "../service/challenge";
 
 export interface UserProfileStore {
   userProfile: IUserData | null;
@@ -53,7 +53,7 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
   },
   getUserAllChallengeIdsAsync: async (userId) => {
     try {
-      const r = await serviceGetAllUSerChallenges(userId);
+      const r = await serviceGetAllUserChallenges(userId);
       const challengeIds = r.data.map((item) => item.id);
       set({
         userAllChallengeIds: challengeIds,

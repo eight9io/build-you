@@ -47,6 +47,7 @@ interface IFeedPostCardProps {
   currentUserId?: string;
   isFocused?: boolean;
   navigation?: any;
+  isCurrentUserChallenge?: boolean;
   challgeneUpdateLike?: INumberOfLikeUpdate;
   challengeUpdateComment?: INumberOfCommentUpdate;
 }
@@ -210,6 +211,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   navigation,
   challgeneUpdateLike,
   challengeUpdateComment,
+  isCurrentUserChallenge,
 }) => {
   const { t } = useTranslation();
   const navigateToUserProfile = () => {
@@ -253,7 +255,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
       });
       return;
     }
-    if (user?.id === currentUserId) {
+    if (user?.id === currentUserId || isCurrentUserChallenge) {
       // User click on his own post on feed
       navigation.navigate("PersonalChallengeDetailScreen", {
         challengeId: challenge?.id,

@@ -50,7 +50,7 @@ export const HomeFeed = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useGetListFollowing();
-  const { getUserProfile } = useUserProfileStore();
+  const { getUserProfile, getUserAllChallengeIds } = useUserProfileStore();
   const userData = getUserProfile();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const {
@@ -61,6 +61,7 @@ export const HomeFeed = () => {
   const challgeneUpdateDetails = getChallengeUpdateDetails();
   const challgeneUpdateLike = getChallengeUpdateLike();
   const challgeneUpdateComment = getChallengeUpdateComment();
+  const currentUserAllChallengeIds = getUserAllChallengeIds();
 
   const isFocused = useIsFocused();
 
@@ -149,6 +150,10 @@ export const HomeFeed = () => {
       if (!item?.id) return null;
       if (item?.isAd) return <AdCard item={item} />;
 
+      const isCurrentUserChallenge = currentUserAllChallengeIds?.includes(
+        item.challenge.id
+      );
+
       return (
         <FeedPostCard
           itemFeedPostCard={item}
@@ -157,6 +162,7 @@ export const HomeFeed = () => {
           navigation={navigation}
           challgeneUpdateLike={challgeneUpdateLike}
           challengeUpdateComment={challgeneUpdateComment}
+          isCurrentUserChallenge={isCurrentUserChallenge}
         />
       );
     },
@@ -376,7 +382,7 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
-            <NavButton
+            <NavButton 
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}
               withBackIcon

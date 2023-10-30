@@ -148,6 +148,7 @@ export const useAuthStore = create<LoginStore>()(
               .catch(() => {
                 console.log("Ignore Push Notification");
               });
+            setBadgeCount(0); // Set badge count to 0 when user logout, it will be updated when user login again
           }
           delete httpInstance.defaults.headers.common["Authorization"];
           ClearCrashlytics();

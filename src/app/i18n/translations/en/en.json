@@ -404,7 +404,6 @@
     "proposing_time": {
       "title": "Do you want to submit these proposing time?",
       "description": "You cannot undo this action",
-      "error_title": "Error",
       "error_description": "Chat and video call are available only when a phase is in progress."
     },
     "cancel": "Cancel",
@@ -460,7 +459,8 @@
     "confirm_time_success": "Confirm time successfully!",
     "confirm_time_error": "Confirm time failed!. Please try again later.",
     "vote_proposing_time_success": "Vote proposing time successfully!",
-    "vote_proposing_time_error": "Vote proposing time failed!. Please try again later."
+    "vote_proposing_time_error": "Vote proposing time failed!. Please try again later.",
+    "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

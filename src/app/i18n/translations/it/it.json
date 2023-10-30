@@ -460,7 +460,8 @@
     "confirm_time_success": "Tempo confermato con successo!",
     "confirm_time_error": "Tempo non confermato! Riprova più tardi.",
     "vote_proposing_time_success": "Voto per la proposta dell'orario effettuato con successo!",
-    "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi."
+    "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi.",
+    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",

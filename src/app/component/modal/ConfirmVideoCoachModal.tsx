@@ -65,7 +65,7 @@ export default function ConfirmVideoCoachModal({
     } catch (error) {
       if (error.response.data.statusCode == 403) {
         openErrorModal({
-          title: t("dialog.proposing_time.error_title"),
+          title: t("error"),
           description: t("dialog.proposing_time.error_description"),
         });
       } else {

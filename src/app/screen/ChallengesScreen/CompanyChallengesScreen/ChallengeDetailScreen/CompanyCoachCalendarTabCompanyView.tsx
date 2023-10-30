@@ -233,7 +233,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
       }
     } catch (error) {
       openErrorModal({
-        title: t("dialog.proposing_time.error_title"),
+        title: t("error"),
         description: t("dialog.proposing_time.error_description"),
       });
     }
@@ -266,7 +266,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
     } catch (error) {
       if (error.response?.data.statusCode == 403) {
         openErrorModal({
-          title: t("dialog.proposing_time.error_title"),
+          title: t("error"),
           description: t("dialog.proposing_time.error_description"),
         });
       } else {

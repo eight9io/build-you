@@ -19,9 +19,9 @@ import DeleteSvg from "./assets/delete.svg";
 import Button from "../../../../component/common/Buttons/Button";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import {
-  confirmProposalByCoach,
   creatProposalScheduleVideoCall,
   getAllScheduleVideoCall,
+  resetScheduledVideoCall,
 } from "../../../../service/schedule";
 import {
   ICertifiedChallengeState,
@@ -69,18 +69,18 @@ const EmptyVideoCall = ({ translate }) => {
 const ConfirmedRequestedCall = ({
   translate,
   confirmedOption,
+  handleEditScheduledVideoCallLink,
+  handleDeleteConfirmedScheduledVideoCall,
 }: {
   translate: (key: string) => string;
   confirmedOption: IProposingScheduleTime;
+  handleEditScheduledVideoCallLink: () => void;
+  handleDeleteConfirmedScheduledVideoCall: () => void;
 }) => {
   const handleOpenLink = async () => {
     openUrlInApp(confirmedOption.meetingUrl);
   };
   const dateTimeObject = new Date(confirmedOption.proposal);
-
-  const handleEdit = () => {};
-
-  const handleDelete = () => {};
 
   return (
     <View className="my-4 flex-1 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
@@ -94,13 +94,13 @@ const ConfirmedRequestedCall = ({
             options={[
               {
                 // text: translate("pop_up_menu.edit"),
-                text: "Edit - not implemented",
-                onPress: handleEdit,
+                text: "Edit",
+                onPress: handleEditScheduledVideoCallLink,
               },
               {
                 // text: translate("pop_up_menu.delete"),
-                text: "Delete - not implemented",
-                onPress: handleDelete,
+                text: "Delete",
+                onPress: handleDeleteConfirmedScheduledVideoCall,
               },
             ]}
           />
@@ -355,7 +355,7 @@ const CompanyCoachCalendarTabCoachView: FC<
       });
     } catch (error) {
       openErrorModal({
-        title: t("dialog.proposing_time.error_title"),
+        title: t("error"),
         description: t("dialog.proposing_time.error_description"),
       });
     }
@@ -379,17 +379,45 @@ const CompanyCoachCalendarTabCoachView: FC<
           (item) => item?.isConfirmed > 0
         );
         if (confirmedOption) setConfirmedOption(confirmedOption);
-        if (scheduledOptions?.proposals?.length > 0) {
-          setProposedOptions(scheduledOptions?.proposals);
+        const filteredScheduledOptions = scheduledOptions?.proposals.filter(
+          (item) => item?.proposal
+        );
+        if (filteredScheduledOptions?.length > 0) {
+          setProposedOptions(filteredScheduledOptions);
           setIsCoachProposed(true);
         }
       }
     } catch (error) {
       openErrorModal({
-        title: t("dialog.proposing_time.error_title"),
+        title: t("error"),
         description: t("dialog.proposing_time.error_description"),
       });
     }
+  };
+
+  const handleDeleteConfirmedScheduledVideoCall = async () => {
+    try {
+      await resetScheduledVideoCall(confirmedOption?.schedule);
+      setConfirmedOption(null);
+      setProposedOptions([]);
+      setProposingOptions([]);
+      setIsCoachProposed(false);
+      GlobalToastController.showModal({
+        message: t(
+          "toast.delete_confirmed_scheduled_video_call_success"
+        ) as string,
+        isScreenHasBottomNav: false,
+      });
+    } catch (error) {
+      openErrorModal({
+        title: t("error"),
+        description: t("error_general_message"),
+      });
+    }
+  };
+
+  const handleEditScheduledVideoCallLink = async () => {
+    setIsShowConfirmTimeModal(true);
   };
 
   useEffect(() => {
@@ -447,6 +475,10 @@ const CompanyCoachCalendarTabCoachView: FC<
           <ConfirmedRequestedCall
             translate={t}
             confirmedOption={confirmedOption}
+            handleDeleteConfirmedScheduledVideoCall={
+              handleDeleteConfirmedScheduledVideoCall
+            }
+            handleEditScheduledVideoCallLink={handleEditScheduledVideoCallLink}
           />
         ) : (
           <EmptyVideoCall translate={t} />

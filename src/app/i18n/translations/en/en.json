@@ -699,7 +699,14 @@
   "challenge_detail_screen_tab": {
     "coach": {
       "waiting_for_coach": "Waiting for coach...",
-      "profile": "Profile"
+      "profile": "Profile",
+      "intake": "intake",
+      "closing": "closing",
+      "touchpoint_of_challenge": "Touchpoints of your challenge",
+      "confirm_open_phase": "Do you really want to start the {{phaseName}} phase?",
+      "confirm_close_phase": "Do you really want to close the {{phaseName}} phase?",
+      "yes": "Yes",
+      "no": "No"
     },
     "coach_calendar": {
       "title": "Coach calendar",

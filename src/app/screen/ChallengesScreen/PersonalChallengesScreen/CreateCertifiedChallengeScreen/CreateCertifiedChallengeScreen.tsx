@@ -1,5 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useLayoutEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { useTranslation } from "react-i18next";
 
 import clsx from "clsx";
@@ -41,6 +47,7 @@ const CreateCertifiedChallengeScreen = () => {
   };
   const { t } = useTranslation();
   const navigation = useNav();
+  const scrollViewRef = useRef(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -147,6 +154,7 @@ const CreateCertifiedChallengeScreen = () => {
     >
       <KeyboardAwareFlatList
         data={[]}
+        ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => null}
@@ -291,7 +299,7 @@ const CreateCertifiedChallengeScreen = () => {
                   <ErrorText message={errors.achievementTime.message} />
                 ) : null}
               </View>
-              <View className="mt-5 flex flex-col ">
+              <View className="mt-5 flex flex-col">
                 <Text className="pb-2 text-md font-semibold text-primary-default">
                   {t("form_onboarding.screen_4.soft_skills") || "Soft skills"}
                 </Text>
@@ -300,7 +308,14 @@ const CreateCertifiedChallengeScreen = () => {
                   dropDrownDirection="TOP"
                   openDropdown={openDropdown}
                   setValue={setSoftSkillValue}
-                  setOpenDropdown={setOpenDropdown}
+                  setOpenDropdown={(value: boolean) => {
+                    setOpenDropdown(value);
+
+                    // Scroll to bottom when open dropdown on Android
+                    // Cause: Cannot scroll the dropdown picker because it is nested in a scrollview (Android only) => need to set position which cause the dropdown always open at the bottom
+                    if (Platform.OS === "android" && value)
+                      scrollViewRef.current?.scrollToEnd();
+                  }}
                   selectedCompetencedSkill={selectedCompetencedSkill}
                   setSelectedCompetencedSkill={handleSelectSoftSkills}
                 />

@@ -1,6 +1,6 @@
 import Checkbox from "expo-checkbox";
 import React, { FC, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import OutsidePressHandler from "react-native-outside-press";
 
@@ -134,12 +134,14 @@ const SoftSkillPicker: FC<ISoftSkillPickerProps> = ({
             borderRadius: 8,
             overflow: "scroll",
             zIndex: 10,
+            ...(Platform.OS === "android"
+              ? { position: "relative", top: 0 }
+              : {}),
           }}
           theme="LIGHT"
           multiple={true}
           mode="SIMPLE"
           badgeDotColors={["#e76f51"]}
-
           renderListItem={({ item, isSelected }) => {
             const isSkillAlreadySelected = selectedCompetencedSkill.find(
               (selected) => selected.label === item.label

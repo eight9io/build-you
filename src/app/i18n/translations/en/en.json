@@ -732,5 +732,9 @@
     "title": "Confirm time",
     "link_video_call": "Link video call",
     "link_video_call_placeholder": "Enter link video call"
+  },
+  "search_company": {
+    "no_result": "No company found",
+    "placeholder": "Enter company name"
   }
 }

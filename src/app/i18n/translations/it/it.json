@@ -733,5 +733,9 @@
     "title": "Conferma orario",
     "link_video_call": "Link videochiamata",
     "link_video_call_placeholder": "Inserisci il link della videochiamata"
+  },
+  "search_company": {
+    "no_result": "No company found",
+    "placeholder": "Enter company name"
   }
 }

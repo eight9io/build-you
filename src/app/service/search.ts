@@ -7,3 +7,7 @@ export const servieGetUserOnSearch = async (searchKey: string) => {
   );
   return response.data;
 };
+
+export const getCompaniesByName = async (keyword: string) => {
+  return httpInstance.get(`user/company/search/all/${keyword}`);
+};

@@ -112,7 +112,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     number | null
   >(null);
   const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
-  const [companyList, setCompanyList] = useState<ICompanyDataUser[]>([]);
 
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
@@ -238,10 +237,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     setShowOccupationPicker(false);
   };
 
-  const handleCompanyPicked = (value: number) => {
-    if (value >= 0) {
-      setSelectedCompanyIndex(value);
-      setValue("employeeOf", companyList[value]);
+  const handleCompanyPicked = (selectedCompany: ICompanyDataUser) => {
+    if (selectedCompany) {
+      setValue("employeeOf", selectedCompany);
     }
     setShowCompanyPicker(false);
   };
@@ -276,27 +274,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       setOccupationList(data);
     };
     getOccupationList();
-  }, []);
-
-  useEffect(() => {
-    const getCompanyList = async () => {
-      try {
-        const res = await serviceGetAllCompany();
-        const companyUserList = res.data.map((item: ICompanyData) => {
-          return {
-            ...item.user,
-          };
-        });
-        setCompanyList(companyUserList);
-      } catch (error) {
-        console.error("Error get company list", error);
-        CrashlyticService({
-          errorType: "Get Company List Error",
-          error: error,
-        });
-      }
-    };
-    getCompanyList();
   }, []);
 
   return (
@@ -342,7 +319,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           />
 
           <SeletecPickerCompany
-            companyList={companyList}
             title={t("edit_personal_profile_screen.company") || "Company"}
             show={showCompanyPicker}
             selectedIndex={selectedCompanyIndex}

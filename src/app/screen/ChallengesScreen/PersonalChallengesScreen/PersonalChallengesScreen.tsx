@@ -312,10 +312,12 @@ const PersonalChallengesScreen = ({
 }: {
   navigation: PersonalChallengesScreenNavigationProp;
 }) => {
+  const { t } = useTranslation();
+
   const [index, setIndex] = useState<number>(0);
   const [routes, setRoutes] = useState([
-    { key: "personal", title: "Personal" },
-    { key: "certified", title: "Certified" },
+    { key: "personal", title: t("challenges_tab.personal") },
+    { key: "certified", title: t("challenges_tab.certified") },
   ]);
 
   const { getUserProfile } = useUserProfileStore();
@@ -330,17 +332,16 @@ const PersonalChallengesScreen = ({
   useEffect(() => {
     if (isUserCoach) {
       setRoutes([
-        { key: "personal", title: "Personal" },
-        { key: "certified", title: "Certified" },
+        { key: "personal", title: t("challenges_tab.personal") },
+        { key: "certified", title: t("challenges_tab.certified") },
         {
           key: "coach",
-          title: "Coach",
+          title: t("challenges_tab.coach"),
         },
       ]);
     }
   }, [isUserCoach]);
 
-  const { t } = useTranslation();
   const layout = useWindowDimensions();
 
   const MemoizedPersonalTab = React.memo(PersonalTab);

@@ -737,5 +737,11 @@
   "search_company": {
     "no_result": "No company found",
     "placeholder": "Enter company name"
+  },
+  "challenges_tab": {
+    "personal": "Personali",
+    "coach": "Coach",
+    "certified": "Certificate",
+    "company": "Azienda"
   }
 }

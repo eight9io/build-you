@@ -39,6 +39,8 @@ import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen
 import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
 import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
 import CompanyCoachCalendarTabCompanyView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCompanyView";
+import { IUserData } from "../../../../types/user";
+import { serviceGetOtherUserData } from "../../../../service/user";
 
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
@@ -58,6 +60,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   const { t } = useTranslation();
   const [isJoined, setIsJoined] = useState<boolean>(true);
   const [participantList, setParticipantList] = useState([]);
+  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
+  const coachID = challengeData?.coach;
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
   const [tabRoutes, setTabRoutes] = useState([
@@ -148,6 +152,16 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           });
       }
     }
+    const getCoachData = async () => {
+      if (!coachID) return;
+      try {
+        const response = await serviceGetOtherUserData(coachID);
+        setCoachData(response.data);
+      } catch (error) {
+        console.error("get coach data error", error);
+      }
+    };
+    getCoachData();
     setTabRoutes(tempTabRoutes);
   }, []);
 
@@ -261,7 +275,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       case CHALLENGE_TABS_KEY.COACH:
         return (
           <PersonalCoachTab
-            coachID={challengeCoach}
+            coachData={coachData}
             challengeId={challengeId}
             challengeState={challengeState}
             setChallengeState={setChallengeState}
@@ -291,7 +305,8 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
                 />
               ) : (
                 <IndividualCoachCalendarTab
-                  isCoach={false}
+                  coachData={coachData}
+                  challengeId={challengeId}
                   isChallengeInProgress={isChallengeInProgress}
                 />
               )

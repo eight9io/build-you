@@ -160,6 +160,14 @@
       "required": "Please fill in your URL.",
       "type": "url",
       "placeholder": "Enter your URL"
+    },
+    {
+      "label": "Link video call",
+      "name": "link_video_call",
+      "error": "Link video call is invalid.",
+      "required": "Please fill in your video call url.",
+      "type": "url",
+      "placeholder": "Enter your video call url"
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
@@ -460,7 +468,8 @@
     "confirm_time_error": "Confirm time failed!. Please try again later.",
     "vote_proposing_time_success": "Vote proposing time successfully!",
     "vote_proposing_time_error": "Vote proposing time failed!. Please try again later.",
-    "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!"
+    "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!",
+    "add_calendy_link_success": "Add calendy link successfully!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
@@ -711,6 +720,7 @@
     "coach_calendar": {
       "title": "Coach calendar",
       "book_video_call_btn": "Book video call",
+      "add_schedule_link_btn": "Add schedule link",
       "upcoming": "Upcoming",
       "past": "Past",
       "book_video_call": "Book video call",
@@ -723,7 +733,10 @@
       "schedule_detail_modal_title": "Detail",
       "note": "Note",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "link": "Link",
+      "link_placeholder": "Enter link video call",
+      "link_video_call": "Link video call"
     }
   },
   "confirm_time_modal": {
@@ -736,5 +749,13 @@
   "search_company": {
     "no_result": "No company found",
     "placeholder": "Enter company name"
+  },
+  "create_schedule_modal": {
+    "title": "Create schedule",
+    "save": "Save",
+    "link_video_call": "Link video call",
+    "link_video_call_placeholder": "Enter link video call",
+    "note": "Note",
+    "note_placeholder": "Enter note for coach"
   }
 }

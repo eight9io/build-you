@@ -41,3 +41,15 @@ export interface IProposedScheduleTime {
   };
   proposals: IProposalTime[];
 }
+
+export interface IScheduledTime {
+  check: null | number;
+  createdAt: string;
+  deletedAt: string | null;
+  id: string;
+  meetingUrl: string;
+  note: string;
+  phase: "intake" | "check" | "closing" | null;
+  schedule: string;
+  updatedAt: string;
+}

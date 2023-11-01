@@ -160,6 +160,14 @@
       "required": "Please fill in your URL.",
       "type": "url",
       "placeholder": "Enter your URL"
+    },
+    {
+      "label": "Link video call",
+      "name": "link_video_call",
+      "error": "Link video call is invalid.",
+      "required": "Please fill in your video call url.",
+      "type": "url",
+      "placeholder": "Enter your video call url"
     }
   ],
   "register_screen.err_policy": "Please agree with our privacy policy",
@@ -439,6 +447,9 @@
     "joined_success": "You have joined the challenge!",
     "leave_success": "You have left the challenge!",
     "delete_success": "Delete comment success!",
+    "create_schedule_success": "Create schedule success!",
+    "delete_schedule_success": "Delete schedule success!",
+    "edit_schedule_success": "Edit schedule success!",
     "add_employee_success": "Employee added successfully! ",
     "delete_employee_success": "Employee deleted successfully! ",
     "reset_password_success": "Reset password successfully! ",
@@ -460,7 +471,8 @@
     "confirm_time_error": "Confirm time failed!. Please try again later.",
     "vote_proposing_time_success": "Vote proposing time successfully!",
     "vote_proposing_time_error": "Vote proposing time failed!. Please try again later.",
-    "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!"
+    "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!",
+    "add_calendy_link_success": "Add calendy link successfully!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
@@ -711,11 +723,12 @@
     },
     "coach_calendar": {
       "title": "Coach calendar",
+      "schedule": "Schedule",
       "book_video_call_btn": "Book video call",
+      "add_schedule_link_btn": "Add schedule link",
       "upcoming": "Upcoming",
       "past": "Past",
       "book_video_call": "Book video call",
-      "reschedule_video_call": "Reschedule video call",
       "cancel_video_call": "Cancel video call",
       "empty_schedule": "You haven't scheduled a video call",
       "request_video_call": "Request video call",
@@ -724,7 +737,10 @@
       "schedule_detail_modal_title": "Detail",
       "note": "Note",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "link": "Link",
+      "link_placeholder": "Enter link video call",
+      "link_video_call": "Link video call"
     }
   },
   "confirm_time_modal": {
@@ -743,5 +759,13 @@
     "coach": "Coach",
     "certified": "Certified",
     "company": "Company"
+  },
+  "create_schedule_modal": {
+    "title": "Create schedule",
+    "save": "Save",
+    "link_video_call": "Link video call",
+    "link_video_call_placeholder": "Enter link video call",
+    "note": "Note",
+    "note_placeholder": "Enter note for coach"
   }
 }

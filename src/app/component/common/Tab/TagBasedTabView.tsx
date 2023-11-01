@@ -8,7 +8,6 @@ import {
   TabBarItem,
   TabBarIndicator,
 } from "react-native-tab-view";
-const TAB_MARGIN = 24;
 interface ITagBasedTabViewProps {
   routes: Route[];
   renderScene: (

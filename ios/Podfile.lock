@@ -568,6 +568,8 @@ PODS:
   - RNGoogleSignin (10.0.1):
     - GoogleSignIn (~> 7.0)
     - React-Core
+  - RNIap (12.10.8):
+    - React-Core
   - RNInAppBrowser (3.7.0):
     - React-Core
   - RNNotifee (7.8.0):
@@ -698,6 +700,7 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -884,6 +887,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNInAppBrowser:
     :path: "../node_modules/react-native-inappbrowser-reborn"
   RNNotifee:
@@ -999,6 +1004,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: b167065ee2fcc7fe43a32b35d79d5eb23bceb4ad
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
+  RNIap: 99a559a3642155b47aa0622f9693632010a0b4f7
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128

@@ -21,6 +21,7 @@ import { IUserData } from "../../../../types/user";
 
 import RatedParticipant from "../assets/rated-participant.svg";
 import Empty from "../../../../common/svg/empty-list.svg";
+import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
 interface IParticipantWithRatingSkills {
   id: number;
@@ -39,6 +40,18 @@ interface ICompanySkillsTabProps {
 
 const isUserSkillRated = (skills: ISoftSkill[]) => {
   return skills?.every((skill) => skill?.isRated);
+};
+
+const renderSkills = (skills: ISoftSkill[]) => {
+  return skills.map((skill: ISoftSkill, index) => {
+    return (
+      <View className="flex flex-col" key={index}>
+        <Text className="text-h6 leading-6 text-black-light">
+          {skill.skill}
+        </Text>
+      </View>
+    );
+  });
 };
 
 const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
@@ -119,8 +132,12 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
     }
   }, [challengeData?.id, shouldRefresh]);
 
+    const skillsToRate: ISoftSkill[] =
+      extractSkillsFromChallengeData(challengeData);
+
+
   return (
-    <View className="flex-1 pl-4 ">
+    <View className="flex-1">
       {isRateSkillsModalVisible && (
         <CoachRateChallengeModal
           isVisible={isRateSkillsModalVisible}
@@ -132,10 +149,22 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
       )}
+      {skillsToRate.length > 0 && (
+        <View
+          className={clsx(
+            "mx-4 mt-4 flex flex-col border-b border-gray-70 pb-4"
+          )}
+        >
+          <Text className="text-h6 font-semibold leading-6 text-black-light">
+            {t("challenge_description_tab.soft_skills") || "Soft skills"}
+          </Text>
+          {renderSkills(skillsToRate)}
+        </View>
+      )}
       {participantsWithRatingSkills?.length > 0 && (
         <FlatList
           data={participantsWithRatingSkills}
-          className="pt-4"
+          className="mx-4 pt-4"
           showsVerticalScrollIndicator={true}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => {
@@ -177,16 +206,21 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
         />
       )}
       {participantsWithRatingSkills?.length == 0 && (
-        <View className="mt-2 h-full flex-1 items-center justify-center">
+        <View className="mt-2 flex-1">
           <FlatList
             data={[]}
             renderItem={() => <></>}
             showsVerticalScrollIndicator={true}
             ListFooterComponent={
-              <View className=" justify-cente mt-6 items-center pt-10">
+              <View className="flex-1 items-center justify-center">
                 <Empty />
+                {/* <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
+                  {t("challenge_detail_screen.empty_participants_list")}
+                </Text> */}
               </View>
             }
+            ListFooterComponentStyle={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1 }}
             onRefresh={fetchParticipantsCertifiedChallenge}
             refreshing={shouldRefresh}
           />

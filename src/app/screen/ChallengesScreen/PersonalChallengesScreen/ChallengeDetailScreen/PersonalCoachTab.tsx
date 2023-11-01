@@ -34,7 +34,7 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import i18n from "../../../../i18n/i18n";
 
 interface ICoachTabProps {
-  coachID: string;
+  coachData: IUserData;
   challengeId: string;
   challengeState: ICertifiedChallengeState;
   isCurrentUserChallengeOnwer: boolean;
@@ -278,7 +278,7 @@ export const TouchPointProgress = ({
 };
 
 const PersonalCoachTab: FC<ICoachTabProps> = ({
-  coachID,
+  coachData,
   challengeId,
   challengeState,
   setChallengeState,
@@ -289,7 +289,6 @@ const PersonalCoachTab: FC<ICoachTabProps> = ({
     isChangeTouchpointStatusModalVisible,
     setChangeTouchpointStatusModalVisible,
   ] = useState<boolean>(false);
-  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const { t } = useTranslation();
@@ -339,15 +338,6 @@ const PersonalCoachTab: FC<ICoachTabProps> = ({
   };
 
   useEffect(() => {
-    const getCoachData = async () => {
-      if (!coachID) return;
-      try {
-        const response = await serviceGetOtherUserData(coachID);
-        setCoachData(response.data);
-      } catch (error) {
-        console.error("get coach data error", error);
-      }
-    };
     const getChallengeStatus = async () => {
       if (!challengeId) return;
       try {
@@ -357,9 +347,8 @@ const PersonalCoachTab: FC<ICoachTabProps> = ({
         console.error("error", error);
       }
     };
-    getCoachData();
     getChallengeStatus();
-  }, [coachID, challengeId]);
+  }, [challengeId]);
 
   return (
     <FlatList

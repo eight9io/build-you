@@ -5,37 +5,38 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { SafeAreaView, View, Text } from "react-native";
-
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
+import { SafeAreaView, View, Text } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+import { serviceGetOtherUserData } from "../../../../service/user";
+import { getChallengeById } from "../../../../service/challenge";
+
+import { isObjectEmpty } from "../../../../utils/common";
+import { useTabIndex } from "../../../../hooks/useTabIndex";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
 import {
   ICertifiedChallengeState,
   IChallenge,
 } from "../../../../types/challenge";
+import { IUserData } from "../../../../types/user";
+import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
 
+import CoachTab from "./CoachTab";
+import ChatCoachTab from "./ChatCoachTab";
+import CoachSkillsTab from "./CoachSkillsTab";
+import CompanySkillsTab from "./CompanySkillsTab";
 import Button from "../../../../component/common/Buttons/Button";
-
-import ShareIcon from "../assets/share.svg";
-
+import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import ProgressTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
-import CoachTab from "./CoachTab";
-import CoachSkillsTab from "./CoachSkillsTab";
-import ChatCoachTab from "./ChatCoachTab";
-import { getChallengeById } from "../../../../service/challenge";
-import { isObjectEmpty } from "../../../../utils/common";
-import CustomTabView from "../../../../component/common/Tab/CustomTabView";
-import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
-import CompanySkillsTab from "./CompanySkillsTab";
-import { useTabIndex } from "../../../../hooks/useTabIndex";
-import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
 import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
+import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
+
+import ShareIcon from "../assets/share.svg";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -73,6 +74,7 @@ const PersonalCoachChallengeDetailScreen = ({
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
+  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
@@ -86,6 +88,7 @@ const PersonalCoachChallengeDetailScreen = ({
       ? challengeData?.owner[0]
       : challengeData?.owner
   )?.companyAccount;
+  const challengeCoach = challengeData?.coach;
 
   const { t } = useTranslation();
   const [tabRoutes, setTabRoutes] = useState([
@@ -143,6 +146,19 @@ const PersonalCoachChallengeDetailScreen = ({
   useEffect(() => {
     getChallengeData();
   }, []);
+
+  useEffect(() => {
+    const getCoachData = async () => {
+      if (!challengeCoach) return;
+      try {
+        const response = await serviceGetOtherUserData(challengeCoach);
+        setCoachData(response.data);
+      } catch (error) {
+        console.error("get coach data error", error);
+      }
+    };
+    getCoachData();
+  }, [challengeCoach]);
 
   useEffect(() => {
     if (shouldScreenRefresh) {
@@ -239,8 +255,9 @@ const PersonalCoachChallengeDetailScreen = ({
               />
             ) : (
               <IndividualCoachCalendarTab
-                isCoach={true}
-                isChallengeInProgress
+                coachData={coachData}
+                challengeId={challengeId}
+                isChallengeInProgress={isChallengeInProgress}
               />
             )}
           </>

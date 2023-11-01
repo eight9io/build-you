@@ -32,7 +32,7 @@
     "completed": "Completato",
     "no_progress_yet": "Non ancora progressi",
     "not_participants": "Nessun partecipante al momento",
-    "chat_coach": "Allenatore di chat",
+    "chat_coach": "Chat",
     "rate_skills": "Rate skills",
     "can_not_rate_skills": "Il coach non può valutare le competenze quando la sfida non è completata",
     "request_video_call": "Richiedi una videochiamata",
@@ -160,6 +160,14 @@
       "required": "Si prega di inserire il tuo URL.",
       "type": "url",
       "placeholder": "Inserisci il tuo URL"
+    },
+    {
+      "label": "Link video call",
+      "name": "link_video_call",
+      "error": "Il link della videochiamata non è valido.",
+      "required": "Per favore, inserisci l'URL della videochiamata.",
+      "type": "url",
+      "placeholder": "Inserisci l'URL della videochiamata"
     }
   ],
   "register_screen.err_policy": "Si prega di accettare la nostra politica sulla privacy",
@@ -440,6 +448,9 @@
     "joined_success": "Ti sei unito alla sfida!",
     "leave_success": "Hai abbandonato la sfida!",
     "delete_success": "Commento eliminato con successo!",
+    "create_schedule_success": "Crea programma con successo!",
+    "delete_schedule_success": "Elimina programma con successo!",
+    "edit_schedule_success": "Modifica programma con successo!",
     "add_employee_success": "Dipendente aggiunto correttamente! ",
     "delete_employee_success": "Dipendente eliminato correttamente! ",
     "reset_password_success": "Password reimpostata con successo! ",
@@ -699,32 +710,36 @@
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {
     "coach": {
-      "waiting_for_coach": "Waiting for coach...",
-      "profile": "Profile",
-      "intake": "intake",
-      "closing": "closing",
-      "touchpoint_of_challenge": "Touchpoints of your challenge",
-      "confirm_open_phase": "Do you really want to start the {{phaseName}} phase?",
-      "confirm_close_phase": "Do you really want to close the {{phaseName}} phase?",
-      "yes": "Yes",
+      "waiting_for_coach": "In attesa dell'allenatore...",
+      "profile": "Profilo",
+      "intake": "Introduzione",
+      "closing": "Chiusura",
+      "touchpoint_of_challenge": "Punti di contatto della tua sfida",
+      "confirm_open_phase": "Vuoi davvero iniziare la fase {{phaseName}}?",
+      "confirm_close_phase": "Vuoi davvero chiudere la fase {{phaseName}}?",
+      "yes": "Sì",
       "no": "No"
     },
     "coach_calendar": {
-      "title": "Coach calendar",
-      "book_video_call_btn": "Book video call",
-      "upcoming": "Upcoming",
-      "past": "Past",
-      "book_video_call": "Book video call",
-      "reschedule_video_call": "Reschedule video call",
-      "cancel_video_call": "Cancel video call",
-      "empty_schedule": "You haven't scheduled a video call",
-      "request_video_call": "Request video call",
-      "time": "Time",
-      "date": "Date",
-      "schedule_detail_modal_title": "Detail",
-      "note": "Note",
-      "edit": "Edit",
-      "delete": "Delete"
+      "title": "Calendario allenatore",
+      "schedule": "Programma",
+      "book_video_call_btn": "Prenota videochiamata",
+      "add_schedule_link_btn": "Aggiungi link programma",
+      "upcoming": "Prossime",
+      "past": "Passate",
+      "book_video_call": "Prenota videochiamata",
+      "cancel_video_call": "Annulla videochiamata",
+      "empty_schedule": "Non hai ancora programmato una videochiamata",
+      "request_video_call": "Richiedi videochiamata",
+      "time": "Orario",
+      "date": "Data",
+      "schedule_detail_modal_title": "Dettaglio",
+      "note": "Nota",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "link": "Link",
+      "link_placeholder": "Inserisci il link",
+      "link_video_call": "Link videochiamata"
     }
   },
   "confirm_time_modal": {
@@ -737,5 +752,13 @@
   "search_company": {
     "no_result": "No company found",
     "placeholder": "Enter company name"
+  },
+  "create_schedule_modal": {
+    "title": "Crea programma",
+    "save": "Salva",
+    "link_video_call": "Link videochiamata",
+    "link_video_call_placeholder": "Inserisci il link della videochiamata",
+    "note": "Nota",
+    "note_placeholder": "Inserisci una nota per l'allenatore"
   }
 }

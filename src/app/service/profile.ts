@@ -35,4 +35,16 @@ export const serviceGetMe = () => {
   return http.get<IUserData>("/user/me");
 };
 
+export const serviceUpdateCalendlyLink = ({
+  userId,
+  calendlyLink,
+}: {
+  userId: string;
+  calendlyLink: string;
+}) =>
+  http.post("/user/update/calendly", {
+    id: userId,
+    calendly: calendlyLink,
+  });
+
 // ==== COMPANY  ======

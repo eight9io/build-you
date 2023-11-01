@@ -340,7 +340,6 @@ const PersonalChallengesScreen = ({
     }
   }, [isUserCoach]);
 
-  const { t } = useTranslation();
   const layout = useWindowDimensions();
 
   const MemoizedPersonalTab = React.memo(PersonalTab);

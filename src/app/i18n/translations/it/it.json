@@ -460,7 +460,8 @@
     "confirm_time_success": "Tempo confermato con successo!",
     "confirm_time_error": "Tempo non confermato! Riprova più tardi.",
     "vote_proposing_time_success": "Voto per la proposta dell'orario effettuato con successo!",
-    "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi."
+    "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi.",
+    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
@@ -699,7 +700,14 @@
   "challenge_detail_screen_tab": {
     "coach": {
       "waiting_for_coach": "Waiting for coach...",
-      "profile": "Profile"
+      "profile": "Profile",
+      "intake": "intake",
+      "closing": "closing",
+      "touchpoint_of_challenge": "Touchpoints of your challenge",
+      "confirm_open_phase": "Do you really want to start the {{phaseName}} phase?",
+      "confirm_close_phase": "Do you really want to close the {{phaseName}} phase?",
+      "yes": "Yes",
+      "no": "No"
     },
     "coach_calendar": {
       "title": "Coach calendar",
@@ -725,5 +733,15 @@
     "title": "Conferma orario",
     "link_video_call": "Link videochiamata",
     "link_video_call_placeholder": "Inserisci il link della videochiamata"
+  },
+  "search_company": {
+    "no_result": "No company found",
+    "placeholder": "Enter company name"
+  },
+  "challenges_tab": {
+    "personal": "Personali",
+    "coach": "Coach",
+    "certified": "Certificate",
+    "company": "Azienda"
   }
 }

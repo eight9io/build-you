@@ -214,12 +214,13 @@ const CompanyChallengsScreen = ({
 }: {
   navigation: CompanyChallengesScreenNavigationProp;
 }) => {
+  const { t } = useTranslation();
   const [index, setIndex] = useState<number>(0);
   const [routes] = useState([
-    { key: "company", title: "Company" },
-    { key: "coaching", title: "Coaching" },
+    { key: "company", title: t("challenges_tab.company") },
+    { key: "coaching", title: t("challenges_tab.coach") },
   ]);
-  const { t } = useTranslation();
+
   const layout = useWindowDimensions();
 
   const MemoizedCompanyTab = React.memo(CompanyTab);

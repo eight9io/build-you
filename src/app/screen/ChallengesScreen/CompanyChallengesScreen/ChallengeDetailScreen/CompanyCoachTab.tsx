@@ -31,13 +31,15 @@ interface ICompanyCoachTabProps {
   setShouldParentRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EmptyCoachBanner = (translation) => {
+const EmptyCoachBanner = () => {
+  const { t } = useTranslation();
   return (
     <View className="flex flex-row items-center rounded-lg bg-gray-light p-4">
       <DefaultAvatar />
       <View className="ml-4" />
       <Text className="text-md font-semibold text-gray-dark">
-        Waiting for coach...
+        {t("challenge_detail_screen_tab.coach.waiting_for_coach") ||
+          "Waiting for coach..."}
       </Text>
     </View>
   );
@@ -135,12 +137,12 @@ const CompanyCoachTab: FC<ICompanyCoachTabProps> = ({
         <View className="w-screen">
           <ConfirmDialog
             isVisible={isChangeTouchpointStatusModalVisible}
-            title={`Do you really want to start the ${
-              translateCheckpointToText(currentTouchpoint) || ""
-            } Phase?`}
+            title={t("challenge_detail_screen_tab.coach.confirm_open_phase", {
+              phaseName: translateCheckpointToText(currentTouchpoint) || "",
+            })}
             onConfirm={onConfirmChangeTouchpointStatusModal}
-            confirmButtonLabel="Yes"
-            closeButtonLabel="No"
+            confirmButtonLabel={t("challenge_detail_screen_tab.coach.yes")}
+            closeButtonLabel={t("challenge_detail_screen_tab.coach.no")}
             onClosed={handleCloseChangeTouchpointStatusModal}
           />
 
@@ -148,11 +150,13 @@ const CompanyCoachTab: FC<ICompanyCoachTabProps> = ({
             {coachData?.id ? (
               <CoachBanner coachData={coachData} />
             ) : (
-              <EmptyCoachBanner translation={t} />
+              <EmptyCoachBanner />
             )}
             <View className="flex flex-col">
               <Text className="mt-6 text-md font-semibold text-primary-default">
-                Touchpoints of your challenge
+                {t(
+                  "challenge_detail_screen_tab.coach.touchpoint_of_challenge"
+                ) || "Touchpoints of your challenge"}
               </Text>
               <TouchPointProgress
                 currentTouchpoint={currentTouchpoint}

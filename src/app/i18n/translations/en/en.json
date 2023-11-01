@@ -404,7 +404,6 @@
     "proposing_time": {
       "title": "Do you want to submit these proposing time?",
       "description": "You cannot undo this action",
-      "error_title": "Error",
       "error_description": "Chat and video call are available only when a phase is in progress."
     },
     "cancel": "Cancel",
@@ -460,7 +459,8 @@
     "confirm_time_success": "Confirm time successfully!",
     "confirm_time_error": "Confirm time failed!. Please try again later.",
     "vote_proposing_time_success": "Vote proposing time successfully!",
-    "vote_proposing_time_error": "Vote proposing time failed!. Please try again later."
+    "vote_proposing_time_error": "Vote proposing time failed!. Please try again later.",
+    "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",
@@ -699,7 +699,14 @@
   "challenge_detail_screen_tab": {
     "coach": {
       "waiting_for_coach": "Waiting for coach...",
-      "profile": "Profile"
+      "profile": "Profile",
+      "intake": "intake",
+      "closing": "closing",
+      "touchpoint_of_challenge": "Touchpoints of your challenge",
+      "confirm_open_phase": "Do you really want to start the {{phaseName}} phase?",
+      "confirm_close_phase": "Do you really want to close the {{phaseName}} phase?",
+      "yes": "Yes",
+      "no": "No"
     },
     "coach_calendar": {
       "title": "Coach calendar",
@@ -725,5 +732,15 @@
     "title": "Confirm time",
     "link_video_call": "Link video call",
     "link_video_call_placeholder": "Enter link video call"
+  },
+  "search_company": {
+    "no_result": "No company found",
+    "placeholder": "Enter company name"
+  },
+  "challenges_tab": {
+    "personal": "Personal",
+    "coach": "Coach",
+    "certified": "Certified",
+    "company": "Company"
   }
 }

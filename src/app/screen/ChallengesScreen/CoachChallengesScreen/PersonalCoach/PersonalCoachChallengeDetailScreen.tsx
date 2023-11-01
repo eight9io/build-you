@@ -81,9 +81,11 @@ const PersonalCoachChallengeDetailScreen = ({
 
   const challengeId = route?.params?.challengeId;
 
-  const isCompanyChallenge = Array.isArray(challengeData?.owner)
-    ? challengeData?.owner[0]
-    : challengeData?.owner;
+  const isCompanyChallenge = (
+    Array.isArray(challengeData?.owner)
+      ? challengeData?.owner[0]
+      : challengeData?.owner
+  )?.companyAccount;
 
   const { t } = useTranslation();
   const [tabRoutes, setTabRoutes] = useState([

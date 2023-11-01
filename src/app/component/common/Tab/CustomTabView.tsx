@@ -31,7 +31,7 @@ export const CustomTabView: FC<ITabViewProps> = ({
   useEffect(() => {
     // This is a hack to fix tab indicator not sync with current active tab
     // due to tab indicator's animation delay when we change tab index immediately after tab view is rendered
-    setTimeout(() => setAnimationEnabled(true), 500); // 500ms is the delay time to wait for the tab indicator initialization => Increase this value when render logic is more complex or disable animation if the render process is too slow
+    setTimeout(() => setAnimationEnabled(true), 1000); // 500ms is the delay time to wait for the tab indicator initialization => Increase this value when render logic is more complex or disable animation if the render process is too slow
   }, []);
 
   return (

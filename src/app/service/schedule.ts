@@ -46,3 +46,7 @@ export const confirmProposalByCoach = ({
     meetingUrl: meetingUrl,
   });
 };
+
+export const resetScheduledVideoCall = (scheduleId: string) => {
+  return http.get(`/schedule/reset/${scheduleId}`);
+};

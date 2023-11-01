@@ -1,5 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  Platform,
+} from "react-native";
 import {
   NavigationProp,
   Route,
@@ -32,6 +38,7 @@ import GlobalToastController from "../../component/common/Toast/GlobalToastContr
 
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
+import clsx from "clsx";
 
 interface ICartScreenProps {
   route: Route<
@@ -71,6 +78,8 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+
+  const isAndroid = Platform.OS === "android";
 
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
@@ -231,7 +240,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   };
 
   return (
-    <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white ">
+    <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
       {isLoading && <Spinner visible={isLoading} />}
       {isShowModal && (
         <ConfirmDialog
@@ -382,7 +391,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       </View>
 
       <TouchableOpacity
-        className="flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4"
+        className={clsx(
+          " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
+          isAndroid ? "my-6" : "my-4"
+        )}
         style={{
           height: 48,
           width: 344,

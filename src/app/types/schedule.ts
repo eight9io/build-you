@@ -3,6 +3,7 @@ export interface IProposingScheduleTime {
   proposal: string | Date; // proposal time
   index?: number;
   meetingUrl?: string;
+  schedule?: string;
 }
 
 export interface IScheduleProposal {

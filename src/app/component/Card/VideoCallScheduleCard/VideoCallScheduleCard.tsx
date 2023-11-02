@@ -26,9 +26,6 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
     setIsScheduleModalVisible(true);
   };
 
-  const dateTime = new Date(schedule.schedule);
-  const time = `${dateTime.getHours()}:${dateTime.getMinutes()}`;
-
   return (
     <TouchableOpacity
       className="rounded-[10px] bg-white"
@@ -41,14 +38,16 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
           </Text>
         </View>
         <View className=" flex-row items-center justify-between py-2">
-          <Text className="text-md font-semibold text-black-light">{time}</Text>
+          <Text className="text-md font-semibold text-black-light">{`${dayjs(
+            schedule?.schedule
+          ).format("hh:mm A")}`}</Text>
           <Text className="text-md font-semibold text-gray-dark">
-            {`${dayjs(schedule.schedule).format("dddd")}, ${dayjs(
-              schedule.schedule
+            {`${dayjs(schedule?.schedule).format("dddd")}, ${dayjs(
+              schedule?.schedule
             ).format("MMMM D, YYYY")}`}
           </Text>
         </View>
-        <View className="flex-row justify-end items-center gap-2 py-2">
+        <View className="flex-row items-center justify-end gap-2 py-2">
           <LinkIcon width={12} height={12} />
           <View className="whitespace-nowrap">
             <Text className="truncate text-ellipsis text-sm font-normal leading-tight text-zinc-500">

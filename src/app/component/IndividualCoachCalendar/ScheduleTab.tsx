@@ -37,7 +37,7 @@ const ScheduleTab: FC<IScheduleTabProps> = ({ schedules }) => {
       <>
         {localSchedules?.length > 0 ? (
           <FlatList
-            data={schedules}
+            data={localSchedules}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <VideoCallScheduleCard
@@ -47,6 +47,7 @@ const ScheduleTab: FC<IScheduleTabProps> = ({ schedules }) => {
             )}
             contentContainerStyle={{ gap: 8 }}
             className="mt-2 flex-1 "
+            ListFooterComponent={<View className="h-20" />}
           />
         ) : (
           <EmptyScheduleView />

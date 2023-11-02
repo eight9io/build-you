@@ -92,3 +92,9 @@ export const editScheduleForIndividualCertifiedChallenge = ({
     note: note,
   });
 };
+
+export const deleteScheduleForIndividualCertifiedChallenge = (
+  scheduleId: string
+) => {
+  return http.put(`/schedule/delete/${scheduleId}`);
+};

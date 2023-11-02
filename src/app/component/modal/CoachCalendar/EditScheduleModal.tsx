@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ErrorText from "../../common/ErrorText";
 import TextInput from "../../common/Inputs/TextInput";
+import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 interface IEditScheduleModalProps {
   isVisible: boolean;
@@ -79,8 +80,15 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
       });
       setLocalSchedule(Array.isArray(res.data) ? res.data[0] : res.data);
       setIsVisible(false);
+      GlobalToastController.showModal({
+        message: t("toast.edit_schedule_success"),
+      });
     } catch (error) {
       console.error("error", error);
+      GlobalToastController.showModal({
+        message: t("error_general_message"),
+      });
+      setIsVisible(false);
     }
   };
 

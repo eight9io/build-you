@@ -12,6 +12,8 @@ import { MenuProvider } from "react-native-popup-menu";
 
 import dayjs from "../../../utils/date.util";
 
+import { deleteScheduleForIndividualCertifiedChallenge } from "../../../service/schedule";
+
 import { IScheduledTime } from "../../../types/schedule";
 
 import Header from "../../common/Header";
@@ -22,6 +24,7 @@ import CloseBtn from "../../asset/close.svg";
 import LinkIcon from "../../asset/link.svg";
 import { openUrlInApp } from "../../../utils/inAppBrowser";
 import EditScheduleModal from "./EditScheduleModal";
+import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 interface IScheduleDetailModalProps {
   isVisible: boolean;
@@ -53,8 +56,22 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
     setIsEditScheduleModalOpen(true);
   };
 
-  const onDelete = () => {
-    setIsEditScheduleModalOpen(true);
+  const onDelete = async () => {
+    try {
+      await deleteScheduleForIndividualCertifiedChallenge(schedule.id);
+      setLocalSchedules((prev: IScheduledTime[]) => {
+        return prev.filter((item) => item.id !== schedule.id);
+      });
+      onClose();
+      GlobalToastController.showModal({
+        message: t("toast.delete_schedule_success"),
+      });
+    } catch (error) {
+      GlobalToastController.showModal({
+        message: t("error_general_message"),
+      });
+      console.error("Error deleting schedule", error);
+    }
   };
 
   const options = [
@@ -117,13 +134,6 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
           </View>
 
           <View className="flex-1 gap-2 rounded-[10px] bg-white px-4">
-            <View className="flex-row items-center justify-between border-b-[1px] border-b-gray-light py-4">
-              <Text className="text-base font-semibold uppercase text-gray-dark">
-                {t(
-                  "challenge_detail_screen_tab.coach_calendar.request_video_call"
-                )}
-              </Text>
-            </View>
             <View className="flex-row items-start">
               <View className="flex-col">
                 <Text className="text-base font-semibold text-primary-default">
@@ -144,7 +154,7 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
                 </Text>
               </View>
             </View>
-            <View className="flex-col">
+            <View className="flex-col py-2">
               <Text className="text-base font-semibold text-primary-default">
                 {t(
                   "challenge_detail_screen_tab.coach_calendar.link_video_call"
@@ -158,9 +168,9 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
               >
                 <LinkIcon width={12} height={12} />
                 <View className="whitespace-nowrap">
-                  <Text className="truncate text-ellipsis text-base font-normal leading-tight text-zinc-500">
-                    {localSchedule?.meetingUrl?.length > 50
-                      ? `${localSchedule?.meetingUrl?.slice(0, 50)}...`
+                  <Text className="truncate text-ellipsis text-base font-normal leading-tight text-blue-500">
+                    {localSchedule?.meetingUrl?.length > 35
+                      ? `${localSchedule?.meetingUrl?.slice(0, 35)}...`
                       : localSchedule?.meetingUrl}
                   </Text>
                 </View>

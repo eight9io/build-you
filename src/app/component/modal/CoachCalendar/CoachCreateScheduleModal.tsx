@@ -17,10 +17,12 @@ import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedu
 
 import CloseBtn from "../../asset/close.svg";
 import { createScheduleForIndividualCertifiedChallenge } from "../../../service/schedule";
+import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 interface ICoachCreateScheduleModalProps {
   isVisible: boolean;
   challengeId: string;
+  setShouldParentRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -34,6 +36,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
   isVisible,
   challengeId,
   setIsVisible,
+  setShouldParentRefresh,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -68,11 +71,16 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
   const onSubmit = async (data: ICoachCreateScheduleForm) => {
     try {
       const date = new Date(data.date).toISOString();
-      const res = await createScheduleForIndividualCertifiedChallenge({
+      await createScheduleForIndividualCertifiedChallenge({
         challengeId: challengeId,
         schedule: date,
         meetingUrl: data.linkVideoCall,
         note: data.note,
+      });
+      setIsVisible(false);
+      setShouldParentRefresh(true);
+      GlobalToastController.showModal({
+        message: t("toast.create_schedule_success"),
       });
     } catch (error) {
       console.error("error", error);

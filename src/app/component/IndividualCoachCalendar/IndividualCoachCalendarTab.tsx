@@ -24,7 +24,6 @@ import AddScheduleLinkModal from "../modal/CoachCalendar/AddScheduleLinkModal";
 import CoachCreateScheduleModal from "../modal/CoachCalendar/CoachCreateScheduleModal";
 
 import LinkIcon from "../../component/asset/link.svg";
-import { serviceGetOtherUserData } from "../../service/user";
 
 interface IIndividualCoachCalendarTabProps {
   coachData: IUserData;
@@ -158,6 +157,7 @@ export const IndividualCoachCalendarTab: FC<
     isCoachCreateScheduleModalVisible,
     setIsCoachCreateScheduleModalVisible,
   ] = useState<boolean>(false);
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
 
   const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
@@ -176,32 +176,39 @@ export const IndividualCoachCalendarTab: FC<
     },
   ];
   const { index, setTabIndex } = useTabIndex({ tabRoutes });
+  const getAllScheduleOfChallenge = async () => {
+    try {
+      const response = await getAllScheduleByChallengeId(challengeId);
+      const now = new Date();
+      const upcompingSchedule = [];
+      const pastSchedule = [];
+
+      response.data.forEach((schedule: any) => {
+        const scheduleDate = new Date(schedule.schedule);
+        if (scheduleDate > now) {
+          upcompingSchedule.push(schedule);
+        } else if (scheduleDate < now) {
+          pastSchedule.push(schedule);
+        }
+      });
+
+      setUpcomingSchedules(upcompingSchedule);
+      setPastSchedules(pastSchedule);
+    } catch (error) {
+      console.error("Failed to get schedule of challenge", error);
+    }
+  };
 
   useEffect(() => {
-    const getAllScheduleOfChallenge = async () => {
-      try {
-        const response = await getAllScheduleByChallengeId(challengeId);
-        const now = new Date();
-        const upcompingSchedule = [];
-        const pastSchedule = [];
-
-        response.data.forEach((schedule: any) => {
-          const scheduleDate = new Date(schedule.schedule);
-          if (scheduleDate > now) {
-            upcompingSchedule.push(schedule);
-          } else if (scheduleDate < now) {
-            pastSchedule.push(schedule);
-          }
-        });
-
-        setUpcomingSchedules(upcompingSchedule);
-        setPastSchedules(pastSchedule);
-      } catch (error) {
-        console.error("Failed to get schedule of challenge", error);
-      }
-    };
     getAllScheduleOfChallenge();
   }, []);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      getAllScheduleOfChallenge();
+      setShouldRefresh(false);
+    }
+  }, [shouldRefresh]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -224,6 +231,7 @@ export const IndividualCoachCalendarTab: FC<
     <View className="h-full flex-1">
       <CoachCreateScheduleModal
         challengeId={challengeId}
+        setShouldParentRefresh={setShouldRefresh}
         isVisible={isCoachCreateScheduleModalVisible}
         setIsVisible={setIsCoachCreateScheduleModalVisible}
       />

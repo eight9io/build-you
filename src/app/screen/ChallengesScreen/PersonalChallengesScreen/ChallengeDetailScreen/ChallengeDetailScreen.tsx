@@ -306,7 +306,7 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               ) : (
                 <IndividualCoachCalendarTab
                   coachData={coachData}
-                  challengeId={challengeId}
+                  challengeData={challengeData}
                   isChallengeInProgress={isChallengeInProgress}
                 />
               )

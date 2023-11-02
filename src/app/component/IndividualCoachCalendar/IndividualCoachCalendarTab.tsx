@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { View, Text, TouchableOpacity } from "react-native";
 
 import { IUserData } from "../../types/user";
+import { IChallenge } from "../../types/challenge";
 import { IScheduledTime } from "../../types/schedule";
 import { COACH_CALENDAR_TABS_KEY } from "../../common/enum";
 
@@ -24,10 +25,13 @@ import AddScheduleLinkModal from "../modal/CoachCalendar/AddScheduleLinkModal";
 import CoachCreateScheduleModal from "../modal/CoachCalendar/CoachCreateScheduleModal";
 
 import LinkIcon from "../../component/asset/link.svg";
+import EditScheduleLinkModal from "../modal/CoachCalendar/EditScheduleLinkModal";
+import { serviceUpdateCalendlyLink } from "../../service/profile";
+import GlobalToastController from "../common/Toast/GlobalToastController";
 
 interface IIndividualCoachCalendarTabProps {
   coachData: IUserData;
-  challengeId: string;
+  challengeData: IChallenge;
   isChallengeInProgress: boolean;
 }
 
@@ -35,10 +39,14 @@ interface IBookVideoCallBtnProps {
   translate: (key: string) => string;
   isChallengeInProgress?: boolean;
   coachCalendyLink?: string;
+  setCoachCalendyLink?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface IScheduleLinkProps {
   link: string;
+  coachId: string;
+  translate: (key: string) => string;
+  setCoachCalendyLink: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const BookVideoCallBtn: FC<IBookVideoCallBtnProps> = ({
@@ -77,8 +85,9 @@ const BookVideoCallBtn: FC<IBookVideoCallBtnProps> = ({
 const AddScheduleLinkBtn: FC<IBookVideoCallBtnProps> = ({
   translate,
   isChallengeInProgress,
+  setCoachCalendyLink,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   return (
     <View className="pt-4">
       <View className="mx-4 ">
@@ -98,16 +107,40 @@ const AddScheduleLinkBtn: FC<IBookVideoCallBtnProps> = ({
         <AddScheduleLinkModal
           isVisible={isModalVisible}
           setIsVisible={setIsModalVisible}
+          setCoachCalendyLink={setCoachCalendyLink}
         />
       </View>
     </View>
   );
 };
 
-const ScheduleLink: FC<IScheduleLinkProps> = ({ link }) => {
-  const onEditScheduleLink = () => {};
-
-  const onDeleteScheduleLink = () => {};
+const ScheduleLink: FC<IScheduleLinkProps> = ({
+  translate,
+  coachId,
+  link,
+  setCoachCalendyLink,
+}) => {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const onEditScheduleLink = () => {
+    setIsModalVisible(true);
+  };
+  const onDeleteScheduleLink = async () => {
+    try {
+      await serviceUpdateCalendlyLink({
+        userId: coachId,
+        calendlyLink: "",
+      });
+      setCoachCalendyLink("");
+      GlobalToastController.showModal({
+        message: "Delete schedule link successfully",
+      });
+    } catch (error) {
+      GlobalToastController.showModal({
+        message: translate("error_general_message"),
+      });
+      console.error(error);
+    }
+  };
 
   return (
     <View className="m-4 flex flex-col items-start justify-start rounded-lg bg-white p-4 shadow">
@@ -142,13 +175,19 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({ link }) => {
           </Text>
         </View>
       </TouchableOpacity>
+      <EditScheduleLinkModal
+        link={link}
+        isVisible={isModalVisible}
+        setIsVisible={setIsModalVisible}
+        setCoachCalendyLink={setCoachCalendyLink}
+      />
     </View>
   );
 };
 
 export const IndividualCoachCalendarTab: FC<
   IIndividualCoachCalendarTabProps
-> = ({ coachData, challengeId, isChallengeInProgress }) => {
+> = ({ coachData, challengeData, isChallengeInProgress }) => {
   const [upcomingSchedules, setUpcomingSchedules] = useState<IScheduledTime[]>(
     []
   );
@@ -158,12 +197,16 @@ export const IndividualCoachCalendarTab: FC<
     setIsCoachCreateScheduleModalVisible,
   ] = useState<boolean>(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const [coachCalendyLink, setCoachCalendyLink] = useState<string>("");
 
   const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCurrentUserCoachOfChallenge = coachData.id === currentUser?.id;
-  const coachCalendyLink = coachData?.calendly;
+
+  const challengeId = challengeData.id;
+  const isChallengeCompleted =
+    challengeData.status === "done" || challengeData.status === "closed";
 
   const tabRoutes = [
     {
@@ -201,6 +244,7 @@ export const IndividualCoachCalendarTab: FC<
 
   useEffect(() => {
     getAllScheduleOfChallenge();
+    setCoachCalendyLink(coachData?.calendly);
   }, []);
 
   useEffect(() => {
@@ -249,11 +293,17 @@ export const IndividualCoachCalendarTab: FC<
           <View>
             <AddScheduleLinkBtn
               translate={t}
+              setCoachCalendyLink={setCoachCalendyLink}
               isChallengeInProgress={isChallengeInProgress}
             />
           </View>
         ) : (
-          <ScheduleLink link={coachCalendyLink} />
+          <ScheduleLink
+            translate={t}
+            coachId={coachData?.id}
+            link={coachCalendyLink}
+            setCoachCalendyLink={setCoachCalendyLink}
+          />
         ))}
       <View className="m-4 flex-1">
         <TagBasedTabView
@@ -263,16 +313,18 @@ export const IndividualCoachCalendarTab: FC<
           setIndex={setTabIndex}
         />
       </View>
-      {isCurrentUserCoachOfChallenge && (
-        <View className={clsx("absolute bottom-4 h-12 w-full bg-white px-6")}>
-          <Button
-            title={"Create schedule"}
-            onPress={() => setIsCoachCreateScheduleModalVisible(true)}
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-          />
-        </View>
-      )}
+      {isCurrentUserCoachOfChallenge &&
+        !isChallengeCompleted &&
+        coachCalendyLink && (
+          <View className={clsx("absolute bottom-4 h-12 w-full bg-white px-6")}>
+            <Button
+              title={"Create schedule"}
+              onPress={() => setIsCoachCreateScheduleModalVisible(true)}
+              containerClassName="bg-primary-default flex-1"
+              textClassName="text-white"
+            />
+          </View>
+        )}
     </View>
   );
 };

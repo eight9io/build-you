@@ -193,17 +193,22 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               });
             }
           }
-
-          setIsLoading(false);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 300);
           return;
         }
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
         setIsRequestSuccess(true);
         setIsShowModal(true);
       }
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
       navigation.navigate("HomeScreen", {
         screen: "CreateChallengeScreenMain",
       });

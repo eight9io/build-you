@@ -45,9 +45,6 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
   const [isEditScheduleModalOpen, setIsEditScheduleModalOpen] =
     useState<boolean>(false);
 
-  const dateTime = new Date(localSchedule.schedule);
-  const time = `${dateTime.getHours()}:${dateTime.getMinutes()}`;
-
   const onClose = () => {
     setIsVisible(false);
   };
@@ -140,7 +137,7 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
                   {t("challenge_detail_screen_tab.coach_calendar.time")}
                 </Text>
                 <Text className="text-base font-semibold text-black-light">
-                  {time}
+                  {`${dayjs(localSchedule.schedule).format("hh:mm A")}`}
                 </Text>
               </View>
               <View className="ml-16 flex-1 flex-col">

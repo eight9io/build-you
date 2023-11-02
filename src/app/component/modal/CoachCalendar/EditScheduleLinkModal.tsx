@@ -19,7 +19,8 @@ import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 import CloseBtn from "../../asset/close.svg";
 
-interface IAddScheduleLinkModalProps {
+interface IEditScheduleLinkModalProps {
+  link: string;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setCoachCalendyLink: React.Dispatch<React.SetStateAction<string>>;
@@ -29,7 +30,8 @@ interface IAddScheduleInput {
   link: string;
 }
 
-const AddScheduleLinkModal: FC<IAddScheduleLinkModalProps> = ({
+const EditScheduleLinkModal: FC<IEditScheduleLinkModalProps> = ({
+  link,
   isVisible,
   setIsVisible,
   setCoachCalendyLink,
@@ -48,20 +50,20 @@ const AddScheduleLinkModal: FC<IAddScheduleLinkModalProps> = ({
     formState: { errors },
   } = useForm<IAddScheduleInput>({
     defaultValues: {
-      link: "",
+      link: link || "",
     },
     resolver: yupResolver(AddScheduleLinkSchema()),
   });
 
   const onSubmit = async (data: IAddScheduleInput) => {
     try {
-      const res = await serviceUpdateCalendlyLink({
+      await serviceUpdateCalendlyLink({
         userId: currectUser?.id,
         calendlyLink: data.link,
       });
       setUserProfile({ ...currectUser, calendly: data.link });
-      onClose();
       setCoachCalendyLink(data.link);
+      onClose();
       setTimeout(() => {
         GlobalToastController.showModal({
           message:
@@ -143,4 +145,4 @@ const AddScheduleLinkModal: FC<IAddScheduleLinkModalProps> = ({
   );
 };
 
-export default AddScheduleLinkModal;
+export default EditScheduleLinkModal;

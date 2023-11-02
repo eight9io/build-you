@@ -128,7 +128,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
               skillName={skill.skill}
               skillCompetence={skill.rating}
               key={index}
-              skillGaugeClassName="bg-success-default"
+              color="bg-success-default"
             />
           );
         })}

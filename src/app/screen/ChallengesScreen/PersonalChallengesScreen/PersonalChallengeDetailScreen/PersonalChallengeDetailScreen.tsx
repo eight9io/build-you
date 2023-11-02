@@ -1,5 +1,10 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
@@ -280,7 +285,9 @@ const PersonalChallengeDetailScreen = ({
     } catch (error) {
       console.error("CoachChallengeDetailScreen - Error fetching data:", error);
     }
-    setIsScreenLoading(false);
+    setTimeout(() => {
+      setIsScreenLoading(false);
+    }, 500);
   };
 
   useEffect(() => {

@@ -256,7 +256,7 @@ const PersonalCoachChallengeDetailScreen = ({
             ) : (
               <IndividualCoachCalendarTab
                 coachData={coachData}
-                challengeId={challengeId}
+                challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
             )}

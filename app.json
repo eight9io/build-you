@@ -86,7 +86,8 @@
         {
           "androidXBrowser": "1.4.0"
         }
-      ]
+      ],
+      ["react-native-iap"]
     ],
     "extra": {
       "eas": {

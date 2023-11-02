@@ -48,7 +48,7 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
             ).format("MMMM D, YYYY")}`}
           </Text>
         </View>
-        <View className="flex-row justify-end items-center gap-2 py-2">
+        <View className="flex-row items-center justify-end gap-2 py-2">
           <LinkIcon width={12} height={12} />
           <View className="whitespace-nowrap">
             <Text className="truncate text-ellipsis text-sm font-normal leading-tight text-zinc-500">

@@ -67,7 +67,7 @@ const EditScheduleLinkModal: FC<IEditScheduleLinkModalProps> = ({
       setTimeout(() => {
         GlobalToastController.showModal({
           message:
-            t("toast.add_calendy_link_success") ||
+            t("toast.edit_calendy_link_success") ||
             "Your progress has been created successfully!",
         });
       }, 500);

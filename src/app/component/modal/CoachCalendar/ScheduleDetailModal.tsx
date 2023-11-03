@@ -29,6 +29,7 @@ import GlobalToastController from "../../common/Toast/GlobalToastController";
 interface IScheduleDetailModalProps {
   isVisible: boolean;
   schedule: IScheduledTime;
+  isCurrentUserCoachOfChallenge: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setLocalSchedules: React.Dispatch<React.SetStateAction<IScheduledTime[]>>;
 }
@@ -38,6 +39,7 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
   isVisible,
   setIsVisible,
   setLocalSchedules,
+  isCurrentUserCoachOfChallenge,
 }) => {
   const { t } = useTranslation();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
@@ -118,13 +120,16 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
               leftBtn={<CloseBtn fill={"black"} />}
               onLeftBtnPress={onClose}
               rightBtn={
-                <PopUpMenu
-                  options={options}
-                  iconColor="#000000"
-                  optionsContainerStyle={{
-                    marginTop: Platform.OS === "ios" ? -(headerHeight - 10) : 0,
-                  }}
-                />
+                isCurrentUserCoachOfChallenge && (
+                  <PopUpMenu
+                    options={options}
+                    iconColor="#000000"
+                    optionsContainerStyle={{
+                      marginTop:
+                        Platform.OS === "ios" ? -(headerHeight - 10) : 0,
+                    }}
+                  />
+                )
               }
               containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
             />

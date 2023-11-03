@@ -93,13 +93,11 @@ const ConfirmedRequestedCall = ({
             iconColor="#6C6E76"
             options={[
               {
-                // text: translate("pop_up_menu.edit"),
-                text: "Edit",
+                text: translate("pop_up_menu.edit"),
                 onPress: handleEditScheduledVideoCallLink,
               },
               {
-                // text: translate("pop_up_menu.delete"),
-                text: "Delete",
+                text: translate("pop_up_menu.delete"),
                 onPress: handleDeleteConfirmedScheduledVideoCall,
               },
             ]}

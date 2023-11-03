@@ -12,12 +12,14 @@ import LinkIcon from "../../../component/asset/link.svg";
 
 interface IVideoCallScheduleCardProps {
   schedule: IScheduledTime;
+  isCurrentUserCoachOfChallenge: boolean;
   setLocalSchedules: (schedules: IScheduledTime[]) => void;
 }
 
 const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
   schedule,
   setLocalSchedules,
+  isCurrentUserCoachOfChallenge,
 }) => {
   const { t } = useTranslation();
   const [isScheduleModalVisible, setIsScheduleModalVisible] = useState(false);
@@ -61,6 +63,7 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
         isVisible={isScheduleModalVisible}
         setLocalSchedules={setLocalSchedules}
         setIsVisible={setIsScheduleModalVisible}
+        isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
       />
     </TouchableOpacity>
   );

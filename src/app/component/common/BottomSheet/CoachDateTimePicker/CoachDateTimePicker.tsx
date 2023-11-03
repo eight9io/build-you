@@ -58,9 +58,10 @@ const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
           <BottomSheet2 onClose={() => setShowDateTimePicker(false)}>
             <View className=" h-full w-full items-center justify-center">
               <DatePicker
-                date={selectedDate}
-                onDateChange={handleDatePicked}
                 dividerHeight={1}
+                date={selectedDate}
+                textColor="#24252B"
+                onDateChange={handleDatePicked}
                 minimumDate={dayjs().startOf("day").toDate()}
               />
               <View className="mt-6 h-12 w-full px-4">

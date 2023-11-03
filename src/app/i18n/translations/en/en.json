@@ -760,6 +760,7 @@
     "link_video_call": "Link video call",
     "link_video_call_placeholder": "Enter link video call",
     "note": "Note",
-    "note_placeholder": "Enter note for coach"
+    "note_placeholder": "Enter note for coach",
+    "schedule_link": "Schedule link"
   }
 }

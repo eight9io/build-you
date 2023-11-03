@@ -88,13 +88,13 @@ const ProgressCard: FC<IProgressCardProps> = ({
 
   const progressOptions = [
     {
-      text: "Edit",
+      text: t("pop_up_menu.edit") as string,
       onPress: () => {
         setIsShowEditModal(true), setProgressIndexToUpdate();
       },
     },
     {
-      text: "Delete",
+      text: t("pop_up_menu.delete") as string,
       onPress: () => setIsShowDeleteModal(true),
     },
   ];

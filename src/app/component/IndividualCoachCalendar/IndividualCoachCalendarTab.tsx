@@ -152,11 +152,11 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({
           iconColor="#6C6E76"
           options={[
             {
-              text: "Edit",
+              text: translate("pop_up_menu.edit") as string,
               onPress: onEditScheduleLink,
             },
             {
-              text: "Delete",
+              text: translate("pop_up_menu.delete") as string,
               onPress: onDeleteScheduleLink,
             },
           ]}
@@ -262,13 +262,19 @@ export const IndividualCoachCalendarTab: FC<
       case COACH_CALENDAR_TABS_KEY.UPCOMING:
         return (
           <View className="flex-1">
-            <ScheduleTab schedules={upcomingSchedules} />
+            <ScheduleTab
+              schedules={upcomingSchedules}
+              isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
+            />
           </View>
         );
       case COACH_CALENDAR_TABS_KEY.PAST:
         return (
           <View className="flex-1">
-            <ScheduleTab schedules={pastSchedules} />
+            <ScheduleTab
+              schedules={pastSchedules}
+              isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
+            />
           </View>
         );
     }

@@ -472,7 +472,8 @@
     "vote_proposing_time_success": "Vote proposing time successfully!",
     "vote_proposing_time_error": "Vote proposing time failed!. Please try again later.",
     "delete_confirmed_scheduled_video_call_success": "Delete confirmed scheduled video call successfully!",
-    "add_calendy_link_success": "Add calendy link successfully!"
+    "add_calendy_link_success": "Add calendy link successfully!",
+    "edit_calendy_link_success": "Edit calendy link successfully!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Write a comment...",

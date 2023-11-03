@@ -472,7 +472,9 @@
     "confirm_time_error": "Tempo non confermato! Riprova più tardi.",
     "vote_proposing_time_success": "Voto per la proposta dell'orario effettuato con successo!",
     "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi.",
-    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!"
+    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!",
+    "add_calendy_link_success": "Link Calendly aggiunto con successo!",
+    "edit_calendy_link_success": "Link Calendly modificato con successo!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
@@ -759,6 +761,7 @@
     "link_video_call": "Link videochiamata",
     "link_video_call_placeholder": "Inserisci il link della videochiamata",
     "note": "Nota",
-    "note_placeholder": "Inserisci una nota per l'allenatore"
+    "note_placeholder": "Inserisci una nota per l'allenatore",
+    "schedule_link": "Link programma"
   }
 }

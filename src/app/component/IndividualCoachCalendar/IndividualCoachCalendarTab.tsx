@@ -244,8 +244,11 @@ export const IndividualCoachCalendarTab: FC<
 
   useEffect(() => {
     getAllScheduleOfChallenge();
-    setCoachCalendyLink(coachData?.calendly);
   }, []);
+
+  useEffect(() => {
+    setCoachCalendyLink(coachData?.calendly);
+  }, [coachData?.calendly]);
 
   useEffect(() => {
     if (shouldRefresh) {

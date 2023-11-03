@@ -146,7 +146,7 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({
     <View className="m-4 flex flex-col items-start justify-start rounded-lg bg-white p-4 shadow">
       <View className="flex w-full flex-row items-center justify-between">
         <Text className=" text-md font-semibold leading-tight text-neutral-700">
-          Schedule link
+          {translate("create_schedule_modal.schedule_link")}
         </Text>
         <PopUpMenu
           iconColor="#6C6E76"
@@ -244,8 +244,11 @@ export const IndividualCoachCalendarTab: FC<
 
   useEffect(() => {
     getAllScheduleOfChallenge();
-    setCoachCalendyLink(coachData?.calendly);
   }, []);
+
+  useEffect(() => {
+    setCoachCalendyLink(coachData?.calendly);
+  }, [coachData?.calendly]);
 
   useEffect(() => {
     if (shouldRefresh) {
@@ -318,7 +321,7 @@ export const IndividualCoachCalendarTab: FC<
         coachCalendyLink && (
           <View className={clsx("absolute bottom-4 h-12 w-full bg-white px-6")}>
             <Button
-              title={"Create schedule"}
+              title={t("create_schedule_modal.title")}
               onPress={() => setIsCoachCreateScheduleModalVisible(true)}
               containerClassName="bg-primary-default flex-1"
               textClassName="text-white"

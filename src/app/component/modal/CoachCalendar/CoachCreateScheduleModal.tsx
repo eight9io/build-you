@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import DatePicker from "react-native-date-picker";
 
 import { Modal, Platform, SafeAreaView, View, StyleSheet } from "react-native";
 
@@ -18,6 +18,7 @@ import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedu
 import CloseBtn from "../../asset/close.svg";
 import { createScheduleForIndividualCertifiedChallenge } from "../../../service/schedule";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface ICoachCreateScheduleModalProps {
   isVisible: boolean;
@@ -60,7 +61,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
   });
 
   const handleDatePicked = (date?: any) => {
-    if (typeof date.getMonth === "function") {
+    if (date) {
       setValue("date", date, {
         shouldValidate: true,
       });
@@ -95,77 +96,77 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
       className="h-full"
     >
       <SafeAreaView className="relative flex-1 bg-white">
-        <View className="px-4">
-          <Header
-            title={t("create_schedule_modal.title") as string}
-            leftBtn={<CloseBtn fill={"black"} />}
-            rightBtn={t("save") as string}
-            onLeftBtnPress={() => setIsVisible(false)}
-            onRightBtnPress={handleSubmit(onSubmit)}
-            containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
-          />
-        </View>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flex: 1,
+          }}
+        >
+          <View className="px-4">
+            <Header
+              title={t("create_schedule_modal.title") as string}
+              leftBtn={<CloseBtn fill={"black"} />}
+              rightBtn={t("save") as string}
+              onLeftBtnPress={() => setIsVisible(false)}
+              onRightBtnPress={handleSubmit(onSubmit)}
+              containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
+            />
+          </View>
 
-        <View className="flex flex-col p-4">
-          <View className="h-64">
-            <GestureHandlerRootView style={styles.container}>
-              <RNDateTimePicker
-                value={selectedDate}
-                mode={"datetime"}
-                display="spinner"
-                textColor="black" // Fix text turning white when iOS is in dark mode
-                onChange={(_, value) => handleDatePicked(value as Date)}
-                style={{ height: "100%" }}
+          <View className="flex flex-col p-4">
+            <View className="h-64">
+              <DatePicker
+                date={selectedDate}
+                onDateChange={handleDatePicked}
                 minimumDate={dayjs().startOf("day").toDate()}
               />
-            </GestureHandlerRootView>
+            </View>
+            {errors.date ? <ErrorText message={errors.date.message} /> : null}
           </View>
-          {errors.date ? <ErrorText message={errors.date.message} /> : null}
-        </View>
 
-        <View className="p-4">
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label={t("create_schedule_modal.link_video_call")}
-                placeholder={t(
-                  "create_schedule_modal.link_video_call_placeholder"
-                )}
-                placeholderTextColor={"#6C6E76"}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-                className={clsx(
-                  errors.linkVideoCall && "border-1 border-red-500"
-                )}
-              />
+          <View className="p-4">
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label={t("create_schedule_modal.link_video_call")}
+                  placeholder={t(
+                    "create_schedule_modal.link_video_call_placeholder"
+                  )}
+                  placeholderTextColor={"#6C6E76"}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  className={clsx(
+                    errors.linkVideoCall && "border-1 border-red-500"
+                  )}
+                />
+              )}
+              name={"linkVideoCall"}
+            />
+            {errors.linkVideoCall && (
+              <ErrorText message={errors.linkVideoCall?.message} />
             )}
-            name={"linkVideoCall"}
-          />
-          {errors.linkVideoCall && (
-            <ErrorText message={errors.linkVideoCall?.message} />
-          )}
-        </View>
-        <View className=" px-4">
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label={t("create_schedule_modal.note")}
-                placeholder={t("create_schedule_modal.note_placeholder")}
-                placeholderTextColor={"#6C6E76"}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-                className={clsx(
-                  errors.linkVideoCall && "border-1 border-red-500"
-                )}
-              />
-            )}
-            name={"note"}
-          />
-        </View>
+          </View>
+          <View className=" px-4">
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label={t("create_schedule_modal.note")}
+                  placeholder={t("create_schedule_modal.note_placeholder")}
+                  placeholderTextColor={"#6C6E76"}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  className={clsx(
+                    errors.linkVideoCall && "border-1 border-red-500"
+                  )}
+                />
+              )}
+              name={"note"}
+            />
+          </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Modal>
   );

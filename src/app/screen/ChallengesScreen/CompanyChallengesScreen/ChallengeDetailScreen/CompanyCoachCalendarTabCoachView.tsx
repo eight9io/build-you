@@ -378,7 +378,10 @@ const CompanyCoachCalendarTabCoachView: FC<
         const confirmedOption = scheduledOptions?.proposals.find(
           (item) => item?.isConfirmed > 0
         );
-        if (confirmedOption) setConfirmedOption(confirmedOption);
+        if (confirmedOption) {
+          setConfirmedOption(confirmedOption);
+          return;
+        }
         const filteredScheduledOptions = scheduledOptions?.proposals.filter(
           (item) => item?.proposal
         );
@@ -469,7 +472,7 @@ const CompanyCoachCalendarTabCoachView: FC<
 
       <View className="flex flex-col rounded-lg py-2">
         <Text className="text-md font-semibold leading-tight text-zinc-500">
-          Request Video call
+          {t("challenge_detail_screen_tab.coach_calendar.request_video_call")}
         </Text>
         {confirmedOption ? (
           <ConfirmedRequestedCall

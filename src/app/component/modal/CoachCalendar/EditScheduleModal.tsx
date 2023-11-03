@@ -1,24 +1,24 @@
+import clsx from "clsx";
+import dayjs from "dayjs";
 import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
+import DatePicker from "react-native-date-picker";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Resolver, Controller } from "react-hook-form";
 import { View, Modal, SafeAreaView, Platform, StyleSheet } from "react-native";
 
 import { IScheduledTime } from "../../../types/schedule";
-
-import Header from "../../common/Header";
-
-import CloseBtn from "../../asset/close.svg";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Resolver, Controller, set } from "react-hook-form";
-import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedule.validate";
 import { ICoachCreateScheduleForm } from "./CoachCreateScheduleModal";
 import { editScheduleForIndividualCertifiedChallenge } from "../../../service/schedule";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import clsx from "clsx";
-import dayjs from "dayjs";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedule.validate";
+
+import Header from "../../common/Header";
 import ErrorText from "../../common/ErrorText";
 import TextInput from "../../common/Inputs/TextInput";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
+
+import CloseBtn from "../../asset/close.svg";
 
 interface IEditScheduleModalProps {
   isVisible: boolean;
@@ -113,17 +113,11 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
         <View className="flex-1">
           <View className="flex flex-col p-4">
             <View className="h-64">
-              <GestureHandlerRootView style={styles.container}>
-                <RNDateTimePicker
-                  value={selectedDate}
-                  mode={"datetime"}
-                  display="spinner"
-                  textColor="black" // Fix text turning white when iOS is in dark mode
-                  onChange={(_, value) => handleDatePicked(value as Date)}
-                  style={{ height: "100%" }}
-                  minimumDate={dayjs().startOf("day").toDate()}
-                />
-              </GestureHandlerRootView>
+              <DatePicker
+                date={selectedDate}
+                onDateChange={handleDatePicked}
+                minimumDate={dayjs().startOf("day").toDate()}
+              />
             </View>
             {errors.date ? <ErrorText message={errors.date.message} /> : null}
           </View>

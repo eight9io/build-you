@@ -19,6 +19,7 @@ import TextInput from "../../common/Inputs/TextInput";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 import CloseBtn from "../../asset/close.svg";
+import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 
 interface IEditScheduleModalProps {
   isVisible: boolean;
@@ -80,9 +81,11 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
       });
       setLocalSchedule(Array.isArray(res.data) ? res.data[0] : res.data);
       setIsVisible(false);
-      GlobalToastController.showModal({
-        message: t("toast.edit_schedule_success"),
-      });
+      setTimeout(() => {
+        GlobalToastController.showModal({
+          message: t("toast.edit_schedule_success"),
+        });
+      }, 500);
     } catch (error) {
       console.error("error", error);
       GlobalToastController.showModal({
@@ -102,9 +105,9 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
       <SafeAreaView className="flex-1 bg-white">
         <View className="px-4">
           <Header
-            title={"Edit"}
+            title={t("challenge_detail_screen_tab.coach_calendar.edit")}
             leftBtn={<CloseBtn fill={"black"} />}
-            rightBtn={"Save"}
+            rightBtn={t("save")}
             onLeftBtnPress={onClose}
             onRightBtnPress={handleSubmit(onSubmit)}
             containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}

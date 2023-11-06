@@ -25,10 +25,12 @@ import LinkIcon from "../../asset/link.svg";
 import { openUrlInApp } from "../../../utils/inAppBrowser";
 import EditScheduleModal from "./EditScheduleModal";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
+import ToastInModal from "../../common/Toast/ToastInModal";
 
 interface IScheduleDetailModalProps {
   isVisible: boolean;
   schedule: IScheduledTime;
+  isPastEvents?: boolean;
   isCurrentUserCoachOfChallenge: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setLocalSchedules: React.Dispatch<React.SetStateAction<IScheduledTime[]>>;
@@ -38,6 +40,7 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
   schedule,
   isVisible,
   setIsVisible,
+  isPastEvents = false,
   setLocalSchedules,
   isCurrentUserCoachOfChallenge,
 }) => {
@@ -46,6 +49,10 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
   const [localSchedule, setLocalSchedule] = useState<IScheduledTime>(schedule);
   const [isEditScheduleModalOpen, setIsEditScheduleModalOpen] =
     useState<boolean>(false);
+  const [isToastVisible, setIsToastVisible] = useState<boolean>(false);
+  const [isEditActionSuccess, setIsEditActionSuccess] = useState<
+    boolean | null
+  >(null);
 
   const onClose = () => {
     setIsVisible(false);
@@ -104,6 +111,16 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
     >
       <MenuProvider skipInstanceCheck>
         <SafeAreaView className="flex-1 ">
+          <ToastInModal
+            isVisible={isToastVisible}
+            setIsVisible={setIsToastVisible}
+            message={
+              isEditActionSuccess
+                ? t("toast.edit_schedule_success")
+                : t("error_general_message")
+            }
+          />
+
           <View
             className="px-4"
             onLayout={({ nativeEvent }) => {
@@ -120,7 +137,8 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
               leftBtn={<CloseBtn fill={"black"} />}
               onLeftBtnPress={onClose}
               rightBtn={
-                isCurrentUserCoachOfChallenge && (
+                isCurrentUserCoachOfChallenge &&
+                !isPastEvents && (
                   <PopUpMenu
                     options={options}
                     iconColor="#000000"

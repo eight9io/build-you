@@ -272,6 +272,7 @@ export const IndividualCoachCalendarTab: FC<
         return (
           <View className="flex-1">
             <ScheduleTab
+              isPastEvents={true}
               schedules={pastSchedules}
               isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
             />

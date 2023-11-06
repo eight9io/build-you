@@ -12,12 +12,14 @@ import LinkIcon from "../../../component/asset/link.svg";
 
 interface IVideoCallScheduleCardProps {
   schedule: IScheduledTime;
+  isPastEvents: boolean;
   isCurrentUserCoachOfChallenge: boolean;
   setLocalSchedules: (schedules: IScheduledTime[]) => void;
 }
 
 const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
   schedule,
+  isPastEvents,
   setLocalSchedules,
   isCurrentUserCoachOfChallenge,
 }) => {
@@ -60,6 +62,7 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
       </View>
       <ScheduleDetailModal
         schedule={schedule}
+        isPastEvents={isPastEvents}
         isVisible={isScheduleModalVisible}
         setLocalSchedules={setLocalSchedules}
         setIsVisible={setIsScheduleModalVisible}

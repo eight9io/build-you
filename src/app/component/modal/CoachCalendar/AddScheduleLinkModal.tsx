@@ -60,8 +60,8 @@ const AddScheduleLinkModal: FC<IAddScheduleLinkModalProps> = ({
         calendlyLink: data.link,
       });
       setUserProfile({ ...currectUser, calendly: data.link });
-      onClose();
       setCoachCalendyLink(data.link);
+      onClose();
       setTimeout(() => {
         GlobalToastController.showModal({
           message:

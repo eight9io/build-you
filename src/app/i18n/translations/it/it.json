@@ -741,7 +741,9 @@
       "delete": "Elimina",
       "link": "Link",
       "link_placeholder": "Inserisci il link",
-      "link_video_call": "Link videochiamata"
+      "delete_schedule_confirm": "Vuoi eliminare questa pianificazione?",
+      "delete_schedule_des": "L'azione non può essere annullata",
+      "delete_schedule_success": "Pianificazione eliminata con successo!"
     }
   },
   "confirm_time_modal": {

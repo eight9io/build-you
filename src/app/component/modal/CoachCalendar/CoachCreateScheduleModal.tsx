@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DatePicker from "react-native-date-picker";
+import debounce from "lodash.debounce";
 
 import { Modal, Platform, SafeAreaView, View, StyleSheet } from "react-native";
 
@@ -77,11 +78,12 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
         schedule: date,
         meetingUrl: data.linkVideoCall,
         note: data.note,
-      });
-      setIsVisible(false);
-      setShouldParentRefresh(true);
-      GlobalToastController.showModal({
-        message: t("toast.create_schedule_success"),
+      }).then(() => {
+        setIsVisible(false);
+        GlobalToastController.showModal({
+          message: t("toast.create_schedule_success"),
+        });
+        setShouldParentRefresh(true);
       });
     } catch (error) {
       console.error("error", error);
@@ -172,12 +174,5 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-  },
-});
 
 export default CoachCreateScheduleModal;

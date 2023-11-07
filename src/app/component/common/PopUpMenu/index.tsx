@@ -34,7 +34,7 @@ const ButtonIcon = ({ iconColor }: { iconColor: string | undefined }) => {
 const MenuItem = ({ text, onPress }: { text: string; onPress: any }) => {
   return (
     <MenuOption onSelect={onPress}>
-      <View className={clsx("flex flex-row items-center  ")}>
+      <View className={clsx("flex flex-row items-center  py-1")}>
         <Text className={clsx("pl-3 text-md font-normal leading-6")}>
           {text}
         </Text>
@@ -107,7 +107,7 @@ const PopUpMenu: FC<IPopMenuProps> = ({
           optionsContainerStyle={[
             {
               borderRadius: 4,
-              width: 100,
+              width: 120,
             },
             optionsContainerStyle,
           ]}

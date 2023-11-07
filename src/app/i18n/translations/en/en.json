@@ -740,7 +740,10 @@
       "delete": "Delete",
       "link": "Link",
       "link_placeholder": "Enter link video call",
-      "link_video_call": "Link video call"
+      "link_video_call": "Link video call",
+      "delete_schedule_confirm": "Do you want to delete this schedule?",
+      "delete_schedule_des": "Action cannot be undo",
+      "delete_schedule_success": "Delete schedule success!"
     }
   },
   "confirm_time_modal": {

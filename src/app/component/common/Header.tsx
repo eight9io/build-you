@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
 import clsx from "clsx";
+import debounce from "lodash.debounce";
 
 interface IHeaderProps {
   title?: string;
@@ -55,7 +56,7 @@ export const Header: FC<IHeaderProps> = ({
       {rightBtn && typeof rightBtn == "string" && (
         <TouchableOpacity
           // className="absolute right-0 top-2"
-          onPress={onRightBtnPress}
+          onPress={debounce(onRightBtnPress, 300)}
         >
           <Text className="text-base font-normal text-primary-default">
             {rightBtn.toUpperCase()}

@@ -7,6 +7,7 @@ import { IScheduledTime } from "../../types/schedule";
 import VideoCallScheduleCard from "../Card/VideoCallScheduleCard/VideoCallScheduleCard";
 
 import EmptySchedule from "../asset/empty-schedule.svg";
+import GlobalToastController from "../common/Toast/GlobalToastController";
 
 interface IScheduleTabProps {
   schedules: IScheduledTime[];
@@ -34,33 +35,33 @@ const ScheduleTab: FC<IScheduleTabProps> = ({
   const [localSchedules, setLocalSchedules] =
     useState<IScheduledTime[]>(schedules);
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     setLocalSchedules(schedules);
   }, [schedules]);
 
   return (
     <View className="flex-1">
-      <>
-        {localSchedules?.length > 0 ? (
-          <FlatList
-            data={localSchedules}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <VideoCallScheduleCard
-                schedule={item}
-                isPastEvents={isPastEvents}
-                setLocalSchedules={setLocalSchedules}
-                isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
-              />
-            )}
-            contentContainerStyle={{ gap: 8 }}
-            className="mt-2 flex-1 "
-            ListFooterComponent={<View className="h-20" />}
-          />
-        ) : (
-          <EmptyScheduleView />
-        )}
-      </>
+      {localSchedules?.length > 0 ? (
+        <FlatList
+          data={localSchedules}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <VideoCallScheduleCard
+              schedule={item}
+              isPastEvents={isPastEvents}
+              setLocalSchedules={setLocalSchedules}
+              isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
+            />
+          )}
+          contentContainerStyle={{ gap: 8 }}
+          className="mt-2 flex-1 "
+          ListFooterComponent={<View className="h-20" />}
+        />
+      ) : (
+        <EmptyScheduleView />
+      )}
     </View>
   );
 };

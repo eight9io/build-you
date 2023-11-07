@@ -15,7 +15,7 @@ import {
 } from "@expo-google-fonts/open-sans";
 import { isDevice } from "expo-device";
 import { useEffect, useState } from "react";
-import { EmitterSubscription, StatusBar } from "react-native";
+import { Alert, EmitterSubscription, StatusBar } from "react-native";
 import { EventProvider } from "react-native-outside-press";
 
 import "./i18n/i18n";
@@ -45,14 +45,20 @@ export const App = () => {
           setPurchaseUpdateSubscription(updateSubscription);
           setPurchaseErrorSubscription(errorSubscription);
           console.log("IAP listeners registered");
+          // crashlytics().crash();
+          // TODO: Remove this after testing
+          requestPurchaseChecks(2).then((res) => {
+            console.log("requestPurchaseChecks", res);
+            Alert.alert("res", JSON.stringify(res[0]));
+            Alert.alert(
+              "quantity",
+              JSON.parse(res[0].dataAndroid).quantity.toString()
+            );
+          });
         })
         .catch((err) => {
           console.error("IAP listeners registration error", err);
         });
-
-      // crashlytics().crash();
-      // TODO: Remove this after testing
-      // requestPurchaseChecks();
     });
 
     return () => {
@@ -74,7 +80,6 @@ export const App = () => {
       }
     };
   }, []);
-
 
   const [fontLoaded] = useFonts({
     OpenSans_300Light,

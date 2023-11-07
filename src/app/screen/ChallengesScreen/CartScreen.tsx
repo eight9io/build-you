@@ -39,6 +39,8 @@ import GlobalToastController from "../../component/common/Toast/GlobalToastContr
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
+import { requestPurchaseChecks } from "../../utils/purchase.util";
+import { ProductPurchase, Purchase } from "react-native-iap";
 
 interface ICartScreenProps {
   route: Route<
@@ -89,6 +91,23 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const handlePay = () => {
     console.log("handlePay");
+    requestPurchaseChecks(numberOfCheckpoints)
+      .then((purchase: ProductPurchase) => {
+        console.log("requestPurchaseChecks finish", purchase);
+        GlobalToastController.showModal({
+          message: "Your payment has been processed successfully.",
+        });
+        // onSumitCertifiedChallenge();
+
+        // TODO: Show acknowledge message
+      })
+      .catch((err) => {
+        // TODO: Show error message
+        console.log("requestPurchaseChecks error", err);
+        GlobalToastController.showModal({
+          message: "There was an error while processing your payment.",
+        });
+      });
   };
 
   const handleAddCheckpoint = () => {
@@ -404,7 +423,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           height: 48,
           width: 344,
         }}
-        onPress={onSumitCertifiedChallenge}
+        onPress={handlePay}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">
           {t("cart_screen.pay") || "Pay"}

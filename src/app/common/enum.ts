@@ -6,6 +6,7 @@ export enum NOTIFICATION_TYPES {
   PROGRESS_CREATED = "ProgressCreated",
   ADDEDASEMPLOYEE = "AddedAsEmployee",
   NEW_MESSAGE = "Message",
+  CLOSEDCHALLENGE = "ClosedChallenge",
 }
 
 export enum NOTIFICATION_TOKEN_STATUS {

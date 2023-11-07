@@ -53,6 +53,7 @@ import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen"
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
 import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
+import { setBadgeCount } from "../utils/notification.util";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -150,6 +151,7 @@ export const RootNavigation = () => {
             }, 200);
           });
       } else {
+        setBadgeCount(0); // Set badge count to 0 in case user reinstall the app and open app in the first time (store data has been cleared when uninstall app)
         setTimeout(() => {
           SplashScreen.hideAsync();
         }, 200);

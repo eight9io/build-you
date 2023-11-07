@@ -287,6 +287,48 @@ export const handleTapOnIncomingNotification = async (
         }
         break;
       }
+      case NOTIFICATION_TYPES.CLOSEDCHALLENGE: {
+        const currentRouteName = navigation.getCurrentRoute().name;
+        const currentRouteParams = navigation.getCurrentRoute().params as {
+          challengeId: string;
+        };
+        const { id: currentUserId } =
+          useUserProfileStore.getState().userProfile;
+
+        // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+        // and the challengeId is the same as the incoming notification
+        // => refresh the challenge detail screen to update the challenge status
+        if (
+          currentRouteParams &&
+          (currentRouteName === "PersonalChallengeDetailScreen" ||
+            currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+          currentRouteParams.challengeId === payload.challengeId
+        ) {
+          const replaceAction = StackActions.replace(
+            payload.coachId === currentUserId
+              ? "PersonalCoachChallengeDetailScreen"
+              : "PersonalChallengeDetailScreen",
+            {
+              challengeId: payload.challengeId,
+            }
+          );
+          navigation.dispatch({
+            ...replaceAction,
+            source: undefined, // Explicitly set the source to undefined to replace the focused route. Reference: https://reactnavigation.org/docs/stack-actions/#replace
+          });
+          return;
+        } else {
+          navigation.navigate(
+            payload.coachId === currentUserId
+              ? "PersonalCoachChallengeDetailScreen"
+              : "PersonalChallengeDetailScreen",
+            {
+              challengeId: payload.challengeId,
+            }
+          );
+        }
+        break;
+      }
     }
   }
 };
@@ -326,21 +368,30 @@ export const handleTapOnNotification = async (
           if (notification.challengeId)
             navigation.navigate("PersonalCoachChallengeDetailScreen", {
               challengeId: notification.challengeId,
-              hasNewMessage: true,
+              hasNewMessage:
+                notification.type === NOTIFICATION_TYPES.NEW_MESSAGE
+                  ? true
+                  : false,
             });
           break;
         case "PersonalChallengeDetailScreen":
           if (notification.challengeId)
             navigation.navigate("PersonalChallengeDetailScreen", {
               challengeId: notification.challengeId,
-              hasNewMessage: true,
+              hasNewMessage:
+                notification.type === NOTIFICATION_TYPES.NEW_MESSAGE
+                  ? true
+                  : false,
             });
           break;
         case "CompanyChallengeDetailScreen":
           if (notification.challengeId)
             navigation.navigate("CompanyChallengeDetailScreen", {
               challengeId: notification.challengeId,
-              hasNewMessage: true,
+              hasNewMessage:
+                notification.type === NOTIFICATION_TYPES.NEW_MESSAGE
+                  ? true
+                  : false,
             });
           break;
       }
@@ -386,6 +437,16 @@ export const handleTapOnNotification = async (
         notification
       );
       break;
+    case NOTIFICATION_TYPES.CLOSEDCHALLENGE: {
+      const { id: currentUserId } = useUserProfileStore.getState().userProfile;
+      handleNavigation(
+        currentUserId === notification.challengeCoachId
+          ? "PersonalCoachChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        notification
+      );
+      break;
+    }
   }
 };
 
@@ -410,6 +471,8 @@ export const getNotificationContent = (
       return i18n.t("notification.new_employee");
     case NOTIFICATION_TYPES.NEW_MESSAGE:
       return i18n.t("notification.new_message");
+    case NOTIFICATION_TYPES.CLOSEDCHALLENGE:
+      return i18n.t("notification.close_challenge");
   }
 };
 

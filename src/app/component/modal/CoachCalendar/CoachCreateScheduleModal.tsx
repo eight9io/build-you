@@ -116,6 +116,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
             <View className="h-64">
               <DatePicker
                 date={selectedDate}
+                textColor="#24252B"
                 onDateChange={handleDatePicked}
                 minimumDate={dayjs().startOf("day").toDate()}
               />

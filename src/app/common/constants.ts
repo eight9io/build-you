@@ -1,4 +1,7 @@
 import { Platform } from "react-native";
+
+const isAnroid = Platform.OS === "android";
+
 export const LINKEDIN_LOGIN = {
   BASE_URL: "https://www.linkedin.com/oauth/v2",
   AUTHORIZATION_URL: "https://www.linkedin.com/oauth/v2/authorization",
@@ -12,10 +15,9 @@ export const LINKEDIN_LOGIN = {
 
 export const GOOGLE_MAP_API = {
   BASE_URL: "https://maps.googleapis.com",
-  NEARBY_SEARCH_ENDPOINT: "/maps/api/place/nearbysearch/json",
-  API_KEY: Platform.select({
-    ios: process.env.EXPO_IOS_GOOGLE_KEY,
-    android: process.env.EXPO_ANDROID_GOOGLE_KEY,
-  }),
+  NEARBY_SEARCH_ENDPOINT: "/maps/api/geocode/json",
+  API_KEY: isAnroid
+    ? process.env.EXPO_ANDROID_GOOGLE_KEY
+    : process.env.EXPO_IOS_GOOGLE_KEY,
   DEFAULT_RADIUS: 1500, // unit: meters
 };

@@ -65,19 +65,11 @@ const LocationInput: React.FC<ILocationInputProps> = ({
         setFetchLocationLoading(false);
         return;
       }
-      const { nextPageToken: token, addresses } = await getNearbyLocations(
-        extractedCoords,
-        nextPageToken
-      );
-      if (addresses.length > 0)
-        setNearbyLocations([...nearbyLocations, ...addresses]);
-      setNextPageToken(token);
+      const addresses = await getNearbyLocations(extractedCoords);
+      if (addresses.length > 0) setNearbyLocations([...addresses]);
     } else {
-      const { nextPageToken: token, addresses } = await getNearbyLocations(
-        extractedCoords
-      );
+      const addresses = await getNearbyLocations(extractedCoords);
       if (addresses.length > 0) setNearbyLocations(addresses);
-      setNextPageToken(token);
     }
     setFetchLocationLoading(false);
   };

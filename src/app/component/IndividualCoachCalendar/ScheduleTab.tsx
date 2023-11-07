@@ -10,6 +10,8 @@ import EmptySchedule from "../asset/empty-schedule.svg";
 
 interface IScheduleTabProps {
   schedules: IScheduledTime[];
+  isPastEvents?: boolean;
+  isCurrentUserCoachOfChallenge: boolean;
 }
 
 export const EmptyScheduleView = () => {
@@ -24,7 +26,11 @@ export const EmptyScheduleView = () => {
   );
 };
 
-const ScheduleTab: FC<IScheduleTabProps> = ({ schedules }) => {
+const ScheduleTab: FC<IScheduleTabProps> = ({
+  schedules,
+  isPastEvents = false,
+  isCurrentUserCoachOfChallenge,
+}) => {
   const [localSchedules, setLocalSchedules] =
     useState<IScheduledTime[]>(schedules);
 
@@ -42,7 +48,9 @@ const ScheduleTab: FC<IScheduleTabProps> = ({ schedules }) => {
             renderItem={({ item }) => (
               <VideoCallScheduleCard
                 schedule={item}
+                isPastEvents={isPastEvents}
                 setLocalSchedules={setLocalSchedules}
+                isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
               />
             )}
             contentContainerStyle={{ gap: 8 }}

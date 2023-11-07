@@ -18,7 +18,6 @@ import { IScheduledTime } from "../../../types/schedule";
 
 import Header from "../../common/Header";
 import PopUpMenu from "../../common/PopUpMenu";
-import VideoCallScheduleModal from "./VideoCallScheduleModal";
 
 import CloseBtn from "../../asset/close.svg";
 import LinkIcon from "../../asset/link.svg";
@@ -26,6 +25,8 @@ import { openUrlInApp } from "../../../utils/inAppBrowser";
 import EditScheduleModal from "./EditScheduleModal";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 import ToastInModal from "../../common/Toast/ToastInModal";
+import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
+import Toast from "../../common/Toast/Toast";
 
 interface IScheduleDetailModalProps {
   isVisible: boolean;
@@ -53,9 +54,11 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
   const [isEditActionSuccess, setIsEditActionSuccess] = useState<
     boolean | null
   >(null);
+  const [isAckModalVisible, setIsAckModalVisible] = useState<boolean>(false);
 
   const onClose = () => {
     setIsVisible(false);
+    setIsAckModalVisible(false);
   };
 
   const onEdit = () => {
@@ -64,14 +67,17 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
 
   const onDelete = async () => {
     try {
-      await deleteScheduleForIndividualCertifiedChallenge(schedule.id);
-      setLocalSchedules((prev: IScheduledTime[]) => {
-        return prev.filter((item) => item.id !== schedule.id);
-      });
-      onClose();
-      GlobalToastController.showModal({
-        message: t("toast.delete_schedule_success"),
-      });
+      await deleteScheduleForIndividualCertifiedChallenge(schedule.id).then(
+        () => {
+          onClose();
+          GlobalToastController.showModal({
+            message: t("toast.delete_schedule_success"),
+          });
+          setLocalSchedules((prev: IScheduledTime[]) => {
+            return prev.filter((item) => item.id !== schedule.id);
+          });
+        }
+      );
     } catch (error) {
       GlobalToastController.showModal({
         message: t("error_general_message"),
@@ -87,7 +93,7 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
     },
     {
       text: t("challenge_detail_screen_tab.coach_calendar.delete") || "Delete",
-      onPress: onDelete,
+      onPress: () => setIsAckModalVisible(true),
     },
   ];
 
@@ -102,6 +108,21 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
     });
   }, [localSchedule]);
 
+  useEffect(() => {
+    if (isEditActionSuccess !== null) {
+      setIsToastVisible(true);
+    }
+  }, [isEditActionSuccess]);
+
+  useEffect(() => {
+    if (isToastVisible) {
+      setTimeout(() => {
+        setIsToastVisible(false);
+        setIsEditActionSuccess(null);
+      }, 2000);
+    }
+  }, [isToastVisible]);
+
   return (
     <Modal
       animationType="slide"
@@ -109,18 +130,31 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
       visible={isVisible}
       className="h-full"
     >
-      <MenuProvider skipInstanceCheck>
-        <SafeAreaView className="flex-1 ">
-          <ToastInModal
-            isVisible={isToastVisible}
-            setIsVisible={setIsToastVisible}
-            message={
-              isEditActionSuccess
-                ? t("toast.edit_schedule_success")
-                : t("error_general_message")
-            }
-          />
-
+      <SafeAreaView className="flex-1 ">
+        <ToastInModal
+          isVisible={isToastVisible}
+          setIsVisible={setIsToastVisible}
+          message={
+            isEditActionSuccess
+              ? t("toast.edit_schedule_success")
+              : t("error_general_message")
+          }
+        />
+        <ConfirmDialog
+          title={t(
+            "challenge_detail_screen_tab.coach_calendar.delete_schedule_confirm"
+          )}
+          description={t(
+            "challenge_detail_screen_tab.coach_calendar.delete_schedule_des"
+          )}
+          isVisible={isAckModalVisible}
+          onConfirm={onDelete}
+          confirmButtonLabel={t("dialog.delete")}
+          confirmButtonColor="red"
+          onClosed={() => setIsAckModalVisible(false)}
+          closeButtonLabel={t("close")}
+        />
+        <MenuProvider skipInstanceCheck>
           <View
             className="px-4"
             onLayout={({ nativeEvent }) => {
@@ -210,9 +244,10 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
             setLocalSchedule={setLocalSchedule}
             isVisible={isEditScheduleModalOpen}
             setIsVisible={setIsEditScheduleModalOpen}
+            setIsEditActionSuccess={setIsEditActionSuccess}
           />
-        </SafeAreaView>
-      </MenuProvider>
+        </MenuProvider>
+      </SafeAreaView>
     </Modal>
   );
 };

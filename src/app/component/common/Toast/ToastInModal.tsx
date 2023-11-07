@@ -27,21 +27,6 @@ const ToastInModal: FC<IToastInModalProps> = ({
 }) => {
   const fadeAnim = new Animated.Value(0);
 
-  const toastRef = useRef<GlobalToastRef>();
-  useLayoutEffect(() => {
-    GlobalToastController.setModalRef(toastRef);
-  }, []);
-
-  useImperativeHandle(
-    toastRef,
-    () => ({
-      show: () => {
-        setIsVisible(true);
-      },
-    }),
-    []
-  );
-
   const handleHideToast = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,

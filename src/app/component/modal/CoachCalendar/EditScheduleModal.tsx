@@ -26,6 +26,7 @@ interface IEditScheduleModalProps {
   schedule: IScheduledTime;
   setLocalSchedule: React.Dispatch<React.SetStateAction<IScheduledTime>>;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditActionSuccess: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const EditScheduleModal: FC<IEditScheduleModalProps> = ({
@@ -33,6 +34,7 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
   isVisible,
   setIsVisible,
   setLocalSchedule,
+  setIsEditActionSuccess,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(
     new Date(schedule.schedule)
@@ -78,20 +80,21 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
         schedule: newDate,
         meetingUrl: data.linkVideoCall,
         note: data.note,
-      });
-      setLocalSchedule(Array.isArray(res.data) ? res.data[0] : res.data);
-      setIsVisible(false);
-      setTimeout(() => {
+      }).then((res) => {
+        setLocalSchedule(Array.isArray(res.data) ? res.data[0] : res.data);
+        setIsVisible(false);
+        setIsEditActionSuccess(true);
         GlobalToastController.showModal({
           message: t("toast.edit_schedule_success"),
         });
-      }, 500);
+      });
     } catch (error) {
       console.error("error", error);
       GlobalToastController.showModal({
         message: t("error_general_message"),
       });
       setIsVisible(false);
+      setIsEditActionSuccess(false);
     }
   };
 

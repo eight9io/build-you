@@ -223,8 +223,8 @@ export const IndividualCoachCalendarTab: FC<
     try {
       const response = await getAllScheduleByChallengeId(challengeId);
       const now = new Date();
-      const upcompingSchedule = [];
-      const pastSchedule = [];
+      const upcompingSchedule: IScheduledTime[] = [];
+      const pastSchedule: IScheduledTime[] = [];
 
       response.data.forEach((schedule: any) => {
         const scheduleDate = new Date(schedule.schedule);
@@ -234,9 +234,22 @@ export const IndividualCoachCalendarTab: FC<
           pastSchedule.push(schedule);
         }
       });
-
-      setUpcomingSchedules(upcompingSchedule);
-      setPastSchedules(pastSchedule);
+      const sortedUpcomingSchedule = upcompingSchedule.sort(
+        (a: IScheduledTime, b: IScheduledTime) => {
+          return (
+            new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
+          );
+        }
+      );
+      const sortedPastSchedule = pastSchedule.sort(
+        (a: IScheduledTime, b: IScheduledTime) => {
+          return (
+            new Date(b.schedule).getTime() - new Date(a.schedule).getTime()
+          );
+        }
+      );
+      setUpcomingSchedules(sortedUpcomingSchedule);
+      setPastSchedules(sortedPastSchedule);
     } catch (error) {
       console.error("Failed to get schedule of challenge", error);
     }
@@ -322,10 +335,11 @@ export const IndividualCoachCalendarTab: FC<
           index={index}
           setIndex={setTabIndex}
         />
-      </View>
+      </View> 
       {isCurrentUserCoachOfChallenge &&
         !isChallengeCompleted &&
-        coachCalendyLink && (
+        coachCalendyLink &&
+        isChallengeInProgress && (
           <View className={clsx("absolute bottom-4 h-12 w-full bg-white px-6")}>
             <Button
               title={t("create_schedule_modal.title")}

@@ -120,7 +120,7 @@ missingDimensionStrategy "store", "play"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 47
-        versionName "1.4.6"
+        versionName "1.4.7"
     }
 
     splits {

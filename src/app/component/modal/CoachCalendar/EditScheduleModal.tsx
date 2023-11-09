@@ -4,8 +4,10 @@ import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DatePicker from "react-native-date-picker";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Spinner from "react-native-loading-spinner-overlay";
 import { useForm, Resolver, Controller } from "react-hook-form";
 import { View, Modal, SafeAreaView, Platform, StyleSheet } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { IScheduledTime } from "../../../types/schedule";
 import { ICoachCreateScheduleForm } from "./CoachCreateScheduleModal";
@@ -19,7 +21,6 @@ import TextInput from "../../common/Inputs/TextInput";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 import CloseBtn from "../../asset/close.svg";
-import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 
 interface IEditScheduleModalProps {
   isVisible: boolean;
@@ -36,6 +37,8 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
   setLocalSchedule,
   setIsEditActionSuccess,
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [selectedDate, setSelectedDate] = useState<Date>(
     new Date(schedule.schedule)
   );
@@ -47,6 +50,7 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
     reset,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<ICoachCreateScheduleForm>({
     defaultValues: {
       date: selectedDate,
@@ -61,6 +65,7 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
 
   const onClose = () => {
     setIsVisible(false);
+    reset();
   };
 
   const handleDatePicked = (date?: any) => {
@@ -75,6 +80,15 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
   const onSubmit = async (data: ICoachCreateScheduleForm) => {
     try {
       const newDate = new Date(selectedDate).toISOString();
+      const timeWhenCreateSchedule = dayjs().format("YYYY-MM-DDTHH:mm:ss");
+      if (dayjs(newDate).isBefore(timeWhenCreateSchedule)) {
+        setError("date", {
+          type: "manual",
+          message: t("create_schedule_modal.error.old_date_time"),
+        });
+        return;
+      }
+      setIsLoading(true);
       const res = await editScheduleForIndividualCertifiedChallenge({
         scheduleId: schedule.id,
         schedule: newDate,
@@ -83,6 +97,7 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
       }).then((res) => {
         setLocalSchedule(Array.isArray(res.data) ? res.data[0] : res.data);
         setIsVisible(false);
+        reset();
         setIsEditActionSuccess(true);
         GlobalToastController.showModal({
           message: t("toast.edit_schedule_success"),
@@ -95,6 +110,8 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
       });
       setIsVisible(false);
       setIsEditActionSuccess(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,6 +123,7 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
       className="h-full"
     >
       <SafeAreaView className="flex-1 bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
         <View className="px-4">
           <Header
             title={t("challenge_detail_screen_tab.coach_calendar.edit")}
@@ -116,7 +134,7 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
             containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
           />
         </View>
-        <View className="flex-1">
+        <KeyboardAwareScrollView className="flex-1">
           <View className="flex flex-col p-4">
             <View className="h-64">
               <DatePicker
@@ -153,26 +171,30 @@ const EditScheduleModal: FC<IEditScheduleModalProps> = ({
               <ErrorText message={errors.linkVideoCall?.message} />
             )}
           </View>
-          <View className=" px-4">
+          <View className="flex flex-col p-4">
             <Controller
               control={control}
+              name="note"
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label={t("create_schedule_modal.note")}
-                  placeholder={t("create_schedule_modal.note_placeholder")}
-                  placeholderTextColor={"#6C6E76"}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  className={clsx(
-                    errors.linkVideoCall && "border-1 border-red-500"
-                  )}
-                />
+                <View className="flex flex-col">
+                  <TextInput
+                    label={t("create_schedule_modal.note")}
+                    placeholder={t("create_schedule_modal.note_placeholder")}
+                    placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    multiline={true}
+                    className={clsx(
+                      "h-32 ",
+                      errors.linkVideoCall && "border-1 border-red-500"
+                    )}
+                  />
+                </View>
               )}
-              name={"note"}
             />
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Modal>
   );

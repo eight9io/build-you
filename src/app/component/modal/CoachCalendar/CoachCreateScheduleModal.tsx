@@ -2,12 +2,13 @@ import clsx from "clsx";
 import dayjs from "dayjs";
 import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, Resolver, useForm } from "react-hook-form";
 import DatePicker from "react-native-date-picker";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Spinner from "react-native-loading-spinner-overlay";
+import { Modal, Platform, SafeAreaView, View } from "react-native";
+import { Controller, Resolver, set, useForm } from "react-hook-form";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { Modal, Platform, SafeAreaView, View, StyleSheet } from "react-native";
 
 import Header from "../../common/Header";
 import ErrorText from "../../common/ErrorText";
@@ -17,7 +18,6 @@ import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedu
 import CloseBtn from "../../asset/close.svg";
 import { createScheduleForIndividualCertifiedChallenge } from "../../../service/schedule";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface ICoachCreateScheduleModalProps {
   isVisible: boolean;
@@ -39,6 +39,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
   setShouldParentRefresh,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { t } = useTranslation();
   const currentDatetime = dayjs().format("YYYY-MM-DDTHH:mm:ss");
@@ -71,6 +72,11 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
     setSelectedDate(date);
   };
 
+  const onCloseModal = () => {
+    setIsVisible(false);
+    reset();
+  };
+
   const onSubmit = async (data: ICoachCreateScheduleForm) => {
     try {
       const date = new Date(data.date).toISOString();
@@ -82,6 +88,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
         });
         return;
       }
+      setIsLoading(true);
       await createScheduleForIndividualCertifiedChallenge({
         challengeId: challengeId,
         schedule: date,
@@ -89,6 +96,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
         note: data.note,
       }).then(() => {
         setIsVisible(false);
+        reset();
         GlobalToastController.showModal({
           message: t("toast.create_schedule_success"),
         });
@@ -96,6 +104,8 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
       });
     } catch (error) {
       console.error("error", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,22 +117,23 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
       className="h-full"
     >
       <SafeAreaView className="relative flex-1 bg-white">
+        {isLoading && <Spinner visible={isLoading} />}
+        <View className="px-4">
+          <Header
+            title={t("create_schedule_modal.title") as string}
+            leftBtn={<CloseBtn fill={"black"} />}
+            rightBtn={t("save") as string}
+            onLeftBtnPress={onCloseModal}
+            onRightBtnPress={handleSubmit(onSubmit)}
+            containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
+          />
+        </View>
+
         <KeyboardAwareScrollView
           contentContainerStyle={{
             flex: 1,
           }}
         >
-          <View className="px-4">
-            <Header
-              title={t("create_schedule_modal.title") as string}
-              leftBtn={<CloseBtn fill={"black"} />}
-              rightBtn={t("save") as string}
-              onLeftBtnPress={() => setIsVisible(false)}
-              onRightBtnPress={handleSubmit(onSubmit)}
-              containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
-            />
-          </View>
-
           <View className="flex flex-col p-4">
             <View className="h-64">
               <DatePicker
@@ -136,7 +147,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
             {errors.date ? <ErrorText message={errors.date.message} /> : null}
           </View>
 
-          <View className="p-4">
+          <View className="px-4">
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -160,23 +171,28 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
               <ErrorText message={errors.linkVideoCall?.message} />
             )}
           </View>
-          <View className=" px-4">
+
+          <View className="flex flex-col p-4">
             <Controller
               control={control}
+              name="note"
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label={t("create_schedule_modal.note")}
-                  placeholder={t("create_schedule_modal.note_placeholder")}
-                  placeholderTextColor={"#6C6E76"}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  className={clsx(
-                    errors.linkVideoCall && "border-1 border-red-500"
-                  )}
-                />
+                <View className="flex flex-col">
+                  <TextInput
+                    label={t("create_schedule_modal.note")}
+                    placeholder={t("create_schedule_modal.note_placeholder")}
+                    placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    multiline={true}
+                    className={clsx(
+                      "h-32 ",
+                      errors.linkVideoCall && "border-1 border-red-500"
+                    )}
+                  />
+                </View>
               )}
-              name={"note"}
             />
           </View>
         </KeyboardAwareScrollView>

@@ -771,6 +771,9 @@
     "link_video_call_placeholder": "Inserisci il link della videochiamata",
     "note": "Nota",
     "note_placeholder": "Inserisci una nota per l'allenatore",
-    "schedule_link": "Link programma"
+    "schedule_link": "Link programma",
+    "error": {
+      "old_date_time": "Seleziona una data e un'ora future."
+    }
   }
 }

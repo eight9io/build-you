@@ -771,6 +771,9 @@
     "link_video_call_placeholder": "Enter link video call",
     "note": "Note",
     "note_placeholder": "Enter note for coach",
-    "schedule_link": "Schedule link"
+    "schedule_link": "Schedule link",
+    "error": {
+      "old_date_time": "Please select a future date and time."
+    }
   }
 }

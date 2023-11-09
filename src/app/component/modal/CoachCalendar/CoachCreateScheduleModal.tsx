@@ -5,9 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, Resolver, useForm } from "react-hook-form";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DatePicker from "react-native-date-picker";
-import debounce from "lodash.debounce";
 
 import { Modal, Platform, SafeAreaView, View, StyleSheet } from "react-native";
 
@@ -43,11 +41,14 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const { t } = useTranslation();
+  const currentDatetime = dayjs().format("YYYY-MM-DDTHH:mm:ss");
+
   const {
     control,
     setValue,
     reset,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<ICoachCreateScheduleForm>({
     defaultValues: {
@@ -73,6 +74,14 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
   const onSubmit = async (data: ICoachCreateScheduleForm) => {
     try {
       const date = new Date(data.date).toISOString();
+      const timeWhenCreateSchedule = dayjs().format("YYYY-MM-DDTHH:mm:ss");
+      if (dayjs(date).isBefore(timeWhenCreateSchedule)) {
+        setError("date", {
+          type: "manual",
+          message: t("create_schedule_modal.error.old_date_time"),
+        });
+        return;
+      }
       await createScheduleForIndividualCertifiedChallenge({
         challengeId: challengeId,
         schedule: date,
@@ -118,9 +127,10 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
             <View className="h-64">
               <DatePicker
                 date={selectedDate}
+                mode="datetime"
                 textColor="#24252B"
                 onDateChange={handleDatePicked}
-                minimumDate={dayjs().startOf("day").toDate()}
+                minimumDate={new Date(currentDatetime)}
               />
             </View>
             {errors.date ? <ErrorText message={errors.date.message} /> : null}

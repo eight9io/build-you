@@ -56,7 +56,10 @@ export const Header: FC<IHeaderProps> = ({
       {rightBtn && typeof rightBtn == "string" && (
         <TouchableOpacity
           // className="absolute right-0 top-2"
-          onPress={debounce(onRightBtnPress, 300)}
+          onPress={(event) => {
+            event.persist();
+            debounce(onRightBtnPress, 300)();
+          }}
         >
           <Text className="text-base font-normal text-primary-default">
             {rightBtn.toUpperCase()}

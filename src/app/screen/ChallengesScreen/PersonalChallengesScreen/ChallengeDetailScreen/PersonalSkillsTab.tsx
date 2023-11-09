@@ -63,7 +63,7 @@ const PersonalSkillsTab: FC<ISkillsTabProps> = ({ challengeData }) => {
               skillName={skill.skill}
               skillCompetence={skill.rating}
               key={index}
-              skillGaugeClassName="bg-success-default"
+              color="bg-success-default"
             />
           );
         })}

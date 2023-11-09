@@ -1,9 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { View, Modal, SafeAreaView, Platform } from "react-native";
 import WebView from "react-native-webview";
 import Header from "../../common/Header";
 import CloseBtn from "../../asset/close.svg";
+import { useUserProfileStore } from "../../../store/user-store";
 export enum VideoCallScheduleAction {
   BOOK = "book",
   RESCHEDULE = "reschedule",
@@ -23,7 +24,23 @@ const VideoCallScheduleModal: FC<IVideoCallScheduleModalProps> = ({
   action,
   uri,
 }) => {
+  const [customUri, setCustomUri] = React.useState<string>("");
   const { t } = useTranslation();
+
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+
+  useEffect(() => {
+    const isCalendlyUri = uri.startsWith("https://calendly.com");
+    if (isCalendlyUri) {
+      const userEmail = currentUser?.email;
+      const userFirstName = currentUser?.name ?? "";
+      const userLastName = currentUser?.surname ?? "";
+      setCustomUri(
+        `${uri}?name=${userFirstName}%20${userLastName}&email=${userEmail}`
+      );
+    }
+  }, [uri]);
 
   const onClose = () => {
     setIsVisible(false);
@@ -69,7 +86,7 @@ const VideoCallScheduleModal: FC<IVideoCallScheduleModalProps> = ({
         <View className="bg-red flex-1">
           <WebView
             source={{
-              uri,
+              uri: customUri,
             }}
             startInLoadingState={true}
           />

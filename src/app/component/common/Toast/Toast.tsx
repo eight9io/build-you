@@ -14,7 +14,7 @@ import GlobalToastController, {
 } from "./GlobalToastController";
 import clsx from "clsx";
 
-const duration = 2000;
+const duration = 4000;
 const Toast = () => {
   const fadeAnim = new Animated.Value(0);
   const [toastVisible, setToastVisible] = useState<boolean>(false);

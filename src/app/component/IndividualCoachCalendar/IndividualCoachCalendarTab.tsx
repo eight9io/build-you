@@ -277,6 +277,8 @@ export const IndividualCoachCalendarTab: FC<
           <View className="flex-1">
             <ScheduleTab
               schedules={upcomingSchedules}
+              shouldParentRefresh={shouldRefresh}
+              setShouldParentRefresh={setShouldRefresh}
               isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
             />
           </View>
@@ -287,6 +289,8 @@ export const IndividualCoachCalendarTab: FC<
             <ScheduleTab
               isPastEvents={true}
               schedules={pastSchedules}
+              shouldParentRefresh={shouldRefresh}
+              setShouldParentRefresh={setShouldRefresh}
               isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
             />
           </View>
@@ -335,7 +339,7 @@ export const IndividualCoachCalendarTab: FC<
           index={index}
           setIndex={setTabIndex}
         />
-      </View> 
+      </View>
       {isCurrentUserCoachOfChallenge &&
         !isChallengeCompleted &&
         coachCalendyLink &&

@@ -13,6 +13,8 @@ interface IScheduleTabProps {
   schedules: IScheduledTime[];
   isPastEvents?: boolean;
   isCurrentUserCoachOfChallenge: boolean;
+  shouldParentRefresh: boolean;
+  setShouldParentRefresh: (value: boolean) => void;
 }
 
 export const EmptyScheduleView = () => {
@@ -30,6 +32,8 @@ export const EmptyScheduleView = () => {
 const ScheduleTab: FC<IScheduleTabProps> = ({
   schedules,
   isPastEvents = false,
+  shouldParentRefresh,
+  setShouldParentRefresh,
   isCurrentUserCoachOfChallenge,
 }) => {
   const [localSchedules, setLocalSchedules] =
@@ -58,6 +62,8 @@ const ScheduleTab: FC<IScheduleTabProps> = ({
           contentContainerStyle={{ gap: 8 }}
           className="mt-2 flex-1 "
           ListFooterComponent={<View className="h-20" />}
+          refreshing={shouldParentRefresh}
+          onRefresh={() => setShouldParentRefresh(true)}
         />
       ) : (
         <EmptyScheduleView />

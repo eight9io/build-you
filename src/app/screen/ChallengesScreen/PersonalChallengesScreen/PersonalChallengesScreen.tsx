@@ -111,12 +111,14 @@ const PersonalTab = () => {
         (challenge) => challenge.type === "free"
       );
       setPersonalChallengesList(sortChallengeByStatus(personalChallenges));
+      // delay 300ms to show loading screen
       setTimeout(() => {
         setIsLoading(false);
       }, 300);
     } catch (err) {
       setIsFetchingError(true);
       setIsLoading(false);
+      console.log("Error loading challenges: ", err);
     }
   };
 
@@ -361,6 +363,7 @@ const PersonalChallengesScreen = ({
           return null;
       }
     },
+    // if new challenge is created or deleted, re-render the screen to update the list
     [newChallengeId, deletedChallengeId]
   );
 

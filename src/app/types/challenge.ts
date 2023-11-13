@@ -117,7 +117,8 @@ export interface IChallenge {
   closing?: any;
   coach?: string;
   softSkill?: ISoftSkillFromChallenge[];
-  // TODO: update type when api ready
+  // isDraft = true is used for pending challenges
+  isDraft?: boolean;
 }
 
 export interface IChallengePackage {

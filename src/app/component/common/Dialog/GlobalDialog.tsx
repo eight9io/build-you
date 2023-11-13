@@ -1,4 +1,4 @@
-import { Platform, View } from "react-native";
+import { Platform, View, Text } from "react-native";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -58,8 +58,10 @@ const GlobalDialog = () => {
   return (
     <View className="items-center justify-center bg-white">
       <Dialog.Container visible={modalVisible}>
-        <Dialog.Title className={clsx(isIOS ? "" : "text-black-default")}>
-          {customTitle || t("dialog.alert_title")}
+        <Dialog.Title>
+          <Text className={clsx(isIOS ? "" : "text-black-default")}>
+            {customTitle || t("dialog.alert_title")}
+          </Text>
         </Dialog.Title>
         <Dialog.Description>{customMessage}</Dialog.Description>
         <Dialog.Button

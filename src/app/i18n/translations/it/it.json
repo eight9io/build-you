@@ -14,6 +14,7 @@
   "login_screen.register": "Registrati gratis ",
   "login_screen.login": "Accedi",
   "login_screen.explore_no_account": "Esplora senza account",
+  "pending_payment": "Pagamento in sospeso",
   "challenge_detail_screen": {
     "title": "Challenge",
     "builder": "Builder",
@@ -414,6 +415,10 @@
       "description": "Questa azione non può essere annullata",
       "error_title": "Errore",
       "error_description": "Chat e videochiamata sono disponibili solo quando una fase è in corso."
+    },
+    "pending_payment": {
+      "title": "Pagamento in sospeso",
+      "description": "Il tuo pagamento è in sospeso. Per favore, riprova più tardi."
     },
     "cancel": "Cancella",
     "close": "Chiudi",

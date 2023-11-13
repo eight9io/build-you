@@ -54,3 +54,8 @@ export enum COACH_CALENDAR_TABS_KEY {
   UPCOMING = "upcoming",
   PAST = "past",
 }
+
+export enum PRODUCT_PLATFORM {
+  APPLE = "apple",
+  GOOGLE = "google",
+}

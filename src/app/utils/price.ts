@@ -3,7 +3,9 @@ export const stringPriceToNumber = (str: string) => {
 };
 
 export const numberToStringPrice = (num: number) => {
-  return num.toFixed(2);
+  const formatNum = Number(num);
+  if (isNaN(formatNum)) return "0";
+  return formatNum.toFixed(2);
 };
 
 // convert 1000 (string) to 1,000

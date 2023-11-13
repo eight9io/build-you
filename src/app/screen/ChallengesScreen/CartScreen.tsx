@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -39,6 +39,14 @@ import GlobalToastController from "../../component/common/Toast/GlobalToastContr
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
+import {
+  getProductFromDatabase,
+  requestPurchaseChecks,
+  verifyPurchase,
+} from "../../utils/purchase.util";
+import { IInAppPurchaseProduct } from "../../types/purchase";
+import ErrorText from "../../component/common/ErrorText";
+import { ErrorCode, ProductPurchase } from "react-native-iap";
 
 interface ICartScreenProps {
   route: Route<
@@ -60,12 +68,15 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [isRequestSuccess, setIsRequestSuccess] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
+  const [purchaseErrorMessages, setPurchaseErrorMessages] =
+    useState<string>("");
 
   const { choosenPackage } = route.params;
   const {
     price: initialPrice,
-    name: typeOfPackage,
+    name: packageName,
     id: packgeId,
+    type: typeOfPackage,
   } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
@@ -87,8 +98,40 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     setFinalPrice(initialPrice + numberOfCheckpoints * CHECKPOINT_PRICE);
   }, [numberOfCheckpoints]);
 
-  const handlePay = () => {
-    console.log("handlePay");
+  const handlePay = async (challengeId: string) => {
+    let productToBuy: IInAppPurchaseProduct = null;
+    try {
+      productToBuy = await getProductFromDatabase(
+        typeOfPackage,
+        numberOfCheckpoints
+      );
+      if (!productToBuy) throw new Error("Product not found");
+    } catch (error) {
+      console.log("Failed to fetch product", error);
+      throw error;
+    }
+
+    let receipt: ProductPurchase = null;
+    try {
+      const purchaseResult = await requestPurchaseChecks(
+        productToBuy.productId,
+        numberOfCheckpoints
+      );
+
+      if (purchaseResult)
+        receipt = Array.isArray(purchaseResult)
+          ? purchaseResult[0]
+          : purchaseResult;
+    } catch (error) {
+      console.log("Request Purchase Error: ", error);
+      throw error;
+    }
+
+    // If there is an error in verification
+    // => Need to ignore it => close the payment screen => prevent user accidentally paying twice
+    if (receipt) {
+      await verifyPurchase(receipt, challengeId);
+    }
   };
 
   const handleAddCheckpoint = () => {
@@ -145,6 +188,24 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             },
             image
           )) as AxiosResponse;
+
+          // Wait for payment to be processed
+          try {
+            await handlePay(newChallengeId);
+            setPurchaseErrorMessages("");
+          } catch (error) {
+            // Delete draft challenge if payment failed
+            httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+            if (error.code !== ErrorCode.E_USER_CANCELLED)
+              setPurchaseErrorMessages(t("error_general_message"));
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 300);
+            return;
+          }
+
+          // TODO: Navigate to challenges screen when payment is still pending after verifying
+
           GlobalToastController.showModal({
             message:
               t("toast.create_challenge_success") ||
@@ -267,7 +328,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         />
       )}
 
-      <View className="flex flex-col items-center justify-between space-y-4">
+      <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
         <View
           className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
           style={{
@@ -276,7 +337,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         >
           <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
             <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
-              {typeOfPackage}
+              {packageName}
             </Text>
           </View>
 
@@ -392,6 +453,15 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               {numberToStringPrice(finalPrice)} $
             </Text>
           </View>
+        </View>
+        <View className="mx-9 self-start">
+          {purchaseErrorMessages && (
+            <ErrorText
+              message={purchaseErrorMessages}
+              containerClassName="w-full"
+              textClassName="flex-1"
+            />
+          )}
         </View>
       </View>
 

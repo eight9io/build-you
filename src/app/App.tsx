@@ -1,10 +1,7 @@
 import codePush from "react-native-code-push";
 import RootNavigation from "./navigation";
 import { MenuProvider } from "react-native-popup-menu";
-import {
-  initConnection,
-  endConnection,
-} from "react-native-iap";
+import { initConnection, endConnection } from "react-native-iap";
 import {
   useFonts,
   OpenSans_300Light,
@@ -22,10 +19,7 @@ import "./i18n/i18n";
 import Toast from "./component/common/Toast/Toast";
 import { addNotificationListener } from "./utils/notification.util";
 import { useNotificationStore } from "./store/notification-store";
-import {
-  registerIAPListeners,
-  requestPurchaseChecks,
-} from "./utils/purchase.util";
+import { registerIAPListeners } from "./utils/purchase.util";
 
 export const App = () => {
   const [purchaseUpdateSubscription, setPurchaseUpdateSubscription] =
@@ -49,10 +43,6 @@ export const App = () => {
         .catch((err) => {
           console.error("IAP listeners registration error", err);
         });
-
-      // crashlytics().crash();
-      // TODO: Remove this after testing
-      // requestPurchaseChecks();
     });
 
     return () => {
@@ -74,7 +64,6 @@ export const App = () => {
       }
     };
   }, []);
-
 
   const [fontLoaded] = useFonts({
     OpenSans_300Light,

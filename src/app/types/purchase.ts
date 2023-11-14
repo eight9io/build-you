@@ -1,4 +1,7 @@
-import { ProductPurchase } from "react-native-iap";
+import {
+  APPLE_IN_APP_PURCHASE_STATUS,
+  GOOGLE_IN_APP_PURCHASE_STATUS,
+} from "../common/enum";
 
 export interface receiptDataAndroid {
   orderId: string;
@@ -32,4 +35,14 @@ export interface IInAppPurchaseProduct {
   platform: "google" | "apple";
   quantity: number;
   packageType: "chat" | "video";
+}
+
+export interface IVerifyApplePurchaseResponse {
+  purchaseStatus: APPLE_IN_APP_PURCHASE_STATUS;
+  valid: boolean;
+}
+
+export interface IVerifyGooglePurchaseResponse {
+  purchaseStatus: GOOGLE_IN_APP_PURCHASE_STATUS;
+  valid: boolean;
 }

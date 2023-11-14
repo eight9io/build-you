@@ -47,6 +47,10 @@ import {
 import { IInAppPurchaseProduct } from "../../types/purchase";
 import ErrorText from "../../component/common/ErrorText";
 import { ErrorCode, ProductPurchase } from "react-native-iap";
+import {
+  APPLE_IN_APP_PURCHASE_STATUS,
+  GOOGLE_IN_APP_PURCHASE_STATUS,
+} from "../../common/enum";
 
 interface ICartScreenProps {
   route: Route<
@@ -70,6 +74,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
   const [purchaseErrorMessages, setPurchaseErrorMessages] =
     useState<string>("");
+  const [isPaymentPending, setIsPaymentPending] = useState<boolean>(false);
 
   const { choosenPackage } = route.params;
   const {
@@ -130,7 +135,21 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     // If there is an error in verification
     // => Need to ignore it => close the payment screen => prevent user accidentally paying twice
     if (receipt) {
-      await verifyPurchase(receipt, challengeId);
+      const verificationRes = await verifyPurchase(receipt, challengeId);
+      if (verificationRes) {
+        const purchaseStatus = Platform.select<
+          APPLE_IN_APP_PURCHASE_STATUS | GOOGLE_IN_APP_PURCHASE_STATUS
+        >({
+          ios: APPLE_IN_APP_PURCHASE_STATUS.PURCHASED,
+          android: GOOGLE_IN_APP_PURCHASE_STATUS.PURCHASED,
+        });
+        if (
+          verificationRes.purchaseStatus.toLowerCase() !==
+          purchaseStatus.toLowerCase()
+        ) {
+          setIsPaymentPending(true);
+        }
+      }
     }
   };
 
@@ -204,56 +223,68 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             return;
           }
 
-          // TODO: Navigate to challenges screen when payment is still pending after verifying
+          if (isPaymentPending) {
+            // If payment is pending, challenge will be saved as draft => cannot navigate to challenge detail
+            // => navigate to challenges screen instead
 
-          GlobalToastController.showModal({
-            message:
-              t("toast.create_challenge_success") ||
-              "Your challenge has been created successfully !",
-          });
+            // This dialog will be shown when all modals are closed
+            GlobalDialogController.showModal({
+              title: t("payment_pending_modal.title"),
+              message: t("payment_pending_modal.description"),
+            });
+            navigation.navigate("Challenges");
+          } else {
+            // This toast will be shown when all modals are closed
+            GlobalToastController.showModal({
+              message:
+                t("toast.create_challenge_success") ||
+                "Your challenge has been created successfully !",
+            });
 
-          const isChallengesScreenInStack = navigation
-            .getState()
-            .routes.some((route) => route.name === "Challenges");
-          if (isChallengesScreenInStack) {
-            console.log("isChallengesScreenInStack");
-            navigation.dispatch(StackActions.popToTop());
-            if (isCurrentUserCompany) {
-              const pushAction = StackActions.push("HomeScreen", {
+            const isChallengesScreenInStack = navigation
+              .getState()
+              .routes.some((route) => route.name === "Challenges");
+            if (isChallengesScreenInStack) {
+              console.log("isChallengesScreenInStack");
+              navigation.dispatch(StackActions.popToTop());
+              if (isCurrentUserCompany) {
+                const pushAction = StackActions.push("HomeScreen", {
+                  screen: "Challenges",
+                  params: {
+                    screen: "CompanyChallengeDetailScreen",
+                    params: { challengeId: newChallengeId },
+                  },
+                });
+                navigation.dispatch(pushAction);
+              } else {
+                const pushAction = StackActions.push("HomeScreen", {
+                  screen: "Challenges",
+                  params: {
+                    screen: "PersonalChallengeDetailScreen",
+                    params: { challengeId: newChallengeId },
+                  },
+                });
+                navigation.dispatch(pushAction);
+              }
+            } else {
+              // add ChallengesScreen to the stack
+              navigation.navigate("HomeScreen", {
                 screen: "Challenges",
-                params: {
+              });
+              if (isCurrentUserCompany) {
+                navigation.navigate("Challenges", {
                   screen: "CompanyChallengeDetailScreen",
                   params: { challengeId: newChallengeId },
-                },
-              });
-              navigation.dispatch(pushAction);
-            } else {
-              const pushAction = StackActions.push("HomeScreen", {
-                screen: "Challenges",
-                params: {
+                });
+              } else {
+                navigation.navigate("Challenges", {
                   screen: "PersonalChallengeDetailScreen",
                   params: { challengeId: newChallengeId },
-                },
-              });
-              navigation.dispatch(pushAction);
-            }
-          } else {
-            // add ChallengesScreen to the stack
-            navigation.navigate("HomeScreen", {
-              screen: "Challenges",
-            });
-            if (isCurrentUserCompany) {
-              navigation.navigate("Challenges", {
-                screen: "CompanyChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
-            } else {
-              navigation.navigate("Challenges", {
-                screen: "PersonalChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
+                });
+              }
             }
           }
+
           setTimeout(() => {
             setIsLoading(false);
           }, 300);

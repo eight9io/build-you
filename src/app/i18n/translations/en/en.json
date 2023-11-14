@@ -780,5 +780,9 @@
     "error": {
       "old_date_time": "Please select a future date and time."
     }
+  },
+  "payment_pending_modal": {
+    "title": "Pending payment",
+    "description": "Your challenge will be saved as draft until the payment is processed."
   }
 }

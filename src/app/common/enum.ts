@@ -59,3 +59,15 @@ export enum PRODUCT_PLATFORM {
   APPLE = "apple",
   GOOGLE = "google",
 }
+
+export enum GOOGLE_IN_APP_PURCHASE_STATUS {
+  PENDING = "pending",
+  PURCHASED = "purchased",
+  UNSPECIFIED = "unspecified",
+  UNKNOWN = "unknown",
+}
+
+export enum APPLE_IN_APP_PURCHASE_STATUS {
+  PENDING = "pending",
+  PURCHASED = "purchased",
+}

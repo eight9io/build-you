@@ -14,7 +14,12 @@ import {
   verifyApplePurchase,
   verifyGooglePurchase,
 } from "../service/purchase";
-import { IInAppPurchaseProduct, receiptDataAndroid } from "../types/purchase";
+import {
+  IInAppPurchaseProduct,
+  IVerifyApplePurchaseResponse,
+  IVerifyGooglePurchaseResponse,
+  receiptDataAndroid,
+} from "../types/purchase";
 import { PRODUCT_PLATFORM } from "../common/enum";
 
 export const registerIAPListeners = async (): Promise<{
@@ -87,7 +92,7 @@ export const getProductFromDatabase = async (
     const products = res.data;
     const productToBeFetched = extractProductByPlatform(
       products,
-      packageType,
+      packageType === "videocall" ? "video" : "chat", // TODO: Unify packageType in database
       numOfChecks,
       Platform.OS
     );
@@ -119,11 +124,14 @@ export const extractProductByPlatform = (
 export const verifyPurchase = async (
   receipt: ProductPurchase,
   challengeId: string
-) => {
+): Promise<IVerifyGooglePurchaseResponse | IVerifyApplePurchaseResponse> => {
   try {
     if (receipt) {
       if (Platform.OS === "android") {
-        const dataAndroid: receiptDataAndroid = JSON.parse(receipt.dataAndroid);
+        const dataAndroid: receiptDataAndroid = receipt.dataAndroid
+          ? JSON.parse(receipt.dataAndroid)
+          : null;
+        if (!dataAndroid) throw new Error("No dataAndroid found in receipt");
         const googleVerificationResult = await verifyGooglePurchase({
           challengeId: challengeId,
           receipt: {
@@ -138,11 +146,13 @@ export const verifyPurchase = async (
             },
           },
         });
+        return googleVerificationResult.data;
       } else {
         const appleVerificationResult = await verifyApplePurchase({
           challengeId: challengeId,
           receipt: receipt.transactionReceipt,
         });
+        return appleVerificationResult.data;
       }
     }
   } catch (error) {

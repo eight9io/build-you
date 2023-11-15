@@ -8,6 +8,8 @@ import {
   RequestPurchase,
   getProducts as getProductsFromProvider,
   Product,
+  Purchase,
+  finishTransaction,
 } from "react-native-iap";
 import getSymbolFromCurrency from "currency-symbol-map";
 import {
@@ -144,12 +146,38 @@ export const verifyPurchase = async (
             },
           },
         });
+        const purchase: Purchase = {
+          productId: receipt.productId,
+          transactionDate: receipt.transactionDate,
+          transactionReceipt: receipt.transactionReceipt,
+          transactionId: receipt.transactionId,
+        };
+        finishTransaction({ purchase, isConsumable: true })
+          .then(() => {
+            console.log("Transaction finished");
+          })
+          .catch((error) => {
+            console.log("Transaction finished with error: ", error);
+          });
         return googleVerificationResult.data;
       } else {
         const appleVerificationResult = await verifyApplePurchase({
           challengeId: challengeId,
           receipt: receipt.transactionReceipt,
         });
+        const purchase: Purchase = {
+          productId: receipt.productId,
+          transactionDate: receipt.transactionDate,
+          transactionReceipt: receipt.transactionReceipt,
+          transactionId: receipt.transactionId,
+        };
+        finishTransaction({ purchase, isConsumable: true })
+          .then(() => {
+            console.log("Transaction finished");
+          })
+          .catch((error) => {
+            console.log("Transaction finished with error: ", error);
+          });
         return appleVerificationResult.data;
       }
     }

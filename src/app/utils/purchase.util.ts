@@ -6,9 +6,10 @@ import {
   purchaseErrorListener,
   PurchaseError,
   RequestPurchase,
-  RequestPurchaseIOS,
   getProducts as getProductsFromProvider,
+  Product,
 } from "react-native-iap";
+import getSymbolFromCurrency from "currency-symbol-map";
 import {
   getProducts,
   verifyApplePurchase,
@@ -16,11 +17,12 @@ import {
 } from "../service/purchase";
 import {
   IInAppPurchaseProduct,
+  IProductFromStore,
   IVerifyApplePurchaseResponse,
   IVerifyGooglePurchaseResponse,
   receiptDataAndroid,
 } from "../types/purchase";
-import { PRODUCT_PLATFORM } from "../common/enum";
+import { PRODUCT_PACKAGE_TYPE, PRODUCT_PLATFORM } from "../common/enum";
 
 export const registerIAPListeners = async (): Promise<{
   updateSubscription: EmitterSubscription;
@@ -64,19 +66,12 @@ export const registerIAPListeners = async (): Promise<{
   return { updateSubscription, errorSubscription };
 };
 
-export const requestPurchaseChecks = (
-  productId: string,
-  numOfChecks: number
-) => {
+export const requestPurchaseChecks = (productId: string) => {
   const requestPurchaseParams: RequestPurchase = {
     sku: productId, // Required for iOS purchases
     andDangerouslyFinishTransactionAutomaticallyIOS: false,
     skus: [productId], // Required for Android purchases
   };
-
-  // Quantity can only used for iOS purchases, no support for Android at the moment
-  if (Platform.OS === "ios")
-    (requestPurchaseParams as RequestPurchaseIOS).quantity = numOfChecks;
 
   return getProductsFromProvider({ skus: [productId] }).then(() => {
     return requestPurchase(requestPurchaseParams);
@@ -92,8 +87,10 @@ export const getProductFromDatabase = async (
     const products = res.data;
     const productToBeFetched = extractProductByPlatform(
       products,
-      packageType === "videocall" ? "video" : "chat", // TODO: Unify packageType in database
-      numOfChecks,
+      packageType === "videocall"
+        ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
+        : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE,
+      numOfChecks + 1,
       Platform.OS
     );
     return productToBeFetched;
@@ -110,13 +107,14 @@ export const extractProductByPlatform = (
   if (platform === "android")
     return products.find(
       (product) =>
-        product.packageType === packageType &&
-        product.quantity === numOfChecks && // Google not supporting quantity for consumable products at the moment
+        product.packageType.trim() === packageType &&
+        product.quantity === numOfChecks && // 1 quantity = 1 check
         product.platform === PRODUCT_PLATFORM.GOOGLE
     );
   return products.find(
     (product) =>
-      product.packageType === packageType &&
+      product.packageType.trim() === packageType &&
+      product.quantity === numOfChecks && // 1 quantity = 1 check
       product.platform === PRODUCT_PLATFORM.APPLE
   );
 };
@@ -159,4 +157,126 @@ export const verifyPurchase = async (
     console.log("Verify Purchase Error: ", error);
     // If there is an error in verification, need to ignore it => close the payment screen => prevent user accidentally paying twice
   }
+};
+
+export const getProductsFromStoreToDisplay = async () => {
+  // Get product from store to display in payment screen (unit price)
+  const res = await getProducts(); // Get product list from database
+  if (res.data) {
+    const products = res.data;
+    const { chatCheck, videoCheck, chatPackage, videoPackage } =
+      extractProductWithUnitPrice(products);
+    if (!chatCheck || !videoCheck || !chatPackage || !videoPackage) return null;
+
+    // Fetch product from store to get localized price based on device's locale
+    const packagesFromStore = await getProductsFromProvider({
+      skus: [
+        chatCheck.productId,
+        videoCheck.productId,
+        chatPackage.productId,
+        videoPackage.productId,
+      ],
+    });
+
+    const result: {
+      chatPackage: IProductFromStore;
+      videoPackage: IProductFromStore;
+      chatCheck: IProductFromStore;
+      videoCheck: IProductFromStore;
+    } = {
+      chatPackage: null,
+      videoPackage: null,
+      chatCheck: null,
+      videoCheck: null,
+    };
+
+    if (packagesFromStore.length === 0) return null;
+
+    packagesFromStore.forEach((packageFromStore) => {
+      const price =
+        Platform.OS === "ios"
+          ? Number(packageFromStore.price)
+          : priceMicrosToPrice(
+              Number(
+                Number(
+                  packageFromStore.oneTimePurchaseOfferDetails.priceAmountMicros
+                ).toFixed(2)
+              )
+            );
+      switch (packageFromStore.productId) {
+        case chatCheck.productId:
+          result.chatCheck = {
+            ...packageFromStore,
+            price: price || 0,
+          };
+          break;
+        case videoCheck.productId:
+          result.videoCheck = {
+            ...packageFromStore,
+            price: price || 0,
+          };
+          break;
+        case chatPackage.productId:
+          result.chatPackage = {
+            ...packageFromStore,
+            price: price || 0,
+          };
+          break;
+        case videoPackage.productId:
+          result.videoPackage = {
+            ...packageFromStore,
+            price: price || 0,
+          };
+          break;
+      }
+    });
+    return result;
+  }
+  return null;
+};
+
+const extractProductWithUnitPrice = (products: IInAppPurchaseProduct[]) => {
+  let chatCheck = null;
+  let videoCheck = null;
+  let chatPackage = null;
+  let videoPackage = null;
+  const platform = Platform.select({
+    ios: PRODUCT_PLATFORM.APPLE,
+    android: PRODUCT_PLATFORM.GOOGLE,
+  });
+
+  products.forEach((product) => {
+    if (product.platform !== platform) return; // Only get product with the same platform as device (Apple or Google
+    switch (product.packageType.trim()) {
+      case PRODUCT_PACKAGE_TYPE.CHAT_CHECK: // Chat Check is expected to have only 1 product
+        chatCheck = product;
+        break;
+      case PRODUCT_PACKAGE_TYPE.VIDEO_CHECK: // Video Check is expected to have only 1 product
+        videoCheck = product;
+        break;
+      case PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE:
+        // Chat Package is expected to have many products => get the one with quantity = 1 to display unit price
+        // 1 quantity = 1 check
+        if (product.quantity === 1) chatPackage = product;
+        break;
+      case PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE:
+        // Video Package is expected to have many products => get the one with quantity = 1 to display unit price
+        // 1 quantity = 1 check
+        if (product.quantity === 1) videoPackage = product;
+        break;
+    }
+  });
+  return { chatCheck, videoCheck, chatPackage, videoPackage };
+};
+
+export const getCurrencySymbol = (currency: string) => {
+  // Get currency symbol based on currency code
+  // Example: USD => $
+
+  return getSymbolFromCurrency(currency);
+};
+
+export const priceMicrosToPrice = (priceMicros: number) => {
+  if (isNaN(Number(priceMicros))) return 0;
+  return Number(priceMicros) / 1000000;
 };

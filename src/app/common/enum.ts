@@ -71,3 +71,10 @@ export enum APPLE_IN_APP_PURCHASE_STATUS {
   PENDING = "pending",
   PURCHASED = "purchased",
 }
+
+export enum PRODUCT_PACKAGE_TYPE {
+  CHAT_CHECK = "chat_check",
+  VIDEO_CHECK = "video_check",
+  CHAT_CHALLENGE = "chat_challenge",
+  VIDEO_CHALLENGE = "video_challenge",
+}

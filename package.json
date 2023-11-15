@@ -36,6 +36,7 @@
     "@rneui/themed": "^4.0.0-rc.7",
     "axios": "^1.4.0",
     "clsx": "^1.2.1",
+    "currency-symbol-map": "^5.1.0",
     "dayjs": "^1.11.7",
     "dotenv": "^16.3.1",
     "eas-cli": "^3.13.0",

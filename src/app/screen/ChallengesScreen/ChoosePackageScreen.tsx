@@ -1,5 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   View,
@@ -10,13 +10,16 @@ import {
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
-import { numberToStringPrice } from "../../utils/price";
-
 import { serviceGetAllPackages } from "../../service/package";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
-import { IPackage } from "../../types/package";
+import { ICheckPoint, IPackage } from "../../types/package";
 import { getLanguageLocalStorage } from "../../utils/language";
+import {
+  getCurrencySymbol,
+  getProductsFromStoreToDisplay,
+} from "../../utils/purchase.util";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 
 interface ITypeOfPackage {
   id: string;
@@ -34,7 +37,14 @@ function convertPhrases(phrase) {
   }
 }
 
-const RenderPackageOptions = ({ name, type, caption, price, onPress }) => {
+const RenderPackageOptions = ({
+  name,
+  type,
+  caption,
+  price,
+  currency,
+  onPress,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -74,7 +84,7 @@ const RenderPackageOptions = ({ name, type, caption, price, onPress }) => {
             <View className="w-[164px] border border-neutral-300"></View>
           </View>
           <Text className="text-center text-base font-semibold leading-snug text-orange-500">
-            {numberToStringPrice(price)} $
+            {`${getCurrencySymbol(currency)}${price.toFixed(2)}`}
           </Text>
         </View>
         <TouchableOpacity
@@ -96,6 +106,14 @@ const RenderPackageOptions = ({ name, type, caption, price, onPress }) => {
 
 const ChoosePackageScreen = () => {
   const [packages, setPackages] = useState<IPackage[]>([] as IPackage[]);
+  const [chatCheck, setChatCheck] = useState<ICheckPoint>({
+    price: 0,
+    currency: "USD",
+  });
+  const [videoCheck, setVideoCheck] = useState<ICheckPoint>({
+    price: 0,
+    currency: "USD",
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -108,6 +126,7 @@ const ChoosePackageScreen = () => {
     const packageData = {
       name: choosenPackage.name,
       price: choosenPackage.price,
+      currency: choosenPackage.currency,
       id: choosenPackage.id,
       type: choosenPackage.type,
     };
@@ -117,6 +136,7 @@ const ChoosePackageScreen = () => {
     });
     navigation.navigate("CartScreen", {
       choosenPackage: choosenPackage,
+      checkPoint: choosenPackage.type === "chat" ? chatCheck : videoCheck,
     });
   };
 
@@ -124,54 +144,105 @@ const ChoosePackageScreen = () => {
     const fetchPackages = async () => {
       const currentLanguage = await getLanguageLocalStorage();
       setLoading(true);
+      let sortedPackages = [];
       try {
         const res = await serviceGetAllPackages(currentLanguage);
-        const sortedPackages = res.data.packages.sort(
-          (a, b) => a.price - b.price
-        );
+        sortedPackages = res.data.packages.sort((a, b) => a.price - b.price);
+      } catch (error) {
+        console.error("get packages error", error);
+      }
+
+      try {
+        // Get unit localized price by fetching from store
+        const packagesFromStore = await getProductsFromStoreToDisplay();
+        if (packagesFromStore) {
+          sortedPackages = sortedPackages.map((item) => {
+            return {
+              ...item,
+              price:
+                item.type === "chat"
+                  ? packagesFromStore.chatPackage.price
+                  : packagesFromStore.videoPackage.price,
+              currency:
+                item.type === "chat"
+                  ? packagesFromStore.chatPackage.currency
+                  : packagesFromStore.videoPackage.currency,
+            };
+          });
+          setChatCheck({
+            price: !isNaN(Number(packagesFromStore.chatCheck.price))
+              ? Number(packagesFromStore.chatCheck.price)
+              : 0,
+            currency: packagesFromStore.chatCheck.currency,
+          });
+          setVideoCheck({
+            price: !isNaN(Number(packagesFromStore.videoCheck.price))
+              ? Number(packagesFromStore.videoCheck.price)
+              : 0,
+            currency: packagesFromStore.videoCheck.currency,
+          });
+        } else {
+          sortedPackages = sortedPackages.map((item) => {
+            return {
+              ...item,
+              price: 0,
+              currency: "USD",
+            };
+          });
+        }
 
         setPackages(sortedPackages);
       } catch (error) {
-        console.error("get packages error", error);
+        console.error("Fetch package error", error);
+        GlobalDialogController.showModal({
+          title: t("dialog.err_title"),
+          message: t("errorMessage:500") as string,
+        });
       } finally {
         setLoading(false);
       }
     };
     fetchPackages();
   }, []);
+
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
-      <ScrollView>
-        <View className="mb-10 flex flex-col items-center justify-start space-y-4">
-          <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
-            {t("choose_packages_screen.title")}
-          </Text>
-          <Text className="px-12  text-center text-md font-normal leading-none text-zinc-800 opacity-90">
-            {t("choose_packages_screen.description")}
-          </Text>
-          <View className=" flex flex-col">
-            {packages.length > 0 &&
-              packages.map((item) => (
-                <View key={item?.type}>
-                  <RenderPackageOptions
-                    name={item.name}
-                    type={item.type}
-                    caption={item.caption}
-                    price={item.price}
-                    onPress={() => handleChoosePackage(item)}
-                  />
+      {loading ? (
+        <Spinner visible={loading} />
+      ) : (
+        <ScrollView>
+          <View className="mb-10 flex flex-col items-center justify-start space-y-4">
+            <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
+              {t("choose_packages_screen.title")}
+            </Text>
+            <Text className="px-12  text-center text-md font-normal leading-none text-zinc-800 opacity-90">
+              {t("choose_packages_screen.description")}
+            </Text>
+            <View className=" flex flex-col">
+              {packages.length > 0 &&
+                packages.map((item) => (
+                  <View key={item?.type}>
+                    <RenderPackageOptions
+                      name={item.name}
+                      type={item.type}
+                      caption={item.caption}
+                      price={item.price}
+                      currency={item.currency}
+                      onPress={() => handleChoosePackage(item)}
+                    />
+                  </View>
+                ))}
+              {packages.length === 0 && !loading && (
+                <View className="flex items-center justify-center">
+                  <Text className="text-center text-md font-semibold leading-tight text-primary-default">
+                    {t("choose_packages_screen.no_package")}
+                  </Text>
                 </View>
-              ))}
-            {packages.length === 0 && !loading && (
-              <View className="flex items-center justify-center">
-                <Text className="text-center text-md font-semibold leading-tight text-primary-default">
-                  {t("choose_packages_screen.no_package")}
-                </Text>
-              </View>
-            )}
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

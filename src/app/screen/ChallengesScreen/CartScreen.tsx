@@ -22,9 +22,8 @@ import {
   updateChallengeImage,
 } from "../../service/challenge";
 import httpInstance from "../../utils/http";
-import { numberToStringPrice } from "../../utils/price";
 
-import { IPackage } from "../../types/package";
+import { ICheckPoint, IPackage } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
 
 import { useUserProfileStore } from "../../store/user-store";
@@ -40,6 +39,7 @@ import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
 import {
+  getCurrencySymbol,
   getProductFromDatabase,
   requestPurchaseChecks,
   verifyPurchase,
@@ -57,11 +57,10 @@ interface ICartScreenProps {
     "CartScreen",
     {
       choosenPackage: IPackage;
+      checkPoint: ICheckPoint;
     }
   >;
 }
-
-const CHECKPOINT_PRICE = 90;
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(1);
@@ -75,13 +74,14 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [purchaseErrorMessages, setPurchaseErrorMessages] =
     useState<string>("");
   const [isPaymentPending, setIsPaymentPending] = useState<boolean>(false);
+  const { choosenPackage, checkPoint } = route.params;
 
-  const { choosenPackage } = route.params;
   const {
     price: initialPrice,
     name: packageName,
     id: packgeId,
     type: typeOfPackage,
+    currency,
   } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
@@ -100,7 +100,11 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
   useEffect(() => {
-    setFinalPrice(initialPrice + numberOfCheckpoints * CHECKPOINT_PRICE);
+    const newFinalPrice =
+      Number(initialPrice) +
+      Number(numberOfCheckpoints) * Number(checkPoint.price);
+    console.log("newFinalPrice: ", newFinalPrice);
+    setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
   }, [numberOfCheckpoints]);
 
   const handlePay = async (challengeId: string) => {
@@ -108,7 +112,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     try {
       productToBuy = await getProductFromDatabase(
         typeOfPackage,
-        numberOfCheckpoints
+        numberOfCheckpoints // -1 because we already have 1 checkpoint in the base package
       );
       if (!productToBuy) throw new Error("Product not found");
     } catch (error) {
@@ -119,8 +123,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     let receipt: ProductPurchase = null;
     try {
       const purchaseResult = await requestPurchaseChecks(
-        productToBuy.productId,
-        numberOfCheckpoints
+        productToBuy.productId
       );
 
       if (purchaseResult)
@@ -154,17 +157,18 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   };
 
   const handleAddCheckpoint = () => {
-    if (lowestCheckpointError) {
-      setLowestCheckpointError(false);
-    }
+    // if (lowestCheckpointError) {
+    //   setLowestCheckpointError(false);
+    // }
     setNumberOfCheckpoints((prev) => prev + 1);
   };
 
   const handleRemoveCheckpoint = () => {
-    if (numberOfCheckpoints === 1) {
-      setLowestCheckpointError(true);
-      return;
-    }
+    // if (numberOfCheckpoints === 0) {
+    //   setLowestCheckpointError(true);
+    //   return;
+    // }
+    if (numberOfCheckpoints < 1) return;
     setNumberOfCheckpoints((prev) => prev - 1);
   };
 
@@ -390,7 +394,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               </View>
               <View className="flex w-full items-end ">
                 <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {numberToStringPrice(initialPrice)} $
+                  {`${getCurrencySymbol(currency)}${initialPrice.toFixed(2)}`}
                 </Text>
               </View>
             </View>
@@ -447,7 +451,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                {lowestCheckpointError && (
+                {/* {lowestCheckpointError && (
                   <View className="flex flex-row items-center justify-start">
                     <Text
                       className="pl-1 text-sm font-normal leading-5 text-red-500"
@@ -457,13 +461,15 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
                         "At least 1 checkpoint is required"}
                     </Text>
                   </View>
-                )}
+                )} */}
 
                 <View className="w-full border border-neutral-300"></View>
               </View>
               <View className="flex w-full items-end ">
                 <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {numberToStringPrice(CHECKPOINT_PRICE)} $
+                  {`${getCurrencySymbol(currency)}${(
+                    checkPoint.price * numberOfCheckpoints
+                  ).toFixed(2)}`}
                 </Text>
               </View>
             </View>
@@ -481,7 +487,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               Total
             </Text>
             <Text className=" text-base font-semibold leading-tight text-primary-default">
-              {numberToStringPrice(finalPrice)} $
+              {`${getCurrencySymbol(currency)}${finalPrice.toFixed(2)}`}
             </Text>
           </View>
         </View>

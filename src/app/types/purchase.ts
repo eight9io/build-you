@@ -1,3 +1,4 @@
+import { Product } from "react-native-iap";
 import {
   APPLE_IN_APP_PURCHASE_STATUS,
   GOOGLE_IN_APP_PURCHASE_STATUS,
@@ -34,7 +35,11 @@ export interface IInAppPurchaseProduct {
   productId: string;
   platform: "google" | "apple";
   quantity: number;
-  packageType: "chat" | "video";
+  packageType:
+    | "chat_check"
+    | "video_check"
+    | "chat_challenge"
+    | "video_challenge";
 }
 
 export interface IVerifyApplePurchaseResponse {
@@ -45,4 +50,8 @@ export interface IVerifyApplePurchaseResponse {
 export interface IVerifyGooglePurchaseResponse {
   purchaseStatus: GOOGLE_IN_APP_PURCHASE_STATUS;
   valid: boolean;
+}
+
+export interface IProductFromStore extends Omit<Product, "price"> {
+  price: number;
 }

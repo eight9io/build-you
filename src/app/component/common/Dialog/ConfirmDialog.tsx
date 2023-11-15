@@ -51,7 +51,7 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
               )}
             >
               {title}
-            </Text>{" "}
+            </Text>
           </Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {onClosed && (

@@ -1,45 +1,31 @@
 import React, {
-  useState,
   useEffect,
   useLayoutEffect,
   useRef,
-  forwardRef,
   useImperativeHandle,
+  FC,
 } from "react";
 import { Text, Animated, TouchableOpacity, Platform, View } from "react-native";
 import IconClose from "../../../component/asset/icon-close.svg";
-import GlobalToastController, {
-  GlobalToastRef,
-  IGlobalToastProps,
-} from "./GlobalToastController";
+import GlobalToastController, { GlobalToastRef } from "./GlobalToastController";
 import clsx from "clsx";
 
-const duration = 4000;
-const Toast = () => {
+const duration = 2000;
+
+interface IToastInModalProps {
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  message: string;
+  isScreenHasBottomNav?: boolean;
+}
+
+const ToastInModal: FC<IToastInModalProps> = ({
+  isVisible,
+  setIsVisible,
+  message,
+  isScreenHasBottomNav = false,
+}) => {
   const fadeAnim = new Animated.Value(0);
-  const [toastVisible, setToastVisible] = useState<boolean>(false);
-  const [message, setMessage] = useState("");
-  const [isScreenHasBottomNav, setIsScreenHasBottomNav] =
-    useState<boolean>(true);
-
-  const toastRef = useRef<GlobalToastRef>();
-  useLayoutEffect(() => {
-    GlobalToastController.setModalRef(toastRef);
-  }, []);
-
-  useImperativeHandle(
-    toastRef,
-    () => ({
-      show: (notification: IGlobalToastProps) => {
-        setToastVisible(true);
-        if (notification.message) {
-          setMessage(notification.message);
-        }
-        setIsScreenHasBottomNav(notification.isScreenHasBottomNav);
-      },
-    }),
-    []
-  );
 
   const handleHideToast = () => {
     Animated.timing(fadeAnim, {
@@ -47,12 +33,12 @@ const Toast = () => {
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      setToastVisible(false);
+      setIsVisible(false);
     });
   };
 
   useEffect(() => {
-    if (toastVisible) {
+    if (isVisible) {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
@@ -63,8 +49,8 @@ const Toast = () => {
         handleHideToast();
       }, duration);
     }
-  }, [fadeAnim, duration, toastVisible]);
-  if (!toastVisible) return null;
+  }, [fadeAnim, duration, isVisible]);
+  if (!isVisible) return null;
 
   return (
     <Animated.View
@@ -88,4 +74,4 @@ const Toast = () => {
   );
 };
 
-export default forwardRef(Toast);
+export default ToastInModal;

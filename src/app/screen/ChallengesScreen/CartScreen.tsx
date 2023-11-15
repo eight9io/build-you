@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -22,9 +22,8 @@ import {
   updateChallengeImage,
 } from "../../service/challenge";
 import httpInstance from "../../utils/http";
-import { numberToStringPrice } from "../../utils/price";
 
-import { IPackage } from "../../types/package";
+import { ICheckPoint, IPackage } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
 
 import { useUserProfileStore } from "../../store/user-store";
@@ -39,17 +38,29 @@ import GlobalToastController from "../../component/common/Toast/GlobalToastContr
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
+import {
+  getCurrencySymbol,
+  getProductFromDatabase,
+  requestPurchaseChecks,
+  verifyPurchase,
+} from "../../utils/purchase.util";
+import { IInAppPurchaseProduct } from "../../types/purchase";
+import ErrorText from "../../component/common/ErrorText";
+import { ErrorCode, ProductPurchase } from "react-native-iap";
+import {
+  APPLE_IN_APP_PURCHASE_STATUS,
+  GOOGLE_IN_APP_PURCHASE_STATUS,
+} from "../../common/enum";
 
 interface ICartScreenProps {
   route: Route<
     "CartScreen",
     {
       choosenPackage: IPackage;
+      checkPoint: ICheckPoint;
     }
   >;
 }
-
-const CHECKPOINT_PRICE = 90;
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(1);
@@ -60,12 +71,17 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [isRequestSuccess, setIsRequestSuccess] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
+  const [purchaseErrorMessages, setPurchaseErrorMessages] =
+    useState<string>("");
+  const [isPaymentPending, setIsPaymentPending] = useState<boolean>(false);
+  const { choosenPackage, checkPoint } = route.params;
 
-  const { choosenPackage } = route.params;
   const {
     price: initialPrice,
-    name: typeOfPackage,
+    name: packageName,
     id: packgeId,
+    type: typeOfPackage,
+    currency,
   } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
@@ -84,25 +100,75 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
   useEffect(() => {
-    setFinalPrice(initialPrice + numberOfCheckpoints * CHECKPOINT_PRICE);
+    const newFinalPrice =
+      Number(initialPrice) +
+      Number(numberOfCheckpoints) * Number(checkPoint.price);
+    console.log("newFinalPrice: ", newFinalPrice);
+    setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
   }, [numberOfCheckpoints]);
 
-  const handlePay = () => {
-    console.log("handlePay");
+  const handlePay = async (challengeId: string) => {
+    let productToBuy: IInAppPurchaseProduct = null;
+    try {
+      productToBuy = await getProductFromDatabase(
+        typeOfPackage,
+        numberOfCheckpoints // -1 because we already have 1 checkpoint in the base package
+      );
+      if (!productToBuy) throw new Error("Product not found");
+    } catch (error) {
+      console.log("Failed to fetch product", error);
+      throw error;
+    }
+
+    let receipt: ProductPurchase = null;
+    try {
+      const purchaseResult = await requestPurchaseChecks(
+        productToBuy.productId
+      );
+
+      if (purchaseResult)
+        receipt = Array.isArray(purchaseResult)
+          ? purchaseResult[0]
+          : purchaseResult;
+    } catch (error) {
+      console.log("Request Purchase Error: ", error);
+      throw error;
+    }
+
+    // If there is an error in verification
+    // => Need to ignore it => close the payment screen => prevent user accidentally paying twice
+    if (receipt) {
+      const verificationRes = await verifyPurchase(receipt, challengeId);
+      if (verificationRes) {
+        const purchaseStatus = Platform.select<
+          APPLE_IN_APP_PURCHASE_STATUS | GOOGLE_IN_APP_PURCHASE_STATUS
+        >({
+          ios: APPLE_IN_APP_PURCHASE_STATUS.PURCHASED,
+          android: GOOGLE_IN_APP_PURCHASE_STATUS.PURCHASED,
+        });
+        if (
+          verificationRes.purchaseStatus.toLowerCase() !==
+          purchaseStatus.toLowerCase()
+        ) {
+          setIsPaymentPending(true);
+        }
+      }
+    }
   };
 
   const handleAddCheckpoint = () => {
-    if (lowestCheckpointError) {
-      setLowestCheckpointError(false);
-    }
+    // if (lowestCheckpointError) {
+    //   setLowestCheckpointError(false);
+    // }
     setNumberOfCheckpoints((prev) => prev + 1);
   };
 
   const handleRemoveCheckpoint = () => {
-    if (numberOfCheckpoints === 1) {
-      setLowestCheckpointError(true);
-      return;
-    }
+    // if (numberOfCheckpoints === 0) {
+    //   setLowestCheckpointError(true);
+    //   return;
+    // }
+    if (numberOfCheckpoints < 1) return;
     setNumberOfCheckpoints((prev) => prev - 1);
   };
 
@@ -145,65 +211,100 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             },
             image
           )) as AxiosResponse;
-          GlobalToastController.showModal({
-            message:
-              t("toast.create_challenge_success") ||
-              "Your challenge has been created successfully !",
-          });
 
-          const isChallengesScreenInStack = navigation
-            .getState()
-            .routes.some((route) => route.name === "Challenges");
-          if (isChallengesScreenInStack) {
-            console.log("isChallengesScreenInStack");
-            navigation.dispatch(StackActions.popToTop());
-            if (isCurrentUserCompany) {
-              const pushAction = StackActions.push("HomeScreen", {
+          // Wait for payment to be processed
+          try {
+            await handlePay(newChallengeId);
+            setPurchaseErrorMessages("");
+          } catch (error) {
+            // Delete draft challenge if payment failed
+            httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+            if (error.code !== ErrorCode.E_USER_CANCELLED)
+              setPurchaseErrorMessages(t("error_general_message"));
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 300);
+            return;
+          }
+
+          if (isPaymentPending) {
+            // If payment is pending, challenge will be saved as draft => cannot navigate to challenge detail
+            // => navigate to challenges screen instead
+
+            // This dialog will be shown when all modals are closed
+            GlobalDialogController.showModal({
+              title: t("payment_pending_modal.title"),
+              message: t("payment_pending_modal.description"),
+            });
+            navigation.navigate("Challenges");
+          } else {
+            // This toast will be shown when all modals are closed
+            GlobalToastController.showModal({
+              message:
+                t("toast.create_challenge_success") ||
+                "Your challenge has been created successfully !",
+            });
+
+            const isChallengesScreenInStack = navigation
+              .getState()
+              .routes.some((route) => route.name === "Challenges");
+            if (isChallengesScreenInStack) {
+              console.log("isChallengesScreenInStack");
+              navigation.dispatch(StackActions.popToTop());
+              if (isCurrentUserCompany) {
+                const pushAction = StackActions.push("HomeScreen", {
+                  screen: "Challenges",
+                  params: {
+                    screen: "CompanyChallengeDetailScreen",
+                    params: { challengeId: newChallengeId },
+                  },
+                });
+                navigation.dispatch(pushAction);
+              } else {
+                const pushAction = StackActions.push("HomeScreen", {
+                  screen: "Challenges",
+                  params: {
+                    screen: "PersonalChallengeDetailScreen",
+                    params: { challengeId: newChallengeId },
+                  },
+                });
+                navigation.dispatch(pushAction);
+              }
+            } else {
+              // add ChallengesScreen to the stack
+              navigation.navigate("HomeScreen", {
                 screen: "Challenges",
-                params: {
+              });
+              if (isCurrentUserCompany) {
+                navigation.navigate("Challenges", {
                   screen: "CompanyChallengeDetailScreen",
                   params: { challengeId: newChallengeId },
-                },
-              });
-              navigation.dispatch(pushAction);
-            } else {
-              const pushAction = StackActions.push("HomeScreen", {
-                screen: "Challenges",
-                params: {
+                });
+              } else {
+                navigation.navigate("Challenges", {
                   screen: "PersonalChallengeDetailScreen",
                   params: { challengeId: newChallengeId },
-                },
-              });
-              navigation.dispatch(pushAction);
-            }
-          } else {
-            // add ChallengesScreen to the stack
-            navigation.navigate("HomeScreen", {
-              screen: "Challenges",
-            });
-            if (isCurrentUserCompany) {
-              navigation.navigate("Challenges", {
-                screen: "CompanyChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
-            } else {
-              navigation.navigate("Challenges", {
-                screen: "PersonalChallengeDetailScreen",
-                params: { challengeId: newChallengeId },
-              });
+                });
+              }
             }
           }
 
-          setIsLoading(false);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 300);
           return;
         }
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
         setIsRequestSuccess(true);
         setIsShowModal(true);
       }
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
       navigation.navigate("HomeScreen", {
         screen: "CreateChallengeScreenMain",
       });
@@ -262,7 +363,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         />
       )}
 
-      <View className="flex flex-col items-center justify-between space-y-4">
+      <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
         <View
           className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
           style={{
@@ -271,7 +372,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         >
           <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
             <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
-              {typeOfPackage}
+              {packageName}
             </Text>
           </View>
 
@@ -293,7 +394,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               </View>
               <View className="flex w-full items-end ">
                 <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {numberToStringPrice(initialPrice)} $
+                  {`${getCurrencySymbol(currency)}${initialPrice.toFixed(2)}`}
                 </Text>
               </View>
             </View>
@@ -350,7 +451,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                {lowestCheckpointError && (
+                {/* {lowestCheckpointError && (
                   <View className="flex flex-row items-center justify-start">
                     <Text
                       className="pl-1 text-sm font-normal leading-5 text-red-500"
@@ -360,13 +461,15 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
                         "At least 1 checkpoint is required"}
                     </Text>
                   </View>
-                )}
+                )} */}
 
                 <View className="w-full border border-neutral-300"></View>
               </View>
               <View className="flex w-full items-end ">
                 <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {numberToStringPrice(CHECKPOINT_PRICE)} $
+                  {`${getCurrencySymbol(currency)}${(
+                    checkPoint.price * numberOfCheckpoints
+                  ).toFixed(2)}`}
                 </Text>
               </View>
             </View>
@@ -384,9 +487,18 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               Total
             </Text>
             <Text className=" text-base font-semibold leading-tight text-primary-default">
-              {numberToStringPrice(finalPrice)} $
+              {`${getCurrencySymbol(currency)}${finalPrice.toFixed(2)}`}
             </Text>
           </View>
+        </View>
+        <View className="mx-9 self-start">
+          {purchaseErrorMessages && (
+            <ErrorText
+              message={purchaseErrorMessages}
+              containerClassName="w-full"
+              textClassName="flex-1"
+            />
+          )}
         </View>
       </View>
 

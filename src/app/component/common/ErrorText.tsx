@@ -5,11 +5,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 interface Props {
   message: any;
   containerClassName?: string;
+  textClassName?: string;
   testID?: string;
 }
 export default function ErrorText({
   message,
   containerClassName,
+  textClassName,
   testID,
 }: Props) {
   return (
@@ -21,7 +23,10 @@ export default function ErrorText({
     >
       <Ionicons name="alert-circle-outline" size={14} color="#FF4949" />
 
-      <Text className={clsx(" ml-1  text-sm text-red-500")} testID={testID}>
+      <Text
+        className={clsx(" ml-1  text-sm text-red-500", textClassName)}
+        testID={testID}
+      >
         {message}
       </Text>
     </View>

@@ -93,13 +93,11 @@ const ConfirmedRequestedCall = ({
             iconColor="#6C6E76"
             options={[
               {
-                // text: translate("pop_up_menu.edit"),
-                text: "Edit",
+                text: translate("pop_up_menu.edit"),
                 onPress: handleEditScheduledVideoCallLink,
               },
               {
-                // text: translate("pop_up_menu.delete"),
-                text: "Delete",
+                text: translate("pop_up_menu.delete"),
                 onPress: handleDeleteConfirmedScheduledVideoCall,
               },
             ]}
@@ -378,7 +376,10 @@ const CompanyCoachCalendarTabCoachView: FC<
         const confirmedOption = scheduledOptions?.proposals.find(
           (item) => item?.isConfirmed > 0
         );
-        if (confirmedOption) setConfirmedOption(confirmedOption);
+        if (confirmedOption) {
+          setConfirmedOption(confirmedOption);
+          return;
+        }
         const filteredScheduledOptions = scheduledOptions?.proposals.filter(
           (item) => item?.proposal
         );
@@ -469,7 +470,7 @@ const CompanyCoachCalendarTabCoachView: FC<
 
       <View className="flex flex-col rounded-lg py-2">
         <Text className="text-md font-semibold leading-tight text-zinc-500">
-          Request Video call
+          {t("challenge_detail_screen_tab.coach_calendar.request_video_call")}
         </Text>
         {confirmedOption ? (
           <ConfirmedRequestedCall

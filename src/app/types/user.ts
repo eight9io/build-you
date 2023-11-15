@@ -30,6 +30,7 @@ export interface IUserData {
   city?: string;
   isCoach?: boolean;
   ratedSkill?: IRatedSkill[];
+  calendly?: string;
 }
 
 export interface IRatedSkill {

@@ -50,3 +50,51 @@ export const confirmProposalByCoach = ({
 export const resetScheduledVideoCall = (scheduleId: string) => {
   return http.get(`/schedule/reset/${scheduleId}`);
 };
+
+export const createScheduleForIndividualCertifiedChallenge = ({
+  challengeId,
+  schedule,
+  meetingUrl,
+  note,
+}: {
+  challengeId: string;
+  schedule: string;
+  meetingUrl: string;
+  note: string;
+}) => {
+  return http.post(`/schedule/single/create`, {
+    challenge: challengeId,
+    schedule: schedule,
+    meetingUrl: meetingUrl,
+    note: note,
+  });
+};
+
+export const getAllScheduleByChallengeId = (challengeId: string) => {
+  return http.get(`/schedule/single/all/${challengeId}`);
+};
+
+export const editScheduleForIndividualCertifiedChallenge = ({
+  scheduleId,
+  schedule,
+  meetingUrl,
+  note,
+}: {
+  scheduleId: string;
+  schedule: string;
+  meetingUrl: string;
+  note: string;
+}) => {
+  return http.put(`/schedule/single/update`, {
+    scheduleId: scheduleId,
+    schedule: schedule,
+    meetingUrl: meetingUrl,
+    note: note,
+  });
+};
+
+export const deleteScheduleForIndividualCertifiedChallenge = (
+  scheduleId: string
+) => {
+  return http.put(`/schedule/delete/${scheduleId}`);
+};

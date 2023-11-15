@@ -14,6 +14,7 @@
   "login_screen.register": "Registrati gratis ",
   "login_screen.login": "Accedi",
   "login_screen.explore_no_account": "Esplora senza account",
+  "pending_payment": "Pagamento in sospeso",
   "challenge_detail_screen": {
     "title": "Challenge",
     "builder": "Builder",
@@ -160,6 +161,14 @@
       "required": "Si prega di inserire il tuo URL.",
       "type": "url",
       "placeholder": "Inserisci il tuo URL"
+    },
+    {
+      "label": "Link video call",
+      "name": "link_video_call",
+      "error": "Il link della videochiamata non è valido.",
+      "required": "Per favore, inserisci l'URL della videochiamata.",
+      "type": "url",
+      "placeholder": "Inserisci l'URL della videochiamata"
     }
   ],
   "register_screen.err_policy": "Si prega di accettare la nostra politica sulla privacy",
@@ -407,6 +416,10 @@
       "error_title": "Errore",
       "error_description": "Chat e videochiamata sono disponibili solo quando una fase è in corso."
     },
+    "pending_payment": {
+      "title": "Pagamento in sospeso",
+      "description": "Il tuo pagamento è in sospeso. Per favore, riprova più tardi."
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
     "complete": "Completa",
@@ -440,6 +453,9 @@
     "joined_success": "Ti sei unito alla sfida!",
     "leave_success": "Hai abbandonato la sfida!",
     "delete_success": "Commento eliminato con successo!",
+    "create_schedule_success": "Crea programma con successo!",
+    "delete_schedule_success": "Elimina programma con successo!",
+    "edit_schedule_success": "Modifica programma con successo!",
     "add_employee_success": "Dipendente aggiunto correttamente! ",
     "delete_employee_success": "Dipendente eliminato correttamente! ",
     "reset_password_success": "Password reimpostata con successo! ",
@@ -461,7 +477,9 @@
     "confirm_time_error": "Tempo non confermato! Riprova più tardi.",
     "vote_proposing_time_success": "Voto per la proposta dell'orario effettuato con successo!",
     "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi.",
-    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!"
+    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!",
+    "add_calendy_link_success": "Link Calendly aggiunto con successo!",
+    "edit_calendy_link_success": "Link Calendly modificato con successo!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
@@ -700,32 +718,38 @@
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {
     "coach": {
-      "waiting_for_coach": "Waiting for coach...",
-      "profile": "Profile",
-      "intake": "intake",
-      "closing": "closing",
-      "touchpoint_of_challenge": "Touchpoints of your challenge",
-      "confirm_open_phase": "Do you really want to start the {{phaseName}} phase?",
-      "confirm_close_phase": "Do you really want to close the {{phaseName}} phase?",
-      "yes": "Yes",
+      "waiting_for_coach": "In attesa dell'allenatore...",
+      "profile": "Profilo",
+      "intake": "Introduzione",
+      "closing": "Chiusura",
+      "touchpoint_of_challenge": "Punti di contatto della tua sfida",
+      "confirm_open_phase": "Vuoi davvero iniziare la fase {{phaseName}}?",
+      "confirm_close_phase": "Vuoi davvero chiudere la fase {{phaseName}}?",
+      "yes": "Sì",
       "no": "No"
     },
     "coach_calendar": {
-      "title": "Coach calendar",
-      "book_video_call_btn": "Book video call",
-      "upcoming": "Upcoming",
-      "past": "Past",
-      "book_video_call": "Book video call",
-      "reschedule_video_call": "Reschedule video call",
-      "cancel_video_call": "Cancel video call",
-      "empty_schedule": "You haven't scheduled a video call",
-      "request_video_call": "Request video call",
-      "time": "Time",
-      "date": "Date",
-      "schedule_detail_modal_title": "Detail",
-      "note": "Note",
-      "edit": "Edit",
-      "delete": "Delete"
+      "title": "Calendario allenatore",
+      "schedule": "Programma",
+      "book_video_call_btn": "Prenota videochiamata",
+      "add_schedule_link_btn": "Aggiungi link programma",
+      "upcoming": "Prossime",
+      "past": "Passate",
+      "book_video_call": "Prenota videochiamata",
+      "cancel_video_call": "Annulla videochiamata",
+      "empty_schedule": "Non hai ancora programmato una videochiamata",
+      "request_video_call": "Richiedi videochiamata",
+      "time": "Orario",
+      "date": "Data",
+      "schedule_detail_modal_title": "Dettaglio",
+      "note": "Nota",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "link": "Link",
+      "link_placeholder": "Inserisci il link",
+      "delete_schedule_confirm": "Vuoi eliminare questa pianificazione?",
+      "delete_schedule_des": "L'azione non può essere annullata",
+      "delete_schedule_success": "Pianificazione eliminata con successo!"
     }
   },
   "confirm_time_modal": {
@@ -744,5 +768,21 @@
     "coach": "Coach",
     "certified": "Certificate",
     "company": "Azienda"
+  },
+  "create_schedule_modal": {
+    "title": "Crea programma",
+    "save": "Salva",
+    "link_video_call": "Link videochiamata",
+    "link_video_call_placeholder": "Inserisci il link della videochiamata",
+    "note": "Nota",
+    "note_placeholder": "Inserisci una nota per l'allenatore",
+    "schedule_link": "Link programma",
+    "error": {
+      "old_date_time": "Seleziona una data e un'ora future."
+    }
+  },
+  "payment_pending_modal": {
+    "title": "Pending payment",
+    "description": "Your challenge will be saved as draft until the payment is processed."
   }
 }

@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+supportLibVersion = "28.0.0"
 // @generated begin expo-gradle-ext-vars - expo prebuild (DO NOT MODIFY) sync-9901e99430a676b7691b424478fcea4bf14b72ab
 	androidXBrowser = "1.4.0"
 // @generated end expo-gradle-ext-vars

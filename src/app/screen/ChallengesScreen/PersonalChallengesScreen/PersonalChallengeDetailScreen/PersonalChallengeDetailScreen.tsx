@@ -1,5 +1,10 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
@@ -27,6 +32,7 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
+import Spinner from "react-native-loading-spinner-overlay";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -226,6 +232,7 @@ const PersonalChallengeDetailScreen = ({
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
+  const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
@@ -270,6 +277,7 @@ const PersonalChallengeDetailScreen = ({
   }, [challengeData, isJoinedLocal]);
 
   const getChallengeData = async () => {
+    setIsScreenLoading(true);
     try {
       await getChallengeById(challengeId).then((res) => {
         setChallengeData(res.data);
@@ -277,6 +285,9 @@ const PersonalChallengeDetailScreen = ({
     } catch (error) {
       console.error("CoachChallengeDetailScreen - Error fetching data:", error);
     }
+    setTimeout(() => {
+      setIsScreenLoading(false);
+    }, 500);
   };
 
   useEffect(() => {
@@ -329,6 +340,8 @@ const PersonalChallengeDetailScreen = ({
 
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
+      {isScreenLoading && <Spinner visible={isScreenLoading} />}
+
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}

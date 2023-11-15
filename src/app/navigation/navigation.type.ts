@@ -1,5 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
-import { IPackage } from "../types/package";
+import { ICheckPoint, IPackage } from "../types/package";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -56,6 +56,7 @@ export type RootStackParamList = {
   CreateCertifiedCompanyChallengeScreen: undefined;
   CartScreen: {
     choosenPackage: IPackage;
+    checkPoint: ICheckPoint;
   };
   CreateCretifiedChallengeScreen: undefined;
   CreateCretifiedCompanyChallengeScreen: undefined;

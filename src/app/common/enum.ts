@@ -54,3 +54,27 @@ export enum COACH_CALENDAR_TABS_KEY {
   UPCOMING = "upcoming",
   PAST = "past",
 }
+
+export enum PRODUCT_PLATFORM {
+  APPLE = "apple",
+  GOOGLE = "google",
+}
+
+export enum GOOGLE_IN_APP_PURCHASE_STATUS {
+  PENDING = "pending",
+  PURCHASED = "purchased",
+  UNSPECIFIED = "unspecified",
+  UNKNOWN = "unknown",
+}
+
+export enum APPLE_IN_APP_PURCHASE_STATUS {
+  PENDING = "pending",
+  PURCHASED = "purchased",
+}
+
+export enum PRODUCT_PACKAGE_TYPE {
+  CHAT_CHECK = "chat_check",
+  VIDEO_CHECK = "video_check",
+  CHAT_CHALLENGE = "chat_challenge",
+  VIDEO_CHALLENGE = "video_challenge",
+}

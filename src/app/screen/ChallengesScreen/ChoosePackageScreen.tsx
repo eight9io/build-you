@@ -199,7 +199,9 @@ const ChoosePackageScreen = () => {
           message: t("errorMessage:500") as string,
         });
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 300);
       }
     };
     fetchPackages();
@@ -207,42 +209,39 @@ const ChoosePackageScreen = () => {
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
-      {loading ? (
-        <Spinner visible={loading} />
-      ) : (
-        <ScrollView>
-          <View className="mb-10 flex flex-col items-center justify-start space-y-4">
-            <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
-              {t("choose_packages_screen.title")}
-            </Text>
-            <Text className="px-12  text-center text-md font-normal leading-none text-zinc-800 opacity-90">
-              {t("choose_packages_screen.description")}
-            </Text>
-            <View className=" flex flex-col">
-              {packages.length > 0 &&
-                packages.map((item) => (
-                  <View key={item?.type}>
-                    <RenderPackageOptions
-                      name={item.name}
-                      type={item.type}
-                      caption={item.caption}
-                      price={item.price}
-                      currency={item.currency}
-                      onPress={() => handleChoosePackage(item)}
-                    />
-                  </View>
-                ))}
-              {packages.length === 0 && !loading && (
-                <View className="flex items-center justify-center">
-                  <Text className="text-center text-md font-semibold leading-tight text-primary-default">
-                    {t("choose_packages_screen.no_package")}
-                  </Text>
+      <ScrollView>
+        {loading && <Spinner visible={loading} />}
+        <View className="mb-10 flex flex-col items-center justify-start space-y-4">
+          <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
+            {t("choose_packages_screen.title")}
+          </Text>
+          <Text className="px-12  text-center text-md font-normal leading-none text-zinc-800 opacity-90">
+            {t("choose_packages_screen.description")}
+          </Text>
+          <View className=" flex flex-col">
+            {packages.length > 0 &&
+              packages.map((item) => (
+                <View key={item?.type}>
+                  <RenderPackageOptions
+                    name={item.name}
+                    type={item.type}
+                    caption={item.caption}
+                    price={item.price}
+                    currency={item.currency}
+                    onPress={() => handleChoosePackage(item)}
+                  />
                 </View>
-              )}
-            </View>
+              ))}
+            {packages.length === 0 && !loading && (
+              <View className="flex items-center justify-center">
+                <Text className="text-center text-md font-semibold leading-tight text-primary-default">
+                  {t("choose_packages_screen.no_package")}
+                </Text>
+              </View>
+            )}
           </View>
-        </ScrollView>
-      )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -63,7 +63,7 @@ interface ICartScreenProps {
 }
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
-  const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(1);
+  const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<number>(0);
   const [lowestCheckpointError, setLowestCheckpointError] =
     useState<boolean>(false);
@@ -184,7 +184,8 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       const { image, ...rest } = data; // Images upload will be handled separately
       const payload: ICreateCompanyChallenge = {
         ...rest,
-        checkpoint: numberOfCheckpoints,
+        // Add 1 to the number of checkpoints because the base package already has 1 checkpoint
+        checkpoint: numberOfCheckpoints + 1,
         achievementTime: data.achievementTime as Date,
       };
 

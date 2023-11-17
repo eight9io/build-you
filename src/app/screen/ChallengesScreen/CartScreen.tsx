@@ -73,7 +73,6 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
   const [purchaseErrorMessages, setPurchaseErrorMessages] =
     useState<string>("");
-  const [isPaymentPending, setIsPaymentPending] = useState<boolean>(false);
   const { choosenPackage, checkPoint } = route.params;
 
   const {
@@ -101,13 +100,19 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   useEffect(() => {
     const newFinalPrice =
-      Number(initialPrice) +
-      Number(numberOfCheckpoints) * Number(checkPoint.price);
-    console.log("newFinalPrice: ", newFinalPrice);
+      parseFloat(Number(initialPrice).toFixed(2)) +
+      Number(numberOfCheckpoints) *
+        parseFloat(Number(checkPoint.price).toFixed(2));
     setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
   }, [numberOfCheckpoints]);
 
-  const handlePay = async (challengeId: string) => {
+  const handlePay = async (
+    challengeId: string
+  ): Promise<{
+    purchaseStatus:
+      | APPLE_IN_APP_PURCHASE_STATUS
+      | GOOGLE_IN_APP_PURCHASE_STATUS;
+  }> => {
     let productToBuy: IInAppPurchaseProduct = null;
     try {
       productToBuy = await getProductFromDatabase(
@@ -126,32 +131,27 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         productToBuy.productId
       );
 
-      if (purchaseResult)
+      if (purchaseResult) {
         receipt = Array.isArray(purchaseResult)
           ? purchaseResult[0]
           : purchaseResult;
+      }
     } catch (error) {
       console.log("Request Purchase Error: ", error);
       throw error;
     }
 
-    // If there is an error in verification
-    // => Need to ignore it => close the payment screen => prevent user accidentally paying twice
     if (receipt) {
-      const verificationRes = await verifyPurchase(receipt, challengeId);
-      if (verificationRes) {
-        const purchaseStatus = Platform.select<
-          APPLE_IN_APP_PURCHASE_STATUS | GOOGLE_IN_APP_PURCHASE_STATUS
-        >({
-          ios: APPLE_IN_APP_PURCHASE_STATUS.PURCHASED,
-          android: GOOGLE_IN_APP_PURCHASE_STATUS.PURCHASED,
-        });
-        if (
-          verificationRes.purchaseStatus.toLowerCase() !==
-          purchaseStatus.toLowerCase()
-        ) {
-          setIsPaymentPending(true);
+      try {
+        const verificationRes = await verifyPurchase(receipt, challengeId);
+        if (verificationRes) {
+          return {
+            purchaseStatus: verificationRes.purchaseStatus,
+          };
         }
+      } catch (error) {
+        console.log("Verify Purchase Error: ", error);
+        throw error;
       }
     }
   };
@@ -214,8 +214,23 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           )) as AxiosResponse;
 
           // Wait for payment to be processed
+          let isPaymentPending = false;
           try {
-            await handlePay(newChallengeId);
+            const { purchaseStatus } = await handlePay(newChallengeId);
+            if (purchaseStatus) {
+              const pendingStatus = Platform.select<
+                APPLE_IN_APP_PURCHASE_STATUS | GOOGLE_IN_APP_PURCHASE_STATUS
+              >({
+                ios: APPLE_IN_APP_PURCHASE_STATUS.PENDING,
+                android: GOOGLE_IN_APP_PURCHASE_STATUS.PENDING,
+              });
+
+              if (
+                purchaseStatus.toLowerCase() === pendingStatus.toLowerCase()
+              ) {
+                isPaymentPending = true;
+              }
+            }
             setPurchaseErrorMessages("");
           } catch (error) {
             // Delete draft challenge if payment failed
@@ -469,7 +484,8 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               <View className="flex w-full items-end ">
                 <Text className="text-end text-base font-semibold leading-snug text-orange-500">
                   {`${getCurrencySymbol(currency)}${(
-                    checkPoint.price * numberOfCheckpoints
+                    parseFloat(Number(checkPoint.price).toFixed(2)) *
+                    numberOfCheckpoints
                   ).toFixed(2)}`}
                 </Text>
               </View>

@@ -420,8 +420,15 @@
       "title": "Pagamento in sospeso",
       "description": "Il tuo pagamento è in sospeso. Per favore, riprova più tardi."
     },
+    "cart": {
+      "summary": "Carrello",
+      "current_credit": "Crediti attuali",
+      "credit_after_charged": "Crediti dopo il pagamento",
+      "not_enough_credit": "Credito insufficiente, contatta l'amministratore per acquistare altro credito."
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
+    "confirm": "Conferma",
     "complete": "Completa",
     "got_it": "Fatto",
     "delete": "Elimina",

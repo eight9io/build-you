@@ -419,8 +419,15 @@
       "title": "Payment is pending",
       "description": "Your challenge will be activated after the payment is completed."
     },
+    "cart": {
+      "summary": "Cart summary",
+      "current_credit": "Current credit",
+      "credit_after_charged": "Credit after charged",
+      "not_enough_credit": "Not enough credit, please contact admin to buy more credit."
+    },
     "cancel": "Cancel",
     "close": "Close",
+    "confirm": "Confirm",
     "complete": "Complete",
     "got_it": "Got it",
     "delete": "Delete",

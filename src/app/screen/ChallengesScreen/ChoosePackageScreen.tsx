@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
-import { serviceGetAllPackages } from "../../service/package";
 import { RootStackParamList } from "../../navigation/navigation.type";
-import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 import { ICheckPoint, IPackage } from "../../types/package";
+
+import { serviceGetAllPackages } from "../../service/package";
+import { useUserProfileStore } from "../../store/user-store";
+import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 import { getLanguageLocalStorage } from "../../utils/language";
 import {
   getCurrencySymbol,
@@ -44,6 +46,7 @@ const RenderPackageOptions = ({
   price,
   currency,
   onPress,
+  isCurrentUserCompany = false,
 }) => {
   const { t } = useTranslation();
 
@@ -51,7 +54,6 @@ const RenderPackageOptions = ({
     <View
       className="mt-4 flex flex-col items-start justify-start rounded-2xl bg-slate-50 pb-4"
       style={{
-        height: 280,
         width: 300,
       }}
     >
@@ -81,11 +83,15 @@ const RenderPackageOptions = ({
                 {item}
               </Text>
             ))}
-            <View className="w-[164px] border border-neutral-300"></View>
+            {!isCurrentUserCompany && (
+              <View className="w-[164px] border border-neutral-300" />
+            )}
           </View>
-          <Text className="text-center text-base font-semibold leading-snug text-orange-500">
-            {`${getCurrencySymbol(currency)}${price.toFixed(2)}`}
-          </Text>
+          {!isCurrentUserCompany && (
+            <Text className="text-center text-base font-semibold leading-snug text-orange-500">
+              {`${getCurrencySymbol(currency)}${price.toFixed(2)}`}
+            </Text>
+          )}
         </View>
         <TouchableOpacity
           className="flex items-center justify-center rounded-[36px] border border-orange-500 bg-orange-500 px-4"
@@ -116,8 +122,11 @@ const ChoosePackageScreen = () => {
   });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const isCurrentUserCompany = currentUser?.companyAccount;
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
@@ -134,10 +143,17 @@ const ChoosePackageScreen = () => {
       ...getCreateChallengeDataStore(),
       package: packageData.id,
     });
-    navigation.navigate("CartScreen", {
-      choosenPackage: choosenPackage,
-      checkPoint: choosenPackage.type === "chat" ? chatCheck : videoCheck,
-    });
+    if (isCurrentUserCompany) {
+      navigation.navigate("CompanyCartScreen", {
+        choosenPackage: choosenPackage,
+        checkPoint: choosenPackage.type === "chat" ? chatCheck : videoCheck,
+      });
+    } else {
+      navigation.navigate("CartScreen", {
+        choosenPackage: choosenPackage,
+        checkPoint: choosenPackage.type === "chat" ? chatCheck : videoCheck,
+      });
+    }
   };
 
   useEffect(() => {
@@ -229,6 +245,7 @@ const ChoosePackageScreen = () => {
                     price={item.price}
                     currency={item.currency}
                     onPress={() => handleChoosePackage(item)}
+                    isCurrentUserCompany={isCurrentUserCompany}
                   />
                 </View>
               ))}

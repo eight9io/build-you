@@ -12,11 +12,12 @@ import { IPackageResponse } from "../../../types/package";
 import { getLanguageLocalStorage } from "../../../utils/language";
 
 interface IChangeCompanyCreditDialogProps {
-  numberOfChecksToChangeCompanyCredit: number;
-  packageToChangeCompanyCredit: "chat" | "videocall";
   isVisible: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  finalPrice: number;
+  numberOfChecksToChangeCompanyCredit: number;
+  packageToChangeCompanyCredit: "chat" | "videocall";
 }
 
 const renderPackageInfo: FC = ({
@@ -57,6 +58,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   onClose,
   isVisible,
   onConfirm,
+  finalPrice,
   numberOfChecksToChangeCompanyCredit,
   packageToChangeCompanyCredit,
 }) => {
@@ -84,19 +86,22 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
     if (packageToChangeCompanyCredit == "chat") {
       const avalaibleChatPackage = packages?.avalaibleChatPackage;
       const remainCredit = avalaibleChatPackage - packageToCharge;
-      if (remainCredit < 0) {
+      if (remainCredit < 0 && packages.availableCredits - finalPrice < 0) {
         setIsCreditEnough(false);
       }
     } else if (packageToChangeCompanyCredit == "videocall") {
       const availableCallPackage = packages?.availableCallPackage;
       const remainCredit = availableCallPackage - packageToCharge;
-      if (remainCredit < 0) {
+      if (remainCredit < 0 && packages.availableCredits - finalPrice < 0) {
         setIsCreditEnough(false);
       }
     }
     // check if number of checks is enough
     const remainChecks = packages?.availableChats + packages?.availableCalls;
-    if (remainChecks < numberOfChecksToChangeCompanyCredit) {
+    if (
+      remainChecks < numberOfChecksToChangeCompanyCredit &&
+      packages.availableCredits - finalPrice < 0
+    ) {
       setIsCreditEnough(false);
     }
   }, [

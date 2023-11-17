@@ -256,6 +256,7 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
         }}
         isVisible={isShowPaymentDetailModal}
         onConfirm={onSumitCertifiedChallenge}
+        finalPrice={finalPrice}
         numberOfChecksToChangeCompanyCredit={numberOfCheckpoints}
         packageToChangeCompanyCredit={choosenPackage?.type}
       />

@@ -10,6 +10,8 @@ import {
   Product,
   Purchase,
   finishTransaction,
+  purchaseUpdatedListener,
+  SubscriptionPurchase,
 } from "react-native-iap";
 import getSymbolFromCurrency from "currency-symbol-map";
 import {
@@ -24,7 +26,12 @@ import {
   IVerifyGooglePurchaseResponse,
   receiptDataAndroid,
 } from "../types/purchase";
-import { PRODUCT_PACKAGE_TYPE, PRODUCT_PLATFORM } from "../common/enum";
+import {
+  APPLE_IN_APP_PURCHASE_STATUS,
+  GOOGLE_IN_APP_PURCHASE_STATUS,
+  PRODUCT_PACKAGE_TYPE,
+  PRODUCT_PLATFORM,
+} from "../common/enum";
 
 export const registerIAPListeners = async (): Promise<{
   updateSubscription: EmitterSubscription;
@@ -54,11 +61,6 @@ export const registerIAPListeners = async (): Promise<{
   //       "purchaseUpdatedListener",
   //       JSON.stringify(purchase, null, "\t")
   //     );
-  //     // TODO: Check if purchase persisted in backend before calling finishTransaction()
-
-  //     finishTransaction({ purchase, isConsumable: true }).then((isFinished) => {
-  //       console.log("isFinished: ", isFinished);
-  //     });
   //   }
   // );
 
@@ -146,44 +148,59 @@ export const verifyPurchase = async (
             },
           },
         });
+        console.log(
+          "googleVerificationResult: ",
+          googleVerificationResult.data
+        );
         const purchase: Purchase = {
           productId: receipt.productId,
           transactionDate: receipt.transactionDate,
           transactionReceipt: receipt.transactionReceipt,
           transactionId: receipt.transactionId,
         };
-        finishTransaction({ purchase, isConsumable: true })
-          .then(() => {
-            console.log("Transaction finished");
-          })
-          .catch((error) => {
-            console.log("Transaction finished with error: ", error);
-          });
+        if (
+          googleVerificationResult.data.purchaseStatus &&
+          googleVerificationResult.data.purchaseStatus !==
+            GOOGLE_IN_APP_PURCHASE_STATUS.PENDING
+        )
+          finishTransaction({ purchase, isConsumable: true })
+            .then(() => {
+              console.log("Google transaction finished");
+            })
+            .catch((error) => {
+              console.log("Google transaction finished with error: ", error);
+            });
         return googleVerificationResult.data;
       } else {
         const appleVerificationResult = await verifyApplePurchase({
           challengeId: challengeId,
           receipt: receipt.transactionReceipt,
         });
+        console.log("appleVerificationResult: ", appleVerificationResult.data);
         const purchase: Purchase = {
           productId: receipt.productId,
           transactionDate: receipt.transactionDate,
           transactionReceipt: receipt.transactionReceipt,
           transactionId: receipt.transactionId,
         };
-        finishTransaction({ purchase, isConsumable: true })
-          .then(() => {
-            console.log("Transaction finished");
-          })
-          .catch((error) => {
-            console.log("Transaction finished with error: ", error);
-          });
+        if (
+          appleVerificationResult.data.purchaseStatus &&
+          appleVerificationResult.data.purchaseStatus !==
+            APPLE_IN_APP_PURCHASE_STATUS.PENDING
+        )
+          finishTransaction({ purchase, isConsumable: true })
+            .then(() => {
+              console.log("Apple transaction finished");
+            })
+            .catch((error) => {
+              console.log("Apple transaction finished with error: ", error);
+            });
         return appleVerificationResult.data;
       }
     }
   } catch (error) {
     console.log("Verify Purchase Error: ", error);
-    // If there is an error in verification, need to ignore it => close the payment screen => prevent user accidentally paying twice
+    throw error;
   }
 };
 

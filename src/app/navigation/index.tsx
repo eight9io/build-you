@@ -49,6 +49,7 @@ import { getLanguageLocalStorage } from "../utils/language";
 import i18n from "../i18n/i18n";
 
 import CartScreen from "../screen/ChallengesScreen/CartScreen";
+import CompanyCartScreen from "../screen/ChallengesScreen/CompanyCartScreen";
 import ChoosePackageScreen from "../screen/ChallengesScreen/ChoosePackageScreen";
 import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChallengeScreenMain";
 import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
@@ -442,6 +443,21 @@ export const RootNavigation = () => {
           <RootStack.Screen
             name="CartScreen"
             component={CartScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle title={t("cart_screen.title") || "Summary"} />
+              ),
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="CompanyCartScreen"
+            component={CompanyCartScreen}
             options={({ navigation }) => ({
               headerShown: true,
               headerTitle: () => (

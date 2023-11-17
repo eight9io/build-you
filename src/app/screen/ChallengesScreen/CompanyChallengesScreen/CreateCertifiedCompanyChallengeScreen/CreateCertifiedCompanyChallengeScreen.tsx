@@ -23,6 +23,7 @@ import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePi
 import { ICreateChallenge } from "../../../../types/challenge";
 import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
 import { CreateCertifiedCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
+import { useUserProfileStore } from "../../../../store/user-store";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -57,10 +58,12 @@ const CreateCertifiedCompanyChallengeScreen: FC<
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
 
-  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
-
   const { t } = useTranslation();
   const navigation = useNav();
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const isCurrentUserCompany = currentUser?.companyAccount;
+  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
 
   const {
     control,

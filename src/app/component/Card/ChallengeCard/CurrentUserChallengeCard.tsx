@@ -18,6 +18,7 @@ import { StackActions } from "@react-navigation/native";
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
+import EmptyImage from "../../../common/svg/empty-image.svg";
 import { useChallengeUpdateStore } from "../../../store/challenge-update-store";
 import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 
@@ -140,6 +141,19 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
               className={clsx("aspect-square w-full rounded-t-xl")}
               source={{ uri: imageSrc }}
             />
+            {isDraft && (
+              <View
+                className="absolute aspect-square w-full rounded-t-xl"
+                style={{
+                  backgroundColor: "rgba(45, 45, 45, 0.5)",
+                }}
+              />
+            )}
+          </View>
+        )}
+        {!imageSrc && (
+          <View className="w-100 flex aspect-square items-center justify-center overflow-hidden">
+            <EmptyImage className="aspect-square w-full rounded-t-xl" />
             {isDraft && (
               <View
                 className="absolute aspect-square w-full rounded-t-xl"

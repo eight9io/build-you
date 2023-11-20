@@ -102,7 +102,6 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
     const newFinalPrice =
       Number(initialPrice) +
       Number(numberOfCheckpoints) * Number(checkPoint.price);
-    console.log("newFinalPrice: ", newFinalPrice);
     setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
   }, [numberOfCheckpoints]);
 
@@ -256,8 +255,9 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
         }}
         isVisible={isShowPaymentDetailModal}
         onConfirm={onSumitCertifiedChallenge}
-        finalPrice={finalPrice}
-        numberOfChecksToChangeCompanyCredit={numberOfCheckpoints}
+        packagePrice={initialPrice}
+        checkPointPrice={checkPoint.price}
+        numberOfChecksToChargeCompanyCredit={numberOfCheckpoints }
         packageToChangeCompanyCredit={choosenPackage?.type}
       />
 

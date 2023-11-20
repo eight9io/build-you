@@ -13,6 +13,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { AxiosResponse } from "axios";
+import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
 import Spinner from "react-native-loading-spinner-overlay";
 
@@ -528,7 +529,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           height: 48,
           width: 344,
         }}
-        onPress={onSumitCertifiedChallenge}
+        onPress={() => debounce(onSumitCertifiedChallenge, 500)}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">
           {t("cart_screen.pay") || "Pay"}

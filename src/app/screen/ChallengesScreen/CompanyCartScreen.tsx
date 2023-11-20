@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -65,6 +65,16 @@ interface ICartScreenProps {
 }
 
 const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
+  // ensure this screen only render once as display credit is important
+  const hasRendered = useRef(false);
+
+  if (hasRendered.current) {
+    return (
+      <View className="flex w-full flex-1 items-center justify-center">
+        <Text>Something went wrong, please return.</Text>
+      </View>
+    );
+  }
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -257,7 +267,7 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
         onConfirm={onSumitCertifiedChallenge}
         packagePrice={initialPrice}
         checkPointPrice={checkPoint.price}
-        numberOfChecksToChargeCompanyCredit={numberOfCheckpoints }
+        numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
         packageToChangeCompanyCredit={choosenPackage?.type}
       />
 

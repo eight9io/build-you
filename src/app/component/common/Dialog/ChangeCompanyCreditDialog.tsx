@@ -179,6 +179,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   numberOfChecksToChargeCompanyCredit,
   packageToChangeCompanyCredit,
 }) => {
+
   const [packages, setPackages] = useState<IPackageResponse>(
     {} as IPackageResponse
   );

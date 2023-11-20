@@ -501,7 +501,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         >
           <View className=" flex w-full flex-row items-center justify-between pt-3">
             <Text className=" text-base font-semibold uppercase leading-tight">
-              Total
+              {t("cart_screen.total")}
             </Text>
             <Text className=" text-base font-semibold leading-tight text-primary-default">
               {`${getCurrencySymbol(currency)}${finalPrice.toFixed(2)}`}

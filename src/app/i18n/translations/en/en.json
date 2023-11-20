@@ -408,7 +408,8 @@
       "basic": "Basic packages (chat):",
       "premium": "Premium packages (video call):",
       "number_of_checks": "Number of checks:",
-      "credits": "Credits:"
+      "credits": "Credits:",
+      "title": "Package information"
     },
     "proposing_time": {
       "title": "Do you want to submit these proposing time?",
@@ -679,7 +680,8 @@
     "intake": "Intake",
     "check": "Check",
     "closing": "Closing",
-    "no_package": "No packages available at the moment"
+    "no_package": "No packages available at the moment",
+    "choose": "Choose"
   },
   "cart_screen": {
     "title": "Summary",

@@ -61,7 +61,7 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
         >
           <Dialog.Title>
             <Text className={clsx("text-black-default")}>
-              Package Information
+              {t("dialog.package_info.title")}
             </Text>
           </Dialog.Title>
           <Dialog.Description>

@@ -408,7 +408,8 @@
       "basic": "Pacchetti base (chiamata audio):",
       "premium": "Pacchetti premium (chiamata video):",
       "number_of_checks": "Numero di controlli:",
-      "credits": "Crediti:"
+      "credits": "Crediti:",
+      "title": "Informazioni sul pacchetto"
     },
     "proposing_time": {
       "title": "Desideri inviare questi tempi di proposta?",
@@ -680,7 +681,8 @@
     "intake": "Valutazione",
     "check": "Verifica",
     "closing": "Chiusura",
-    "no_package": "Al momento non sono disponibili pacchetti"
+    "no_package": "Al momento non sono disponibili pacchetti",
+    "choose": "Scegli"
   },
   "cart_screen": {
     "title": "Summary",

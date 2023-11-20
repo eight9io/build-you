@@ -405,10 +405,10 @@
       "delete_success_description": "Sfida cancellata con successo"
     },
     "package_info": {
-      "basic": "Pacchetti base (chiamata audio):",
-      "premium": "Pacchetti premium (chiamata video):",
-      "number_of_checks": "Numero di controlli:",
-      "credits": "Crediti:",
+      "basic": "Pacchetti base (chiamata audio)",
+      "premium": "Pacchetti premium (chiamata video)",
+      "number_of_checks": "Numero di controlli",
+      "credits": "Crediti",
       "title": "Informazioni sul pacchetto",
       "number_of_callcheck": "Numero di chiamate",
       "number_of_chatcheck": "Numero di chat"

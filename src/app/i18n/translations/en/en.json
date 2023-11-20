@@ -405,10 +405,10 @@
       "delete_success_description": "Your challenge has been deleted successfully"
     },
     "package_info": {
-      "basic": "Basic packages (chat):",
-      "premium": "Premium packages (video call):",
-      "number_of_checks": "Number of checks:",
-      "credits": "Credits:",
+      "basic": "Basic packages (chat)",
+      "premium": "Premium packages (video call)",
+      "number_of_checks": "Number of checks",
+      "credits": "Credits",
       "title": "Package information",
       "number_of_callcheck": "Number of Videocall check",
       "number_of_chatcheck": "Number of Chat check"

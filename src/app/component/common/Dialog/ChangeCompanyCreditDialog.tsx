@@ -32,8 +32,8 @@ interface IRenderPackageInfoProps {
 
 interface IRenderChargePackageInfoProps {
   title: string;
-  valueInPackage: number;
-  valueInCredit: number;
+  creditToBeCharged: number;
+  unit: "package" | "check" | "$";
 }
 
 const RenderPackageInfo: FC<IRenderPackageInfoProps> = ({
@@ -56,17 +56,26 @@ const RenderPackageInfo: FC<IRenderPackageInfoProps> = ({
 
 const RenderChargePackageInfo: FC<IRenderChargePackageInfoProps> = ({
   title,
-  valueInPackage,
-  valueInCredit,
+  creditToBeCharged,
+  unit,
 }) => {
+  const isUnitCurrency = unit == "$";
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
       <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
         {title}
       </Text>
-      <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-        {valueInPackage} or ${valueInCredit}
-      </Text>
+      {!isUnitCurrency && (
+        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
+          {creditToBeCharged} {unit}(s)
+        </Text>
+      )}
+      {isUnitCurrency && (
+        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
+          -{unit}
+          {creditToBeCharged}
+        </Text>
+      )}
     </View>
   );
 };
@@ -173,8 +182,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   const [packages, setPackages] = useState<IPackageResponse>(
     {} as IPackageResponse
   );
-  const [isPackageCreditEnough, setIsPackageCreditEnough] =
-    useState<boolean>(true);
+  const [totalPackageCredit, setTotalPackageCredit] = useState<number>(0);
   const [totalAdditionalCredit, setTotalAdditionalCredit] = useState<number>(0);
 
   const { t } = useTranslation();
@@ -199,35 +207,42 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
     const packageToCharge = 1;
     if (packageToChangeCompanyCredit == "chat") {
       if (packages.avalaibleChatPackage < packageToCharge) {
-        setIsPackageCreditEnough(false);
-        setTotalAdditionalCredit(packagePrice);
+        setTotalPackageCredit(packagePrice);
       } else {
-        setIsPackageCreditEnough(true);
-      }
-      if (packages.availableChats < numberOfChecksToChargeCompanyCredit) {
-        setIsPackageCreditEnough(false);
-        const amountToChargeCredit =
-          (numberOfChecksToChargeCompanyCredit - packages.availableChats) *
-          checkPointPrice;
-
-        setTotalAdditionalCredit((prev) => prev + amountToChargeCredit);
+        setTotalPackageCredit(0);
       }
     } else if (packageToChangeCompanyCredit == "videocall") {
       if (packages.availableCallPackage < packageToCharge) {
-        setIsPackageCreditEnough(false);
-        setTotalAdditionalCredit(packagePrice);
+        setTotalPackageCredit(packagePrice);
       } else {
-        setIsPackageCreditEnough(true);
-      }
-      if (packages.availableCalls < numberOfChecksToChargeCompanyCredit) {
-        const amountToChargeCredit =
-          (numberOfChecksToChargeCompanyCredit - packages.availableChats) *
-          checkPointPrice;
-        setIsPackageCreditEnough(false);
-        setTotalAdditionalCredit((prev) => prev + amountToChargeCredit);
+        setTotalPackageCredit(0);
       }
     }
-  }, [packages, numberOfChecksToChargeCompanyCredit]);
+  }, [packages]);
+
+  useEffect(() => {
+    if (packageToChangeCompanyCredit == "chat") {
+      if (packages.availableChats < numberOfChecksToChargeCompanyCredit) {
+        const amountToChargeCredit =
+          Math.abs(
+            numberOfChecksToChargeCompanyCredit - packages.availableChats
+          ) * checkPointPrice;
+        setTotalAdditionalCredit(totalPackageCredit + amountToChargeCredit);
+      } else {
+        setTotalAdditionalCredit(totalPackageCredit);
+      }
+    } else if (packageToChangeCompanyCredit == "videocall") {
+      if (packages.availableCalls <= numberOfChecksToChargeCompanyCredit) {
+        const amountToChargeCredit =
+          Math.abs(
+            numberOfChecksToChargeCompanyCredit - packages.availableCalls
+          ) * checkPointPrice;
+        setTotalAdditionalCredit(totalPackageCredit + amountToChargeCredit);
+      } else {
+        setTotalAdditionalCredit(totalPackageCredit);
+      }
+    }
+  }, [numberOfChecksToChargeCompanyCredit, totalPackageCredit]);
 
   return (
     <Dialog.Container
@@ -249,20 +264,28 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           </Text>
           <View className="flex flex-col items-start justify-center p-2 pb-0">
             <RenderPackageInfo
-              title={t("dialog.package_info.basic")}
-              avalaibleCredits={packages.avalaibleChatPackage || 0}
+              title={
+                packageToChangeCompanyCredit == "chat"
+                  ? t("dialog.package_info.basic")
+                  : t("dialog.package_info.premium")
+              }
+              avalaibleCredits={
+                packageToChangeCompanyCredit == "chat"
+                  ? packages.avalaibleChatPackage
+                  : packages.availableCallPackage
+              }
             />
             <RenderPackageInfo
-              title={t("dialog.package_info.premium")}
-              avalaibleCredits={packages.availableCallPackage || 0}
-            />
-            <RenderPackageInfo
-              title={t("dialog.package_info.number_of_chatcheck")}
-              avalaibleCredits={packages.availableChats || 0}
-            />
-            <RenderPackageInfo
-              title={t("dialog.package_info.number_of_callcheck")}
-              avalaibleCredits={packages.availableCalls || 0}
+              title={
+                packageToChangeCompanyCredit == "chat"
+                  ? t("dialog.package_info.number_of_chatcheck")
+                  : t("dialog.package_info.number_of_callcheck")
+              }
+              avalaibleCredits={
+                packageToChangeCompanyCredit == "chat"
+                  ? packages.availableChats
+                  : packages.availableCalls
+              }
             />
             <RenderPackageInfo
               title={t("dialog.package_info.credits")}
@@ -283,8 +306,16 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
                   ? t("dialog.package_info.basic")
                   : t("dialog.package_info.premium")
               }
-              valueInPackage={1}
-              valueInCredit={packagePrice}
+              creditToBeCharged={
+                packageToChangeCompanyCredit == "chat"
+                  ? packages.avalaibleChatPackage > 0
+                    ? 1
+                    : 0
+                  : packages.availableCallPackage > 0
+                  ? 1
+                  : 0
+              }
+              unit="package"
             />
 
             <RenderChargePackageInfo
@@ -293,10 +324,13 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
                   ? t("dialog.package_info.number_of_chatcheck")
                   : t("dialog.package_info.number_of_callcheck")
               }
-              valueInPackage={numberOfChecksToChargeCompanyCredit}
-              valueInCredit={
-                numberOfChecksToChargeCompanyCredit * checkPointPrice
-              }
+              creditToBeCharged={numberOfChecksToChargeCompanyCredit}
+              unit="check"
+            />
+            <RenderChargePackageInfo
+              title={"total credit to be charged"}
+              creditToBeCharged={totalAdditionalCredit}
+              unit="$"
             />
           </View>
         </View>
@@ -307,39 +341,28 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           </Text>
           <View className="flex flex-col items-start justify-center p-2 pb-0">
             <RenderPackageInfoAfterCharge
-              title={t("dialog.package_info.basic")}
-              avalaibleCredits={packages.avalaibleChatPackage || 0}
-              valueToCharge={
-                packageToChangeCompanyCredit == "chat" ? packagePrice : 0
-              }
-              packageToCharge={packageToChangeCompanyCredit == "chat" ? 1 : 0}
-            />
-            <RenderPackageInfoAfterCharge
-              title={t("dialog.package_info.premium")}
-              avalaibleCredits={packages.availableCallPackage || 0}
-              packageToCharge={
-                packageToChangeCompanyCredit == "videocall" ? 1 : 0
-              }
-              pricePerCheck={checkPointPrice}
-            />
-            <RenderPackageInfoAfterCharge2
-              title={t("dialog.package_info.number_of_chatcheck")}
-              avalaibleCredits={packages.availableChats || 0}
-              packageToCharge={
+              title={
                 packageToChangeCompanyCredit == "chat"
-                  ? numberOfChecksToChargeCompanyCredit
-                  : 0
+                  ? t("dialog.package_info.basic")
+                  : t("dialog.package_info.premium")
               }
+              avalaibleCredits={
+                packageToChangeCompanyCredit == "chat"
+                  ? packages.avalaibleChatPackage
+                  : packages.availableCallPackage
+              }
+              packageToCharge={1}
               pricePerCheck={checkPointPrice}
             />
+
             <RenderPackageInfoAfterCharge2
-              title={t("dialog.package_info.number_of_callcheck")}
-              avalaibleCredits={packages.availableCalls || 0}
-              packageToCharge={
-                packageToChangeCompanyCredit == "videocall"
-                  ? numberOfChecksToChargeCompanyCredit
-                  : 0
+              title={
+                packageToChangeCompanyCredit == "chat"
+                  ? t("dialog.package_info.number_of_chatcheck")
+                  : t("dialog.package_info.number_of_callcheck")
               }
+              avalaibleCredits={packages.availableCalls || 0}
+              packageToCharge={numberOfChecksToChargeCompanyCredit}
               pricePerCheck={checkPointPrice}
             />
             <RenderRemainingCredit

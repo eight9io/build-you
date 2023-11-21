@@ -6,13 +6,12 @@ import clsx from "clsx";
 import { serviceGetAllPackages } from "../../../service/package";
 import { IPackageResponse } from "../../../types/package";
 import { getLanguageLocalStorage } from "../../../utils/language";
+import debounce from "lodash.debounce";
 
 interface IChangeCompanyCreditDialogProps {
   isVisible: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  packagePrice: number;
-  checkPointPrice: number;
   numberOfChecksToChargeCompanyCredit: number;
   packageToChangeCompanyCredit: "chat" | "videocall";
 }
@@ -20,7 +19,6 @@ interface IChangeCompanyCreditDialogProps {
 interface IRenderPackageInfoProps {
   title: string;
   avalaibleCredits: number;
-  isDollarSign?: boolean;
   valueToCharge?: number;
   packageToCharge?: number;
   pricePerCheck?: number;
@@ -35,7 +33,6 @@ interface IRenderChargePackageInfoProps {
 const RenderPackageInfo: FC<IRenderPackageInfoProps> = ({
   title,
   avalaibleCredits,
-  isDollarSign,
 }) => {
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
@@ -43,7 +40,6 @@ const RenderPackageInfo: FC<IRenderPackageInfoProps> = ({
         {title}
       </Text>
       <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-        {isDollarSign && "$"}
         {avalaibleCredits}
       </Text>
     </View>
@@ -55,23 +51,14 @@ const RenderChargePackageInfo: FC<IRenderChargePackageInfoProps> = ({
   creditToBeCharged,
   unit,
 }) => {
-  const isUnitCurrency = unit == "$";
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
       <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
         {title}
       </Text>
-      {!isUnitCurrency && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          {creditToBeCharged} {unit}(s)
-        </Text>
-      )}
-      {isUnitCurrency && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          -{unit}
-          {creditToBeCharged}
-        </Text>
-      )}
+      <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
+        {creditToBeCharged} {unit}(s)
+      </Text>
     </View>
   );
 };
@@ -81,7 +68,6 @@ const RenderPackageInfoAfterCharge: FC<IRenderPackageInfoProps> = ({
   avalaibleCredits,
   valueToCharge = 0,
   packageToCharge = 0,
-  isDollarSign = false,
 }) => {
   const remainingCredit = packageToCharge
     ? avalaibleCredits - packageToCharge
@@ -94,7 +80,6 @@ const RenderPackageInfoAfterCharge: FC<IRenderPackageInfoProps> = ({
       </Text>
       {remainingCredit >= 0 && (
         <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          {isDollarSign && "$"}
           {remainingCredit}
         </Text>
       )}
@@ -133,58 +118,20 @@ const RenderPackageInfoAfterCharge2: FC<IRenderPackageInfoProps> = ({
   );
 };
 
-const RenderRemainingCredit: FC<IRenderPackageInfoProps> = ({
-  title,
-  avalaibleCredits,
-  valueToCharge,
-  isDollarSign,
-}) => {
-  const remainingCredit = avalaibleCredits - valueToCharge;
-  return (
-    <View className="flex w-full flex-row items-center justify-between py-1">
-      <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
-        {title}
-      </Text>
-      {remainingCredit > 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          {isDollarSign && "$"}
-          {remainingCredit}
-        </Text>
-      )}
-      {remainingCredit == 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          {isDollarSign && "$"}0
-        </Text>
-      )}
-      {remainingCredit <= 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          -{isDollarSign && "$"}
-          {Math.abs(remainingCredit)}
-        </Text>
-      )}
-    </View>
-  );
-};
-
 const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   onClose,
   isVisible,
   onConfirm,
-  packagePrice,
-  checkPointPrice,
   numberOfChecksToChargeCompanyCredit,
   packageToChangeCompanyCredit,
 }) => {
   const [packages, setPackages] = useState<IPackageResponse>(
     {} as IPackageResponse
   );
-  const [totalPackageCredit, setTotalPackageCredit] = useState<number>(0);
-  const [totalAdditionalCredit, setTotalAdditionalCredit] = useState<number>(0);
+  const [isPackageAndCheckEnough, setIsPackageAndCheckEnough] =
+    useState<boolean>(false);
 
   const { t } = useTranslation();
-
-  const isUserHaveEnoughCredit =
-    totalAdditionalCredit > packages?.availableCredits;
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -202,43 +149,27 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   useEffect(() => {
     const packageToCharge = 1;
     if (packageToChangeCompanyCredit == "chat") {
-      if (packages.avalaibleChatPackage < packageToCharge) {
-        setTotalPackageCredit(packagePrice);
+      if (
+        packages.avalaibleChatPackage >= packageToCharge &&
+        packages.availableChats >= numberOfChecksToChargeCompanyCredit
+      ) {
+        setIsPackageAndCheckEnough(true);
       } else {
-        setTotalPackageCredit(0);
-      }
-    } else if (packageToChangeCompanyCredit == "videocall") {
-      if (packages.availableCallPackage < packageToCharge) {
-        setTotalPackageCredit(packagePrice);
-      } else {
-        setTotalPackageCredit(0);
+        setIsPackageAndCheckEnough(false);
       }
     }
-  }, [packages]);
 
-  useEffect(() => {
-    if (packageToChangeCompanyCredit == "chat") {
-      if (packages.availableChats < numberOfChecksToChargeCompanyCredit) {
-        const amountToChargeCredit =
-          Math.abs(
-            numberOfChecksToChargeCompanyCredit - packages.availableChats
-          ) * checkPointPrice;
-        setTotalAdditionalCredit(totalPackageCredit + amountToChargeCredit);
+    if (packageToChangeCompanyCredit == "videocall") {
+      if (
+        packages.availableCallPackage >= packageToCharge &&
+        packages.availableCalls >= numberOfChecksToChargeCompanyCredit
+      ) {
+        setIsPackageAndCheckEnough(true);
       } else {
-        setTotalAdditionalCredit(totalPackageCredit);
-      }
-    } else if (packageToChangeCompanyCredit == "videocall") {
-      if (packages.availableCalls <= numberOfChecksToChargeCompanyCredit) {
-        const amountToChargeCredit =
-          Math.abs(
-            numberOfChecksToChargeCompanyCredit - packages.availableCalls
-          ) * checkPointPrice;
-        setTotalAdditionalCredit(totalPackageCredit + amountToChargeCredit);
-      } else {
-        setTotalAdditionalCredit(totalPackageCredit);
+        setIsPackageAndCheckEnough(false);
       }
     }
-  }, [numberOfChecksToChargeCompanyCredit, totalPackageCredit]);
+  }, [packages, numberOfChecksToChargeCompanyCredit]);
 
   return (
     <Dialog.Container
@@ -283,11 +214,6 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
                   : packages.availableCalls
               }
             />
-            <RenderPackageInfo
-              title={t("dialog.package_info.credits")}
-              avalaibleCredits={packages?.availableCredits}
-              isDollarSign
-            />
           </View>
         </View>
 
@@ -302,15 +228,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
                   ? t("dialog.package_info.basic")
                   : t("dialog.package_info.premium")
               }
-              creditToBeCharged={
-                packageToChangeCompanyCredit == "chat"
-                  ? packages.avalaibleChatPackage > 0
-                    ? 1
-                    : 0
-                  : packages.availableCallPackage > 0
-                  ? 1
-                  : 0
-              }
+              creditToBeCharged={1}
               unit="package"
             />
 
@@ -322,11 +240,6 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
               }
               creditToBeCharged={numberOfChecksToChargeCompanyCredit}
               unit="check"
-            />
-            <RenderChargePackageInfo
-              title={t("dialog.package_info.total_credit_to_charge")}
-              creditToBeCharged={totalAdditionalCredit}
-              unit="$"
             />
           </View>
         </View>
@@ -348,7 +261,6 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
                   : packages.availableCallPackage
               }
               packageToCharge={1}
-              pricePerCheck={checkPointPrice}
             />
 
             <RenderPackageInfoAfterCharge2
@@ -357,19 +269,16 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
                   ? t("dialog.package_info.number_of_chatcheck")
                   : t("dialog.package_info.number_of_callcheck")
               }
-              avalaibleCredits={packages.availableCalls || 0}
+              avalaibleCredits={
+                packageToChangeCompanyCredit == "chat"
+                  ? packages.availableChats
+                  : packages.availableCalls
+              }
               packageToCharge={numberOfChecksToChargeCompanyCredit}
-              pricePerCheck={checkPointPrice}
-            />
-            <RenderRemainingCredit
-              title={t("dialog.package_info.credits")}
-              avalaibleCredits={packages?.availableCredits}
-              valueToCharge={totalAdditionalCredit}
-              isDollarSign
             />
           </View>
         </View>
-        {isUserHaveEnoughCredit && (
+        {!isPackageAndCheckEnough && (
           <Text className="text-md font-medium text-red-500">
             {t("dialog.cart.not_enough_credit")}
           </Text>
@@ -378,9 +287,9 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
       <Dialog.Button label={t("dialog.close")} onPress={onClose} />
       <Dialog.Button
         label={t("dialog.confirm")}
-        onPress={onConfirm}
+        onPress={debounce(onConfirm, 500)}
         bold
-        disabled={isUserHaveEnoughCredit}
+        disabled={!isPackageAndCheckEnough}
       />
     </Dialog.Container>
   );

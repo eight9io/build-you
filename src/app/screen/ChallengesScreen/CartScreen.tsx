@@ -13,6 +13,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { AxiosResponse } from "axios";
+import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
 import Spinner from "react-native-loading-spinner-overlay";
 
@@ -501,7 +502,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         >
           <View className=" flex w-full flex-row items-center justify-between pt-3">
             <Text className=" text-base font-semibold uppercase leading-tight">
-              Total
+              {t("cart_screen.total")}
             </Text>
             <Text className=" text-base font-semibold leading-tight text-primary-default">
               {`${getCurrencySymbol(currency)}${finalPrice.toFixed(2)}`}
@@ -528,7 +529,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           height: 48,
           width: 344,
         }}
-        onPress={onSumitCertifiedChallenge}
+        onPress={() => debounce(onSumitCertifiedChallenge, 500)}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">
           {t("cart_screen.pay") || "Pay"}

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -32,26 +32,13 @@ import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-cr
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
 
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
-import {
-  getCurrencySymbol,
-  getProductFromDatabase,
-  requestPurchaseChecks,
-  verifyPurchase,
-} from "../../utils/purchase.util";
-import { IInAppPurchaseProduct } from "../../types/purchase";
 import ErrorText from "../../component/common/ErrorText";
-import { ErrorCode, ProductPurchase } from "react-native-iap";
-import {
-  APPLE_IN_APP_PURCHASE_STATUS,
-  GOOGLE_IN_APP_PURCHASE_STATUS,
-} from "../../common/enum";
 import ChangeCompanyCreditDialog from "../../component/common/Dialog/ChangeCompanyCreditDialog";
 
 interface ICartScreenProps {
@@ -65,6 +52,16 @@ interface ICartScreenProps {
 }
 
 const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
+  // ensure this screen only render once as display credit is important
+  const hasRendered = useRef(false);
+  const { t } = useTranslation();
+  if (hasRendered.current) {
+    return (
+      <View className="flex w-full flex-1 items-center justify-center">
+        <Text>{t("error_general_message")}</Text>
+      </View>
+    );
+  }
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -86,8 +83,6 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
   const { setNewChallengeId: setNewChallengeIdToStore } =
     useNewCreateOrDeleteChallengeStore();
 
-  const { t } = useTranslation();
-
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getCreateChallengeDataStore } = useCreateChallengeDataStore();
 
@@ -102,7 +97,6 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
     const newFinalPrice =
       Number(initialPrice) +
       Number(numberOfCheckpoints) * Number(checkPoint.price);
-    console.log("newFinalPrice: ", newFinalPrice);
     setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
   }, [numberOfCheckpoints]);
 
@@ -256,8 +250,9 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
         }}
         isVisible={isShowPaymentDetailModal}
         onConfirm={onSumitCertifiedChallenge}
-        finalPrice={finalPrice}
-        numberOfChecksToChangeCompanyCredit={numberOfCheckpoints}
+        packagePrice={initialPrice}
+        checkPointPrice={checkPoint.price}
+        numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
         packageToChangeCompanyCredit={choosenPackage?.type}
       />
 

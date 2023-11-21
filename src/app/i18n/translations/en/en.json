@@ -405,10 +405,14 @@
       "delete_success_description": "Your challenge has been deleted successfully"
     },
     "package_info": {
-      "basic": "Basic packages (chat):",
-      "premium": "Premium packages (video call):",
-      "number_of_checks": "Number of checks:",
-      "credits": "Credits:"
+      "basic": "Basic packages (chat)",
+      "premium": "Premium packages (video call)",
+      "number_of_checks": "Number of checks",
+      "credits": "Credits",
+      "title": "Package information",
+      "number_of_callcheck": "Number of Videocall check",
+      "number_of_chatcheck": "Number of Chat check",
+      "total_credit_to_charge": "Total credit to be charged"
     },
     "proposing_time": {
       "title": "Do you want to submit these proposing time?",
@@ -423,6 +427,7 @@
       "summary": "Cart summary",
       "current_credit": "Current credit",
       "credit_after_charged": "Credit after charged",
+      "credit_will_be_charged": "Credit will be charged",
       "not_enough_credit": "Not enough credit, please contact admin to buy more credit."
     },
     "cancel": "Cancel",
@@ -679,7 +684,8 @@
     "intake": "Intake",
     "check": "Check",
     "closing": "Closing",
-    "no_package": "No packages available at the moment"
+    "no_package": "No packages available at the moment",
+    "choose": "Choose"
   },
   "cart_screen": {
     "title": "Summary",
@@ -690,7 +696,7 @@
     "intake": "Intake",
     "check": "Check",
     "closing": "Closing",
-    "select_checkpoints": "Select the number of checkpoints:",
+    "select_checkpoints": "Select the number of additional checkpoints:",
     "minimum_checkpoint_error": "At least 1 checkpoint is required",
     "total": "Total",
     "pay": "Pay"

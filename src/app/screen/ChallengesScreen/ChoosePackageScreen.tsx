@@ -102,7 +102,7 @@ const RenderPackageOptions = ({
           onPress={onPress}
         >
           <Text className="text-center text-[14px] font-semibold leading-tight text-white">
-            Choose
+            {t("choose_packages_screen.choose")}
           </Text>
         </TouchableOpacity>
       </View>

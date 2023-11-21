@@ -1,12 +1,8 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import {
-  numberToPriceWithCommas,
-  stringToPriceWithCommas,
-} from "../../../utils/price";
 import { serviceGetAllPackages } from "../../../service/package";
 import { IPackageResponse } from "../../../types/package";
 import { getLanguageLocalStorage } from "../../../utils/language";
@@ -179,7 +175,6 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   numberOfChecksToChargeCompanyCredit,
   packageToChangeCompanyCredit,
 }) => {
-
   const [packages, setPackages] = useState<IPackageResponse>(
     {} as IPackageResponse
   );
@@ -329,7 +324,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
               unit="check"
             />
             <RenderChargePackageInfo
-              title={"total credit to be charged"}
+              title={t("dialog.package_info.total_credit_to_charge")}
               creditToBeCharged={totalAdditionalCredit}
               unit="$"
             />

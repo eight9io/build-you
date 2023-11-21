@@ -411,7 +411,8 @@
       "credits": "Credits",
       "title": "Package information",
       "number_of_callcheck": "Number of Videocall check",
-      "number_of_chatcheck": "Number of Chat check"
+      "number_of_chatcheck": "Number of Chat check",
+      "total_credit_to_charge": "Total credit to be charged"
     },
     "proposing_time": {
       "title": "Do you want to submit these proposing time?",

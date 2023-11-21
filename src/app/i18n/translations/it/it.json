@@ -411,7 +411,8 @@
       "credits": "Crediti",
       "title": "Informazioni sul pacchetto",
       "number_of_callcheck": "Numero di chiamate",
-      "number_of_chatcheck": "Numero di chat"
+      "number_of_chatcheck": "Numero di chat",
+      "total_credit_to_charge": "Totale credito da addebitare"
     },
     "proposing_time": {
       "title": "Desideri inviare questi tempi di proposta?",

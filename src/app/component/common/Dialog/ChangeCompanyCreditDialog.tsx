@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { View, Text, Appearance } from "react-native";
+import { View, Text, Appearance, Platform } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -30,18 +30,29 @@ interface IRenderChargePackageInfoProps {
   unit: "package" | "check" | "$";
 }
 
+const isAndroid = Platform.OS === "android";
+
 const RenderPackageInfo: FC<IRenderPackageInfoProps> = ({
   title,
   avalaibleCredits,
 }) => {
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
-      <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
-        {title}
-      </Text>
-      <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-        {avalaibleCredits}
-      </Text>
+      <View className="flex w-2/3 ">
+        <Text className=" text-md font-semibold leading-tight text-neutral-500">
+          {title}
+        </Text>
+      </View>
+      <View
+        className={clsx(
+          "flex w-1/3 flex-row items-center ",
+          isAndroid ? "justify-end" : "justify-center"
+        )}
+      >
+        <Text className="text-start text-md font-semibold leading-tight text-orange-500">
+          {avalaibleCredits}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -53,12 +64,16 @@ const RenderChargePackageInfo: FC<IRenderChargePackageInfoProps> = ({
 }) => {
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
-      <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
-        {title}
-      </Text>
-      <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-        {creditToBeCharged} {unit}(s)
-      </Text>
+      <View className="flex w-2/3 ">
+        <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
+          {title}
+        </Text>
+      </View>
+      <View className={clsx("flex w-1/3 flex-row items-center justify-center")}>
+        <Text className=" text-center text-md font-semibold leading-tight text-orange-500">
+          {creditToBeCharged} {unit}(s)
+        </Text>
+      </View>
     </View>
   );
 };
@@ -75,19 +90,28 @@ const RenderPackageInfoAfterCharge: FC<IRenderPackageInfoProps> = ({
 
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
-      <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
-        {title}
-      </Text>
-      {remainingCredit >= 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          {remainingCredit}
+      <View className="flex w-2/3 ">
+        <Text className=" text-md font-semibold leading-tight text-neutral-500">
+          {title}
         </Text>
-      )}
-      {remainingCredit < 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          0
-        </Text>
-      )}
+      </View>
+      <View
+        className={clsx(
+          "flex w-1/3 flex-row items-center ",
+          isAndroid ? "justify-end" : "justify-center"
+        )}
+      >
+        {remainingCredit >= 0 && (
+          <Text className="text-center text-md font-semibold leading-tight text-orange-500">
+            {remainingCredit}
+          </Text>
+        )}
+        {remainingCredit < 0 && (
+          <Text className=" text-center text-md font-semibold leading-tight text-orange-500">
+            0
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
@@ -101,19 +125,28 @@ const RenderPackageInfoAfterCharge2: FC<IRenderPackageInfoProps> = ({
 
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
-      <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-500">
-        {title}
-      </Text>
-      {remainingCredit >= 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          {remainingCredit}
+      <View className="flex w-2/3 ">
+        <Text className=" text-md font-semibold leading-tight text-neutral-500">
+          {title}
         </Text>
-      )}
-      {remainingCredit < 0 && (
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
-          0
-        </Text>
-      )}
+      </View>
+      <View
+        className={clsx(
+          "flex w-1/3 flex-row items-center ",
+          isAndroid ? "justify-end" : "justify-center"
+        )}
+      >
+        {remainingCredit >= 0 && (
+          <Text className=" text-center text-md font-semibold leading-tight text-orange-500">
+            {remainingCredit}
+          </Text>
+        )}
+        {remainingCredit < 0 && (
+          <Text className=" text-center text-md font-semibold leading-tight text-orange-500">
+            0
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
@@ -191,7 +224,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
         </Text>
       </Dialog.Title>
       <Dialog.Description>
-        <View className="flex flex-col pt-2">
+        <View className="flex w-full flex-col pt-2">
           <Text
             className={clsx(
               "text-md font-semibold",
@@ -200,7 +233,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           >
             {t("dialog.cart.current_credit")}
           </Text>
-          <View className="flex flex-col items-start justify-center p-2 pb-0">
+          <View className="flex w-full flex-col items-start justify-center p-2 pb-0">
             <RenderPackageInfo
               title={
                 packageToChangeCompanyCredit == "chat"
@@ -228,7 +261,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           </View>
         </View>
 
-        <View className="flex flex-col pt-2">
+        <View className="flex w-full flex-col  py-4">
           <Text
             className={clsx(
               "text-md font-semibold",
@@ -237,7 +270,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           >
             {t("dialog.cart.credit_will_be_charged")}
           </Text>
-          <View className="flex flex-col items-start justify-center p-2 pb-0">
+          <View className="flex w-full flex-col items-start justify-center p-2 pb-0">
             <RenderChargePackageInfo
               title={
                 packageToChangeCompanyCredit == "chat"
@@ -260,7 +293,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           </View>
         </View>
 
-        <View className="flex flex-col pt-2">
+        <View className="flex w-full flex-col  pt-2">
           <Text
             className={clsx(
               "text-md font-semibold",
@@ -269,7 +302,7 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
           >
             {t("dialog.cart.credit_after_charged")}
           </Text>
-          <View className="flex flex-col items-start justify-center p-2 pb-0">
+          <View className=" flex w-full flex-col items-start justify-center p-2 pb-0">
             <RenderPackageInfoAfterCharge
               title={
                 packageToChangeCompanyCredit == "chat"

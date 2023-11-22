@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Appearance } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -132,6 +132,8 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
     useState<boolean>(false);
 
   const { t } = useTranslation();
+  const colorScheme = Appearance.getColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -180,13 +182,22 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
       }}
     >
       <Dialog.Title>
-        <Text className={clsx("text-black-default")}>
+        <Text
+          className={clsx(
+            isDarkMode ? "text-gray-medium" : "text-black-default"
+          )}
+        >
           {t("dialog.cart.summary")}
         </Text>
       </Dialog.Title>
       <Dialog.Description>
         <View className="flex flex-col pt-2">
-          <Text className="text-md font-semibold text-black-default">
+          <Text
+            className={clsx(
+              "text-md font-semibold",
+              isDarkMode ? "text-gray-medium" : "text-black-default"
+            )}
+          >
             {t("dialog.cart.current_credit")}
           </Text>
           <View className="flex flex-col items-start justify-center p-2 pb-0">
@@ -218,7 +229,12 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
         </View>
 
         <View className="flex flex-col pt-2">
-          <Text className="text-md font-semibold text-black-default">
+          <Text
+            className={clsx(
+              "text-md font-semibold",
+              isDarkMode ? "text-gray-medium" : "text-black-default"
+            )}
+          >
             {t("dialog.cart.credit_will_be_charged")}
           </Text>
           <View className="flex flex-col items-start justify-center p-2 pb-0">
@@ -245,7 +261,12 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
         </View>
 
         <View className="flex flex-col pt-2">
-          <Text className="text-md font-semibold text-black-default">
+          <Text
+            className={clsx(
+              "text-md font-semibold",
+              isDarkMode ? "text-gray-medium" : "text-black-default"
+            )}
+          >
             {t("dialog.cart.credit_after_charged")}
           </Text>
           <View className="flex flex-col items-start justify-center p-2 pb-0">

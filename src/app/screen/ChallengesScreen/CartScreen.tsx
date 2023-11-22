@@ -529,7 +529,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           height: 48,
           width: 344,
         }}
-        onPress={() => debounce(onSumitCertifiedChallenge, 500)}
+        onPress={debounce(onSumitCertifiedChallenge, 500)}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">
           {t("cart_screen.pay") || "Pay"}

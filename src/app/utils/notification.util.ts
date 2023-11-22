@@ -473,6 +473,8 @@ export const getNotificationContent = (
       return i18n.t("notification.new_message");
     case NOTIFICATION_TYPES.CLOSEDCHALLENGE:
       return i18n.t("notification.close_challenge");
+    default:
+      return "";
   }
 };
 
@@ -487,10 +489,16 @@ export const clearNotification = async (notificationId: string) => {
   await notifee.cancelNotification(notificationId);
 };
 
+const notificationTypesSet = new Set(Object.values(NOTIFICATION_TYPES)); // Use Set for efficient lookup
 export const mapNotificationResponses = (
   responses: INotificationResponse[]
 ): INotification[] => {
-  const transformedData: INotification[] = responses.map((response) => {
+  // Filter out the notification with no type (type = undefined)
+  const filteredResponses = responses.filter((response) => {
+    return notificationTypesSet.has(response.title);
+  });
+
+  const transformedData: INotification[] = filteredResponses.map((response) => {
     return {
       id: response.id,
       type: response.title,

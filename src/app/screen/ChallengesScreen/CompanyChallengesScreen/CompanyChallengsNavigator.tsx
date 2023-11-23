@@ -11,7 +11,7 @@ import NavButton from "../../../component/common/Buttons/NavButton";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileScreen from "../../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
-import CompanyChallengsScreen from "./CompnayChallengsScreen";
+import CompanyChallengsScreen from "./CompanyChallengsScreen";
 import PersonalChallengeDetailScreen from "../PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "../CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 

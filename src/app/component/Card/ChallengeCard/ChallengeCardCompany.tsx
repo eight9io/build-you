@@ -20,6 +20,7 @@ import {
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
+import EmptyImage from "../../../common/svg/empty-image.svg";
 
 const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   item,
@@ -109,6 +110,11 @@ const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
             )}
           >
             <CertifiedChallengeTag />
+          </View>
+        )}
+        {!imageSrc && (
+          <View className="w-100 flex aspect-square items-center justify-center overflow-hidden">
+            <EmptyImage className="aspect-square w-full rounded-t-xl" />
           </View>
         )}
         {imageSrc && (

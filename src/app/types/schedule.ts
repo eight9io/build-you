@@ -4,6 +4,7 @@ export interface IProposingScheduleTime {
   index?: number;
   meetingUrl?: string;
   schedule?: string;
+  note?: string;
 }
 
 export interface IScheduleProposal {

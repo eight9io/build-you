@@ -50,9 +50,12 @@
     "confirmed": "Confirmed",
     "open_meeting": "Open meeting",
     "link": "Link",
+    "copy": "Copy",
+    "open_link": "Open link",
     "vote": "Vote",
     "confirm": "Confirm",
-    "voted_waiting": "You already voted. Please wait until the coach confirms the time."
+    "voted_waiting": "You already voted. Please wait until the coach confirms the time.",
+    "note": "Note"
   },
   "bottom_nav": {
     "feed": "Feed",
@@ -458,7 +461,8 @@
     "create_challenge_success": "Your challenge has been created successfully !",
     "create_progress_success": "Your progress has been created successfully !",
     "completed_challenge_success": "Challenge has been completed successfully !",
-    "congratulation": "Congratulation!"
+    "congratulation": "Congratulation!",
+    "coach_no_calendy_link": "Coach has not added calendy link yet"
   },
   "toast": {
     "joined_success": "You have joined the challenge!",
@@ -558,6 +562,7 @@
   "session_expired_error": "Session expires. Please login again",
   "share_link": {
     "copying_to_clipboard_error": "Error when copying to clipboard",
+    "copied_to_clipboard": "Copied to clipboard",
     "join_my_challenge": "Join my challenge!",
     "user_did_not_share_link": "User did not share"
   },

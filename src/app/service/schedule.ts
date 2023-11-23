@@ -37,13 +37,16 @@ export const createVoteScheduleVideoCall = (scheduleId: string) => {
 export const confirmProposalByCoach = ({
   scheduleId,
   meetingUrl,
+  note,
 }: {
   scheduleId: string;
   meetingUrl: string;
+  note: string;
 }) => {
   return http.post(`/schedule/proposal/confirm`, {
     scheduleProposal: scheduleId,
     meetingUrl: meetingUrl,
+    note: note,
   });
 };
 

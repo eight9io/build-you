@@ -553,7 +553,8 @@
     "company_vat_placeholder": "Enter your company VAT Number "
   },
   "notification_screen": {
-    "no_notification": "You have no notifications at the moment"
+    "no_notification": "You have no notifications at the moment",
+    "you": "You"
   },
   "challenge_detail_screen.not_found": "Challenge not found",
   "user_not_found": "User not found",

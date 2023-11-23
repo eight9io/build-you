@@ -554,7 +554,8 @@
     "company_vat_placeholder": "Inserisci la tua P.Iva "
   },
   "notification_screen": {
-    "no_notification": "Non hai notifiche al momento"
+    "no_notification": "Non hai notifiche al momento",
+    "you": "Tu"
   },
   "challenge_detail_screen.not_found": "Sfida non trovata",
   "user_not_found": "Utente non trovato",

@@ -12,6 +12,8 @@ import { INotification } from "../../../types/notification";
 import dayjs from "../../../utils/date.util";
 import { useNav } from "../../../hooks/useNav";
 import { setNotificationIsRead } from "../../../service/notification";
+import { useUserProfileStore } from "../../../store/user-store";
+import { useTranslation } from "react-i18next";
 interface INotiItemProps {
   notification: INotification;
 }
@@ -19,6 +21,8 @@ interface INotiItemProps {
 const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
   const navigation = useNav();
   const [isRead, setIsRead] = useState<boolean>(notification.isRead);
+  const { userProfile } = useUserProfileStore();
+  const { t } = useTranslation();
 
   let content = "";
   if (
@@ -59,7 +63,11 @@ const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
       />
       <View className={clsx("ml-4 flex-1")}>
         <Text className={clsx("text-base font-normal")}>
-          {`${notification.user.name || "Rudy Aster"} ${content}`}
+          {`${
+            userProfile.id !== notification.user.id
+              ? notification.user.name
+              : t("notification_screen.you")
+          } ${content}`}
         </Text>
         <Text className={clsx("text-[#7C7673]")}>
           {dayjs(notification.createdAt).fromNow()}

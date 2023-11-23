@@ -2,7 +2,7 @@ export interface IProposingScheduleTime {
   id?: string;
   proposal: string | Date; // proposal time
   index?: number;
-  meetingUrl?: string;
+  metingUrl?: string;
   schedule?: string;
   note?: string;
 }
@@ -24,7 +24,7 @@ export interface IProposalTime {
   isConfirmed: number;
   isVotedByCurrentUser: boolean;
   votes: number;
-  meetingUrl: string;
+  metingUrl: string;
   votedBy: string;
   createdAt: string;
   updatedAt: string;

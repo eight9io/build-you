@@ -119,8 +119,8 @@ missingDimensionStrategy "store", "play"
         applicationId 'com.buildyou.buildyou'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 53
-        versionName "1.5.3"
+        versionCode 54
+        versionName "1.5.4"
     }
 
     splits {

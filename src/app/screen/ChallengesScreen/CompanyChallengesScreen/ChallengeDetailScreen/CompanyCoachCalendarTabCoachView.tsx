@@ -32,6 +32,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;
@@ -70,22 +71,27 @@ const EmptyVideoCall = ({ translate }) => {
 const ConfirmedRequestedCall = ({
   translate,
   confirmedOption,
-  coachCalendyLink,
   handleEditScheduledVideoCallLink,
   handleDeleteConfirmedScheduledVideoCall,
 }: {
-  coachCalendyLink: string;
   translate: (key: string) => string;
   confirmedOption: IProposingScheduleTime;
   handleEditScheduledVideoCallLink: () => void;
   handleDeleteConfirmedScheduledVideoCall: () => void;
 }) => {
+  const { metingUrl } = confirmedOption;
+
   const handleOpenLink = async () => {
-    openUrlInApp(confirmedOption.meetingUrl);
+    if (!metingUrl) {
+      GlobalDialogController.showModal({
+        title: translate("error"),
+        message: translate("error_general_message"),
+      });
+      return;
+    }
+    openUrlInApp(confirmedOption.metingUrl);
   };
   const dateTimeObject = new Date(confirmedOption.proposal);
-
-  console.log(confirmedOption);
 
   return (
     <View className="my-4 flex-1 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
@@ -138,7 +144,7 @@ const ConfirmedRequestedCall = ({
         </View>
         <TouchableOpacity
           className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={() => onCopyLink(coachCalendyLink)}
+          onPress={() => onCopyLink(metingUrl)}
         >
           <LinkSvg />
           <Text className="text-right text-md font-normal leading-tight text-blue-600">
@@ -304,7 +310,6 @@ const CompanyCoachCalendarTabCoachView: FC<
   const [proposedOptions, setProposedOptions] = useState<IProposalTime[]>(
     [] as IProposalTime[]
   );
-  const [coachData, setCoachData] = useState<IUserData>(null);
 
   const [isCoachProposed, setIsCoachProposed] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] =
@@ -454,22 +459,6 @@ const CompanyCoachCalendarTabCoachView: FC<
 
   useEffect(() => {
     getScheduledVideocall();
-    if (coach) {
-      const getCoachInfo = async () => {
-        try {
-          const res = await serviceGetOtherUserData(coach);
-          if (res?.data) {
-            setCoachData(res?.data);
-          }
-        } catch (error) {
-          openErrorModal({
-            title: t("error"),
-            description: t("error_general_message"),
-          });
-        }
-      };
-      getCoachInfo();
-    }
   }, [challengeId, currentChallengeState]);
 
   useEffect(() => {
@@ -522,7 +511,6 @@ const CompanyCoachCalendarTabCoachView: FC<
         {confirmedOption ? (
           <ConfirmedRequestedCall
             translate={t}
-            coachCalendyLink={coachData?.calendly}
             confirmedOption={confirmedOption}
             handleDeleteConfirmedScheduledVideoCall={
               handleDeleteConfirmedScheduledVideoCall

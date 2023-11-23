@@ -51,25 +51,23 @@ const EmptyVideoCall = ({ translate }) => {
 const ConfirmedRequestedCall = ({
   translate,
   confirmedOption,
-  coachCalendyLink,
 }: {
   translate: (key: string) => string;
   confirmedOption: IProposalTime;
-  coachCalendyLink: string;
 }) => {
+  const { metingUrl } = confirmedOption;
   const handleOpenLink = async () => {
-    if (!coachCalendyLink) {
+    if (!metingUrl) {
       GlobalDialogController.showModal({
         title: translate("error"),
-        message: translate("dialog.coach_no_calendy_link"),
+        message: translate("error_general_message"),
       });
       return;
     }
-    openUrlInApp(coachCalendyLink);
+    openUrlInApp(metingUrl);
   };
 
   const dateTimeObject = new Date(confirmedOption.proposal);
-
   return (
     <View className="my-4 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
       <View className="inline-flex items-start justify-between self-stretch">
@@ -106,7 +104,7 @@ const ConfirmedRequestedCall = ({
         </View>
         <TouchableOpacity
           className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={() => onCopyLink(coachCalendyLink)}
+          onPress={() => onCopyLink(metingUrl)}
         >
           <LinkSvg />
           <Text className="text-right text-md font-normal leading-tight text-blue-600">
@@ -207,7 +205,6 @@ const CompanyCoachCalendarTabCompanyView: FC<
   );
   const [selectedOptions, setSelectedOptions] = useState<IProposalTime[]>([]);
   const [confirmedOption, setConfirmedOption] = useState<IProposalTime>(null);
-  const [coachData, setCoachData] = useState<IUserData>(null);
 
   const [isCurrentUserVotedProposedTime, setIsCurrentUserVotedProposedTime] =
     useState<boolean>(false);
@@ -315,22 +312,6 @@ const CompanyCoachCalendarTabCompanyView: FC<
     if (challengeId && currentChallengeState) {
       getScheduledVideocall();
     }
-    if (coach) {
-      const getCoachInfo = async () => {
-        try {
-          const res = await serviceGetOtherUserData(coach);
-          if (res?.data) {
-            setCoachData(res?.data);
-          }
-        } catch (error) {
-          openErrorModal({
-            title: t("error"),
-            description: t("error_general_message"),
-          });
-        }
-      };
-      getCoachInfo();
-    }
   }, [challengeId, currentChallengeState]);
 
   return (
@@ -352,7 +333,6 @@ const CompanyCoachCalendarTabCompanyView: FC<
           <ConfirmedRequestedCall
             translate={t}
             confirmedOption={confirmedOption}
-            coachCalendyLink={coachData?.calendly}
           />
         ) : (
           <EmptyVideoCall translate={t} />

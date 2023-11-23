@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import clsx from "clsx";
+import { EvilIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
@@ -7,30 +8,30 @@ import {
   IProposalTime,
   IProposingScheduleTime,
 } from "../../../../types/schedule";
+import { IUserData } from "../../../../types/user";
+import { ICertifiedChallengeState } from "../../../../types/challenge";
 
-import { openUrlInApp } from "../../../../utils/inAppBrowser";
-import { useErrorModal } from "../../../../hooks/useErrorModal";
-
-import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
-
-import LinkSvg from "./assets/link.svg";
-import EmptySvg from "./assets/emptyFollow.svg";
-import DeleteSvg from "./assets/delete.svg";
-import Button from "../../../../component/common/Buttons/Button";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import {
   creatProposalScheduleVideoCall,
   getAllScheduleVideoCall,
   resetScheduledVideoCall,
 } from "../../../../service/schedule";
-import {
-  ICertifiedChallengeState,
-  IChallengeTouchpointStatus,
-} from "../../../../types/challenge";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
-import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
+import { onCopyLink } from "../../../../utils/shareLink.uitl";
+import { openUrlInApp } from "../../../../utils/inAppBrowser";
+import { useErrorModal } from "../../../../hooks/useErrorModal";
+import { serviceGetOtherUserData } from "../../../../service/user";
+
+import LinkSvg from "./assets/link.svg";
+import EmptySvg from "./assets/emptyFollow.svg";
+import DeleteSvg from "./assets/delete.svg";
+
 import PopUpMenu from "../../../../component/common/PopUpMenu";
+import Button from "../../../../component/common/Buttons/Button";
+import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;
@@ -69,9 +70,11 @@ const EmptyVideoCall = ({ translate }) => {
 const ConfirmedRequestedCall = ({
   translate,
   confirmedOption,
+  coachCalendyLink,
   handleEditScheduledVideoCallLink,
   handleDeleteConfirmedScheduledVideoCall,
 }: {
+  coachCalendyLink: string;
   translate: (key: string) => string;
   confirmedOption: IProposingScheduleTime;
   handleEditScheduledVideoCallLink: () => void;
@@ -81,6 +84,8 @@ const ConfirmedRequestedCall = ({
     openUrlInApp(confirmedOption.meetingUrl);
   };
   const dateTimeObject = new Date(confirmedOption.proposal);
+
+  console.log(confirmedOption);
 
   return (
     <View className="my-4 flex-1 flex-col items-start justify-start rounded-lg bg-white p-4 shadow-sm">
@@ -125,7 +130,7 @@ const ConfirmedRequestedCall = ({
           </Text>
         </View>
       </View>
-      <View className="flex flex-row items-end justify-between self-stretch pt-3">
+      <View className="flex flex-row items-center justify-between self-stretch pt-3">
         <View className="inline-flex flex-col items-start justify-start gap-1">
           <Text className="text-md font-semibold leading-snug text-zinc-500">
             {translate("challenge_detail_screen.open_meeting")}
@@ -133,14 +138,37 @@ const ConfirmedRequestedCall = ({
         </View>
         <TouchableOpacity
           className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={handleOpenLink}
+          onPress={() => onCopyLink(coachCalendyLink)}
         >
           <LinkSvg />
           <Text className="text-right text-md font-normal leading-tight text-blue-600">
-            {translate("challenge_detail_screen.link")}
+            {translate("challenge_detail_screen.copy")}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="flex flex-row items-center justify-end gap-1 p-1"
+          onPress={handleOpenLink}
+        >
+          <EvilIcons name="external-link" size={20} color="#2563eb" />
+          <Text className="text-right text-md font-normal leading-tight text-blue-600">
+            {translate("challenge_detail_screen.open_link")}
           </Text>
         </TouchableOpacity>
       </View>
+      {confirmedOption?.note && (
+        <View className="flex flex-row items-center justify-between self-stretch pt-3">
+          <View className="inline-flex flex-col items-start justify-start gap-1">
+            <Text className="text-md font-semibold leading-snug text-zinc-500">
+              {translate("challenge_detail_screen.note")}
+            </Text>
+          </View>
+          <View className="flex w-48">
+            <Text className="text-right text-md font-normal leading-tight text-zinc-500">
+              {confirmedOption?.note}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -276,6 +304,8 @@ const CompanyCoachCalendarTabCoachView: FC<
   const [proposedOptions, setProposedOptions] = useState<IProposalTime[]>(
     [] as IProposalTime[]
   );
+  const [coachData, setCoachData] = useState<IUserData>(null);
+
   const [isCoachProposed, setIsCoachProposed] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] =
     useState<IProposingScheduleTime>(null);
@@ -302,6 +332,7 @@ const CompanyCoachCalendarTabCoachView: FC<
     challengeState?.closingStatus === "in-progress" ||
     challengeState?.intakeStatus === "in-progress";
 
+  const { coach } = challengeState;
   const currentChallengeState = getInprogressState(challengeState);
 
   const handleAddTime = () => {
@@ -423,6 +454,22 @@ const CompanyCoachCalendarTabCoachView: FC<
 
   useEffect(() => {
     getScheduledVideocall();
+    if (coach) {
+      const getCoachInfo = async () => {
+        try {
+          const res = await serviceGetOtherUserData(coach);
+          if (res?.data) {
+            setCoachData(res?.data);
+          }
+        } catch (error) {
+          openErrorModal({
+            title: t("error"),
+            description: t("error_general_message"),
+          });
+        }
+      };
+      getCoachInfo();
+    }
   }, [challengeId, currentChallengeState]);
 
   useEffect(() => {
@@ -475,6 +522,7 @@ const CompanyCoachCalendarTabCoachView: FC<
         {confirmedOption ? (
           <ConfirmedRequestedCall
             translate={t}
+            coachCalendyLink={coachData?.calendly}
             confirmedOption={confirmedOption}
             handleDeleteConfirmedScheduledVideoCall={
               handleDeleteConfirmedScheduledVideoCall

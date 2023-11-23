@@ -13,6 +13,7 @@ import TextInput from "../common/Inputs/TextInput";
 import ErrorText from "../common/ErrorText";
 import { confirmProposalByCoach } from "../../service/schedule";
 import GlobalToastController from "../common/Toast/GlobalToastController";
+import clsx from "clsx";
 
 interface IConfirmVideoCoachModalProps {
   modalVisible: boolean;
@@ -40,9 +41,11 @@ export default function ConfirmVideoCoachModal({
     formState: { errors },
   } = useForm<{
     url: string;
+    note: string;
   }>({
     defaultValues: {
       url: "",
+      note: "",
     },
     resolver: yupResolver(ConfirmVideoCallUrlValidationSchema()),
     reValidateMode: "onChange",
@@ -54,6 +57,7 @@ export default function ConfirmVideoCoachModal({
       const res = await confirmProposalByCoach({
         scheduleId: selectedOption.id,
         meetingUrl: getValues("url"),
+        note: getValues("note"),
       });
 
       if (res.status === 201) {
@@ -152,6 +156,26 @@ export default function ConfirmVideoCoachModal({
               )}
             />
             {errors.url && <ErrorText message={errors.url?.message} />}
+          </View>
+          <View className="pt-4">
+            <Controller
+              control={control}
+              name="note"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <View className="flex flex-col">
+                  <TextInput
+                    label={t("create_schedule_modal.note")}
+                    placeholder={t("create_schedule_modal.note_placeholder")}
+                    placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    multiline={true}
+                    className={clsx("h-32 ")}
+                  />
+                </View>
+              )}
+            />
           </View>
         </View>
       </View>

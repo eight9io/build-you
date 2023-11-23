@@ -1,25 +1,31 @@
-import React, { FC, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
+import { EvilIcons } from "@expo/vector-icons";
+import React, { FC, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
-import { openUrlInApp } from "../../../../utils/inAppBrowser";
-
-import LinkSvg from "./assets/link.svg";
-import EmptySvg from "./assets/emptyFollow.svg";
-import Button from "../../../../component/common/Buttons/Button";
+import { IUserData } from "../../../../types/user";
+import { IProposalTime } from "../../../../types/schedule";
 import { ICertifiedChallengeState } from "../../../../types/challenge";
+
 import {
   createVoteScheduleVideoCall,
   getAllScheduleVideoCall,
 } from "../../../../service/schedule";
+import { openUrlInApp } from "../../../../utils/inAppBrowser";
+import { serviceGetOtherUserData } from "../../../../service/user";
+
+import { useErrorModal } from "../../../../hooks/useErrorModal";
+import { onCopyLink } from "../../../../utils/shareLink.uitl";
 import { getInprogressState } from "./CompanyCoachCalendarTabCoachView";
 
-import { IProposalTime } from "../../../../types/schedule";
-import { useErrorModal } from "../../../../hooks/useErrorModal";
+import Button from "../../../../component/common/Buttons/Button";
 import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { set } from "react-native-reanimated";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+
+import LinkSvg from "./assets/link.svg";
+import EmptySvg from "./assets/emptyFollow.svg";
 
 interface IProposedTimeTag {
   translate: (key: string) => string;
@@ -45,14 +51,21 @@ const EmptyVideoCall = ({ translate }) => {
 const ConfirmedRequestedCall = ({
   translate,
   confirmedOption,
+  coachCalendyLink,
 }: {
   translate: (key: string) => string;
   confirmedOption: IProposalTime;
+  coachCalendyLink: string;
 }) => {
-  const url = "https://meet.google.com/abc-defg-hij";
-
   const handleOpenLink = async () => {
-    openUrlInApp(url);
+    if (!coachCalendyLink) {
+      GlobalDialogController.showModal({
+        title: translate("error"),
+        message: translate("dialog.coach_no_calendy_link"),
+      });
+      return;
+    }
+    openUrlInApp(coachCalendyLink);
   };
 
   const dateTimeObject = new Date(confirmedOption.proposal);
@@ -85,7 +98,7 @@ const ConfirmedRequestedCall = ({
           </Text>
         </View>
       </View>
-      <View className="flex flex-row items-end justify-between self-stretch pt-3">
+      <View className="flex flex-row items-center justify-between self-stretch pt-3">
         <View className="inline-flex flex-col items-start justify-start gap-1">
           <Text className="text-md font-semibold leading-snug text-zinc-500">
             {translate("challenge_detail_screen.open_meeting")}
@@ -93,11 +106,20 @@ const ConfirmedRequestedCall = ({
         </View>
         <TouchableOpacity
           className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={handleOpenLink}
+          onPress={() => onCopyLink(coachCalendyLink)}
         >
           <LinkSvg />
           <Text className="text-right text-md font-normal leading-tight text-blue-600">
-            {translate("challenge_detail_screen.link")}
+            {translate("challenge_detail_screen.copy")}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="flex flex-row items-center justify-end gap-1 p-1"
+          onPress={handleOpenLink}
+        >
+          <EvilIcons name="external-link" size={20} color="#2563eb" />
+          <Text className="text-right text-md font-normal leading-tight text-blue-600">
+            {translate("challenge_detail_screen.open_link")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -185,14 +207,15 @@ const CompanyCoachCalendarTabCompanyView: FC<
   );
   const [selectedOptions, setSelectedOptions] = useState<IProposalTime[]>([]);
   const [confirmedOption, setConfirmedOption] = useState<IProposalTime>(null);
+  const [coachData, setCoachData] = useState<IUserData>(null);
 
-  const [isCoachProposed, setIsCoachProposed] = useState<boolean>(false);
   const [isCurrentUserVotedProposedTime, setIsCurrentUserVotedProposedTime] =
     useState<boolean>(false);
 
   const { t } = useTranslation();
 
   const currentChallengeState = getInprogressState(challengeState);
+  const { coach } = challengeState;
 
   const {
     isErrorModalOpen,
@@ -228,7 +251,6 @@ const CompanyCoachCalendarTabCompanyView: FC<
         if (confirmedOption) setConfirmedOption(confirmedOption);
         if (scheduledOptions?.proposals?.length > 0) {
           setProposingOptions(scheduledOptions?.proposals);
-          setIsCoachProposed(true);
         }
       }
     } catch (error) {
@@ -290,7 +312,25 @@ const CompanyCoachCalendarTabCompanyView: FC<
   };
 
   useEffect(() => {
-    getScheduledVideocall();
+    if (challengeId && currentChallengeState) {
+      getScheduledVideocall();
+    }
+    if (coach) {
+      const getCoachInfo = async () => {
+        try {
+          const res = await serviceGetOtherUserData(coach);
+          if (res?.data) {
+            setCoachData(res?.data);
+          }
+        } catch (error) {
+          openErrorModal({
+            title: t("error"),
+            description: t("error_general_message"),
+          });
+        }
+      };
+      getCoachInfo();
+    }
   }, [challengeId, currentChallengeState]);
 
   return (
@@ -312,6 +352,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
           <ConfirmedRequestedCall
             translate={t}
             confirmedOption={confirmedOption}
+            coachCalendyLink={coachData?.calendly}
           />
         ) : (
           <EmptyVideoCall translate={t} />

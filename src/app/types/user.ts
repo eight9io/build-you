@@ -31,6 +31,14 @@ export interface IUserData {
   isCoach?: boolean;
   ratedSkill?: IRatedSkill[];
   calendly?: string;
+  skills?: IUserSkills[];
+}
+
+export interface IUserSkills {
+  id: string;
+  isRated: boolean;
+  rating: number;
+  skill: string;
 }
 
 export interface IRatedSkill {

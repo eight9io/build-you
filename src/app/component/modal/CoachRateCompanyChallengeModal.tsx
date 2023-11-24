@@ -1,32 +1,25 @@
-import clsx from "clsx";
 import React, { FC, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   View,
   Text,
   Modal,
+  Platform,
   SafeAreaView,
   ScrollView,
-  TouchableOpacity,
-  Platform,
 } from "react-native";
 import { Image } from "expo-image";
 
+import { IChallenge, ISoftSkill } from "../../types/challenge";
+import { IUserData } from "../../types/user";
 import { serviceRateSoftSkillCertifiedChallenge } from "../../service/challenge";
-
-import { IChallenge, IChallengeOwner, ISoftSkill } from "../../types/challenge";
-
-import { extractSkillsFromChallengeData } from "../../utils/challenge";
-
-import Header from "../common/Header";
-import Button from "../common/Buttons/Button";
 import GlobalToastController from "../common/Toast/GlobalToastController";
+import { useTranslation } from "react-i18next";
+import clsx from "clsx";
+import Button from "../common/Buttons/Button";
+import Header from "../common/Header";
 
 import DefaultAvatar from "../asset/default-avatar.svg";
-import CheckedSvg from "../../component/asset/checked.svg";
-import UncheckedSvg from "../../component/asset/uncheck.svg";
-import WarningSvg from "../../component/asset/warning.svg";
-import { IUserData } from "../../types/user";
+import { renderSelectedSoftSkill } from "./CoachRateChallengeModal";
 
 interface ICoachRateChallengeModalProps {
   isVisible: boolean;
@@ -34,106 +27,37 @@ interface ICoachRateChallengeModalProps {
   userToRate: IUserData;
   challengeData: IChallenge;
   setShouldParentRefresh: React.Dispatch<React.SetStateAction<boolean>>;
-  ratedCompetencedSkill: ISoftSkill[];
   canCurrentUserRateSkills: boolean;
 }
 
-interface IRenderSoftSkillProgress {
-  t: any;
-  item: ISoftSkill;
-  changeSkillValue: any;
-  skillValueError: boolean;
-}
-
-const MAX_PROGRESS_VALUE = 5;
-
-const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
-  t,
-  item,
-  changeSkillValue,
-  skillValueError,
-}) => {
-  const randomId = Math.random().toString();
-  return (
-    <View className="flex w-full flex-col">
-      <View className="flex w-full flex-col items-center justify-between">
-        <View>
-          <Text className="w-44 text-h6 font-medium leading-6 text-black-default">
-            {item.skill}
-          </Text>
-        </View>
-        <View className="flex flex-1 flex-row  justify-end pt-2">
-          {Array.from(Array(MAX_PROGRESS_VALUE).keys()).map((_, index) => (
-            <TouchableOpacity
-              className="pr-4"
-              key={`${randomId}${index}`}
-              onPress={() => changeSkillValue(item?.skill, index + 1)}
-            >
-              {index < item?.rating ? (
-                <CheckedSvg />
-              ) : (
-                <UncheckedSvg className="text-gray-light" />
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      {skillValueError && (item?.rating === 0 || !item?.rating) && (
-        <View className="flex flex-row items-center pt-3">
-          <WarningSvg />
-          <Text className="pl-1 text-sm text-red-500">
-            {t("form_onboarding.screen_4.error_rate") ||
-              "Please rate from 1 to 5"}
-          </Text>
-        </View>
-      )}
-    </View>
-  );
+const extractSkillsFromUserData = (userData: IUserData) => {
+  const skillsToRate: ISoftSkill[] = userData?.skills?.map((item) => item);
+  return skillsToRate;
 };
 
-export const renderSelectedSoftSkill = (
-  t: any,
-  selectedCompetencedSkill: ISoftSkill[],
-  changeSkillValue: any,
-  skillValueError: boolean
-) => {
-  const randomId = Math.random().toString();
-  return (
-    <View className="flex flex-col flex-wrap">
-      {selectedCompetencedSkill.map((item, index) => (
-        <View className="pb-6" key={`${randomId}${index}`}>
-          {renderSoftSkillProgress({
-            t,
-            item,
-            changeSkillValue,
-            skillValueError,
-          })}
-        </View>
-      ))}
-    </View>
-  );
-};
-
-const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
+const CoachRateCompanyChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   isVisible,
   setIsVisible,
   userToRate,
   challengeData,
   setShouldParentRefresh,
-  ratedCompetencedSkill,
   canCurrentUserRateSkills,
 }) => {
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
     ISoftSkill[]
   >([]);
-
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
 
   const { t } = useTranslation();
-  
-  const isChallengeRated = ratedCompetencedSkill.every((item) => item.isRating);
-  const challengeOwnerId = userToRate?.id;
+
+  const userToRateId = userToRate?.id;
   const challengeId = challengeData?.id;
+
+  const isChallengeRated = selectedCompetencedSkill.every(
+    (item) => item.isRated
+  );
+
+  console.log(isChallengeRated);
 
   const handleSummitRatingSkills = async () => {
     try {
@@ -151,7 +75,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
 
       await serviceRateSoftSkillCertifiedChallenge(
         challengeId,
-        challengeOwnerId,
+        userToRateId,
         data
       );
       setShouldParentRefresh(true);
@@ -179,16 +103,13 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   };
 
   useEffect(() => {
-    if (challengeId) {
-      const skillsToRate: ISoftSkill[] =
-        extractSkillsFromChallengeData(challengeData);
+    if (userToRate) {
+      const skillsToRate: ISoftSkill[] = extractSkillsFromUserData(userToRate);
       setSelectedCompetencedSkill(skillsToRate);
     }
-  }, [challengeId]);
+  }, [userToRate]);
 
-  const onClose = () => {
-    setIsVisible(false);
-  };
+  console.log(selectedCompetencedSkill);
 
   return (
     <Modal
@@ -205,7 +126,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
               ("Rate skills" as string)
             }
             leftBtn={t("add_new_challenge_progress_modal.cancel") || "Cancel"}
-            onLeftBtnPress={onClose}
+            onLeftBtnPress={() => setIsVisible(false)}
             containerStyle={Platform.OS === "ios" ? "mt-5" : "mt-0"}
           />
         </View>
@@ -234,7 +155,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
                 {userToRate?.name} {userToRate?.surname}
               </Text>
             </View>
-            {!canCurrentUserRateSkills && !isChallengeRated && (
+            {!canCurrentUserRateSkills && (
               <View className="flex flex-row items-center justify-between px-4 pt-4">
                 <Text className="text-md  text-danger-default">
                   {t("challenge_detail_screen.can_not_rate_skills")}
@@ -245,9 +166,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
             <View className="w-full flex-col justify-between px-5 pt-6">
               {renderSelectedSoftSkill(
                 t,
-                isChallengeRated
-                  ? ratedCompetencedSkill
-                  : selectedCompetencedSkill,
+                selectedCompetencedSkill,
                 changeSkillValue,
                 skillValueError
               )}
@@ -270,4 +189,4 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   );
 };
 
-export default CoachRateChallengeModal;
+export default CoachRateCompanyChallengeModal;

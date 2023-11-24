@@ -337,7 +337,6 @@ const CompanyCoachCalendarTabCoachView: FC<
     challengeState?.closingStatus === "in-progress" ||
     challengeState?.intakeStatus === "in-progress";
 
-  const { coach } = challengeState;
   const currentChallengeState = getInprogressState(challengeState);
 
   const handleAddTime = () => {
@@ -498,7 +497,7 @@ const CompanyCoachCalendarTabCoachView: FC<
 
       <ConfirmVideoCoachModal
         openErrorModal={openErrorModal}
-        selectedOption={selectedOption}
+        selectedOption={confirmedOption ? confirmedOption : selectedOption}
         setConfirmedOption={setConfirmedOption}
         modalVisible={isShowConfirmTimeModal}
         setModalVisible={setIsShowConfirmTimeModal}

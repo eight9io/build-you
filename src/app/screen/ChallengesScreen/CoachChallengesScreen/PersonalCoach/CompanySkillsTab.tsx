@@ -23,6 +23,8 @@ import RatedParticipant from "../assets/rated-participant.svg";
 import Empty from "../../../../common/svg/empty-list.svg";
 import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
+import CoachRateCompanyChallengeModal from "../../../../component/modal/CoachRateCompanyChallengeModal";
+
 interface IParticipantWithRatingSkills {
   id: number;
   name: string;
@@ -132,20 +134,18 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
     }
   }, [challengeData?.id, shouldRefresh]);
 
-    const skillsToRate: ISoftSkill[] =
-      extractSkillsFromChallengeData(challengeData);
-
+  const skillsToRate: ISoftSkill[] =
+    extractSkillsFromChallengeData(challengeData);
 
   return (
     <View className="flex-1">
       {isRateSkillsModalVisible && (
-        <CoachRateChallengeModal
+        <CoachRateCompanyChallengeModal
           isVisible={isRateSkillsModalVisible}
           setIsVisible={setIsRateSkillsModalVisible}
           challengeData={challengeData}
           userToRate={selectedUser}
           setShouldParentRefresh={setShouldRefresh}
-          ratedCompetencedSkill={ratedCompetencedSkill}
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
       )}

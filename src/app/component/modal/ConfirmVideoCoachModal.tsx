@@ -1,6 +1,6 @@
 import { View, Modal, Text } from "react-native";
 import { useTranslation } from "react-i18next";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
 
@@ -36,6 +36,7 @@ export default function ConfirmVideoCoachModal({
   const {
     control,
     handleSubmit,
+    setValue,
     getValues,
     setError,
     formState: { errors },
@@ -61,7 +62,7 @@ export default function ConfirmVideoCoachModal({
       });
 
       if (res.status === 201) {
-        setConfirmedOption({ ...selectedOption, meetingUrl: getValues("url") });
+        setConfirmedOption({ ...selectedOption, metingUrl: getValues("url") });
         GlobalToastController.showModal({
           message: t("toast.proposing_time_success") as string,
         });
@@ -85,6 +86,8 @@ export default function ConfirmVideoCoachModal({
     // seselectedOption.proposal in format 2023-10-28T00:00:00.000Z
     if (!selectedOption) return;
     setSelectedDatetime(new Date(selectedOption.proposal));
+    setValue("url", selectedOption.metingUrl);
+    setValue("note", selectedOption.note);
   }, [selectedOption]);
 
   return (
@@ -114,7 +117,7 @@ export default function ConfirmVideoCoachModal({
         />
         <View className="flex flex-col p-2">
           <View className="flex flex-col">
-            <Text className=" text-md font-normal leading-tight text-orange-500">
+            <Text className="text-md font-semibold text-primary-default">
               {t("confirm_time_modal.option")}
             </Text>
             <Text className="font-['Open Sans'] py-2 text-xl font-semibold leading-7 text-zinc-800">

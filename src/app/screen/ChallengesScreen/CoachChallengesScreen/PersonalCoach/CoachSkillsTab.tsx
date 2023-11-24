@@ -92,15 +92,17 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
 
   return (
     <View className="mb-4 flex-1 px-4 pr-4 pt-4">
-      <CoachRateChallengeModal
-        isVisible={isRateSkillsModalVisible}
-        setIsVisible={setIsRateSkillsModalVisible}
-        challengeData={challengeData}
-        userToRate={challengeOwner}
-        setShouldParentRefresh={setShouldRefresh}
-        ratedCompetencedSkill={ratedCompetencedSkill}
-        canCurrentUserRateSkills={canCurrentUserRateSkills}
-      />
+      {isRateSkillsModalVisible && (
+        <CoachRateChallengeModal
+          isVisible={isRateSkillsModalVisible}
+          setIsVisible={setIsRateSkillsModalVisible}
+          challengeData={challengeData}
+          userToRate={challengeOwner}
+          setShouldParentRefresh={setShouldRefresh}
+          ratedCompetencedSkill={ratedCompetencedSkill}
+          canCurrentUserRateSkills={canCurrentUserRateSkills}
+        />
+      )}
       {canCurrentUserRateSkills && !isChallengeRated && (
         <Button
           containerClassName="bg-primary-default flex-none px-1"

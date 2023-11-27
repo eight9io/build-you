@@ -8,7 +8,7 @@ import notifee, {
 import { Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackActions } from "@react-navigation/native";
+import { NavigationContainerRef, StackActions } from "@react-navigation/native";
 import { RootStackParamList } from "../navigation/navigation.type";
 import {
   INotification,
@@ -101,237 +101,237 @@ export const addNotificationListener = (
   return unsubscribe;
 };
 
-export const handleTapOnIncomingNotification = async (
-  notification: Notification,
-  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
-) => {
-  const navigation = NavigationService.getContainer();
+// export const handleTapOnIncomingNotification = async (
+//   notification: Notification,
+//   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+// ) => {
+//   const navigation = NavigationService.getContainer();
 
-  // When the app is launched by tapping on the notification from killed state => notification event will be triggered before navigation is ready
-  // => Keep calling handleTapOnIncomingNotification until navigation is ready
-  // When the app is launched from killed state => the current route is IntroScreen (cannot navigate to other screens) => wait until the app done checking the user's authentication state
-  if (
-    !navigation ||
-    (navigation && navigation.getCurrentRoute().name === "IntroScreen")
-  ) {
-    if (MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT === 0) {
-      MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10; // Reset the retry count
-      return; // Stop retrying
-    }
-    MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT--;
-    return setTimeout(
-      () => handleTapOnIncomingNotification(notification, useNotificationStore),
-      RETRY_DELAY
-    ); // retry after a delay (prevent stack overflow)
-  } else {
-    const payload = notification.data as Record<
-      string,
-      any
-    > as INotificationPayload;
+//   // When the app is launched by tapping on the notification from killed state => notification event will be triggered before navigation is ready
+//   // => Keep calling handleTapOnIncomingNotification until navigation is ready
+//   // When the app is launched from killed state => the current route is IntroScreen (cannot navigate to other screens) => wait until the app done checking the user's authentication state
+//   if (
+//     !navigation ||
+//     (navigation && navigation.getCurrentRoute().name === "IntroScreen")
+//   ) {
+//     if (MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT === 0) {
+//       MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10; // Reset the retry count
+//       return; // Stop retrying
+//     }
+//     MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT--;
+//     return setTimeout(
+//       () => handleTapOnIncomingNotification(notification, useNotificationStore),
+//       RETRY_DELAY
+//     ); // retry after a delay (prevent stack overflow)
+//   } else {
+//     const payload = notification.data as Record<
+//       string,
+//       any
+//     > as INotificationPayload;
 
-    switch (payload.notificationType) {
-      case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-        if (payload.commentUserId && payload.challengeId) {
-          try {
-            const userCreateChallengeId = payload.commentUserId;
-            const userCreateChallengeData = await serviceGetOtherUserData(
-              userCreateChallengeId
-            );
-            const pushAction = StackActions.push(
-              "OtherUserProfileChallengeDetailsScreen",
-              {
-                challengeId: payload.challengeId,
-                isCompany: userCreateChallengeData.data.companyAccount,
-              }
-            );
-            navigation.dispatch(pushAction);
-          } catch (error) {
-            console.error("error: ", error);
-            CrashlyticService({
-              errorType: "Handle Tap On Incoming Notification Error",
-              error: error,
-            });
-          }
-        }
-        break;
-      case NOTIFICATION_TYPES.PROGRESS_CREATED:
-        if (payload.progressId && payload.challengeId) {
-          // navigation.navigate("ProgressCommentScreen", {
-          //   progressId: payload.progressId,
-          //   challengeId: payload.challengeId,
-          // });
-          const pushAction = StackActions.push("ProgressCommentScreen", {
-            progressId: payload.progressId,
-            challengeId: payload.challengeId,
-          });
-          navigation.dispatch(pushAction);
-        }
-        break;
-      case NOTIFICATION_TYPES.NEW_COMMENT:
-        if (payload.progressId && payload.challengeId) {
-          // navigation.navigate("ProgressCommentScreen", {
-          //   progressId: payload.progressId,
-          //   challengeId: payload.challengeId,
-          // });
-          const currentRouteParams = navigation.getCurrentRoute().params as {
-            progressId: string;
-            challengeId: string;
-          };
-          // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
-          if (
-            currentRouteParams &&
-            currentRouteParams.progressId === payload.progressId
-          )
-            return;
-          const pushAction = StackActions.push("ProgressCommentScreen", {
-            progressId: payload.progressId,
-            challengeId: payload.challengeId,
-          });
-          navigation.dispatch(pushAction);
-        }
-        break;
-      case NOTIFICATION_TYPES.NEW_MENTION:
-        const currentRouteParams = navigation.getCurrentRoute().params as {
-          progressId: string;
-          challengeId: string;
-        };
-        // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
-        if (
-          currentRouteParams &&
-          currentRouteParams.progressId === payload.progressId
-        )
-          return;
-        if (payload.progressId && payload.challengeId) {
-          // navigation.navigate("ProgressCommentScreen", {
-          //   progressId: payload.progressId,
-          //   challengeId: payload.challengeId,
-          // });
-          const pushAction = StackActions.push("ProgressCommentScreen", {
-            progressId: payload.progressId,
-            challengeId: payload.challengeId,
-          });
-          navigation.dispatch(pushAction);
-        }
-        break;
-      case NOTIFICATION_TYPES.NEW_FOLLOWER:
-        if (payload.followerId) {
-          // navigation.navigate("OtherUserProfileScreen", {
-          //   userId: payload.followerId,
-          //   isFollower: true,
-          // });
-          const pushAction = StackActions.push("OtherUserProfileScreen", {
-            userId: payload.followerId,
-            isFollower: true,
-          });
-          navigation.dispatch(pushAction);
-        }
-        break;
-      case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
-        if (payload.companyId) {
-          // navigation.navigate("OtherUserProfileScreen", {
-          //   userId: payload.companyId,
-          // });
-          const pushAction = StackActions.push("OtherUserProfileScreen", {
-            userId: payload.companyId,
-          });
-          navigation.dispatch(pushAction);
-        }
-        break;
-      case NOTIFICATION_TYPES.NEW_MESSAGE: {
-        // TODO: Handle navigation with company account
-        const currentRouteName = navigation.getCurrentRoute().name;
-        const currentRouteParams = navigation.getCurrentRoute().params as {
-          challengeId: string;
-        };
-        const shouldDisplayNewMessageNotification =
-          useNotificationStore.getState().shouldDisplayNewMessageNotification;
-        // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
-        // and the challengeId is the same as the incoming notification
-        // => navigate to chat tab if the user is not in chat tab
-        // => do nothing if the user is in chat tab
-        if (
-          currentRouteParams &&
-          (currentRouteName === "PersonalChallengeDetailScreen" ||
-            currentRouteName === "CompanyChallengeDetailScreen" ||
-            currentRouteName === "PersonalCoachChallengeDetailScreen") &&
-          currentRouteParams.challengeId === payload.challengeId
-        ) {
-          if (shouldDisplayNewMessageNotification) {
-            // user is not in chat tab
-            // Trigger the navigation to chat tab
-            navigation.setParams({
-              hasNewMessage: true,
-            });
-          }
-          return;
-        }
-        if (payload.challengeId && payload.coachId) {
-          try {
-            const { id: currentUserId, companyAccount } =
-              useUserProfileStore.getState().userProfile;
-            const pushAction = StackActions.push(
-              payload.coachId === currentUserId
-                ? "PersonalCoachChallengeDetailScreen"
-                : companyAccount
-                ? "CompanyChallengeDetailScreen"
-                : "PersonalChallengeDetailScreen",
-              {
-                challengeId: payload.challengeId,
-                hasNewMessage: true,
-              }
-            );
-            navigation.dispatch(pushAction);
-          } catch (error) {
-            console.log("error: ", error);
-          }
-        }
-        break;
-      }
-      case NOTIFICATION_TYPES.CLOSEDCHALLENGE: {
-        const currentRouteName = navigation.getCurrentRoute().name;
-        const currentRouteParams = navigation.getCurrentRoute().params as {
-          challengeId: string;
-        };
-        const { id: currentUserId } =
-          useUserProfileStore.getState().userProfile;
+//     switch (payload.notificationType) {
+//       case NOTIFICATION_TYPES.CHALLENGE_CREATED:
+//         if (payload.commentUserId && payload.challengeId) {
+//           try {
+//             const userCreateChallengeId = payload.commentUserId;
+//             const userCreateChallengeData = await serviceGetOtherUserData(
+//               userCreateChallengeId
+//             );
+//             const pushAction = StackActions.push(
+//               "OtherUserProfileChallengeDetailsScreen",
+//               {
+//                 challengeId: payload.challengeId,
+//                 isCompany: userCreateChallengeData.data.companyAccount,
+//               }
+//             );
+//             navigation.dispatch(pushAction);
+//           } catch (error) {
+//             console.error("error: ", error);
+//             CrashlyticService({
+//               errorType: "Handle Tap On Incoming Notification Error",
+//               error: error,
+//             });
+//           }
+//         }
+//         break;
+//       case NOTIFICATION_TYPES.PROGRESS_CREATED:
+//         if (payload.progressId && payload.challengeId) {
+//           // navigation.navigate("ProgressCommentScreen", {
+//           //   progressId: payload.progressId,
+//           //   challengeId: payload.challengeId,
+//           // });
+//           const pushAction = StackActions.push("ProgressCommentScreen", {
+//             progressId: payload.progressId,
+//             challengeId: payload.challengeId,
+//           });
+//           navigation.dispatch(pushAction);
+//         }
+//         break;
+//       case NOTIFICATION_TYPES.NEW_COMMENT:
+//         if (payload.progressId && payload.challengeId) {
+//           // navigation.navigate("ProgressCommentScreen", {
+//           //   progressId: payload.progressId,
+//           //   challengeId: payload.challengeId,
+//           // });
+//           const currentRouteParams = navigation.getCurrentRoute().params as {
+//             progressId: string;
+//             challengeId: string;
+//           };
+//           // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
+//           if (
+//             currentRouteParams &&
+//             currentRouteParams.progressId === payload.progressId
+//           )
+//             return;
+//           const pushAction = StackActions.push("ProgressCommentScreen", {
+//             progressId: payload.progressId,
+//             challengeId: payload.challengeId,
+//           });
+//           navigation.dispatch(pushAction);
+//         }
+//         break;
+//       case NOTIFICATION_TYPES.NEW_MENTION:
+//         const currentRouteParams = navigation.getCurrentRoute().params as {
+//           progressId: string;
+//           challengeId: string;
+//         };
+//         // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
+//         if (
+//           currentRouteParams &&
+//           currentRouteParams.progressId === payload.progressId
+//         )
+//           return;
+//         if (payload.progressId && payload.challengeId) {
+//           // navigation.navigate("ProgressCommentScreen", {
+//           //   progressId: payload.progressId,
+//           //   challengeId: payload.challengeId,
+//           // });
+//           const pushAction = StackActions.push("ProgressCommentScreen", {
+//             progressId: payload.progressId,
+//             challengeId: payload.challengeId,
+//           });
+//           navigation.dispatch(pushAction);
+//         }
+//         break;
+//       case NOTIFICATION_TYPES.NEW_FOLLOWER:
+//         if (payload.followerId) {
+//           // navigation.navigate("OtherUserProfileScreen", {
+//           //   userId: payload.followerId,
+//           //   isFollower: true,
+//           // });
+//           const pushAction = StackActions.push("OtherUserProfileScreen", {
+//             userId: payload.followerId,
+//             isFollower: true,
+//           });
+//           navigation.dispatch(pushAction);
+//         }
+//         break;
+//       case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
+//         if (payload.companyId) {
+//           // navigation.navigate("OtherUserProfileScreen", {
+//           //   userId: payload.companyId,
+//           // });
+//           const pushAction = StackActions.push("OtherUserProfileScreen", {
+//             userId: payload.companyId,
+//           });
+//           navigation.dispatch(pushAction);
+//         }
+//         break;
+//       case NOTIFICATION_TYPES.NEW_MESSAGE: {
+//         // TODO: Handle navigation with company account
+//         const currentRouteName = navigation.getCurrentRoute().name;
+//         const currentRouteParams = navigation.getCurrentRoute().params as {
+//           challengeId: string;
+//         };
+//         const shouldDisplayNewMessageNotification =
+//           useNotificationStore.getState().shouldDisplayNewMessageNotification;
+//         // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+//         // and the challengeId is the same as the incoming notification
+//         // => navigate to chat tab if the user is not in chat tab
+//         // => do nothing if the user is in chat tab
+//         if (
+//           currentRouteParams &&
+//           (currentRouteName === "PersonalChallengeDetailScreen" ||
+//             currentRouteName === "CompanyChallengeDetailScreen" ||
+//             currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+//           currentRouteParams.challengeId === payload.challengeId
+//         ) {
+//           if (shouldDisplayNewMessageNotification) {
+//             // user is not in chat tab
+//             // Trigger the navigation to chat tab
+//             navigation.setParams({
+//               hasNewMessage: true,
+//             });
+//           }
+//           return;
+//         }
+//         if (payload.challengeId && payload.coachId) {
+//           try {
+//             const { id: currentUserId, companyAccount } =
+//               useUserProfileStore.getState().userProfile;
+//             const pushAction = StackActions.push(
+//               payload.coachId === currentUserId
+//                 ? "PersonalCoachChallengeDetailScreen"
+//                 : companyAccount
+//                 ? "CompanyChallengeDetailScreen"
+//                 : "PersonalChallengeDetailScreen",
+//               {
+//                 challengeId: payload.challengeId,
+//                 hasNewMessage: true,
+//               }
+//             );
+//             navigation.dispatch(pushAction);
+//           } catch (error) {
+//             console.log("error: ", error);
+//           }
+//         }
+//         break;
+//       }
+//       case NOTIFICATION_TYPES.CLOSEDCHALLENGE: {
+//         const currentRouteName = navigation.getCurrentRoute().name;
+//         const currentRouteParams = navigation.getCurrentRoute().params as {
+//           challengeId: string;
+//         };
+//         const { id: currentUserId } =
+//           useUserProfileStore.getState().userProfile;
 
-        // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
-        // and the challengeId is the same as the incoming notification
-        // => refresh the challenge detail screen to update the challenge status
-        if (
-          currentRouteParams &&
-          (currentRouteName === "PersonalChallengeDetailScreen" ||
-            currentRouteName === "PersonalCoachChallengeDetailScreen") &&
-          currentRouteParams.challengeId === payload.challengeId
-        ) {
-          const replaceAction = StackActions.replace(
-            payload.coachId === currentUserId
-              ? "PersonalCoachChallengeDetailScreen"
-              : "PersonalChallengeDetailScreen",
-            {
-              challengeId: payload.challengeId,
-            }
-          );
-          navigation.dispatch({
-            ...replaceAction,
-            source: undefined, // Explicitly set the source to undefined to replace the focused route. Reference: https://reactnavigation.org/docs/stack-actions/#replace
-          });
-          return;
-        } else {
-          navigation.navigate(
-            payload.coachId === currentUserId
-              ? "PersonalCoachChallengeDetailScreen"
-              : "PersonalChallengeDetailScreen",
-            {
-              challengeId: payload.challengeId,
-            }
-          );
-        }
-        break;
-      }
-    }
-  }
-};
+//         // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+//         // and the challengeId is the same as the incoming notification
+//         // => refresh the challenge detail screen to update the challenge status
+//         if (
+//           currentRouteParams &&
+//           (currentRouteName === "PersonalChallengeDetailScreen" ||
+//             currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+//           currentRouteParams.challengeId === payload.challengeId
+//         ) {
+//           const replaceAction = StackActions.replace(
+//             payload.coachId === currentUserId
+//               ? "PersonalCoachChallengeDetailScreen"
+//               : "PersonalChallengeDetailScreen",
+//             {
+//               challengeId: payload.challengeId,
+//             }
+//           );
+//           navigation.dispatch({
+//             ...replaceAction,
+//             source: undefined, // Explicitly set the source to undefined to replace the focused route. Reference: https://reactnavigation.org/docs/stack-actions/#replace
+//           });
+//           return;
+//         } else {
+//           navigation.navigate(
+//             payload.coachId === currentUserId
+//               ? "PersonalCoachChallengeDetailScreen"
+//               : "PersonalChallengeDetailScreen",
+//             {
+//               challengeId: payload.challengeId,
+//             }
+//           );
+//         }
+//         break;
+//       }
+//     }
+//   }
+// };
 
 export const handleTapOnNotification = async (
   notification: any,
@@ -591,4 +591,271 @@ export const setBadgeCount = (count: number) => {
 
 export const decrementBadgeCount = () => {
   return notifee.decrementBadgeCount();
+};
+
+const handleTapOnChallengeCreatedPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  if (payload.commentUserId && payload.challengeId) {
+    try {
+      const userCreateChallengeId = payload.commentUserId;
+      const userCreateChallengeData = await serviceGetOtherUserData(
+        userCreateChallengeId
+      );
+      const pushAction = StackActions.push(
+        "OtherUserProfileChallengeDetailsScreen",
+        {
+          challengeId: payload.challengeId,
+          isCompany: userCreateChallengeData.data.companyAccount,
+        }
+      );
+      navigation.dispatch(pushAction);
+    } catch (error) {
+      console.error("error: ", error);
+      CrashlyticService({
+        errorType: "Handle Tap On Incoming Notification Error",
+        error: error,
+      });
+    }
+  }
+};
+
+const handleTapOnProgressCreatedPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  if (payload.progressId && payload.challengeId) {
+    const pushAction = StackActions.push("ProgressCommentScreen", {
+      progressId: payload.progressId,
+      challengeId: payload.challengeId,
+    });
+    navigation.dispatch(pushAction);
+  }
+};
+
+const handleTapOnNewCommentPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  if (payload.progressId && payload.challengeId) {
+    const currentRouteParams = navigation.getCurrentRoute().params as {
+      progressId: string;
+      challengeId: string;
+    };
+    // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
+    if (
+      currentRouteParams &&
+      currentRouteParams.progressId === payload.progressId
+    )
+      return;
+    const pushAction = StackActions.push("ProgressCommentScreen", {
+      progressId: payload.progressId,
+      challengeId: payload.challengeId,
+    });
+    navigation.dispatch(pushAction);
+  }
+};
+
+const handleTapOnNewMentionPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  const currentRouteParams = navigation.getCurrentRoute().params as {
+    progressId: string;
+    challengeId: string;
+  };
+  // If the current screen is ProgressCommentScreen and the progressId is the same as the incoming notification => do nothing
+  if (
+    currentRouteParams &&
+    currentRouteParams.progressId === payload.progressId
+  )
+    return;
+  if (payload.progressId && payload.challengeId) {
+    const pushAction = StackActions.push("ProgressCommentScreen", {
+      progressId: payload.progressId,
+      challengeId: payload.challengeId,
+    });
+    navigation.dispatch(pushAction);
+  }
+};
+
+const handleTapOnNewFollowerPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  if (payload.followerId) {
+    const pushAction = StackActions.push("OtherUserProfileScreen", {
+      userId: payload.followerId,
+      isFollower: true,
+    });
+    navigation.dispatch(pushAction);
+  }
+};
+
+const handleTapOnAddAsEmployeePushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  if (payload.companyId) {
+    const pushAction = StackActions.push("OtherUserProfileScreen", {
+      userId: payload.companyId,
+    });
+    navigation.dispatch(pushAction);
+  }
+};
+
+const handleTapOnNewMessagePushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>,
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+) => {
+  const currentRouteName = navigation.getCurrentRoute().name;
+  const currentRouteParams = navigation.getCurrentRoute().params as {
+    challengeId: string;
+  };
+  const shouldDisplayNewMessageNotification =
+    useNotificationStore.getState().shouldDisplayNewMessageNotification;
+  // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+  // and the challengeId is the same as the incoming notification
+  // => navigate to chat tab if the user is not in chat tab
+  // => do nothing if the user is in chat tab
+  if (
+    currentRouteParams &&
+    (currentRouteName === "PersonalChallengeDetailScreen" ||
+      currentRouteName === "CompanyChallengeDetailScreen" ||
+      currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+    currentRouteParams.challengeId === payload.challengeId
+  ) {
+    if (shouldDisplayNewMessageNotification) {
+      // user is not in chat tab
+      // Trigger the navigation to chat tab
+      navigation.setParams({
+        hasNewMessage: true,
+      });
+    }
+    return;
+  }
+  if (payload.challengeId && payload.coachId) {
+    try {
+      const { id: currentUserId, companyAccount } =
+        useUserProfileStore.getState().userProfile;
+      const pushAction = StackActions.push(
+        payload.coachId === currentUserId
+          ? "PersonalCoachChallengeDetailScreen"
+          : companyAccount
+          ? "CompanyChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        {
+          challengeId: payload.challengeId,
+          hasNewMessage: true,
+        }
+      );
+      navigation.dispatch(pushAction);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }
+};
+
+const handleTapOnCloseChallengePushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  const currentRouteName = navigation.getCurrentRoute().name;
+  const currentRouteParams = navigation.getCurrentRoute().params as {
+    challengeId: string;
+  };
+  const { id: currentUserId } = useUserProfileStore.getState().userProfile;
+
+  // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+  // and the challengeId is the same as the incoming notification
+  // => refresh the challenge detail screen to update the challenge status
+  if (
+    currentRouteParams &&
+    (currentRouteName === "PersonalChallengeDetailScreen" ||
+      currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+    currentRouteParams.challengeId === payload.challengeId
+  ) {
+    const replaceAction = StackActions.replace(
+      payload.coachId === currentUserId
+        ? "PersonalCoachChallengeDetailScreen"
+        : "PersonalChallengeDetailScreen",
+      {
+        challengeId: payload.challengeId,
+      }
+    );
+    navigation.dispatch({
+      ...replaceAction,
+      source: undefined, // Explicitly set the source to undefined to replace the focused route. Reference: https://reactnavigation.org/docs/stack-actions/#replace
+    });
+    return;
+  } else {
+    navigation.navigate(
+      payload.coachId === currentUserId
+        ? "PersonalCoachChallengeDetailScreen"
+        : "PersonalChallengeDetailScreen",
+      {
+        challengeId: payload.challengeId,
+      }
+    );
+  }
+};
+
+const retryHandleTapOnIncomingNotification = (
+  notification: Notification,
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+) => {
+  if (MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT === 0) {
+    MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT = 10; // Reset the retry count
+    return; // Stop retrying
+  }
+  MAX_RETRY_HANDLE_TAP_ON_INCOMING_NOTIFICATION_COUNT--;
+  return setTimeout(
+    () => handleTapOnIncomingNotification(notification, useNotificationStore),
+    RETRY_DELAY
+  ); // retry after a delay (prevent stack overflow)
+};
+
+const pushNotificationHandlerMap = {
+  [NOTIFICATION_TYPES.CHALLENGE_CREATED]:
+    handleTapOnChallengeCreatedPushNotification,
+  [NOTIFICATION_TYPES.PROGRESS_CREATED]:
+    handleTapOnProgressCreatedPushNotification,
+  [NOTIFICATION_TYPES.NEW_COMMENT]: handleTapOnNewCommentPushNotification,
+  [NOTIFICATION_TYPES.NEW_MENTION]: handleTapOnNewMentionPushNotification,
+  [NOTIFICATION_TYPES.NEW_FOLLOWER]: handleTapOnNewFollowerPushNotification,
+  [NOTIFICATION_TYPES.ADDEDASEMPLOYEE]:
+    handleTapOnAddAsEmployeePushNotification,
+  [NOTIFICATION_TYPES.NEW_MESSAGE]: handleTapOnNewMessagePushNotification,
+  [NOTIFICATION_TYPES.CLOSEDCHALLENGE]:
+    handleTapOnCloseChallengePushNotification,
+};
+
+export const handleTapOnIncomingNotification = async (
+  notification: Notification,
+  useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+) => {
+  const navigation = NavigationService.getContainer();
+
+  // When the app is launched by tapping on the notification from killed state => notification event will be triggered before navigation is ready
+  // => Keep calling handleTapOnIncomingNotification until navigation is ready
+  // When the app is launched from killed state => the current route is IntroScreen (cannot navigate to other screens) => wait until the app done checking the user's authentication state
+  if (
+    !navigation ||
+    (navigation && navigation.getCurrentRoute().name === "IntroScreen")
+  )
+    return retryHandleTapOnIncomingNotification(
+      notification,
+      useNotificationStore
+    );
+
+  const payload = notification.data as Record<
+    string,
+    any
+  > as INotificationPayload;
+
+  const handler = pushNotificationHandlerMap[payload.notificationType];
+
+  if (handler) handler(payload, navigation);
 };

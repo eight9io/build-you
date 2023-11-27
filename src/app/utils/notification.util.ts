@@ -978,7 +978,14 @@ const retryHandleTapOnIncomingNotification = (
   ); // retry after a delay (prevent stack overflow)
 };
 
-const pushNotificationHandlerMap = {
+const pushNotificationHandlerMap: Record<
+  string,
+  (
+    payload: INotificationPayload,
+    navigation: NavigationContainerRef<RootStackParamList>,
+    useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
+  ) => Promise<void>
+> = {
   [NOTIFICATION_TYPES.CHALLENGE_CREATED]:
     handleTapOnChallengeCreatedPushNotification,
   [NOTIFICATION_TYPES.PROGRESS_CREATED]:
@@ -1020,5 +1027,5 @@ export const handleTapOnIncomingNotification = async (
 
   const handler = pushNotificationHandlerMap[payload.notificationType];
 
-  if (handler) handler(payload, navigation);
+  if (handler) handler(payload, navigation, useNotificationStore);
 };

@@ -43,10 +43,16 @@ export const useTabIndex = ({ tabRoutes, route }: UseTabIndexProps) => {
   }, [tabRoutes]);
 
   useEffect(() => {
+    // Use setTimeout to wait for tab bar to be rendered at first tab (index 0) before switching to coach tab
+    // This is to prevent the tab bar from move back to first tab immediately after switching to coach tab
     if (chatTabIndex && route?.params?.hasNewMessage) {
-      setTabIndex(chatTabIndex);
+      setTimeout(() => {
+        setTabIndex(chatTabIndex);
+      }, 1000);
     } else if (coachTabIndex && route?.params?.hasNotificationOnCoachTab) {
-      setTabIndex(coachTabIndex);
+      setTimeout(() => {
+        setTabIndex(coachTabIndex);
+      }, 1000);
     }
   }, [chatTabIndex, coachTabIndex, route]);
 

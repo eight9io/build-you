@@ -739,7 +739,7 @@
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {
     "coach": {
-      "waiting_for_coach": "In attesa dell'allenatore...",
+      "waiting_for_coach": "In attesa del coach...",
       "profile": "Profilo",
       "intake": "Introduzione",
       "closing": "Chiusura",
@@ -750,7 +750,7 @@
       "no": "No"
     },
     "coach_calendar": {
-      "title": "Calendario allenatore",
+      "title": "Calendario coach",
       "schedule": "Programma",
       "book_video_call_btn": "Prenota videochiamata",
       "add_schedule_link_btn": "Aggiungi link al calendario",
@@ -797,7 +797,7 @@
     "link_video_call": "Link videochiamata",
     "link_video_call_placeholder": "Inserisci il link della videochiamata",
     "note": "Nota",
-    "note_placeholder": "Inserisci una nota per l'allenatore",
+    "note_placeholder": "Inserisci una nota per il coach",
     "schedule_link": "Link programma",
     "error": {
       "old_date_time": "Seleziona una data e un'ora future."

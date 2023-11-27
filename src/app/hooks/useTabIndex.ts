@@ -34,11 +34,21 @@ export const useTabIndex = ({ tabRoutes, route }: UseTabIndexProps) => {
     return index;
   }, [tabRoutes]);
 
+  const coachTabIndex = useMemo(() => {
+    const index = tabRoutes.findIndex(
+      (route) => route.key === CHALLENGE_TABS_KEY.COACH
+    );
+    if (index === -1) return null;
+    return index;
+  }, [tabRoutes]);
+
   useEffect(() => {
     if (chatTabIndex && route?.params?.hasNewMessage) {
       setTabIndex(chatTabIndex);
+    } else if (coachTabIndex && route?.params?.hasNotificationOnCoachTab) {
+      setTabIndex(coachTabIndex);
     }
-  }, [chatTabIndex, route]);
+  }, [chatTabIndex, coachTabIndex, route]);
 
   return {
     index,

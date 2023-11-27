@@ -732,7 +732,9 @@
     "new_follower": "ha iniziato a seguirti",
     "new_employee": "ti ha aggiunto come dipendente",
     "new_message": "ha inviato un messaggio",
-    "close_challenge": "ha contrassegnato la sfida come completata"
+    "close_challenge": "ha contrassegnato la sfida come completata",
+    "coach_added": "è stato assegnato alla sfida",
+    "phase_opened": "ha aperto una nuova fase"
   },
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {

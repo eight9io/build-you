@@ -15,6 +15,7 @@ import { useNotificationStore } from "./src/app/store/notification-store";
 // the environment is set up appropriately
 
 const onMessageReceived = async (message) => {
+  console.log("message: ", message);
   displayNotificationOnForeground(message, useNotificationStore);
 };
 

@@ -25,6 +25,7 @@ export type RootStackParamList = {
   PersonalChallengeDetailScreen: {
     challengeId: string;
     hasNewMessage?: boolean;
+    hasNotificationOnCoachTab?: boolean;
   };
   RegisterScreen: undefined;
   SkillStepThreeScreen: undefined;
@@ -47,6 +48,7 @@ export type RootStackParamList = {
   CompanyChallengeDetailScreen: {
     challengeId: string;
     hasNewMessage?: boolean;
+    hasNotificationOnCoachTab?: boolean;
   };
   CreateCompanyChallengeScreen: undefined;
 
@@ -102,6 +104,7 @@ export type RootStackParamList = {
   PersonalCoachChallengeDetailScreen: {
     challengeId: string;
     hasNewMessage?: boolean;
+    hasNotificationOnCoachTab?: boolean;
   };
 };
 

@@ -42,6 +42,7 @@ export interface ISoftSkill {
   rating?: number;
   isRating?: boolean;
   isRated?: boolean;
+  userId?: string;
 }
 
 export interface ISoftSkillFromChallenge {

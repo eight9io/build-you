@@ -19,7 +19,6 @@ import {
 import { onCopyLink } from "../../../../utils/shareLink.uitl";
 import { openUrlInApp } from "../../../../utils/inAppBrowser";
 import { useErrorModal } from "../../../../hooks/useErrorModal";
-import { serviceGetOtherUserData } from "../../../../service/user";
 
 import LinkSvg from "./assets/link.svg";
 import EmptySvg from "./assets/emptyFollow.svg";

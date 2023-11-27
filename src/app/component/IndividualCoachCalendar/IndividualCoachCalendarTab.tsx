@@ -306,15 +306,17 @@ export const IndividualCoachCalendarTab: FC<
         isVisible={isCoachCreateScheduleModalVisible}
         setIsVisible={setIsCoachCreateScheduleModalVisible}
       />
-      {!isCurrentUserCoachOfChallenge && coachCalendyLink && (
-        <View>
-          <BookVideoCallBtn
-            translate={t}
-            isChallengeInProgress={isChallengeInProgress}
-            coachCalendyLink={coachCalendyLink}
-          />
-        </View>
-      )}
+      {!isCurrentUserCoachOfChallenge &&
+        coachCalendyLink &&
+        upcomingSchedules?.length == 0 && (
+          <View>
+            <BookVideoCallBtn
+              translate={t}
+              isChallengeInProgress={isChallengeInProgress}
+              coachCalendyLink={coachCalendyLink}
+            />
+          </View>
+        )}
       {isCurrentUserCoachOfChallenge &&
         (!coachCalendyLink ? (
           <View>

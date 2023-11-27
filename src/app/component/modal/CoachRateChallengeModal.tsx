@@ -126,11 +126,14 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
   const [selectedCompetencedSkill, setSelectedCompetencedSkill] = useState<
     ISoftSkill[]
   >([]);
+  const ratedCompetencedSkillForSelectedUser = ratedCompetencedSkill.filter(
+    (item) => item.userId === userToRate?.id
+  );
 
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
 
   const { t } = useTranslation();
-  
+
   const isChallengeRated = ratedCompetencedSkill.every((item) => item.isRating);
   const challengeOwnerId = userToRate?.id;
   const challengeId = challengeData?.id;
@@ -246,7 +249,7 @@ const CoachRateChallengeModal: FC<ICoachRateChallengeModalProps> = ({
               {renderSelectedSoftSkill(
                 t,
                 isChallengeRated
-                  ? ratedCompetencedSkill
+                  ? ratedCompetencedSkillForSelectedUser
                   : selectedCompetencedSkill,
                 changeSkillValue,
                 skillValueError

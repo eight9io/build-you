@@ -15,7 +15,6 @@ import {
   serviceGetRatedSoftSkillCertifiedChallenge,
 } from "../../../../service/challenge";
 
-import CoachRateChallengeModal from "../../../../component/modal/CoachRateChallengeModal";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { IUserData } from "../../../../types/user";
 

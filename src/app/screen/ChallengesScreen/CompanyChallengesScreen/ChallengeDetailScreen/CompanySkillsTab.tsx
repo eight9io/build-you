@@ -104,15 +104,16 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
         const [ratedSoffSkillsValue] = await Promise.allSettled([
           serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
         ]);
-
         if (ratedSoffSkillsValue.status === "fulfilled") {
           const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
             (item) => {
+              console.log(item.userId)
               return {
                 id: item.skillId,
                 skill: item.skillName,
                 rating: item.skillRating,
                 isRating: item.isRating,
+                userId: item.userId
               };
             }
           );
@@ -214,9 +215,6 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
             ListFooterComponent={
               <View className="flex-1 items-center justify-center">
                 <Empty />
-                {/* <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
-                  {t("challenge_detail_screen.empty_participants_list")}
-                </Text> */}
               </View>
             }
             ListFooterComponentStyle={{ flex: 1 }}

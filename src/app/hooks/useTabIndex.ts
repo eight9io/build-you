@@ -45,7 +45,7 @@ export const useTabIndex = ({ tabRoutes, route }: UseTabIndexProps) => {
   useEffect(() => {
     if (chatTabIndex && route?.params?.hasNewMessage) {
       setTabIndex(chatTabIndex);
-    } else if (coachTabIndex && route?.params?.hasJustAssignedCoach) {
+    } else if (coachTabIndex && route?.params?.hasNotificationOnCoachTab) {
       setTabIndex(coachTabIndex);
     }
   }, [chatTabIndex, coachTabIndex, route]);

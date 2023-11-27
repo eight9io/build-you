@@ -8,6 +8,7 @@ export enum NOTIFICATION_TYPES {
   NEW_MESSAGE = "Message",
   CLOSEDCHALLENGE = "ClosedChallenge",
   COACH_ADDED = "CoachAdded",
+  PHASE_OPENED = "PhaseOpened",
 }
 
 export enum NOTIFICATION_TOKEN_STATUS {

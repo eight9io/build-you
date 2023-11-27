@@ -372,8 +372,9 @@ export const handleTapOnNotification = async (
                 notification.type === NOTIFICATION_TYPES.NEW_MESSAGE
                   ? true
                   : false,
-              hasJustAssignedCoach:
-                notification.type === NOTIFICATION_TYPES.COACH_ADDED
+              hasNotificationOnCoachTab:
+                notification.type === NOTIFICATION_TYPES.COACH_ADDED ||
+                notification.type === NOTIFICATION_TYPES.PHASE_OPENED
                   ? true
                   : false,
             });
@@ -386,8 +387,9 @@ export const handleTapOnNotification = async (
                 notification.type === NOTIFICATION_TYPES.NEW_MESSAGE
                   ? true
                   : false,
-              hasJustAssignedCoach:
-                notification.type === NOTIFICATION_TYPES.COACH_ADDED
+              hasNotificationOnCoachTab:
+                notification.type === NOTIFICATION_TYPES.COACH_ADDED ||
+                notification.type === NOTIFICATION_TYPES.PHASE_OPENED
                   ? true
                   : false,
             });
@@ -400,8 +402,9 @@ export const handleTapOnNotification = async (
                 notification.type === NOTIFICATION_TYPES.NEW_MESSAGE
                   ? true
                   : false,
-              hasJustAssignedCoach:
-                notification.type === NOTIFICATION_TYPES.COACH_ADDED
+              hasNotificationOnCoachTab:
+                notification.type === NOTIFICATION_TYPES.COACH_ADDED ||
+                notification.type === NOTIFICATION_TYPES.PHASE_OPENED
                   ? true
                   : false,
             });
@@ -472,6 +475,19 @@ export const handleTapOnNotification = async (
       );
       break;
     }
+    case NOTIFICATION_TYPES.PHASE_OPENED: {
+      const { id: currentUserId, companyAccount } =
+        useUserProfileStore.getState().userProfile;
+      handleNavigation(
+        currentUserId === notification.challengeCoachId
+          ? "PersonalCoachChallengeDetailScreen"
+          : companyAccount
+          ? "CompanyChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        notification
+      );
+      break;
+    }
   }
 };
 
@@ -500,6 +516,8 @@ export const getNotificationContent = (
       return i18n.t("notification.close_challenge");
     case NOTIFICATION_TYPES.COACH_ADDED:
       return i18n.t("notification.coach_added");
+    case NOTIFICATION_TYPES.PHASE_OPENED:
+      return i18n.t("notification.phase_opened");
     default:
       return "";
   }
@@ -858,7 +876,7 @@ const handleTapOnCoachAddedPushNotification = async (
         : "PersonalChallengeDetailScreen",
       {
         challengeId: payload.challengeId,
-        hasJustAssignedCoach: true,
+        hasNotificationOnCoachTab: true,
       }
     );
     navigation.dispatch({
@@ -877,7 +895,65 @@ const handleTapOnCoachAddedPushNotification = async (
           : "PersonalChallengeDetailScreen",
         {
           challengeId: payload.challengeId,
-          hasJustAssignedCoach: true,
+          hasNotificationOnCoachTab: true,
+        }
+      );
+      navigation.dispatch(pushAction);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }
+};
+
+const handleTapOnPhaseOpenedPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  const currentRouteName = navigation.getCurrentRoute().name;
+  const currentRouteParams = navigation.getCurrentRoute().params as {
+    challengeId: string;
+  };
+
+  // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+  // and the challengeId is the same as the incoming notification
+  // => navigate to coach tab if the user is not in coach tab
+  const { id: currentUserId, companyAccount } =
+    useUserProfileStore.getState().userProfile;
+  if (
+    currentRouteParams &&
+    (currentRouteName === "PersonalChallengeDetailScreen" ||
+      currentRouteName === "CompanyChallengeDetailScreen" ||
+      currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+    currentRouteParams.challengeId === payload.challengeId
+  ) {
+    const replaceAction = StackActions.replace(
+      payload.coachId === currentUserId
+        ? "PersonalCoachChallengeDetailScreen"
+        : companyAccount
+        ? "CompanyChallengeDetailScreen"
+        : "PersonalChallengeDetailScreen",
+      {
+        challengeId: payload.challengeId,
+        hasNotificationOnCoachTab: true,
+      }
+    );
+    navigation.dispatch({
+      ...replaceAction,
+      source: undefined, // Explicitly set the source to undefined to replace the focused route. Reference: https://reactnavigation.org/docs/stack-actions/#replace
+    });
+    return;
+  }
+  if (payload.challengeId && payload.coachId) {
+    try {
+      const pushAction = StackActions.push(
+        payload.coachId === currentUserId
+          ? "PersonalCoachChallengeDetailScreen"
+          : companyAccount
+          ? "CompanyChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        {
+          challengeId: payload.challengeId,
+          hasNotificationOnCoachTab: true,
         }
       );
       navigation.dispatch(pushAction);
@@ -916,6 +992,7 @@ const pushNotificationHandlerMap = {
   [NOTIFICATION_TYPES.CLOSEDCHALLENGE]:
     handleTapOnCloseChallengePushNotification,
   [NOTIFICATION_TYPES.COACH_ADDED]: handleTapOnCoachAddedPushNotification,
+  [NOTIFICATION_TYPES.PHASE_OPENED]: handleTapOnPhaseOpenedPushNotification,
 };
 
 export const handleTapOnIncomingNotification = async (

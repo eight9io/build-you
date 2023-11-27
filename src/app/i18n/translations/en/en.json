@@ -732,7 +732,8 @@
     "new_employee": "has added you as an employee",
     "new_message": "has sent a message",
     "close_challenge": "has marked the challenge as completed",
-    "coach_added": "has been assigned to the challenge"
+    "coach_added": "has been assigned to the challenge",
+    "phase_opened": "has opened a new phase"
   },
   "top_nav.create_challenge": "Create challenge",
   "challenge_detail_screen_tab": {

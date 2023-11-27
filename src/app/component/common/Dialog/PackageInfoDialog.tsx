@@ -1,5 +1,5 @@
-import { FC, ReactNode } from "react";
-import { View, Text } from "react-native";
+import { FC, ReactNode, useEffect, useState } from "react";
+import { View, Text, FlatList } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -20,11 +20,18 @@ interface IPackageInfoDialogProps {
   onClosed: () => void;
 }
 
+interface IRenderPackageInfoProps {
+  title: string;
+  value: string | number;
+}
+
 const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
   packages,
   onClosed,
   isVisible,
 }) => {
+  const [packageInfo, setPackageInfo] =
+    useState<IRenderPackageInfoProps[]>(null);
   const { t } = useTranslation();
   const handleCancel = () => {
     onClosed();
@@ -38,16 +45,45 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
     value: string | number;
   }) => {
     return (
-      <View className="flex w-full flex-row items-center justify-between py-1">
-        <Text className="w-2/3 text-md font-semibold leading-tight text-neutral-700">
-          {title}
+      <View className="flex flex-row items-center justify-between py-1">
+        <Text className="text-md font-semibold leading-tight text-neutral-700 ">
+          {title}:
         </Text>
-        <Text className="w-1/3 text-center text-md font-semibold leading-tight text-orange-500">
+        <View className="w-4" />
+        <Text className="text-center text-md font-semibold leading-tight text-orange-500 ">
           {value}
         </Text>
       </View>
     );
   };
+
+  useEffect(() => {
+    const PACKAGE_INFO = [
+      {
+        title: t("dialog.package_info.basic"),
+        value: 0,
+      },
+      {
+        title: t("dialog.package_info.premium"),
+        value: 0,
+      },
+      {
+        title: t("dialog.package_info.number_of_checks"),
+        value: 0,
+      },
+      {
+        title: t("dialog.package_info.credits"),
+        value: 0,
+      },
+    ];
+    if (packages) {
+      PACKAGE_INFO[0].value = packages.avalaibleChatPackage || 0;
+      PACKAGE_INFO[1].value = packages.availableCallPackage || 0;
+      PACKAGE_INFO[2].value = packages.availableChats + packages.availableCalls;
+      PACKAGE_INFO[3].value = packages.availableCredits;
+    }
+    setPackageInfo(PACKAGE_INFO);
+  }, [packages]);
 
   return (
     <View>
@@ -65,26 +101,13 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
             </Text>
           </Dialog.Title>
           <Dialog.Description>
-            <View className="flex flex-col items-start justify-center p-2 pb-0">
-              {renderPackageInfo({
-                title: t("dialog.package_info.basic"),
-                value: packages.avalaibleChatPackage || 0,
-              })}
-              {renderPackageInfo({
-                title: t("dialog.package_info.premium"),
-                value: packages.availableCallPackage || 0,
-              })}
-              {renderPackageInfo({
-                title: t("dialog.package_info.number_of_checks"),
-                value:
-                  `${packages?.availableChats + packages?.availableCalls}` || 0,
-              })}
-              {renderPackageInfo({
-                title: t("dialog.package_info.credits"),
-                value: `$${numberToPriceWithCommas(
-                  packages?.availableCredits
-                )}`,
-              })}
+            <View className="flex h-32 flex-col items-center justify-center p-2 pb-0">
+              <FlatList
+                data={packageInfo}
+                keyExtractor={(item) => item.title}
+                renderItem={({ item }) => renderPackageInfo(item)}
+                style={{ flex: 1 }}
+              />
             </View>
           </Dialog.Description>
           {onClosed && (

@@ -34,12 +34,13 @@ import { useCreateChallengeDataStore } from "../../store/create-challenge-data-s
 import { RootStackParamList } from "../../navigation/navigation.type";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
+import ChangeCompanyCreditDialogIos from "../../component/common/Dialog/ChangeCompanyCreditDialogIos";
+import ChangeCompanyCreditDialogAndroid from "../../component/common/Dialog/ChangeCompanyCreditDialogAndroid";
 
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
 import ErrorText from "../../component/common/ErrorText";
-import ChangeCompanyCreditDialog from "../../component/common/Dialog/ChangeCompanyCreditDialog";
 
 interface ICartScreenProps {
   route: Route<
@@ -63,13 +64,10 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
     );
   }
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
-  const [finalPrice, setFinalPrice] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
   const [isShowPaymentDetailModal, setIsShowPaymentDetailModal] =
     useState<boolean>(false);
-  const [purchaseErrorMessages, setPurchaseErrorMessages] =
-    useState<string>("");
+
   const { choosenPackage, checkPoint } = route.params;
 
   const {
@@ -92,13 +90,6 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
   const isAndroid = Platform.OS === "android";
 
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
-
-  useEffect(() => {
-    const newFinalPrice =
-      Number(initialPrice) +
-      Number(numberOfCheckpoints) * Number(checkPoint.price);
-    setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
-  }, [numberOfCheckpoints]);
 
   const handleAddCheckpoint = () => {
     if (isLoading) return;
@@ -206,7 +197,6 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
         setTimeout(() => {
           setIsLoading(false);
         }, 300);
-        setIsRequestSuccess(true);
       }
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
@@ -244,15 +234,27 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
       {isLoading && <Spinner visible={isLoading} />}
-      <ChangeCompanyCreditDialog
-        onClose={() => {
-          setIsShowPaymentDetailModal(false);
-        }}
-        isVisible={isShowPaymentDetailModal}
-        onConfirm={onSumitCertifiedChallenge}
-        numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
-        packageToChangeCompanyCredit={choosenPackage?.type}
-      />
+      {isAndroid ? (
+        <ChangeCompanyCreditDialogAndroid
+          onClose={() => {
+            setIsShowPaymentDetailModal(false);
+          }}
+          isVisible={isShowPaymentDetailModal}
+          onConfirm={onSumitCertifiedChallenge}
+          numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
+          packageToChangeCompanyCredit={choosenPackage?.type}
+        />
+      ) : (
+        <ChangeCompanyCreditDialogIos
+          onClose={() => {
+            setIsShowPaymentDetailModal(false);
+          }}
+          isVisible={isShowPaymentDetailModal}
+          onConfirm={onSumitCertifiedChallenge}
+          numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
+          packageToChangeCompanyCredit={choosenPackage?.type}
+        />
+      )}
 
       <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
         <View
@@ -339,16 +341,6 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
               </View>
             </View>
           </View>
-        </View>
-
-        <View className="mx-9 self-start">
-          {purchaseErrorMessages && (
-            <ErrorText
-              message={purchaseErrorMessages}
-              containerClassName="w-full"
-              textClassName="flex-1"
-            />
-          )}
         </View>
       </View>
 

@@ -151,7 +151,7 @@ const RenderPackageInfoAfterCharge2: FC<IRenderPackageInfoProps> = ({
   );
 };
 
-const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
+const ChangeCompanyCreditDialogIos: FC<IChangeCompanyCreditDialogProps> = ({
   onClose,
   isVisible,
   onConfirm,
@@ -349,4 +349,4 @@ const ChangeCompanyCreditDialog: FC<IChangeCompanyCreditDialogProps> = ({
   );
 };
 
-export default ChangeCompanyCreditDialog;
+export default ChangeCompanyCreditDialogIos;

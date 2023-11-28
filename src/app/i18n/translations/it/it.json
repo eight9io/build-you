@@ -729,16 +729,16 @@
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",
   "notification": {
-    "new_challenge": "ha creato una nuova sfida",
-    "new_progress": "ha creato un nuovo progresso in {{challengeGoal}}",
-    "new_comment": "ha commentato il tuo aggiornamento",
-    "new_mention": "ti ha menzionato in un commento",
-    "new_follower": "ha iniziato a seguirti",
-    "new_employee": "ti ha aggiunto come dipendente",
-    "new_message": "ha inviato un messaggio",
-    "close_challenge": "ha contrassegnato la sfida come completata",
-    "coach_added": "è stato assegnato alla sfida",
-    "phase_opened": "ha aperto una nuova fase"
+    "new_challenge": "{{userName}} ha creato una nuova sfida",
+    "new_progress": "{{userName}} ha creato un nuovo progresso in {{challengeGoal}}",
+    "new_comment": "{{userName}} ha commentato il tuo aggiornamento",
+    "new_mention": "{{userName}} ti ha menzionato in un commento",
+    "new_follower": "{{userName}} ha iniziato a seguirti",
+    "new_employee": "{{userName}} ti ha aggiunto come dipendente",
+    "new_message": "{{userName}} ha inviato un messaggio",
+    "close_challenge": "{{userName}} ha contrassegnato la sfida come completata",
+    "coach_added": "Il coach {{userName}} è stato assegnato alla sfida",
+    "phase_opened": "{{userName}} ha aperto una nuova fase"
   },
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {

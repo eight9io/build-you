@@ -491,33 +491,54 @@ export const handleTapOnNotification = async (
   }
 };
 
-export const getNotificationContent = (
-  notificationType: NOTIFICATION_TYPES,
-  contentPayload?: any
-) => {
-  switch (notificationType) {
+export const getNotificationContent = (notification: INotification) => {
+  const userProfile = useUserProfileStore.getState().userProfile;
+  const userName =
+    userProfile.id !== notification.user.id
+      ? notification.user.name
+      : i18n.t("notification_screen.you");
+  switch (notification.type) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
-      return i18n.t("notification.new_challenge");
+      return i18n.t("notification.new_challenge", {
+        userName,
+      });
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       return i18n.t("notification.new_progress", {
-        challengeGoal: contentPayload.challengeGoal,
+        challengeGoal: notification.challengeGoal,
+        userName,
       });
     case NOTIFICATION_TYPES.NEW_COMMENT:
-      return i18n.t("notification.new_comment");
+      return i18n.t("notification.new_comment", {
+        userName,
+      });
     case NOTIFICATION_TYPES.NEW_MENTION:
-      return i18n.t("notification.new_mention");
+      return i18n.t("notification.new_mention", {
+        userName,
+      });
     case NOTIFICATION_TYPES.NEW_FOLLOWER:
-      return i18n.t("notification.new_follower");
+      return i18n.t("notification.new_follower", {
+        userName,
+      });
     case NOTIFICATION_TYPES.ADDEDASEMPLOYEE:
-      return i18n.t("notification.new_employee");
+      return i18n.t("notification.new_employee", {
+        userName,
+      });
     case NOTIFICATION_TYPES.NEW_MESSAGE:
-      return i18n.t("notification.new_message");
+      return i18n.t("notification.new_message", {
+        userName,
+      });
     case NOTIFICATION_TYPES.CLOSEDCHALLENGE:
-      return i18n.t("notification.close_challenge");
+      return i18n.t("notification.close_challenge", {
+        userName,
+      });
     case NOTIFICATION_TYPES.COACH_ADDED:
-      return i18n.t("notification.coach_added");
+      return i18n.t("notification.coach_added", {
+        userName,
+      });
     case NOTIFICATION_TYPES.PHASE_OPENED:
-      return i18n.t("notification.phase_opened");
+      return i18n.t("notification.phase_opened", {
+        userName,
+      });
     default:
       return "";
   }

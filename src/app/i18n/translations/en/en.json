@@ -728,16 +728,16 @@
   "not_found": "Not found",
   "invalid_date": "Invalid date",
   "notification": {
-    "new_challenge": "has added a new challenge",
-    "new_progress": "has added a new progress in {{challengeGoal}}",
-    "new_comment": "has commented on your update",
-    "new_mention": "has mentioned you in a comment",
-    "new_follower": "has started following you",
-    "new_employee": "has added you as an employee",
-    "new_message": "has sent a message",
-    "close_challenge": "has marked the challenge as completed",
-    "coach_added": "has been assigned to the challenge",
-    "phase_opened": "has opened a new phase"
+    "new_challenge": "{{userName}} has added a new challenge",
+    "new_progress": "{{userName}}has added a new progress in {{challengeGoal}}",
+    "new_comment": "{{userName}} has commented on your update",
+    "new_mention": "{{userName}} has mentioned you in a comment",
+    "new_follower": "{{userName}} has started following you",
+    "new_employee": "{{userName}} has added you as an employee",
+    "new_message": "{{userName}} has sent a message",
+    "close_challenge": "{{userName}} has marked the challenge as completed",
+    "coach_added": "Coach {{userName}} was added to the challenge",
+    "phase_opened": "{{userName}} has opened a new phase"
   },
   "top_nav.create_challenge": "Create challenge",
   "challenge_detail_screen_tab": {

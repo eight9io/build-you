@@ -738,7 +738,8 @@
     "new_message": "{{userName}} ha inviato un messaggio",
     "close_challenge": "{{userName}} ha contrassegnato la sfida come completata",
     "coach_added": "Il coach {{userName}} è stato assegnato alla sfida",
-    "phase_opened": "{{userName}} ha aperto una nuova fase"
+    "phase_opened": "{{userName}} ha aperto una nuova fase",
+    "schedule_confirmed": "Appuntamento confermato per la sfida {{challengeName}}"
   },
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {

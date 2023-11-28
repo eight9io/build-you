@@ -9,6 +9,7 @@ export enum NOTIFICATION_TYPES {
   CLOSEDCHALLENGE = "ClosedChallenge",
   COACH_ADDED = "CoachAdded",
   PHASE_OPENED = "PhaseOpened",
+  SCHEDULE_CONFIRMED = "ScheduleConfirmed",
 }
 
 export enum NOTIFICATION_TOKEN_STATUS {

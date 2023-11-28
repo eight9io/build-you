@@ -26,6 +26,7 @@ export type RootStackParamList = {
     challengeId: string;
     hasNewMessage?: boolean;
     hasNotificationOnCoachTab?: boolean;
+    hasNotificationOnCoachCalendarTab?: boolean;
   };
   RegisterScreen: undefined;
   SkillStepThreeScreen: undefined;
@@ -49,6 +50,7 @@ export type RootStackParamList = {
     challengeId: string;
     hasNewMessage?: boolean;
     hasNotificationOnCoachTab?: boolean;
+    hasNotificationOnCoachCalendarTab?: boolean;
   };
   CreateCompanyChallengeScreen: undefined;
 
@@ -105,6 +107,7 @@ export type RootStackParamList = {
     challengeId: string;
     hasNewMessage?: boolean;
     hasNotificationOnCoachTab?: boolean;
+    hasNotificationOnCoachCalendarTab?: boolean;
   };
 };
 

@@ -518,10 +518,11 @@ export const handleTapOnNotification = async (
 
 export const getNotificationContent = (notification: INotification) => {
   const userProfile = useUserProfileStore.getState().userProfile;
-  const userName =
-    userProfile.id !== notification.user.id
-      ? notification.user.name
-      : i18n.t("notification_screen.you");
+  const currentUserIsAttachedToNotification =
+    userProfile.id === notification.user.id;
+  const userName = !currentUserIsAttachedToNotification
+    ? notification.user.name
+    : i18n.t("notification_screen.you");
   switch (notification.type) {
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       return i18n.t("notification.new_challenge", {
@@ -557,6 +558,8 @@ export const getNotificationContent = (notification: INotification) => {
         userName,
       });
     case NOTIFICATION_TYPES.COACH_ADDED:
+      if (currentUserIsAttachedToNotification)
+        return i18n.t("notification.coach_added_in_coach_view");
       return i18n.t("notification.coach_added", {
         userName,
       });

@@ -161,3 +161,7 @@ export const serviceGetAllUserChallenges = (userId: string) => {
   if (!userId) return null;
   return http.get(`/challenge/participant/${userId}`);
 };
+
+export const serviceGetIsUserHasInDraftChallenge = () => {
+  return http.get<boolean>(`/challenge/inDraft`);
+};

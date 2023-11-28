@@ -433,6 +433,10 @@
       "credit_will_be_charged": "Credit will be charged",
       "not_enough_credit": "Not enough credit, please contact admin to buy more credit."
     },
+    "in_draft": {
+      "title": "Payment is pending",
+      "description": "You have a challenge in process. Please wait until it is completed."
+    },
     "cancel": "Cancel",
     "close": "Close",
     "confirm": "Confirm",

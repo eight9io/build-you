@@ -434,6 +434,10 @@
       "credit_will_be_charged": "Crediti da addebitare",
       "not_enough_credit": "Credito insufficiente, contatta l'amministratore per acquistare altro credito."
     },
+    "in_draft": {
+      "title": "Pagamento in sospeso",
+      "description": "Hai una sfida in corso. Per favore, attendi fino a quando non sarà completata."
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
     "confirm": "Conferma",

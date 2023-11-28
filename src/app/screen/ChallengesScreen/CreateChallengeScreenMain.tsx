@@ -32,6 +32,8 @@ import ProgressCommentScreen from "./ProgressCommentScreen/ProgressCommentScreen
 import AppTitle from "../../component/common/AppTitle";
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import CompanyChallengeDetailScreen from "./CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { serviceGetIsUserHasInDraftChallenge } from "../../service/challenge";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -114,7 +116,20 @@ const CreateChallengeScreenMain = () => {
     if (isCompany) navigation.navigate("CreateCompanyChallengeScreen");
     else navigation.navigate("CreateChallengeScreen");
   };
-  const handleCreateCretifiedChallenge = () => {
+  const handleCreateCretifiedChallenge = async () => {
+    try {
+      const { data: isUserHasInDraftChallenge } =
+        await serviceGetIsUserHasInDraftChallenge();
+      if (!isUserHasInDraftChallenge) {
+        GlobalDialogController.showModal({
+          title: t("dialog.in_draft.title"),
+          message: t("dialog.in_draft.description"),
+        });
+        return;
+      }
+    } catch (error) {
+      console.error("get is user has in draft challenge error", error);
+    }
     if (isCompany) navigation.navigate("CreateCertifiedCompanyChallengeScreen");
     else navigation.navigate("CreateCertifiedChallengeScreen");
   };

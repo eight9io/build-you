@@ -26,35 +26,43 @@ export const useTabIndex = ({ tabRoutes, route }: UseTabIndexProps) => {
     setIndex(nextIndex);
   };
 
-  const chatTabIndex = useMemo(() => {
-    const index = tabRoutes.findIndex(
-      (route) => route.key === CHALLENGE_TABS_KEY.CHAT
-    );
-    if (index === -1) return null;
-    return index;
-  }, [tabRoutes]);
+const { chatTabIndex, coachTabIndex, coachCalendarTabIndex } = useMemo(() => {
+  const keys = [
+    CHALLENGE_TABS_KEY.CHAT,
+    CHALLENGE_TABS_KEY.COACH,
+    CHALLENGE_TABS_KEY.COACH_CALENDAR,
+  ];
+  const indexes = keys.map((key) => {
+    const index = tabRoutes.findIndex((route) => route.key === key);
+    return index === -1 ? null : index;
+  });
+  return {
+    chatTabIndex: indexes[0],
+    coachTabIndex: indexes[1],
+    coachCalendarTabIndex: indexes[2],
+  };
+}, [tabRoutes]);
 
-  const coachTabIndex = useMemo(() => {
-    const index = tabRoutes.findIndex(
-      (route) => route.key === CHALLENGE_TABS_KEY.COACH
-    );
-    if (index === -1) return null;
-    return index;
-  }, [tabRoutes]);
-
-  useEffect(() => {
-    // Use setTimeout to wait for tab bar to be rendered at first tab (index 0) before switching to coach tab
-    // This is to prevent the tab bar from move back to first tab immediately after switching to coach tab
-    if (chatTabIndex && route?.params?.hasNewMessage) {
-      setTimeout(() => {
-        setTabIndex(chatTabIndex);
-      }, 1000);
-    } else if (coachTabIndex && route?.params?.hasNotificationOnCoachTab) {
-      setTimeout(() => {
-        setTabIndex(coachTabIndex);
-      }, 1000);
-    }
-  }, [chatTabIndex, coachTabIndex, route]);
+useEffect(() => {
+  // Use setTimeout to wait for tab bar to be rendered at first tab (index 0) before switching to coach tab
+  // This is to prevent the tab bar from move back to first tab immediately after switching to coach tab
+  if (chatTabIndex && route?.params?.hasNewMessage) {
+    setTimeout(() => {
+      setTabIndex(chatTabIndex);
+    }, 1000);
+  } else if (coachTabIndex && route?.params?.hasNotificationOnCoachTab) {
+    setTimeout(() => {
+      setTabIndex(coachTabIndex);
+    }, 1000);
+  } else if (
+    coachCalendarTabIndex &&
+    route?.params?.hasNotificationOnCoachCalendarTab
+  ) {
+    setTimeout(() => {
+      setTabIndex(coachCalendarTabIndex);
+    }, 1000);
+  }
+}, [chatTabIndex, coachTabIndex, coachCalendarTabIndex, route]);
 
   return {
     index,

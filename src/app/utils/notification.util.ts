@@ -377,6 +377,10 @@ export const handleTapOnNotification = async (
                 notification.type === NOTIFICATION_TYPES.PHASE_OPENED
                   ? true
                   : false,
+              hasNotificationOnCoachCalendarTab:
+                notification.type === NOTIFICATION_TYPES.SCHEDULE_CONFIRMED
+                  ? true
+                  : false,
             });
           break;
         case "PersonalChallengeDetailScreen":
@@ -392,6 +396,10 @@ export const handleTapOnNotification = async (
                 notification.type === NOTIFICATION_TYPES.PHASE_OPENED
                   ? true
                   : false,
+              hasNotificationOnCoachCalendarTab:
+                notification.type === NOTIFICATION_TYPES.SCHEDULE_CONFIRMED
+                  ? true
+                  : false,
             });
           break;
         case "CompanyChallengeDetailScreen":
@@ -405,6 +413,10 @@ export const handleTapOnNotification = async (
               hasNotificationOnCoachTab:
                 notification.type === NOTIFICATION_TYPES.COACH_ADDED ||
                 notification.type === NOTIFICATION_TYPES.PHASE_OPENED
+                  ? true
+                  : false,
+              hasNotificationOnCoachCalendarTab:
+                notification.type === NOTIFICATION_TYPES.SCHEDULE_CONFIRMED
                   ? true
                   : false,
             });
@@ -488,6 +500,19 @@ export const handleTapOnNotification = async (
       );
       break;
     }
+    case NOTIFICATION_TYPES.SCHEDULE_CONFIRMED: {
+      const { id: currentUserId, companyAccount } =
+        useUserProfileStore.getState().userProfile;
+      handleNavigation(
+        currentUserId === notification.challengeCoachId
+          ? "PersonalCoachChallengeDetailScreen"
+          : companyAccount
+          ? "CompanyChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        notification
+      );
+      break;
+    }
   }
 };
 
@@ -538,6 +563,11 @@ export const getNotificationContent = (notification: INotification) => {
     case NOTIFICATION_TYPES.PHASE_OPENED:
       return i18n.t("notification.phase_opened", {
         userName,
+      });
+    case NOTIFICATION_TYPES.SCHEDULE_CONFIRMED:
+      return i18n.t("notification.schedule_confirmed", {
+        userName,
+        challengeGoal: notification.challengeGoal,
       });
     default:
       return "";
@@ -984,6 +1014,64 @@ const handleTapOnPhaseOpenedPushNotification = async (
   }
 };
 
+const handleTapOnVideoCallConfirmPushNotification = async (
+  payload: INotificationPayload,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  const currentRouteName = navigation.getCurrentRoute().name;
+  const currentRouteParams = navigation.getCurrentRoute().params as {
+    challengeId: string;
+  };
+
+  // If the current screen is PersonalChallengeDetailScreen or PersonalCoachChallengeDetailScreen
+  // and the challengeId is the same as the incoming notification
+  // => navigate to coach calendar tab if the user is not in coach calendar tab
+  const { id: currentUserId, companyAccount } =
+    useUserProfileStore.getState().userProfile;
+  if (
+    currentRouteParams &&
+    (currentRouteName === "PersonalChallengeDetailScreen" ||
+      currentRouteName === "CompanyChallengeDetailScreen" ||
+      currentRouteName === "PersonalCoachChallengeDetailScreen") &&
+    currentRouteParams.challengeId === payload.challengeId
+  ) {
+    const replaceAction = StackActions.replace(
+      payload.coachId === currentUserId
+        ? "PersonalCoachChallengeDetailScreen"
+        : companyAccount
+        ? "CompanyChallengeDetailScreen"
+        : "PersonalChallengeDetailScreen",
+      {
+        challengeId: payload.challengeId,
+        hasNotificationOnCoachCalendarTab: true,
+      }
+    );
+    navigation.dispatch({
+      ...replaceAction,
+      source: undefined, // Explicitly set the source to undefined to replace the focused route. Reference: https://reactnavigation.org/docs/stack-actions/#replace
+    });
+    return;
+  }
+  if (payload.challengeId && payload.coachId) {
+    try {
+      const pushAction = StackActions.push(
+        payload.coachId === currentUserId
+          ? "PersonalCoachChallengeDetailScreen"
+          : companyAccount
+          ? "CompanyChallengeDetailScreen"
+          : "PersonalChallengeDetailScreen",
+        {
+          challengeId: payload.challengeId,
+          hasNotificationOnCoachCalendarTab: true,
+        }
+      );
+      navigation.dispatch(pushAction);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }
+};
+
 const retryHandleTapOnIncomingNotification = (
   notification: Notification,
   useNotificationStore: UseBoundStore<StoreApi<NotificationStore>>
@@ -1021,6 +1109,8 @@ const pushNotificationHandlerMap: Record<
     handleTapOnCloseChallengePushNotification,
   [NOTIFICATION_TYPES.COACH_ADDED]: handleTapOnCoachAddedPushNotification,
   [NOTIFICATION_TYPES.PHASE_OPENED]: handleTapOnPhaseOpenedPushNotification,
+  [NOTIFICATION_TYPES.SCHEDULE_CONFIRMED]:
+    handleTapOnVideoCallConfirmPushNotification,
 };
 
 export const handleTapOnIncomingNotification = async (

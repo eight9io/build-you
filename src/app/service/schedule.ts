@@ -51,7 +51,7 @@ export const confirmProposalByCoach = ({
 };
 
 export const resetScheduledVideoCall = (scheduleId: string) => {
-  return http.get(`/schedule/reset/${scheduleId}`);
+  return http.delete(`/schedule/reset/${scheduleId}`);
 };
 
 export const createScheduleForIndividualCertifiedChallenge = ({

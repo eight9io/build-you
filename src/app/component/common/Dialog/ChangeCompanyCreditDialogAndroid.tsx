@@ -38,11 +38,13 @@ const RenderPackageInfo: FC<IRenderPackageInfoProps> = ({
 }) => {
   return (
     <View className="flex flex-row  items-center justify-between py-1">
-      <Text className=" text-md font-semibold leading-tight text-neutral-500">
-        {title}:
-      </Text>
-      <View className="w-4" />
-      <View>
+      <View className="w-[60%] pr-2">
+        <Text className=" text-md font-semibold leading-tight text-neutral-500">
+          {title}:
+        </Text>
+      </View>
+
+      <View className="w-[40%]">
         <Text className="text-center text-md font-semibold leading-tight text-orange-500 ">
           {avalaibleCredits}
         </Text>
@@ -57,12 +59,14 @@ const RenderChargePackageInfo: FC<IRenderChargePackageInfoProps> = ({
   unit,
 }) => {
   return (
-    <View className="flex flex-row items-center justify-between  py-1">
-      <Text className=" text-md font-semibold leading-tight text-neutral-500">
-        {title}:
-      </Text>
-      <View className="w-4" />
-      <View>
+    <View className="flex flex-row items-center  justify-between  py-1">
+      <View className="w-[60%] pr-2">
+        <Text className="text-md font-semibold leading-tight text-neutral-500">
+          {title}:
+        </Text>
+      </View>
+
+      <View className="w-[40%]">
         <Text className="text-center text-md font-semibold leading-tight text-orange-500 ">
           {creditToBeCharged} {unit}(s)
         </Text>
@@ -105,13 +109,15 @@ const RenderPackageInfoAfterCharge2: FC<IRenderPackageInfoProps> = ({
 
   return (
     <View className="flex flex-row items-center justify-between  py-1">
-      <Text className=" text-md font-semibold leading-tight text-neutral-500">
-        {title}:
-      </Text>
-      <View className="w-4" />
-      <View>
+      <View className="w-[60%] pr-2">
+        <Text className=" text-md font-semibold leading-tight text-neutral-500">
+          {title}:
+        </Text>
+      </View>
+
+      <View className="w-[40%]">
         <Text className="text-center text-md font-semibold leading-tight text-orange-500 ">
-          {remainingCredit}
+          {remainingCredit > 0 ? remainingCredit : 0}
         </Text>
       </View>
     </View>
@@ -242,7 +248,7 @@ const ChangeCompanyCreditDialogAndroid: FC<IChangeCompanyCreditDialogProps> = ({
     <Dialog.Container
       visible={isVisible}
       contentStyle={{
-        width: 370,
+        // width: 370,
         backgroundColor: "white",
       }}
     >
@@ -255,7 +261,7 @@ const ChangeCompanyCreditDialogAndroid: FC<IChangeCompanyCreditDialogProps> = ({
           {t("dialog.cart.summary")}
         </Text>
       </Dialog.Title>
-      <Dialog.Description>
+      <View className="px-3">
         <View className="flex w-full flex-col pt-2">
           <Text
             className={clsx(
@@ -275,7 +281,7 @@ const ChangeCompanyCreditDialogAndroid: FC<IChangeCompanyCreditDialogProps> = ({
                   avalaibleCredits={item?.avalaibleCredits}
                 />
               )}
-              style={{ flex: 1 }}
+              // style={{ flex: 1 }}
             />
           </View>
         </View>
@@ -304,7 +310,7 @@ const ChangeCompanyCreditDialogAndroid: FC<IChangeCompanyCreditDialogProps> = ({
                   }
                 />
               )}
-              style={{ flex: 1 }}
+              // style={{ flex: 1 }}
             />
           </View>
         </View>
@@ -329,16 +335,18 @@ const ChangeCompanyCreditDialogAndroid: FC<IChangeCompanyCreditDialogProps> = ({
                   packageToCharge={item?.packageToCharge}
                 />
               )}
-              style={{ flex: 1 }}
+              // style={{ flex: 1 }}
             />
           </View>
         </View>
-        {!isPackageAndCheckEnough && (
-          <Text className="text-md font-medium text-red-500">
-            {t("dialog.cart.not_enough_credit")}
-          </Text>
-        )}
-      </Dialog.Description>
+        <View className="mt-2">
+          {!isPackageAndCheckEnough && (
+            <Text className="flex-wrap text-md font-medium text-red-500">
+              {t("dialog.cart.not_enough_credit")}
+            </Text>
+          )}
+        </View>
+      </View>
       <Dialog.Button label={t("dialog.close")} onPress={onClose} />
       <Dialog.Button
         label={t("dialog.confirm")}

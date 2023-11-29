@@ -121,6 +121,24 @@ export const ChallengeCompanyDetailScreen: FC<
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
+
+    if (isCertifiedChallenge) {
+      const shouldPreventJoin =
+        challengeState.intakeStatus &&
+        challengeState.intakeStatus !== "init" &&
+        challengeState.intakeStatus !== "open"
+          ? true
+          : false;
+
+      if (shouldPreventJoin) {
+        GlobalDialogController.showModal({
+          message: t("dialog.err_join_in_progress_challenge"),
+          title: t("dialog.err_title"),
+        });
+        return;
+      }
+    }
+
     try {
       await serviceAddChallengeParticipant(challengeId);
       await fetchParticipants();
@@ -228,7 +246,7 @@ export const ChallengeCompanyDetailScreen: FC<
           });
       }
     }
-    
+
     setTabRoutes(tempTabRoutes);
   }, []);
 
@@ -294,7 +312,7 @@ export const ChallengeCompanyDetailScreen: FC<
         );
     }
   };
-
+  console.log("challengeStateChallCompnay: ", challengeState);
   return (
     <SafeAreaView>
       <View className="flex h-full flex-col bg-gray-veryLight ">

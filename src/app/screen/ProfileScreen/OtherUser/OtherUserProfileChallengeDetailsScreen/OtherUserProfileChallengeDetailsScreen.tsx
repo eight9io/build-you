@@ -306,6 +306,23 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
 
+    if (isCertifiedChallenge) {
+      const shouldPreventJoin =
+        challengeState.challengeData.intakeStatus &&
+        challengeState.challengeData.intakeStatus !== "init" &&
+        challengeState.challengeData.intakeStatus !== "open"
+          ? true
+          : false;
+
+      if (shouldPreventJoin) {
+        GlobalDialogController.showModal({
+          message: t("dialog.err_join_in_progress_challenge"),
+          title: t("dialog.err_title"),
+        });
+        return;
+      }
+    }
+
     try {
       await serviceAddChallengeParticipant(challengeId);
       GlobalToastController.showModal({

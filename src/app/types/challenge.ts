@@ -120,6 +120,9 @@ export interface IChallenge {
   softSkill?: ISoftSkillFromChallenge[];
   // isDraft = true is used for pending challenges
   isDraft?: boolean;
+  intakeStatus?: IChallengeTouchpointStatus;
+  checkStatus?: IChallengeTouchpointStatus;
+  closingStatus?: IChallengeTouchpointStatus;
 }
 
 export interface IChallengePackage {

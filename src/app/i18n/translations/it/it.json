@@ -467,7 +467,8 @@
     "create_progress_success": "Il tuo progresso è stato creato con successo !",
     "completed_challenge_success": "La sfida è stata completata con successo !",
     "congratulation": "Congratulazioni!",
-    "coach_no_calendy_link": "Il coach non ha ancora aggiunto il link Calendly."
+    "coach_no_calendy_link": "Il coach non ha ancora aggiunto il link Calendly.",
+    "err_join_in_progress_challenge": "Non puoi partecipare a questa sfida perché la sfida è in corso."
   },
   "toast": {
     "joined_success": "Ti sei unito alla sfida!",

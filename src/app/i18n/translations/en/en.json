@@ -466,7 +466,8 @@
     "create_progress_success": "Your progress has been created successfully !",
     "completed_challenge_success": "Challenge has been completed successfully !",
     "congratulation": "Congratulation!",
-    "coach_no_calendy_link": "Coach has not added calendy link yet"
+    "coach_no_calendy_link": "Coach has not added calendy link yet",
+    "err_join_in_progress_challenge": "You can not join this challenge, it is in progress."
   },
   "toast": {
     "joined_success": "You have joined the challenge!",

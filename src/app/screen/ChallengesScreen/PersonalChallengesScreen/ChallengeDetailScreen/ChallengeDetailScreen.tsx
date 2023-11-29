@@ -180,6 +180,24 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
 
   const handleJoinChallenge = async () => {
     if (!currentUser?.id || !challengeId) return;
+
+    if (isCertifiedChallenge) {
+      const shouldPreventJoin =
+        challengeState.intakeStatus &&
+        challengeState.intakeStatus !== "init" &&
+        challengeState.intakeStatus !== "open"
+          ? true
+          : false;
+
+      if (shouldPreventJoin) {
+        GlobalDialogController.showModal({
+          message: t("dialog.err_join_in_progress_challenge"),
+          title: t("dialog.err_title"),
+        });
+        return;
+      }
+    }
+
     try {
       await serviceAddChallengeParticipant(challengeId);
       GlobalToastController.showModal({

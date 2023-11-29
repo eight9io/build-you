@@ -26,6 +26,7 @@ export interface IProposalTime {
   votes: number;
   metingUrl: string;
   votedBy: string;
+  note?: string;
   createdAt: string;
   updatedAt: string;
 }

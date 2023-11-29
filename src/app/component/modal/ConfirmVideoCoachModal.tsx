@@ -60,9 +60,12 @@ export default function ConfirmVideoCoachModal({
         meetingUrl: getValues("url"),
         note: getValues("note"),
       });
-
       if (res.status === 201) {
-        setConfirmedOption({ ...selectedOption, metingUrl: getValues("url") });
+        setConfirmedOption({
+          ...selectedOption,
+          metingUrl: getValues("url"),
+          note: getValues("note"),
+        });
         GlobalToastController.showModal({
           message: t("toast.proposing_time_success") as string,
         });

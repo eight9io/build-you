@@ -121,6 +121,20 @@ const ConfirmedRequestedCall = ({
           </Text>
         </TouchableOpacity>
       </View>
+      {confirmedOption?.note && (
+        <View className="flex flex-row items-center justify-between self-stretch pt-3">
+          <View className="inline-flex flex-col items-start justify-start gap-1">
+            <Text className="text-md font-semibold leading-snug text-zinc-500">
+              {translate("challenge_detail_screen.note")}
+            </Text>
+          </View>
+          <View className="flex w-48">
+            <Text className="text-right text-md font-normal leading-tight text-zinc-500">
+              {confirmedOption?.note}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

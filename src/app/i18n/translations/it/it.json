@@ -740,7 +740,7 @@
     "coach_added": "Il coach {{userName}} è stato assegnato alla sfida",
     "coach_added_in_coach_view": "Sei stato aggiunto alla sfida come coach",
     "phase_opened": "{{userName}} ha aperto una nuova fase",
-    "schedule_confirmed": "Appuntamento confermato per la sfida {{challengeName}}"
+    "schedule_confirmed": "Appuntamento confermato per la sfida {{challengeGoal}}"
   },
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {

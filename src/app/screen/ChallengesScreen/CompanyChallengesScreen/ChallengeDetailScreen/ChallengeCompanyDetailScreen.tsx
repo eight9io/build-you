@@ -205,29 +205,30 @@ export const ChallengeCompanyDetailScreen: FC<
             title: t("challenge_detail_screen.coach"),
           }
         );
-    }
-    if (isVideoChallenge) {
-      if (
-        !tempTabRoutes.find(
-          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
+      if (isVideoChallenge) {
+        if (
+          !tempTabRoutes.find(
+            (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.COACH_CALENDAR
+          )
+        ) {
+          tempTabRoutes.push({
+            key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
+            title: t("challenge_detail_screen.coach_calendar"),
+          });
+        }
+      } else {
+        if (
+          !tempTabRoutes.find(
+            (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.CHAT
+          )
         )
-      ) {
-        tempTabRoutes.push({
-          key: CHALLENGE_TABS_KEY.COACH_CALENDAR,
-          title: t("challenge_detail_screen.coach_calendar"),
-        });
+          tempTabRoutes.push({
+            key: CHALLENGE_TABS_KEY.CHAT,
+            title: t("challenge_detail_screen.chat_coach"),
+          });
       }
-    } else {
-      if (
-        !tempTabRoutes.find(
-          (tabRoute) => tabRoute.key === CHALLENGE_TABS_KEY.CHAT
-        )
-      )
-        tempTabRoutes.push({
-          key: CHALLENGE_TABS_KEY.CHAT,
-          title: t("challenge_detail_screen.chat_coach"),
-        });
     }
+    
     setTabRoutes(tempTabRoutes);
   }, []);
 

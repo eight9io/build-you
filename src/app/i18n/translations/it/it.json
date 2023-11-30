@@ -158,7 +158,7 @@
       "placeholder": "Ripeti password"
     },
     {
-      "label": "URL",
+      "label": "Sito web (solo per i coach)",
       "name": "url",
       "error": "URL non valido.",
       "required": "Si prega di inserire il tuo URL.",
@@ -166,7 +166,7 @@
       "placeholder": "Inserisci il tuo URL"
     },
     {
-      "label": "Link video call",
+      "label": "Link videochiamata (solo per i coach)",
       "name": "link_video_call",
       "error": "Il link della videochiamata non è valido.",
       "required": "Per favore, inserisci l'URL della videochiamata.",

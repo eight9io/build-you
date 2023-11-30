@@ -158,7 +158,7 @@
       "placeholder": "Repeat your password"
     },
     {
-      "label": "URL",
+      "label": "Website (for coach only)",
       "name": "url",
       "error": "URL is invalid.",
       "required": "Please fill in your URL.",
@@ -166,7 +166,7 @@
       "placeholder": "Enter your URL"
     },
     {
-      "label": "Link video call",
+      "label": "Link video call (for coach only)",
       "name": "link_video_call",
       "error": "Link video call is invalid.",
       "required": "Please fill in your video call url.",

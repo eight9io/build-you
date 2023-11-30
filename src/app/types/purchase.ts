@@ -35,6 +35,7 @@ export interface IInAppPurchaseProduct {
   productId: string;
   platform: "google" | "apple";
   quantity: number;
+  price: string;
   packageType:
     | "chat_check"
     | "video_check"

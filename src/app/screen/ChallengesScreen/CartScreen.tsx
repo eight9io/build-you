@@ -17,6 +17,8 @@ import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
 import Spinner from "react-native-loading-spinner-overlay";
 
+import { getProducts as getProductsFromProvider } from "react-native-iap";
+
 import {
   createChallenge,
   createCompanyChallenge,
@@ -40,6 +42,7 @@ import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
 import {
+  getAllProductsFromStore,
   getCurrencySymbol,
   getProductFromDatabase,
   requestPurchaseChecks,
@@ -65,15 +68,19 @@ interface ICartScreenProps {
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
-  const [finalPrice, setFinalPrice] = useState<number>(0);
-  const [lowestCheckpointError, setLowestCheckpointError] =
-    useState<boolean>(false);
+  const [finalPrice, setFinalPrice] = useState<string>("0");
+
   const [isLoading, setIsLoading] = useState(false);
   const [isRequestSuccess, setIsRequestSuccess] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
   const [purchaseErrorMessages, setPurchaseErrorMessages] =
     useState<string>("");
+
+  const [allProductsFromDatabase, setAllProductsFromDatabase] = useState<
+    IInAppPurchaseProduct[]
+  >([]);
+
   const { choosenPackage, checkPoint } = route.params;
 
   const {
@@ -99,13 +106,60 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
+  const getPackagePriceFromStore = async (productId: string) => {
+    if (!productId) return;
+    const getPackageFromStore = async () => {
+      setIsLoading(true);
+      const packagesFromStore = await getProductsFromProvider({
+        skus: [productId],
+      });
+      setFinalPrice(packagesFromStore[0].localizedPrice);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
+    };
+    getPackageFromStore();
+  };
+
   useEffect(() => {
-    const newFinalPrice =
-      parseFloat(Number(initialPrice).toFixed(2)) +
-      Number(numberOfCheckpoints) *
-        parseFloat(Number(checkPoint.price).toFixed(2));
-    setFinalPrice(isNaN(newFinalPrice) ? 0 : newFinalPrice);
+    const selectedProduct = allProductsFromDatabase.find(
+      (product) => product.quantity === numberOfCheckpoints + 1
+    );
+    if (!selectedProduct) return;
+    getPackagePriceFromStore(selectedProduct.productId);
   }, [numberOfCheckpoints]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const products = await getAllProductsFromStore();
+      // if ios, filter project have platform ios
+      if (Platform.OS === "ios") {
+        const iosProducts = products.filter(
+          (product) => product.platform === "apple"
+        );
+        setAllProductsFromDatabase(iosProducts);
+        //set product with quantity = 1 to default
+        const defaultProduct = iosProducts.find(
+          (product) => product.quantity === 1
+        );
+        await getPackagePriceFromStore(defaultProduct?.productId);
+        return;
+      } else {
+        // if android, filter project have platform android
+        const androidProducts = products.filter(
+          (product) => product.platform === "google"
+        );
+        setAllProductsFromDatabase(androidProducts);
+        //set product with quantity = 1 to default
+        const defaultProduct = androidProducts.find(
+          (product) => product.quantity === 1
+        );
+        await getPackagePriceFromStore(defaultProduct?.productId);
+        return;
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const handlePay = async (
     challengeId: string
@@ -158,17 +212,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   };
 
   const handleAddCheckpoint = () => {
-    // if (lowestCheckpointError) {
-    //   setLowestCheckpointError(false);
-    // }
     setNumberOfCheckpoints((prev) => prev + 1);
   };
 
   const handleRemoveCheckpoint = () => {
-    // if (numberOfCheckpoints === 0) {
-    //   setLowestCheckpointError(true);
-    //   return;
-    // }
     if (numberOfCheckpoints < 1) return;
     setNumberOfCheckpoints((prev) => prev - 1);
   };
@@ -398,7 +445,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               {choosenPackage?.caption}
             </Text>
             <View className="flex w-full flex-col items-start justify-start">
-              <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
+              <View className="flex w-full flex-col items-start justify-start space-y-2 py-2 pb-6">
                 {["Intake", "Check", "Closing"].map((item) => (
                   <Text
                     className="text-center text-md font-semibold leading-none text-neutral-700"
@@ -407,12 +454,6 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
                     {item}
                   </Text>
                 ))}
-                <View className="w-full border border-neutral-300"></View>
-              </View>
-              <View className="flex w-full items-end ">
-                <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {`${getCurrencySymbol(currency)}${initialPrice.toFixed(2)}`}
-                </Text>
               </View>
             </View>
           </View>
@@ -468,27 +509,6 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                {/* {lowestCheckpointError && (
-                  <View className="flex flex-row items-center justify-start">
-                    <Text
-                      className="pl-1 text-sm font-normal leading-5 text-red-500"
-                      testID="minimum_checkpoint_error"
-                    >
-                      {t("cart_screen.minimum_checkpoint_error") ||
-                        "At least 1 checkpoint is required"}
-                    </Text>
-                  </View>
-                )} */}
-
-                <View className="w-full border border-neutral-300"></View>
-              </View>
-              <View className="flex w-full items-end ">
-                <Text className="text-end text-base font-semibold leading-snug text-orange-500">
-                  {`${getCurrencySymbol(currency)}${(
-                    parseFloat(Number(checkPoint.price).toFixed(2)) *
-                    numberOfCheckpoints
-                  ).toFixed(2)}`}
-                </Text>
               </View>
             </View>
           </View>
@@ -505,7 +525,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               {t("cart_screen.total")}
             </Text>
             <Text className=" text-base font-semibold leading-tight text-primary-default">
-              {`${getCurrencySymbol(currency)}${finalPrice.toFixed(2)}`}
+              {finalPrice}
             </Text>
           </View>
         </View>

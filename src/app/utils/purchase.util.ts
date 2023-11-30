@@ -280,6 +280,16 @@ export const getProductsFromStoreToDisplay = async () => {
   return null;
 };
 
+export const getAllProductsFromStore = async () => {
+  try {
+    const res = await getProducts(); // Get product list from database
+    return res?.data;
+  } catch (error) {
+    console.error("Failed to get products:", error);
+    throw error;
+  }
+};
+
 const extractProductWithUnitPrice = (products: IInAppPurchaseProduct[]) => {
   let chatCheck = null;
   let videoCheck = null;
@@ -289,6 +299,7 @@ const extractProductWithUnitPrice = (products: IInAppPurchaseProduct[]) => {
     ios: PRODUCT_PLATFORM.APPLE,
     android: PRODUCT_PLATFORM.GOOGLE,
   });
+  console.log("products: ", products);
 
   products.forEach((product) => {
     if (product.platform !== platform) return; // Only get product with the same platform as device (Apple or Google

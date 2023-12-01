@@ -93,15 +93,17 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
           </TouchableOpacity>
         </View>
         {schedule?.note && (
-          <View className="flex flex-row items-center justify-between self-stretch pt-3">
+          <View className="flex flex-row items-center justify-between self-stretch pt-3 ">
             <View className="inline-flex flex-col items-start justify-start gap-1">
               <Text className="text-md font-semibold leading-snug text-zinc-500">
                 {t("challenge_detail_screen.note")}
               </Text>
             </View>
-            <Text className="text-right text-md font-normal leading-tight text-black-light">
-              {schedule?.note}
-            </Text>
+            <View className="w-48">
+              <Text className="text-left text-md font-normal leading-tight text-black-light ">
+                {schedule?.note}
+              </Text>
+            </View>
           </View>
         )}
       </View>

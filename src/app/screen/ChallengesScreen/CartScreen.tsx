@@ -73,9 +73,9 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRequestSuccess, setIsRequestSuccess] = useState(false);
-  const [isShowModal, setIsShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
   const [purchaseErrorMessages, setPurchaseErrorMessages] =
     useState<string>("");
@@ -112,14 +112,23 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const getPackagePriceFromStore = async (productId: string) => {
     if (!productId) return;
     const getPackageFromStore = async () => {
-      setIsLoading(true);
-      const packagesFromStore = await getProductsFromProvider({
-        skus: [productId],
-      });
-      setFinalPrice(packagesFromStore[0].localizedPrice);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
+      try {
+        setIsLoading(true);
+        setPurchaseErrorMessages("");
+        const packagesFromStore = await getProductsFromProvider({
+          skus: [productId],
+        });
+        setFinalPrice(packagesFromStore[0].localizedPrice);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      } catch (error) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+        setFinalPrice("0");
+        setPurchaseErrorMessages(t("error_general_message"));
+      }
     };
     getPackageFromStore();
   };
@@ -573,12 +582,14 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       <TouchableOpacity
         className={clsx(
           " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
-          isAndroid ? "my-6" : "my-4"
+          isAndroid ? "my-6" : "my-4",
+          finalPrice === "0" ? "opacity-50" : ""
         )}
         style={{
           height: 48,
           width: 344,
         }}
+        disabled={finalPrice === "0"}
         onPress={debounce(onSumitCertifiedChallenge, 500)}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">

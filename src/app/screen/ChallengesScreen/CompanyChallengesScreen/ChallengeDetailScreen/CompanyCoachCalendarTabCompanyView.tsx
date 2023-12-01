@@ -129,7 +129,7 @@ const ConfirmedRequestedCall = ({
             </Text>
           </View>
           <View className="flex w-48">
-            <Text className="text-right text-md font-normal leading-tight text-zinc-500">
+            <Text className="text-md font-normal leading-tight text-zinc-500">
               {confirmedOption?.note}
             </Text>
           </View>

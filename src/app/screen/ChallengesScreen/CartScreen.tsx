@@ -220,11 +220,16 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       });
       setPurchaseErrorMessages(translatedMessage);
       return;
+    } else {
+      setPurchaseErrorMessages("");
     }
     setNumberOfCheckpoints((prev) => prev + 1);
   };
 
   const handleRemoveCheckpoint = () => {
+    if (numberOfCheckpoints <= MAX_CHECKPOINT) {
+      setPurchaseErrorMessages("");
+    }
     if (numberOfCheckpoints < 1) return;
     setNumberOfCheckpoints((prev) => prev - 1);
   };

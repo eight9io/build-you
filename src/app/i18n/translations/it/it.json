@@ -14,23 +14,49 @@
   "login_screen.register": "Registrati gratis ",
   "login_screen.login": "Accedi",
   "login_screen.explore_no_account": "Esplora senza account",
-  "challenge_detail_screen.title": "Challenge",
-  "challenge_detail_screen.builder": "Builder",
-  "challenge_detail_screen.progress": "Progresso",
-  "challenge_detail_screen.edit_progress": "Modifica progresso",
-  "challenge_detail_screen.description": "Descrizione",
-  "challenge_detail_screen.skills": "Skills",
-  "challenge_detail_screen.coach": "Coach",
-  "challenge_detail_screen.participants": "Partecipanti",
-  "challenge_detail_screen.upload_new_progress": "Aggiungi nuovo progresso",
-  "challenge_detail_screen.new_progress": "Nuovo progresso",
-  "challenge_detail_screen.new_progress_post": "POST",
-  "challenge_detail_screen.add_new_employees": "Aggiungi nuovo impiegato",
-  "challenge_detail_screen.join": "Entra",
-  "challenge_detail_screen.leave": "Lascia",
-  "challenge_detail_screen.completed": "Completato",
-  "challenge_detail_screen.no_progress_yet": "Non ancora progressi",
-  "challenge_detail_screen.not_participants": "Nessun partecipante al momento ",
+  "pending_payment": "Pagamento in sospeso",
+  "challenge_detail_screen": {
+    "title": "Challenge",
+    "builder": "Builder",
+    "progress": "Progresso",
+    "edit_progress": "Modifica progresso",
+    "description": "Descrizione",
+    "skills": "Skills",
+    "coach": "Coach",
+    "participants": "Partecipanti",
+    "upload_new_progress": "Aggiungi nuovo progresso",
+    "new_progress": "Nuovo progresso",
+    "new_progress_post": "POST",
+    "add_new_employees": "Aggiungi nuovo impiegato",
+    "join": "Entra",
+    "leave": "Lascia",
+    "completed": "Completato",
+    "no_progress_yet": "Non ancora progressi",
+    "not_participants": "Nessun partecipante al momento",
+    "chat_coach": "Chat",
+    "rate_skills": "Valuta le skills",
+    "can_not_rate_skills": "Il coach non può valutare le competenze quando la sfida non è completata",
+    "request_video_call": "Richiedi una videochiamata",
+    "empty_participants_list": "Non ci sono partecipanti al momento",
+    "coach_calendar": "Calendario del coach",
+    "add": "Aggiungi",
+    "propose": "Proporre",
+    "proposing_time": "Fasce orarie proposte",
+    "coach_proposing_time": "Fasce orarie proposte dal coach",
+    "number_of_vote": "Numero di voti",
+    "option": "Opzione",
+    "empty_proposing_time": "Al momento non hai nessuna proposta",
+    "empty_confirmed_time": "Al momento non hai un appuntamento per una videochiamata",
+    "confirmed": "Confermato",
+    "open_meeting": "Incontro aperto",
+    "link": "Link",
+    "copy": "Copia",
+    "open_link": "Apri link",
+    "vote": "Vota",
+    "confirm": "Conferma",
+    "voted_waiting": "Votato. Attendi fino alla conferma del coach.",
+    "note": "Nota"
+  },
   "bottom_nav": {
     "feed": "Feed",
     "challenges": "Sfide",
@@ -66,7 +92,6 @@
   "register_screen.policy": "Ho letto e approvo ",
   "register_screen.policy_link": "Privacy Policy",
   "register_screen.terms_link": "Termini",
-  "register_screen.conditions_link": "Condizioni",
   "and": "e",
   "policy": [
     {
@@ -131,6 +156,22 @@
       "required": "Per favore ripeti la tua password.",
       "type": "repeat_password",
       "placeholder": "Ripeti password"
+    },
+    {
+      "label": "Sito web (solo per i coach)",
+      "name": "url",
+      "error": "URL non valido.",
+      "required": "Si prega di inserire il tuo URL.",
+      "type": "url",
+      "placeholder": "Inserisci il tuo URL"
+    },
+    {
+      "label": "Link videochiamata (solo per i coach)",
+      "name": "link_video_call",
+      "error": "Il link della videochiamata non è valido.",
+      "required": "Per favore, inserisci l'URL della videochiamata.",
+      "type": "url",
+      "placeholder": "Inserisci l'URL della videochiamata"
     }
   ],
   "register_screen.err_policy": "Si prega di accettare la nostra politica sulla privacy",
@@ -242,28 +283,41 @@
     }
   },
   "new_challenge_screen": {
-    "title": "Nuova sfida",
+    "new_challenge": "Nuova sfida",
+    "new_certified_challenge": "Nuova sfida certificata",
+    "next": "Avanti",
     "create_button": "Crea",
+    "next_button": "Avanti",
+    "choose_type": "Scegli il tipo di sfida",
+    "choose_type_description": "Scegli quale sfida fa per te e inizia la tua crescita personale.",
+    "free_challenge": "Sfida gratuita",
+    "free_challenge_description": "Crea la tua sfida e lascia che la comunità ti supporti.",
+    "create_free_challenge": "Crea sfida gratuita",
+    "certified_challenge": "Sfida certificata",
+    "certified_challenge_description": "Crea la tua sfida e sii seguito da un coach professionista.",
+    "create_certified_challenge": "Crea sfida certificata",
+    "title": "Nuova sfida",
     "description": "Crea una nuova sfida per te stesso con un obiettivo concreto e tempo per raggiungerlo.",
     "your_goal": "Tuo obiettivo",
     "your_goal_placeholder": "Imposta un obiettivo concreto",
     "benefits": "I benefici",
     "benefits_placeholder": "Elenca i vantaggi che otterrai al raggiungimento",
     "reasons": "Il motivo",
-    "max_people": "Numero max partecipanti",
+    "max_people": "Numero massimo partecipanti",
     "max_people_placeholder": "Inserisci il numero di persone",
     "reasons_placeholder": "Indica i motivi che ti spingono a realizzarlo",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
-    "time_to_reach_goal_placeholder": "Indica la data",
-    "your_goal_required": "Imposta il tuo obiettivo",
-    "benefits_required": "Elenca i vantaggi",
-    "reasons_required": "Indica i motivi",
-    "time_to_reach_goal_required": "Seleziona la data",
-    "image_required": "Carica un'immagine",
-    "max_people_required": "Indica il numero massimo di persone",
+    "time_to_reach_goal_placeholder": "Seleziona una data",
+    "your_goal_required": "Imposta il tuo obiettivo, per favore",
+    "benefits_required": "Elenca i vantaggi, per favore",
+    "reasons_required": "Indica i motivi, per favore",
+    "time_to_reach_goal_required": "Seleziona la data, per favore",
+    "image_required": "Carica un'immagine, per favore",
+    "max_people_required": "Indica il numero massimo di persone, per favore",
     "min_people_required": "Il numero minimo di persone è 2",
-    "is_public_required": "Per favore seleziona la privacy della sfida",
-    "challenge_status_description": "Tutti possono partecipare alla tua sfida pubblica mentre solo gli utenti della tua azienda possono partecipare alla tua sfida privata."
+    "is_public_required": "Seleziona la privacy della sfida, per favore",
+    "challenge_status_description": "Tutti possono partecipare alla tua sfida pubblica, mentre solo gli utenti della tua azienda possono partecipare alla tua sfida privata.",
+    "soft_skill_required": "Ti prego di selezionare almeno 1 e non più di 3 competenze trasversali."
   },
   "new_progress_modal": {
     "title": "Nuovo progresso",
@@ -353,8 +407,40 @@
       "delete_success_title": "Sfida cancellata",
       "delete_success_description": "Sfida cancellata con successo"
     },
+    "package_info": {
+      "basic": "Pacchetti base (chiamata audio)",
+      "premium": "Pacchetti premium (chiamata video)",
+      "number_of_checks": "Numero di controlli",
+      "credits": "Crediti",
+      "title": "Informazioni sul pacchetto",
+      "number_of_callcheck": "Numero di chiamate",
+      "number_of_chatcheck": "Numero di chat",
+      "total_credit_to_charge": "Totale credito da addebitare"
+    },
+    "proposing_time": {
+      "title": "Desideri inviare questi tempi di proposta?",
+      "description": "Questa azione non può essere annullata",
+      "error_title": "Errore",
+      "error_description": "Chat e videochiamata sono disponibili solo quando una fase è in corso."
+    },
+    "pending_payment": {
+      "title": "Pagamento in sospeso",
+      "description": "Il tuo pagamento è in sospeso. Per favore, riprova più tardi."
+    },
+    "cart": {
+      "summary": "Carrello",
+      "current_credit": "Crediti attuali",
+      "credit_after_charged": "Crediti dopo il pagamento",
+      "credit_will_be_charged": "Crediti da addebitare",
+      "not_enough_credit": "Credito insufficiente, contatta l'amministratore per acquistare altro credito."
+    },
+    "in_draft": {
+      "title": "Pagamento in sospeso",
+      "description": "Hai una sfida in corso. Per favore, attendi fino a quando non sarà completata."
+    },
     "cancel": "Cancella",
     "close": "Chiudi",
+    "confirm": "Conferma",
     "complete": "Completa",
     "got_it": "Fatto",
     "delete": "Elimina",
@@ -380,12 +466,17 @@
     "create_challenge_success": "La tua sfida è stata creata con successo !",
     "create_progress_success": "Il tuo progresso è stato creato con successo !",
     "completed_challenge_success": "La sfida è stata completata con successo !",
-    "congratulation": "Congratulazioni!"
+    "congratulation": "Congratulazioni!",
+    "coach_no_calendy_link": "Il coach non ha ancora aggiunto il link Calendly.",
+    "err_join_in_progress_challenge": "Non puoi partecipare a questa sfida perché la sfida è in corso."
   },
   "toast": {
     "joined_success": "Ti sei unito alla sfida!",
     "leave_success": "Hai abbandonato la sfida!",
     "delete_success": "Commento eliminato con successo!",
+    "create_schedule_success": "Crea programma con successo!",
+    "delete_schedule_success": "Elimina programma con successo!",
+    "edit_schedule_success": "Modifica programma con successo!",
     "add_employee_success": "Dipendente aggiunto correttamente! ",
     "delete_employee_success": "Dipendente eliminato correttamente! ",
     "reset_password_success": "Password reimpostata con successo! ",
@@ -395,11 +486,29 @@
     "completed_challenge_success": "La sfida è stata completata con successo !",
     "delete_challenge_success": "Sfida eliminata con successo !",
     "copied_to_clipboard": "Copiato negli appunti",
-    "copied_to_clipboard_error": "Errore durante la copia negli appunti"
+    "copied_to_clipboard_error": "Errore durante la copia negli appunti",
+    "open_touchpoint_success": "Aggiornamento riuscito!",
+    "open_touchpoint_error": "Aggiornamento non riuscito! Riprova più tardi.",
+    "cannot_close_touchpoint_error": "Non puoi chiudere questo touchpoint quando la sfida non è completata.",
+    "rate_skills_success": "Valutazione competenze riuscita!",
+    "rate_skills_error": "Valutazione competenze fallita! Riprova più tardi.",
+    "proposing_time_success": "Proposta inviata con successo!",
+    "proposing_time_error": "Proposta non inviata! Riprova più tardi.",
+    "confirm_time_success": "Tempo confermato con successo!",
+    "confirm_time_error": "Tempo non confermato! Riprova più tardi.",
+    "vote_proposing_time_success": "Voto per la proposta dell'orario effettuato con successo!",
+    "vote_proposing_time_error": "Errore durante la proposta dell'orario. Si prega di riprovare più tardi.",
+    "delete_confirmed_scheduled_video_call_success": "Videochiamata confermata eliminata con successo!",
+    "add_calendy_link_success": "Link Calendly aggiunto con successo!",
+    "edit_calendy_link_success": "Link Calendly modificato con successo!"
   },
   "progress_comment_screen": {
     "comment_input_placeholder": "Scrivi un commento...",
     "delete_comment_success": "Il tuo commento è stato eliminato con successo"
+  },
+  "chat_input": {
+    "chat_input_placeholder": "Scrivi un messaggio",
+    "chat_input_empty": "Non puoi inviare un messaggio vuoto"
   },
   "delete_progress": {
     "delete_success": "I tuoi progressi sono stati eliminati con successo"
@@ -427,6 +536,7 @@
     "content_3": "Aggiungi nuovo dipendente",
     "content_4": "per aggiungere un dipendente alla tua azienda."
   },
+  "empty_participant": "Non ci sono partecipanti al momento",
   "image_picker": {
     "image_permission_required": "Permesso negato. Si prega di abilitarlo nelle impostazioni del telefono.",
     "upload_a_video": "Carica un video",
@@ -449,7 +559,8 @@
     "company_vat_placeholder": "Inserisci la tua P.Iva "
   },
   "notification_screen": {
-    "no_notification": "Non hai notifiche al momento"
+    "no_notification": "Non hai notifiche al momento",
+    "you": "Tu"
   },
   "challenge_detail_screen.not_found": "Sfida non trovata",
   "user_not_found": "Utente non trovato",
@@ -458,6 +569,7 @@
   "session_expired_error": "Sessione scaduta. Per favore esegui l'accesso di nuovo",
   "share_link": {
     "copying_to_clipboard_error": "Errore durante la copia negli appunti",
+    "copied_to_clipboard": "Copiato negli appunti",
     "join_my_challenge": "Unisciti alla mia sfida!",
     "user_did_not_share_link": "L'utente non ha condiviso"
   },
@@ -524,7 +636,8 @@
     "no_biography": "Nessuna biografia al momento"
   },
   "skill_tab": {
-    "self_declared": "Auto-dichiarate"
+    "self_declared": "Auto-dichiarate",
+    "certified": "Certificato"
   },
   "private": "Privata",
   "public": "Pubblica",
@@ -536,7 +649,8 @@
     "the_benefits": "I benefici",
     "the_reason": "Il motivo",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
-    "participants": "Partecipanti"
+    "participants": "Partecipanti",
+    "soft_skills": "Abilità trasversale"
   },
   "challenge_progress_tab": {
     "do_you_want_to_confirm_rating": "Vuoi confermare la tua valutazione?",
@@ -565,16 +679,140 @@
     "enter_your_city": "Inserisci la tua città",
     "company": "Azienda",
     "enter_your_company": "Inserisci la tua azienda",
-    "enter_your_company_error": "Per favore inserisci il nome della tua azienda."
+    "enter_your_company_error": "Per favore inserisci il nome della tua azienda.",
+    "phone": "Telefono",
+    "enter_phone": "Inserisci il tuo telefono"
+  },
+  "choose_packages_screen": {
+    "package": "Pacchetto",
+    "title": "Scegli il tipo di supporto del coach",
+    "description": "Alla fine della sfida, il coach certificherà le competenze trasversali acquisite",
+    "basic_package": "Pacchetto base",
+    "basic_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto.",
+    "direct_chat": "Chat diretta",
+    "premium_package": "Pacchetto premium",
+    "premium_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto.",
+    "video_call": "Videochiamata",
+    "intake": "Valutazione",
+    "check": "Verifica",
+    "closing": "Chiusura",
+    "no_package": "Al momento non sono disponibili pacchetti",
+    "choose": "Scegli"
+  },
+  "cart_screen": {
+    "title": "Riepilogo",
+    "basic_packages": "Pacchetti base",
+    "basic_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto con chat diretta",
+    "premium_packages": "Pacchetti premium",
+    "premium_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto con chat diretta e videochiamata",
+    "intake": "Introduzione",
+    "check": "Verifica",
+    "closing": "Chiusura",
+    "select_checkpoints": "Seleziona il numero di checkpoint aggiuntivi:",
+    "minimum_checkpoint_error": "È richiesto almeno 1 checkpoint",
+    "total": "Totale",
+    "pay": "Avanti",
+    "max_check_error": "Puoi avere al massimo {{MAX_CHECKPOINT}} checkpoint aggiuntivi."
+  },
+  "challenge_screen": {
+    "empty_challenge": "Al momento non hai nessuna sfida",
+    "coach_empty_challenge": "Al momento non hai nessuna sfida di coaching",
+    "coach_empty_challenge_description": "Devi essere assegnato a una sfida dall'amministratore",
+    "to_create_new_challenge": "per creare una nuova sfida",
+    "occupation_error": "Seleziona la tua occupazione, per favore.",
+    "biography": "Biografia",
+    "your_biography": "La tua biografia",
+    "city": "Città",
+    "enter_your_city": "Dove ti trovi?",
+    "company": "Azienda",
+    "enter_your_company": "Inserisci il nome della tua azienda",
+    "enter_your_company_error": "Inserisci il nome della tua azienda, per favore"
   },
   "not_found": "Non trovato",
   "invalid_date": "Data non valida",
   "notification": {
-    "new_challenge": "ha creato una nuova sfida",
-    "new_progress": "ha creato un nuovo progresso in {{challengeGoal}}",
-    "new_comment": "ha commentato il tuo aggiornamento",
-    "new_mention": "ti ha menzionato in un commento",
-    "new_follower": "ha iniziato a seguirti",
-    "new_employee": "ti ha aggiunto come dipendente"
+    "new_challenge": "{{userName}} ha creato una nuova sfida",
+    "new_progress": "{{userName}} ha creato un nuovo progresso in {{challengeGoal}}",
+    "new_comment": "{{userName}} ha commentato il tuo aggiornamento",
+    "new_mention": "{{userName}} ti ha menzionato in un commento",
+    "new_follower": "{{userName}} ha iniziato a seguirti",
+    "new_employee": "{{userName}} ti ha aggiunto come dipendente",
+    "new_message": "{{userName}} ha inviato un messaggio",
+    "close_challenge": "{{userName}} ha contrassegnato la sfida come completata",
+    "coach_added": "Il coach {{userName}} è stato assegnato alla sfida",
+    "coach_added_in_coach_view": "Sei stato aggiunto alla sfida come coach",
+    "phase_opened": "{{userName}} ha aperto una nuova fase",
+    "schedule_confirmed": "Appuntamento confermato per la sfida {{challengeGoal}}"
+  },
+  "top_nav.create_challenge": "Crea sfida",
+  "challenge_detail_screen_tab": {
+    "coach": {
+      "waiting_for_coach": "In attesa del coach...",
+      "profile": "Profilo",
+      "intake": "Introduzione",
+      "closing": "Chiusura",
+      "touchpoint_of_challenge": "Punti di contatto della tua sfida",
+      "confirm_open_phase": "Vuoi davvero iniziare la fase {{phaseName}}?",
+      "confirm_close_phase": "Vuoi davvero chiudere la fase {{phaseName}}?",
+      "yes": "Sì",
+      "no": "No"
+    },
+    "coach_calendar": {
+      "title": "Calendario coach",
+      "schedule": "Programma",
+      "book_video_call_btn": "Prenota videochiamata",
+      "add_schedule_link_btn": "Aggiungi link al calendario",
+      "upcoming": "Prossime",
+      "past": "Passate",
+      "book_video_call": "Prenota videochiamata",
+      "cancel_video_call": "Annulla videochiamata",
+      "empty_schedule": "Non hai ancora programmato una videochiamata",
+      "request_video_call": "Richiedi videochiamata",
+      "time": "Orario",
+      "date": "Data",
+      "schedule_detail_modal_title": "Dettaglio",
+      "note": "Nota",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "link": "Link",
+      "link_placeholder": "Inserisci il link",
+      "link_video_call": "Link videochiamata",
+      "delete_schedule_confirm": "Vuoi eliminare questa pianificazione?",
+      "delete_schedule_des": "L'azione non può essere annullata",
+      "delete_schedule_success": "Pianificazione eliminata con successo!"
+    }
+  },
+  "confirm_time_modal": {
+    "confirm": "Conferma",
+    "option": "Opzione",
+    "title": "Conferma orario",
+    "link_video_call": "Link videochiamata",
+    "link_video_call_placeholder": "Inserisci il link della videochiamata"
+  },
+  "search_company": {
+    "no_result": "No company found",
+    "placeholder": "Enter company name"
+  },
+  "challenges_tab": {
+    "personal": "Personali",
+    "coach": "Coach",
+    "certified": "Certificate",
+    "company": "Azienda"
+  },
+  "create_schedule_modal": {
+    "title": "Crea programma",
+    "save": "Salva",
+    "link_video_call": "Link videochiamata",
+    "link_video_call_placeholder": "Inserisci il link della videochiamata",
+    "note": "Nota",
+    "note_placeholder": "Inserisci una nota per il coach",
+    "schedule_link": "Link programma",
+    "error": {
+      "old_date_time": "Seleziona una data e un'ora future."
+    }
+  },
+  "payment_pending_modal": {
+    "title": "Pending payment",
+    "description": "Your challenge will be saved as draft until the payment is processed."
   }
 }

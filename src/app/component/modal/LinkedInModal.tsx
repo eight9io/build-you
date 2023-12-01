@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { LINKEDIN_LOGIN } from "../../common/constants";
 import { getUrlParam } from "../../utils/common";
 import NavButton from "../common/Buttons/NavButton";
+import { CrashlyticService } from "../../service/crashlytic";
 
 interface ILinkedInModalProps {
   isVisible: boolean;
@@ -36,6 +37,9 @@ const LinkedInModal: FC<ILinkedInModalProps> = ({
       if (!code) {
         console.error("Cannot get authorization code from linkedin");
         onError && onError(t("errorMessage:500"));
+        CrashlyticService({
+          errorType: "Linkedin Login Error",
+        });
       }
       const state = getUrlParam(url, "state") as string; // Get state from linkedin
       if (!state || state !== authorizationState) {

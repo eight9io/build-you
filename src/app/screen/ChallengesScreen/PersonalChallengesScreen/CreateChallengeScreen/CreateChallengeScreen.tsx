@@ -9,27 +9,23 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import {
-  ICreateChallenge,
-  ICreateChallengeForm,
-} from "../../../../types/challenge";
-import { useNav } from "../../../../navigation/navigation.type";
+import { ICreateChallengeForm } from "../../../../types/challenge";
 import { CreateChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import dayjs from "../../../../utils/date.util";
 import {
   createChallenge,
   updateChallengeImage,
 } from "../../../../service/challenge";
-import Header from "../../../../component/common/Header";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import httpInstance from "../../../../utils/http";
 import { StackActions } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNav } from "../../../../hooks/useNav";
 
 const CreateChallengeScreen = () => {
   const onClose = () => {

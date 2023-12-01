@@ -35,6 +35,7 @@ import {
   NOTIFICATION_TOKEN_DEVICE_TYPE,
   NOTIFICATION_TOKEN_STATUS,
 } from "../../common/enum";
+import { CrashlyticService } from "../../service/crashlytic";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -60,20 +61,20 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const handleLogout = async () => {
     setIsShowLogoutModal(false);
     const userLoginType = currentUser?.loginType;
-    await unregisterForPushNotificationsAsync()
-      .then((token) => {
-        updateNotificationToken({
-          notificationToken: token,
-          status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
-          deviceType:
-            Platform.OS === "android"
-              ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-              : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
-        });
-      })
-      .catch(() => {
-        console.log("Ignore Push Notification");
-      });
+    // await unregisterForPushNotificationsAsync()
+    //   .then((token) => {
+    //     updateNotificationToken({
+    //       notificationToken: token,
+    //       status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
+    //       deviceType:
+    //         Platform.OS === "android"
+    //           ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+    //           : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+    //     });
+    //   })
+    //   .catch(() => {
+    //     console.log("Ignore Push Notification");
+    //   });
 
     setTimeout(async () => {
       navigation.dispatch(
@@ -91,6 +92,10 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
             await GoogleSignin.signOut();
           } catch (error) {
             console.error(error);
+            CrashlyticService({
+              errorType: "Google Sign Out Error",
+              error: error,
+            });
           }
         };
         googleSignOut();

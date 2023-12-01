@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import httpInstance from "./http";
+import { CrashlyticService } from "../service/crashlytic";
 
 export const uploadNewVideo = async (video: string | undefined) => {
   try {
@@ -24,5 +25,9 @@ export const uploadNewVideo = async (video: string | undefined) => {
     return response.data;
   } catch (e) {
     console.error("uploadNewVideo", e);
+    CrashlyticService({
+      errorType: "Upload Video Error",
+      error: e,
+    });
   }
 };

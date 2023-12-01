@@ -1,20 +1,10 @@
-import {
-  View,
-  Text,
-  Image,
-  Modal,
-  StyleSheet,
-  FlatList,
-  TouchableHighlightBase,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState } from "react";
+import { View, Text } from "react-native";
+import React from "react";
 
 import { useTranslation } from "react-i18next";
 
 import Button from "../../component/common/Buttons/Button";
 
-import clsx from "clsx";
 import Step from "../../component/common/Step";
 
 interface MyObject {

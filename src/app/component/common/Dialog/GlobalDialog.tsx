@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Platform, View, Text } from "react-native";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -13,6 +13,7 @@ import GlobalDialogController, {
 } from "./GlobalDialogController";
 import { IGlobalDialogProps } from "../../../types/globalDialog";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 
 const GlobalDialog = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -25,6 +26,7 @@ const GlobalDialog = () => {
   );
   const { t } = useTranslation();
 
+  const isIOS = Platform.OS === "ios";
   const modalRef = useRef<GlobalDialogRef>();
 
   useLayoutEffect(() => {
@@ -56,7 +58,11 @@ const GlobalDialog = () => {
   return (
     <View className="items-center justify-center bg-white">
       <Dialog.Container visible={modalVisible}>
-        <Dialog.Title>{customTitle || t("dialog.alert_title")}</Dialog.Title>
+        <Dialog.Title>
+          <Text className={clsx(isIOS ? "" : "text-black-default")}>
+            {customTitle || t("dialog.alert_title")}
+          </Text>
+        </Dialog.Title>
         <Dialog.Description>{customMessage}</Dialog.Description>
         <Dialog.Button
           label={customButton || t("dialog.ok")}

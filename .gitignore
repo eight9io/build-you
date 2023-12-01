@@ -80,3 +80,5 @@ dist/
 
 # @end expo-cli
 .env
+
+.cosine

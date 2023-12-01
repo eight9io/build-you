@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { View, Switch, StyleSheet, Text } from "react-native";
+import { View, Switch, Text } from "react-native";
 
 interface ICustomSwitchProps {
   onValueChange?: any;

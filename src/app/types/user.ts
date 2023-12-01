@@ -2,7 +2,7 @@ import { ICompanyData, ICompanyDataUser } from "./company";
 
 export interface IUserData {
   id: string;
-  email: string;
+  email?: string;
   name: string;
   surname: string;
   birth?: string;
@@ -28,6 +28,25 @@ export interface IUserData {
   loginType?: ILoginType;
   isVerified?: boolean;
   city?: string;
+  isCoach?: boolean;
+  ratedSkill?: IRatedSkill[];
+  calendly?: string;
+  skills?: IUserSkills[];
+}
+
+export interface IUserSkills {
+  id: string;
+  isRated: boolean;
+  rating: number;
+  skill: string;
+}
+
+export interface IRatedSkill {
+  rating: number;
+  skill: {
+    id: string;
+    skill: string;
+  };
 }
 
 export type ILoginType =

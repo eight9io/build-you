@@ -1,23 +1,45 @@
 import clsx from "clsx";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import Empty from "./assets/emptyFollow.svg";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
+
+import { ISoftSkill } from "../../../../types/challenge";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
+
 import MarkDone from "./assets/mark_done.svg";
+import Empty from "./assets/emptyFollow.svg";
+
 interface IParticipantsTabProps {
   participant?: {
-    id: string | number;
+    id: string;
     avatar: string;
     name: string;
+    surname: string;
     challengeStatus?: string;
   }[];
+  fetchParticipants?: () => void;
 }
 
-const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
+const ParticipantsTab: FC<IParticipantsTabProps> = ({
+  participant = [],
+  fetchParticipants,
+}) => {
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const handlePushToOtherUserProfile = (userId: string) => {
+    const pushAction = StackActions.push("OtherUserProfileScreen", {
+      userId,
+    });
+    navigation.dispatch(pushAction);
+  };
 
   return (
     <View className={clsx("flex-1 px-4")}>
@@ -32,11 +54,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate("OtherUserProfileScreen", {
-                    userId: item.id as string,
-                  })
-                }
+                onPress={() => handlePushToOtherUserProfile(item?.id)}
                 className="mb-5 flex-row items-center justify-between gap-3"
               >
                 <View className="flex-row items-center">
@@ -55,7 +73,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
                     )}
                   </View>
                   <Text className="ml-3 text-base font-semibold text-basic-black">
-                    {item.name}
+                    {item?.name} {item?.surname}
                   </Text>
                 </View>
                 <View className="pr-3">
@@ -66,10 +84,16 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({ participant = [] }) => {
             );
           }}
           ListFooterComponent={<View className="h-20" />}
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+            fetchParticipants && fetchParticipants();
+            setRefreshing(false);
+          }}
         />
       )}
       {participant.length == 0 && (
-        <View className=" flex-1 items-center justify-center">
+        <View className=" flex-1 items-center pt-16">
           <Empty />
           <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
             {t("challenge_detail_screen.not_participants")}

@@ -14,7 +14,7 @@ import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
 import { useUserProfileStore } from "../../../store/user-store";
 import { serviceAddEmployee } from "../../../service/company";
 import { fetchListEmployee } from "../../../utils/profile";
-import { useEmployeeListStore } from "../../../store/company-data";
+import { useEmployeeListStore } from "../../../store/company-data-store";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 interface IAddNewEmployeeModalProps {
@@ -125,7 +125,7 @@ export const AddNewEmployeeModal: FC<IAddNewEmployeeModalProps> = ({
                   }
                   placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                   onBlur={onBlur}
-                  onChangeText={(text) => onChange(text)}
+                  onChangeText={onChange}
                   value={value}
                 />
               </View>

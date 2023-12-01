@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { useNav } from "../../navigation/navigation.type";
+import { useNav } from "../../hooks/useNav";
 import { IChallenge, IEditChallenge } from "../../types/challenge";
 import { EditChallengeValidationSchema } from "../../Validators/EditChallenge.validate";
 
@@ -18,7 +18,7 @@ import ErrorText from "../common/ErrorText";
 import TextInput from "../common/Inputs/TextInput";
 import ConfirmDialog from "../common/Dialog/ConfirmDialog";
 import { updateChallenge } from "../../service/challenge";
-import DateTimePicker2 from "../common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../common/BottomSheet/DateTimePicker2/DateTimePicker2";
 
 import CloseIcon from "../asset/close.svg";
 import CalendarIcon from "../asset/calendar.svg";

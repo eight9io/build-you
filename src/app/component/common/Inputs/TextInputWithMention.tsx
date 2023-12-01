@@ -27,7 +27,7 @@ interface ITextInputWithMentionProps extends MentionInputProps {
   onPress?: () => void;
   multiline?: boolean;
   onRightIconPress?: () => void;
-  companyEmployees: IEmployeeDataProps[] | undefined;
+  companyEmployees?: IEmployeeDataProps[] | undefined;
 }
 
 interface IUserSuggestionProps extends MentionSuggestionsProps {

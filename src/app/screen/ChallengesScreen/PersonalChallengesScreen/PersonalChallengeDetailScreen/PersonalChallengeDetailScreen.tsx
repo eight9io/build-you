@@ -1,13 +1,18 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
-import { SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 
-import httpInstance from "../../../../utils/http";
 import {
   deleteChallenge,
   completeChallenge,
+  getChallengeById,
 } from "../../../../service/challenge";
 
 import { RootStackParamList } from "../../../../navigation/navigation.type";
@@ -26,6 +31,8 @@ import TaskAltIconGray from "./assets/task-alt-gray.svg";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
+import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
+import Spinner from "react-native-loading-spinner-overlay";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -116,11 +123,8 @@ export const RightPersonalChallengeDetailOptions: FC<
             message:
               t("toast.completed_challenge_success") ||
               "Challenge has been completed successfully !",
+            isScreenHasBottomNav: false,
           });
-          // setTimeout(() => {
-          //   setIsCompletedChallengeSuccess(true);
-          //   setShouldRefresh(true);
-          // }, 600);
         }
       })
       .catch((err) => {
@@ -228,6 +232,7 @@ const PersonalChallengeDetailScreen = ({
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
+  const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
@@ -237,17 +242,23 @@ const PersonalChallengeDetailScreen = ({
     useState<boolean>(false);
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
-  const [isNewProgressAdded, setIsNewProgressAdded] = useState<boolean>(false);
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+
+  // use for refresh screen when add new progress, refetch participant list,  edit challenge
+  const [shouldScreenRefresh, setShouldScreenRefresh] =
+    useState<boolean>(false);
 
   const challengeId = route?.params?.challengeId;
 
   const { getUserProfile } = useUserProfileStore();
+  const { setDeletedChallengeId } = useNewCreateOrDeleteChallengeStore();
+
   const currentUser = getUserProfile();
 
   const challengeOwner = Array.isArray(challengeData?.owner)
     ? challengeData?.owner[0]
     : challengeData?.owner;
+
+  const isCurrentUserChallengeOnwer = challengeOwner?.id === currentUser?.id;
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -255,9 +266,9 @@ const PersonalChallengeDetailScreen = ({
       headerRight: () => (
         <RightPersonalChallengeDetailOptions
           challengeData={challengeData}
-          shouldRenderEditAndDeleteBtns={challengeOwner?.id === currentUser?.id}
+          shouldRenderEditAndDeleteBtns={isCurrentUserChallengeOnwer}
           shouldRenderCompleteBtn={isJoinedLocal}
-          refresh={refresh}
+          refresh={getChallengeData}
           onEditChallengeBtnPress={handleEditChallengeBtnPress}
           setIsDeleteChallengeDialogVisible={setIsDeleteChallengeDialogVisible}
         />
@@ -265,16 +276,30 @@ const PersonalChallengeDetailScreen = ({
     });
   }, [challengeData, isJoinedLocal]);
 
-  const refresh = () => {
-    setShouldRefresh(true);
-    httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
-      setChallengeData(res.data);
-    });
+  const getChallengeData = async () => {
+    setIsScreenLoading(true);
+    try {
+      await getChallengeById(challengeId).then((res) => {
+        setChallengeData(res.data);
+      });
+    } catch (error) {
+      console.error("CoachChallengeDetailScreen - Error fetching data:", error);
+    }
+    setTimeout(() => {
+      setIsScreenLoading(false);
+    }, 500);
   };
 
   useEffect(() => {
-    refresh();
-  }, [isNewProgressAdded]);
+    if (shouldScreenRefresh) {
+      getChallengeData();
+      setShouldScreenRefresh(false);
+    }
+  }, [shouldScreenRefresh]);
+
+  useEffect(() => {
+    getChallengeData();
+  }, []);
 
   const handleEditChallengeBtnPress = () => {
     setIsEditChallengeModalVisible(true);
@@ -284,7 +309,7 @@ const PersonalChallengeDetailScreen = ({
   };
 
   const handleEditChallengeModalConfirm = () => {
-    refresh();
+    getChallengeData();
     setIsEditChallengeModalVisible(false);
   };
 
@@ -293,6 +318,7 @@ const PersonalChallengeDetailScreen = ({
     deleteChallenge(challengeData.id)
       .then((res) => {
         if (res.status === 200) {
+          setDeletedChallengeId(challengeData.id);
           setIsDeleteChallengeDialogVisible(false);
           GlobalToastController.showModal({
             message:
@@ -311,8 +337,11 @@ const PersonalChallengeDetailScreen = ({
         }, 600);
       });
   };
+
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-[#FAFBFF]">
+      {isScreenLoading && <Spinner visible={isScreenLoading} />}
+
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}
@@ -339,11 +368,11 @@ const PersonalChallengeDetailScreen = ({
       {challengeData?.id && (
         <>
           <ChallengeDetailScreen
-            shouldRefresh={shouldRefresh}
-            setShouldRefresh={setShouldRefresh}
             challengeData={challengeData}
             setIsJoinedLocal={setIsJoinedLocal}
-            setIsNewProgressAdded={setIsNewProgressAdded}
+            route={route}
+            shouldScreenRefresh={shouldScreenRefresh}
+            setShouldScreenRefresh={setShouldScreenRefresh}
           />
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

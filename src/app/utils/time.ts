@@ -7,7 +7,9 @@ export const getTimeDiffToNow = (createdAt: string) => {
   }
   const currentDate = new Date();
 
-  const timeDifference = currentDate.getTime() - createdDate.getTime();
+  const timeDifference = Math.abs(
+    currentDate.getTime() - createdDate.getTime()
+  );
   const secondsElapsed = Math.floor(timeDifference / 1000);
   const minutesElapsed = Math.floor(secondsElapsed / 60);
   const hoursElapsed = Math.floor(minutesElapsed / 60);

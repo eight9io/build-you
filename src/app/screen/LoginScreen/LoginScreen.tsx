@@ -37,6 +37,7 @@ import { LOGIN_TYPE } from "../../common/enum";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import { serviceUpdateMyProfile } from "../../service/profile";
 import { useAppleLoginInfoStore } from "../../store/apple-login-store";
+import { CrashlyticService, InitCrashlytics } from "../../service/crashlytic";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -103,6 +104,9 @@ export default function Login() {
       );
 
       const { data: profile } = await getUserProfileAsync();
+      if (profile) {
+        InitCrashlytics(profile.id);
+      }
       if (type === LOGIN_TYPE.APPLE) {
         try {
           const userAppleInfo = getUserAppleInfo();
@@ -121,6 +125,10 @@ export default function Login() {
           setUserProfile(newUserInfo.data);
         } catch (error) {
           console.error("Apple update name error: ", error);
+          CrashlyticService({
+            errorType: "Apple update name error",
+            error: error,
+          });
         }
       }
       setIsLoading(false); // Important to not crashing app with duplicate modal
@@ -148,7 +156,11 @@ export default function Login() {
         setIsLoading(false);
         return;
       }
-      console.log("error", error);
+      console.error("error", error);
+      CrashlyticService({
+        errorType: "Login Error",
+        error: error,
+      });
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
     }
@@ -158,6 +170,7 @@ export default function Login() {
 
   const handleConfirmError = async () => {
     setIsShowVerifiedErrorModal(false);
+    logout();
   };
 
   return (

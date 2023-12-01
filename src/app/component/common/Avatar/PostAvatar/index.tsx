@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React from "react";
 import { View } from "react-native";
 import { Image } from "expo-image";
 import clsx from "clsx";

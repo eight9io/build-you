@@ -2,11 +2,7 @@ import React, { FC } from "react";
 import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
-import {
-  NavigationProp,
-  StackActions,
-  useNavigation,
-} from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo.svg";

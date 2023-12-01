@@ -9,8 +9,8 @@ import {
   Keyboard,
 } from "react-native";
 import { useTranslation } from "react-i18next";
-import { Controller, set, useForm } from "react-hook-form";
-import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
+import { Controller, useForm } from "react-hook-form";
+import { Route } from "@react-navigation/native";
 
 import { IProgressComment } from "../../../types/progress";
 import { IProgressChallenge } from "../../../types/challenge";

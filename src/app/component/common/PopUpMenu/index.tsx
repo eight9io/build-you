@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleProp, Text, View, ViewStyle } from "react-native";
 import React, { FC } from "react";
 import {
   Menu,
@@ -11,7 +11,6 @@ import clsx from "clsx";
 
 import EditIcon from "./assets/edit-icon.svg";
 import { useTranslation } from "react-i18next";
-
 type MenuOptionProp = {
   text: string;
   onPress: () => void;
@@ -21,6 +20,7 @@ interface IPopMenuProps {
   iconColor?: string;
   options?: MenuOptionProp[];
   isDisabled?: boolean;
+  optionsContainerStyle?: StyleProp<ViewStyle>;
 }
 
 const ButtonIcon = ({ iconColor }: { iconColor: string | undefined }) => {
@@ -34,7 +34,7 @@ const ButtonIcon = ({ iconColor }: { iconColor: string | undefined }) => {
 const MenuItem = ({ text, onPress }: { text: string; onPress: any }) => {
   return (
     <MenuOption onSelect={onPress}>
-      <View className={clsx("flex flex-row items-center  ")}>
+      <View className={clsx("flex flex-row items-center  py-1")}>
         <Text className={clsx("pl-3 text-md font-normal leading-6")}>
           {text}
         </Text>
@@ -43,9 +43,13 @@ const MenuItem = ({ text, onPress }: { text: string; onPress: any }) => {
   );
 };
 
-const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options, isDisabled }) => {
+const PopUpMenu: FC<IPopMenuProps> = ({
+  iconColor,
+  options,
+  isDisabled,
+  optionsContainerStyle,
+}) => {
   const { t } = useTranslation();
-
   return (
     <Menu>
       <MenuTrigger
@@ -73,9 +77,12 @@ const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options, isDisabled }) => {
       />
       {!options && (
         <MenuOptions
-          optionsContainerStyle={{
-            borderRadius: 4,
-          }}
+          optionsContainerStyle={[
+            {
+              borderRadius: 4,
+            },
+            optionsContainerStyle,
+          ]}
         >
           <MenuItem
             text={t("pop_up_menu.edit") || "Edit"}
@@ -97,10 +104,13 @@ const PopUpMenu: FC<IPopMenuProps> = ({ iconColor, options, isDisabled }) => {
       )}
       {options && (
         <MenuOptions
-          optionsContainerStyle={{
-            borderRadius: 4,
-            width: 100,
-          }}
+          optionsContainerStyle={[
+            {
+              borderRadius: 4,
+              width: 120,
+            },
+            optionsContainerStyle,
+          ]}
         >
           {options.map((option, id) => (
             <MenuItem key={id} text={option.text} onPress={option.onPress} />

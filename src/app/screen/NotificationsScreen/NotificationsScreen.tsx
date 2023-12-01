@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -11,12 +11,11 @@ import { t } from "i18next";
 import { useIsFocused } from "@react-navigation/native";
 import AppTitle from "../../component/common/AppTitle";
 import NavButton from "../../component/common/Buttons/NavButton";
-import IconSearch from "../../component/common/IconSearch/IconSearch";
 
 import Notification from "../../component/Notification";
 import { useNotificationStore } from "../../store/notification-store";
 import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
-import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
@@ -24,6 +23,10 @@ import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/Skele
 
 import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 import ProgressCommentScreen from "../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import PersonalChallengeDetailScreen from "../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import PersonalCoachChallengeDetailScreen from "../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
+import CompanyChallengeDetailScreen from "../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { CrashlyticService } from "../../service/crashlytic";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -71,6 +74,10 @@ const Notifications = () => {
         button: t("dialog.ok"),
       });
       console.error(error);
+      CrashlyticService({
+        errorType: "Fetch Notification Error",
+        error: error,
+      });
     }
   };
 
@@ -162,6 +169,50 @@ const NotificationsScreen = () => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <NotificationsStack.Screen
+        name="PersonalChallengeDetailScreen"
+        component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <NotificationsStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <NotificationsStack.Screen
+        name="CompanyChallengeDetailScreen"
+        component={CompanyChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}

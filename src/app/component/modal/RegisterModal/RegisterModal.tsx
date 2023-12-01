@@ -30,6 +30,7 @@ import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
 
 import { RootStackParamList } from "../../../navigation/navigation.type";
 import { serviceUpdateMyProfile } from "../../../service/profile";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface Props {
   modalVisible: boolean;
@@ -90,6 +91,10 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
           setUserProfile(newUserInfo.data);
         } catch (error) {
           console.error("Apple update name error: ", error);
+          CrashlyticService({
+            errorType: "Apple update name error",
+            error,
+          });
         }
       }
       setIsLoading(false); // Important to not crashing app with duplicate modal
@@ -114,6 +119,10 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       console.error("error: ", error);
       setErrMessage(errorMessage(error, "err_login"));
       setIsLoading(false);
+      CrashlyticService({
+        errorType: "Register Error",
+        error,
+      });
     }
   };
 

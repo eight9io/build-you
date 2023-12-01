@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ImageSourcePropType } from "react-native";
+import { CrashlyticService } from "../service/crashlytic";
 
 export const getImageFromUrl = (
   url: string | null
@@ -29,6 +30,10 @@ export const getImageFromUrl = (
       } catch (error) {
         console.error(error);
         setError(true);
+        CrashlyticService({
+          errorType: "Get Image From Url Error",
+          error,
+        });
         setLoading(false);
       }
     };

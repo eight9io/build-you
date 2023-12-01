@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 
-import Button from "../Button";
 import AddEmojiIcon from "../asset/add-emoji.svg";
 import WarningSvg from "../../../asset/warning.svg";
 import { useTranslation } from "react-i18next";

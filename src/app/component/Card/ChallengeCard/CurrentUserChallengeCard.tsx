@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 
-import { IChallenge, IChallengeOwner } from "../../../types/challenge";
+import { IChallenge } from "../../../types/challenge";
 import {
   getChallengeStatusColor,
   roundToDecimalOrWhole,
@@ -11,19 +12,35 @@ import {
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
-import { CompanyTag } from "./ChallengeCard";
+import { CertifiedChallengeTag, CompanyTag } from "./ChallengeCard";
 import { useUserProfileStore } from "../../../store/user-store";
 import { StackActions } from "@react-navigation/native";
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
+import EmptyImage from "../../../common/svg/empty-image.svg";
 import { useChallengeUpdateStore } from "../../../store/challenge-update-store";
+import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 
 interface ICurrentUserChallengeCardProps {
   item: IChallenge;
   imageSrc: string | null | undefined;
   navigation?: any;
 }
+
+export const PaymentPendingTag = ({
+  translate,
+}: {
+  translate: (key: string) => string;
+}) => {
+  return (
+    <View className="flex h-8 w-3/6 flex-row items-center rounded-l-md bg-primary-default">
+      <Text className="pl-4 text-md font-normal text-white">
+        {translate("pending_payment")}
+      </Text>
+    </View>
+  );
+};
 
 const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   item,
@@ -32,6 +49,7 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
 }) => {
   const [ratedValue, setRatedValue] = useState<number>(0);
 
+  const isDraft = item.isDraft;
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
@@ -42,7 +60,16 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   const { getChallengeRatingUpdate } = useChallengeUpdateStore();
   const challengeRatingUpdate = getChallengeRatingUpdate();
 
+  const { t } = useTranslation();
+
   const onPress = () => {
+    if (isDraft) {
+      GlobalDialogController.showModal({
+        title: t("dialog.pending_payment.title"),
+        message: t("dialog.pending_payment.description"),
+      });
+      return;
+    }
     if (navigation) {
       const action = StackActions.push("PersonalChallengeDetailScreen", {
         challengeId: item.id,
@@ -55,6 +82,8 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
   const isCurrentUserParticipant = item?.participants?.find(
     (participant) => participant.id === currentUser?.id
   );
+
+  const isCertifiedChallenge = item?.type === "certified";
 
   const challengeStatus =
     challengeOwner.id === currentUser?.id
@@ -92,16 +121,58 @@ const CurrentUserChallengeCard: React.FC<ICurrentUserChallengeCardProps> = ({
             <CompanyTag companyName={companyName} />
           </View>
         )}
+        {isDraft && (
+          <View className={clsx("absolute top-6 z-10 flex w-full items-end")}>
+            <PaymentPendingTag translate={t} />
+          </View>
+        )}
+        {isCertifiedChallenge && (
+          <View
+            className={clsx(
+              "absolute left-4 top-6 z-10 flex w-full items-start"
+            )}
+          >
+            <CertifiedChallengeTag />
+          </View>
+        )}
         {imageSrc && (
-          <Image
-            className={clsx("aspect-square w-full rounded-t-xl")}
-            source={{ uri: imageSrc }}
-          />
+          <View className="w-100 aspect-square overflow-hidden">
+            <Image
+              className={clsx("aspect-square w-full rounded-t-xl")}
+              source={{ uri: imageSrc }}
+            />
+            {isDraft && (
+              <View
+                className="absolute aspect-square w-full rounded-t-xl"
+                style={{
+                  backgroundColor: "rgba(45, 45, 45, 0.5)",
+                }}
+              />
+            )}
+          </View>
+        )}
+        {!imageSrc && (
+          <View className="w-100 flex aspect-square items-center justify-center overflow-hidden">
+            <EmptyImage className="aspect-square w-full rounded-t-xl" />
+            {isDraft && (
+              <View
+                className="absolute aspect-square w-full rounded-t-xl"
+                style={{
+                  backgroundColor: "rgba(45, 45, 45, 0.5)",
+                }}
+              />
+            )}
+          </View>
         )}
         <View
           className={clsx(
-            "flex flex-row items-center justify-between px-4 py-3"
+            "flex flex-row items-center justify-between rounded-b-xl px-4 py-3"
           )}
+          style={{
+            backgroundColor: isDraft
+              ? "rgba(45, 45, 45, 0.3)"
+              : "rgba(45, 45, 45, 0)",
+          }}
         >
           <View className={clsx("flex-1 flex-row items-center")}>
             <CheckCircle

@@ -1,8 +1,4 @@
-import {
-  NavigationProp,
-  StackActions,
-  useNavigation,
-} from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -18,7 +14,6 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 
-import NavButton from "../../component/common/Buttons/NavButton";
 import { useDebounce } from "../../hooks/useDebounce";
 import { ISearchUserData } from "../../types/user";
 import { servieGetUserOnSearch } from "../../service/search";

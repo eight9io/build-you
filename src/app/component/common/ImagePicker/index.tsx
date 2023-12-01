@@ -11,7 +11,7 @@ import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 
 import CameraIcon from "./asset/camera-icon.svg";
-import { getImageFromUserDevice } from "../../../utils/uploadUserImage";
+import { getImageFromUserDevice } from "../../../service/upload-image";
 import Close from "../../asset/close.svg";
 import Button from "../Buttons/Button";
 import ConfirmDialog from "../Dialog/ConfirmDialog";

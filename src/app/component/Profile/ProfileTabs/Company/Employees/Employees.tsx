@@ -16,7 +16,7 @@ import { RootStackParamList } from "../../../../../navigation/navigation.type";
 
 import ConfirmDialog from "../../../../common/Dialog/ConfirmDialog";
 import GlobalDialogController from "../../../../common/Dialog/GlobalDialogController";
-import { useEmployeeListStore } from "../../../../../store/company-data";
+import { useEmployeeListStore } from "../../../../../store/company-data-store";
 import {
   serviceAddEmployee,
   serviceRemoveEmployee,

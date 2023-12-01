@@ -15,17 +15,15 @@ import {
   serviceGetListOccupation,
   serviceUpdateMyProfile,
 } from "../../../../service/profile";
-import { useGetUserData } from "../../../../hooks/useGetUser";
 import { useUserProfileStore } from "../../../../store/user-store";
 
 import Warning from "../../../../component/asset/warning.svg";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import PencilEditSvg from "../../../../component/asset/pencil-edit.svg";
 import Button from "../../../../component/common/Buttons/Button";
-import SelectPicker from "../../../../component/common/Pickers/SelectPicker";
 import { EditProfileValidators } from "../../../../Validators/EditProfile.validate";
 import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import { IOccupation } from "../../../../types/user";
 import CustomSwitch from "../../../../component/common/Switch";
@@ -42,6 +40,7 @@ import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPic
 import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
 import { serviceGetAllCompany } from "../../../../service/company";
 import { getUserOccupationCondition } from "../../../../utils/profile";
+import { CrashlyticService } from "../../../../service/crashlytic";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -113,7 +112,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     number | null
   >(null);
   const [occupationList, setOccupationList] = useState<IOccupation[]>([]);
-  const [companyList, setCompanyList] = useState<ICompanyDataUser[]>([]);
 
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
@@ -128,6 +126,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
+
+  const currentOccupation = getUserOccupationCondition(userData);
 
   const {
     control,
@@ -147,6 +147,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     hardSkill: IHardSkillProps[];
     isShowCompany: boolean;
     city: string;
+    phone: string;
   }>({
     defaultValues: {
       name: userData?.name || "",
@@ -159,6 +160,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       isShowCompany: userData?.isShowCompany || false,
       city: userData?.city || "",
       employeeOf: userData?.employeeOf || undefined,
+      phone: userData?.phone || "",
     },
     resolver: yupResolver(EditProfileValidators()),
   });
@@ -194,6 +196,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           hardSkill: arrayMyHardSkills,
           isShowCompany: data.isShowCompany,
           city: data?.city,
+          phone: data?.phone,
         }),
       ]);
       const res = await serviceGetMyProfile();
@@ -234,10 +237,9 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     setShowOccupationPicker(false);
   };
 
-  const handleCompanyPicked = (value: number) => {
-    if (value >= 0) {
-      setSelectedCompanyIndex(value);
-      setValue("employeeOf", companyList[value]);
+  const handleCompanyPicked = (selectedCompany: ICompanyDataUser) => {
+    if (selectedCompany) {
+      setValue("employeeOf", selectedCompany);
     }
     setShowCompanyPicker(false);
   };
@@ -272,23 +274,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
       setOccupationList(data);
     };
     getOccupationList();
-  }, []);
-
-  useEffect(() => {
-    const getCompanyList = async () => {
-      try {
-        const res = await serviceGetAllCompany();
-        const companyUserList = res.data.map((item: ICompanyData) => {
-          return {
-            ...item.user,
-          };
-        });
-        setCompanyList(companyUserList);
-      } catch (error) {
-        console.error("Error get company list", error);
-      }
-    };
-    getCompanyList();
   }, []);
 
   return (
@@ -330,10 +315,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
             onCancel={() => {
               setShowOccupationPicker(false);
             }}
+            currentOccupation={currentOccupation}
           />
 
           <SeletecPickerCompany
-            companyList={companyList}
             title={t("edit_personal_profile_screen.company") || "Company"}
             show={showCompanyPicker}
             selectedIndex={selectedCompanyIndex}
@@ -448,6 +433,31 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                           </Text>
                         </View>
                       )}
+                    </View>
+                  )}
+                />
+              </View>
+              <View className="pt-3">
+                <Controller
+                  control={control}
+                  name="phone"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View className="flex flex-col">
+                      <TextInput
+                        label={
+                          t("edit_personal_profile_screen.phone") || "Phone"
+                        }
+                        placeholder={
+                          t("edit_personal_profile_screen.enter_phone") ||
+                          "Enter your last name"
+                        }
+                        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        keyboardType="phone-pad"
+                        maxLength={14}
+                      />
                     </View>
                   )}
                 />
@@ -589,7 +599,6 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                         value={value}
                         multiline={true}
                         numberOfLines={4}
-                        // className="h-32"
                       />
                     </View>
                   )}

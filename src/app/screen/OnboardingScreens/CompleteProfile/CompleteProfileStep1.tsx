@@ -24,7 +24,7 @@ import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 
 import Warning from "../../../component/asset/warning.svg";
 
-import DateTimePicker2 from "../../../component/common/BottomSheet/DateTimePicker2.tsx/DateTimePicker2";
+import DateTimePicker2 from "../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import { useTranslation } from "react-i18next";
 import { serviceGetListOccupation } from "../../../service/profile";
 import { IOccupation } from "../../../types/user";

@@ -1,9 +1,18 @@
 import React, { FC, useEffect, useState } from "react";
+import clsx from "clsx";
 import { View } from "react-native";
 import { useTranslation } from "react-i18next";
-import TabViewFlatlist from "../../../common/Tab/TabViewFlatlist";
+import { RouteProp } from "@react-navigation/native";
 
-import clsx from "clsx";
+import { PROFILE_TABS_KEY } from "../../../../common/enum";
+import { RootStackParamList } from "../../../../navigation/navigation.type";
+
+import { useTabIndex } from "../../../../hooks/useTabIndex";
+import {
+  serviceGetListFollower,
+  serviceGetListFollowing,
+} from "../../../../service/profile";
+
 import {
   useFollowingListStore,
   useUserProfileStore,
@@ -13,24 +22,47 @@ import Biography from "./Biography/Biography";
 import Skills from "./Skills";
 import Followers from "../common/Followers/Followers";
 import Following from "../common/Following/Following";
-import {
-  serviceGetListFollower,
-  serviceGetListFollowing,
-} from "../../../../service/profile";
+import { CrashlyticService } from "../../../../service/crashlytic";
 
-const ProfileTabs: FC = () => {
+import CustomTabView from "../../../common/Tab/CustomTabView";
+
+interface IProfileTabsProps {
+  route: RouteProp<RootStackParamList, "ProfileScreen">;
+}
+
+const ProfileTabs: FC<IProfileTabsProps> = ({ route }) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [isFollowerRefreshing, setIsFollowerRefreshing] =
     useState<boolean>(false);
   const [isFollowingRefreshing, setIsFollowingRefreshing] =
     useState<boolean>(false);
   const [followerList, setFollowerList] = useState([]);
-  // const [followingList, setFollowingList] = useState([]);
   const { getFollowingList, setFollowingList } = useFollowingListStore();
   const followingList = getFollowingList();
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const { t } = useTranslation();
+
+  const [tabRoutes] = useState([
+    {
+      key: PROFILE_TABS_KEY.BIOGRAPHY,
+      title: t("profile_screen_tabs.biography"),
+    },
+    {
+      key: PROFILE_TABS_KEY.SKILLS,
+      title: t("profile_screen_tabs.skills"),
+    },
+    {
+      key: PROFILE_TABS_KEY.FOLLOWERS,
+      title: t("profile_screen_tabs.followers"),
+    },
+    {
+      key: PROFILE_TABS_KEY.FOLLOWING,
+      title: t("profile_screen_tabs.following"),
+    },
+  ]);
+
+  const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
   const getFollowerList = async () => {
     setIsFollowerRefreshing(true);
@@ -40,7 +72,11 @@ const ProfileTabs: FC = () => {
       );
       setFollowerList(followerList);
     } catch (error) {
-      console.log("getFollowerList", error);
+      console.error("getFollowerList", error);
+      CrashlyticService({
+        errorType: "Fetch Follower List Error",
+        error,
+      });
     }
     setIsFollowerRefreshing(false);
   };
@@ -53,7 +89,11 @@ const ProfileTabs: FC = () => {
       );
       setFollowingList(followingList);
     } catch (error) {
-      console.log("fetchFollowingList", error);
+      console.error("fetchFollowingList", error);
+      CrashlyticService({
+        errorType: "Fetch Following List Error",
+        error,
+      });
     }
     setIsFollowingRefreshing(false);
   };
@@ -73,36 +113,43 @@ const ProfileTabs: FC = () => {
     }
   }, [currentTab]);
 
-  const titles = [
-    t("profile_screen_tabs.biography"),
-    t("profile_screen_tabs.skills"),
-    t("profile_screen_tabs.followers"),
-    t("profile_screen_tabs.following"),
-  ];
-
-  return (
-    <View className={clsx("  w-full flex-1 bg-gray-50  ")}>
-      <TabViewFlatlist
-        titles={titles}
-        children={[
-          <Biography key="0" userProfile={userProfile} />,
-          <Skills skills={userProfile?.softSkill} key="1" />,
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case PROFILE_TABS_KEY.BIOGRAPHY:
+        return <Biography userProfile={userProfile} />;
+      case PROFILE_TABS_KEY.FOLLOWERS:
+        return (
           <Followers
             followers={followerList}
             isRefreshing={isFollowerRefreshing}
             getFollowerList={getFollowerList}
-            key="2"
-          />,
+          />
+        );
+      case PROFILE_TABS_KEY.FOLLOWING:
+        return (
           <Following
             following={followingList}
             isRefreshing={isFollowingRefreshing}
-            getFollowingList={fetchFollowingList}
-            key="3"
-          />,
-        ]}
-        activeTabClassName=""
-        defaultTabClassName="text-gray-dark "
-        getCurrentTab={(index) => setCurrentTab(index)}
+            getFollowingList={getFollowingList}
+          />
+        );
+      case PROFILE_TABS_KEY.SKILLS:
+        return (
+          <Skills
+            skills={userProfile?.softSkill}
+            ratedSkill={userProfile?.ratedSkill}
+          />
+        );
+    }
+  };
+
+  return (
+    <View className={clsx("  w-full flex-1 bg-gray-50  ")}>
+      <CustomTabView
+        routes={tabRoutes}
+        renderScene={renderScene}
+        index={index}
+        setIndex={setTabIndex}
       />
     </View>
   );

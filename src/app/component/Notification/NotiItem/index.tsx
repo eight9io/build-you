@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import clsx from "clsx";
 import { View, Text, TouchableOpacity } from "react-native";
 
 import NotiAvatar from "../../common/Avatar/NotiAvatar";
-import { NOTIFICATION_TYPES } from "../../../common/enum";
 import {
   getNotificationContent,
   handleTapOnNotification,
 } from "../../../utils/notification.util";
 import { INotification } from "../../../types/notification";
 import dayjs from "../../../utils/date.util";
-import { useNav } from "../../../navigation/navigation.type";
+import { useNav } from "../../../hooks/useNav";
 import { setNotificationIsRead } from "../../../service/notification";
 interface INotiItemProps {
   notification: INotification;
@@ -19,16 +18,11 @@ interface INotiItemProps {
 const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
   const navigation = useNav();
   const [isRead, setIsRead] = useState<boolean>(notification.isRead);
+  const content = useMemo(
+    () => getNotificationContent(notification),
+    [notification]
+  );
 
-  let content = "";
-  if (
-    notification.type === NOTIFICATION_TYPES.CHALLENGE_CREATED ||
-    notification.type === NOTIFICATION_TYPES.PROGRESS_CREATED
-  )
-    content = getNotificationContent(notification.type, {
-      challengeGoal: notification.challengeGoal,
-    });
-  else content = getNotificationContent(notification.type);
   return (
     <TouchableOpacity
       className={clsx(
@@ -58,9 +52,7 @@ const NotiItem: React.FC<INotiItemProps> = ({ notification }) => {
         }}
       />
       <View className={clsx("ml-4 flex-1")}>
-        <Text className={clsx("text-base font-normal")}>
-          {`${notification.user.name || "Rudy Aster"} ${content}`}
-        </Text>
+        <Text className={clsx("text-base font-normal")}>{content}</Text>
         <Text className={clsx("text-[#7C7673]")}>
           {dayjs(notification.createdAt).fromNow()}
         </Text>

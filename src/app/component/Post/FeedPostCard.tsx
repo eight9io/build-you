@@ -16,7 +16,11 @@ import CommentButton from "./CommentButton";
 import GlobalDialogController from "../common/Dialog/GlobalDialogController";
 
 import BackSvg from "../asset/back.svg";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
 import { ResizeMode, Video } from "expo-av";
 import LikeButtonUnregister from "./LikeButtonUnregister";
 import CommentButtonUnregister from "./CommentButtonUnregister";
@@ -40,9 +44,10 @@ interface IChallengeVideoProps {
 
 interface IFeedPostCardProps {
   itemFeedPostCard: IFeedPostProps;
-  userId?: string;
+  currentUserId?: string;
   isFocused?: boolean;
   navigation?: any;
+  isCurrentUserChallenge?: boolean;
   challgeneUpdateLike?: INumberOfLikeUpdate;
   challengeUpdateComment?: INumberOfCommentUpdate;
 }
@@ -135,8 +140,6 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
   const { getAccessToken } = useAuthStore();
 
   const isToken = getAccessToken();
-  const { t } = useTranslation();
-  const isCompanyAccount = user.companyAccount;
 
   const navigateToUserProfile = () => {
     navigation.goBack();
@@ -203,11 +206,12 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
 
 const FeedPostCard: React.FC<IFeedPostCardProps> = ({
   itemFeedPostCard: { id, caption, user, image, video, updatedAt, challenge },
-  userId,
+  currentUserId,
   isFocused,
   navigation,
   challgeneUpdateLike,
   challengeUpdateComment,
+  isCurrentUserChallenge,
 }) => {
   const { t } = useTranslation();
   const navigateToUserProfile = () => {
@@ -248,6 +252,13 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
         message:
           t("error_general_message") ||
           "Something went wrong. Please try again later!",
+      });
+      return;
+    }
+    if (user?.id === currentUserId || isCurrentUserChallenge) {
+      // User click on his own post on feed
+      navigation.navigate("PersonalChallengeDetailScreen", {
+        challengeId: challenge?.id,
       });
       return;
     }
@@ -306,7 +317,7 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
           <View className="mt-2 flex flex-row ">
             <LikeButton
               progressId={id}
-              currentUserId={userId}
+              currentUserId={currentUserId}
               isFocused={isFocused}
               localProgressLikes={challgeneUpdateLike}
             />

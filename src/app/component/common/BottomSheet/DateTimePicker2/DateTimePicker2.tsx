@@ -30,19 +30,14 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
     dayjs()
       .subtract(shouldMinus16Years ? 16 : 0, "years")
-      .startOf("day")
       .toDate()
   );
-
   const onConfirm = () => {
     setShowDateTimePicker(false);
     // RNDateTimePicker returns the date in UTC, so we need to add 1 day to get the correct date
     setSelectedDate(tempSelectedDate as Date);
   };
 
-  const onCancel = () => {
-    setShowDateTimePicker(false);
-  };
   return (
     <>
       {Platform.OS === "ios" ? (
@@ -101,7 +96,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
                   )}
                   <View className="absolute bottom-10 h-12 w-full px-4">
                     <Button
-                      title={t('save') || "Save"}
+                      title={t("save") || "Save"}
                       onPress={onConfirm}
                       containerClassName="bg-primary-default flex-1"
                       textClassName="text-white"

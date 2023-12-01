@@ -16,10 +16,14 @@ import AppTitle from "../../../component/common/AppTitle";
 import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
-import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen";
+import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
+import PersonalChallengeDetailScreen from "../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
+import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { RouteProp } from "@react-navigation/native";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -29,6 +33,7 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 interface IProfileProps {
+  route: RouteProp<RootStackParamList, "ProfileScreen">;
   navigation: ProfileScreenNavigationProp;
 }
 
@@ -43,6 +48,7 @@ const Profile: React.FC<IProfileProps> = ({ route, navigation }: any) => {
 
       <View className="h-full ">
         <ProfileComponent
+          route={route}
           userData={userData}
           navigation={navigation}
           setIsLoading={setIsLoading}
@@ -124,6 +130,50 @@ const PersonalProfileScreen = () => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <ProfileStack.Screen
+        name="PersonalChallengeDetailScreen"
+        component={PersonalChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+      <ProfileStack.Screen
+        name="PersonalCoachChallengeDetailScreen"
+        component={PersonalCoachChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      <ProfileStack.Screen
+        name="CompanyChallengeDetailScreen"
+        component={CompanyChallengeDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}

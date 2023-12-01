@@ -37,8 +37,9 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   // const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { getUserProfile } = useUserProfileStore();
+  const { getUserProfile, getUserAllChallengeIds } = useUserProfileStore();
   const userProfile = getUserProfile();
+  const currentUserAllChallengeIds = getUserAllChallengeIds();
 
   useEffect(() => {
     if (!userId || isCurrentUserInCompany == null) return;
@@ -77,7 +78,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [userId, isCurrentUserInCompany]);
 
   if (!userId) {
     return (
@@ -88,10 +89,11 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
   }
 
   return (
-    <View className="h-full px-6">
+    <View className="h-full px-2">
       {otherUserChallenge.length > 0 && (
         <FlatList
-          className=" pt-4"
+          contentContainerStyle={{ paddingBottom: 100 }}
+          className="px-4 pt-4"
           data={otherUserChallenge}
           renderItem={({ item }: { item: IChallenge }) => (
             <ChallengeCard
@@ -100,6 +102,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
               isFromOtherUser
               imageSrc={`${item.image}`}
               navigation={navigation}
+              currentUserAllChallengeIds={currentUserAllChallengeIds}
             />
           )}
           keyExtractor={(item) => item.id}

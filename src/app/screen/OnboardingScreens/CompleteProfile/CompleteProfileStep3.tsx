@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
-import { View, Text, ScrollView, FlatList } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
 import clsx from "clsx";
-import { useForm, Controller, set } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import httpInstance from "../../../utils/http";
@@ -15,6 +14,7 @@ import StepOfSteps from "../../../component/common/StepofSteps";
 import Button from "../../../component/common/Buttons/Button";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 import AddSkillModal from "../../../component/modal/AddSkill";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface CompleteProfileStep3Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -44,6 +44,10 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         setFetchedHardSkills(response.data);
       } catch (error) {
         console.error(error);
+        CrashlyticService({
+          errorType: "Get Hard Skill Error",
+          error: error,
+        });
       }
     };
     fetchSkills();

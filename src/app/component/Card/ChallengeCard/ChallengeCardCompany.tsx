@@ -4,15 +4,23 @@ import clsx from "clsx";
 import { Image } from "expo-image";
 import { useIsFocused } from "@react-navigation/native";
 
-import { getChallengeStatusColor, roundToDecimalOrWhole } from "../../../utils/common";
+import {
+  getChallengeStatusColor,
+  roundToDecimalOrWhole,
+} from "../../../utils/common";
 
 import CheckCircle from "../../asset/check_circle.svg";
 import BackSvg from "../../asset/back.svg";
 import { StackActions } from "@react-navigation/native";
-import { IChallengeCardProps, CompanyTag } from "./ChallengeCard";
+import {
+  IChallengeCardProps,
+  CompanyTag,
+  CertifiedChallengeTag,
+} from "./ChallengeCard";
 import { serviceGetChallengeRating } from "../../../service/challenge";
 
 import StarFillSvg from "../../../common/svg/star-fill.svg";
+import EmptyImage from "../../../common/svg/empty-image.svg";
 
 const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   item,
@@ -32,6 +40,7 @@ const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
   const companyName = challengeOwner.companyAccount && challengeOwner?.name;
 
   const challengeStatus = item.status;
+  const isCertifiedChallenge = item?.type === "certified";
 
   const onPress = () => {
     if (navigation) {
@@ -92,6 +101,20 @@ const ChallengeCardCompany: React.FC<IChallengeCardProps> = ({
         {(isCompanyAccount || companyName) && (
           <View className={clsx("absolute top-6 z-10 flex w-full items-end")}>
             <CompanyTag companyName={companyName} />
+          </View>
+        )}
+        {isCertifiedChallenge && (
+          <View
+            className={clsx(
+              "absolute left-4 top-6 z-10 flex w-full items-start"
+            )}
+          >
+            <CertifiedChallengeTag />
+          </View>
+        )}
+        {!imageSrc && (
+          <View className="w-100 flex aspect-square items-center justify-center overflow-hidden">
+            <EmptyImage className="aspect-square w-full rounded-t-xl" />
           </View>
         )}
         {imageSrc && (

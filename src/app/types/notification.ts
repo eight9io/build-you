@@ -14,6 +14,7 @@ export interface INotificationPayload {
   challengeId?: string;
   commentUserId?: string;
   companyId?: string;
+  coachId?: string;
 }
 
 export interface INotification {
@@ -25,6 +26,7 @@ export interface INotification {
   type: NOTIFICATION_TYPES;
   createdAt: Date;
   challengeGoal?: string;
+  challengeCoachId?: string;
 }
 
 export interface IPushNotificationToken {
@@ -42,6 +44,9 @@ export interface INotificationResponse {
   createdAt: Date;
   createdBy: string;
   isRead: boolean;
-  challenge?: Pick<IChallenge, "id" | "goal">;
+  challenge?: Pick<IChallenge, "id" | "goal"> & {
+    owner?: Pick<IUserData, "id">;
+    coach?: Pick<IUserData, "id">;
+  };
   progress?: Pick<IProgressChallenge, "id">;
 }

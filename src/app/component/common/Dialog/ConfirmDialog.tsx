@@ -39,40 +39,35 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
   const handleConfirm = () => {
     onConfirm && onConfirm();
   };
-
   return (
-    <View>
-      {isVisible && (
-        <Dialog.Container visible={true}>
-          <Dialog.Title>
-            <Text
-              className={clsx(
-                "text-black-default",
-                isIOS && isDarkMode ? "text-white" : ""
-              )}
-            >
-              {title}
-            </Text>{" "}
-          </Dialog.Title>
-          <Dialog.Description>{description}</Dialog.Description>
-          {onClosed && (
-            <Dialog.Button
-              label={closeButtonLabel ?? t("dialog.cancel")}
-              onPress={handleCancel}
-            />
+    <Dialog.Container visible={isVisible}>
+      <Dialog.Title>
+        <Text
+          className={clsx(
+            "text-black-default",
+            isIOS && isDarkMode ? "text-white" : ""
           )}
-          {onConfirm && (
-            <Dialog.Button
-              bold
-              label={confirmButtonLabel ?? t("dialog.ok")}
-              color={confirmButtonColor}
-              onPress={handleConfirm}
-              testID={confirmButtonTestID}
-            />
-          )}
-        </Dialog.Container>
+        >
+          {title}
+        </Text>
+      </Dialog.Title>
+      <Dialog.Description>{description}</Dialog.Description>
+      {onClosed && (
+        <Dialog.Button
+          label={closeButtonLabel ?? t("dialog.cancel")}
+          onPress={handleCancel}
+        />
       )}
-    </View>
+      {onConfirm && (
+        <Dialog.Button
+          bold
+          label={confirmButtonLabel ?? t("dialog.ok")}
+          color={confirmButtonColor}
+          onPress={handleConfirm}
+          testID={confirmButtonTestID}
+        />
+      )}
+    </Dialog.Container>
   );
 };
 

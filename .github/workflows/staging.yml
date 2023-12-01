@@ -5,6 +5,7 @@ on: workflow_dispatch
 env:
   NODE_VERSION: 20.5.0
   JAVA_VERSION: 11.0.20
+  RUBY_VERSION: 3.2.2
   ENV: ${{ secrets.ENV_STAGING}}
   # USED IN BUILD GRADLE
   ANDROID_ALIAS: ${{ secrets.ANDROID_ALIAS_STAGING }}

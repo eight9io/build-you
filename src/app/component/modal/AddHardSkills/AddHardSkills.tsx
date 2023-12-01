@@ -7,14 +7,12 @@ import httpInstance from "../../../utils/http";
 import { IHardSkill } from "../../../types/user";
 
 import Header from "../../common/Header";
-// import InlineTextInput from "../../common/Inputs/InlineTextInput";
-// import AddEmojiButton from "../../common/Buttons/AddEmojiButton";
-// import AddEmojiModal from "../AddEmoji";
 import clsx from "clsx";
 import Close from "../../../component/asset/close.svg";
 import Button from "../../common/Buttons/Button";
 
 import AddSkillModal from "../AddSkill";
+import { CrashlyticService } from "../../../service/crashlytic";
 
 interface IAddSkillModallProps {
   setIsShowAddHardSkillModal: (value: boolean) => void;
@@ -49,6 +47,10 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
         setFetchedHardSkills(response.data);
       } catch (error) {
         console.error(error);
+        CrashlyticService({
+          errorType: "Get Hard Skill Error",
+          error,
+        });
       }
     };
     fetchSkills();
@@ -114,7 +116,7 @@ export const AddHardSkills: FC<IAddSkillModallProps> = ({
       presentationStyle="pageSheet"
       visible={isVisible}
     >
-      <View className="mx-4 pb-1 mt-[-6]">
+      <View className="mx-4 mt-[-6] pb-1">
         <Header
           title={t("add_hard_skill_modal.title") as string}
           leftBtn={<Close fill={"black"} />}

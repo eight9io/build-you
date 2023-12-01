@@ -299,8 +299,6 @@ const extractProductWithUnitPrice = (products: IInAppPurchaseProduct[]) => {
     ios: PRODUCT_PLATFORM.APPLE,
     android: PRODUCT_PLATFORM.GOOGLE,
   });
-  console.log("products: ", products);
-
   products.forEach((product) => {
     if (product.platform !== platform) return; // Only get product with the same platform as device (Apple or Google
     switch (product.packageType.trim()) {

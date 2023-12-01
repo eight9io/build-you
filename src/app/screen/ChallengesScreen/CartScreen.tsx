@@ -66,6 +66,8 @@ interface ICartScreenProps {
   >;
 }
 
+const MAX_CHECKPOINT = 9;
+
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
@@ -212,6 +214,13 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   };
 
   const handleAddCheckpoint = () => {
+    if (numberOfCheckpoints >= MAX_CHECKPOINT) {
+      const translatedMessage = t("cart_screen.max_check_error", {
+        MAX_CHECKPOINT: MAX_CHECKPOINT,
+      });
+      setPurchaseErrorMessages(translatedMessage);
+      return;
+    }
     setNumberOfCheckpoints((prev) => prev + 1);
   };
 

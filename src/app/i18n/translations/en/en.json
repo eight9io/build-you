@@ -710,7 +710,8 @@
     "select_checkpoints": "Select the number of additional checkpoints:",
     "minimum_checkpoint_error": "At least 1 checkpoint is required",
     "total": "Total",
-    "pay": "Pay"
+    "pay": "Pay",
+    "max_check_error": "You can only have a maximum of {{MAX_CHECKPOINT}} additional checkpoints."
   },
   "challenge_screen": {
     "empty_challenge": "You have no challenge at the moment",

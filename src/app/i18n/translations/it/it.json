@@ -711,7 +711,8 @@
     "select_checkpoints": "Seleziona il numero di checkpoint aggiuntivi:",
     "minimum_checkpoint_error": "È richiesto almeno 1 checkpoint",
     "total": "Totale",
-    "pay": "Avanti"
+    "pay": "Avanti",
+    "max_check_error": "Puoi avere al massimo {{MAX_CHECKPOINT}} checkpoint aggiuntivi."
   },
   "challenge_screen": {
     "empty_challenge": "Al momento non hai nessuna sfida",

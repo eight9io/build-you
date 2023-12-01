@@ -54,6 +54,7 @@ import { ErrorCode, ProductPurchase } from "react-native-iap";
 import {
   APPLE_IN_APP_PURCHASE_STATUS,
   GOOGLE_IN_APP_PURCHASE_STATUS,
+  PRODUCT_PACKAGE_TYPE,
 } from "../../common/enum";
 
 interface ICartScreenProps {
@@ -127,6 +128,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     const selectedProduct = allProductsFromDatabase.find(
       (product) => product.quantity === numberOfCheckpoints + 1
     );
+
     if (!selectedProduct) return;
     getPackagePriceFromStore(selectedProduct.productId);
   }, [numberOfCheckpoints]);
@@ -136,9 +138,16 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       const products = await getAllProductsFromStore();
       // if ios, filter project have platform ios
       if (Platform.OS === "ios") {
-        const iosProducts = products.filter(
-          (product) => product.platform === "apple"
-        );
+        const iosProducts = products.filter((product) => {
+          const packageTypeToBeFetch =
+            typeOfPackage === "videocall"
+              ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
+              : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
+          return (
+            product.platform === "apple" &&
+            product.packageType === packageTypeToBeFetch
+          );
+        });
         setAllProductsFromDatabase(iosProducts);
         //set product with quantity = 1 to default
         const defaultProduct = iosProducts.find(
@@ -148,9 +157,16 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         return;
       } else {
         // if android, filter project have platform android
-        const androidProducts = products.filter(
-          (product) => product.platform === "google"
-        );
+        const androidProducts = products.filter((product) => {
+          const packageTypeToBeFetch =
+            typeOfPackage === "videocall"
+              ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
+              : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
+          return (
+            product.platform === "google" &&
+            product.packageType.trim() === packageTypeToBeFetch
+          );
+        });
         setAllProductsFromDatabase(androidProducts);
         //set product with quantity = 1 to default
         const defaultProduct = androidProducts.find(

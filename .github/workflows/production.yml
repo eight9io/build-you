@@ -66,7 +66,6 @@ jobs:
 
       - name: Generate App AAB
         run: |
-          cd android && ./gradlew bundleRelease --no-daemon
           echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
           cd android && ./gradlew bundleRelease --no-daemon

@@ -67,7 +67,7 @@ interface ICartScreenProps {
   >;
 }
 
-const MAX_CHECKPOINT = 9;
+const MAX_CHECKPOINT = 5;
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);

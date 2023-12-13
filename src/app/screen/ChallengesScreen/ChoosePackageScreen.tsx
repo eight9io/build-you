@@ -226,7 +226,6 @@ const ChoosePackageScreen = () => {
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
       <ScrollView>
-        {loading && <Spinner visible={loading} />}
         <View className="mb-10 flex flex-col items-center justify-start space-y-4">
           <Text className="pt-4 text-md font-semibold leading-tight text-primary-default">
             {t("choose_packages_screen.title")}

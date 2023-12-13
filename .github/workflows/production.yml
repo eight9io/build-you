@@ -22,6 +22,9 @@ env:
   P12_BASE64: ${{ secrets.STAGING_BUILD_CERTIFICATE_BASE64 }}
   MOBILE_PROVISION_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
   CERTIFICATE_PASSWORD: ${{ secrets.STAGING_P12_PASSWORD }}
+  APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+  APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+  APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
   # ------
 
 jobs:
@@ -126,10 +129,10 @@ jobs:
             $( (( $INPUT_DEBUG )) && printf %s '--debug' )
         shell: bash
 
-      # - name: "Upload app to TestFlight"
-      #   uses: apple-actions/upload-testflight-build@v1
-      #   with:
-      #     app-path: "output.ipa"
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      - name: "Upload app to TestFlight"
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: "output.ipa"
+          issuer-id: ${{ env.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ env.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ env.APPSTORE_API_PRIVATE_KEY }}

@@ -10713,10 +10713,10 @@ react-native-gradle-plugin@^0.71.19:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.19.tgz#3379e28341fcd189bc1f4691cefc84c1a4d7d232"
   integrity sha512-1dVk9NwhoyKHCSxcrM6vY6cxmojeATsBobDicX0ZKr7DgUF2cBQRTKsimQFvzH8XhOVXyH8p4HyDSZNIFI8OlQ==
 
-react-native-iap@^12.10.8:
-  version "12.10.8"
-  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-12.10.8.tgz#4cf1670ca3401381b48a822ef444e0835f9af4f3"
-  integrity sha512-n5iw1Lzw0tXN54sx/bcS5nttfnJ6ecQb95FYzLHN3NIsrRK9nkudcf5LhmNXznHkfh6YdMk0w8V1vRWRWiDRcA==
+react-native-iap@^12.12.0:
+  version "12.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-12.12.0.tgz#d88a56e72399df654f6dbd81bcfe024433ec76a1"
+  integrity sha512-3O5Ao+hT0/95QOoIU34CpscR+NNvfiWBVFQBRRfOXyDnLCkOOA2mDtQWKKBmEu+XZbmPNa/7esHpks61lUuyDA==
   dependencies:
     "@expo/config-plugins" "^6.0.1"
 

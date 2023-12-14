@@ -87,11 +87,11 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const { choosenPackage, checkPoint } = route.params;
 
   const {
-    price: initialPrice,
+    // price: initialPrice,
     name: packageName,
-    id: packgeId,
+    // id: packgeId,
     type: typeOfPackage,
-    currency,
+    // currency,
   } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
@@ -265,6 +265,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const onSumitCertifiedChallenge = async () => {
     const data = getCreateChallengeDataStore();
+    console.log(data);
     setIsLoading(true);
     let newChallengeId: string | null = null;
     try {
@@ -293,12 +294,12 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
       if (challengeCreateResponse.status === 200 || 201) {
         setNewChallengeId(challengeCreateResponse.data.id);
         if (image) {
-          const challengeImageResponse = (await updateChallengeImage(
+          await updateChallengeImage(
             {
               id: newChallengeId,
             },
             image
-          )) as AxiosResponse;
+          );
 
           // Wait for payment to be processed
           let isPaymentPending = false;
@@ -322,11 +323,13 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           } catch (error) {
             // Delete draft challenge if payment failed
             httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-            if (error.code !== ErrorCode.E_USER_CANCELLED)
+            if (error.code !== ErrorCode.E_USER_CANCELLED) {
               setPurchaseErrorMessages(t("error_general_message"));
+            }
+
             setTimeout(() => {
               setIsLoading(false);
-            }, 300);
+            }, 100);
             return;
           }
 
@@ -335,100 +338,102 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             // => navigate to challenges screen instead
 
             // This dialog will be shown when all modals are closed
-            GlobalDialogController.showModal({
-              title: t("payment_pending_modal.title"),
-              message: t("payment_pending_modal.description"),
-            });
-            navigation.navigate("Challenges");
-          } else {
-            // This toast will be shown when all modals are closed
+            setIsLoading(false);
+            setTimeout(() => {
+              navigation.navigate("Challenges");
+              setTimeout(() => {
+                GlobalDialogController.showModal({
+                  title: t("payment_pending_modal.title"),
+                  message: t("payment_pending_modal.description"),
+                });
+              }, 300);
+            }, 100);
+
+            return;
+          }
+          // This toast will be shown when all modals are closed
+          setTimeout(() => {
             GlobalToastController.showModal({
               message:
                 t("toast.create_challenge_success") ||
                 "Your challenge has been created successfully !",
             });
 
-            const isChallengesScreenInStack = navigation
-              .getState()
-              .routes.some((route) => route.name === "Challenges");
-            if (isChallengesScreenInStack) {
-              console.log("isChallengesScreenInStack");
-              navigation.dispatch(StackActions.popToTop());
-              if (isCurrentUserCompany) {
-                const pushAction = StackActions.push("HomeScreen", {
+            setTimeout(() => {
+              const isChallengesScreenInStack = navigation
+                .getState()
+                .routes.some((route) => route.name === "Challenges");
+
+              if (isChallengesScreenInStack) {
+                console.log("isChallengesScreenInStack");
+                navigation.dispatch(StackActions.popToTop());
+                if (isCurrentUserCompany) {
+                  const pushAction = StackActions.push("HomeScreen", {
+                    screen: "Challenges",
+                    params: {
+                      screen: "CompanyChallengeDetailScreen",
+                      params: { challengeId: newChallengeId },
+                    },
+                  });
+                  navigation.dispatch(pushAction);
+                } else {
+                  const pushAction = StackActions.push("HomeScreen", {
+                    screen: "Challenges",
+                    params: {
+                      screen: "PersonalChallengeDetailScreen",
+                      params: { challengeId: newChallengeId },
+                    },
+                  });
+                  navigation.dispatch(pushAction);
+                }
+              } else {
+                // add ChallengesScreen to the stack
+                navigation.navigate("HomeScreen", {
                   screen: "Challenges",
-                  params: {
+                });
+                if (isCurrentUserCompany) {
+                  navigation.navigate("Challenges", {
                     screen: "CompanyChallengeDetailScreen",
                     params: { challengeId: newChallengeId },
-                  },
-                });
-                navigation.dispatch(pushAction);
-              } else {
-                const pushAction = StackActions.push("HomeScreen", {
-                  screen: "Challenges",
-                  params: {
+                  });
+                } else {
+                  navigation.navigate("Challenges", {
                     screen: "PersonalChallengeDetailScreen",
                     params: { challengeId: newChallengeId },
-                  },
-                });
-                navigation.dispatch(pushAction);
+                  });
+                }
               }
-            } else {
-              // add ChallengesScreen to the stack
-              navigation.navigate("HomeScreen", {
-                screen: "Challenges",
-              });
-              if (isCurrentUserCompany) {
-                navigation.navigate("Challenges", {
-                  screen: "CompanyChallengeDetailScreen",
-                  params: { challengeId: newChallengeId },
-                });
-              } else {
-                navigation.navigate("Challenges", {
-                  screen: "PersonalChallengeDetailScreen",
-                  params: { challengeId: newChallengeId },
-                });
-              }
-            }
-          }
-
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 300);
-          return;
+            }, 300);
+          }, 100);
         }
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 300);
         setIsRequestSuccess(true);
         setIsShowModal(true);
       }
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-      navigation.navigate("HomeScreen", {
-        screen: "CreateChallengeScreenMain",
-      });
+      setIsLoading(false);
       if (error.response && error.response.status === 400) {
         setTimeout(() => {
           GlobalDialogController.showModal({
             title: t("dialog.err_title"),
             message: error.response.data.message,
           }),
-            1500;
+            100;
         });
         return;
       }
       setTimeout(() => {
-        GlobalToastController.showModal({
-          message:
-            t("error_general_message") ||
-            "Something went wrong. Please try again later!",
-        }),
-          1500;
-      });
+        navigation.navigate("HomeScreen", {
+          screen: "CreateChallengeScreenMain",
+        });
+        setTimeout(() => {
+          GlobalToastController.showModal({
+            message:
+              t("error_general_message") ||
+              "Something went wrong. Please try again later!",
+          });
+        }, 300);
+      }, 100);
     }
   };
 

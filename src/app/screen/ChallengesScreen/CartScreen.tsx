@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useMemo, useRef } from "react";
 import {
   View,
   Text,
@@ -70,6 +70,7 @@ interface ICartScreenProps {
 const MAX_CHECKPOINT = 5;
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
+  const packagesPriceRef = useRef({});
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
 
@@ -84,15 +85,9 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     IInAppPurchaseProduct[]
   >([]);
 
-  const { choosenPackage, checkPoint } = route.params;
+  const { choosenPackage } = route.params;
 
-  const {
-    // price: initialPrice,
-    name: packageName,
-    // id: packgeId,
-    type: typeOfPackage,
-    // currency,
-  } = choosenPackage;
+  const { name: packageName, type: typeOfPackage } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
     useNewCreateOrDeleteChallengeStore();
@@ -111,6 +106,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const getPackagePriceFromStore = async (productId: string) => {
     if (!productId) return;
+    if (packagesPriceRef[productId]) {
+      return setFinalPrice(packagesPriceRef[productId].localizedPrice);
+    }
+
     const getPackageFromStore = async () => {
       try {
         setIsLoading(true);
@@ -118,6 +117,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         const packagesFromStore = await getProductsFromProvider({
           skus: [productId],
         });
+        packagesPriceRef[productId] = packagesFromStore[0];
         setFinalPrice(packagesFromStore[0].localizedPrice);
         setTimeout(() => {
           setIsLoading(false);
@@ -140,52 +140,24 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
     if (!selectedProduct) return;
     getPackagePriceFromStore(selectedProduct.productId);
-  }, [numberOfCheckpoints]);
+  }, [numberOfCheckpoints, allProductsFromDatabase]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const products = await getAllProductsFromStore();
-      // if ios, filter project have platform ios
-      if (Platform.OS === "ios") {
-        const iosProducts = products.filter((product) => {
-          const packageTypeToBeFetch =
-            typeOfPackage === "videocall"
-              ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
-              : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
-          return (
-            product.platform === "apple" &&
-            product.packageType === packageTypeToBeFetch
-          );
-        });
-        setAllProductsFromDatabase(iosProducts);
-        //set product with quantity = 1 to default
-        const defaultProduct = iosProducts.find(
-          (product) => product.quantity === 1
+    (async function () {
+      const allProducts = await getAllProductsFromStore();
+      const currentPlatform = Platform.OS === "ios" ? "apple" : "google";
+      const products = allProducts.filter((product) => {
+        const packageTypeToBeFetch =
+          typeOfPackage === "videocall"
+            ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
+            : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
+        return (
+          product.platform === currentPlatform &&
+          product.packageType === packageTypeToBeFetch
         );
-        await getPackagePriceFromStore(defaultProduct?.productId);
-        return;
-      } else {
-        // if android, filter project have platform android
-        const androidProducts = products.filter((product) => {
-          const packageTypeToBeFetch =
-            typeOfPackage === "videocall"
-              ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
-              : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
-          return (
-            product.platform === "google" &&
-            product.packageType.trim() === packageTypeToBeFetch
-          );
-        });
-        setAllProductsFromDatabase(androidProducts);
-        //set product with quantity = 1 to default
-        const defaultProduct = androidProducts.find(
-          (product) => product.quantity === 1
-        );
-        await getPackagePriceFromStore(defaultProduct?.productId);
-        return;
-      }
-    };
-    fetchProducts();
+      });
+      setAllProductsFromDatabase(products);
+    })();
   }, []);
 
   const handlePay = async (
@@ -265,7 +237,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const onSumitCertifiedChallenge = async () => {
     const data = getCreateChallengeDataStore();
-    console.log(data);
+
     setIsLoading(true);
     let newChallengeId: string | null = null;
     try {
@@ -279,28 +251,20 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
       let challengeCreateResponse: AxiosResponse;
       if (isCurrentUserCompany) {
-        challengeCreateResponse = (await createCompanyChallenge(
-          payload
-        )) as AxiosResponse;
+        challengeCreateResponse = await createCompanyChallenge(payload);
       } else {
-        challengeCreateResponse = (await createChallenge(
-          payload
-        )) as AxiosResponse;
+        challengeCreateResponse = await createChallenge(payload);
       }
 
       newChallengeId = challengeCreateResponse.data.id;
       setNewChallengeIdToStore(newChallengeId);
       // If challenge created successfully, upload image
-      if (challengeCreateResponse.status === 200 || 201) {
+      if (
+        challengeCreateResponse.status === 200 ||
+        challengeCreateResponse.status === 201
+      ) {
         setNewChallengeId(challengeCreateResponse.data.id);
         if (image) {
-          await updateChallengeImage(
-            {
-              id: newChallengeId,
-            },
-            image
-          );
-
           // Wait for payment to be processed
           let isPaymentPending = false;
           try {
@@ -332,6 +296,13 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             }, 100);
             return;
           }
+
+          updateChallengeImage(
+            {
+              id: newChallengeId,
+            },
+            image
+          );
 
           if (isPaymentPending) {
             // If payment is pending, challenge will be saved as draft => cannot navigate to challenge detail
@@ -517,14 +488,12 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             <View className="flex w-full flex-col items-start justify-start">
               <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
                 <View className="flex w-full flex-row items-center justify-between">
-                  {["Check"].map((item) => (
-                    <Text
-                      className="text-center text-md font-semibold leading-none text-neutral-700"
-                      key={"numberOfCheckCart"}
-                    >
-                      {item}
-                    </Text>
-                  ))}
+                  <Text
+                    className="text-center text-md font-semibold leading-none text-neutral-700"
+                    key={"numberOfCheckCart"}
+                  >
+                    Check
+                  </Text>
                   <View className="flex flex-row items-center justify-between">
                     <TouchableOpacity
                       className="flex items-center justify-center rounded-[36px] border border-orange-500 "
@@ -594,8 +563,8 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           height: 48,
           width: 344,
         }}
-        disabled={finalPrice === "0"}
-        onPress={debounce(onSumitCertifiedChallenge, 500)}
+        disabled={finalPrice === "0" || isLoading}
+        onPress={onSumitCertifiedChallenge}
       >
         <Text className="text-center text-[14px] font-semibold leading-tight text-white">
           {t("cart_screen.pay") || "Pay"}

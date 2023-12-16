@@ -120,18 +120,22 @@ const CreateChallengeScreenMain = () => {
     try {
       const { data: isUserHasInDraftChallenge } =
         await serviceGetIsUserHasInDraftChallenge();
-        if (isUserHasInDraftChallenge) {
-          GlobalDialogController.showModal({
-            title: t("dialog.in_draft.title"),
-            message: t("dialog.in_draft.description"),
-          });
-          return;
-        }
+      if (isUserHasInDraftChallenge) {
+        GlobalDialogController.showModal({
+          title: t("dialog.in_draft.title"),
+          message: t("dialog.in_draft.description"),
+        });
+        return;
+      }
     } catch (error) {
       console.error("get is user has in draft challenge error", error);
     }
-    if (isCompany) navigation.navigate("CreateCertifiedCompanyChallengeScreen");
-    else navigation.navigate("CreateCertifiedChallengeScreen");
+    // navigation.navigate("CartScreen");
+    navigation.navigate(
+      isCompany
+        ? "CreateCertifiedCompanyChallengeScreen"
+        : "CreateCertifiedChallengeScreen"
+    );
   };
 
   useLayoutEffect(() => {

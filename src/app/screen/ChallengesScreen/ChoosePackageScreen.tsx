@@ -7,8 +7,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
-import Spinner from "react-native-loading-spinner-overlay";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { ICheckPoint, IPackage } from "../../types/package";
@@ -22,12 +22,6 @@ import {
   getProductsFromStoreToDisplay,
 } from "../../utils/purchase.util";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
-
-interface ITypeOfPackage {
-  id: string;
-  name: string;
-  price: number;
-}
 
 function convertPhrases(phrase) {
   if (phrase === "videocall") {
@@ -111,16 +105,23 @@ const RenderPackageOptions = ({
 };
 
 const ChoosePackageScreen = () => {
-  const [packages, setPackages] = useState<IPackage[]>([] as IPackage[]);
-  const [chatCheck, setChatCheck] = useState<ICheckPoint>({
-    price: 0,
-    currency: "USD",
+  const [{ packages, chatCheck, videoCheck, loading }, _setState] = useState<{
+    packages: IPackage[];
+    chatCheck: ICheckPoint;
+    videoCheck: ICheckPoint;
+    loading: boolean;
+  }>({
+    packages: [],
+    chatCheck: {
+      price: 0,
+      currency: "USD",
+    },
+    videoCheck: {
+      price: 0,
+      currency: "USD",
+    },
+    loading: true,
   });
-  const [videoCheck, setVideoCheck] = useState<ICheckPoint>({
-    price: 0,
-    currency: "USD",
-  });
-  const [loading, setLoading] = useState<boolean>(false);
 
   const { t } = useTranslation();
   const { getUserProfile } = useUserProfileStore();
@@ -159,7 +160,6 @@ const ChoosePackageScreen = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       const currentLanguage = await getLanguageLocalStorage();
-      setLoading(true);
       let sortedPackages = [];
       try {
         const res = await serviceGetAllPackages(currentLanguage);
@@ -171,53 +171,62 @@ const ChoosePackageScreen = () => {
       try {
         // Get unit localized price by fetching from store
         const packagesFromStore = await getProductsFromStoreToDisplay();
-        if (packagesFromStore) {
-          sortedPackages = sortedPackages.map((item) => {
-            return {
-              ...item,
-              price:
-                item.type === "chat"
-                  ? packagesFromStore.chatPackage.price
-                  : packagesFromStore.videoPackage.price,
-              currency:
-                item.type === "chat"
-                  ? packagesFromStore.chatPackage.currency
-                  : packagesFromStore.videoPackage.currency,
-            };
-          });
-          setChatCheck({
+
+        if (!packagesFromStore) {
+          _setState({ packages, chatCheck, videoCheck, loading: false });
+
+          setTimeout(() => {
+            GlobalDialogController.showModal({
+              title: t("dialog.err_title"),
+              message: t("errorMessage:500"),
+            });
+          }, 300);
+
+          return;
+        }
+        sortedPackages = sortedPackages.map((item) => {
+          return {
+            ...item,
+            price:
+              item.type === "chat"
+                ? packagesFromStore.chatPackage.price
+                : packagesFromStore.videoPackage.price,
+            currency:
+              item.type === "chat"
+                ? packagesFromStore.chatPackage.currency
+                : packagesFromStore.videoPackage.currency,
+          };
+        });
+
+        _setState((oldState) => ({
+          ...oldState,
+          packages: sortedPackages,
+          chatCheck: {
             price: !isNaN(Number(packagesFromStore.chatCheck.price))
               ? Number(packagesFromStore.chatCheck.price)
               : 0,
             currency: packagesFromStore.chatCheck.currency,
-          });
-          setVideoCheck({
+          },
+          videoCheck: {
             price: !isNaN(Number(packagesFromStore.videoCheck.price))
               ? Number(packagesFromStore.videoCheck.price)
               : 0,
             currency: packagesFromStore.videoCheck.currency,
-          });
-        } else {
-          sortedPackages = sortedPackages.map((item) => {
-            return {
-              ...item,
-              price: 0,
-              currency: "USD",
-            };
-          });
-        }
+          },
+        }));
 
-        setPackages(sortedPackages);
+        setTimeout(() => {
+          _setState((oldState) => ({
+            ...oldState,
+            loading: false,
+          }));
+        }, 300);
       } catch (error) {
         console.error("Fetch package error", error);
         GlobalDialogController.showModal({
           title: t("dialog.err_title"),
-          message: t("errorMessage:500") as string,
+          message: t("errorMessage:500"),
         });
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 300);
       }
     };
     fetchPackages();
@@ -248,6 +257,7 @@ const ChoosePackageScreen = () => {
                   />
                 </View>
               ))}
+            {packages.length === 0 && loading && <ActivityIndicator />}
             {packages.length === 0 && !loading && (
               <View className="flex items-center justify-center">
                 <Text className="text-center text-md font-semibold leading-tight text-primary-default">

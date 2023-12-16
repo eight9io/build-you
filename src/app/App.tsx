@@ -17,6 +17,8 @@ import { EventProvider } from "react-native-outside-press";
 
 import "./i18n/i18n";
 import Toast from "./component/common/Toast/Toast";
+import GlobalDialog from "./component/common/Dialog/GlobalDialog";
+
 import { addNotificationListener } from "./utils/notification.util";
 import { useNotificationStore } from "./store/notification-store";
 import { registerIAPListeners } from "./utils/purchase.util";
@@ -81,8 +83,9 @@ export const App = () => {
   return (
     <MenuProvider>
       <EventProvider>
-        <Toast />
         <RootNavigation />
+        <Toast />
+        <GlobalDialog />
       </EventProvider>
     </MenuProvider>
   );

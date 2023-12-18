@@ -421,7 +421,6 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
       {isShowModal && (
         <ConfirmDialog
           title={

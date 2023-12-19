@@ -27,7 +27,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
 import StarFillSvg from "../../../../common/svg/star-fill.svg";
 import { useChallengeUpdateStore } from "../../../../store/challenge-update-store";
-import Spinner from "react-native-loading-spinner-overlay";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -311,8 +311,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           onConfirm={handleConfirmEditChallengeProgress}
         />
       )}
-      {progressLoading && <Spinner />}
-
+      <CustomActivityIndicator isVisible={progressLoading} />
       {!progressLoading && (
         <FlatList
           data={localProgressData}

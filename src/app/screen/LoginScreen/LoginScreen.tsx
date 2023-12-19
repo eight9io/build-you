@@ -1,43 +1,46 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import { Image } from "expo-image";
 import React, { useLayoutEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { CommonActions } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+import {
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import ErrorText from "../../component/common/ErrorText";
-import Button from "../../component/common/Buttons/Button";
-import TextInput from "../../component/common/Inputs/TextInput";
-import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
-import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
-import { ISocialLoginForm, IToken, LoginForm } from "../../types/auth";
-import { LoginValidationSchema } from "../../Validators/Login.validate";
-import { errorMessage } from "../../utils/statusCode";
-import { useAuthStore } from "../../store/auth-store";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { LoginValidationSchema } from "../../Validators/Login.validate";
+import { LOGIN_TYPE } from "../../common/enum";
+import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
+import Button from "../../component/common/Buttons/Button";
+import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
+import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import ErrorText from "../../component/common/ErrorText";
+import TextInput from "../../component/common/Inputs/TextInput";
 import { RootStackParamList } from "../../navigation/navigation.type";
-import { setupInterceptor } from "../../utils/refreshToken.util";
+import { CrashlyticService, InitCrashlytics } from "../../service/crashlytic";
+import { serviceUpdateMyProfile } from "../../service/profile";
+import { useAppleLoginInfoStore } from "../../store/apple-login-store";
+import { useAuthStore } from "../../store/auth-store";
 import {
   checkIsAccountVerified,
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../../store/user-store";
-import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
-import { LOGIN_TYPE } from "../../common/enum";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
-import { serviceUpdateMyProfile } from "../../service/profile";
-import { useAppleLoginInfoStore } from "../../store/apple-login-store";
-import { CrashlyticService, InitCrashlytics } from "../../service/crashlytic";
+import { ISocialLoginForm, LoginForm } from "../../types/auth";
+import { setupInterceptor } from "../../utils/refreshToken.util";
+import { errorMessage } from "../../utils/statusCode";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -178,7 +181,7 @@ export default function Login() {
       className="relative h-full flex-1 bg-white"
       testID="login_with_email_screen"
     >
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
 
       {isShowVerifiedErrorModal && (
         <ConfirmDialog

@@ -1,10 +1,9 @@
-import { View, Modal, SafeAreaView } from "react-native";
-import { FC, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useForm, Controller } from "react-hook-form";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Spinner from "react-native-loading-spinner-overlay";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { FC, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Modal, SafeAreaView, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useNav } from "../../hooks/useNav";
 import { IChallenge, IEditChallenge } from "../../types/challenge";
@@ -13,17 +12,18 @@ import { EditChallengeValidationSchema } from "../../Validators/EditChallenge.va
 import useModal from "../../hooks/useModal";
 import dayjs from "../../utils/date.util";
 
-import Header from "../common/Header";
-import ErrorText from "../common/ErrorText";
-import TextInput from "../common/Inputs/TextInput";
-import ConfirmDialog from "../common/Dialog/ConfirmDialog";
 import { updateChallenge } from "../../service/challenge";
 import DateTimePicker2 from "../common/BottomSheet/DateTimePicker2/DateTimePicker2";
+import ConfirmDialog from "../common/Dialog/ConfirmDialog";
+import ErrorText from "../common/ErrorText";
+import Header from "../common/Header";
+import TextInput from "../common/Inputs/TextInput";
 
-import CloseIcon from "../asset/close.svg";
-import CalendarIcon from "../asset/calendar.svg";
-import GlobalToastController from "../common/Toast/GlobalToastController";
 import { useChallengeUpdateStore } from "../../store/challenge-update-store";
+import CalendarIcon from "../asset/calendar.svg";
+import CloseIcon from "../asset/close.svg";
+import GlobalToastController from "../common/Toast/GlobalToastController";
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
 
 interface IEditChallengeModalProps {
   challenge: IChallenge;
@@ -118,7 +118,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       visible={visible}
     >
       <SafeAreaView className="flex-1">
-        {isLoading && <Spinner visible={isLoading} />}
+      CustomActivityIndicator        <CustomActivityIndicator isVisible={isLoading} />
 
         <View className="px-4 py-4">
           <Header

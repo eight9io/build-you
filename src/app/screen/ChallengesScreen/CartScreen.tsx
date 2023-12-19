@@ -1,11 +1,10 @@
-import { FC, useState, useEffect, useMemo, useRef } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   SafeAreaView,
   Platform,
-  ActivityIndicator,
 } from "react-native";
 import {
   NavigationProp,
@@ -16,9 +15,12 @@ import {
 import { AxiosResponse } from "axios";
 import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
-import Spinner from "react-native-loading-spinner-overlay";
 
-import { getProducts as getProductsFromProvider } from "react-native-iap";
+import {
+  getProducts as getProductsFromProvider,
+  ErrorCode,
+  ProductPurchase,
+} from "react-native-iap";
 
 import {
   createChallenge,
@@ -35,6 +37,9 @@ import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-cr
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
+
+import ErrorText from "../../component/common/ErrorText";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
@@ -44,14 +49,12 @@ import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
 import {
   getAllProductsFromStore,
-  getCurrencySymbol,
   getProductFromDatabase,
   requestPurchaseChecks,
   verifyPurchase,
 } from "../../utils/purchase.util";
+
 import { IInAppPurchaseProduct } from "../../types/purchase";
-import ErrorText from "../../component/common/ErrorText";
-import { ErrorCode, ProductPurchase } from "react-native-iap";
 import {
   APPLE_IN_APP_PURCHASE_STATUS,
   GOOGLE_IN_APP_PURCHASE_STATUS,
@@ -75,7 +78,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
@@ -122,7 +125,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         setFinalPrice(packagesFromStore[0].localizedPrice);
         setTimeout(() => {
           setIsLoading(false);
-        }, 300);
+        }, 1000);
       } catch (error) {
         setTimeout(() => {
           setIsLoading(false);
@@ -422,6 +425,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
+      <CustomActivityIndicator isVisible={isLoading} />
       {isShowModal && (
         <ConfirmDialog
           title={
@@ -442,140 +446,136 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         />
       )}
 
-      {finalPrice === "0" && isLoading && <ActivityIndicator />}
+      <View>
+        <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
+          <View
+            className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
+            style={{
+              width: 343,
+            }}
+          >
+            <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
+              <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
+                {packageName}
+              </Text>
+            </View>
 
-      {finalPrice !== "0" && (
-        <View>
-          <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
-            <View
-              className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
-              style={{
-                width: 343,
-              }}
-            >
-              <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
-                <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
-                  {packageName}
-                </Text>
-              </View>
-
-              <View className="flex w-full flex-col items-start justify-center gap-y-2">
-                <Text className="text-start text-md font-normal leading-none text-zinc-500">
-                  {choosenPackage?.caption}
-                </Text>
-                <View className="flex w-full flex-col items-start justify-start">
-                  <View className="flex w-full flex-col items-start justify-start space-y-2 py-2 pb-6">
-                    {["Intake", "Check", "Closing"].map((item) => (
-                      <Text
-                        className="text-center text-md font-semibold leading-none text-neutral-700"
-                        key={item}
-                      >
-                        {item}
-                      </Text>
-                    ))}
-                  </View>
+            <View className="flex w-full flex-col items-start justify-center gap-y-2">
+              <Text className="text-start text-md font-normal leading-none text-zinc-500">
+                {choosenPackage?.caption}
+              </Text>
+              <View className="flex w-full flex-col items-start justify-start">
+                <View className="flex w-full flex-col items-start justify-start space-y-2 py-2 pb-6">
+                  {["Intake", "Check", "Closing"].map((item) => (
+                    <Text
+                      className="text-center text-md font-semibold leading-none text-neutral-700"
+                      key={item}
+                    >
+                      {item}
+                    </Text>
+                  ))}
                 </View>
               </View>
             </View>
+          </View>
 
-            <View
-              className="flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4 py-4"
-              style={{
-                width: 343,
-              }}
-            >
-              <View className="flex w-full flex-col items-start justify-center gap-y-2">
-                <Text className="text-start text-md font-normal leading-none text-zinc-500">
-                  {t("cart_screen.select_checkpoints") ||
-                    "Select the number of Check points:"}
-                </Text>
-                <View className="flex w-full flex-col items-start justify-start">
-                  <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
-                    <View className="flex w-full flex-row items-center justify-between">
-                      <Text
-                        className="text-center text-md font-semibold leading-none text-neutral-700"
-                        key={"numberOfCheckCart"}
+          <View
+            className="flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4 py-4"
+            style={{
+              width: 343,
+            }}
+          >
+            <View className="flex w-full flex-col items-start justify-center gap-y-2">
+              <Text className="text-start text-md font-normal leading-none text-zinc-500">
+                {t("cart_screen.select_checkpoints") ||
+                  "Select the number of Check points:"}
+              </Text>
+              <View className="flex w-full flex-col items-start justify-start">
+                <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
+                  <View className="flex w-full flex-row items-center justify-between">
+                    <Text
+                      className="text-center text-md font-semibold leading-none text-neutral-700"
+                      key={"numberOfCheckCart"}
+                    >
+                      Check
+                    </Text>
+                    <View className="flex flex-row items-center justify-between">
+                      <TouchableOpacity
+                        className="flex items-center justify-center rounded-[36px] border border-orange-500 "
+                        style={{
+                          height: 28,
+                          width: 28,
+                        }}
+                        onPress={handleRemoveCheckpoint}
                       >
-                        Check
-                      </Text>
-                      <View className="flex flex-row items-center justify-between">
-                        <TouchableOpacity
-                          className="flex items-center justify-center rounded-[36px] border border-orange-500 "
-                          style={{
-                            height: 28,
-                            width: 28,
-                          }}
-                          onPress={handleRemoveCheckpoint}
-                        >
-                          <MinusSVG />
-                        </TouchableOpacity>
-                        <View className="w-8">
-                          <Text className="text-center text-md font-semibold leading-none text-neutral-700">
-                            {numberOfCheckpoints}
-                          </Text>
-                        </View>
-                        <TouchableOpacity
-                          className="flex items-center justify-center rounded-2xl border border-orange-500 "
-                          style={{
-                            height: 28,
-                            width: 28,
-                          }}
-                          onPress={handleAddCheckpoint}
-                        >
-                          <PlusSVG />
-                        </TouchableOpacity>
+                        <MinusSVG />
+                      </TouchableOpacity>
+                      <View className="w-8">
+                        <Text className="text-center text-md font-semibold leading-none text-neutral-700">
+                          {numberOfCheckpoints}
+                        </Text>
                       </View>
+                      <TouchableOpacity
+                        className="flex items-center justify-center rounded-2xl border border-orange-500 "
+                        style={{
+                          height: 28,
+                          width: 28,
+                        }}
+                        onPress={handleAddCheckpoint}
+                      >
+                        <PlusSVG />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>
               </View>
             </View>
-
-            <View
-              className="border-black flex w-full flex-row  border-t px-4"
-              style={{
-                width: 343,
-              }}
-            >
-              <View className=" flex w-full flex-row items-center justify-between pt-3">
-                <Text className=" text-base font-semibold uppercase leading-tight">
-                  {t("cart_screen.total")}
-                </Text>
-                <Text className=" text-base font-semibold leading-tight text-primary-default">
-                  {finalPrice}
-                </Text>
-              </View>
-            </View>
-            <View className="mx-9 self-start">
-              {purchaseErrorMessages && (
-                <ErrorText
-                  message={purchaseErrorMessages}
-                  containerClassName="w-full"
-                  textClassName="flex-1"
-                />
-              )}
-            </View>
           </View>
 
-          <TouchableOpacity
-            className={clsx(
-              " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
-              isAndroid ? "my-6" : "my-4",
-              finalPrice === "0" ? "opacity-50" : ""
-            )}
+          <View
+            className="border-black flex w-full flex-row  border-t px-4"
             style={{
-              height: 48,
-              width: 344,
+              width: 343,
             }}
-            disabled={finalPrice === "0" || isLoading}
-            onPress={onSumitCertifiedChallenge}
           >
-            <Text className="text-center text-[14px] font-semibold leading-tight text-white">
-              {t("cart_screen.pay") || "Pay"}
-            </Text>
-          </TouchableOpacity>
+            <View className=" flex w-full flex-row items-center justify-between pt-3">
+              <Text className=" text-base font-semibold uppercase leading-tight">
+                {t("cart_screen.total")}
+              </Text>
+              <Text className=" text-base font-semibold leading-tight text-primary-default">
+                {finalPrice}
+              </Text>
+            </View>
+          </View>
+          <View className="mx-9 self-start">
+            {purchaseErrorMessages && (
+              <ErrorText
+                message={purchaseErrorMessages}
+                containerClassName="w-full"
+                textClassName="flex-1"
+              />
+            )}
+          </View>
         </View>
-      )}
+
+        <TouchableOpacity
+          className={clsx(
+            " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
+            isAndroid ? "my-6" : "my-4",
+            finalPrice === "0" ? "opacity-50" : ""
+          )}
+          style={{
+            height: 48,
+            width: 344,
+          }}
+          disabled={finalPrice === "0" || isLoading}
+          onPress={onSumitCertifiedChallenge}
+        >
+          <Text className="text-center text-[14px] font-semibold leading-tight text-white">
+            {t("cart_screen.pay") || "Pay"}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

@@ -1,29 +1,29 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
 import React, { FC, useLayoutEffect, useState } from "react";
-import { useForm, Controller, Resolver } from "react-hook-form";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Controller, Resolver, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { useNav } from "../../../../hooks/useNav";
-import { ICreateCompanyChallenge } from "../../../../types/challenge";
-import CustomSwitch from "../../../../component/common/Switch";
+import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
-import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
+import CustomSwitch from "../../../../component/common/Switch";
+import { useNav } from "../../../../hooks/useNav";
+import { ICreateCompanyChallenge } from "../../../../types/challenge";
 
-import { ICreateChallenge } from "../../../../types/challenge";
-import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
 import { CreateCertifiedCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
+import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
 import { useUserProfileStore } from "../../../../store/user-store";
+import { ICreateChallenge } from "../../../../types/challenge";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -155,7 +155,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
 
   return (
     <SafeAreaView className="flex flex-col bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
 
       <KeyboardAwareFlatList
         data={[]}
@@ -163,7 +163,9 @@ const CreateCertifiedCompanyChallengeScreen: FC<
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => null}
         ListHeaderComponent={
-          <View>{isLoading && <Spinner visible={isLoading} />}</View>
+          <View>
+            <CustomActivityIndicator isVisible={isLoading} />
+          </View>
         }
         ListFooterComponent={
           <View className=" flex h-full  rounded-t-xl bg-white">

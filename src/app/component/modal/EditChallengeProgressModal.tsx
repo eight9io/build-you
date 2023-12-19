@@ -1,26 +1,24 @@
-import { View, Modal, SafeAreaView } from "react-native";
-import { FC, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
+import { FC, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Modal, SafeAreaView, View } from "react-native";
 
-import { IUpdateProgress } from "../../types/progress";
-import { IProgressChallenge } from "../../types/challenge";
 import { EditProgressValidationSchema } from "../../Validators/EditProgress.validate";
+import { IProgressChallenge } from "../../types/challenge";
+import { IUpdateProgress } from "../../types/progress";
 
-import useModal from "../../hooks/useModal";
 import { updateProgress } from "../../service/progress";
 
+import ErrorText from "../common/ErrorText";
 import Header from "../common/Header";
 import ImageSwiper from "../common/ImageSwiper";
-import VideoPlayer from "../common/VideoPlayer";
 import TextInput from "../common/Inputs/TextInput";
-import ErrorText from "../common/ErrorText";
-import ConfirmDialog from "../common/Dialog/ConfirmDialog";
+import VideoPlayer from "../common/VideoPlayer";
 
 import CloseIcon from "../asset/close.svg";
 import GlobalToastController from "../common/Toast/GlobalToastController";
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
 
 interface IEditChallengeProgressModalProps {
   progress: IProgressChallenge;
@@ -87,7 +85,7 @@ export const EditChallengeProgressModal: FC<
       visible={isVisible}
     >
       <SafeAreaView className=" bg-white">
-        {isLoading && <Spinner visible={isLoading} />}
+        <CustomActivityIndicator isVisible={isLoading} />
 
         <View className="mx-4 flex h-full flex-col rounded-t-xl bg-white">
           <Header
@@ -135,7 +133,6 @@ export const EditChallengeProgressModal: FC<
             </View>
           ) : null}
         </View>
-
       </SafeAreaView>
     </Modal>
   );

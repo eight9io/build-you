@@ -1,32 +1,26 @@
-import {
-  View,
-  Text,
-  Modal,
-  SafeAreaView,
-  Dimensions,
-  ScaledSize,
-  Platform,
-  ActivityIndicator,
-} from "react-native";
-import { Image } from "expo-image";
-import React, { FC, useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Image } from "expo-image";
+import React, { FC, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Modal,
+  Platform,
+  SafeAreaView,
+  ScaledSize,
+  Text,
+  View,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Spinner from "react-native-loading-spinner-overlay";
 
 import { useUserProfileStore } from "../../store/user-store";
 import { IUploadMediaWithId } from "../../types/media";
 import { getRandomId } from "../../utils/common";
 import { CreateProgressValidationSchema } from "../../Validators/CreateProgress.validate";
 
-import Header from "../common/Header";
-import Button from "../common/Buttons/Button";
-import ImagePicker from "../common/ImagePicker";
-import VideoPicker from "../common/VideoPicker";
-import LocationInput from "../common/Inputs/LocationInput";
-import CustomTextInput from "../common/Inputs/CustomTextInput";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import Close from "../../component/asset/close.svg";
 import {
   createProgress,
@@ -34,10 +28,17 @@ import {
   updateProgressImage,
   updateProgressVideo,
 } from "../../service/progress";
+import Button from "../common/Buttons/Button";
 import ConfirmDialog from "../common/Dialog/ConfirmDialog";
 import ErrorText from "../common/ErrorText";
+import Header from "../common/Header";
+import ImagePicker from "../common/ImagePicker";
+import CustomTextInput from "../common/Inputs/CustomTextInput";
+import LocationInput from "../common/Inputs/LocationInput";
 import GlobalToastController from "../common/Toast/GlobalToastController";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import VideoPicker from "../common/VideoPicker";
+
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
 
 interface IAddNewChallengeProgressModalProps {
   challengeId: string;
@@ -230,7 +231,7 @@ export const AddNewChallengeProgressModal: FC<
       className="h-full"
     >
       <SafeAreaView className="flex-1 bg-white">
-        {isLoading && <Spinner visible={isLoading} />}
+        <CustomActivityIndicator isVisible={isLoading} />
         <KeyboardAwareScrollView
           contentContainerStyle={{
             flex: 1,

@@ -1,26 +1,26 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CheckBox } from "@rneui/themed";
 import { Image } from "expo-image";
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
-import { CheckBox } from "@rneui/themed";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
+import { useTranslation } from "react-i18next";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { RegisterValidationSchema } from "../../Validators/Register.validate";
 import { serviceRegister } from "../../service/auth";
-import { err_server, errorMessage } from "../../utils/statusCode";
+import { errorMessage } from "../../utils/statusCode";
 
 import Button from "../../component/common/Buttons/Button";
-import TextInput from "../../component/common/Inputs/TextInput";
 import ErrorText from "../../component/common/ErrorText";
+import TextInput from "../../component/common/Inputs/TextInput";
 import PolicyModal from "../../component/modal/PolicyModal";
 
-import IconEyeOn from "./asset/icon-eye.svg";
-import IconEyeOff from "./asset/eye-off.svg";
-import TermModal from "../../component/modal/TermModal";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import TermModal from "../../component/modal/TermModal";
+import IconEyeOff from "./asset/eye-off.svg";
+import IconEyeOn from "./asset/icon-eye.svg";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 
 type FormData = {
   email: string;
@@ -97,7 +97,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
       testID="register_with_email_screen"
     >
       <KeyboardAwareScrollView testID="register_scroll_view">
-        {isLoading && <Spinner visible={isLoading} />}
+        <CustomActivityIndicator isVisible={isLoading} />
 
         {isShowModal && (
           <ConfirmDialog

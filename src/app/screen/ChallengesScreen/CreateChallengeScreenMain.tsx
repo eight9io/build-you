@@ -8,32 +8,35 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useUserProfileStore } from "../../store/user-store";
 
 import InfoSvg from "../../common/svg/info.svg";
-import Button from "../../component/common/Buttons/Button";
-import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog";
+
 import { IPackage, IPackageResponse } from "../../types/package";
 import { serviceGetAllPackages } from "../../service/package";
 import { getLanguageLocalStorage } from "../../utils/language";
-import {
-  NativeStackNavigationProp,
-  createNativeStackNavigator,
-} from "@react-navigation/native-stack";
+import { serviceGetIsUserHasInDraftChallenge } from "../../service/challenge";
+
+import AppTitle from "../../component/common/AppTitle";
+import Button from "../../component/common/Buttons/Button";
 import NavButton from "../../component/common/Buttons/NavButton";
+import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+
 import PersonalChallengeDetailScreen from "./PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "./CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileScreen";
 import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import ProgressCommentScreen from "./ProgressCommentScreen/ProgressCommentScreen";
-import AppTitle from "../../component/common/AppTitle";
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import CompanyChallengeDetailScreen from "./CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
-import { serviceGetIsUserHasInDraftChallenge } from "../../service/challenge";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 

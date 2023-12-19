@@ -1,23 +1,22 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import React, { FC, useState } from "react";
+import { Controller, Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import DatePicker from "react-native-date-picker";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
 import { Modal, Platform, SafeAreaView, View } from "react-native";
-import { Controller, Resolver, set, useForm } from "react-hook-form";
+import DatePicker from "react-native-date-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-
-import Header from "../../common/Header";
-import ErrorText from "../../common/ErrorText";
-import TextInput from "../../common/Inputs/TextInput";
 import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedule.validate";
+import ErrorText from "../../common/ErrorText";
+import Header from "../../common/Header";
+import TextInput from "../../common/Inputs/TextInput";
 
-import CloseBtn from "../../asset/close.svg";
 import { createScheduleForIndividualCertifiedChallenge } from "../../../service/schedule";
+import CloseBtn from "../../asset/close.svg";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
+import CustomActivityIndicator from "../../common/CustomActivityIndicator";
 
 interface ICoachCreateScheduleModalProps {
   isVisible: boolean;
@@ -117,7 +116,7 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
       className="h-full"
     >
       <SafeAreaView className="relative flex-1 bg-white">
-        {isLoading && <Spinner visible={isLoading} />}
+        <CustomActivityIndicator isVisible={isLoading} />
         <View className="px-4">
           <Header
             title={t("create_schedule_modal.title") as string}

@@ -1,16 +1,15 @@
-import jwt_decode from "jwt-decode";
-import { AxiosError } from "axios";
-import debounce from "lodash.debounce";
-import { useTranslation } from "react-i18next";
-import { View, Text, SafeAreaView } from "react-native";
-import Spinner from "react-native-loading-spinner-overlay";
-import React, { FC, useLayoutEffect, useEffect, useState } from "react";
 import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
+import { AxiosError } from "axios";
+import jwt_decode from "jwt-decode";
+import debounce from "lodash.debounce";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { SafeAreaView, Text, View } from "react-native";
 
-import { IToken } from "../../../../types/auth";
-import { IChallenge } from "../../../../types/challenge";
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
+import { IToken } from "../../../../types/auth";
+import { IChallenge } from "../../../../types/challenge";
 
 import { useAuthStore } from "../../../../store/auth-store";
 import { useUserProfileStore } from "../../../../store/user-store";
@@ -27,21 +26,22 @@ import {
 import { getChallengeStatusColor } from "../../../../utils/common";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 
-import CoachTabViewOnly from "./Tabs/CoachTabViewOnly";
 import Button from "../../../../component/common/Buttons/Button";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
-import ProgressTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
-import DescriptionTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import ParticipantsTab from "../../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
+import DescriptionTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
+import ProgressTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import { RightPersonalChallengeDetailOptions } from "../../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
+import CoachTabViewOnly from "./Tabs/CoachTabViewOnly";
 
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
 
-import ShareIcon from "../../../../../../assets/svg/share.svg";
 import CheckCircle from "../../../../../../assets/svg/check_circle.svg";
+import ShareIcon from "../../../../../../assets/svg/share.svg";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -467,7 +467,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   return (
     <SafeAreaView>
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}

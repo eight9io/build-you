@@ -1,31 +1,31 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
 import { useTranslation } from "react-i18next";
+import {
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import clsx from "clsx";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
-import { useForm, Controller, Resolver } from "react-hook-form";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { yupResolver } from "@hookform/resolvers/yup";
+import clsx from "clsx";
+import { Controller, Resolver, useForm } from "react-hook-form";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
-import dayjs from "../../../../utils/date.util";
-import { useNav } from "../../../../hooks/useNav";
-import { ICreateChallenge } from "../../../../types/challenge";
+import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
+import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
-import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
+import { useNav } from "../../../../hooks/useNav";
 import { useCreateChallengeDataStore } from "../../../../store/create-challenge-data-store";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
-import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
+import { ICreateChallenge } from "../../../../types/challenge";
+import dayjs from "../../../../utils/date.util";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface ICreateCertifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -159,7 +159,9 @@ const CreateCertifiedChallengeScreen = () => {
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => null}
         ListHeaderComponent={
-          <View>{isLoading && <Spinner visible={isLoading} />}</View>
+          <View>
+            <CustomActivityIndicator isVisible={isLoading} />
+          </View>
         }
         ListFooterComponent={
           <View className="mx-4 flex h-full rounded-t-xl bg-white">

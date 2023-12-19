@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
-import clsx from "clsx";
-import { Controller, set, useForm } from "react-hook-form";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Spinner from "react-native-loading-spinner-overlay";
+import clsx from "clsx";
+import React, { FC, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { IHardSkill, IHardSkillProps } from "../../../../types/user";
@@ -17,30 +16,29 @@ import {
 } from "../../../../service/profile";
 import { useUserProfileStore } from "../../../../store/user-store";
 
-import Warning from "../../../../component/asset/warning.svg";
-import TextInput from "../../../../component/common/Inputs/TextInput";
-import PencilEditSvg from "../../../../component/asset/pencil-edit.svg";
-import Button from "../../../../component/common/Buttons/Button";
 import { EditProfileValidators } from "../../../../Validators/EditProfile.validate";
-import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
+import { VideoWithPlayButton } from "../../../../component/Profile/ProfileTabs/Users/Biography/Biography";
+import PencilEditSvg from "../../../../component/asset/pencil-edit.svg";
+import Warning from "../../../../component/asset/warning.svg";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
+import Button from "../../../../component/common/Buttons/Button";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import { IOccupation } from "../../../../types/user";
+import TextInput from "../../../../component/common/Inputs/TextInput";
 import CustomSwitch from "../../../../component/common/Switch";
 import VideoPicker from "../../../../component/common/VideoPicker";
+import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
 import { IUploadMediaWithId } from "../../../../types/media";
+import { IOccupation } from "../../../../types/user";
 import { uploadNewVideo } from "../../../../utils/uploadVideo";
-import { VideoWithPlayButton } from "../../../../component/Profile/ProfileTabs/Users/Biography/Biography";
 
-import CalendarIcon from "./asset/calendar-icon.svg";
+import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPicker/SelectPickerCompany";
+import SeletecPickerOccupation from "../../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { serviceGetMyProfile } from "../../../../service/auth";
-import SeletecPickerOccupation from "../../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
-import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPicker/SelectPickerCompany";
-import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
-import { serviceGetAllCompany } from "../../../../service/company";
+import { ICompanyDataUser } from "../../../../types/company";
 import { getUserOccupationCondition } from "../../../../utils/profile";
-import { CrashlyticService } from "../../../../service/crashlytic";
+import CalendarIcon from "./asset/calendar-icon.svg";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
@@ -278,7 +276,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
       <KeyboardAwareScrollView>
         <View className="  h-full rounded-t-xl bg-white ">
           <ConfirmDialog

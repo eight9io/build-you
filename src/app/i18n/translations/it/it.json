@@ -304,7 +304,7 @@
     "your_goal_placeholder": "Imposta un obiettivo concreto",
     "benefits": "I benefici",
     "benefits_placeholder": "Elenca i vantaggi che otterrai al raggiungimento",
-    "reasons": "Il motivo",
+    "reasons": "Motivazione",
     "max_people": "Numero massimo partecipanti",
     "max_people_placeholder": "Inserisci il numero di persone",
     "reasons_placeholder": "Indica i motivi che ti spingono a realizzarlo",
@@ -355,7 +355,7 @@
     "your_goal_placeholder": "Imposta un obiettivo concreto",
     "benefits": "I benefici",
     "benefits_placeholder": "Elenca i vantaggi che otterrai al raggiungimento",
-    "reasons": "Il motivo",
+    "reasons": "Motivazione",
     "reasons_placeholder": "Indica i motivi che ti spingono a realizzarlo",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
     "time_to_reach_goal_placeholder": "Seleziona il periodo",
@@ -650,7 +650,7 @@
   "to_create_new_challenge": "per creare una nuova sfida",
   "challenge_description_tab": {
     "the_benefits": "I benefici",
-    "the_reason": "Il motivo",
+    "the_reason": "Motivazione",
     "time_to_reach_goal": "Tempo per raggiungere l'obiettivo",
     "participants": "Partecipanti",
     "soft_skills": "Abilità trasversale"

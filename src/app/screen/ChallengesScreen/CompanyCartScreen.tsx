@@ -1,12 +1,3 @@
-import { FC, useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  Platform,
-  ActivityIndicator,
-} from "react-native";
 import {
   NavigationProp,
   Route,
@@ -14,8 +5,16 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { AxiosResponse } from "axios";
+import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Spinner from "react-native-loading-spinner-overlay";
+import {
+  ActivityIndicator,
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import {
   createChallenge,
@@ -24,23 +23,23 @@ import {
 } from "../../service/challenge";
 import httpInstance from "../../utils/http";
 
-import { ICheckPoint, IPackage } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
+import { ICheckPoint, IPackage } from "../../types/package";
 
-import { useUserProfileStore } from "../../store/user-store";
-import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
+import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
+import { useUserProfileStore } from "../../store/user-store";
 
-import { RootStackParamList } from "../../navigation/navigation.type";
+import ChangeCompanyCreditDialogAndroid from "../../component/common/Dialog/ChangeCompanyCreditDialogAndroid";
+import ChangeCompanyCreditDialogIos from "../../component/common/Dialog/ChangeCompanyCreditDialogIos";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
-import ChangeCompanyCreditDialogIos from "../../component/common/Dialog/ChangeCompanyCreditDialogIos";
-import ChangeCompanyCreditDialogAndroid from "../../component/common/Dialog/ChangeCompanyCreditDialogAndroid";
+import { RootStackParamList } from "../../navigation/navigation.type";
 
-import PlusSVG from "../../component/asset/plus.svg";
-import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
-import ErrorText from "../../component/common/ErrorText";
+import MinusSVG from "../../component/asset/minus.svg";
+import PlusSVG from "../../component/asset/plus.svg";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 
 interface ICartScreenProps {
   route: Route<
@@ -233,7 +232,7 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
       {isAndroid ? (
         <ChangeCompanyCreditDialogAndroid
           onClose={() => {

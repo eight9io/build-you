@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, View, Text } from "react-native";
-import Spinner from "react-native-loading-spinner-overlay";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { serviceGetOtherUserData } from "../../../../service/user";
@@ -37,6 +36,7 @@ import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCal
 import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";
 
 import ShareIcon from "../assets/share.svg";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -267,7 +267,7 @@ const PersonalCoachChallengeDetailScreen = ({
 
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
-      {isScreenLoading && <Spinner visible={isScreenLoading} />}
+      <CustomActivityIndicator isVisible={isScreenLoading} />
       <View className="flex h-full flex-col bg-white pt-2">
         <View className="flex flex-row items-center justify-between px-4">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">

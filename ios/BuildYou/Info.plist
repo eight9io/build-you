@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.5.16</string>
+    <string>1.5.17</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -39,7 +39,7 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>66</string>
+    <string>71</string>
     <key>CodePushDeploymentKey</key>
     <string>K60TOcl0LeY6pFRO94YIWX2MaLMs-UxHeaHiG</string>
     <key>ITSAppUsesNonExemptEncryption</key>

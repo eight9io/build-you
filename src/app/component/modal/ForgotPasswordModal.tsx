@@ -1,30 +1,30 @@
+import { Image } from "expo-image";
 import {
-  View,
-  Text,
   Modal,
   SafeAreaView,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { Image } from "expo-image";
 
 import React, { useState } from "react";
-import Header from "../common/Header";
-import NavButton from "../common/Buttons/NavButton";
 import { useTranslation } from "react-i18next";
-import Spinner from "react-native-loading-spinner-overlay";
+import NavButton from "../common/Buttons/NavButton";
+import Header from "../common/Header";
 
-import { Controller, useForm } from "react-hook-form";
-import { ResetPasswordValidationSchema } from "../../Validators/ResetPassword.validate";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { ResetPasswordValidationSchema } from "../../Validators/ResetPassword.validate";
+import { serviceChangePassword } from "../../service/auth";
+import { err_server, errorMessage } from "../../utils/statusCode";
 import Button from "../common/Buttons/Button";
 import ErrorText from "../common/ErrorText";
 import TextInput from "../common/Inputs/TextInput";
-import IconEyeOn from "./asset/icon-eye.svg";
-import IconEyeOff from "./asset/eye-off.svg";
-import { serviceChangePassword } from "../../service/auth";
-import { err_server, errorMessage } from "../../utils/statusCode";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import GlobalToastController from "../common/Toast/GlobalToastController";
+import IconEyeOff from "./asset/eye-off.svg";
+import IconEyeOn from "./asset/icon-eye.svg";
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -114,9 +114,7 @@ export default function ForgotPasswordModal({
       visible={modalVisible}
       presentationStyle="pageSheet"
     >
-      <View className="mx-1 h-full bg-white"
-        testID="forgot_password_modal"
-      >
+      <View className="mx-1 h-full bg-white" testID="forgot_password_modal">
         <Header
           containerStyle="mx-4"
           title={t("forgot_password.title") as string}
@@ -131,7 +129,7 @@ export default function ForgotPasswordModal({
         <KeyboardAwareScrollView testID="forgot_password_scroll_view">
           <View className="h-full pt-5">
             <SafeAreaView>
-              {isLoading && <Spinner visible={isLoading} />}
+              <CustomActivityIndicator isVisible={isLoading} />
 
               <View className="flex-column h-full justify-between bg-white px-6  pb-14">
                 <View>
@@ -168,7 +166,9 @@ export default function ForgotPasswordModal({
                               rules={{
                                 required: true,
                               }}
-                              render={({ field: { onChange, onBlur, value } }) => (
+                              render={({
+                                field: { onChange, onBlur, value },
+                              }) => (
                                 <View className="flex flex-col gap-1">
                                   <TextInput
                                     testID={getInputTypeForE2ETest(item.type)}
@@ -232,7 +232,9 @@ export default function ForgotPasswordModal({
                             />
                             {errors[item.type as keyof FormData] && (
                               <ErrorText
-                                message={errors[item.type as keyof FormData]?.message}
+                                message={
+                                  errors[item.type as keyof FormData]?.message
+                                }
                                 testID={`forgot_password_${item.type}_error`}
                               />
                             )}
@@ -240,8 +242,6 @@ export default function ForgotPasswordModal({
                         );
                       }
                     })}
-
-
                   </View>
                 </View>
                 <View className="pb-10 pt-10">

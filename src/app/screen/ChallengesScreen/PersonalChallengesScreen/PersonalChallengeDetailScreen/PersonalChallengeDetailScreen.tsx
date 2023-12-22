@@ -32,7 +32,7 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
-import Spinner from "react-native-loading-spinner-overlay";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -176,13 +176,13 @@ export const RightPersonalChallengeDetailOptions: FC<
           title={
             isCompletedChallengeSuccess
               ? t("dialog.congratulation") || "Congratulation!"
-              : t("dialog.error_general_message") || "Something went wrong"
+              : t("error")
           }
           description={
             isCompletedChallengeSuccess
               ? t("dialog.completed_challenge_success") ||
                 "Challenge has been completed successfully."
-              : t("dialog.error_general_message") || "Please try again later."
+              : t("error_general_message") || "Please try again later."
           }
           confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}
@@ -340,7 +340,7 @@ const PersonalChallengeDetailScreen = ({
 
   return (
     <SafeAreaView className="bg-[#FAFBFF]">
-      {isScreenLoading && <Spinner visible={isScreenLoading} />}
+      <CustomActivityIndicator isVisible={isScreenLoading} />
 
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}

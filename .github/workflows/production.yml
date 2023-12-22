@@ -22,6 +22,9 @@ env:
   P12_BASE64: ${{ secrets.STAGING_BUILD_CERTIFICATE_BASE64 }}
   MOBILE_PROVISION_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
   CERTIFICATE_PASSWORD: ${{ secrets.STAGING_P12_PASSWORD }}
+  APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+  APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+  APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
   # ------
 
 jobs:
@@ -50,31 +53,31 @@ jobs:
           sed -i '' 's/"adhoc"/"it.buildyou.buildyou AppStore"/g; s/adhoc/"it.buildyou.buildyou AppStore"/g' ios/BuildYou.xcodeproj/project.pbxproj
         shell: bash
 
-      - name: Set up our JDK environment
-        uses: actions/setup-java@v3
-        with:
-          distribution: "zulu"
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: gradle
+      # - name: Set up our JDK environment
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     distribution: "zulu"
+      #     java-version: ${{ env.JAVA_VERSION }}
+      #     cache: gradle
 
       - name: Prebuild Expo
         run: npx expo prebuild
         shell: bash
 
-      - name: Make Gradlew Executable
-        run: cd android && chmod +x ./gradlew
+      # - name: Make Gradlew Executable
+      #   run: cd android && chmod +x ./gradlew
 
-      - name: Generate App AAB
-        run: |
-          echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
-          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
-          cd android && ./gradlew bundleRelease --no-daemon
-          npx firebase-tools \
-            appdistribution:distribute app/build/outputs/bundle/release/app-release.aab \
-            --app $ANDROID_FIREBASE_APP_ID \
-            --groups "testers" \
-            $( (( $INPUT_DEBUG )) && printf %s '--debug' )
-          cd ..
+      # - name: Generate App AAB
+      #   run: |
+      #     echo $CREDENTIAL_FILE_CONTENT > "$RUNNER_TEMP/credential.json"
+      #     export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/credential.json"
+      #     cd android && ./gradlew bundleRelease --no-daemon
+      #     npx firebase-tools \
+      #       appdistribution:distribute app/build/outputs/bundle/release/app-release.aab \
+      #       --app $ANDROID_FIREBASE_APP_ID \
+      #       --groups "testers" \
+      #       $( (( $INPUT_DEBUG )) && printf %s '--debug' )
+      #     cd ..
 
       #  iOS Build
       - name: Build Cache
@@ -130,6 +133,6 @@ jobs:
       #   uses: apple-actions/upload-testflight-build@v1
       #   with:
       #     app-path: "output.ipa"
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      #     issuer-id: ${{ env.APPSTORE_ISSUER_ID }}
+      #     api-key-id: ${{ env.APPSTORE_API_KEY_ID }}
+      #     api-private-key: ${{ env.APPSTORE_API_PRIVATE_KEY }}

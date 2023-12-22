@@ -19,8 +19,8 @@ import appleAuth from "@invertase/react-native-apple-authentication";
 import { serviceDeleteAccount } from "../../service/profile";
 import { CommonActions } from "@react-navigation/native";
 import LinkedInModal from "../../component/modal/LinkedInModal";
-import Spinner from "react-native-loading-spinner-overlay";
 import { getUserOccupationCondition } from "../../utils/profile";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 
 const getGoogleToken = async () => {
   const { idToken } = await GoogleSignin.signIn();
@@ -165,7 +165,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
       />
 
       <ScrollView>
-        {isLoading && <Spinner />}
+        <CustomActivityIndicator isVisible={isLoading} />
         <View className={clsx("px-4 py-4")}>
           <Text className={clsx("text-h4 font-medium")}>
             {t("personal_information.description")}

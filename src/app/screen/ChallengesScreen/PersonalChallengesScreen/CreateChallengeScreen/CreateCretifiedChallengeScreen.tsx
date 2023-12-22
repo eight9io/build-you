@@ -1,32 +1,32 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
-import clsx from "clsx";
-import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
-import { useForm, Controller, Resolver } from "react-hook-form";
-import Spinner from "react-native-loading-spinner-overlay";
-import { yupResolver } from "@hookform/resolvers/yup";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { yupResolver } from "@hookform/resolvers/yup";
+import clsx from "clsx";
+import { Controller, Resolver, useForm } from "react-hook-form";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
-import { ICreateChallenge } from "../../../../types/challenge";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { StackActions } from "@react-navigation/native";
 import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
-import dayjs from "../../../../utils/date.util";
+import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ErrorText from "../../../../component/common/ErrorText";
+import ImagePicker from "../../../../component/common/ImagePicker";
+import TextInput from "../../../../component/common/Inputs/TextInput";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { useNav } from "../../../../hooks/useNav";
 import {
   createChallenge,
   updateChallengeImage,
 } from "../../../../service/challenge";
-import ErrorText from "../../../../component/common/ErrorText";
-import ImagePicker from "../../../../component/common/ImagePicker";
-import TextInput from "../../../../component/common/Inputs/TextInput";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import { ICreateChallenge } from "../../../../types/challenge";
+import dayjs from "../../../../utils/date.util";
 import httpInstance from "../../../../utils/http";
-import { StackActions } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
-import { useNav } from "../../../../hooks/useNav";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface ICreateCretifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -253,7 +253,9 @@ const CreateCretifiedChallengeScreen = () => {
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={() => null}
         ListHeaderComponent={
-          <View>{isLoading && <Spinner visible={isLoading} />}</View>
+          <View>
+            <CustomActivityIndicator isVisible={isLoading} />
+          </View>
         }
         ListFooterComponent={
           <View className="mx-4 flex h-full rounded-t-xl bg-white">

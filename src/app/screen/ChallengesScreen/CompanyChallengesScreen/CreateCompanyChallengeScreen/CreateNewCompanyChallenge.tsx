@@ -1,42 +1,41 @@
-import {
-  View,
-  Text,
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import React, { FC, useLayoutEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useForm, Controller } from "react-hook-form";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import Spinner from "react-native-loading-spinner-overlay";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import React, { FC, useLayoutEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { useNav } from "../../../../hooks/useNav";
-import { ICreateCompanyChallenge } from "../../../../types/challenge";
 import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
-import CustomSwitch from "../../../../component/common/Switch";
+import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
-import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
+import CustomSwitch from "../../../../component/common/Switch";
+import { useNav } from "../../../../hooks/useNav";
+import { ICreateCompanyChallenge } from "../../../../types/challenge";
 
-import { ICreateChallenge } from "../../../../types/challenge";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { StackActions } from "@react-navigation/native";
+import { AxiosResponse } from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import {
   createCompanyChallenge,
   updateChallengeImage,
 } from "../../../../service/challenge";
-import { AxiosResponse } from "axios";
+import { ICreateChallenge } from "../../../../types/challenge";
 import httpInstance from "../../../../utils/http";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
-import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { StackActions } from "@react-navigation/native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -210,7 +209,7 @@ export const CreateCompanyChallengeScreen: FC<
 
   return (
     <SafeAreaView className="flex flex-col bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
 
       <ConfirmDialog
         title={

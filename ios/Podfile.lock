@@ -570,7 +570,7 @@ PODS:
   - RNGoogleSignin (10.0.1):
     - GoogleSignIn (~> 7.0)
     - React-Core
-  - RNIap (12.10.8):
+  - RNIap (12.12.0):
     - React-Core
   - RNInAppBrowser (3.7.0):
     - React-Core
@@ -1010,7 +1010,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: b167065ee2fcc7fe43a32b35d79d5eb23bceb4ad
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
-  RNIap: 99a559a3642155b47aa0622f9693632010a0b4f7
+  RNIap: 313ab52dde2bc1a25abb76cba70388e9b5f6a8c1
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
@@ -1027,4 +1027,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 046906f4076f0d53de90160ea35108438e6dcc82
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.13.0

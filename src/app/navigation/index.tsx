@@ -18,7 +18,6 @@ import Header from "../component/common/Header";
 import AppTitle from "../component/common/AppTitle";
 import NavButton from "../component/common/Buttons/NavButton";
 import BottomNavBar from "../component/BottomNavBar/BottomNavBar";
-import GlobalDialog from "../component/common/Dialog/GlobalDialog";
 import BottomNavBarWithoutLogin from "../component/BottomNavBar/BottomNavBarWithoutLogin";
 
 import Login from "../screen/LoginScreen/LoginScreen";
@@ -180,7 +179,6 @@ export const RootNavigation = () => {
       }}
       linking={isLoggedin && (link as any)}
     >
-      <GlobalDialog />
       <RootStack.Navigator
         initialRouteName="IntroScreen"
         screenOptions={{

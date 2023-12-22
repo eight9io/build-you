@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -15,9 +15,12 @@ import {
 import { AxiosResponse } from "axios";
 import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
-import Spinner from "react-native-loading-spinner-overlay";
 
-import { getProducts as getProductsFromProvider } from "react-native-iap";
+import {
+  getProducts as getProductsFromProvider,
+  ErrorCode,
+  ProductPurchase,
+} from "react-native-iap";
 
 import {
   createChallenge,
@@ -34,6 +37,9 @@ import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-cr
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
+
+import ErrorText from "../../component/common/ErrorText";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
@@ -43,14 +49,12 @@ import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
 import {
   getAllProductsFromStore,
-  getCurrencySymbol,
   getProductFromDatabase,
   requestPurchaseChecks,
   verifyPurchase,
 } from "../../utils/purchase.util";
+
 import { IInAppPurchaseProduct } from "../../types/purchase";
-import ErrorText from "../../component/common/ErrorText";
-import { ErrorCode, ProductPurchase } from "react-native-iap";
 import {
   APPLE_IN_APP_PURCHASE_STATUS,
   GOOGLE_IN_APP_PURCHASE_STATUS,
@@ -70,10 +74,11 @@ interface ICartScreenProps {
 const MAX_CHECKPOINT = 5;
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
+  const packagesPriceRef = useRef({});
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
@@ -84,15 +89,9 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     IInAppPurchaseProduct[]
   >([]);
 
-  const { choosenPackage, checkPoint } = route.params;
+  const { choosenPackage } = route.params;
 
-  const {
-    price: initialPrice,
-    name: packageName,
-    id: packgeId,
-    type: typeOfPackage,
-    currency,
-  } = choosenPackage;
+  const { name: packageName, type: typeOfPackage } = choosenPackage;
 
   const { setNewChallengeId: setNewChallengeIdToStore } =
     useNewCreateOrDeleteChallengeStore();
@@ -111,6 +110,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const getPackagePriceFromStore = async (productId: string) => {
     if (!productId) return;
+    if (packagesPriceRef[productId]) {
+      return setFinalPrice(packagesPriceRef[productId].localizedPrice);
+    }
+
     const getPackageFromStore = async () => {
       try {
         setIsLoading(true);
@@ -118,10 +121,11 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         const packagesFromStore = await getProductsFromProvider({
           skus: [productId],
         });
+        packagesPriceRef[productId] = packagesFromStore[0];
         setFinalPrice(packagesFromStore[0].localizedPrice);
         setTimeout(() => {
           setIsLoading(false);
-        }, 300);
+        }, 1000);
       } catch (error) {
         setTimeout(() => {
           setIsLoading(false);
@@ -140,52 +144,24 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
     if (!selectedProduct) return;
     getPackagePriceFromStore(selectedProduct.productId);
-  }, [numberOfCheckpoints]);
+  }, [numberOfCheckpoints, allProductsFromDatabase]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const products = await getAllProductsFromStore();
-      // if ios, filter project have platform ios
-      if (Platform.OS === "ios") {
-        const iosProducts = products.filter((product) => {
-          const packageTypeToBeFetch =
-            typeOfPackage === "videocall"
-              ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
-              : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
-          return (
-            product.platform === "apple" &&
-            product.packageType === packageTypeToBeFetch
-          );
-        });
-        setAllProductsFromDatabase(iosProducts);
-        //set product with quantity = 1 to default
-        const defaultProduct = iosProducts.find(
-          (product) => product.quantity === 1
+    (async function () {
+      const allProducts = await getAllProductsFromStore();
+      const currentPlatform = Platform.OS === "ios" ? "apple" : "google";
+      const products = allProducts.filter((product) => {
+        const packageTypeToBeFetch =
+          typeOfPackage === "videocall"
+            ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
+            : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
+        return (
+          product.platform === currentPlatform &&
+          product.packageType === packageTypeToBeFetch
         );
-        await getPackagePriceFromStore(defaultProduct?.productId);
-        return;
-      } else {
-        // if android, filter project have platform android
-        const androidProducts = products.filter((product) => {
-          const packageTypeToBeFetch =
-            typeOfPackage === "videocall"
-              ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
-              : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
-          return (
-            product.platform === "google" &&
-            product.packageType.trim() === packageTypeToBeFetch
-          );
-        });
-        setAllProductsFromDatabase(androidProducts);
-        //set product with quantity = 1 to default
-        const defaultProduct = androidProducts.find(
-          (product) => product.quantity === 1
-        );
-        await getPackagePriceFromStore(defaultProduct?.productId);
-        return;
-      }
-    };
-    fetchProducts();
+      });
+      setAllProductsFromDatabase(products);
+    })();
   }, []);
 
   const handlePay = async (
@@ -265,6 +241,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const onSumitCertifiedChallenge = async () => {
     const data = getCreateChallengeDataStore();
+
     setIsLoading(true);
     let newChallengeId: string | null = null;
     try {
@@ -278,28 +255,20 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
       let challengeCreateResponse: AxiosResponse;
       if (isCurrentUserCompany) {
-        challengeCreateResponse = (await createCompanyChallenge(
-          payload
-        )) as AxiosResponse;
+        challengeCreateResponse = await createCompanyChallenge(payload);
       } else {
-        challengeCreateResponse = (await createChallenge(
-          payload
-        )) as AxiosResponse;
+        challengeCreateResponse = await createChallenge(payload);
       }
 
       newChallengeId = challengeCreateResponse.data.id;
       setNewChallengeIdToStore(newChallengeId);
       // If challenge created successfully, upload image
-      if (challengeCreateResponse.status === 200 || 201) {
+      if (
+        challengeCreateResponse.status === 200 ||
+        challengeCreateResponse.status === 201
+      ) {
         setNewChallengeId(challengeCreateResponse.data.id);
         if (image) {
-          const challengeImageResponse = (await updateChallengeImage(
-            {
-              id: newChallengeId,
-            },
-            image
-          )) as AxiosResponse;
-
           // Wait for payment to be processed
           let isPaymentPending = false;
           try {
@@ -322,113 +291,124 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           } catch (error) {
             // Delete draft challenge if payment failed
             httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-            if (error.code !== ErrorCode.E_USER_CANCELLED)
+            if (error.code !== ErrorCode.E_USER_CANCELLED) {
               setPurchaseErrorMessages(t("error_general_message"));
+            }
+
             setTimeout(() => {
               setIsLoading(false);
-            }, 300);
+            }, 100);
             return;
           }
+
+          updateChallengeImage(
+            {
+              id: newChallengeId,
+            },
+            image
+          );
 
           if (isPaymentPending) {
             // If payment is pending, challenge will be saved as draft => cannot navigate to challenge detail
             // => navigate to challenges screen instead
 
             // This dialog will be shown when all modals are closed
-            GlobalDialogController.showModal({
-              title: t("payment_pending_modal.title"),
-              message: t("payment_pending_modal.description"),
-            });
-            navigation.navigate("Challenges");
-          } else {
-            // This toast will be shown when all modals are closed
+            setIsLoading(false);
+            setTimeout(() => {
+              navigation.navigate("Challenges");
+              setTimeout(() => {
+                GlobalDialogController.showModal({
+                  title: t("payment_pending_modal.title"),
+                  message: t("payment_pending_modal.description"),
+                });
+              }, 300);
+            }, 100);
+
+            return;
+          }
+          // This toast will be shown when all modals are closed
+          setTimeout(() => {
             GlobalToastController.showModal({
               message:
                 t("toast.create_challenge_success") ||
                 "Your challenge has been created successfully !",
             });
 
-            const isChallengesScreenInStack = navigation
-              .getState()
-              .routes.some((route) => route.name === "Challenges");
-            if (isChallengesScreenInStack) {
-              console.log("isChallengesScreenInStack");
-              navigation.dispatch(StackActions.popToTop());
-              if (isCurrentUserCompany) {
-                const pushAction = StackActions.push("HomeScreen", {
+            setTimeout(() => {
+              const isChallengesScreenInStack = navigation
+                .getState()
+                .routes.some((route) => route.name === "Challenges");
+
+              if (isChallengesScreenInStack) {
+                console.log("isChallengesScreenInStack");
+                navigation.dispatch(StackActions.popToTop());
+                if (isCurrentUserCompany) {
+                  const pushAction = StackActions.push("HomeScreen", {
+                    screen: "Challenges",
+                    params: {
+                      screen: "CompanyChallengeDetailScreen",
+                      params: { challengeId: newChallengeId },
+                    },
+                  });
+                  navigation.dispatch(pushAction);
+                } else {
+                  const pushAction = StackActions.push("HomeScreen", {
+                    screen: "Challenges",
+                    params: {
+                      screen: "PersonalChallengeDetailScreen",
+                      params: { challengeId: newChallengeId },
+                    },
+                  });
+                  navigation.dispatch(pushAction);
+                }
+              } else {
+                // add ChallengesScreen to the stack
+                navigation.navigate("HomeScreen", {
                   screen: "Challenges",
-                  params: {
+                });
+                if (isCurrentUserCompany) {
+                  navigation.navigate("Challenges", {
                     screen: "CompanyChallengeDetailScreen",
                     params: { challengeId: newChallengeId },
-                  },
-                });
-                navigation.dispatch(pushAction);
-              } else {
-                const pushAction = StackActions.push("HomeScreen", {
-                  screen: "Challenges",
-                  params: {
+                  });
+                } else {
+                  navigation.navigate("Challenges", {
                     screen: "PersonalChallengeDetailScreen",
                     params: { challengeId: newChallengeId },
-                  },
-                });
-                navigation.dispatch(pushAction);
+                  });
+                }
               }
-            } else {
-              // add ChallengesScreen to the stack
-              navigation.navigate("HomeScreen", {
-                screen: "Challenges",
-              });
-              if (isCurrentUserCompany) {
-                navigation.navigate("Challenges", {
-                  screen: "CompanyChallengeDetailScreen",
-                  params: { challengeId: newChallengeId },
-                });
-              } else {
-                navigation.navigate("Challenges", {
-                  screen: "PersonalChallengeDetailScreen",
-                  params: { challengeId: newChallengeId },
-                });
-              }
-            }
-          }
-
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 300);
-          return;
+            }, 300);
+          }, 100);
         }
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 300);
         setIsRequestSuccess(true);
         setIsShowModal(true);
       }
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-      navigation.navigate("HomeScreen", {
-        screen: "CreateChallengeScreenMain",
-      });
+      setIsLoading(false);
       if (error.response && error.response.status === 400) {
         setTimeout(() => {
           GlobalDialogController.showModal({
             title: t("dialog.err_title"),
             message: error.response.data.message,
           }),
-            1500;
+            100;
         });
         return;
       }
       setTimeout(() => {
-        GlobalToastController.showModal({
-          message:
-            t("error_general_message") ||
-            "Something went wrong. Please try again later!",
-        }),
-          1500;
-      });
+        navigation.navigate("HomeScreen", {
+          screen: "CreateChallengeScreenMain",
+        });
+        setTimeout(() => {
+          GlobalToastController.showModal({
+            message:
+              t("error_general_message") ||
+              "Something went wrong. Please try again later!",
+          });
+        }, 300);
+      }, 100);
     }
   };
 
@@ -445,7 +425,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
       {isShowModal && (
         <ConfirmDialog
           title={
@@ -466,136 +446,136 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
         />
       )}
 
-      <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
-        <View
-          className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
-          style={{
-            width: 343,
-          }}
-        >
-          <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
-            <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
-              {packageName}
-            </Text>
-          </View>
-
-          <View className="flex w-full flex-col items-start justify-center gap-y-2">
-            <Text className="text-start text-md font-normal leading-none text-zinc-500">
-              {choosenPackage?.caption}
-            </Text>
-            <View className="flex w-full flex-col items-start justify-start">
-              <View className="flex w-full flex-col items-start justify-start space-y-2 py-2 pb-6">
-                {["Intake", "Check", "Closing"].map((item) => (
-                  <Text
-                    className="text-center text-md font-semibold leading-none text-neutral-700"
-                    key={item}
-                  >
-                    {item}
-                  </Text>
-                ))}
-              </View>
+      <View>
+        <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
+          <View
+            className="mt-6 flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4"
+            style={{
+              width: 343,
+            }}
+          >
+            <View className="flex w-full items-start justify-center rounded-tl-3xl pb-2 pt-4 ">
+              <Text className="text-[16px] font-semibold uppercase leading-tight text-primary-default">
+                {packageName}
+              </Text>
             </View>
-          </View>
-        </View>
 
-        <View
-          className="flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4 py-4"
-          style={{
-            width: 343,
-          }}
-        >
-          <View className="flex w-full flex-col items-start justify-center gap-y-2">
-            <Text className="text-start text-md font-normal leading-none text-zinc-500">
-              {t("cart_screen.select_checkpoints") ||
-                "Select the number of Check points:"}
-            </Text>
-            <View className="flex w-full flex-col items-start justify-start">
-              <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
-                <View className="flex w-full flex-row items-center justify-between">
-                  {["Check"].map((item) => (
+            <View className="flex w-full flex-col items-start justify-center gap-y-2">
+              <Text className="text-start text-md font-normal leading-none text-zinc-500">
+                {choosenPackage?.caption}
+              </Text>
+              <View className="flex w-full flex-col items-start justify-start">
+                <View className="flex w-full flex-col items-start justify-start space-y-2 py-2 pb-6">
+                  {["Intake", "Check", "Closing"].map((item) => (
                     <Text
                       className="text-center text-md font-semibold leading-none text-neutral-700"
-                      key={"numberOfCheckCart"}
+                      key={item}
                     >
                       {item}
                     </Text>
                   ))}
-                  <View className="flex flex-row items-center justify-between">
-                    <TouchableOpacity
-                      className="flex items-center justify-center rounded-[36px] border border-orange-500 "
-                      style={{
-                        height: 28,
-                        width: 28,
-                      }}
-                      onPress={handleRemoveCheckpoint}
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <View
+            className="flex flex-col items-start justify-start rounded-2xl bg-slate-50 px-4 py-4"
+            style={{
+              width: 343,
+            }}
+          >
+            <View className="flex w-full flex-col items-start justify-center gap-y-2">
+              <Text className="text-start text-md font-normal leading-none text-zinc-500">
+                {t("cart_screen.select_checkpoints") ||
+                  "Select the number of Check points:"}
+              </Text>
+              <View className="flex w-full flex-col items-start justify-start">
+                <View className="flex w-full flex-col items-start justify-start space-y-2 py-2">
+                  <View className="flex w-full flex-row items-center justify-between">
+                    <Text
+                      className="text-center text-md font-semibold leading-none text-neutral-700"
+                      key={"numberOfCheckCart"}
                     >
-                      <MinusSVG />
-                    </TouchableOpacity>
-                    <View className="w-8">
-                      <Text className="text-center text-md font-semibold leading-none text-neutral-700">
-                        {numberOfCheckpoints}
-                      </Text>
+                      Check
+                    </Text>
+                    <View className="flex flex-row items-center justify-between">
+                      <TouchableOpacity
+                        className="flex items-center justify-center rounded-[36px] border border-orange-500 "
+                        style={{
+                          height: 28,
+                          width: 28,
+                        }}
+                        onPress={handleRemoveCheckpoint}
+                      >
+                        <MinusSVG />
+                      </TouchableOpacity>
+                      <View className="w-8">
+                        <Text className="text-center text-md font-semibold leading-none text-neutral-700">
+                          {numberOfCheckpoints}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        className="flex items-center justify-center rounded-2xl border border-orange-500 "
+                        style={{
+                          height: 28,
+                          width: 28,
+                        }}
+                        onPress={handleAddCheckpoint}
+                      >
+                        <PlusSVG />
+                      </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                      className="flex items-center justify-center rounded-2xl border border-orange-500 "
-                      style={{
-                        height: 28,
-                        width: 28,
-                      }}
-                      onPress={handleAddCheckpoint}
-                    >
-                      <PlusSVG />
-                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
 
-        <View
-          className="border-black flex w-full flex-row  border-t px-4"
-          style={{
-            width: 343,
-          }}
-        >
-          <View className=" flex w-full flex-row items-center justify-between pt-3">
-            <Text className=" text-base font-semibold uppercase leading-tight">
-              {t("cart_screen.total")}
-            </Text>
-            <Text className=" text-base font-semibold leading-tight text-primary-default">
-              {finalPrice}
-            </Text>
+          <View
+            className="border-black flex w-full flex-row  border-t px-4"
+            style={{
+              width: 343,
+            }}
+          >
+            <View className=" flex w-full flex-row items-center justify-between pt-3">
+              <Text className=" text-base font-semibold uppercase leading-tight">
+                {t("cart_screen.total")}
+              </Text>
+              <Text className=" text-base font-semibold leading-tight text-primary-default">
+                {finalPrice}
+              </Text>
+            </View>
+          </View>
+          <View className="mx-9 self-start">
+            {purchaseErrorMessages && (
+              <ErrorText
+                message={purchaseErrorMessages}
+                containerClassName="w-full"
+                textClassName="flex-1"
+              />
+            )}
           </View>
         </View>
-        <View className="mx-9 self-start">
-          {purchaseErrorMessages && (
-            <ErrorText
-              message={purchaseErrorMessages}
-              containerClassName="w-full"
-              textClassName="flex-1"
-            />
-          )}
-        </View>
-      </View>
 
-      <TouchableOpacity
-        className={clsx(
-          " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
-          isAndroid ? "my-6" : "my-4",
-          finalPrice === "0" ? "opacity-50" : ""
-        )}
-        style={{
-          height: 48,
-          width: 344,
-        }}
-        disabled={finalPrice === "0"}
-        onPress={debounce(onSumitCertifiedChallenge, 500)}
-      >
-        <Text className="text-center text-[14px] font-semibold leading-tight text-white">
-          {t("cart_screen.pay") || "Pay"}
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          className={clsx(
+            " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
+            isAndroid ? "my-6" : "my-4",
+            finalPrice === "0" ? "opacity-50" : ""
+          )}
+          style={{
+            height: 48,
+            width: 344,
+          }}
+          disabled={finalPrice === "0" || isLoading}
+          onPress={onSumitCertifiedChallenge}
+        >
+          <Text className="text-center text-[14px] font-semibold leading-tight text-white">
+            {t("cart_screen.pay") || "Pay"}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

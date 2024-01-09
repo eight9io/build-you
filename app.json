@@ -2,7 +2,7 @@
   "expo": {
     "name": "BuildYou",
     "slug": "build-you",
-    "version": "1.5.17",
+    "version": "1.5.18",
     "orientation": "portrait",
     "jsEngine": "hermes",
     "scheme": "it.buildyou.buildyou",

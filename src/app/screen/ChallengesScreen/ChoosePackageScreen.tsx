@@ -13,6 +13,7 @@ import {
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { ICheckPoint, IPackage } from "../../types/package";
 
+import { usePriceStore } from "../../store/price-store";
 import { serviceGetAllPackages } from "../../service/package";
 import { useUserProfileStore } from "../../store/user-store";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
@@ -132,6 +133,8 @@ const ChoosePackageScreen = () => {
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
 
+  const { setChatPackagePrice, setVideoPackagePrice } = usePriceStore();
+
   const handleChoosePackage = (choosenPackage: IPackage) => {
     const packageData = {
       name: choosenPackage.name,
@@ -184,6 +187,10 @@ const ChoosePackageScreen = () => {
 
           return;
         }
+        const chatPackagePrice = packagesFromStore.chatPackage.localizedPrice;
+        const videoPackagePrice = packagesFromStore.videoPackage.localizedPrice;
+        setChatPackagePrice(chatPackagePrice);
+        setVideoPackagePrice(videoPackagePrice);
         sortedPackages = sortedPackages.map((item) => {
           return {
             ...item,

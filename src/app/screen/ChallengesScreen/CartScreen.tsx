@@ -32,6 +32,7 @@ import httpInstance from "../../utils/http";
 import { ICheckPoint, IPackage } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
 
+import { usePriceStore } from "../../store/price-store";
 import { useUserProfileStore } from "../../store/user-store";
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
@@ -78,7 +79,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
@@ -100,6 +101,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getCreateChallengeDataStore } = useCreateChallengeDataStore();
+  const { getChatPackagePrice, getVideoPackagePrice } = usePriceStore();
 
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
@@ -112,6 +114,16 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     if (!productId) return;
     if (packagesPriceRef[productId]) {
       return setFinalPrice(packagesPriceRef[productId].localizedPrice);
+    }
+
+    if (numberOfCheckpoints == 0) {
+      if (typeOfPackage === "videocall") {
+        setFinalPrice(getVideoPackagePrice());
+      }
+      if (typeOfPackage === "chat") {
+        setFinalPrice(getChatPackagePrice());
+      }
+      return;
     }
 
     const getPackageFromStore = async () => {

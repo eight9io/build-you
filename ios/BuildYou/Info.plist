@@ -34,12 +34,12 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.googleusercontent.apps.182046676611-uguei0ko32e2i9cobbcicfd9pjsj89ru</string>
+          <string>com.googleusercontent.apps.288098023879-i6v73ulr31sfgodmjsfi67mnrgj3po6i</string>
         </array>
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>73</string>
+    <string>74</string>
     <key>CodePushDeploymentKey</key>
     <string>K60TOcl0LeY6pFRO94YIWX2MaLMs-UxHeaHiG</string>
     <key>ITSAppUsesNonExemptEncryption</key>

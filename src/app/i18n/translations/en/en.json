@@ -230,7 +230,8 @@
       "title": "Select the soft skills you are already competent on",
       "sub_title": "Please select at least 3 different soft skills and rate it from 1 to 5.",
       "soft_skills": "Soft skills",
-      "error": "Please select at least 3 soft skills.",
+      "error": "Please select 3 soft skills.",
+      "error_exceed": "Maximum selected soft skills is 3",
       "error_rate": "Please rate from 1 to 5",
       "select_soft_skill": "Select a soft skill"
     },

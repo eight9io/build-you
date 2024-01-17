@@ -571,6 +571,7 @@
     "copying_to_clipboard_error": "Error when copying to clipboard",
     "copied_to_clipboard": "Copied to clipboard",
     "join_my_challenge": "Join my challenge!",
+    "see_my_profile": "See my profile!",
     "user_did_not_share_link": "User did not share"
   },
   "upload_cover_failed": "Upload cover failed. Please try again later.",

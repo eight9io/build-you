@@ -14,6 +14,9 @@ export const DeepLink = {
               OtherUserProfileChallengeDetailsScreen: {
                 path: "/challenge/:challengeId",
               },
+              OtherUserProfileScreen: {
+                path: "/user/:userId",
+              },
             },
           },
         },

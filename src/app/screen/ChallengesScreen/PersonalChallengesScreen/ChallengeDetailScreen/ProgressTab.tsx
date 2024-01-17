@@ -192,7 +192,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   >([]);
   const [progressIndexToUpdate, setProgressIndexToUpdate] =
     useState<number>(-1);
-  const [progressLoading, setProgressLoading] = useState<boolean>(true);
+  const [progressLoading, setProgressLoading] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
 
   const isFocused = useIsFocused();
@@ -311,6 +311,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           onConfirm={handleConfirmEditChallengeProgress}
         />
       )}
+
       <CustomActivityIndicator isVisible={progressLoading} />
       {!progressLoading && (
         <FlatList
@@ -320,6 +321,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             return (
               <>
                 {(isJoined || isCurrentUserOwnerOfChallenge) &&
+                  progressLoading &&
                   (!isChallengeCompleted ? (
                     <View>
                       <AddNewChallengeProgressButton />

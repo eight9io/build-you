@@ -2,7 +2,7 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, View } from "react-native";
 
@@ -24,6 +24,11 @@ import { RouteProp } from "@react-navigation/native";
 import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
 import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 import CustomActivityIndicator from "../../../component/common/CustomActivityIndicator";
+import Button from "../../../component/common/Buttons/Button";
+import { onShareUserLink } from "../../../utils/shareLink.uitl";
+
+import ShareIcon from "../../../../../assets/svg/share.svg";
+import SettingsIcon from "../../../component/common/Buttons/ButtonWithIcon/asset/settings.svg";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -39,9 +44,41 @@ interface IProfileProps {
 
 const Profile: React.FC<IProfileProps> = ({ route, navigation }: any) => {
   const { getUserProfile } = useUserProfileStore();
+  const { t } = useTranslation();
 
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      contentStyle: {
+        display: "flex",
+        justifyContent: "center",
+      },
+      headerTitle: () => <AppTitle title={t("profile_title")} />,
+      headerLeft: () => (
+        <View className="">
+          <BuildYouLogo width={90} />
+        </View>
+      ),
+      headerRight: () => {
+        return (
+          <View className="flex w-20 flex-row justify-between">
+            <Button
+              Icon={<ShareIcon />}
+              onPress={() => onShareUserLink(userData.id)}
+            />
+            <Button
+              Icon={<SettingsIcon />}
+              onPress={() => navigation.push("SettingsScreenRoot")}
+            />
+          </View>
+        );
+      },
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView className="justify-content: space-between h-full w-full flex-1 bg-gray-50 ">
       <CustomActivityIndicator isVisible={isLoading} />
@@ -71,26 +108,7 @@ const PersonalProfileScreen = () => {
       <ProfileStack.Screen
         name="ProfileScreen"
         component={Profile}
-        options={({ navigation }) => ({
-          headerShown: true,
-          contentStyle: {
-            display: "flex",
-            justifyContent: "center",
-          },
-          headerTitle: () => <AppTitle title={t("profile_title")} />,
-          headerLeft: () => (
-            <View className="">
-              <BuildYouLogo width={90} />
-            </View>
-          ),
-          headerRight: (props) => (
-            <ButtonWithIcon
-              icon="setting"
-              onPress={() => navigation.push("SettingsScreenRoot")}
-              testID="settings_btn"
-            />
-          ),
-        })}
+        options={({ navigation }) => ({})}
       />
       <ProfileStack.Screen
         name="OtherUserProfileScreen"

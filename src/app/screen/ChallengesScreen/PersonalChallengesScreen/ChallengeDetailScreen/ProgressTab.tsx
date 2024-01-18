@@ -301,6 +301,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     handleEditProgress(); // Navigate to the challenge progresses screen to refresh the list
   };
 
+  // TODO: change image on top, then add a change button
+
   return (
     <View className="h-full flex-1">
       {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal && (
@@ -321,11 +323,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             return (
               <>
                 {(isJoined || isCurrentUserOwnerOfChallenge) &&
-                  progressLoading &&
+                  !progressLoading &&
                   (!isChallengeCompleted ? (
                     <View>
                       <AddNewChallengeProgressButton />
-                      {!progressLoading && localProgressData?.length == 0 && (
+                      {localProgressData?.length == 0 && (
                         <View className="px-4 py-4">
                           <Text className="selection: text-base">
                             {

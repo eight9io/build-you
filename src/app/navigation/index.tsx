@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -89,6 +89,19 @@ export const RootNavigation = () => {
     return url;
   };
 
+  const onLayoutRootView = useCallback(async () => {
+    if (authStoreHydrated) {
+      const deepLink = await getInitialURL();
+      if (deepLink) {
+        await SplashScreen.hideAsync();
+        return;
+      }
+      setTimeout(async () => {
+        await SplashScreen.hideAsync();
+      }, 1000);
+    }
+  }, [authStoreHydrated]);
+
   const link = {
     ...DeepLink,
     getInitialURL,
@@ -113,48 +126,39 @@ export const RootNavigation = () => {
         );
         setAuthTokenToHttpHeader(isLoggedin);
 
-        getUserProfileAsync()
-          .then(({ data: profile }) => {
-            const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
-            let navigateToRoute = isCompleteProfile
-              ? "HomeScreen"
-              : "CompleteProfileScreen";
+        getUserProfileAsync().then(({ data: profile }) => {
+          const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
+          let navigateToRoute = isCompleteProfile
+            ? "HomeScreen"
+            : "CompleteProfileScreen";
 
-            getUserAllChallengeIdsAsync(profile?.id);
-            if (isCompleteProfile && isNavigationReadyRef?.current) {
-              return profile;
-            } else if (!isCompleteProfile) {
-              //get challenge id from deep link
-              link.getInitialURL().then((url) => {
-                if (url) {
-                  const challengeId = url.split("/").pop();
-                  if (challengeId) {
-                    setDeepLink({
-                      challengeId,
-                    });
-                  }
-                }
-              });
-            }
-
-            navigationRef.current.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: navigateToRoute }],
-              })
-            );
+          getUserAllChallengeIdsAsync(profile?.id);
+          if (isCompleteProfile && isNavigationReadyRef?.current) {
             return profile;
-          })
-          .finally(() => {
-            setTimeout(() => {
-              SplashScreen.hideAsync();
-            }, 200);
-          });
+          } else if (!isCompleteProfile) {
+            //get challenge id from deep link
+            link.getInitialURL().then((url) => {
+              if (url) {
+                const challengeId = url.split("/").pop();
+                if (challengeId) {
+                  setDeepLink({
+                    challengeId,
+                  });
+                }
+              }
+            });
+          }
+
+          navigationRef.current.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: navigateToRoute }],
+            })
+          );
+          return profile;
+        });
       } else {
         setBadgeCount(0); // Set badge count to 0 in case user reinstall the app and open app in the first time (store data has been cleared when uninstall app)
-        setTimeout(() => {
-          SplashScreen.hideAsync();
-        }, 200);
       }
     }
   }, [authStoreHydrated]);
@@ -178,6 +182,7 @@ export const RootNavigation = () => {
         navigationRef.current = navigation;
       }}
       linking={isLoggedin && (link as any)}
+      onReady={onLayoutRootView}
     >
       <RootStack.Navigator
         initialRouteName="IntroScreen"

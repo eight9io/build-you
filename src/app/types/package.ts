@@ -4,7 +4,12 @@ export interface IPackage {
   price: number;
   currency: string;
   caption: string;
-  type: "videocall" | "chat";
+  type: PACKAGE_TYPE;
+}
+
+export enum PACKAGE_TYPE {
+  VIDEO_CALL = "videocall",
+  CHAT = "chat",
 }
 
 export interface IPackageResponse {

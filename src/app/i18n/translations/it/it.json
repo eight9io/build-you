@@ -230,7 +230,8 @@
       "title": "Seleziona le soft skills su cui sei già competente",
       "sub_title": "Seleziona almeno 3 diverse soft skills e valutale da 1 a 5.",
       "soft_skills": "Soft skills",
-      "error": "Select almeno 3 soft skills.",
+      "error": "Select 3 soft skills.",
+      "error_exceed": "Il massimo delle competenze soft selezionate è 3",
       "error_rate": "Vota da 1 a 5",
       "select_soft_skill": "Seleziona una soft skill"
     },
@@ -571,6 +572,7 @@
     "copying_to_clipboard_error": "Errore durante la copia negli appunti",
     "copied_to_clipboard": "Copiato negli appunti",
     "join_my_challenge": "Unisciti alla mia sfida!",
+    "see_my_profile": "Guarda il mio profilo!",
     "user_did_not_share_link": "L'utente non ha condiviso"
   },
   "upload_cover_failed": "Caricamento della copertina non riuscito. Riprova più tardi.",

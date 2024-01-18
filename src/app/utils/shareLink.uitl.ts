@@ -38,6 +38,37 @@ export const onShareChallengeLink = (challengeId: string) => {
   onShare();
 };
 
+export const onShareUserLink = (userId: string) => {
+  if (!userId) {
+    GlobalDialogController.showModal({
+      title: i18n.t("dialog.err_title"),
+      message:
+        i18n.t("share_link.copying_to_clipboard_error") ||
+        "Something went wrong",
+      button: i18n.t("dialog.ok"),
+    });
+    return;
+  }
+  const onShare = async () => {
+    try {
+      await Share.open({
+        title: i18n.t("share_link.see_my_profile") || "See my profile!",
+        url: `${EXPO_APP_DOMAIN}/user/${userId}`,
+      });
+    } catch (error: any) {
+      if (
+        error.message === i18n.t("share_link.user_did_not_share_link") ||
+        "User did not share"
+      ) {
+        return;
+      }
+      Alert.alert(error.message);
+    }
+  };
+
+  onShare();
+};
+
 export const onCopyLink = (link: string) => {
   if (!link) {
     GlobalDialogController.showModal({

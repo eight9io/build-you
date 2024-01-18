@@ -158,6 +158,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     IFormValueInput[]
   >([]);
   const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
+  const [numberOfSkillExceedError, setNumberOfSkillExceedError] =
+    useState<boolean>(false);
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
   const [fetchedSoftSkills, setFetchedSoftSkills] = useState<IFormValueInput[]>(
     []
@@ -184,7 +186,10 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   };
 
   const checkSoftSkillRequired = () => {
-    if (selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED) {
+    if (
+      selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED ||
+      selectedCompetencedSkill.length > NUMBER_OF_SKILL_REQUIRED
+    ) {
       setNumberOfSkillError(true);
       return false;
     }
@@ -266,6 +271,12 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       setSelectedCompetencedSkill(newSelectedCompetencedSkill);
       return;
     }
+    if (selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED) {
+      setNumberOfSkillExceedError(true);
+      setOpenDropdown(false);
+      return;
+    }
+
     setSelectedCompetencedSkill([...selectedCompetencedSkill, skill]);
   };
 
@@ -439,7 +450,19 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                             testID="complete_profile_step_4_error"
                           >
                             {t("form_onboarding.screen_4.error") ||
-                              "Please select at least 3 soft skills."}
+                              "Please select 3 soft skills."}
+                          </Text>
+                        </View>
+                      )}
+                      {numberOfSkillExceedError && (
+                        <View className="flex flex-row items-center justify-start pt-2">
+                          <WarningSvg />
+                          <Text
+                            className="pl-1 text-sm font-normal leading-5 text-red-500"
+                            testID="complete_profile_step_4_error"
+                          >
+                            {t("form_onboarding.screen_4.error_exceed") ||
+                              "Please select maximum of 3 soft skills."}
                           </Text>
                         </View>
                       )}

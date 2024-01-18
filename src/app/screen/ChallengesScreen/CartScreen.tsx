@@ -29,7 +29,7 @@ import {
 } from "../../service/challenge";
 import httpInstance from "../../utils/http";
 
-import { ICheckPoint, IPackage } from "../../types/package";
+import { ICheckPoint, IPackage, PACKAGE_TYPE } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
 
 import { usePriceStore } from "../../store/price-store";
@@ -117,10 +117,10 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     }
 
     if (numberOfCheckpoints == 0) {
-      if (typeOfPackage === "videocall") {
+      if (typeOfPackage === PACKAGE_TYPE.VIDEO_CALL) {
         setFinalPrice(getVideoPackagePrice());
       }
-      if (typeOfPackage === "chat") {
+      if (typeOfPackage === PACKAGE_TYPE.CHAT) {
         setFinalPrice(getChatPackagePrice());
       }
       return;

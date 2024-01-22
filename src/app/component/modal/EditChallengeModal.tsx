@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { Modal, SafeAreaView, View, Text } from "react-native";
+import { Modal, SafeAreaView, View, Text, ScrollView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useNav } from "../../hooks/useNav";
@@ -165,8 +165,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
             flex: 1,
           }}
         >
-          <View className="mx-4 flex h-full rounded-t-xl">
-            <View className="flex flex-1 flex-col">
+          <ScrollView className=" flex h-full rounded-t-xl">
+            <View className="mx-4 flex flex-1 flex-col">
               <View className="pt-5">
                 <Controller
                   control={control}
@@ -302,8 +302,10 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
                   <ErrorText message={errors.achievementTime.message} />
                 ) : null}
               </View>
+
+              <View className="h-10" />
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAwareScrollView>
       </SafeAreaView>
       <ConfirmDialog

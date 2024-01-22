@@ -55,7 +55,8 @@
     "vote": "Vota",
     "confirm": "Conferma",
     "voted_waiting": "Votato. Attendi fino alla conferma del coach.",
-    "note": "Nota"
+    "note": "Nota",
+    "complete": "Completa"
   },
   "bottom_nav": {
     "feed": "Feed",

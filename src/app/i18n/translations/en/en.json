@@ -55,7 +55,8 @@
     "vote": "Vote",
     "confirm": "Confirm",
     "voted_waiting": "You already voted. Please wait until the coach confirms the time.",
-    "note": "Note"
+    "note": "Note",
+    "complete": "Complete"
   },
   "bottom_nav": {
     "feed": "Feed",

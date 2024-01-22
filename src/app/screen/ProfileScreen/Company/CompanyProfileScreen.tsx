@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, View } from "react-native";
 
@@ -11,21 +11,28 @@ import {
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import AppTitle from "../../../component/common/AppTitle";
-import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
+import Button from "../../../component/common/Buttons/Button";
 import NavButton from "../../../component/common/Buttons/NavButton";
+import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
+import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import CompanyComponent from "../../../component/Profile/Company/CompanyProfileComponent";
+
 import { serviceGetMyProfile } from "../../../service/auth";
 import { useUserProfileStore } from "../../../store/user-store";
-import OtherUserProfileScreen from "../OtherUser/OtherUserProfileScreen";
-
-import { useGetListEmployee } from "../../../hooks/useGetCompany";
 import { CrashlyticService } from "../../../service/crashlytic";
+import { useGetListEmployee } from "../../../hooks/useGetCompany";
+import { onShareUserLink } from "../../../utils/shareLink.uitl";
+
 import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 import PersonalChallengeDetailScreen from "../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import ProgressCommentScreen from "../../ChallengesScreen/ProgressCommentScreen/ProgressCommentScreen";
 import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import CustomActivityIndicator from "../../../component/common/CustomActivityIndicator";
+
+import ShareIcon from "../../../../../assets/svg/share.svg";
+import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
+import SettingsIcon from "../../../component/common/Buttons/ButtonWithIcon/asset/settings.svg";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -41,6 +48,7 @@ interface ICompanyProps {
 
 const Company: React.FC<ICompanyProps> = ({ navigation, route }) => {
   useGetListEmployee();
+  const { t } = useTranslation();
   const [shouldNotLoadOnFirstFocus, setShouldNotLoadOnFirstFocus] =
     useState<boolean>(true);
 
@@ -63,6 +71,36 @@ const Company: React.FC<ICompanyProps> = ({ navigation, route }) => {
         });
       });
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      contentStyle: {
+        display: "flex",
+        justifyContent: "center",
+      },
+      headerTitle: () => <AppTitle title={t("profile_title")} />,
+      headerLeft: () => (
+        <View className="">
+          <BuildYouLogo width={90} />
+        </View>
+      ),
+      headerRight: () => {
+        return (
+          <View className="flex w-20 flex-row justify-between">
+            <Button
+              Icon={<ShareIcon />}
+              onPress={() => onShareUserLink(userData.id)}
+            />
+            <Button
+              Icon={<SettingsIcon />}
+              onPress={() => navigation.push("SettingsScreenRoot")}
+            />
+          </View>
+        );
+      },
+    });
+  }, [navigation]);
 
   const userData = getUserProfile();
   const [isLoading, setIsLoading] = useState(false);

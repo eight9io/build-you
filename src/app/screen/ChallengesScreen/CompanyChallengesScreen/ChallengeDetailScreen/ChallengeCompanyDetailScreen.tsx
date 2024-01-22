@@ -312,7 +312,7 @@ export const ChallengeCompanyDetailScreen: FC<
         );
     }
   };
-  console.log("challengeStateChallCompnay: ", challengeState);
+
   return (
     <SafeAreaView>
       <View className="flex h-full flex-col bg-gray-veryLight ">

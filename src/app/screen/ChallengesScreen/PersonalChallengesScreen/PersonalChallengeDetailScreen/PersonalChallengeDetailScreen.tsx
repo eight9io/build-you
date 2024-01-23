@@ -28,6 +28,7 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -175,6 +176,23 @@ const PersonalChallengeDetailScreen = ({
 
   const onCheckChallengeCompleted = () => {
     if (!challengeData) return;
+    if (challengeData.type == "certified") {
+      // certified challenge required coach before complete
+      if (challengeData.coach) {
+        if (isChallengeCompleted) {
+          setIsChallengeAlreadyCompletedDialogVisible(true);
+        } else {
+          setIsCompletedChallengeDialogVisible(true);
+        }
+      } else {
+        GlobalDialogController.showModal({
+          title: t("dialog.challenge_is_not_assigned_to_coach.title"),
+          message: t("dialog.challenge_is_not_assigned_to_coach.description"),
+        });
+        return;
+      }
+    }
+
     if (isChallengeCompleted) {
       setIsChallengeAlreadyCompletedDialogVisible(true);
     } else {

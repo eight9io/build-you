@@ -439,6 +439,10 @@
       "title": "Payment is pending",
       "description": "You have a challenge in process. Please wait until it is completed."
     },
+    "challenge_is_not_assigned_to_coach": {
+      "title": "Challenge is not assigned to coach",
+      "description": "Please wait until the challenge is assigned to coach before complete"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "confirm": "Confirm",

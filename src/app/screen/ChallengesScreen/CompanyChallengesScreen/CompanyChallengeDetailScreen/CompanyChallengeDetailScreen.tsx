@@ -1,10 +1,12 @@
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View, Text } from "react-native";
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import httpInstance from "../../../../utils/http";
+import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
 import {
   deleteChallenge,
   completeChallenge,
@@ -20,12 +22,10 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 
 import ShareIcon from "./assets/share.svg";
 import TaskAltIcon from "./assets/task-alt.svg";
-import TaskAltIconGray from "./assets/task-alt-gray.svg";
 import ChallengeCompanyDetailScreen from "../ChallengeDetailScreen/ChallengeCompanyDetailScreen";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { useTranslation } from "react-i18next";
-import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -154,6 +154,9 @@ const CompanyChallengeDetailScreen = ({
       ? challengeData?.status
       : currentUserInParticipant?.challengeStatus;
 
+  const isCoachAssigned = !!challengeData?.coach;
+  const isCertifiedChallenge = challengeData?.type === "certified";
+
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
 
@@ -194,6 +197,23 @@ const CompanyChallengeDetailScreen = ({
 
   const onCheckChallengeCompleted = () => {
     if (!challengeData) return;
+    if (isCertifiedChallenge) {
+      // certified challenge required coach before complete
+      if (isCoachAssigned) {
+        if (isChallengeCompleted) {
+          setIsChallengeAlreadyCompletedDialogVisible(true);
+        } else {
+          setIsCompletedChallengeDialogVisible(true);
+        }
+      } else {
+        GlobalDialogController.showModal({
+          title: t("dialog.challenge_is_not_assigned_to_coach.title"),
+          message: t("dialog.challenge_is_not_assigned_to_coach.description"),
+        });
+        return;
+      }
+    }
+
     if (isChallengeCompleted) {
       setIsChallengeAlreadyCompletedDialogVisible(true);
     } else {
@@ -201,12 +221,13 @@ const CompanyChallengeDetailScreen = ({
     }
   };
 
-  const onCompleteChallenge = () => {
+  const onCompleteChallenge = async () => {
     if (!challengeData) return;
-    completeChallenge(challengeData.id)
+    await completeChallenge(challengeData.id)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           setIsCompletedChallengeDialogVisible(false);
+          setIsCompletedChallengeSuccess(true);
           setShouldScreenRefresh(true);
           GlobalToastController.showModal({
             message:
@@ -330,13 +351,13 @@ const CompanyChallengeDetailScreen = ({
           title={
             isCompletedChallengeSuccess
               ? t("dialog.congratulation") || "Congratulation!"
-              : t("dialog.error_general_message") || "Something went wrong"
+              : t("error_general_message") || "Something went wrong"
           }
           description={
             isCompletedChallengeSuccess
               ? t("dialog.completed_challenge_success") ||
                 "Challenge has been completed successfully."
-              : t("dialog.error_general_message") || "Please try again later."
+              : t("error_general_message") || "Please try again later."
           }
           confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}

@@ -103,8 +103,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       softSkills: softSkillsWithSkillLabel,
       type: "certified",
     });
+    setIsLoading(false);
     setTimeout(() => {
-      setIsLoading(false);
       navigation.navigate("ChoosePackageScreen");
     }, 500);
   };

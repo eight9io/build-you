@@ -118,8 +118,8 @@ const CreateCertifiedChallengeScreen = () => {
       ...data,
       type: "certified",
     });
-    setTimeout(() => {
-      setIsLoading(false);
+    setIsLoading(false);
+     setTimeout(() => {
       navigation.navigate("ChoosePackageScreen");
     }, 500);
   };

@@ -20,7 +20,6 @@ import {
 import { ISocialLoginForm } from "../../../types/auth";
 
 import { LOGIN_TYPE } from "../../../common/enum";
-import AppleLoginButton from "../../common/Buttons/AppleLoginButton";
 import Button from "../../common/Buttons/Button";
 import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
 import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
@@ -31,6 +30,7 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 import { CrashlyticService } from "../../../service/crashlytic";
 import { serviceUpdateMyProfile } from "../../../service/profile";
 import CustomActivityIndicator from "../../common/CustomActivityIndicator";
+import AppleLoginButton from "../../common/Buttons/AppleLoginButton/AppleLoginButton";
 
 interface Props {
   modalVisible: boolean;

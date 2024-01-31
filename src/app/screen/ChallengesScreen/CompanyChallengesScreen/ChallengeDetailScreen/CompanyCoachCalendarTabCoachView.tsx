@@ -16,7 +16,6 @@ import {
   getAllScheduleVideoCall,
   resetScheduledVideoCall,
 } from "../../../../service/schedule";
-import { onCopyLink } from "../../../../utils/shareLink.uitl";
 import { openUrlInApp } from "../../../../utils/inAppBrowser";
 import { useErrorModal } from "../../../../hooks/useErrorModal";
 
@@ -32,6 +31,7 @@ import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoac
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import { onCopyLink } from "../../../../utils/native/share/shareLink.util";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;

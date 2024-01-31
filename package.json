@@ -10,6 +10,7 @@
     "eas-ios-adhoc": "eas build -p ios --profile adhoc"
   },
   "dependencies": {
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@expo-google-fonts/open-sans": "^0.2.3",
     "@expo/metro-config": "0.7.1",
     "@expo/vector-icons": "^13.0.0",

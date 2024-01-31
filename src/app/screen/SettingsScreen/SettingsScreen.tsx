@@ -1,41 +1,32 @@
 import React, { useState } from "react";
-import { View, SafeAreaView, Platform } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { CommonActions } from "@react-navigation/native";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 
 import { useUserProfileStore } from "../../store/user-store";
 import { useAppleLoginInfoStore } from "../../store/apple-login-store";
 import { useAuthStore } from "../../store/auth-store";
-import {
-  setLastNotiIdToLocalStorage,
-  unregisterForPushNotificationsAsync,
-} from "../../utils/notification.util";
+import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 
 import Settings from "../../component/Settings";
 import AppTitle from "../../component/common/AppTitle";
 import Button from "../../component/common/Buttons/Button";
 import NavButton from "../../component/common/Buttons/NavButton";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
-
-import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen";
 import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
 import TermsOfServicesScreen from "../PersonalInformations/TermsOfServicesScreen";
 import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
 import CompanyInformationScreen from "../PersonalInformations/CompanyInformationScreen";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { updateNotificationToken } from "../../service/notification";
-import {
-  NOTIFICATION_TOKEN_DEVICE_TYPE,
-  NOTIFICATION_TOKEN_STATUS,
-} from "../../common/enum";
 import { CrashlyticService } from "../../service/crashlytic";
+import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen/PersonalInformationScreen";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {

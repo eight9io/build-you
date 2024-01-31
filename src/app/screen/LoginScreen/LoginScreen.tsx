@@ -20,7 +20,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { LOGIN_TYPE } from "../../common/enum";
-import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton";
 import Button from "../../component/common/Buttons/Button";
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
@@ -41,6 +40,7 @@ import { ISocialLoginForm, LoginForm } from "../../types/auth";
 import { setupInterceptor } from "../../utils/refreshToken.util";
 import { errorMessage } from "../../utils/statusCode";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
+import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton/AppleLoginButton";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

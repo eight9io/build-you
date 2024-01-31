@@ -25,7 +25,7 @@ import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
 import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 import CustomActivityIndicator from "../../../component/common/CustomActivityIndicator";
 import Button from "../../../component/common/Buttons/Button";
-import { onShareUserLink } from "../../../utils/shareLink.uitl";
+import { onShareUserLink } from "../../../utils/native/share/shareLink.util";
 
 import ShareIcon from "../../../../../assets/svg/share.svg";
 import SettingsIcon from "../../../component/common/Buttons/ButtonWithIcon/asset/settings.svg";

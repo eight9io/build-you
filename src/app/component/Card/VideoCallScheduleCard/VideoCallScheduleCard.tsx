@@ -6,7 +6,7 @@ import dayjs from "../../../utils/date.util";
 
 import { IScheduledTime } from "../../../types/schedule";
 
-import { onCopyLink } from "../../../utils/shareLink.uitl";
+import { onCopyLink } from "../../../utils/native/share/shareLink.util";
 
 import ScheduleDetailModal from "../../modal/CoachCalendar/ScheduleDetailModal";
 

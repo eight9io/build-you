@@ -1,48 +1,26 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import React, { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import jwt_decode from "jwt-decode";
 
-import {
-  checkIsCompleteProfileOrCompany,
-  useUserProfileStore,
-} from "../../store/user-store";
-import Button from "../../component/common/Buttons/Button";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
-import { LOGIN_TYPE } from "../../common/enum";
-import { LoginForm, ISocialLoginForm, IToken } from "../../types/auth";
-import { errorMessage } from "../../utils/statusCode";
-import { useAuthStore } from "../../store/auth-store";
+import { useUserProfileStore } from "../../../store/user-store";
+import Button from "../../../component/common/Buttons/Button";
+import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
+import { LOGIN_TYPE } from "../../../common/enum";
+import { LoginForm, ISocialLoginForm, IToken } from "../../../types/auth";
+import { errorMessage } from "../../../utils/statusCode";
+import { useAuthStore } from "../../../store/auth-store";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import appleAuth from "@invertase/react-native-apple-authentication";
-import { serviceDeleteAccount } from "../../service/profile";
+import { serviceDeleteAccount } from "../../../service/profile";
 import { CommonActions } from "@react-navigation/native";
-import LinkedInModal from "../../component/modal/LinkedInModal";
-import { getUserOccupationCondition } from "../../utils/profile";
-import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
+import LinkedInModal from "../../../component/modal/LinkedInModal";
+import { getUserOccupationCondition } from "../../../utils/profile";
+import CustomActivityIndicator from "../../../component/common/CustomActivityIndicator";
 
 const getGoogleToken = async () => {
   const { idToken } = await GoogleSignin.signIn();
   return idToken;
-};
-
-const getAppleToken = async () => {
-  const { identityToken, authorizationCode } = await appleAuth.performRequest({
-    requestedOperation: appleAuth.Operation.LOGIN,
-    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-  });
-
-  const { email, sub } = jwt_decode<{
-    email: string;
-    sub: string;
-  }>(identityToken);
-
-  return {
-    email,
-    sub,
-    token: authorizationCode,
-  };
 };
 
 export default function PersonalInformationScreen({ navigation }: any) {
@@ -106,10 +84,6 @@ export default function PersonalInformationScreen({ navigation }: any) {
       case "google":
         const googleToken = await getGoogleToken();
         handleLoginOnDeleteAccount({ token: googleToken }, LOGIN_TYPE.GOOGLE);
-        break;
-      case "apple":
-        const applePayload = await getAppleToken();
-        handleLoginOnDeleteAccount(applePayload, LOGIN_TYPE.APPLE);
         break;
       case "linkedin":
         setLinkedInModalVisible(true);

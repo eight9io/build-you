@@ -16,7 +16,7 @@ import { openUrlInApp } from "../../../../utils/inAppBrowser";
 import { serviceGetOtherUserData } from "../../../../service/user";
 
 import { useErrorModal } from "../../../../hooks/useErrorModal";
-import { onCopyLink } from "../../../../utils/shareLink.uitl";
+import { onCopyLink } from "../../../../utils/native/share/shareLink.util";
 import { getInprogressState } from "./CompanyCoachCalendarTabCoachView";
 
 import Button from "../../../../component/common/Buttons/Button";

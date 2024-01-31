@@ -21,7 +21,7 @@ import { serviceGetMyProfile } from "../../../service/auth";
 import { useUserProfileStore } from "../../../store/user-store";
 import { CrashlyticService } from "../../../service/crashlytic";
 import { useGetListEmployee } from "../../../hooks/useGetCompany";
-import { onShareUserLink } from "../../../utils/shareLink.uitl";
+import { onShareUserLink } from "../../../utils/native/share/shareLink.util";
 
 import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import CompanyChallengeDetailScreen from "../../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";

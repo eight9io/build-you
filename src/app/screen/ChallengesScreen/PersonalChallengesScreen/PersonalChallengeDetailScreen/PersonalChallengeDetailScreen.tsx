@@ -25,7 +25,7 @@ import ShareIcon from "./assets/share.svg";
 import TaskAltIcon from "./assets/task-alt.svg";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import { onShareChallengeLink } from "../../../../utils/shareLink.uitl";
+import { onShareChallengeLink } from "../../../../utils/native/share/shareLink.util";
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";

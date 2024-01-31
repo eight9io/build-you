@@ -7,13 +7,13 @@ import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import jwt_decode from "jwt-decode";
 
-import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
+import { useAppleLoginInfoStore } from "../../../../store/apple-login-store";
 
-import Button from "../../common/Buttons/Button";
-import { LOGIN_TYPE } from "../../../common/enum";
-import { ISocialLoginForm, LoginForm } from "../../../types/auth";
-import { errorMessage } from "../../../utils/statusCode";
-import { CrashlyticService } from "../../../service/crashlytic";
+import Button from "../Button";
+import { LOGIN_TYPE } from "../../../../common/enum";
+import { ISocialLoginForm, LoginForm } from "../../../../types/auth";
+import { errorMessage } from "../../../../utils/statusCode";
+import { CrashlyticService } from "../../../../service/crashlytic";
 
 interface IAppleLoginButtonProps {
   title?: string;

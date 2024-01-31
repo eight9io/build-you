@@ -1,5 +1,5 @@
 import { registerRootComponent } from "expo";
-import { LogBox } from "react-native";
+import { LogBox, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import { H } from "highlight.run";
 
@@ -19,12 +19,13 @@ const onMessageReceived = async (message) => {
   displayNotificationOnForeground(message, useNotificationStore);
 };
 
-messaging().onMessage(onMessageReceived);
-messaging().onNotificationOpenedApp(() => {
-  handleAppOpenOnNotificationPressed(useNotificationStore);
-}); // For Android when app is in background
-// messaging().setBackgroundMessageHandler(onMessageReceived(message)); // Comment this because it will send notification twice in Android (one from FCM and one from notifee)
-
+if (Platform.OS === "android" || Platform.OS === "ios") {
+  messaging().onMessage(onMessageReceived);
+  messaging().onNotificationOpenedApp(() => {
+    handleAppOpenOnNotificationPressed(useNotificationStore);
+  }); // For Android when app is in background
+  // messaging().setBackgroundMessageHandler(onMessageReceived(message)); // Comment this because it will send notification twice in Android (one from FCM and one from notifee)
+}
 
 registerRootComponent(App);
 if (!__DEV__) {

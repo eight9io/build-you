@@ -20,9 +20,9 @@ import { onCopyLink } from "../../../../utils/native/share/shareLink.util";
 import { getInprogressState } from "./CompanyCoachCalendarTabCoachView";
 
 import Button from "../../../../component/common/Buttons/Button";
-import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
+import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog/ErrorDialog";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 
 import LinkSvg from "./assets/link.svg";
 import EmptySvg from "./assets/emptyFollow.svg";

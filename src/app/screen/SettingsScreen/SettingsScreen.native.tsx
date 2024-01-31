@@ -24,6 +24,7 @@ import DeleteAccountScreen from "../PersonalInformations/DeleteAccountScreen";
 import TermsOfServicesScreen from "../PersonalInformations/TermsOfServicesScreen";
 import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
 import CompanyInformationScreen from "../PersonalInformations/CompanyInformationScreen";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { CrashlyticService } from "../../service/crashlytic";
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen/PersonalInformationScreen";
 
@@ -75,6 +76,29 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
       );
       setLastNotiIdToLocalStorage("");
       logout();
+      if (userLoginType === "google") {
+        const googleSignOut = async () => {
+          try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+          } catch (error) {
+            console.error(error);
+            CrashlyticService({
+              errorType: "Google Sign Out Error",
+              error: error,
+            });
+          }
+        };
+        googleSignOut();
+      }
+
+      if (userLoginType === "apple") {
+        setUserAppleInfo({
+          email: null,
+          sub: null,
+          fullName: null,
+        });
+      }
 
       userProfileStoreOnLogout();
     }, 500);

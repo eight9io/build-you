@@ -21,7 +21,7 @@ import WarningSvg from "../../../component/asset/warning.svg";
 
 import httpInstance from "../../../utils/http";
 import { uploadNewVideo } from "../../../utils/uploadVideo";
-import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
 import { CrashlyticService } from "../../../service/crashlytic";
 

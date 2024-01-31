@@ -19,7 +19,7 @@ import ChallengeDetailScreen from "../ChallengeDetailScreen/ChallengeDetailScree
 import PopUpMenu from "../../../../component/common/PopUpMenu";
 import Button from "../../../../component/common/Buttons/Button";
 import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import ShareIcon from "./assets/share.svg";
 import TaskAltIcon from "./assets/task-alt.svg";
@@ -28,7 +28,7 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import { onShareChallengeLink } from "../../../../utils/native/share/shareLink.util";
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

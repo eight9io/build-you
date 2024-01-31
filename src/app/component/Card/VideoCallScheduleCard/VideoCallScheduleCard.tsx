@@ -11,7 +11,7 @@ import { onCopyLink } from "../../../utils/native/share/shareLink.util";
 import ScheduleDetailModal from "../../modal/CoachCalendar/ScheduleDetailModal";
 
 import LinkSvg from "../../../component/asset/link.svg";
-import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 import { openUrlInApp } from "../../../utils/inAppBrowser";
 
 interface IVideoCallScheduleCardProps {

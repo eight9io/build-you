@@ -22,7 +22,7 @@ import PencilEditSvg from "../../../../component/asset/pencil-edit.svg";
 import Warning from "../../../../component/asset/warning.svg";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
 import Button from "../../../../component/common/Buttons/Button";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import CustomSwitch from "../../../../component/common/Switch";
 import VideoPicker from "../../../../component/common/VideoPicker";

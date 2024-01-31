@@ -7,7 +7,7 @@ import {
 import { serviceGetOtherUserData } from "../service/user";
 import { serviceGetMyProfile } from "../service/auth";
 import { serviceGetListFollowing } from "../service/profile";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { useTranslation } from "react-i18next";
 import { CrashlyticService } from "../service/crashlytic";
 

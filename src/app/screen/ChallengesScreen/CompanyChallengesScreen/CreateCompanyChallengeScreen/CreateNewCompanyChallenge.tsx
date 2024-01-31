@@ -15,7 +15,7 @@ import {
 
 import { CreateCompanyChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";
@@ -27,7 +27,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { StackActions } from "@react-navigation/native";
 import { AxiosResponse } from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import {
   createCompanyChallenge,

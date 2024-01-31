@@ -1,7 +1,16 @@
-import {
-  GoogleSignin,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+// import {
+//   GoogleSignin,
+//   statusCodes,
+// } from "@react-native-google-signin/google-signin";
+let GoogleSignin, statusCodes;
+if (Platform.OS !== "web") {
+  const {
+    GoogleSignin: GoogleSigninImport,
+    statusCodes: statusCodesImport,
+  } = require("@react-native-google-signin/google-signin");
+  GoogleSignin = GoogleSigninImport;
+  statusCodes = statusCodesImport;
+}
 import { FC, useEffect } from "react";
 import Button from "./Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -10,6 +19,7 @@ import { ISocialLoginForm, LoginForm } from "../../../types/auth";
 import { LOGIN_TYPE } from "../../../common/enum";
 import { errorMessage } from "../../../utils/statusCode";
 import { CrashlyticService } from "../../../service/crashlytic";
+import { Platform } from "react-native";
 
 interface IGoogleLoginButtonProps {
   title?: string;

@@ -30,9 +30,8 @@ import { useCreateChallengeDataStore } from "../../store/create-challenge-data-s
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import { useUserProfileStore } from "../../store/user-store";
 
-import ChangeCompanyCreditDialogAndroid from "../../component/common/Dialog/ChangeCompanyCreditDialogAndroid";
-import ChangeCompanyCreditDialogIos from "../../component/common/Dialog/ChangeCompanyCreditDialogIos";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import ChangeCompanyCreditDialog from "../../component/common/Dialog/ChangeCompanyCreditDialog/ChangeCompanyCreditDialog";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
 import { RootStackParamList } from "../../navigation/navigation.type";
 
@@ -233,27 +232,15 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
-      {isAndroid ? (
-        <ChangeCompanyCreditDialogAndroid
-          onClose={() => {
-            setIsShowPaymentDetailModal(false);
-          }}
-          isVisible={isShowPaymentDetailModal}
-          onConfirm={onSumitCertifiedChallenge}
-          numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
-          packageToChangeCompanyCredit={choosenPackage?.type}
-        />
-      ) : (
-        <ChangeCompanyCreditDialogIos
-          onClose={() => {
-            setIsShowPaymentDetailModal(false);
-          }}
-          isVisible={isShowPaymentDetailModal}
-          onConfirm={onSumitCertifiedChallenge}
-          numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
-          packageToChangeCompanyCredit={choosenPackage?.type}
-        />
-      )}
+      <ChangeCompanyCreditDialog
+        onClose={() => {
+          setIsShowPaymentDetailModal(false);
+        }}
+        isVisible={isShowPaymentDetailModal}
+        onConfirm={onSumitCertifiedChallenge}
+        numberOfChecksToChargeCompanyCredit={numberOfCheckpoints}
+        packageToChangeCompanyCredit={choosenPackage?.type}
+      />
 
       <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
         <View

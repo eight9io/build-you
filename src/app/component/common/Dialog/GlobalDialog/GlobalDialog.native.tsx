@@ -11,7 +11,7 @@ import Dialog from "react-native-dialog";
 import GlobalDialogController, {
   GlobalDialogRef,
 } from "./GlobalDialogController";
-import { IGlobalDialogProps } from "../../../types/globalDialog";
+import { IGlobalDialogProps } from "../../../../types/globalDialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 

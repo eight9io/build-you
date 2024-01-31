@@ -23,7 +23,7 @@ import { LOGIN_TYPE } from "../../common/enum";
 import Button from "../../component/common/Buttons/Button";
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import ErrorText from "../../component/common/ErrorText";
 import TextInput from "../../component/common/Inputs/TextInput";
 import { RootStackParamList } from "../../navigation/navigation.type";

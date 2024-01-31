@@ -14,7 +14,7 @@ import CameraIcon from "./asset/camera-icon.svg";
 import { getImageFromUserDevice } from "../../../service/upload-image";
 import Close from "../../asset/close.svg";
 import Button from "../Buttons/Button";
-import ConfirmDialog from "../Dialog/ConfirmDialog";
+import ConfirmDialog from "../Dialog/ConfirmDialog/ConfirmDialog";
 
 interface IImagePickerProps {
   images?: string[];

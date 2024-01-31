@@ -19,7 +19,7 @@ import Header from "../common/Header";
 import ErrorText from "../common/ErrorText";
 import ImagePicker from "../common/ImagePicker";
 import TextInput from "../common/Inputs/TextInput";
-import ConfirmDialog from "../common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../common/Dialog/ConfirmDialog/ConfirmDialog";
 import CustomActivityIndicator from "../common/CustomActivityIndicator";
 import GlobalToastController from "../common/Toast/GlobalToastController";
 import DateTimePicker2 from "../common/BottomSheet/DateTimePicker2/DateTimePicker2";

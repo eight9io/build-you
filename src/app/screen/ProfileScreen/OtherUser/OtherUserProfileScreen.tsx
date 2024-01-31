@@ -20,8 +20,8 @@ import SkeletonLoadingCommon from "../../../component/common/SkeletonLoadings/Sk
 
 import DefaultAvatar from "../../../component/asset/default-avatar.svg";
 import OtherUserProfileTabs from "../../../component/Profile/ProfileTabs/OtherUser/OtherUserProfileTabs";
-import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
-import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
+import GlobalDialogController from "../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
+import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import {
   useFollowingListStore,

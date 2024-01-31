@@ -18,7 +18,7 @@ import OtherUserProfileScreen from "../ProfileScreen/OtherUser/OtherUserProfileS
 import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import SkeletonLoadingCommon from "../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 
 import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";

@@ -16,7 +16,7 @@ import ErrorText from "../../component/common/ErrorText";
 import TextInput from "../../component/common/Inputs/TextInput";
 import PolicyModal from "../../component/modal/PolicyModal";
 
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import TermModal from "../../component/modal/TermModal";
 import IconEyeOff from "./asset/eye-off.svg";
 import IconEyeOn from "./asset/icon-eye.svg";

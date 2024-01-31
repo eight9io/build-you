@@ -14,7 +14,7 @@ import {
   getImageFromUserDevice,
   uploadNewCover,
 } from "../../../service/upload-image";
-import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../common/Dialog/ConfirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 interface ICoverImageProps {

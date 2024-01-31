@@ -27,14 +27,14 @@ import { getChallengeStatusColor } from "../../../../utils/common";
 import { onShareChallengeLink } from "../../../../utils/native/share/shareLink.util";
 
 import Button from "../../../../component/common/Buttons/Button";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import ParticipantsTab from "../../../ChallengesScreen/CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import DescriptionTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/DescriptionTab";
 import ProgressTab from "../../../ChallengesScreen/PersonalChallengesScreen/ChallengeDetailScreen/ProgressTab";
 import { RightPersonalChallengeDetailOptions } from "../../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import CoachTabViewOnly from "./Tabs/CoachTabViewOnly";
 
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import EditChallengeModal from "../../../../component/modal/EditChallengeModal";

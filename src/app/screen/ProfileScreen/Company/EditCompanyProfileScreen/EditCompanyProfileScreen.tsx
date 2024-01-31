@@ -12,7 +12,7 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import { EditCompanyProfileValidators } from "../../../../Validators/EditProfile.validate";
 import Warning from "../../../../component/asset/warning.svg";
 import Button from "../../../../component/common/Buttons/Button";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { serviceGetMyProfile } from "../../../../service/auth";

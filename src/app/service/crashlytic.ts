@@ -1,4 +1,15 @@
-import crashlytics from "@react-native-firebase/crashlytics";
+import { FirebaseCrashlyticsTypes } from "@react-native-firebase/crashlytics";
+import { ReactNativeFirebase } from "@react-native-firebase/app";
+let crashlytics:
+  | ReactNativeFirebase.FirebaseModuleWithStatics<
+      FirebaseCrashlyticsTypes.Module,
+      FirebaseCrashlyticsTypes.Statics
+    >
+  | undefined;
+if (Platform.OS !== "web") {
+  crashlytics = require("@react-native-firebase/crashlytics");
+}
+// import crashlytics from "@react-native-firebase/crashlytics";
 
 import {
   getReadableVersion,
@@ -6,6 +17,7 @@ import {
   getBrand,
   getModel,
 } from "./deviceInfo";
+import { Platform } from "react-native";
 
 interface ICrashlyticServiceArgs {
   errorType: string;

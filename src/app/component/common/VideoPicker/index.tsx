@@ -18,7 +18,7 @@ import { getRandomId } from "../../../utils/common";
 import CameraIcon from "./asset/camera-icon.svg";
 import PlayButton from "./asset/play-button.svg";
 import CloseButton from "./asset/close-button.svg";
-import ConfirmDialog from "../Dialog/ConfirmDialog";
+import ConfirmDialog from "../Dialog/ConfirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import { CrashlyticService } from "../../../service/crashlytic";
 

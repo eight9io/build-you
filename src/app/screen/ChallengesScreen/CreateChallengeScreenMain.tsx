@@ -27,8 +27,8 @@ import { serviceGetIsUserHasInDraftChallenge } from "../../service/challenge";
 import AppTitle from "../../component/common/AppTitle";
 import Button from "../../component/common/Buttons/Button";
 import NavButton from "../../component/common/Buttons/NavButton";
-import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import PackageInfoDialog from "../../component/common/Dialog/PackageInfoDialog/PackageInfoDialog";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 
 import PersonalChallengeDetailScreen from "./PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "./CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";

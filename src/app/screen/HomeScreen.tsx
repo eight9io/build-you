@@ -33,7 +33,7 @@ import FeedPostCard, {
 } from "../component/Post/FeedPostCard";
 import NavButton from "../component/common/Buttons/NavButton";
 import IconSearch from "../component/common/IconSearch/IconSearch";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import AdCard from "../component/Post/AdCard";
 
 import BuildYouLogo from "../common/svg/buildYou_logo_top_app.svg";

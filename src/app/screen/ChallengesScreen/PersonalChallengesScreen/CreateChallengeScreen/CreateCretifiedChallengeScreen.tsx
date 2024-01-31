@@ -13,7 +13,7 @@ import { StackActions } from "@react-navigation/native";
 import { CreateCertifiedChallengeValidationSchema } from "../../../../Validators/CreateChallenge.validate";
 import SoftSkillPicker from "../../../../component/SoftSkillPicker/SoftSkillPicker";
 import DateTimePicker2 from "../../../../component/common/BottomSheet/DateTimePicker2/DateTimePicker2";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import ErrorText from "../../../../component/common/ErrorText";
 import ImagePicker from "../../../../component/common/ImagePicker";
 import TextInput from "../../../../component/common/Inputs/TextInput";

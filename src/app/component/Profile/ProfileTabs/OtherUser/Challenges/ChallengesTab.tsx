@@ -12,7 +12,7 @@ import { getChallengeByUserId } from "../../../../../service/challenge";
 import { IChallenge, IChallengeOwner } from "../../../../../types/challenge";
 import ChallengeCard from "../../../../Card/ChallengeCard/ChallengeCard";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
-import GlobalDialogController from "../../../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../common/Dialog/GlobalDialog/GlobalDialogController";
 import { sortChallengeByStatus } from "../../../../../utils/common";
 import { useUserProfileStore } from "../../../../../store/user-store";
 

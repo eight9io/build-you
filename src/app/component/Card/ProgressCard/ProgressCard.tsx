@@ -16,7 +16,7 @@ import ImageSwiper from "../../common/ImageSwiper";
 import VideoPlayer from "../../common/VideoPlayer";
 import ProgressCardAvatar from "../../common/Avatar/PostAvatar";
 
-import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../common/Dialog/ConfirmDialog/ConfirmDialog";
 import LikeButton from "../../Post/LikeButton";
 import CommentButton from "../../Post/CommentButton";
 
@@ -24,7 +24,7 @@ import useModal from "../../../hooks/useModal";
 import { deleteProgress } from "../../../service/progress";
 import { getTimeDiffToNow } from "../../../utils/time";
 import { getSeperateImageUrls } from "../../../utils/image";
-import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 
 import IconDot from "./asset/dot.svg";
 import { useUserProfileStore } from "../../../store/user-store";

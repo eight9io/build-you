@@ -1,7 +1,7 @@
 import * as ExpoImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 import { serviceUpdateAvatar, serviceUpdateCover } from "../service/profile";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import i18n from "../i18n/i18n";
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;

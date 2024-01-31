@@ -41,8 +41,8 @@ import { RootStackParamList } from "../../navigation/navigation.type";
 
 import ErrorText from "../../component/common/ErrorText";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
 
 import PlusSVG from "../../component/asset/plus.svg";

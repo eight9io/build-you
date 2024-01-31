@@ -3,9 +3,9 @@ import { View, Text, Appearance, Platform, FlatList } from "react-native";
 import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import { serviceGetAllPackages } from "../../../service/package";
-import { IPackageResponse } from "../../../types/package";
-import { getLanguageLocalStorage } from "../../../utils/language";
+import { serviceGetAllPackages } from "../../../../service/package";
+import { IPackageResponse } from "../../../../types/package";
+import { getLanguageLocalStorage } from "../../../../utils/language";
 import debounce from "lodash.debounce";
 
 interface IChangeCompanyCreditDialogProps {

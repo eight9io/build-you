@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { IGlobalDialogProps } from "../../../types/globalDialog";
+import { IGlobalDialogProps } from "../../../../types/globalDialog";
 
 export type GlobalDialogRef = {
   show: (notification: IGlobalDialogProps) => void;

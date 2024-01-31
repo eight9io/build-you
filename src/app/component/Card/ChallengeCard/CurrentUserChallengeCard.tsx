@@ -20,7 +20,7 @@ import { serviceGetChallengeRating } from "../../../service/challenge";
 import StarFillSvg from "../../../common/svg/star-fill.svg";
 import EmptyImage from "../../../common/svg/empty-image.svg";
 import { useChallengeUpdateStore } from "../../../store/challenge-update-store";
-import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 
 interface ICurrentUserChallengeCardProps {
   item: IChallenge;

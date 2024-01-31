@@ -14,7 +14,7 @@ import Header from "../../common/Header";
 import ErrorText from "../../common/ErrorText";
 import Button from "../../common/Buttons/Button";
 import TextInput from "../../common/Inputs/TextInput";
-import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 
 import CloseBtn from "../../asset/close.svg";

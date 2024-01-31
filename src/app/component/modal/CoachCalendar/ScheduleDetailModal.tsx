@@ -25,7 +25,7 @@ import { openUrlInApp } from "../../../utils/inAppBrowser";
 import EditScheduleModal from "./EditScheduleModal";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 import ToastInModal from "../../common/Toast/ToastInModal";
-import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../common/Dialog/ConfirmDialog/ConfirmDialog";
 import Toast from "../../common/Toast/Toast";
 
 interface IScheduleDetailModalProps {

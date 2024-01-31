@@ -15,7 +15,7 @@ import { useUserProfileStore } from "../../../store/user-store";
 
 import dayjs from "../../../utils/date.util";
 import { deleteProgressComment } from "../../../service/progress";
-import GlobalDialogController from "../Dialog/GlobalDialogController";
+import GlobalDialogController from "../Dialog/GlobalDialog/GlobalDialogController";
 
 import PopUpMenu from "../PopUpMenu";
 import PostAvatar from "../Avatar/PostAvatar/index";

@@ -10,7 +10,7 @@ import {
   getImageFromUserDevice,
   uploadNewAvatar,
 } from "../../../../service/upload-image";
-import ConfirmDialog from "../../Dialog/ConfirmDialog";
+import ConfirmDialog from "../../Dialog/ConfirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 interface ISignupAvatarProps {}

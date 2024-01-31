@@ -25,7 +25,7 @@ import DefaultAvatar from "../../../../common/svg/default-avatar.svg";
 import TouchPointCircle from "../../../../common/svg/touchpoint-circle.svg";
 import TouchPointCheckCircle from "../../../../common/svg/check-circle-24.svg";
 import TouchPointRetangle from "../../../../common/svg/touchpoint-rectangle.svg";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import {
   serviceGetCertifiedChallengeStatus,
   serviceOpenTouchpoint,

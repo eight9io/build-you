@@ -22,7 +22,7 @@ import {
   getCurrencySymbol,
   getProductsFromStoreToDisplay,
 } from "../../utils/purchase.util";
-import GlobalDialogController from "../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 
 function convertPhrases(phrase) {
   if (phrase === "videocall") {

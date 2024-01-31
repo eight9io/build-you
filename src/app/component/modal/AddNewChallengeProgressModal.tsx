@@ -29,7 +29,7 @@ import {
   updateProgressVideo,
 } from "../../service/progress";
 import Button from "../common/Buttons/Button";
-import ConfirmDialog from "../common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../common/Dialog/ConfirmDialog/ConfirmDialog";
 import ErrorText from "../common/ErrorText";
 import Header from "../common/Header";
 import ImagePicker from "../common/ImagePicker";

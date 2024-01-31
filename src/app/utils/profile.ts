@@ -1,6 +1,6 @@
 import { t } from "i18next";
 
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { serviceGetEmployeeList } from "../service/company";
 import { serviceGetListFollowing } from "../service/profile";
 import { IOccupation, IUserData } from "../types/user";

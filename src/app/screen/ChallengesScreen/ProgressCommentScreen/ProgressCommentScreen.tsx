@@ -29,7 +29,7 @@ import SingleComment from "../../../component/common/SingleComment";
 import ErrorText from "../../../component/common/ErrorText";
 import SendIcon from "../../../component/asset/send-icon.svg";
 import PostAvatar from "../../../component/common/Avatar/PostAvatar";
-import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import SkeletonLoadingCommon from "../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import TextInputWithMention from "../../../component/common/Inputs/TextInputWithMention";
 import { useUserProfileStore } from "../../../store/user-store";

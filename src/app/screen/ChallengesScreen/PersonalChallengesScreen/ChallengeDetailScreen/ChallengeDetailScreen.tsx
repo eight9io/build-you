@@ -34,7 +34,7 @@ import Button from "../../../../component/common/Buttons/Button";
 import CustomTabView from "../../../../component/common/Tab/CustomTabView";
 import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import ParticipantsTab from "../../CompanyChallengesScreen/ChallengeDetailScreen/ParticipantsTab";
 import IndividualCoachCalendarTab from "../../../../component/IndividualCoachCalendar/IndividualCoachCalendarTab";
 import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/ChallengeDetailScreen/CompanyCoachCalendarTabCoachView";

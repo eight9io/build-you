@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import NotiItem from "./NotiItem";
 import { INotification } from "../../types/notification";
 import { getNotifications } from "../../service/notification";
-import GlobalDialogController from "../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../common/Dialog/GlobalDialog/GlobalDialogController";
 import SkeletonLoadingCommon from "../common/SkeletonLoadings/SkeletonLoadingCommon";
 import EmptyNotification from "../../component/asset/empty-notification.svg";
 interface INotificationProps {

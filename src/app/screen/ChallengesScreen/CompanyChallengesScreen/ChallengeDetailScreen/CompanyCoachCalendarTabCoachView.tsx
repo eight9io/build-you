@@ -25,12 +25,12 @@ import DeleteSvg from "./assets/delete.svg";
 
 import PopUpMenu from "../../../../component/common/PopUpMenu";
 import Button from "../../../../component/common/Buttons/Button";
-import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog/ErrorDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { onCopyLink } from "../../../../utils/native/share/shareLink.util";
 
 export interface IProposingScheduleTimeTag {

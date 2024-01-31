@@ -20,7 +20,7 @@ import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { useUserProfileStore } from "../../store/user-store";
 import Button from "../../component/common/Buttons/Button";
 import { LoginForm } from "../../types/auth";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import { serviceLogin } from "../../service/auth";
 import { serviceDeleteAccount } from "../../service/profile";
 import { useAuthStore } from "../../store/auth-store";

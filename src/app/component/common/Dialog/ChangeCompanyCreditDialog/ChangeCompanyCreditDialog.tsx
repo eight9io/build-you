@@ -1,12 +1,11 @@
+// TODO: Implement dialog for web since react-native-dialog is not working on web
 import { FC, useEffect, useState } from "react";
 import { View, Text, Appearance, Platform } from "react-native";
-import Dialog from "react-native-dialog";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import { serviceGetAllPackages } from "../../../service/package";
-import { IPackageResponse } from "../../../types/package";
-import { getLanguageLocalStorage } from "../../../utils/language";
-import debounce from "lodash.debounce";
+import { serviceGetAllPackages } from "../../../../service/package";
+import { IPackageResponse } from "../../../../types/package";
+import { getLanguageLocalStorage } from "../../../../utils/language";
 
 interface IChangeCompanyCreditDialogProps {
   isVisible: boolean;
@@ -95,12 +94,7 @@ const RenderPackageInfoAfterCharge: FC<IRenderPackageInfoProps> = ({
           {title}
         </Text>
       </View>
-      <View
-        className={clsx(
-          "flex w-1/3 flex-row items-center ",
-          isAndroid ? "justify-end" : "justify-center"
-        )}
-      >
+      <View className={clsx("flex w-1/3 flex-row items-center justify-center")}>
         {remainingCredit >= 0 && (
           <Text className="text-center text-md font-semibold leading-tight text-orange-500">
             {remainingCredit}
@@ -206,147 +200,7 @@ const ChangeCompanyCreditDialogIos: FC<IChangeCompanyCreditDialogProps> = ({
     }
   }, [packages, numberOfChecksToChargeCompanyCredit]);
 
-  return (
-    <Dialog.Container
-      visible={isVisible}
-      contentStyle={{
-        width: 370,
-        backgroundColor: "white",
-      }}
-    >
-      <Dialog.Title>
-        <Text
-          className={clsx(
-            isDarkMode ? "text-gray-medium" : "text-black-default"
-          )}
-        >
-          {t("dialog.cart.summary")}
-        </Text>
-      </Dialog.Title>
-      <Dialog.Description>
-        <View className="flex w-full flex-col pt-2">
-          <Text
-            className={clsx(
-              "text-md font-semibold",
-              isDarkMode ? "text-gray-medium" : "text-black-default"
-            )}
-          >
-            {t("dialog.cart.current_credit")}
-          </Text>
-          <View className="flex w-full flex-col items-start justify-center p-2 pb-0">
-            <RenderPackageInfo
-              title={
-                packageToChangeCompanyCredit == "chat"
-                  ? t("dialog.package_info.basic")
-                  : t("dialog.package_info.premium")
-              }
-              avalaibleCredits={
-                packageToChangeCompanyCredit == "chat"
-                  ? packages.avalaibleChatPackage
-                  : packages.availableCallPackage
-              }
-            />
-            <RenderPackageInfo
-              title={
-                packageToChangeCompanyCredit == "chat"
-                  ? t("dialog.package_info.number_of_chatcheck")
-                  : t("dialog.package_info.number_of_callcheck")
-              }
-              avalaibleCredits={
-                packageToChangeCompanyCredit == "chat"
-                  ? packages.availableChats
-                  : packages.availableCalls
-              }
-            />
-          </View>
-        </View>
-
-        <View className="flex w-full flex-col  py-4">
-          <Text
-            className={clsx(
-              "text-md font-semibold",
-              isDarkMode ? "text-gray-medium" : "text-black-default"
-            )}
-          >
-            {t("dialog.cart.credit_will_be_charged")}
-          </Text>
-          <View className="flex w-full flex-col items-start justify-center p-2 pb-0">
-            <RenderChargePackageInfo
-              title={
-                packageToChangeCompanyCredit == "chat"
-                  ? t("dialog.package_info.basic")
-                  : t("dialog.package_info.premium")
-              }
-              creditToBeCharged={1}
-              unit="package"
-            />
-
-            <RenderChargePackageInfo
-              title={
-                packageToChangeCompanyCredit == "chat"
-                  ? t("dialog.package_info.number_of_chatcheck")
-                  : t("dialog.package_info.number_of_callcheck")
-              }
-              creditToBeCharged={numberOfChecksToChargeCompanyCredit}
-              unit="check"
-            />
-          </View>
-        </View>
-
-        <View className="flex w-full flex-col  pt-2">
-          <Text
-            className={clsx(
-              "text-md font-semibold",
-              isDarkMode ? "text-gray-medium" : "text-black-default"
-            )}
-          >
-            {t("dialog.cart.credit_after_charged")}
-          </Text>
-          <View className=" flex w-full flex-col items-start justify-center p-2 pb-0">
-            <RenderPackageInfoAfterCharge
-              title={
-                packageToChangeCompanyCredit == "chat"
-                  ? t("dialog.package_info.basic")
-                  : t("dialog.package_info.premium")
-              }
-              avalaibleCredits={
-                packageToChangeCompanyCredit == "chat"
-                  ? packages.avalaibleChatPackage
-                  : packages.availableCallPackage
-              }
-              packageToCharge={1}
-            />
-
-            <RenderPackageInfoAfterCharge2
-              title={
-                packageToChangeCompanyCredit == "chat"
-                  ? t("dialog.package_info.number_of_chatcheck")
-                  : t("dialog.package_info.number_of_callcheck")
-              }
-              avalaibleCredits={
-                packageToChangeCompanyCredit == "chat"
-                  ? packages.availableChats
-                  : packages.availableCalls
-              }
-              packageToCharge={numberOfChecksToChargeCompanyCredit}
-            />
-          </View>
-        </View>
-        {!isPackageAndCheckEnough && (
-          <Text className="text-md font-medium text-red-500">
-            {t("dialog.cart.not_enough_credit")}
-          </Text>
-        )}
-      </Dialog.Description>
-      <Dialog.Button label={t("dialog.close")} onPress={onClose} />
-      <Dialog.Button
-        label={t("dialog.confirm")}
-        onPress={debounce(onConfirm, 500)}
-        bold
-        disabled={!isPackageAndCheckEnough}
-      />
-    </Dialog.Container>
-  );
+  return <View></View>;
 };
 
 export default ChangeCompanyCreditDialogIos;

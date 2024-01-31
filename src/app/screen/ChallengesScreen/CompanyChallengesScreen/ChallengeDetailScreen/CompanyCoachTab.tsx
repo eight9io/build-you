@@ -6,7 +6,7 @@ import { ICertifiedChallengeState } from "../../../../types/challenge";
 
 import DefaultAvatar from "../../../../common/svg/default-avatar.svg";
 
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import {
   CoachBanner,
   TouchPointProgress,

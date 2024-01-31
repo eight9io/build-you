@@ -13,7 +13,7 @@ import { getTimeDiffToNow } from "../../utils/time";
 import PostAvatar from "../common/Avatar/PostAvatar";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
-import GlobalDialogController from "../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../common/Dialog/GlobalDialog/GlobalDialogController";
 
 import BackSvg from "../asset/back.svg";
 import {

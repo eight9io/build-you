@@ -10,7 +10,7 @@ import {
 
 import DefaultAvatar from "../../../asset/default-avatar.svg";
 import IconUploadAvatar from "./asset/uploadAvatar.svg";
-import ConfirmDialog from "../../Dialog/ConfirmDialog";
+import ConfirmDialog from "../../Dialog/ConfirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 interface IProfileAvatarProps {

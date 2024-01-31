@@ -19,7 +19,7 @@ import Followers from "../common/Followers/Followers";
 import Following from "../common/Following/Following";
 import Biography from "../Users/Biography/Biography";
 import CustomTabView from "../../../common/Tab/CustomTabView";
-import GlobalDialogController from "../../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../common/Dialog/GlobalDialog/GlobalDialogController";
 
 interface ICompanyProfileTabsProps {
   route: RouteProp<RootStackParamList, "CompanyProfileScreen">;

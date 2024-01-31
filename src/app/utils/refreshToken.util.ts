@@ -2,7 +2,7 @@ import jwt_decode from "jwt-decode";
 import { AxiosRequestConfig } from "axios";
 import { ILoginResponse, IToken } from "../types/auth";
 import httpInstance from "./http";
-import GlobalDialogController from "../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import i18n from "../i18n/i18n";
 
 interface AxiosRequestConfigExtends extends AxiosRequestConfig {

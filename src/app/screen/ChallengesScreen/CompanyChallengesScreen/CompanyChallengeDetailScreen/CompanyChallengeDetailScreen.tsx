@@ -18,14 +18,14 @@ import { IChallenge } from "../../../../types/challenge";
 import PopUpMenu from "../../../../component/common/PopUpMenu";
 import Button from "../../../../component/common/Buttons/Button";
 import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import ShareIcon from "./assets/share.svg";
 import TaskAltIcon from "./assets/task-alt.svg";
 import ChallengeCompanyDetailScreen from "../ChallengeDetailScreen/ChallengeCompanyDetailScreen";
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
-import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

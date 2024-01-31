@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import LocationSvg from "../assets/location.svg";
 import ErrorText from "../../ErrorText";
 import TextInput from "../TextInput";
-import ConfirmDialog from "../../Dialog/ConfirmDialog";
+import ConfirmDialog from "../../Dialog/ConfirmDialog/ConfirmDialog";
 import SelectPicker from "../../Pickers/SelectPicker";
 import { ISelectOption } from "../../../../types/common";
 import { getNearbyLocations } from "../../../../service/location";

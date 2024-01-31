@@ -3,7 +3,7 @@ import { Alert, View, Button } from "react-native";
 import Share from "react-native-share";
 import Clipboard from "@react-native-clipboard/clipboard";
 
-import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import i18n from "../../../i18n/i18n";
 import GlobalToastController from "../../../component/common/Toast/GlobalToastController";
 

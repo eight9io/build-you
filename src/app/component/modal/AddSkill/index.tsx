@@ -14,7 +14,7 @@ import AddEmojiButton from "../../common/Buttons/AddEmojiButton";
 import AddEmojiModal from "../AddEmoji";
 import Close from "../../../component/asset/close.svg";
 import Button from "../../common/Buttons/Button";
-import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
+import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 
 interface IAddSkillModallProps {
   setUserAddSkill: (skills: any) => void;

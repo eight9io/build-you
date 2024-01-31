@@ -22,7 +22,7 @@ import httpInstance from "../../../../utils/http";
 
 import SkeletonLoadingCommon from "../../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 import EditChallengeProgressModal from "../../../../component/modal/EditChallengeProgressModal";
-import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
 import StarFillSvg from "../../../../common/svg/star-fill.svg";

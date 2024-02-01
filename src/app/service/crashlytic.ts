@@ -1,12 +1,13 @@
 import { FirebaseCrashlyticsTypes } from "@react-native-firebase/crashlytics";
 import { ReactNativeFirebase } from "@react-native-firebase/app";
+import { isMobile } from "../utils/common";
 let crashlytics:
   | ReactNativeFirebase.FirebaseModuleWithStatics<
       FirebaseCrashlyticsTypes.Module,
       FirebaseCrashlyticsTypes.Statics
     >
   | undefined;
-if (Platform.OS !== "web") {
+if (isMobile()) {
   crashlytics = require("@react-native-firebase/crashlytics");
 }
 // import crashlytics from "@react-native-firebase/crashlytics";
@@ -17,7 +18,6 @@ import {
   getBrand,
   getModel,
 } from "./deviceInfo";
-import { Platform } from "react-native";
 
 interface ICrashlyticServiceArgs {
   errorType: string;

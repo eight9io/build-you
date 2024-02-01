@@ -21,7 +21,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { LOGIN_TYPE } from "../../common/enum";
 import Button from "../../component/common/Buttons/Button";
-import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton";
+import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton/GoogleLoginButton";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import ErrorText from "../../component/common/ErrorText";
@@ -196,7 +196,7 @@ export default function Login() {
         <KeyboardAwareScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">
             <View>
-              <View className="flex-column items-center  ">
+              <View className="flex-column items-center">
                 <Image
                   className=" mb-7 mt-10 h-[91px] w-[185px]"
                   source={require("./asset/buildYou.png")}
@@ -227,13 +227,13 @@ export default function Login() {
                 <View className="h-[0.5px] w-[50%] bg-black-default"></View>
               </View>
 
-              {errMessage && (
+              {errMessage ? (
                 <ErrorText
-                  containerClassName="justify-center "
+                  containerClassName="justify-center"
                   message={errMessage}
                   testID="login_error_message"
                 />
-              )}
+              ) : null}
 
               <View className="mt-4 flex flex-col ">
                 {(

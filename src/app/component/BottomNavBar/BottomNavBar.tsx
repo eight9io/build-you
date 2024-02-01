@@ -63,7 +63,6 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const isCompany = currentUser && currentUser?.companyAccount;
 
   const newestNotiId = getNewestNotificationId();
-  getLastNotiIdFromLocalStorage().then((id) => setLastNotiId(id));
 
   const fetchNotifications = async () => {
     try {
@@ -76,6 +75,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
 
   useEffect(() => {
     fetchNotifications();
+    getLastNotiIdFromLocalStorage().then((id) => setLastNotiId(id));
   }, []);
 
   const isUserHasNewNotification =

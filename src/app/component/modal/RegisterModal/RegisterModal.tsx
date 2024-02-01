@@ -21,7 +21,7 @@ import { ISocialLoginForm } from "../../../types/auth";
 
 import { LOGIN_TYPE } from "../../../common/enum";
 import Button from "../../common/Buttons/Button";
-import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
+import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton/GoogleLoginButton";
 import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
 import NavButton from "../../common/Buttons/NavButton";
 import ErrorText from "../../common/ErrorText";

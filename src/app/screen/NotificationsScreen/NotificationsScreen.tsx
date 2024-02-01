@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
 import {

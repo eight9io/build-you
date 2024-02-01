@@ -103,12 +103,12 @@ export const HomeFeed = () => {
     }).then((res) => {
       if (res?.data?.data) {
         const newResDataIds = res.data.data.map((item: IFeedPostProps) => {
-          return item.id;
+          return item?.id;
         });
         // remove duplicate data in response
         const newResData = res.data.data.filter(
           (item: IFeedPostProps, index: number) => {
-            return newResDataIds.indexOf(item.id) === index;
+            return newResDataIds.indexOf(item?.id) === index;
           }
         );
         setFeedData((prev: any) => [...prev, ...newResData]);
@@ -382,7 +382,7 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
           headerShown: true,
           headerTitle: () => "",
           headerLeft: (props) => (
-            <NavButton 
+            <NavButton
               text={t("button.back") as string}
               onPress={() => navigation.goBack()}
               withBackIcon

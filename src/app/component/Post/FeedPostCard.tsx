@@ -294,25 +294,25 @@ const FeedPostCard: React.FC<IFeedPostCardProps> = ({
               </View>
             </View>
           </TouchableOpacity>
-          {caption && (
+          {caption ? (
             <Text className=" mb-3 text-md font-normal leading-5">
               {caption}
             </Text>
-          )}
-          {image && (
+          ) : null}
+          {image ? (
             <ChallengeImage
               name={challenge?.goal}
               image={image as string}
               onPress={navigateToChallengeDetail}
             />
-          )}
-          {video && (
+          ) : null}
+          {video ? (
             <ChallengeVideo
               name={challenge?.goal}
               video={video as string}
               onPress={navigateToChallengeDetail}
             />
-          )}
+          ) : null}
 
           <View className="mt-2 flex flex-row ">
             <LikeButton

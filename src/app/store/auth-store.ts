@@ -31,6 +31,7 @@ import {
 import { useNotificationStore } from "./notification-store";
 import httpInstance from "../utils/http";
 import { ClearCrashlytics, CrashlyticService } from "../service/crashlytic";
+import { isMobile } from "../utils/common";
 
 export interface LoginStore {
   accessToken: string | null;
@@ -106,20 +107,22 @@ export const useAuthStore = create<LoginStore>()(
           accessToken: res.data.authorization,
           refreshToken: res.data.refresh,
         });
-        registerForPushNotificationsAsync()
-          .then((token) => {
-            updateNotificationToken({
-              notificationToken: token,
-              status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
-              deviceType:
-                Platform.OS === "android"
-                  ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-                  : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+        if (isMobile()) {
+          registerForPushNotificationsAsync()
+            .then((token) => {
+              updateNotificationToken({
+                notificationToken: token,
+                status: NOTIFICATION_TOKEN_STATUS.ACTIVE,
+                deviceType:
+                  Platform.OS === "android"
+                    ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+                    : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+              });
+            })
+            .catch((e) => {
+              console.error("Ignore Push Notification", e);
             });
-          })
-          .catch((e) => {
-            console.error("Ignore Push Notification", e);
-          });
+        }
         return res;
       },
 
@@ -133,21 +136,23 @@ export const useAuthStore = create<LoginStore>()(
             const messagingToken = await messaging().getToken();
             await deletePushNotificatoinToken(messagingToken);
             useNotificationStore.getState().setListenerIsReady(false);
-            unregisterForPushNotificationsAsync()
-              .then((token) => {
-                console.log(token);
-                updateNotificationToken({
-                  notificationToken: token,
-                  status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
-                  deviceType:
-                    Platform.OS === "android"
-                      ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-                      : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+            if (isMobile()) {
+              unregisterForPushNotificationsAsync()
+                .then((token) => {
+                  console.log(token);
+                  updateNotificationToken({
+                    notificationToken: token,
+                    status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
+                    deviceType:
+                      Platform.OS === "android"
+                        ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+                        : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+                  });
+                })
+                .catch(() => {
+                  console.log("Ignore Push Notification");
                 });
-              })
-              .catch(() => {
-                console.log("Ignore Push Notification");
-              });
+            }
             setBadgeCount(0); // Set badge count to 0 when user logout, it will be updated when user login again
           }
           delete httpInstance.defaults.headers.common["Authorization"];

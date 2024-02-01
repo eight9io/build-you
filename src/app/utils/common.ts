@@ -1,4 +1,5 @@
 import queryString from "query-string";
+import { Platform } from "react-native";
 import { AxiosResponse } from "axios";
 import isEmpty from "lodash.isempty";
 import dayjs from "./date.util";
@@ -128,4 +129,8 @@ export const roundToDecimalOrWhole = (number: number): number => {
   } else {
     return Math.round(number * 10) / 10; // Return the number rounded to one decimal place
   }
+};
+
+export const isMobile = () => {
+  return Platform.OS === "android" || Platform.OS === "ios";
 };

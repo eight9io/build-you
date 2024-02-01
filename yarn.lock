@@ -1711,6 +1711,11 @@
     resolve-from "^5.0.0"
     sucrase "^3.20.0"
 
+"@expo/metro-runtime@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-3.1.2.tgz#4cc4fe53aa8f716307f584c67db76268d38c2ed7"
+  integrity sha512-Wekv2AZ3HY0NG9Im8AMB1KHGyHjmALg6xekVK34724I/DLtcocLKtQEP04oI9GcAZBotAhROHH5E4ADhJAEgYg==
+
 "@expo/multipart-body-parser@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@expo/multipart-body-parser/-/multipart-body-parser-1.1.0.tgz#ba402b3047cf14ef17b4d785ec030dd6474ae6e4"

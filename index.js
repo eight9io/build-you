@@ -1,3 +1,4 @@
+import "@expo/metro-runtime"; // Required for hot reload when developing on web platform
 import { registerRootComponent } from "expo";
 import { LogBox, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";

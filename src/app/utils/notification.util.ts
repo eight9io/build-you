@@ -579,7 +579,12 @@ export const getNotificationContent = (notification: INotification) => {
 
 export const clearAllNotifications = async () => {
   // Dismiss all notification trays and reset badge count
-  await notifee.cancelAllNotifications();
+  await notifee.cancelAllNotifications().catch((error) => {
+    CrashlyticService({
+      errorType: "Clear All Notifications Error",
+      error: error,
+    });
+  });
   await notifee.setBadgeCount(0);
 };
 
@@ -685,6 +690,7 @@ export const displayNotificationOnForeground = async (
 
 export const setBadgeCount = (count: number) => {
   if (isNaN(count)) return;
+  console.log("count", count);
   return notifee.setBadgeCount(count);
 };
 

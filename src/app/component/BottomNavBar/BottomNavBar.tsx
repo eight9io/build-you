@@ -31,7 +31,10 @@ import { useNotificationStore } from "../../store/notification-store";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
-import { getNotifications } from "../../service/notification";
+import {
+  getNotifications,
+  setAllNotificationsIsRead,
+} from "../../service/notification";
 import CreateChallengeScreen from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
 
 const Tab = createBottomTabNavigator();
@@ -205,7 +208,10 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         component={NotificationsScreen}
         listeners={() => ({
           tabPress: () => {
-            if (numOfNewNotifications > 0) refreshNumOfNewNotifications();
+            if (numOfNewNotifications > 0) {
+              refreshNumOfNewNotifications();
+            }
+            setAllNotificationsIsRead();
           },
         })}
         options={{

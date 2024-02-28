@@ -203,7 +203,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
                 containerClassName="border-primary-default flex-row border-[1px] m-2"
                 textClassName="text-primary-default ml-2 text-base font-bold"
                 onPress={() => {
-                  closeModal();
+                  // closeModal(); // Hot fix for the issue that it doesn't navigate to RegisterScreen
                   navigation.navigate("RegisterScreen");
                 }}
                 testID="register_with_email_btn"

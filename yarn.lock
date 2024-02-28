@@ -6041,10 +6041,10 @@ expo-image-picker@~14.1.1:
   dependencies:
     expo-image-loader "~4.1.0"
 
-expo-image@~1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-1.0.1.tgz#0cc04fac8e5204fc0d4d86f30f26273c0b1dce08"
-  integrity sha512-h3xDHaw3ZWzOKar1eFXY4CsFgDstw6fo5Tzv6BXXs+Zte5betPMb567f8zCNnhpkr7UCo5CN7Cg92o+lqzdvRA==
+expo-image@~1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-1.0.2.tgz#11f74c89812fcdb67a467fad41625b536ddb3612"
+  integrity sha512-wDLPdtU+9xNtl57NC9SQrnEqjD6obH6ZImwoeynewSTwAZ8rppKq5Kia0189fn6Kc1zzKT5kymOrwleruqS9Qg==
 
 expo-keep-awake@~12.0.1:
   version "12.0.1"

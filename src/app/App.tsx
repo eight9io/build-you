@@ -1,5 +1,7 @@
+import "@expo/metro-runtime"; // Required for hot reload when developing on web platform
 import { MenuProvider } from "react-native-popup-menu";
 import { NativeWindStyleSheet } from "nativewind";
+7;
 import {
   useFonts,
   OpenSans_300Light,
@@ -10,7 +12,7 @@ import {
 } from "@expo-google-fonts/open-sans";
 import { isDevice } from "expo-device";
 import { useEffect } from "react";
-import { StatusBar } from "react-native";
+import { Platform, StatusBar } from "react-native";
 import { EventProvider } from "react-native-outside-press";
 import RootNavigation from "./navigation";
 import "./i18n/i18n";

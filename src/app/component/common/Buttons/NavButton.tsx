@@ -25,7 +25,7 @@ const NavButton: FC<INavButtonProps> = ({
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className={clsx("flex flex-row items-center")}
+      className={clsx("flex flex-row items-center pl-2")}
       onPress={onPress}
       testID={testID}
     >

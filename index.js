@@ -1,10 +1,9 @@
-import "@expo/metro-runtime"; // Required for hot reload when developing on web platform
+import App from "./src/app/App"; // MUST be the first import to ensure Fast Refresh works for web development
 import { registerRootComponent } from "expo";
 import { LogBox, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import { H } from "highlight.run";
 
-import App from "./src/app/App";
 import { expo } from "./app.json";
 import {
   displayNotificationOnForeground,

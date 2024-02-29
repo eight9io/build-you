@@ -3,9 +3,10 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
+import { Image } from "expo-image";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, Modal, Platform, SafeAreaView, Text, View } from "react-native";
+import { Modal, Platform, SafeAreaView, Text, View } from "react-native";
 
 import { setupInterceptor } from "../../../utils/refreshToken.util";
 import { errorMessage } from "../../../utils/statusCode";
@@ -29,6 +30,7 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 import { CrashlyticService } from "../../../service/crashlytic";
 import { serviceUpdateMyProfile } from "../../../service/profile";
 import CustomActivityIndicator from "../../common/CustomActivityIndicator";
+import AppleLoginButton from "../../common/Buttons/AppleLoginButton/AppleLoginButton";
 
 interface Props {
   modalVisible: boolean;
@@ -134,14 +136,14 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
       animationType="slide"
       visible={modalVisible}
       presentationStyle="pageSheet"
-      // style={{ borderRadius: 10 }}
+      style={{ borderRadius: 10 }}
     >
       <View
-        className="flex-1"
-        // style={{ borderRadius: 10 }}
+        className=" bg-white "
+        style={{ borderRadius: 10 }}
         testID="register_modal"
       >
-        <View className="absolute z-10 my-6">
+        <View className="absolute z-10 my-6 ml-4 ">
           <NavButton
             onPress={() => {
               closeModal();
@@ -151,9 +153,9 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
             testID="register_modal_back_btn"
           />
         </View>
-        <SafeAreaView className="flex-1">
+        <SafeAreaView>
           <CustomActivityIndicator isVisible={isLoading} />
-          <View className="h-full flex-1 p-5">
+          <View className="h-full p-5">
             <View className="flex h-[65%] pt-4">
               <View className="h-[70%]">
                 <Image
@@ -172,13 +174,20 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
               </View>
             </View>
 
-            {errMessage ? (
+            {errMessage && (
               <ErrorText
                 containerClassName="justify-center px-5"
                 message={errMessage}
               />
-            ) : null}
-            <View className="h-[30%] flex-col items-center pt-5">
+            )}
+            <View className="h-[35%] flex-col items-center pt-5">
+              {Platform.OS === "ios" ? (
+                <AppleLoginButton
+                  title={t("register_modal.apple") || "Register with Apple"}
+                  onLogin={handleRegisterSocial}
+                  onError={setErrMessage}
+                />
+              ) : null}
               <LinkedInLoginButton
                 title={t("register_modal.linked") || "Register with Linkedin"}
                 onLogin={handleRegisterSocial}
@@ -191,7 +200,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
               />
               <Button
                 title={t("register_modal.register")}
-                containerClassName="border-primary-default flex-row border-[1px] m-2 w-full"
+                containerClassName="border-primary-default flex-row border-[1px] m-2"
                 textClassName="text-primary-default ml-2 text-base font-bold"
                 onPress={() => {
                   closeModal();

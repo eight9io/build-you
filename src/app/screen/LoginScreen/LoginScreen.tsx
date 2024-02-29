@@ -22,7 +22,7 @@ import { LoginValidationSchema } from "../../Validators/Login.validate";
 import { LOGIN_TYPE } from "../../common/enum";
 import Button from "../../component/common/Buttons/Button";
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton/GoogleLoginButton";
-import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton";
+import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton/LinkedInLoginButton";
 import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import ErrorText from "../../component/common/ErrorText";
 import TextInput from "../../component/common/Inputs/TextInput";

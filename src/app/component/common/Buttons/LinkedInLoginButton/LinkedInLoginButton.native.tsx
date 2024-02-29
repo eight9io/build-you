@@ -2,11 +2,12 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import Button from "./Button";
+import Button from "../Button";
 // import { getLinkedInAccessToken } from "../../../service/auth";
-import LinkedInModal from "../../modal/LinkedInModal";
-import { LOGIN_TYPE } from "../../../common/enum";
-import { ISocialLoginForm, LoginForm } from "../../../types/auth";
+import LinkedInModal from "../../../modal/LinkedInModal";
+import { LOGIN_TYPE } from "../../../../common/enum";
+import { ISocialLoginForm, LoginForm } from "../../../../types/auth";
+import clsx from "clsx";
 
 interface ILinkedInLoginButtonProps {
   title?: string;
@@ -47,7 +48,7 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
     <>
       <Button
         title={title}
-        containerClassName="bg-sky-20 flex-row m-2"
+        containerClassName={"bg-sky-20 flex-row m-2"}
         textClassName="text-white ml-2 text-base font-bold"
         Icon={<Ionicons name="logo-linkedin" size={24} color="#FFF" />}
         onPress={handleLinkedInBtnClicked}

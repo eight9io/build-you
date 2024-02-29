@@ -3,14 +3,9 @@ import { CheckBox } from "@rneui/themed";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import {
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-} from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Image } from "expo-image";
 
 import { RegisterValidationSchema } from "../../Validators/Register.validate";
 import { serviceRegister } from "../../service/auth";
@@ -104,7 +99,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
       <KeyboardAwareScrollView testID="register_scroll_view">
         <CustomActivityIndicator isVisible={isLoading} />
 
-        {isShowModal ? (
+        {isShowModal && (
           <ConfirmDialog
             title={t("dialog.register.title") || ""}
             description={t("dialog.register.description") || ""}
@@ -112,7 +107,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             confirmButtonLabel={t("dialog.close") || ""}
             onConfirm={() => handleConfirm()}
           />
-        ) : null}
+        )}
         <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
           <View>
             <View className="flex-column items-center ">
@@ -125,13 +120,13 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                 {t("register_screen.sub_title")}
               </Text>
             </View>
-            {errMessage ? (
+            {errMessage && (
               <ErrorText
                 containerClassName="justify-center "
                 message={errMessage}
                 testID="register_error"
               />
-            ) : null}
+            )}
             <View className="mb-1 mt-4 flex  flex-col ">
               {(
                 t("form", {
@@ -211,12 +206,12 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                           </View>
                         )}
                       />
-                      {errors[item.type as keyof FormData] ? (
+                      {errors[item.type as keyof FormData] && (
                         <ErrorText
                           message={errors[item.type as keyof FormData]?.message}
                           testID={`register_${item.type}_error`}
                         />
-                      ) : null}
+                      )}
                     </View>
                   );
                 }
@@ -269,12 +264,12 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                       checkedColor="blue"
                       testID="register_argee_policy_checkbox"
                     />
-                    {errors.check_policy && !value ? (
+                    {errors.check_policy && !value && (
                       <ErrorText
                         message={errors.check_policy?.message}
                         testID="register_argee_policy_error"
                       />
-                    ) : null}
+                    )}
                   </View>
                 )}
               />

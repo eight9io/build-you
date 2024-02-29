@@ -42,7 +42,7 @@ PODS:
     - ExpoModulesCore
   - ExpoDevice (5.2.1):
     - ExpoModulesCore
-  - ExpoImage (1.0.1):
+  - ExpoImage (1.0.2):
     - ExpoModulesCore
     - SDWebImage (~> 5.15.0)
     - SDWebImageAVIFCoder (~> 0.10.0)
@@ -930,7 +930,7 @@ SPEC CHECKSUMS:
   ExpoAppleAuthentication: 7bd5e4150d59e8df37aa80b425850ae88adf9e65
   ExpoCrypto: 9105610a09cd6290b900bd82fc5d190e489125a3
   ExpoDevice: e0bebf68f978b3d353377ce42e73c20c0a070215
-  ExpoImage: 55b537a1f50df2f6fc3c2d82552e6d1df397a73d
+  ExpoImage: bb5ac5f106d534c36054c78a929be9a177971e06
   ExpoImagePicker: 270dea232b3a072d981dd564e2cafc63a864edb1
   ExpoKeepAwake: 69f5f627670d62318410392d03e0b5db0f85759a
   ExpoModulesCore: 653958063a301098b541ae4dfed1ac0b98db607b
@@ -1027,4 +1027,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 046906f4076f0d53de90160ea35108438e6dcc82
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.12.1

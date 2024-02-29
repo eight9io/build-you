@@ -109,6 +109,7 @@ export type RootStackParamList = {
     hasNotificationOnCoachTab?: boolean;
     hasNotificationOnCoachCalendarTab?: boolean;
   };
+  RegisterModal: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

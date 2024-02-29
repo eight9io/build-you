@@ -54,6 +54,7 @@ import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChalleng
 import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
 import { setBadgeCount } from "../utils/notification.util";
+import RegisterModal from "../component/modal/RegisterModal/RegisterModal";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -292,6 +293,22 @@ export const RootNavigation = () => {
         </RootStack.Group>
 
         <RootStack.Group screenOptions={{ presentation: "modal" }}>
+          <RootStack.Screen
+            name="RegisterModal" // Use modal as a screen name to avoid conflict when navigate to the another modal
+            component={RegisterModal}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => <AppTitle title={""} />, // Not showing title
+              headerTransparent: true,
+              headerLeft: (props) => (
+                <NavButton
+                  text={t("button.back") || "Back"}
+                  onPress={() => navigation.navigate("IntroScreen")}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
           <RootStack.Screen
             name="LoginScreen"
             component={Login}

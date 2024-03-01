@@ -1,12 +1,10 @@
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Platform, TouchableOpacity, View } from "react-native";
-import Modal from "react-native-modal";
-import BottomSheet2 from "../BottomSheet";
+import { Dialog } from "@rneui/themed";
+import { View } from "react-native";
 import Button from "../../Buttons/Button";
-import DatePicker from "react-native-date-picker";
 
 interface CoachDateTimePickerProps {
   showDateTimePicker: boolean;
@@ -24,10 +22,11 @@ const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
   const { t } = useTranslation();
   const todayDate = dayjs().toDate();
 
-  const [tempSelectedDate, setTempSelectedDate] = React.useState(todayDate);
+  const [tempSelectedDate, setTempSelectedDate] = React.useState(
+    selectedDate || todayDate
+  );
   const onConfirm = () => {
     setShowDateTimePicker(false);
-    // RNDateTimePicker returns the date in UTC, so we need to add 1 day to get the correct date
     setSelectedDate(tempSelectedDate as Date);
   };
 
@@ -38,46 +37,35 @@ const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
   };
 
   return (
-    <Modal
+    <Dialog
       isVisible={showDateTimePicker}
-      onBackdropPress={() => setShowDateTimePicker(false)}
-      onSwipeComplete={() => setShowDateTimePicker(false)}
-      swipeDirection={"down"}
-      hasBackdrop
-      onBackButtonPress={() => setShowDateTimePicker(false)}
-      backdropColor={"gray"}
-      backdropOpacity={0.2}
-      style={{ margin: 0, justifyContent: "flex-end" }}
+      className="flex bg-blue-500"
+      overlayStyle={{
+        borderRadius: 20,
+        backgroundColor: "#F2F2F2",
+        alignItems: "center",
+      }}
     >
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        activeOpacity={1}
-        onPressOut={() => setShowDateTimePicker(false)}
-      >
-        <View className="flex-1">
-          <BottomSheet2 onClose={() => setShowDateTimePicker(false)}>
-            <View className=" h-full w-full items-center justify-center">
-              <DatePicker
-                dividerHeight={1}
-                date={selectedDate}
-                textColor="#24252B"
-                onDateChange={handleDatePicked}
-                minimumDate={dayjs().startOf("day").toDate()}
-              />
-              <View className="mt-6 h-12 w-full px-4">
-                <Button
-                  title={t("save") || "Save"}
-                  onPress={onConfirm}
-                  containerClassName="bg-primary-default flex-1"
-                  textClassName="text-white"
-                  testID="date_time_picker_confirm_btn"
-                />
-              </View>
-            </View>
-          </BottomSheet2>
+      <View className="flex-1 justify-center">
+        <DateTimePicker
+          mode="single"
+          timePicker
+          date={tempSelectedDate}
+          // textColor="#24252B"
+          onChange={(params) => handleDatePicked(params.date)}
+          minDate={dayjs().startOf("day")}
+        />
+        <View className="mt-6 h-12 w-full px-4">
+          <Button
+            title={t("save") || "Save"}
+            onPress={onConfirm}
+            containerClassName="bg-primary-default flex-1"
+            textClassName="text-white"
+            testID="date_time_picker_confirm_btn"
+          />
         </View>
-      </TouchableOpacity>
-    </Modal>
+      </View>
+    </Dialog>
   );
 };
 

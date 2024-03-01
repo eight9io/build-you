@@ -289,7 +289,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       navigation.setOptions({
         headerRight: () => {
           return (
-            <View>
+            <View className="mr-3">
               <Button
                 Icon={<ShareIcon />}
                 onPress={() =>

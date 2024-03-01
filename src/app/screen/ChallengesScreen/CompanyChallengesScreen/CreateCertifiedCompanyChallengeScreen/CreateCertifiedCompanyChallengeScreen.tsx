@@ -144,7 +144,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+        <TouchableOpacity onPress={handleSubmit(onSubmit)} className="mr-3">
           <Text className="text-base font-normal text-primary-default">
             {t("new_challenge_screen.next_button").toLocaleUpperCase()}
           </Text>

@@ -119,7 +119,7 @@ const CreateCertifiedChallengeScreen = () => {
       type: "certified",
     });
     setIsLoading(false);
-     setTimeout(() => {
+    setTimeout(() => {
       navigation.navigate("ChoosePackageScreen");
     }, 500);
   };
@@ -127,7 +127,7 @@ const CreateCertifiedChallengeScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+        <TouchableOpacity onPress={handleSubmit(onSubmit)} className="mr-3">
           <Text className="text-base font-normal text-primary-default">
             {t("new_challenge_screen.next").toLocaleUpperCase()}
           </Text>

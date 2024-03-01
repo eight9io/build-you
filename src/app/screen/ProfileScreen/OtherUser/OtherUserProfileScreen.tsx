@@ -206,7 +206,7 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
     navigation.setOptions({
       headerRight: () => {
         return (
-          <View>
+          <View className="mr-3">
             <Button
               Icon={<ShareIcon />}
               onPress={() => onShareUserLink(userId)}

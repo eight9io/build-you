@@ -81,7 +81,7 @@ const Company: React.FC<ICompanyProps> = ({ navigation, route }) => {
       },
       headerTitle: () => <AppTitle title={t("profile_title")} />,
       headerLeft: () => (
-        <View className="">
+        <View className="ml-3">
           <BuildYouLogo width={90} />
         </View>
       ),

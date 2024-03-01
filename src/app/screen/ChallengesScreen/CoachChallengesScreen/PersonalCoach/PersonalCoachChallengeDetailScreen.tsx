@@ -55,7 +55,7 @@ export const RightCoachChallengeDetailOptions: FC<
   };
   return (
     <View>
-      <View className="-mt-1 flex flex-row items-center">
+      <View className="mr-3 flex flex-row items-center">
         <View className="pl-4 pr-2">
           <Button Icon={<ShareIcon />} onPress={onShare} />
         </View>

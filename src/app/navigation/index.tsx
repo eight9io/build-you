@@ -361,6 +361,7 @@ export const RootNavigation = () => {
                 <TouchableOpacity
                   onPress={() => navigation.goBack()}
                   testID="user_create_challenge_close_btn"
+                  className="ml-3"
                 >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
@@ -380,7 +381,10 @@ export const RootNavigation = () => {
                 />
               ),
               headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  className="ml-3"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),
@@ -400,7 +404,10 @@ export const RootNavigation = () => {
                 />
               ),
               headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  className="ml-3"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),
@@ -420,7 +427,10 @@ export const RootNavigation = () => {
                 />
               ),
               headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  className="ml-3"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),
@@ -437,7 +447,10 @@ export const RootNavigation = () => {
                 />
               ),
               headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  className="ml-3"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),
@@ -452,7 +465,10 @@ export const RootNavigation = () => {
                 <AppTitle title={t("cart_screen.title") || "Summary"} />
               ),
               headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  className="ml-3"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),
@@ -467,7 +483,10 @@ export const RootNavigation = () => {
                 <AppTitle title={t("cart_screen.title") || "Summary"} />
               ),
               headerLeft: ({}) => (
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  className="ml-3"
+                >
                   <Ionicons name="close" size={24} color="#000" />
                 </TouchableOpacity>
               ),

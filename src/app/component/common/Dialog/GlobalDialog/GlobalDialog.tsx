@@ -7,11 +7,12 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
+import { Dialog } from "@rneui/themed";
 import GlobalDialogController, {
   GlobalDialogRef,
 } from "./GlobalDialogController";
 import { IGlobalDialogProps } from "../../../../types/globalDialog";
-import { useTranslation } from "react-i18next";
 
 const GlobalDialog = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -53,7 +54,41 @@ const GlobalDialog = () => {
     []
   );
 
-  return <View></View>;
+  const handleClose = () => {
+    modalRef.current?.hide();
+  };
+
+  return (
+    <Dialog
+      isVisible={modalVisible}
+      onBackdropPress={handleClose}
+      className="!rounded-2xl"
+      overlayStyle={{
+        borderRadius: 20,
+        backgroundColor: "#F2F2F2",
+        alignItems: "center",
+      }}
+    >
+      <Dialog.Title
+        title={customTitle || t("dialog.alert_title")}
+        titleStyle={{
+          color: "black",
+        }}
+      />
+      <Text className="text-center text-sm">{customMessage}</Text>
+      <Dialog.Actions>
+        <Dialog.Button
+          title={customButton || t("dialog.ok")}
+          onPress={handleClose}
+          titleStyle={{
+            fontSize: 17,
+            lineHeight: 22,
+            color: "#007AFF",
+          }}
+        />
+      </Dialog.Actions>
+    </Dialog>
+  );
 };
 
 export default forwardRef(GlobalDialog);

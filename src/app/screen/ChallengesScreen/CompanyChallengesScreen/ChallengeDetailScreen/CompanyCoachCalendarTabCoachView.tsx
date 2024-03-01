@@ -489,7 +489,7 @@ const CompanyCoachCalendarTabCoachView: FC<
         title={erroModalTitle}
         description={errorModalDescription}
         isVisible={isErrorModalOpen}
-        confirmButtonLabel="Okay"
+        confirmButtonLabel={t("dialog.ok")}
         onConfirm={closeErrorModal}
         onClosed={closeErrorModal}
       />

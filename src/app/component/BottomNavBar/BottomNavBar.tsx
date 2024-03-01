@@ -94,9 +94,8 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
         tabBarStyle: {
           display: shouldHideTabBar ? "none" : "flex",
           backgroundColor: "#FFFFFF",
-          height: isAndroid ? 68 : 102,
-          paddingBottom: isAndroid ? 0 : 30,
           position: "absolute", // Fix tab bar showing as grey bar but no content during the show/hide process. Reference: https://stackoverflow.com/a/76670272
+          height: 86,
         },
         headerRightContainerStyle: {
           paddingRight: 10,

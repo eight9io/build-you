@@ -32,7 +32,7 @@ import { IOccupation } from "../../../../types/user";
 import { uploadNewVideo } from "../../../../utils/uploadVideo";
 
 import SeletecPickerCompany from "../../../../component/common/Pickers/SelectPicker/SelectPickerCompany";
-import SeletecPickerOccupation from "../../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
+import SelectPickerOccupation from "../../../../component/common/Pickers/SelectPicker/SelectPickerOccupation";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { serviceGetMyProfile } from "../../../../service/auth";
 import { ICompanyDataUser } from "../../../../types/company";
@@ -304,7 +304,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
             minimumDate={dayjs().subtract(100, "years").startOf("day").toDate()}
           />
 
-          <SeletecPickerOccupation
+          <SelectPickerOccupation
             occupationList={occupationList}
             title={t("edit_personal_profile_screen.occupation") || "Occupation"}
             show={showOccupationPicker}

@@ -1,10 +1,8 @@
 import clsx from "clsx";
-import Modal from "react-native-modal";
 import { useTranslation } from "react-i18next";
 import { FC, useEffect, useRef, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import {
-  TouchableOpacity,
   View,
   Text,
   ActivityIndicator,
@@ -16,7 +14,7 @@ import {
 import { ICompanyData, ICompanyDataUser } from "../../../../types/company";
 
 import Button from "../../Buttons/Button";
-import BottomSheet2 from "../../BottomSheet/BottomSheet";
+import BottomSheet from "../../BottomSheet/BottomSheet";
 import BottomSheetOption from "../../Buttons/BottomSheetOption";
 import CompanySearchBar from "../../SearchBar/CompanySearchBar";
 import { useDebounce } from "../../../../hooks/useDebounce";
@@ -53,6 +51,7 @@ const SelectPickerCompany: FC<ISelectPickerProps> = ({
   const debouncedSearchQuery = useDebounce(searchText, 500); // Adjust the delay as needed
   // Initialize animated value for search bar focus animation
   const animatedHeight = useRef(new Animated.Value(30)).current;
+  const bottomSheetRef = useRef(null);
 
   useEffect(() => {
     const getCompanyList = async () => {
@@ -117,115 +116,98 @@ const SelectPickerCompany: FC<ISelectPickerProps> = ({
     setSelected(selectedIndex || 0);
   }, [selectedIndex]);
 
+  useEffect(() => {
+    if (show) {
+      bottomSheetRef.current?.open();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [show]);
+
   return (
     <View>
-      <Modal
-        isVisible={show}
-        onBackdropPress={handleClose}
-        hasBackdrop
-        onBackButtonPress={handleClose}
-        backdropColor={"#85868C"}
-        backdropOpacity={0.3}
-        style={{ margin: 0, justifyContent: "flex-end" }}
+      <BottomSheet
+        ref={bottomSheetRef}
+        onClose={handleClose}
+        HeaderComponent={
+          <>
+            <View className="mt-3 flex w-full flex-row items-center justify-center pb-3">
+              <Text className="text-base font-semibold">{title}</Text>
+            </View>
+            <View className="mb-4 flex w-full flex-row items-center justify-center">
+              <CompanySearchBar
+                focused={isSearchBarFocused}
+                setFocused={setIsSearchBarFocused}
+                searchPhrase={searchText}
+                setSearchPhrase={setSearchText}
+              />
+            </View>
+          </>
+        }
+        FloatingComponent={
+          <View className="h-14 w-full bg-white px-4">
+            <Button
+              title={t("save") || "Save"}
+              onPress={() => hanldeSelectCompany(selected)}
+              containerClassName="bg-primary-default flex-1 mb-2"
+              textClassName="text-white"
+              disabledContainerClassName="bg-gray-light flex-none px-1"
+              disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
+              isDisabled={
+                (debouncedSearchQuery && searchedCompanies.length === 0) ||
+                companyList.length === 0
+              }
+            />
+          </View>
+        }
+        modalHeight={500}
       >
-        <Animated.View
-          style={{
-            height: animatedHeight.interpolate({
-              // map animated value to desired height
-              inputRange: [15, 20, 30],
-              outputRange: ["15%", "20%", "30%"],
-            }),
-          }}
-        >
-          <TouchableOpacity
-            className="h-full"
-            activeOpacity={0}
-            onPressOut={handleClose}
-          />
-        </Animated.View>
-        <View className="flex-1 ">
-          <BottomSheet2 onClose={handleClose} snapPoints={["100%"]}>
-            <View className="relative flex-1 ">
-              <View className="flex w-full flex-row items-center justify-center">
-                <Text className="text-base font-semibold">{title}</Text>
-              </View>
-              <View className="mb-4 flex w-full flex-row items-center justify-center">
-                <CompanySearchBar
-                  focused={isSearchBarFocused}
-                  setFocused={setIsSearchBarFocused}
-                  searchPhrase={searchText}
-                  setSearchPhrase={setSearchText}
-                />
-              </View>
-
-              {isSearchLoading ? (
-                <View className="flex flex-1 items-center justify-center">
-                  <ActivityIndicator size="large" />
+        <View className="h-full">
+          {isSearchLoading ? (
+            <View className="flex flex-1 items-center justify-center">
+              <ActivityIndicator size="large" />
+            </View>
+          ) : (
+            <>
+              {(debouncedSearchQuery && searchedCompanies.length === 0) ||
+              companyList.length === 0 ? (
+                <View className="flex flex-1 items-center  pt-6">
+                  <Text className="text-lg font-semibold text-gray-600">
+                    {t("search_company.no_result")}
+                  </Text>
                 </View>
               ) : (
-                <>
-                  {(debouncedSearchQuery && searchedCompanies.length === 0) ||
-                  companyList.length === 0 ? (
-                    <View className="flex flex-1 items-center  pt-6">
-                      <Text className="text-lg font-semibold text-gray-600">
-                        {t("search_company.no_result")}
-                      </Text>
-                    </View>
-                  ) : (
-                    <FlatList
-                      data={
-                        debouncedSearchQuery ? searchedCompanies : companyList
-                      }
-                      keyExtractor={(_, index) => `${Math.random()}-${index}}`}
-                      renderItem={({ item, index }) => {
-                        return (
-                          <View className="px-4">
-                            <BottomSheetOption
-                              onPress={() => setSelected(index)}
-                              title={item?.name}
-                              containerClassName={clsx(
-                                "focus:bg-gray-light",
-                                index === selected && "bg-gray-light"
-                              )}
-                              textClassName={clsx(
-                                "text-base font-normal",
-                                index === selected && "font-semibold"
-                              )}
-                            />
-                          </View>
-                        );
-                      }}
-                      onEndReached={onLoadMore}
-                      ListFooterComponent={<View className="h-10" />}
-                      onEndReachedThreshold={0.5}
-                      className="mb-8 flex-1"
-                    />
-                  )}
-                </>
-              )}
-              <View
-                className={clsx(
-                  "h-12 w-full bg-white px-4",
-                  Platform.OS === "android" ? "mb-6" : "mb-10"
-                )}
-              >
-                <Button
-                  title={t("save") || "Save"}
-                  onPress={() => hanldeSelectCompany(selected)}
-                  containerClassName="bg-primary-default "
-                  textClassName="text-white"
-                  disabledContainerClassName="bg-gray-light flex-none px-1"
-                  disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
-                  isDisabled={
-                    (debouncedSearchQuery && searchedCompanies.length === 0) ||
-                    companyList.length === 0
-                  }
+                <FlatList
+                  data={debouncedSearchQuery ? searchedCompanies : companyList}
+                  keyExtractor={(_, index) => `${Math.random()}-${index}}`}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <View className="px-4">
+                        <BottomSheetOption
+                          onPress={() => setSelected(index)}
+                          title={item?.name}
+                          containerClassName={clsx(
+                            "focus:bg-gray-light",
+                            index === selected && "bg-gray-light"
+                          )}
+                          textClassName={clsx(
+                            "text-base font-normal",
+                            index === selected && "font-semibold"
+                          )}
+                        />
+                      </View>
+                    );
+                  }}
+                  onEndReached={onLoadMore}
+                  ListFooterComponent={<View className="h-10" />}
+                  onEndReachedThreshold={0.5}
+                  className="mb-8 flex-1"
                 />
-              </View>
-            </View>
-          </BottomSheet2>
+              )}
+            </>
+          )}
         </View>
-      </Modal>
+      </BottomSheet>
     </View>
   );
 };

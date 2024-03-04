@@ -18,7 +18,7 @@ import TextInput from "../../../component/common/Inputs/TextInput";
 
 import CalendarIcon from "./asset/calendar-icon.svg";
 import Button from "../../../component/common/Buttons/Button";
-import SeletecPickerOccupation from "../../../component/common/Pickers/SelectPicker/SeletecPickerOccupation";
+import SelectPickerOccupation from "../../../component/common/Pickers/SelectPicker/SelectPickerOccupation";
 
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 
@@ -149,7 +149,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         minimumDate={dayjs().subtract(100, "years").startOf("day").toDate()}
       />
 
-      <SeletecPickerOccupation
+      <SelectPickerOccupation
         occupationList={occupationList}
         title={t("edit_personal_profile_screen.occupation") || "Occupation"}
         show={showOccupationPicker}

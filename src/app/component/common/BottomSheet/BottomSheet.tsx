@@ -1,57 +1,42 @@
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import React, { FC, useCallback, useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { forwardRef, useImperativeHandle } from "react";
+import { Modalize, ModalizeProps } from "react-native-modalize";
+import { useModalize } from "react-native-modalize/lib/utils/use-modalize";
 
-interface IBottomSheet2Props {
-  onClose: () => void;
-  snapPoints?: Array<string | number>;
-  children?: React.ReactNode;
-}
+interface IBottomSheetProps extends ModalizeProps {}
 
-const BottomSheet2: FC<IBottomSheet2Props> = ({
-  onClose,
-  snapPoints,
-  children,
-}) => {
-  const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const snapPointsDefault = useMemo(() => ["50%"], []);
-  snapPoints = snapPoints || snapPointsDefault;
+const BottomSheet = forwardRef<any, IBottomSheetProps>(
+  (
+    { children, HeaderComponent, FloatingComponent, modalHeight, onClose },
+    ref
+  ) => {
+    const { ref: bottomSheetRef, open, close } = useModalize();
+    useImperativeHandle(
+      ref,
+      () => ({
+        open: () => {
+          open();
+        },
+        close: () => {
+          close();
+        },
+      }),
+      []
+    );
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={1}
-        appearsOnIndex={2}
-        pressBehavior={0}
-        opacity={0}
-      />
-    ),
-    []
-  );
-
-  return (
-    <GestureHandlerRootView style={styles.container}>
-      <BottomSheet
+    return (
+      <Modalize
         ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
+        withReactModal
         onClose={onClose}
-        backdropComponent={renderBackdrop}
+        HeaderComponent={HeaderComponent}
+        FloatingComponent={FloatingComponent}
+        adjustToContentHeight={false}
+        modalHeight={modalHeight}
       >
         {children}
-      </BottomSheet>
-    </GestureHandlerRootView>
-  );
-};
+      </Modalize>
+    );
+  }
+);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-  },
-});
-
-export default BottomSheet2;
+export default BottomSheet;

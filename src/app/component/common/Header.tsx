@@ -25,14 +25,13 @@ export const Header: FC<IHeaderProps> = ({
   return (
     <View
       className={clsx(
-        "relative flex h-9 w-full flex-row items-center justify-between",
-        Platform.OS === "ios" ? "mt-5" : "mt-0",
+        "relative mt-6 flex w-full flex-row items-center justify-center",
         containerStyle
       )}
     >
       {leftBtn ? (
         <TouchableOpacity
-          // className="absolute left-0 top-2"
+          className="absolute left-0 top-0"
           onPress={onLeftBtnPress}
         >
           {typeof leftBtn === "string" && (
@@ -44,7 +43,7 @@ export const Header: FC<IHeaderProps> = ({
         </TouchableOpacity>
       ) : null}
 
-      {title && (
+      {title ? (
         <View
         //  className={clsx("absolute top-2")}
         >
@@ -52,10 +51,10 @@ export const Header: FC<IHeaderProps> = ({
             {title}
           </Text>
         </View>
-      )}
-      {rightBtn && typeof rightBtn == "string" && (
+      ) : null}
+      {rightBtn && typeof rightBtn == "string" ? (
         <TouchableOpacity
-          // className="absolute right-0 top-2"
+          className="absolute right-0 top-0"
           onPress={(event) => {
             event.persist();
             debounce(onRightBtnPress, 300)();
@@ -65,16 +64,15 @@ export const Header: FC<IHeaderProps> = ({
             {rightBtn.toUpperCase()}
           </Text>
         </TouchableOpacity>
-      )}
+      ) : null}
 
-      {rightBtn && typeof rightBtn === "object" && (
+      {rightBtn && typeof rightBtn === "object" ? (
         <View
         // className="absolute right-5 top-2"
         >
           {rightBtn}
         </View>
-      )}
-      {!rightBtn && <View />}
+      ) : null}
     </View>
   );
 };

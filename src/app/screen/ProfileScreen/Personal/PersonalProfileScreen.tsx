@@ -58,7 +58,7 @@ const Profile: React.FC<IProfileProps> = ({ route, navigation }: any) => {
       },
       headerTitle: () => <AppTitle title={t("profile_title")} />,
       headerLeft: () => (
-        <View className="">
+        <View className="ml-3">
           <BuildYouLogo width={90} />
         </View>
       ),

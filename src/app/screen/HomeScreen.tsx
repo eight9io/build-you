@@ -278,7 +278,7 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
           },
           headerTitle: () => <AppTitle title={t("your_feed.header")} />,
           headerLeft: () => (
-            <View className="">
+            <View className="ml-3">
               <BuildYouLogo width={90} />
             </View>
           ),

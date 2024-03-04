@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { View, Text, Appearance, Platform } from "react-native";
+import { Modal, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
-import clsx from "clsx";
+import { Dialog } from "@rneui/themed";
 
 interface IComfirmDialogProps {
   title?: string;
@@ -27,9 +27,6 @@ const ErrorDialog: FC<IComfirmDialogProps> = ({
   confirmButtonTestID,
 }) => {
   const { t } = useTranslation();
-  const colorScheme = Appearance.getColorScheme();
-  const isDarkMode = colorScheme === "dark";
-  const isIOS = Platform.OS === "ios";
 
   const handleCancel = () => {
     onClosed && onClosed();
@@ -38,7 +35,63 @@ const ErrorDialog: FC<IComfirmDialogProps> = ({
   const handleConfirm = () => {
     onConfirm && onConfirm();
   };
-  return <View></View>;
+  return (
+    <Dialog
+      isVisible={isVisible}
+      onBackdropPress={handleCancel}
+      overlayStyle={{
+        borderRadius: 20,
+        backgroundColor: "#F2F2F2",
+        alignItems: "center",
+      }}
+    >
+      <Dialog.Title
+        title={title || t("dialog.err_title")}
+        titleStyle={{
+          color: "black",
+          textAlign: "center",
+        }}
+      />
+      <Text className="text-center text-sm">
+        {description || t("error_general_message")}
+      </Text>
+
+      <View className="mt-4 flex w-full flex-row">
+        {onClosed ? (
+          <Dialog.Button
+            title={closeButtonLabel ?? t("dialog.cancel")}
+            onPress={handleCancel}
+            titleStyle={{
+              fontSize: 17,
+              lineHeight: 22,
+              color: "#007AFF",
+            }}
+            containerStyle={{
+              flex: 1,
+            }}
+          />
+        ) : null}
+        {onConfirm ? (
+          <Dialog.Button
+            title={confirmButtonLabel ?? t("dialog.ok")}
+            className="font-bold"
+            color={confirmButtonColor}
+            onPress={handleConfirm}
+            testID={confirmButtonTestID}
+            titleStyle={{
+              fontWeight: "600",
+              fontSize: 17,
+              lineHeight: 22,
+              color: confirmButtonColor || "#007AFF",
+            }}
+            containerStyle={{
+              flex: 1,
+            }}
+          />
+        ) : null}
+      </View>
+    </Dialog>
+  );
 };
 
 export default ErrorDialog;

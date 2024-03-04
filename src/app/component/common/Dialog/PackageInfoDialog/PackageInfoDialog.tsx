@@ -1,11 +1,7 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
-import clsx from "clsx";
-import {
-  numberToPriceWithCommas,
-  stringToPriceWithCommas,
-} from "../../../../utils/price";
+import { Dialog } from "@rneui/themed";
 
 interface IPackageInfoDialogProps {
   packages: {
@@ -84,7 +80,45 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
     setPackageInfo(PACKAGE_INFO);
   }, [packages]);
 
-  return <View></View>;
+  return (
+    <Dialog
+      isVisible={isVisible}
+      onBackdropPress={handleCancel}
+      overlayStyle={{
+        borderRadius: 20,
+        backgroundColor: "#F2F2F2",
+        alignItems: "center",
+      }}
+    >
+      <Dialog.Title
+        title={t("dialog.package_info.title")}
+        titleStyle={{
+          color: "black",
+        }}
+      />
+      <View className="flex h-32 flex-col items-center justify-center p-2 pb-0">
+        <FlatList
+          data={packageInfo}
+          keyExtractor={(item) => item.title}
+          renderItem={({ item }) => renderPackageInfo(item)}
+          style={{ flex: 1 }}
+        />
+      </View>
+      <Dialog.Actions>
+        {onClosed ? (
+          <Dialog.Button
+            title={t("dialog.close")}
+            onPress={handleCancel}
+            titleStyle={{
+              fontSize: 17,
+              lineHeight: 22,
+              color: "#007AFF",
+            }}
+          />
+        ) : null}
+      </Dialog.Actions>
+    </Dialog>
+  );
 };
 
 export default PackageInfoDialog;

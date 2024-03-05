@@ -181,7 +181,7 @@ const ProgressCard: FC<IProgressCardProps> = ({
               <Text className="text-xs font-light text-gray-dark ">
                 {timeDiff}
               </Text>
-              {itemProgressCard?.location && (
+              {itemProgressCard?.location ? (
                 <>
                   <View className="px-2">
                     <IconDot fill={"#7D7E80"} />
@@ -190,29 +190,31 @@ const ProgressCard: FC<IProgressCardProps> = ({
                     {itemProgressCard?.location}
                   </Text>
                 </>
-              )}
+              ) : null}
             </View>
           </View>
         </TouchableOpacity>
-        {((isJoined && isProgressOwner) ||
-          (!isChallengeOwnerCompanyAccount && isProgressOwner)) && (
+        {(isJoined && isProgressOwner) ||
+        (!isChallengeOwnerCompanyAccount && isProgressOwner) ? (
           <PopUpMenu
             options={progressOptions}
             isDisabled={isChallengeCompleted || itemProgressCard?.first}
           />
-        )}
+        ) : null}
       </View>
-      {itemProgressCard?.caption && (
+      {itemProgressCard?.caption ? (
         <Text className=" mb-1 text-md font-normal leading-5">
           {itemProgressCard?.caption}
         </Text>
-      )}
-      {extractedImageUrls && (
+      ) : null}
+      {extractedImageUrls ? (
         <View className="mt-2 aspect-square w-full rounded-xl">
           <ImageSwiper imageSrc={extractedImageUrls} />
         </View>
-      )}
-      {itemProgressCard?.video && <VideoPlayer src={itemProgressCard.video} />}
+      ) : null}
+      {itemProgressCard?.video ? (
+        <VideoPlayer src={itemProgressCard.video} />
+      ) : null}
 
       <View className="mt-3 flex-row">
         <LikeButton

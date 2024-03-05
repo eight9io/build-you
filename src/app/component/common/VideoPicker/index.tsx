@@ -61,7 +61,14 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   const generateThumbnail = async (video: string) => {
     try {
-      const { uri } = await VideoThumbnails.getThumbnailAsync(video);
+      const res = await fetch(video);
+      if (!res.ok) throw new Error(`Failed to fetch video: ${video}`);
+
+      // Convert the response body (video data/readable stream) to a Blob
+      const blob = await res.blob();
+      const videoUrl = URL.createObjectURL(blob);
+      console.log("videoUrl: ", videoUrl);
+      const { uri } = await VideoThumbnails.getThumbnailAsync(videoUrl);
       if (setExternalVideo && setIsSelectedImage) {
         const id = getRandomId();
         setExternalVideo([{ id, uri }]);
@@ -90,6 +97,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   useEffect(() => {
     if (!pickedVideo.length) return;
+    console.log("pickedVideo: ", pickedVideo);
 
     generateThumbnail(pickedVideo[0]);
   }, [pickedVideo]);
@@ -126,17 +134,17 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   return (
     <View className="flex flex-col">
-      {loading && <ActivityIndicator size="large" color="#C5C8D2" />}
-      {useBigImage && pickedVideo.length > 0 && !setExternalVideo && (
+      {loading ? <ActivityIndicator size="large" color="#C5C8D2" /> : null}
+      {useBigImage && pickedVideo.length > 0 && !setExternalVideo ? (
         <View className="h-[108px] w-[108px]">
           <Image
             source={{ uri: thumbnailImage as any }}
             className="h-full w-full rounded-xl"
           />
         </View>
-      )}
+      ) : null}
 
-      {useBigImage && pickedVideo.length > 0 && (
+      {useBigImage && pickedVideo.length > 0 ? (
         <View className="relative h-[138px] w-full">
           <Image
             source={{ uri: thumbnailImage as any }}
@@ -152,7 +160,7 @@ const VideoPicker: FC<IVideoPickerProps> = ({
             <CloseButton />
           </TouchableOpacity>
         </View>
-      )}
+      ) : null}
 
       <TouchableOpacity
         onPress={pickVideo}

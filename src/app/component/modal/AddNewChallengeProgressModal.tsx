@@ -72,25 +72,26 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
 
   return (
     <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
-      {selectedMedia?.length > 0 &&
-        selectedMedia.map((media: any) => (
-          <View
-            className="relative aspect-square"
-            style={{ width: singleImageWidth }}
-            key={media.id}
-          >
-            <View className="absolute right-1 top-2 z-10">
-              <Button
-                onPress={() => handleRemoveItem(media.id)}
-                Icon={<Close fill={"white"} />}
+      {selectedMedia?.length > 0
+        ? selectedMedia.map((media: any) => (
+            <View
+              className="relative aspect-square"
+              style={{ width: singleImageWidth }}
+              key={media.id}
+            >
+              <View className="absolute right-1 top-2 z-10">
+                <Button
+                  onPress={() => handleRemoveItem(media.id)}
+                  Icon={<Close fill={"white"} />}
+                />
+              </View>
+              <Image
+                source={{ uri: media.uri as any }}
+                className="h-full w-full rounded-xl"
               />
             </View>
-            <Image
-              source={{ uri: media.uri as any }}
-              className="h-full w-full rounded-xl"
-            />
-          </View>
-        ))}
+          ))
+        : null}
     </View>
   );
 };
@@ -168,7 +169,9 @@ export const AddNewChallengeProgressModal: FC<
         selectedMedia.length > 0
       ) {
         const progressId = createProgressResponse.data.id;
+        console.log("isSelectedImage: ", isSelectedImage);
         if (isSelectedImage) {
+          console.log("selectedMedia: ", selectedMedia);
           await updateProgressImage(progressId, selectedMedia)
             .then((res) => {
               if (res.status === 200 || 201) {
@@ -263,7 +266,6 @@ export const AddNewChallengeProgressModal: FC<
               leftBtn={t("add_new_challenge_progress_modal.cancel") || "Cancel"}
               onLeftBtnPress={onClose}
               onRightBtnPress={handleSubmit(onSubmit)}
-              containerStyle={Platform.OS === "ios" ? "mt-5" : "mt-0"}
             />
 
             <View className="flex flex-col justify-between pt-4">
@@ -281,7 +283,7 @@ export const AddNewChallengeProgressModal: FC<
                 errors={errors.caption}
               />
 
-              {selectedMedia && (
+              {selectedMedia ? (
                 <RenderSelectedMedia
                   screen={screen}
                   selectedMedia={selectedMedia}
@@ -297,12 +299,12 @@ export const AddNewChallengeProgressModal: FC<
                     }
                   }}
                 />
-              )}
+              ) : null}
 
               <View>
-                {isImageOrVideoLoading && (
+                {isImageOrVideoLoading ? (
                   <ActivityIndicator size="large" color="#C5C8D2" />
-                )}
+                ) : null}
                 <View className="">
                   <ImagePicker
                     onImagesSelected={(images) => {
@@ -344,10 +346,10 @@ export const AddNewChallengeProgressModal: FC<
                     setLoading={setIsImageOrVideoLoading}
                   />
                 </View>
-                {!isImageOrVideoLoading && errors?.media && (
+                {!isImageOrVideoLoading && errors?.media ? (
                   <ErrorText message={errors.media.message} />
-                )}
-                {isImageOrVideoLoading && errors?.media && (
+                ) : null}
+                {isImageOrVideoLoading && errors?.media ? (
                   <Text className="pt-2 text-sm text-red-500">
                     <Ionicons
                       name="alert-circle-outline"
@@ -356,7 +358,7 @@ export const AddNewChallengeProgressModal: FC<
                     />
                     {t("image_picker.upload_a_video_waiting") as string}
                   </Text>
-                )}
+                ) : null}
               </View>
 
               <View className="flex flex-col pt-4">

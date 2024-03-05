@@ -84,9 +84,9 @@ const ImagePicker: FC<IImagePickerProps> = ({
   };
   return (
     <View className="flex flex-col">
-      {loading && <ActivityIndicator size="large" color="#C5C8D2" />}
+      {loading ? <ActivityIndicator size="large" color="#C5C8D2" /> : null}
 
-      {images && images.length > 0 && (
+      {images && images.length > 0 ? (
         <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
           {images.map((uri, index) => (
             <View
@@ -94,14 +94,14 @@ const ImagePicker: FC<IImagePickerProps> = ({
               className="relative aspect-square"
               style={{ width: 100 }}
             >
-              {onRemoveSelectedImage && (
+              {onRemoveSelectedImage ? (
                 <View className="absolute right-0 top-0 z-10">
                   <Button
                     onPress={() => handleRemoveSelectedImage(index)}
                     Icon={<Close fill={"white"} />}
                   />
                 </View>
-              )}
+              ) : null}
               <Image
                 source={{
                   uri,
@@ -111,7 +111,7 @@ const ImagePicker: FC<IImagePickerProps> = ({
             </View>
           ))}
         </View>
-      )}
+      ) : null}
 
       <TouchableOpacity
         onPress={handlePickImage}

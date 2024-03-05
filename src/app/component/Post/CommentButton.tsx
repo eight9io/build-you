@@ -53,12 +53,11 @@ const CommentButton: FC<ICommentButtonProps> = ({
         className={clsx("flex-1 flex-row items-center justify-center gap-2")}
       >
         <CommentSvg />
-        {!(localCommentUpdate?.id === progressId) && (
+        {!(localCommentUpdate?.id === progressId) ? (
           <Text className={clsx("text-md font-normal text-gray-dark ")}>
             {t("commentWithCount", { count: numberOfComments })}
           </Text>
-        )}
-        {localCommentUpdate?.id === progressId && (
+        ) : (
           <Text className={clsx("text-md font-normal text-gray-dark ")}>
             {t("commentWithCount", {
               count: localCommentUpdate.numberOfComments,

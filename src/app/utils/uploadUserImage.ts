@@ -38,51 +38,51 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
   };
 };
 
-// TODO: this one don't need utils, can stay inside service folder
-export const uploadNewAvatar = async (image: string) => {
-  const formData = new FormData();
-  const uri = Platform.OS === "android" ? image : image.replace("file://", "");
-  formData.append("file", {
-    uri,
-    name: "avatar.jpg",
-    type: "image/jpeg",
-  } as any);
+// // TODO: this one don't need utils, can stay inside service folder
+// export const uploadNewAvatar = async (image: string) => {
+//   const formData = new FormData();
+//   const uri = Platform.OS === "android" ? image : image.replace("file://", "");
+//   formData.append("file", {
+//     uri,
+//     name: "avatar.jpg",
+//     type: "image/jpeg",
+//   } as any);
 
-  const response = serviceUpdateAvatar(formData)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      return undefined;
-    });
-  return response;
-};
+//   const response = serviceUpdateAvatar(formData)
+//     .then((res) => {
+//       return res.data;
+//     })
+//     .catch((err) => {
+//       return undefined;
+//     });
+//   return response;
+// };
 
-export const uploadNewCover = async (image: string) => {
-  const formData = new FormData();
-  const uri = Platform.OS === "android" ? image : image.replace("file://", "");
-  formData.append("file", {
-    uri,
-    name: "avatar.jpg",
-    type: "image/jpeg",
-  } as any);
+// export const uploadNewCover = async (image: string) => {
+//   const formData = new FormData();
+//   const uri = Platform.OS === "android" ? image : image.replace("file://", "");
+//   formData.append("file", {
+//     uri,
+//     name: "avatar.jpg",
+//     type: "image/jpeg",
+//   } as any);
 
-  const response = serviceUpdateCover(formData)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((_) => {
-      GlobalDialogController.showModal({
-        title: i18n.t("dialog.err_title"),
-        message:
-          i18n.t("upload_cover_failed") ||
-          "Upload cover failed. Please try again later.",
-        button: i18n.t("dialog.ok"),
-      });
-      return undefined;
-    });
-  return response;
-};
+//   const response = serviceUpdateCover(formData)
+//     .then((res) => {
+//       return res.data;
+//     })
+//     .catch((_) => {
+//       GlobalDialogController.showModal({
+//         title: i18n.t("dialog.err_title"),
+//         message:
+//           i18n.t("upload_cover_failed") ||
+//           "Upload cover failed. Please try again later.",
+//         button: i18n.t("dialog.ok"),
+//       });
+//       return undefined;
+//     });
+//   return response;
+// };
 
 export const getImageExtension = (uri: string) => {
   const uriSplit = uri.split(".");

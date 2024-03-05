@@ -89,6 +89,7 @@
     "react-native-inappbrowser-reborn": "^3.7.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-loading-spinner-overlay": "^3.0.1",
+    "react-native-mime-types": "^2.5.0",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^15.0.1",
     "react-native-modalize": "^2.1.1",

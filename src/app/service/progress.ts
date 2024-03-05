@@ -7,10 +7,9 @@ import {
   IProgressLike,
   IUpdateProgress,
 } from "../types/progress";
-import { getImageExtension } from "../utils/image";
 import { IUploadMediaWithId } from "../types/media";
-import { Platform } from "react-native";
 import { IProgressChallenge } from "../types/challenge";
+import { createImageFileFromUri } from "../utils/image";
 
 export const createProgress = (data: ICreateProgress) => {
   return httpInstance.post("/challenge/progress/create", data);
@@ -25,17 +24,14 @@ export const updateProgressImage = async (
   image: IUploadMediaWithId[]
 ) => {
   const imageForm = new FormData();
-  image.map((image) => {
-    const extension = getImageExtension(image.uri);
-    const uri =
-      Platform.OS === "android" ? image.uri : image?.uri.replace("file://", "");
-    const imageItemToUpload = {
-      uri: uri,
-      name: `${image.id}.${extension}`,
-      type: `image/${extension}`,
-    };
-    imageForm.append("files", imageItemToUpload as any);
-  });
+
+  await Promise.all(
+    image.map(async (image) => {
+      const imageFile = await createImageFileFromUri(image.uri);
+
+      imageForm.append("files", imageFile);
+    })
+  );
 
   const uploadingImage = await httpInstance.post(
     `/challenge/progress/image/${progressId}`,

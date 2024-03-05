@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StatusBar } from "react-native";
-import { Image } from "expo-image";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 
 import { useTranslation } from "react-i18next";
 import Swiper from "react-native-swiper";
@@ -26,12 +25,12 @@ export const IntroScreen = ({ navigation, route }: any) => {
         <Image
           className="z-10 h-[100%] w-[100%] rounded-xl"
           source={require("./asset/banner.png")}
-          contentFit="cover"
+          resizeMode="cover"
         />
         <Image
           className="position: absolute bottom-7 left-[34%] z-20"
           source={require("./asset/logo.png")}
-          contentFit="cover"
+          resizeMode="cover"
         />
         <View className="position: absolute top-3 h-[100%] w-[100%] rounded-xl bg-[#FF7B1C] opacity-40" />
         <View className="position: absolute top-5 h-[100%] w-[100%] rounded-xl bg-[#FFA41B] opacity-30" />

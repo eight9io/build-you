@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import { useState, useEffect, FC } from "react";
 import {
   View,
   TouchableOpacity,
@@ -7,9 +7,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as ExpoImagePicker from "expo-image-picker";
-import * as VideoThumbnails from "expo-video-thumbnails";
 import clsx from "clsx";
-import { Image } from "expo-image";
+import { ResizeMode, Video } from "expo-av";
 
 import { IUploadMediaWithId } from "../../../types/media";
 
@@ -61,17 +60,9 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   const generateThumbnail = async (video: string) => {
     try {
-      const res = await fetch(video);
-      if (!res.ok) throw new Error(`Failed to fetch video: ${video}`);
-
-      // Convert the response body (video data/readable stream) to a Blob
-      const blob = await res.blob();
-      const videoUrl = URL.createObjectURL(blob);
-      console.log("videoUrl: ", videoUrl);
-      const { uri } = await VideoThumbnails.getThumbnailAsync(videoUrl);
       if (setExternalVideo && setIsSelectedImage) {
         const id = getRandomId();
-        setExternalVideo([{ id, uri }]);
+        setExternalVideo([{ id, uri: video }]);
         setSelectedVideo && setSelectedVideo([{ id, uri: video }]);
         setIsSelectedImage(false);
         setLoading && setLoading(false);
@@ -80,11 +71,11 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       if (setExternalVideo) {
         const id = getRandomId();
         setExternalVideo([{ id, uri: video }]);
-        setThumbnailImage(uri);
+        setThumbnailImage(video);
         setLoading && setLoading(false);
         return;
       }
-      setThumbnailImage(uri);
+      setThumbnailImage(video);
     } catch (error) {
       setLoading && setLoading(false);
       console.error("generateThumbnail", error);
@@ -97,7 +88,6 @@ const VideoPicker: FC<IVideoPickerProps> = ({
 
   useEffect(() => {
     if (!pickedVideo.length) return;
-    console.log("pickedVideo: ", pickedVideo);
 
     generateThumbnail(pickedVideo[0]);
   }, [pickedVideo]);
@@ -137,18 +127,22 @@ const VideoPicker: FC<IVideoPickerProps> = ({
       {loading ? <ActivityIndicator size="large" color="#C5C8D2" /> : null}
       {useBigImage && pickedVideo.length > 0 && !setExternalVideo ? (
         <View className="h-[108px] w-[108px]">
-          <Image
-            source={{ uri: thumbnailImage as any }}
-            className="h-full w-full rounded-xl"
+          <Video
+            source={{ uri: thumbnailImage }}
+            className={clsx("aspect-square h-full w-full rounded-xl")}
+            resizeMode={ResizeMode.COVER}
+            videoStyle={{ width: "100%" }}
           />
         </View>
       ) : null}
 
       {useBigImage && pickedVideo.length > 0 ? (
         <View className="relative h-[138px] w-full">
-          <Image
-            source={{ uri: thumbnailImage as any }}
-            className="h-full w-full rounded-xl"
+          <Video
+            source={{ uri: thumbnailImage }}
+            className={clsx("aspect-square h-full w-full rounded-xl")}
+            resizeMode={ResizeMode.COVER}
+            videoStyle={{ width: "100%" }}
           />
           <View className="absolute left-1/2 top-[60px] ml-[-10px]">
             <PlayButton />

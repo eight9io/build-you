@@ -9,7 +9,7 @@ import {
 } from "../types/progress";
 import { IUploadMediaWithId } from "../types/media";
 import { IProgressChallenge } from "../types/challenge";
-import { createImageFileFromUri } from "../utils/image";
+import { createFileFromUri } from "../utils/image";
 
 export const createProgress = (data: ICreateProgress) => {
   return httpInstance.post("/challenge/progress/create", data);
@@ -27,7 +27,7 @@ export const updateProgressImage = async (
 
   await Promise.all(
     image.map(async (image) => {
-      const imageFile = await createImageFileFromUri(image.uri);
+      const imageFile = await createFileFromUri(image.uri);
 
       imageForm.append("files", imageFile);
     })
@@ -46,16 +46,14 @@ export const updateProgressImage = async (
   return uploadingImage;
 };
 
-export const updateProgressVideo = (
+export const updateProgressVideo = async (
   progressId: string,
   video: IUploadMediaWithId
 ) => {
   const videoData = new FormData();
-  videoData.append("file", {
-    uri: video.uri,
-    name: `${video.id}.mp4`,
-    type: `video/mp4`,
-  } as any);
+  const videoFile = await createFileFromUri(video.uri);
+  videoData.append("file", videoFile);
+
   return httpInstance.post(
     `/challenge/progress/video/${progressId}`,
     videoData,

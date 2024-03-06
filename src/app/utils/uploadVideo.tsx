@@ -1,21 +1,14 @@
-import { Platform } from "react-native";
 import httpInstance from "./http";
 import { CrashlyticService } from "../service/crashlytic";
+import { createFileFromUri } from "./image";
 
 export const uploadNewVideo = async (video: string | undefined) => {
   try {
     if (!video) return;
     const formData = new FormData();
-    // detect file type
-    const type = video.split(".").pop();
-    const uri =
-      Platform.OS === "android" ? video : video.replace("file://", "");
-    const name = `video.${type}`;
-    formData.append("file", {
-      uri: uri,
-      name,
-      type: `video/${type}`,
-    } as any);
+    const videoFile = await createFileFromUri(video);
+
+    formData.append("file", videoFile);
 
     const response = await httpInstance.post("/user/video", formData, {
       headers: {

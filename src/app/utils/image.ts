@@ -1,5 +1,5 @@
 import mime from "react-native-mime-types";
-import { IUploadMediaWithId } from "../types/media";
+import { getImageMime } from "base64-image-mime";
 import { getRandomId } from "./common";
 // const extractPrefix = (url: string) => {
 //   console.log("url", url);
@@ -42,22 +42,43 @@ export const getImageExtension = (uri: string) => {
   return uriSplit[uriSplit.length - 1];
 };
 
-export const createImageFileFromUri = async (uri: string) => {
+export const createFileFromUri = async (uri: string) => {
   // Fetch image from uri to get binary data
   const res = await fetch(uri);
-  if (!res.ok) throw new Error(`Failed to fetch image: ${uri}`);
+  if (!res.ok) throw new Error(`Failed to fetch file data: ${uri}`);
 
-  // Convert the response body (image data/readable stream) to a Blob
+  // Convert the response body (file data/readable stream) to a Blob
   const blob = await res.blob();
 
-  const imageExtension = mime.extension(blob.type);
-  if (!imageExtension)
+  const fileExtension = mime.extension(blob.type);
+  if (!fileExtension)
     throw new Error(
-      `Failed to get image extension from mime type: ${blob.type}`
+      `Failed to get file extension from mime type: ${blob.type}`
     );
 
-  const imageId = getRandomId();
-  return new File([blob], `${imageId}.${imageExtension}`, {
+  const fileId = getRandomId();
+  return new File([blob], `${fileId}.${fileExtension}`, {
     type: blob.type, // our API expects the mime type to be in the file object
   });
+};
+
+export const getBase64FileMimeType = (base64: string) => {
+  try {
+    const mime = getImageMime(base64);
+    if (!mime) throw new Error("Failed to get mime type from base64");
+    return mime;
+  } catch (error) {
+    throw new Error(`Failed to get mime type from base64: ${error}`);
+  }
+};
+
+export const isValidBase64 = (str: string) => {
+  try {
+    const mime = getImageMime(str);
+    if (!mime) return false;
+    return true;
+  } catch (error) {
+    console.error("error: ", error);
+    return false;
+  }
 };

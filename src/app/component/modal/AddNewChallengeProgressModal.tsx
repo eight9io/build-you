@@ -7,14 +7,13 @@ import {
   ActivityIndicator,
   Dimensions,
   Modal,
-  Platform,
   SafeAreaView,
   ScaledSize,
   Text,
   View,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import { ResizeMode, Video } from "expo-av";
 import { useUserProfileStore } from "../../store/user-store";
 import { IUploadMediaWithId } from "../../types/media";
 import { getRandomId } from "../../utils/common";
@@ -39,6 +38,7 @@ import GlobalToastController from "../common/Toast/GlobalToastController";
 import VideoPicker from "../common/VideoPicker";
 
 import CustomActivityIndicator from "../common/CustomActivityIndicator";
+import { getBase64FileMimeType, isValidBase64 } from "../../utils/image";
 
 interface IAddNewChallengeProgressModalProps {
   challengeId: string;
@@ -61,6 +61,8 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
   setSelectedMedia,
   onRemoveItem,
 }) => {
+  const { t } = useTranslation();
+  const [error, setError] = useState<string | null>(null);
   const handleRemoveItem = (id: string) => {
     const filteredMedia = selectedMedia.filter((media) => media.id !== id);
     setSelectedMedia(filteredMedia);
@@ -70,27 +72,54 @@ const RenderSelectedMedia: FC<IRenderSelectedMediaProps> = ({
   // px-5 + gap-2 + gap-2 = 56
   const singleImageWidth = (screen.width - 56) / 3;
 
+  useEffect(() => {
+    // Check if selectedMedia contains invalid base64
+    if (selectedMedia.length > 0) {
+      const validMedia = selectedMedia.filter((media) =>
+        isValidBase64(media.uri)
+      );
+      if (validMedia.length < selectedMedia.length)
+        setError(t("error_general_message"));
+      else setError(null);
+    } else setError(null);
+  }, [selectedMedia]);
+
+  if (error) return <ErrorText message={error} />;
+
   return (
     <View className="flex flex-row flex-wrap justify-start gap-2 pt-5">
       {selectedMedia?.length > 0
-        ? selectedMedia.map((media: any) => (
-            <View
-              className="relative aspect-square"
-              style={{ width: singleImageWidth }}
-              key={media.id}
-            >
-              <View className="absolute right-1 top-2 z-10">
-                <Button
-                  onPress={() => handleRemoveItem(media.id)}
-                  Icon={<Close fill={"white"} />}
-                />
+        ? selectedMedia.map((media) => {
+            // getBase64FileMimeType return value are expected to be "image/*" or "video/*"
+            const mediaType = getBase64FileMimeType(media.uri).split("/")[0];
+            const isVideo = mediaType === "video";
+            return (
+              <View
+                className="relative aspect-square"
+                style={{ width: singleImageWidth }}
+                key={media.id}
+              >
+                <View className="absolute right-1 top-2 z-10">
+                  <Button
+                    onPress={() => handleRemoveItem(media.id)}
+                    Icon={<Close fill={"white"} />}
+                  />
+                </View>
+                {isVideo ? (
+                  <Video
+                    source={{ uri: media.uri }}
+                    className={"aspect-square h-full w-full rounded-xl"}
+                    resizeMode={ResizeMode.COVER}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: media.uri as any }}
+                    className="h-full w-full rounded-xl"
+                  />
+                )}
               </View>
-              <Image
-                source={{ uri: media.uri as any }}
-                className="h-full w-full rounded-xl"
-              />
-            </View>
-          ))
+            );
+          })
         : null}
     </View>
   );
@@ -169,9 +198,7 @@ export const AddNewChallengeProgressModal: FC<
         selectedMedia.length > 0
       ) {
         const progressId = createProgressResponse.data.id;
-        console.log("isSelectedImage: ", isSelectedImage);
         if (isSelectedImage) {
-          console.log("selectedMedia: ", selectedMedia);
           await updateProgressImage(progressId, selectedMedia)
             .then((res) => {
               if (res.status === 200 || 201) {

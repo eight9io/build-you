@@ -1,18 +1,13 @@
-import {
-  View,
-  Text,
-  Modal,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import React, { useState } from "react";
+import { View, Modal } from "react-native";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import HTMLView from "react-native-htmlview";
 import Header from "../common/Header";
 import NavButton from "../common/Buttons/NavButton";
-import { useTranslation } from "react-i18next";
 import { serviceGetTerms } from "../../service/settings";
-import WebView from "react-native-webview";
 import { CrashlyticService } from "../../service/crashlytic";
+import { trimHtml } from "../../utils/common";
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -25,27 +20,35 @@ export default function TermModal({
 }: Props) {
   const { t } = useTranslation();
   const [content, setContent] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+
   const getContent = () => {
+    setIsLoading(true);
     serviceGetTerms()
       .then((res) => {
-        setContent(res.data.terms);
+        setContent(trimHtml(res.data.terms));
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.error("err", err);
         CrashlyticService({
           errorType: "Get Terms Error",
         });
       });
   };
-  getContent();
+
+  useEffect(() => {
+    getContent();
+  }, []);
+
   return (
     <Modal
       animationType="slide"
       // transparent={true}
       visible={modalVisible}
-      presentationStyle="pageSheet"
     >
-      <View className=" flex-1 bg-white px-3 pt-3" testID="terms_modal">
+      <View className=" flex-1 bg-white" testID="terms_modal">
         <Header
           title={t("register_screen.terms_link") || "Privacy policy..."}
           leftBtn={
@@ -58,16 +61,20 @@ export default function TermModal({
           }
           containerStyle="mb-4"
         />
-        <WebView originWhitelist={["*"]} source={{ html: content }} />
+        <CustomActivityIndicator isVisible={isLoading} />
+        {!isLoading ? (
+          <HTMLView
+            value={content}
+            style={{
+              paddingVertical: 16,
+              paddingHorizontal: 16,
+              width: "100%",
+              height: "100%",
+              overflow: "scroll",
+            }}
+          />
+        ) : null}
       </View>
     </Modal>
   );
 }
-const styles = StyleSheet.create({
-  centeredView: {
-    // flex: 1,
-    height: "100%",
-
-    marginTop: 22,
-  },
-});

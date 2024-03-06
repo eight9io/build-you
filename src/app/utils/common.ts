@@ -134,3 +134,7 @@ export const roundToDecimalOrWhole = (number: number): number => {
 export const isMobile = () => {
   return Platform.OS === "android" || Platform.OS === "ios";
 };
+
+export const trimHtml = (html: string) => {
+  return html.replace(/(\r\n|\n|\r)/gm, ""); // Remove weird line breaks. Ref: https://github.com/jsdf/react-native-htmlview/issues/202
+};

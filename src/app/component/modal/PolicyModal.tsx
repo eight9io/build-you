@@ -1,51 +1,50 @@
-import {
-  View,
-  Text,
-  Modal,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import React, { useState } from "react";
+import { View, Modal } from "react-native";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import HTMLView from "react-native-htmlview";
 import Header from "../common/Header";
 import NavButton from "../common/Buttons/NavButton";
-import { useTranslation } from "react-i18next";
 import { serviceGetPrivacy } from "../../service/settings";
-import WebView from "react-native-webview";
 import { CrashlyticService } from "../../service/crashlytic";
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
+import { trimHtml } from "../../utils/common";
 interface Props {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
   navigation?: any;
 }
-export default function PolicyModal({
-  navigation,
-  modalVisible,
-  setModalVisible,
-}: Props) {
+export default function PolicyModal({ modalVisible, setModalVisible }: Props) {
   const { t } = useTranslation();
   const [content, setContent] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+
   const getContent = () => {
+    setIsLoading(true);
     serviceGetPrivacy()
       .then((res) => {
-        setContent(res.data.privacy);
+        setContent(trimHtml(res.data.privacy));
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.error("err", err);
         CrashlyticService({
           errorType: "Get Privacy Error",
         });
       });
   };
-  getContent();
+
+  useEffect(() => {
+    getContent();
+  }, []);
+
   return (
     <Modal
       animationType="slide"
       // transparent={true}
       visible={modalVisible}
-      presentationStyle="pageSheet"
     >
-      <View className=" flex-1 bg-white px-3 pt-3" testID="policy_modal">
+      <View className=" flex-1 bg-white" testID="policy_modal">
         <Header
           title={t("policy_modal.title") || "Privacy policy..."}
           leftBtn={
@@ -58,16 +57,20 @@ export default function PolicyModal({
           }
           containerStyle="mb-4"
         />
-        <WebView originWhitelist={["*"]} source={{ html: content }} />
+        <CustomActivityIndicator isVisible={isLoading} />
+        {!isLoading ? (
+          <HTMLView
+            value={content}
+            style={{
+              paddingVertical: 16,
+              paddingHorizontal: 16,
+              width: "100%",
+              height: "100%",
+              overflow: "scroll",
+            }}
+          />
+        ) : null}
       </View>
     </Modal>
   );
 }
-const styles = StyleSheet.create({
-  centeredView: {
-    // flex: 1,
-    height: "100%",
-
-    marginTop: 22,
-  },
-});

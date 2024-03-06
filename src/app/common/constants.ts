@@ -11,6 +11,8 @@ export const LINKEDIN_LOGIN = {
   AUTHORIZATION_ENDPOINT: "/authorization",
   ACCESS_TOKEN_ENDPOINT: "/accessToken",
   LOGIN_CANCEL_ENDPOINT: "/login-cancel",
+  CLIENT_ID: process.env.EXPO_LINKEDIN_CLIENT_ID,
+  REDIRECT_URI: process.env.EXPO_LINKEDIN_REDIRECT_URI,
 };
 
 export const GOOGLE_MAP_API = {

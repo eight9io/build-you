@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import jwt_decode from "jwt-decode";
@@ -13,9 +13,9 @@ import { errorMessage } from "../../../utils/statusCode";
 import { useAuthStore } from "../../../store/auth-store";
 import { serviceDeleteAccount } from "../../../service/profile";
 import { CommonActions } from "@react-navigation/native";
-import LinkedInModal from "../../../component/modal/LinkedInModal";
 import { getUserOccupationCondition } from "../../../utils/profile";
 import CustomActivityIndicator from "../../../component/common/CustomActivityIndicator";
+import useLinkedInLogin from "../../../hooks/useLinkedInLogin";
 
 export default function PersonalInformationScreen({ navigation }: any) {
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
@@ -29,11 +29,25 @@ export default function PersonalInformationScreen({ navigation }: any) {
   const { onLogout: userProfileStoreOnLogout } = useUserProfileStore();
   const { getUserProfile } = useUserProfileStore();
 
+  // Define the error handler for LinkedIn login here
+  const handleLinkedInLoginError = (errorMessage: string) => {
+    setErrMessage(errorMessage);
+  };
+  const { login: linkedInLogin, authrozationCode } = useLinkedInLogin({
+    onError: handleLinkedInLoginError,
+  });
+
   const userData = getUserProfile();
 
   let linkedinToken = null;
 
   const occupation = getUserOccupationCondition(userData);
+
+  useEffect(() => {
+    if (authrozationCode) {
+      handleLinkedInLoginSuccess(authrozationCode);
+    }
+  }, [authrozationCode]);
 
   const handleLoginOnDeleteAccount = async (
     payload: LoginForm | ISocialLoginForm,
@@ -70,7 +84,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
     setIsDialogVisible(false);
     switch (userData?.loginType) {
       case "linkedin":
-        setLinkedInModalVisible(true);
+        linkedInLogin();
         break;
       default:
         navigation.navigate("DeleteAccountScreen");
@@ -94,13 +108,8 @@ export default function PersonalInformationScreen({ navigation }: any) {
   };
 
   const handleLinkedInLoginSuccess = async (authrozationCode: string) => {
-    setLinkedInModalVisible(false);
     linkedinToken = authrozationCode;
     handleLoginOnDeleteAccount({ token: linkedinToken }, LOGIN_TYPE.LINKEDIN);
-  };
-
-  const handleLinkedInLoginError = (errorMessage: string) => {
-    setErrMessage(errorMessage);
   };
 
   return (
@@ -114,12 +123,6 @@ export default function PersonalInformationScreen({ navigation }: any) {
         confirmButtonColor="red"
         onConfirm={handleDeleteSocialAccount}
         onClosed={() => setIsDialogVisible(false)}
-      />
-      <LinkedInModal
-        isVisible={linkedInModalVisible}
-        onLoginCancel={handleLinkedInLoginCancel}
-        onLoginSuccess={handleLinkedInLoginSuccess}
-        onError={handleLinkedInLoginError}
       />
 
       <ScrollView>

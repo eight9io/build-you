@@ -54,7 +54,7 @@ export const googleLogin = (token: string) => {
 };
 
 export const linkedInLogin = (token: string) => {
-  return http.get<ILoginResponse>(`/auth/linkedin/${token}`);
+  return http.get<ILoginResponse>(`/auth/web/linkedin/${token}`);
 };
 
 export const appleLogin = async (payload: ISocialLoginForm) => {

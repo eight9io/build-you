@@ -51,13 +51,13 @@ const CustomTextInput: React.FC<ICustomTextInputProps> = ({
                 multiline
                 textAlignVertical="top"
               />
-              {maxChar && (
+              {maxChar ? (
                 <Text className="pt-1 text-sm font-normal text-gray-dark">
                   {t("max_characters", {
                     numOfCharacters: maxChar,
                   })}
                 </Text>
-              )}
+              ) : null}
             </View>
             {errors ? <ErrorText message={errors.message} /> : null}
           </View>

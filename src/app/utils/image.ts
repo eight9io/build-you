@@ -1,3 +1,6 @@
+import mime from "react-native-mime-types";
+import { IUploadMediaWithId } from "../types/media";
+import { getRandomId } from "./common";
 // const extractPrefix = (url: string) => {
 //   console.log("url", url);
 //   if (!url || url === null) return "";
@@ -9,7 +12,7 @@
 //     return "";
 //   }
 // };
-// error: url.origin is not implemented 
+// error: url.origin is not implemented
 
 // TODO use https://developer.mozilla.org/en-US/docs/Web/API/URL
 const extractPrefix = (url: string) => {
@@ -37,4 +40,24 @@ export const getSeperateImageUrls = (url: string | null) => {
 export const getImageExtension = (uri: string) => {
   const uriSplit = uri.split(".");
   return uriSplit[uriSplit.length - 1];
+};
+
+export const createImageFileFromUri = async (uri: string) => {
+  // Fetch image from uri to get binary data
+  const res = await fetch(uri);
+  if (!res.ok) throw new Error(`Failed to fetch image: ${uri}`);
+
+  // Convert the response body (image data/readable stream) to a Blob
+  const blob = await res.blob();
+
+  const imageExtension = mime.extension(blob.type);
+  if (!imageExtension)
+    throw new Error(
+      `Failed to get image extension from mime type: ${blob.type}`
+    );
+
+  const imageId = getRandomId();
+  return new File([blob], `${imageId}.${imageExtension}`, {
+    type: blob.type, // our API expects the mime type to be in the file object
+  });
 };

@@ -63,7 +63,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
     setValue,
     reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm<IEditChallenge>({
     defaultValues: {
       goal: challenge.goal,
@@ -91,6 +91,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
   const handleImagesSelected = (images: string[]) => {
     setValue("image", images[0], {
       shouldValidate: true,
+      shouldDirty: true,
     });
   };
 
@@ -106,10 +107,15 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
     try {
       const { image, ...rest } = data; // Images upload will be handle separately
 
-      await Promise.all([
-        updateChallenge(challenge.id, { ...rest }),
-        updateChallengeImage({ id: challenge.id }, image),
-      ]);
+      // Only update image if it's changed
+      await Promise.all(
+        dirtyFields.image
+          ? [
+              updateChallenge(challenge.id, { ...rest }),
+              updateChallengeImage({ id: challenge.id }, image),
+            ]
+          : [updateChallenge(challenge.id, { ...rest })]
+      );
 
       GlobalToastController.showModal({
         message:

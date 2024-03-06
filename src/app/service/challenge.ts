@@ -6,6 +6,7 @@ import {
   IUpdateChallengeImage,
 } from "../types/challenge";
 import http from "../utils/http";
+import { createImageFileFromUri } from "../utils/image";
 
 export const createChallenge = (data: ICreateChallenge) => {
   return http.post("/challenge/create", data);
@@ -15,17 +16,13 @@ export const createCompanyChallenge = (data: ICreateCompanyChallenge) => {
   return http.post("/challenge/company/create", data);
 };
 
-export const updateChallengeImage = (
+export const updateChallengeImage = async (
   params: IUpdateChallengeImage,
   image: string
 ) => {
   const imageData = new FormData();
-  const extension = image.split(".").pop();
-  imageData.append("file", {
-    uri: image,
-    name: `${params.id}.${extension}`,
-    type: `image/${extension}`,
-  } as any);
+  const imageFile = await createImageFileFromUri(image);
+  imageData.append("file", imageFile);
 
   return http.post(`/challenge/image/${params.id}`, imageData, {
     headers: {

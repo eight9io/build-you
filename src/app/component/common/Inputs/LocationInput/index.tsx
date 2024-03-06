@@ -91,9 +91,9 @@ const LocationInput: React.FC<ILocationInputProps> = ({
 
   return (
     <View>
-      {setFetchLocationLoading && (
+      {setFetchLocationLoading ? (
         <CustomActivityIndicator isVisible={fetchLocationLoading} />
-      )}
+      ) : null}
       <Controller
         control={control}
         rules={{

@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { serviceUpdateAvatar, serviceUpdateCover } from "./profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import i18n from "../i18n/i18n";
+import { createImageFileFromUri } from "../utils/image";
 
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
@@ -41,12 +42,8 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
 
 export const uploadNewAvatar = async (image: string) => {
   const formData = new FormData();
-  const uri = Platform.OS === "android" ? image : image.replace("file://", "");
-  formData.append("file", {
-    uri,
-    name: "avatar.jpg",
-    type: "image/jpeg",
-  } as any);
+  const imageFile = await createImageFileFromUri(image);
+  formData.append("file", imageFile);
 
   const response = serviceUpdateAvatar(formData)
     .then((res) => {
@@ -60,12 +57,8 @@ export const uploadNewAvatar = async (image: string) => {
 
 export const uploadNewCover = async (image: string) => {
   const formData = new FormData();
-  const uri = Platform.OS === "android" ? image : image.replace("file://", "");
-  formData.append("file", {
-    uri,
-    name: "avatar.jpg",
-    type: "image/jpeg",
-  } as any);
+  const imageFile = await createImageFileFromUri(image);
+  formData.append("file", imageFile);
 
   const response = serviceUpdateCover(formData)
     .then((res) => {

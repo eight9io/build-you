@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
 import { Image } from "expo-image";
-import Swiper from "react-native-swiper";
+import Swiper from "react-native-web-swiper";
 
 interface IImageSwiperProps {
   imageSrc: string[] | string | null;
@@ -35,16 +35,33 @@ const ImageItem = ({ imageSrc }: { imageSrc: string }) => {
 const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
   if (!imageSrc) return null;
   return (
-    <View className="flex-1 ">
+    <View className="flex-1">
       <Swiper
-        loop={false}
-        showsButtons={false}
-        showsPagination={true}
-        autoplay={false}
-        dotColor="white"
-        activeDotColor="#FF7B1C"
-        snapToAlignment="center"
-        containerStyle={{ width: "100%", height: "100%" }}
+        controlsProps={{
+          nextTitleStyle: {
+            display: "none",
+          },
+          prevTitleStyle: {
+            display: "none",
+          },
+          dotActiveStyle: {
+            backgroundColor: "#FF7B1C",
+          },
+          dotProps: {
+            badgeStyle: {
+              backgroundColor: "#FFFFFF",
+            },
+          },
+          dotsWrapperStyle: {
+            shadowColor: "#0C0F39",
+            shadowOffset: {
+              width: 0,
+              height: 0,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 1,
+          },
+        }}
       >
         {typeof imageSrc === "string" ? (
           <ImageItem imageSrc={imageSrc.trim()} />

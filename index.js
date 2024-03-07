@@ -1,9 +1,9 @@
 import App from "./src/app/App"; // MUST be the first import to ensure Fast Refresh works for web development
 import { registerRootComponent } from "expo";
 import { LogBox, Platform } from "react-native";
+import { AppRegistry } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import { H } from "highlight.run";
-
 import { expo } from "./app.json";
 import {
   displayNotificationOnForeground,
@@ -26,8 +26,8 @@ if (Platform.OS === "android" || Platform.OS === "ios") {
   }); // For Android when app is in background
   // messaging().setBackgroundMessageHandler(onMessageReceived(message)); // Comment this because it will send notification twice in Android (one from FCM and one from notifee)
 }
-
 registerRootComponent(App);
+
 if (!__DEV__) {
   H.init("jgo8z9el", {
     // Get your project ID from https://app.highlight.io/setup

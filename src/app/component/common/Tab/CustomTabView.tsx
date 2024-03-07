@@ -42,6 +42,7 @@ export const CustomTabView: FC<ITabViewProps> = ({
       initialLayout={{
         width: Dimensions.get("window").width,
       }}
+      swipeEnabled={false}
       animationEnabled={animationEnabled}
       renderTabBar={(props) => (
         <TabBar

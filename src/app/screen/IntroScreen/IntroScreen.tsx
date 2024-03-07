@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
 import { useTranslation } from "react-i18next";
-import Swiper from "react-native-swiper";
+import Swiper from "react-native-web-swiper";
 import Button from "../../component/common/Buttons/Button";
 
 import RegisterModal from "../../component/modal/RegisterModal/RegisterModal";
@@ -40,8 +40,28 @@ export const IntroScreen = ({ navigation, route }: any) => {
           {t("login_screen.title")}
         </Text>
 
-        <View className="h-[120px]">
-          <Swiper className="justify-center">
+        <View className="h-[120px] w-full">
+          <Swiper
+            controlsProps={{
+              nextTitleStyle: {
+                display: "none",
+              },
+              prevTitleStyle: {
+                display: "none",
+              },
+              dotActiveStyle: {
+                width: 16,
+                borderRadius: 3,
+                backgroundColor: "#256FFF",
+              },
+              dotProps: {
+                badgeStyle: {
+                  backgroundColor: "#D9D9D9",
+                  borderRadius: 3,
+                },
+              },
+            }}
+          >
             <Text className="line-[22.4px] text-center text-[16px] font-normal text-[#90969E]">
               {t("login_screen.description1")}
             </Text>

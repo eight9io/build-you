@@ -132,29 +132,29 @@ export const useAuthStore = create<LoginStore>()(
             accessToken: null,
             refreshToken: null,
           });
-          if (Device.isDevice) {
-            const messagingToken = await messaging().getToken();
-            await deletePushNotificatoinToken(messagingToken);
-            useNotificationStore.getState().setListenerIsReady(false);
-            if (isMobile()) {
-              unregisterForPushNotificationsAsync()
-                .then((token) => {
-                  console.log(token);
-                  updateNotificationToken({
-                    notificationToken: token,
-                    status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
-                    deviceType:
-                      Platform.OS === "android"
-                        ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
-                        : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
-                  });
-                })
-                .catch(() => {
-                  console.log("Ignore Push Notification");
-                });
-            }
-            setBadgeCount(0); // Set badge count to 0 when user logout, it will be updated when user login again
-          }
+          // if (Device.isDevice) {
+          //   const messagingToken = await messaging().getToken();
+          //   await deletePushNotificatoinToken(messagingToken);
+          //   useNotificationStore.getState().setListenerIsReady(false);
+          //   if (isMobile()) {
+          //     unregisterForPushNotificationsAsync()
+          //       .then((token) => {
+          //         console.log(token);
+          //         updateNotificationToken({
+          //           notificationToken: token,
+          //           status: NOTIFICATION_TOKEN_STATUS.INACTIVE,
+          //           deviceType:
+          //             Platform.OS === "android"
+          //               ? NOTIFICATION_TOKEN_DEVICE_TYPE.ANDROID
+          //               : NOTIFICATION_TOKEN_DEVICE_TYPE.IOS,
+          //         });
+          //       })
+          //       .catch(() => {
+          //         console.log("Ignore Push Notification");
+          //       });
+          //   }
+          //   setBadgeCount(0); // Set badge count to 0 when user logout, it will be updated when user login again
+          // }
           delete httpInstance.defaults.headers.common["Authorization"];
           ClearCrashlytics();
         } catch (error) {

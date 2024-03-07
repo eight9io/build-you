@@ -1,12 +1,10 @@
-// TODO: Implement Google Login for web platform
 import { FC, useEffect } from "react";
 import Button from "../Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useTranslation } from "react-i18next";
+import {} from "expo-auth-session/providers/google";
 import { ISocialLoginForm, LoginForm } from "../../../../types/auth";
 import { LOGIN_TYPE } from "../../../../common/enum";
-import { errorMessage } from "../../../../utils/statusCode";
-import { CrashlyticService } from "../../../../service/crashlytic";
+import useGoogleLogin from "../../../../hooks/useGoogleLogin";
 
 interface IGoogleLoginButtonProps {
   title?: string;
@@ -21,34 +19,14 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({
   onLogin,
   onError,
 }) => {
-  const { t } = useTranslation();
+  const { login, token } = useGoogleLogin({ onError });
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId: process.env.EXPO_GOOGLE_WEB_CLIENT_ID,
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (token) onLogin({ token }, LOGIN_TYPE.GOOGLE);
+  }, [token]);
 
   const handleGoogleBtnClicked = async () => {
-    // try {
-    //   const userInfo = await GoogleSignin.signIn();
-    //   if (userInfo.idToken) {
-    //     onLogin({ token: userInfo.idToken }, LOGIN_TYPE.GOOGLE);
-    //   } else
-    //     throw new Error(t("errorMessage:err_login.cannot_get_access_token"));
-    // } catch (error) {
-    //   // Google throw error on user cancel login => ignore this error
-    //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //     console.log("User canceled Google Sign in.");
-    //   } else {
-    //     console.error("Error", error);
-    //     onError && onError(errorMessage(error, "err_login"));
-    //     CrashlyticService({
-    //       errorType: "Google Logout Error",
-    //       error,
-    //     });
-    //   }
-    // }
+    login();
   };
 
   return (

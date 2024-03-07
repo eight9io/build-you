@@ -14,6 +14,7 @@ import { isDevice } from "expo-device";
 import { useEffect } from "react";
 import { Platform, StatusBar } from "react-native";
 import { EventProvider } from "react-native-outside-press";
+import { FirebaseOptions, getApps, initializeApp } from "firebase/app";
 import RootNavigation from "./navigation";
 import "./i18n/i18n";
 import Toast from "./component/common/Toast/Toast";
@@ -29,6 +30,15 @@ NativeWindStyleSheet.setOutput({
   default: "native",
 });
 // ------------
+
+// Initialize Firebase
+if (getApps().length === 0) {
+  const firebaseConfig: FirebaseOptions = JSON.parse(
+    process.env.EXPO_FIREBASE_CONFIG || ""
+  );
+  console.log(firebaseConfig);
+  initializeApp(firebaseConfig);
+}
 
 export const App = () => {
   useEffect(() => {

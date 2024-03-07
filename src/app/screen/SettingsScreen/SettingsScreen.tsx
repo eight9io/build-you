@@ -11,7 +11,6 @@ import { FlatList } from "react-native-gesture-handler";
 import { RootStackParamList } from "../../navigation/navigation.type";
 
 import { useUserProfileStore } from "../../store/user-store";
-import { useAppleLoginInfoStore } from "../../store/apple-login-store";
 import { useAuthStore } from "../../store/auth-store";
 import { setLastNotiIdToLocalStorage } from "../../utils/notification.util";
 
@@ -26,6 +25,7 @@ import PrivacyPolicyScreen from "../PersonalInformations/PrivacyPolicyScreen";
 import CompanyInformationScreen from "../PersonalInformations/CompanyInformationScreen";
 import { CrashlyticService } from "../../service/crashlytic";
 import PersonalInformationScreen from "../PersonalInformations/PersonalInformationScreen/PersonalInformationScreen";
+import useGoogleLogin from "../../hooks/useGoogleLogin";
 
 const SettingStack = createNativeStackNavigator<RootStackParamList>();
 interface INavBarInnerScreenProps {
@@ -42,7 +42,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   const { logout } = useAuthStore();
   const { onLogout: userProfileStoreOnLogout, getUserProfile } =
     useUserProfileStore();
-  const { setUserAppleInfo } = useAppleLoginInfoStore();
+  const { signOut } = useGoogleLogin({});
 
   const currentUser = getUserProfile();
 
@@ -75,6 +75,20 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
       );
       setLastNotiIdToLocalStorage("");
       logout();
+      if (userLoginType === "google") {
+        const googleSignOut = async () => {
+          try {
+            await signOut();
+          } catch (error) {
+            console.error(error);
+            CrashlyticService({
+              errorType: "Google Sign Out Error",
+              error: error,
+            });
+          }
+        };
+        googleSignOut();
+      }
 
       userProfileStoreOnLogout();
     }, 500);

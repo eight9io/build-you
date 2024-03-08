@@ -295,12 +295,12 @@ export const ChallengeCompanyDetailScreen: FC<
       case CHALLENGE_TABS_KEY.CHAT:
         return (
           <>
-            {isCertifiedChallenge && (
+            {isCertifiedChallenge ? (
               <ChatCoachTab
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
-            )}
+            ) : null}
           </>
         );
       case CHALLENGE_TABS_KEY.COACH_CALENDAR:
@@ -314,64 +314,62 @@ export const ChallengeCompanyDetailScreen: FC<
   };
 
   return (
-    <SafeAreaView>
-      <View className="flex h-full flex-col bg-gray-veryLight ">
-        <View className="flex flex-row items-center justify-between bg-white px-4 pb-3 pt-4">
-          <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
-            <CheckCircle
-              fill={getChallengeStatusColor(
-                challengeStatus,
-                challengeData.status
-              )}
-            />
-            <View className="flex-1">
-              <Text className="text-2xl font-semibold">{goal}</Text>
-            </View>
-          </View>
-          {!isCurrentUserOwner && !isChallengeCompleted && (
-            <View className="ml-2 h-9">
-              <Button
-                isDisabled={false}
-                containerClassName={
-                  isJoined
-                    ? "border border-gray-dark flex items-center justify-center px-5"
-                    : "bg-primary-default flex items-center justify-center px-5"
-                }
-                textClassName={`text-center text-md font-semibold ${
-                  isJoined ? "text-gray-dark" : "text-white"
-                } `}
-                disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
-                disabledTextClassName="text-center text-md font-semibold text-gray-medium"
-                title={
-                  isJoined
-                    ? t("challenge_detail_screen.leave")
-                    : t("challenge_detail_screen.join")
-                }
-                onPress={handleJoinLeaveChallenge}
-              />
-            </View>
-          )}
-          {isChallengeCompleted && (
-            <View className="ml-2 h-9">
-              <Button
-                containerClassName="border border-gray-dark flex items-center justify-center px-5"
-                textClassName={`text-center text-md font-semibold text-gray-dark `}
-                title={t("challenge_detail_screen.completed")}
-              />
-            </View>
-          )}
-        </View>
-
-        <View className="flex flex-1">
-          <CustomTabView
-            routes={tabRoutes}
-            renderScene={renderScene}
-            index={index}
-            setIndex={setTabIndex}
+    <View className="flex flex-1 flex-col bg-gray-veryLight ">
+      <View className="flex flex-row items-center justify-between bg-white px-4 pb-3 pt-4">
+        <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
+          <CheckCircle
+            fill={getChallengeStatusColor(
+              challengeStatus,
+              challengeData.status
+            )}
           />
+          <View className="flex-1">
+            <Text className="text-2xl font-semibold">{goal}</Text>
+          </View>
         </View>
+        {!isCurrentUserOwner && !isChallengeCompleted && (
+          <View className="ml-2 h-9">
+            <Button
+              isDisabled={false}
+              containerClassName={
+                isJoined
+                  ? "border border-gray-dark flex items-center justify-center px-5"
+                  : "bg-primary-default flex items-center justify-center px-5"
+              }
+              textClassName={`text-center text-md font-semibold ${
+                isJoined ? "text-gray-dark" : "text-white"
+              } `}
+              disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
+              disabledTextClassName="text-center text-md font-semibold text-gray-medium"
+              title={
+                isJoined
+                  ? t("challenge_detail_screen.leave")
+                  : t("challenge_detail_screen.join")
+              }
+              onPress={handleJoinLeaveChallenge}
+            />
+          </View>
+        )}
+        {isChallengeCompleted && (
+          <View className="ml-2 h-9">
+            <Button
+              containerClassName="border border-gray-dark flex items-center justify-center px-5"
+              textClassName={`text-center text-md font-semibold text-gray-dark `}
+              title={t("challenge_detail_screen.completed")}
+            />
+          </View>
+        )}
       </View>
-    </SafeAreaView>
+
+      <View className="flex flex-1">
+        <CustomTabView
+          routes={tabRoutes}
+          renderScene={renderScene}
+          index={index}
+          setIndex={setTabIndex}
+        />
+      </View>
+    </View>
   );
 };
 

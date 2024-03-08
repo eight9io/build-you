@@ -119,118 +119,120 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
   );
 
   return (
-    <GiftedChat
-      messagesContainerStyle={{
-        paddingBottom: Platform.OS === "ios" ? 6 : 12,
-      }}
-      isCustomViewBottom
-      messages={messages}
-      onSend={(messages) => handleSubmit(messages)}
-      renderSend={(props) => {
-        return (
-          <TouchableOpacity
-            className="mb-3 mr-3 flex justify-center
+    <View className="flex-1">
+      <GiftedChat
+        messagesContainerStyle={{
+          paddingBottom: 24,
+        }}
+        isCustomViewBottom
+        messages={messages}
+        onSend={(messages) => handleSubmit(messages)}
+        renderSend={(props) => {
+          return (
+            <TouchableOpacity
+              className="mb-3 mr-3 flex justify-center
                    "
-            onPress={() => {
-              props.onSend({ text: props.text.trim() }, true);
-            }}
-          >
-            <SendIcon />
-          </TouchableOpacity>
-        );
-      }}
-      renderInputToolbar={(props) => (
-        <>
-          {isChallengeInProgress && (
-            <InputToolbar
-              {...props}
-              containerStyle={{
-                backgroundColor: "white",
-                borderColor: "#E8E8E8",
-                paddingTop: 8,
-                borderRadius: 10,
-                borderWidth: 1,
-                marginHorizontal: 20,
-                marginBottom: Platform.OS === "ios" ? 0 : 16,
+              onPress={() => {
+                props.onSend({ text: props.text.trim() }, true);
               }}
-            />
-          )}
-        </>
-      )}
-      maxComposerHeight={100}
-      placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}
-      user={{
-        _id: currentUser?.id,
-      }}
-      renderTime={() => null}
-      renderBubble={(props) => (
-        <Bubble
-          renderUsernameOnMessage
-          renderUsername={(user) => (
-            <Text className="absolute -bottom-4 left-0 text-sm font-light text-gray-dark">
-              {user.name}
-              {user?.isCoach && (
-                <Text className="text-sm text-primary-default">Coach</Text>
-              )}
-            </Text>
-          )}
-          {...props}
-          textStyle={{
-            right: {
-              color: "#000",
-              padding: 6,
-            },
-            left: {
-              color: "#000",
-              padding: 6,
-            },
-          }}
-          containerStyle={{
-            right: {
-              maxWidth: "80%",
-              marginBottom: 10,
-            },
-            left: {
-              maxWidth: "80%",
-              marginBottom: 22,
-            },
-          }}
-          wrapperStyle={{
-            right: {
-              backgroundColor: "#fbe1d2",
-              marginRight: 10,
-              borderTopRightRadius: 10,
-              borderBottomRightRadius: 10,
-            },
-            left: {
-              backgroundColor: "#E7E9F1",
-              borderTopLeftRadius: 10,
-              borderBottomLeftRadius: 10,
-            },
-          }}
-        />
-      )}
-      renderAvatar={(props) => (
-        <Avatar
-          {...props}
-          containerStyle={{
-            left: {
-              marginBottom: 16,
-            },
-          }}
-          imageStyle={{
-            left: {
-              width: 34,
-              height: 34,
-              marginRight: -10,
-            },
-          }}
-        />
-      )}
-      renderChatEmpty={() => <EmptyChatHolder />}
-      scrollToBottom
-      infiniteScroll
-    />
+            >
+              <SendIcon />
+            </TouchableOpacity>
+          );
+        }}
+        renderInputToolbar={(props) => (
+          <>
+            {isChallengeInProgress ? (
+              <InputToolbar
+                {...props}
+                containerStyle={{
+                  backgroundColor: "white",
+                  borderColor: "#E8E8E8",
+                  paddingTop: 8,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  marginHorizontal: 20,
+                  marginBottom: Platform.OS === "ios" ? 0 : 16,
+                }}
+              />
+            ) : null}
+          </>
+        )}
+        maxComposerHeight={100}
+        placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}
+        user={{
+          _id: currentUser?.id,
+        }}
+        renderTime={() => null}
+        renderBubble={(props) => (
+          <Bubble
+            renderUsernameOnMessage
+            renderUsername={(user) => (
+              <Text className="absolute -bottom-4 left-0 text-sm font-light text-gray-dark">
+                {user.name}
+                {user?.isCoach && (
+                  <Text className="text-sm text-primary-default">Coach</Text>
+                )}
+              </Text>
+            )}
+            {...props}
+            textStyle={{
+              right: {
+                color: "#000",
+                padding: 6,
+              },
+              left: {
+                color: "#000",
+                padding: 6,
+              },
+            }}
+            containerStyle={{
+              right: {
+                maxWidth: "80%",
+                marginBottom: 10,
+              },
+              left: {
+                maxWidth: "80%",
+                marginBottom: 22,
+              },
+            }}
+            wrapperStyle={{
+              right: {
+                backgroundColor: "#fbe1d2",
+                marginRight: 10,
+                borderTopRightRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+              left: {
+                backgroundColor: "#E7E9F1",
+                borderTopLeftRadius: 10,
+                borderBottomLeftRadius: 10,
+              },
+            }}
+          />
+        )}
+        renderAvatar={(props) => (
+          <Avatar
+            {...props}
+            containerStyle={{
+              left: {
+                marginBottom: 16,
+              },
+            }}
+            imageStyle={{
+              left: {
+                width: 34,
+                height: 34,
+                marginRight: -10,
+              },
+            }}
+          />
+        )}
+        renderChatEmpty={() => <EmptyChatHolder />}
+        scrollToBottom
+        infiniteScroll
+      />
+    </View>
   );
 };
 

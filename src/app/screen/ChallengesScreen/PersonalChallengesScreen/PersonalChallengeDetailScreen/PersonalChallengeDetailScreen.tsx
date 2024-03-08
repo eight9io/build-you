@@ -322,7 +322,7 @@ const PersonalChallengeDetailScreen = ({
   };
 
   return (
-    <SafeAreaView className="relative bg-[#FAFBFF]">
+    <SafeAreaView className="relative flex-1 bg-[#FAFBFF]">
       <CustomActivityIndicator isVisible={isScreenLoading} />
 
       <ConfirmDialog

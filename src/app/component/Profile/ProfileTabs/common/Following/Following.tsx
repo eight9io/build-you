@@ -1,13 +1,12 @@
 import clsx from "clsx";
-import { IUserData } from "../../../../../types/user";
 import { FC } from "react";
-import { Image } from "expo-image";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View, Image } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+import { IUserData } from "../../../../../types/user";
 import { RootStackParamList } from "../../../../../navigation/navigation.type";
 
 import Empty from "../asset/emptyFollow.svg";
-import { useTranslation } from "react-i18next";
 interface IFollowingProps {
   following: IUserData[] | null;
   isRefreshing?: boolean;
@@ -22,12 +21,16 @@ const Following: FC<IFollowingProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View className="flex-1 px-4 ">
-      {following && following.length > 0 && (
+    <View className="flex-1">
+      {following && following.length > 0 ? (
         <FlatList
-          className="pt-4"
-          keyExtractor={(item, index) => index.toString()}
           data={following}
+          contentContainerStyle={{
+            paddingBottom: 20,
+            paddingTop: 12,
+            rowGap: 20,
+          }}
+          keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={true}
           renderItem={({ item, index }) => {
             return (
@@ -39,23 +42,23 @@ const Following: FC<IFollowingProps> = ({
                     userId: item.id,
                   })
                 }
-                className="mb-5 flex-row items-center gap-3 pr-10"
+                className="flex flex-row items-center space-x-3 px-4"
               >
                 <View className="relative">
                   <Image
                     className="h-10 w-10 rounded-full"
                     source={require("../asset/avatar-load.png")}
                   />
-                  {item?.avatar && (
+                  {item?.avatar ? (
                     <Image
                       source={{ uri: item.avatar.trim() }}
                       className={clsx(
                         "absolute left-0  top-0 h-10 w-10  rounded-full"
                       )}
                     />
-                  )}
+                  ) : null}
                 </View>
-                <Text className="flex w-full flex-row flex-wrap gap-1 pr-[40px]  text-base font-semibold text-basic-black">
+                <Text className="text-base font-semibold text-basic-black">
                   {item.name + " " + item.surname}
                 </Text>
               </TouchableOpacity>
@@ -65,18 +68,18 @@ const Following: FC<IFollowingProps> = ({
           refreshing={isRefreshing}
           ListFooterComponent={<View className="h-20" />}
         />
-      )}
-      {following && following.length == 0 && (
+      ) : null}
+      {following && following.length == 0 ? (
         <View className="mt-2 h-full flex-1 items-center justify-center">
           <FlatList
             data={[]}
             renderItem={() => <></>}
             showsVerticalScrollIndicator={true}
             ListFooterComponent={
-              <View className=" justify-cente mt-6 items-center pt-10">
+              <View className="mt-6 items-center justify-center pt-10">
                 <Empty />
                 <Text className="text-h6 font-light leading-10 text-[#6C6E76]">
-                  {t("empty_followers")}
+                  {t("empty_following")}
                 </Text>
               </View>
             }
@@ -84,7 +87,7 @@ const Following: FC<IFollowingProps> = ({
             refreshing={isRefreshing}
           />
         </View>
-      )}
+      ) : null}
     </View>
   );
 };

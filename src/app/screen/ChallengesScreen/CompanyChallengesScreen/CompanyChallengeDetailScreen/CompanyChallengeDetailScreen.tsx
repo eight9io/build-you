@@ -276,7 +276,7 @@ const CompanyChallengeDetailScreen = ({
   }, [shouldScreenRefresh]);
 
   return (
-    <SafeAreaView className="bg-gray-veryLight pt-3">
+    <SafeAreaView className="flex-1 bg-gray-veryLight pt-3">
       <ConfirmDialog
         isVisible={isCompletedChallengeDialogVisible}
         title={

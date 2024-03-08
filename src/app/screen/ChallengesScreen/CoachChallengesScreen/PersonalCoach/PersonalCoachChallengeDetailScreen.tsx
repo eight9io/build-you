@@ -236,12 +236,12 @@ const PersonalCoachChallengeDetailScreen = ({
       case CHALLENGE_TABS_KEY.CHAT:
         return (
           <>
-            {challengeData?.type === "certified" && (
+            {challengeData?.type === "certified" ? (
               <ChatCoachTab
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
-            )}
+            ) : null}
           </>
         );
       case CHALLENGE_TABS_KEY.COACH_CALENDAR:
@@ -266,7 +266,7 @@ const PersonalCoachChallengeDetailScreen = ({
   };
 
   return (
-    <SafeAreaView className="bg-[#FAFBFF]">
+    <SafeAreaView className="flex-1 bg-[#FAFBFF]">
       <CustomActivityIndicator isVisible={isScreenLoading} />
       <View className="flex h-full flex-col bg-white pt-2">
         <View className="flex flex-row items-center justify-between px-4">

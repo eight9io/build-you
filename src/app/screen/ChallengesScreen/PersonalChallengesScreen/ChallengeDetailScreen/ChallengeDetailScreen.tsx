@@ -304,12 +304,12 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       case CHALLENGE_TABS_KEY.CHAT:
         return (
           <>
-            {isCertifiedChallenge && (
+            {isCertifiedChallenge ? (
               <ChatCoachTab
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
-            )}
+            ) : null}
           </>
         );
       case CHALLENGE_TABS_KEY.COACH_CALENDAR:
@@ -335,57 +335,55 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   };
 
   return (
-    <SafeAreaView>
-      <View className="flex h-full flex-col bg-white pt-2">
-        <View className="flex flex-row items-center justify-between px-4">
-          <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
-            <CheckCircle fill={statusColor} />
-            <View className="flex-1">
-              <Text className="text-2xl font-semibold">{goal}</Text>
-            </View>
+    <View className="flex flex-1 flex-col pt-2">
+      <View className="flex flex-row items-center justify-between px-4">
+        <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
+          <CheckCircle fill={statusColor} />
+          <View className="flex-1">
+            <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
-          {!isCurrentUserChallengeOnwer && !isChallengeCompleted && (
-            <View className="ml-2 h-9">
-              <Button
-                isDisabled={false}
-                containerClassName={
-                  isJoined
-                    ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
-                    : "bg-primary-default flex items-center justify-center px-5"
-                }
-                textClassName={`text-center text-md font-semibold ${
-                  isJoined ? "text-gray-dark" : "text-white"
-                } `}
-                title={
-                  isJoined
-                    ? t("challenge_detail_screen.leave")
-                    : t("challenge_detail_screen.join")
-                }
-                onPress={handleJoinLeaveChallenge}
-              />
-            </View>
-          )}
-          {!isCurrentUserChallengeOnwer && isChallengeCompleted && (
-            <View className="ml-2 h-9">
-              <Button
-                containerClassName="border border-gray-dark flex items-center justify-center px-5"
-                textClassName={`text-center text-md font-semibold text-gray-dark `}
-                title={t("challenge_detail_screen.completed")}
-              />
-            </View>
-          )}
         </View>
-
-        <View className="mt-2 flex flex-1 bg-gray-veryLight">
-          <CustomTabView
-            routes={tabRoutes}
-            renderScene={renderScene}
-            index={index}
-            setIndex={setTabIndex}
-          />
-        </View>
+        {!isCurrentUserChallengeOnwer && !isChallengeCompleted && (
+          <View className="ml-2 h-9">
+            <Button
+              isDisabled={false}
+              containerClassName={
+                isJoined
+                  ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
+                  : "bg-primary-default flex items-center justify-center px-5"
+              }
+              textClassName={`text-center text-md font-semibold ${
+                isJoined ? "text-gray-dark" : "text-white"
+              } `}
+              title={
+                isJoined
+                  ? t("challenge_detail_screen.leave")
+                  : t("challenge_detail_screen.join")
+              }
+              onPress={handleJoinLeaveChallenge}
+            />
+          </View>
+        )}
+        {!isCurrentUserChallengeOnwer && isChallengeCompleted && (
+          <View className="ml-2 h-9">
+            <Button
+              containerClassName="border border-gray-dark flex items-center justify-center px-5"
+              textClassName={`text-center text-md font-semibold text-gray-dark `}
+              title={t("challenge_detail_screen.completed")}
+            />
+          </View>
+        )}
       </View>
-    </SafeAreaView>
+
+      <View className="mt-2 flex flex-1">
+        <CustomTabView
+          routes={tabRoutes}
+          renderScene={renderScene}
+          index={index}
+          setIndex={setTabIndex}
+        />
+      </View>
+    </View>
   );
 };
 

@@ -78,6 +78,7 @@ export const useFollowingListStore = create<FollowingListStore>((set, get) => ({
 }));
 
 export const checkIsCompleteProfileOrCompany = (profile: IUserData) => {
+  // If company account, return true because company account doesn't have to fill in the profile
   if (profile?.companyAccount) return true;
   // console.log(JSON.stringify(profile, null, " "));
   return !!profile?.birth;

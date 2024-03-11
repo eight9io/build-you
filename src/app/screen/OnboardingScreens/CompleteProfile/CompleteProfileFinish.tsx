@@ -1,41 +1,17 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo.svg";
 import StarLogo from "../../../common/svg/auto_awesome.svg";
-import { useDeepLinkStore } from "../../../store/deep-link-store";
 
 interface CompleteProfileFinishProps {
   navigation: CompleteProfileScreenNavigationProp;
 }
 
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  const { getDeepLink } = useDeepLinkStore();
-  const deepLink = getDeepLink();
-
   const { t } = useTranslation();
-
-  setTimeout(() => {
-    if (deepLink) {
-      navigation.navigate("HomeScreen", {
-        screen: "Feed",
-        params: {
-          screen: "OtherUserProfileChallengeDetailsScreen",
-          params: {
-            challengeId: deepLink.challengeId,
-          },
-        },
-      });
-      return;
-    }
-    navigation.navigate("HomeScreen");
-  }, 2000);
 
   return (
     <View

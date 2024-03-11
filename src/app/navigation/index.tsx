@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -6,7 +6,7 @@ import {
 
 import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
-import { TouchableOpacity, Text, Alert } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as SplashScreen from "expo-splash-screen";
 import { CommonActions } from "@react-navigation/native";
@@ -43,7 +43,7 @@ import {
   setAuthTokenToHttpHeader,
   setupInterceptor,
 } from "../utils/refreshToken.util";
-import { DeepLink } from "../utils/linking.util";
+import { LinkingConfig, isValidDeepLinkPath } from "../utils/linking.util";
 import { getLanguageLocalStorage } from "../utils/language";
 import i18n from "../i18n/i18n";
 
@@ -61,6 +61,7 @@ SplashScreen.preventAutoHideAsync();
 
 export const RootNavigation = () => {
   const { t } = useTranslation();
+  const [isHttpAuthHeaderSet, setIsHttpAuthHeaderSet] = useState(false);
   const {
     getAccessToken,
     getRefreshToken,
@@ -89,24 +90,21 @@ export const RootNavigation = () => {
     return url;
   };
 
-  const onLayoutRootView = useCallback(async () => {
-    if (authStoreHydrated) {
-      const deepLink = await getInitialURL();
-      if (deepLink) {
-        await SplashScreen.hideAsync();
-        return;
+  useEffect(() => {
+    // Get deeplink before isHttpAuthHeaderSet is set to "true" to avoid initial URL to be overwritten by initialRouteName
+    const getDeepLinkAsync = async () => {
+      const deepLink = await getInitialURL(); // Get the URL that was used to launch the app if it was launched by a link
+      const params = Linking.parse(deepLink);
+      if (params) {
+        const isValidDeepLink = isValidDeepLinkPath(params.path);
+        if (!isValidDeepLink) return;
+        setDeepLink(params.path);
       }
-      setTimeout(async () => {
-        await SplashScreen.hideAsync();
-      }, 1000);
-    }
-  }, [authStoreHydrated]);
+    };
+    getDeepLinkAsync();
+  }, []);
 
-  const link = {
-    ...DeepLink,
-    getInitialURL,
-  };
-
+  // This useEffect include setting auth token to http header => need to be called after the getDeepLink useEffect
   useEffect(() => {
     if (authStoreHydrated) {
       if (!!isLoggedin) {
@@ -125,6 +123,7 @@ export const RootNavigation = () => {
           setRefreshToken
         );
         setAuthTokenToHttpHeader(isLoggedin);
+        setIsHttpAuthHeaderSet(true);
 
         getUserProfileAsync().then(({ data: profile }) => {
           const isCompleteProfile = checkIsCompleteProfileOrCompany(profile);
@@ -133,21 +132,6 @@ export const RootNavigation = () => {
             : "CompleteProfileScreen";
 
           getUserAllChallengeIdsAsync(profile?.id);
-          if (isCompleteProfile && isNavigationReadyRef?.current) {
-            return profile;
-          } else if (!isCompleteProfile) {
-            //get challenge id from deep link
-            link.getInitialURL().then((url) => {
-              if (url) {
-                const challengeId = url.split("/").pop();
-                if (challengeId) {
-                  setDeepLink({
-                    challengeId,
-                  });
-                }
-              }
-            });
-          }
 
           navigationRef.current.dispatch(
             CommonActions.reset({
@@ -161,7 +145,7 @@ export const RootNavigation = () => {
         setBadgeCount(0); // Set badge count to 0 in case user reinstall the app and open app in the first time (store data has been cleared when uninstall app)
       }
     }
-  }, [authStoreHydrated]);
+  }, []);
 
   useEffect(() => {
     const getLanguageFromStorage = async () => {
@@ -181,8 +165,13 @@ export const RootNavigation = () => {
         NavigatorService.setContainer(navigation);
         navigationRef.current = navigation;
       }}
-      linking={isLoggedin && (link as any)}
-      onReady={onLayoutRootView}
+      // Deep link config should be set after setting auth token to http header
+      // to avoid react navigation navigate to the route in the deep link before setting auth token to http header
+      linking={
+        isHttpAuthHeaderSet && {
+          ...(LinkingConfig as any),
+        }
+      }
     >
       <RootStack.Navigator
         initialRouteName="IntroScreen"

@@ -81,3 +81,8 @@ export enum PRODUCT_PACKAGE_TYPE {
   CHAT_CHALLENGE = "chat_challenge",
   VIDEO_CHALLENGE = "video_challenge",
 }
+
+export enum DEEP_LINK_PATH_NAME {
+  CHALLENGE_DETAIL = "challenge",
+  USER_PROFILE = "user",
+}

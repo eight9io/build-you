@@ -41,6 +41,8 @@ import PersonalChallengeDetailScreen from "./ChallengesScreen/PersonalChallenges
 import PersonalCoachChallengeDetailScreen from "./ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import { useNotificationStore } from "../store/notification-store";
 import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
+import { useDeepLinkStore } from "../store/deep-link-store";
+import { handleDeepLinkNavigation } from "../utils/linking.util";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -52,6 +54,7 @@ export const HomeFeed = () => {
   useGetListFollowing();
   const { getUserProfile, getUserAllChallengeIds } = useUserProfileStore();
   const userData = getUserProfile();
+  const { getDeepLink } = useDeepLinkStore();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const {
     getChallengeUpdateDetails,
@@ -143,6 +146,13 @@ export const HomeFeed = () => {
     if (isDevice && Platform.OS === "android")
       handleAppOpenOnNotificationPressed(useNotificationStore); // Handle app open on notification pressed when app is killed on Android
     getInitialFeeds();
+
+    // Handle deep link navigation
+    const deepLink = getDeepLink();
+    if (deepLink) {
+      handleDeepLinkNavigation(deepLink);
+      return;
+    }
   }, []);
 
   const renderItem = useCallback(

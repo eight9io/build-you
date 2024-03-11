@@ -5,7 +5,6 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import { Image } from "expo-image";
 import React, { useLayoutEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -15,6 +14,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -200,7 +200,7 @@ export default function Login() {
                 <Image
                   className=" mb-7 mt-10 h-[91px] w-[185px]"
                   source={require("./asset/buildYou.png")}
-                  contentFit="cover"
+                  resizeMode="cover"
                 />
               </View>
               <View className="flex-row">

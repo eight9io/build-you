@@ -162,12 +162,12 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             <CertifiedChallengeTag />
           </View>
         )}
-        {imageSrc && (
+        {imageSrc ? (
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
           />
-        )}
+        ) : null}
         <View
           className={clsx(
             "flex flex-row items-center justify-between px-4 py-3"

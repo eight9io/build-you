@@ -100,7 +100,7 @@ const ChallengesTab: FC<IChallengesTabProps> = ({
               item={item}
               isCompanyAccount={isCompanyAccount}
               isFromOtherUser
-              imageSrc={`${item.image}`}
+              imageSrc={item.image}
               navigation={navigation}
               currentUserAllChallengeIds={currentUserAllChallengeIds}
             />

@@ -31,7 +31,7 @@ import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoac
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
-import { onCopyLink } from "../../../../utils/native/share/shareLink.util";
+import { onCopyLink } from "../../../../utils/shareLink.util";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;

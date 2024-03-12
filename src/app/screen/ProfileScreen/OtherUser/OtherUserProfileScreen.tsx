@@ -30,7 +30,7 @@ import {
 import { serviceFollow, serviceUnfollow } from "../../../service/profile";
 import { useGetOtherUserData } from "../../../hooks/useGetUser";
 import { fetchNewFollowingData } from "../../../utils/profile";
-import { onShareUserLink } from "../../../utils/native/share/shareLink.util";
+import { onShareUserLink } from "../../../utils/shareLink.util";
 
 import ShareIcon from "../../../../../assets/svg/share.svg";
 

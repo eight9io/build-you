@@ -14,7 +14,7 @@ import { getChallengeById } from "../../../../service/challenge";
 
 import { isObjectEmpty } from "../../../../utils/common";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
-import { onShareChallengeLink } from "../../../../utils/native/share/shareLink.util";
+import { onShareChallengeLink } from "../../../../utils/shareLink.util";
 
 import {
   ICertifiedChallengeState,

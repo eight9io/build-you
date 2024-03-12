@@ -6,7 +6,7 @@ import { SafeAreaView, TouchableOpacity, View, Text } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import httpInstance from "../../../../utils/http";
-import { onShareChallengeLink } from "../../../../utils/native/share/shareLink.util";
+import { onShareChallengeLink } from "../../../../utils/shareLink.util";
 import {
   deleteChallenge,
   completeChallenge,

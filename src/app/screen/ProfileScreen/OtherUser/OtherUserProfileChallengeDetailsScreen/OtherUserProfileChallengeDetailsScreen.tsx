@@ -24,7 +24,7 @@ import {
   serviceRemoveChallengeParticipant,
 } from "../../../../service/challenge";
 import { getChallengeStatusColor } from "../../../../utils/common";
-import { onShareChallengeLink } from "../../../../utils/native/share/shareLink.util";
+import { onShareChallengeLink } from "../../../../utils/shareLink.util";
 
 import Button from "../../../../component/common/Buttons/Button";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";

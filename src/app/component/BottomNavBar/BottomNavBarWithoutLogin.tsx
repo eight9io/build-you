@@ -29,8 +29,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
         headerTitleAlign: "center",
         tabBarStyle: {
           backgroundColor: "#FFFFFF",
-          height: Platform.OS === "android" ? 68 : 102,
-          paddingBottom: Platform.OS === "android" ? 0 : 30,
+          height: 86,
         },
         headerRightContainerStyle: {
           paddingRight: 10,

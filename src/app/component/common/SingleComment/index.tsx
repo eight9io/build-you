@@ -2,6 +2,8 @@ import { FC, useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
+
+// Used only for render mentions in comment
 import {
   Part,
   PartType,
@@ -182,7 +184,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
           </View>
         </TouchableOpacity>
 
-        {userProfile && userProfile.id === comment.user && (
+        {userProfile && userProfile.id === comment.user ? (
           <PopUpMenu
             iconColor="#FF7B1D"
             options={[
@@ -192,7 +194,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
               },
             ]}
           />
-        )}
+        ) : null}
       </View>
 
       {renderValue(comment.comment, [

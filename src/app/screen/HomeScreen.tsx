@@ -251,7 +251,7 @@ export const HomeFeedUnregister = () => {
   };
 
   return (
-    <SafeAreaView className={clsx("bg-white")}>
+    <SafeAreaView className={clsx("flex-1 bg-white")}>
       <View className={clsx("h-full w-full bg-gray-50 ")}>
         <FlatList
           data={feedData}
@@ -259,7 +259,7 @@ export const HomeFeedUnregister = () => {
           keyExtractor={(item) => item.id as unknown as string}
           ListFooterComponent={<View className={clsx("h-16")} />}
           onEndReached={getNewFeed}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={3}
           onRefresh={handleScroll}
           refreshing={isRefreshing}
         />

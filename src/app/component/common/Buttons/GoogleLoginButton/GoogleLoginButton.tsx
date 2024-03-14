@@ -26,7 +26,8 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({
   }, [token]);
 
   const handleGoogleBtnClicked = async () => {
-    login();
+    // Disable action until api is ready
+    // login();
   };
 
   return (

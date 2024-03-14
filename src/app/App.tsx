@@ -36,7 +36,6 @@ if (getApps().length === 0) {
   const firebaseConfig: FirebaseOptions = JSON.parse(
     process.env.EXPO_FIREBASE_CONFIG || ""
   );
-  console.log(firebaseConfig);
   initializeApp(firebaseConfig);
 }
 

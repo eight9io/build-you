@@ -120,25 +120,26 @@ const CreateChallengeScreenMain = () => {
     else navigation.navigate("CreateChallengeScreen");
   };
   const handleCreateCretifiedChallenge = async () => {
-    try {
-      const { data: isUserHasInDraftChallenge } =
-        await serviceGetIsUserHasInDraftChallenge();
-      if (isUserHasInDraftChallenge) {
-        GlobalDialogController.showModal({
-          title: t("dialog.in_draft.title"),
-          message: t("dialog.in_draft.description"),
-        });
-        return;
-      }
-    } catch (error) {
-      console.error("get is user has in draft challenge error", error);
-    }
-    // navigation.navigate("CartScreen");
-    navigation.navigate(
-      isCompany
-        ? "CreateCertifiedCompanyChallengeScreen"
-        : "CreateCertifiedChallengeScreen"
-    );
+    // Disable action until api is ready
+    // try {
+    //   const { data: isUserHasInDraftChallenge } =
+    //     await serviceGetIsUserHasInDraftChallenge();
+    //   if (isUserHasInDraftChallenge) {
+    //     GlobalDialogController.showModal({
+    //       title: t("dialog.in_draft.title"),
+    //       message: t("dialog.in_draft.description"),
+    //     });
+    //     return;
+    //   }
+    // } catch (error) {
+    //   console.error("get is user has in draft challenge error", error);
+    // }
+    // // navigation.navigate("CartScreen");
+    // navigation.navigate(
+    //   isCompany
+    //     ? "CreateCertifiedCompanyChallengeScreen"
+    //     : "CreateCertifiedChallengeScreen"
+    // );
   };
 
   useLayoutEffect(() => {

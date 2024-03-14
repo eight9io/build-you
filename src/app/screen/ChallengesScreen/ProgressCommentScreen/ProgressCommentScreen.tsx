@@ -97,7 +97,6 @@ const CommentInput: FC<ICommentInputProps> = ({
                   t("progress_comment_screen.comment_input_placeholder") || ""
                 }
                 companyEmployees={companyEmployees}
-                placeholderTextColor={"#C5C8D2"}
                 rightIcon={value !== "" && <SendIcon />}
                 onChange={onChange}
                 onBlur={onBlur}
@@ -222,8 +221,8 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
 
   return (
     <SafeAreaView className=" flex-1 bg-white">
-      {progressCommentScreenLoading && <SkeletonLoadingCommon />}
-      {!progressCommentScreenLoading && (
+      {progressCommentScreenLoading ? <SkeletonLoadingCommon /> : null}
+      {!progressCommentScreenLoading ? (
         <KeyboardAvoidingView
           keyboardVerticalOffset={Platform.OS === "ios" ? 115 : 0}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -275,7 +274,7 @@ const ProgressCommentScreen: FC<IProgressCommentScreenProps> = ({ route }) => {
             />
           </View>
         </KeyboardAvoidingView>
-      )}
+      ) : null}
     </SafeAreaView>
   );
 };

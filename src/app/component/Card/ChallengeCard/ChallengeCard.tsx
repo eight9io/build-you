@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import clsx from "clsx";
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
+import EmptyImage from "../../../common/svg/empty-image.svg";
 
 import { IChallenge, IChallengeOwner } from "../../../types/challenge";
 import {
@@ -167,7 +168,11 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: imageSrc }}
           />
-        ) : null}
+        ) : (
+          <View className="flex aspect-square w-full items-center justify-center rounded-t-xl">
+            <EmptyImage />
+          </View>
+        )}
         <View
           className={clsx(
             "flex flex-row items-center justify-between px-4 py-3"

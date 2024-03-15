@@ -131,7 +131,9 @@ const VideoPicker: FC<IVideoPickerProps> = ({
             source={{ uri: thumbnailImage }}
             className={clsx("aspect-square h-full w-full rounded-xl")}
             resizeMode={ResizeMode.COVER}
-            videoStyle={{ width: "100%" }}
+            videoStyle={{
+              width: "100%",
+            }}
           />
         </View>
       ) : null}
@@ -141,8 +143,12 @@ const VideoPicker: FC<IVideoPickerProps> = ({
           <Video
             source={{ uri: thumbnailImage }}
             className={clsx("aspect-square h-full w-full rounded-xl")}
-            resizeMode={ResizeMode.COVER}
-            videoStyle={{ width: "100%" }}
+            resizeMode={ResizeMode.CONTAIN}
+            videoStyle={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "black",
+            }}
           />
           <View className="absolute left-1/2 top-[60px] ml-[-10px]">
             <PlayButton />

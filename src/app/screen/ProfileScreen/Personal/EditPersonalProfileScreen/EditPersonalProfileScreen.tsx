@@ -278,7 +278,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     <SafeAreaView className="h-full bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
       <KeyboardAwareScrollView>
-        <View className="  h-full rounded-t-xl bg-white ">
+        <View className="h-full rounded-t-xl bg-white">
           <ConfirmDialog
             title={t("dialog.err_title_update_profile") as string}
             description={t("dialog.err_update_profile") as string}
@@ -327,7 +327,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           />
 
           {userData && (
-            <View className=" h-full w-full px-4 pt-8 ">
+            <View className="h-full w-full space-y-4 px-4 pt-8">
               <View>
                 <Controller
                   control={control}
@@ -360,7 +360,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="surname"
@@ -392,7 +392,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="birth"
@@ -435,7 +435,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="phone"
@@ -460,7 +460,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   name="occupation"
                   control={control}
@@ -493,7 +493,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   name="employeeOf"
                   control={control}
@@ -517,7 +517,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="city"
@@ -549,11 +549,11 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                 />
               </View>
               <View>
-                <Text className="py-4 text-md font-semibold text-primary-default">
+                <Text className="text-md font-semibold text-primary-default">
                   {t("video_profile")}
                 </Text>
                 {userData?.video && pickedVideo.length === 0 && (
-                  <View className={clsx(" flex flex-col ")}>
+                  <View className={clsx("flex flex-col ")}>
                     <View>
                       <VideoWithPlayButton
                         src={userData?.video}
@@ -576,7 +576,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   </Text>
                 )}
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="bio"
@@ -602,12 +602,14 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                   )}
                 />
               </View>
-              <HardSkillSection
-                setOpenModal={() => setIsShowAddHardSkillModal(true)}
-                hardSkill={arrayMyHardSkills || []}
-                setArrayMyHardSkills={setArrayMyHardSkills}
-              />
-              {userData?.employeeOf && (
+              <View>
+                <HardSkillSection
+                  setOpenModal={() => setIsShowAddHardSkillModal(true)}
+                  hardSkill={arrayMyHardSkills || []}
+                  setArrayMyHardSkills={setArrayMyHardSkills}
+                />
+              </View>
+              {userData?.employeeOf ? (
                 <>
                   <Text className="pt-4 text-base font-semibold text-primary-default">
                     {t("work_place")}
@@ -626,10 +628,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                     />
                   </View>
                 </>
-              )}
+              ) : null}
               <Button
                 title={t("button.update") || "Update"}
-                containerClassName="mb-4  bg-primary-default mt-10 mb-"
+                containerClassName="mb-4 bg-primary-default mt-10 flex-none"
                 textClassName="text-white text-md leading-6"
                 onPress={handleSubmit(onSubmit)}
               />

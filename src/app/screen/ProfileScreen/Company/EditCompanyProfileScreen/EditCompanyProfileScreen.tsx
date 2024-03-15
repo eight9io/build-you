@@ -93,7 +93,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
           closeButtonLabel={t("close") || ""}
         />
         {userData && (
-          <KeyboardAwareScrollView className=" h-full w-full px-4 pt-8 ">
+          <KeyboardAwareScrollView className="h-full w-full space-y-4 px-4 pt-8">
             <View>
               <Controller
                 control={control}
@@ -128,7 +128,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
               />
             </View>
 
-            <View className="pt-3">
+            <View>
               <Controller
                 control={control}
                 name="bio"
@@ -157,7 +157,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
               />
             </View>
 
-            <View className="pt-3">
+            <View>
               <Controller
                 control={control}
                 name="phone"
@@ -183,7 +183,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 )}
               />
             </View>
-            <View className="pt-3">
+            <View>
               <Controller
                 control={control}
                 name="mailContact"
@@ -208,7 +208,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 )}
               />
             </View>
-            <View className="pt-3">
+            <View>
               <Controller
                 control={control}
                 name="webSite"
@@ -232,7 +232,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 )}
               />
             </View>
-            <View className="pt-3">
+            <View>
               <Controller
                 control={control}
                 name="pIva"
@@ -258,7 +258,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
 
             <Button
               title={t("button.update") || "Update"}
-              containerClassName=" bg-primary-default my-10"
+              containerClassName=" bg-primary-default my-10 flex-none"
               textClassName="text-white text-md leading-6"
               onPress={handleSubmit(onSubmit)}
             />

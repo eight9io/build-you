@@ -107,13 +107,12 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
         if (ratedSoffSkillsValue.status === "fulfilled") {
           const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
             (item) => {
-              console.log(item.userId)
               return {
                 id: item.skillId,
                 skill: item.skillName,
                 rating: item.skillRating,
                 isRating: item.isRating,
-                userId: item.userId
+                userId: item.userId,
               };
             }
           );
@@ -138,7 +137,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
     extractSkillsFromChallengeData(challengeData);
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-gray-veryLight">
       {isRateSkillsModalVisible && (
         <CoachRateChallengeModal
           isVisible={isRateSkillsModalVisible}

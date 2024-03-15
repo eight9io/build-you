@@ -314,7 +314,7 @@ export const ChallengeCompanyDetailScreen: FC<
   };
 
   return (
-    <View className="flex flex-1 flex-col bg-gray-veryLight ">
+    <View className="flex flex-1 flex-col bg-gray-veryLight">
       <View className="flex flex-row items-center justify-between bg-white px-4 pb-3 pt-4">
         <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
           <CheckCircle

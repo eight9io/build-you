@@ -52,7 +52,7 @@ export const VideoWithPlayButton = ({
         "relative flex flex-col items-center justify-center rounded-xl  bg-gray-200"
       }
     >
-      {src && (
+      {src ? (
         <Video
           ref={videoPlayer}
           source={{
@@ -83,8 +83,8 @@ export const VideoWithPlayButton = ({
               setResizeMode(ResizeMode.COVER);
           }}
         />
-      )}
-      {!isVideoPlayed && !isLoading && (
+      ) : null}
+      {!isVideoPlayed && !isLoading ? (
         <TouchableOpacity
           className={clsx("absolute translate-x-1/2 translate-y-1/2")}
           onPress={() => {
@@ -93,12 +93,12 @@ export const VideoWithPlayButton = ({
         >
           <PlayButton />
         </TouchableOpacity>
-      )}
-      {isLoading && (
+      ) : null}
+      {isLoading ? (
         <View className="absolute h-full w-full items-center justify-center rounded-xl bg-black-light  opacity-60 ">
           <ActivityIndicator animating color="#FFFFFF" size="large" />
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -115,17 +115,17 @@ const Biography = ({ userProfile }: IBiographyProps) => {
   return (
     <ScrollView className="w-full px-4  ">
       <View className="justify-content: space-between mb-[100px] w-full pt-4 ">
-        {videoSrc && videoSrc !== null && (
+        {videoSrc && videoSrc !== null ? (
           <View className={clsx(" flex flex-col ")}>
             <View className={clsx("py-6")}>
               <VideoWithPlayButton src={videoSrc} />
             </View>
           </View>
-        )}
+        ) : null}
         <Text className={clsx("text-h6 text-gray-dark")}>
           {bio ? bio : t("biography_tab.no_biography") || "No biography yet"}
         </Text>
-        {hardSkill && (
+        {hardSkill ? (
           <View className="align-center mt-3 flex-row flex-wrap  ">
             {hardSkill.map((content, index) => {
               return (
@@ -138,9 +138,9 @@ const Biography = ({ userProfile }: IBiographyProps) => {
               );
             })}
           </View>
-        )}
+        ) : null}
         <View className="flex-column flex flex-wrap gap-5 pt-[20px]">
-          {occupation && (
+          {occupation ? (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -154,8 +154,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 {occupation}
               </Text>
             </View>
-          )}
-          {city && (
+          ) : null}
+          {city ? (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -167,8 +167,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
 
               <Text className={clsx("text-md text-gray-dark")}>{city}</Text>
             </View>
-          )}
-          {userProfile?.webSite && (
+          ) : null}
+          {userProfile?.webSite ? (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -182,8 +182,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 {userProfile?.webSite}
               </Text>
             </View>
-          )}
-          {userProfile?.phone && (
+          ) : null}
+          {userProfile?.phone ? (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -197,8 +197,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 {userProfile?.phone}
               </Text>
             </View>
-          )}
-          {userProfile?.emailContact && (
+          ) : null}
+          {userProfile?.emailContact ? (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -212,8 +212,8 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 {userProfile?.emailContact}
               </Text>
             </View>
-          )}
-          {userProfile?.pIva && (
+          ) : null}
+          {userProfile?.pIva ? (
             <View className="flex w-full flex-row flex-wrap pr-[30px]">
               <Text
                 className={clsx(
@@ -227,7 +227,7 @@ const Biography = ({ userProfile }: IBiographyProps) => {
                 {userProfile?.pIva}
               </Text>
             </View>
-          )}
+          ) : null}
         </View>
       </View>
     </ScrollView>

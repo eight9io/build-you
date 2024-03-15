@@ -61,14 +61,14 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
       className={clsx("w-full rounded-xl border border-gray-80 bg-white")}
     >
       <View className={clsx("relative w-full")}>
-        {image && (
+        {image ? (
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{ uri: image }}
             onLoadEnd={() => setIsImageLoading(false)}
           />
-        )}
-        {isImageLoading && (
+        ) : null}
+        {isImageLoading ? (
           <View
             className={clsx(
               "absolute left-0 top-0 h-full w-full flex-row items-center justify-center"
@@ -76,7 +76,7 @@ const ChallengeImage: FC<IChallengeImageProps> = ({ name, image, onPress }) => {
           >
             <ActivityIndicator size="large" />
           </View>
-        )}
+        ) : null}
         <View
           className={clsx(
             "relative flex  flex-row items-center justify-between px-4 py-3"
@@ -104,16 +104,21 @@ const ChallengeVideo: FC<IChallengeVideoProps> = ({ name, video, onPress }) => {
       className={clsx("w-full rounded-xl border border-gray-80 bg-white")}
     >
       <View className={clsx("relative w-full")}>
-        {video && (
+        {video ? (
           <Video
             className={clsx("aspect-square w-full rounded-t-xl")}
             source={{
               uri: video,
             }}
             useNativeControls
-            resizeMode={ResizeMode.COVER}
+            resizeMode={ResizeMode.CONTAIN}
+            videoStyle={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "black",
+            }}
           />
-        )}
+        ) : null}
         <View
           className={clsx(
             "relative flex  flex-row items-center justify-between px-4 py-3"
@@ -172,20 +177,20 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
             </View>
           </TouchableOpacity>
           <Text className=" mb-3 text-md font-normal leading-5">{caption}</Text>
-          {image && (
+          {image ? (
             <ChallengeImage
               name={challenge?.goal}
               image={image as string}
               onPress={navigateToChallengeDetail}
             />
-          )}
-          {video && (
+          ) : null}
+          {video ? (
             <ChallengeVideo
               name={challenge?.goal}
               video={video as string}
               onPress={navigateToChallengeDetail}
             />
-          )}
+          ) : null}
 
           <View className="mt-4 flex-row">
             <LikeButtonUnregister />
@@ -194,12 +199,12 @@ export const FeedPostCardUnregister: React.FC<IFeedPostCardProps> = ({
         </View>
         <View className="h-2 w-full bg-gray-light" />
       </View>
-      {!isToken && (
+      {!isToken ? (
         <TouchableOpacity
           className=" absolute left-0 top-0 z-10 h-full w-full "
           onPress={() => navigation.navigate("LoginScreen")}
         ></TouchableOpacity>
-      )}
+      ) : null}
     </View>
   );
 };

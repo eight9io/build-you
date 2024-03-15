@@ -19,7 +19,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
     {} as AVPlaybackStatus
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
-  const [resizeMode, setResizeMode] = React.useState(ResizeMode.COVER);
+  const [resizeMode, setResizeMode] = React.useState(ResizeMode.CONTAIN);
 
   useEffect(() => {
     if (status && status.isLoaded && status.isPlaying) {
@@ -29,35 +29,11 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
   //expo video doesn't support tailwind
   return (
     <View
-      className={clsx("relative flex flex-col items-center justify-center")}
-    >
-      {!src && (
-        <Video
-          ref={(r) => (videoPlayer.current = r)}
-          source={{
-            uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-          }}
-          style={{
-            width: "100%",
-            height: 200,
-            backgroundColor: "#FFFFF",
-            borderRadius: 12,
-          }}
-          useNativeControls
-          resizeMode={resizeMode}
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-          onFullscreenUpdate={({ fullscreenUpdate }) => {
-            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
-            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
-              setResizeMode(ResizeMode.CONTAIN);
-            else if (
-              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
-            )
-              setResizeMode(ResizeMode.COVER);
-          }}
-        />
+      className={clsx(
+        "relative flex flex-col items-center justify-center rounded-xl"
       )}
-      {src && (
+    >
+      {src ? (
         <Video
           ref={videoPlayer}
           source={{
@@ -65,9 +41,44 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
           }}
           style={{
             width: "100%",
-            height: 200,
+            aspectRatio: 1 / 1,
             backgroundColor: "#FFFFF",
             borderRadius: 12,
+          }}
+          videoStyle={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "black",
+          }}
+          useNativeControls
+          resizeMode={resizeMode}
+          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onFullscreenUpdate={({ fullscreenUpdate }) => {
+            // Resize when video is fullscreened (Android only, it will auto change resize mode when go fullscreen on iOS)
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT)
+              setResizeMode(ResizeMode.CONTAIN);
+            else if (
+              fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_DISMISS
+            )
+              setResizeMode(ResizeMode.COVER);
+          }}
+        />
+      ) : (
+        <Video
+          ref={(r) => (videoPlayer.current = r)}
+          source={{
+            uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+          }}
+          style={{
+            width: "100%",
+            aspectRatio: 1 / 1,
+            backgroundColor: "#FFFFF",
+            borderRadius: 12,
+          }}
+          videoStyle={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: "black",
           }}
           useNativeControls
           resizeMode={resizeMode}
@@ -83,7 +94,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
           }}
         />
       )}
-      {!isVideoPlayed && (
+      {!isVideoPlayed ? (
         <TouchableOpacity
           className={clsx("absolute translate-x-1/2 translate-y-1/2")}
           onPress={() => {
@@ -92,7 +103,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src }) => {
         >
           <PlayButton />
         </TouchableOpacity>
-      )}
+      ) : null}
     </View>
   );
 };

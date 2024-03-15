@@ -38,7 +38,7 @@ export const VideoWithPlayButton = ({
   );
   const [isVideoPlayed, setIsVideoPlayed] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [resizeMode, setResizeMode] = React.useState(ResizeMode.COVER);
+  const [resizeMode, setResizeMode] = React.useState(ResizeMode.CONTAIN);
 
   useEffect(() => {
     if (status && status.isLoaded && status.isPlaying) {
@@ -64,6 +64,7 @@ export const VideoWithPlayButton = ({
             backgroundColor: "#FFFFF",
             borderRadius: 12,
           }}
+          videoStyle={{ width: "100%", height: "100%" }}
           useNativeControls
           resizeMode={resizeMode}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}

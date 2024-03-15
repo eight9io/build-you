@@ -137,7 +137,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
     extractSkillsFromChallengeData(challengeData);
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-gray-veryLight">
       {isRateSkillsModalVisible && (
         <CoachRateCompanyChallengeModal
           isVisible={isRateSkillsModalVisible}

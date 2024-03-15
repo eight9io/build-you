@@ -276,7 +276,7 @@ const CompanyChallengeDetailScreen = ({
   }, [shouldScreenRefresh]);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-veryLight pt-3">
+    <SafeAreaView className="flex-1 bg-gray-veryLight">
       <ConfirmDialog
         isVisible={isCompletedChallengeDialogVisible}
         title={
@@ -384,7 +384,7 @@ const CompanyChallengeDetailScreen = ({
           </TouchableOpacity>
         </View>
       )}
-      {challengeData && (
+      {challengeData ? (
         <>
           <ChallengeCompanyDetailScreen
             route={route}
@@ -399,7 +399,7 @@ const CompanyChallengeDetailScreen = ({
             challenge={challengeData}
           />
         </>
-      )}
+      ) : null}
     </SafeAreaView>
   );
 };

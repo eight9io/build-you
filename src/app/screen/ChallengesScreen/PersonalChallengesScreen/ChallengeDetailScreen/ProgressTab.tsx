@@ -304,30 +304,30 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   // TODO: change image on top, then add a change button
 
   return (
-    <View className="h-full flex-1">
-      {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal && (
+    <View className="h-full flex-1 bg-gray-light">
+      {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal ? (
         <EditChallengeProgressModal
           progress={localProgressData[progressIndexToUpdate]}
           isVisible={isShowEditModal}
           onClose={() => setIsShowEditModal(false)}
           onConfirm={handleConfirmEditChallengeProgress}
         />
-      )}
+      ) : null}
 
       <CustomActivityIndicator isVisible={progressLoading} />
-      {!progressLoading && (
+      {!progressLoading ? (
         <FlatList
           data={localProgressData}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={() => {
             return (
-              <>
+              <View className="bg-gray-veryLight pb-3">
                 {(isJoined || isCurrentUserOwnerOfChallenge) &&
-                  !progressLoading &&
-                  (!isChallengeCompleted ? (
+                !progressLoading ? (
+                  !isChallengeCompleted ? (
                     <View>
                       <AddNewChallengeProgressButton />
-                      {localProgressData?.length == 0 && (
+                      {localProgressData?.length == 0 ? (
                         <View className="px-4 py-4">
                           <Text className="selection: text-base">
                             {
@@ -337,14 +337,15 @@ export const ProgressTab: FC<IProgressTabProps> = ({
                             }
                           </Text>
                         </View>
-                      )}
+                      ) : null}
                     </View>
-                  ) : null)}
-                {(isChallengeCompletedOrClosed ||
-                  isChallengeDoneByCurrentUser) && (
+                  ) : null
+                ) : null}
+                {isChallengeCompletedOrClosed ||
+                isChallengeDoneByCurrentUser ? (
                   <RateChallengeSection challengeId={challengeData.id} />
-                )}
-              </>
+                ) : null}
+              </View>
             );
           }}
           renderItem={({ item, index }) => (
@@ -364,7 +365,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           )}
           contentContainerStyle={{ paddingBottom: 80 }}
         />
-      )}
+      ) : null}
     </View>
   );
 };

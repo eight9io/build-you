@@ -91,7 +91,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   }, [challengeData?.id, shouldRefresh]);
 
   return (
-    <View className="mb-4 flex-1 px-4 pr-4 pt-4">
+    <View className="mb-4 flex-1 bg-gray-veryLight px-4 pr-4 pt-4">
       {isRateSkillsModalVisible && (
         <CoachRateChallengeModal
           isVisible={isRateSkillsModalVisible}

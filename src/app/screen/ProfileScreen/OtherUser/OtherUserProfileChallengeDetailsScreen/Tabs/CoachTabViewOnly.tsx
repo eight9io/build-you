@@ -85,7 +85,7 @@ const CoachTabViewOnly: FC<ICoachTabProps> = ({ coachID }) => {
   }, [coachID]);
 
   return (
-    <View className="p-4">
+    <View className="flex-1 bg-gray-veryLight p-4">
       {coachData?.id ? (
         <CoachBanner coachData={coachData} />
       ) : (

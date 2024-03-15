@@ -466,7 +466,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex flex-1">
       <CustomActivityIndicator isVisible={isLoading} />
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
@@ -506,7 +506,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
         }}
       />
 
-      <View className="flex h-full flex-col bg-white pt-4">
+      <View className="flex flex-1 flex-col bg-white pt-4">
         <View className="flex flex-row items-center justify-between px-4 pb-3">
           <View className="flex-1 flex-row items-center gap-2 pb-2 pt-2">
             <CheckCircle fill={statusColor} />

@@ -22,8 +22,8 @@ export const EmployeesCompany: FC<IEmployeesTabProps> = ({ employeeList }) => {
 
   return (
     <View className="flex-1">
-      <View className="mt-5 px-4">
-        {employeeList.length > 0 && (
+      <View className="mt-4 flex-1">
+        {employeeList.length > 0 ? (
           <FlatList
             data={employeeList}
             renderItem={({ item }) => (
@@ -34,17 +34,22 @@ export const EmployeesCompany: FC<IEmployeesTabProps> = ({ employeeList }) => {
               />
             )}
             keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingBottom: 100,
+              gap: 20,
+            }}
           />
-        )}
+        ) : null}
       </View>
 
-      {employeeList.length == 0 && !userProfile?.companyAccount && (
+      {employeeList.length == 0 && !userProfile?.companyAccount ? (
         <View className="align-center mt-[150px] items-center justify-center ">
           <Text className="text-lg text-gray-400 ">
             {t("empty_employee.content_1")}
           </Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };

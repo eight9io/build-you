@@ -16,6 +16,9 @@ interface ISelectPickerProps {
   onSelect: (index: number) => void;
   onCancel: () => void;
   onLoadMore?: () => void;
+  optionContainerClassName?: string;
+  optionTextClassName?: string;
+  optionAutoHeight?: boolean;
 }
 const SelectPicker: FC<ISelectPickerProps> = ({
   show,
@@ -25,6 +28,9 @@ const SelectPicker: FC<ISelectPickerProps> = ({
   onSelect,
   onCancel,
   onLoadMore,
+  optionContainerClassName,
+  optionTextClassName,
+  optionAutoHeight,
 }) => {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<number>(0);
@@ -52,11 +58,11 @@ const SelectPicker: FC<ISelectPickerProps> = ({
         </View>
       }
       FloatingComponent={
-        <View className="h-14 w-full bg-white px-4">
+        <View className="mb-2 w-full bg-white px-4">
           <Button
             title={t("save") || "Save"}
             onPress={() => onSelect(selected)}
-            containerClassName="bg-primary-default flex-1 mb-2"
+            containerClassName="bg-primary-default flex-1 py-[14px]"
             textClassName="text-white"
           />
         </View>
@@ -68,7 +74,6 @@ const SelectPicker: FC<ISelectPickerProps> = ({
           data={data}
           keyExtractor={(item, index) => `${Math.random()}-${index}}`}
           renderItem={({ item, index }) => {
-            console.log("item: ", item);
             return (
               <View className="px-4">
                 <BottomSheetOption
@@ -76,12 +81,15 @@ const SelectPicker: FC<ISelectPickerProps> = ({
                   title={item?.name || item?.label}
                   containerClassName={clsx(
                     "focus:bg-gray-light",
-                    index === selected && "bg-gray-light"
+                    index === selected && "bg-gray-light",
+                    optionContainerClassName
                   )}
                   textClassName={clsx(
                     "text-base font-normal",
-                    index === selected && "font-semibold"
+                    index === selected && "font-semibold",
+                    optionTextClassName
                   )}
+                  autoHeight={optionAutoHeight}
                 />
               </View>
             );

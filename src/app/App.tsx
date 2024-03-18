@@ -1,7 +1,6 @@
 import "@expo/metro-runtime"; // Required for hot reload when developing on web platform
 import { MenuProvider } from "react-native-popup-menu";
 import { NativeWindStyleSheet } from "nativewind";
-7;
 import {
   useFonts,
   OpenSans_300Light,

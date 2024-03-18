@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, View, Text } from "react-native";
 
@@ -7,7 +7,6 @@ import { IScheduledTime } from "../../types/schedule";
 import VideoCallScheduleCard from "../Card/VideoCallScheduleCard/VideoCallScheduleCard";
 
 import EmptySchedule from "../asset/empty-schedule.svg";
-import GlobalToastController from "../common/Toast/GlobalToastController";
 
 interface IScheduleTabProps {
   schedules: IScheduledTime[];
@@ -60,7 +59,7 @@ const ScheduleTab: FC<IScheduleTabProps> = ({
             />
           )}
           contentContainerStyle={{ gap: 8 }}
-          className="mt-2 flex-1 "
+          className="mt-2 flex-1"
           ListFooterComponent={<View className="h-20" />}
           refreshing={shouldParentRefresh}
           onRefresh={() => setShouldParentRefresh(true)}

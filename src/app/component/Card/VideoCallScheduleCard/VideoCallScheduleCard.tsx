@@ -12,7 +12,7 @@ import ScheduleDetailModal from "../../modal/CoachCalendar/ScheduleDetailModal";
 
 import LinkSvg from "../../../component/asset/link.svg";
 import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
-import { openUrlInApp } from "../../../utils/inAppBrowser";
+import { openUrl } from "../../../utils/linking.util";
 
 interface IVideoCallScheduleCardProps {
   schedule: IScheduledTime;
@@ -43,7 +43,14 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
       });
       return;
     }
-    openUrlInApp(meetingUrl);
+    try {
+      await openUrl(meetingUrl);
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
+    }
   };
 
   return (

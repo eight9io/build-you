@@ -99,7 +99,7 @@ export default function ConfirmVideoCoachModal({
       visible={modalVisible}
       presentationStyle="pageSheet"
     >
-      <View className=" flex-1 bg-white px-3 pt-1">
+      <View className="flex-1 bg-white px-3 pt-1">
         <Header
           title={t("confirm_time_modal.title")}
           leftBtn={
@@ -109,13 +109,15 @@ export default function ConfirmVideoCoachModal({
               withBackIcon
             />
           }
-          rightBtn={
-            <NavButton
-              text={t("confirm_time_modal.confirm") as string}
-              onPress={handleSubmit(handleSubmitConfirmedProposedTime)}
-              textClassName="text-primary-default uppercase"
-            />
-          }
+          // rightBtn={
+          //   <NavButton
+          //     text={t("confirm_time_modal.confirm") as string}
+          //     onPress={handleSubmit(handleSubmitConfirmedProposedTime)}
+          //     textClassName="text-primary-default uppercase"
+          //   />
+          // }
+          rightBtn={t("confirm_time_modal.confirm")}
+          onRightBtnPress={handleSubmit(handleSubmitConfirmedProposedTime)}
           containerStyle="mb-4"
         />
         <View className="flex flex-col p-2">

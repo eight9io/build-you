@@ -1,4 +1,5 @@
 import { NavigationContainerRef } from "@react-navigation/native";
+import { Linking } from "react-native";
 import { RootStackParamList } from "../navigation/navigation.type";
 import { IDeepLinkValue } from "../store/deep-link-store";
 import { DEEP_LINK_PATH_NAME } from "../common/enum";
@@ -99,4 +100,27 @@ export const getPathNameFromDeepLinkPath = (path: string) => {
 export const getParamFromDeepLinkPath = (path: string) => {
   const [_, param] = path.split("/");
   return param;
+};
+
+export const openUrl = async (url: string) => {
+  const isValidUrl = isValidHttpUrl(url);
+  if (!isValidUrl) throw new Error("Invalid URL");
+  try {
+    await Linking.openURL(url);
+  } catch (error) {
+    console.error("error: ", error);
+    throw error;
+  }
+};
+
+export const isValidHttpUrl = (url: string) => {
+  let urlObject;
+  try {
+    urlObject = new URL(url);
+  } catch (error) {
+    console.log("error: ", error);
+    return false;
+  }
+
+  return urlObject.protocol === "http:" || urlObject.protocol === "https:";
 };

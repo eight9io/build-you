@@ -103,7 +103,7 @@ const EditScheduleLinkModal: FC<IEditScheduleLinkModalProps> = ({
             }
             leftBtn={<CloseBtn fill={"black"} />}
             onLeftBtnPress={onClose}
-            containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
+            containerStyle="mt-3"
           />
         </View>
         <View className="flex-1 p-4">

@@ -1,11 +1,13 @@
 import clsx from "clsx";
 import { ResizeMode, Video } from "expo-av";
-import React, { FC } from "react";
+import { FC } from "react";
 import { Image } from "expo-image";
-import { InAppBrowser } from "react-native-inappbrowser-reborn";
-import { View, Text, TouchableOpacity, Linking, Alert } from "react-native";
+import { useTranslation } from "react-i18next";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import { IAdProps } from "../../types/common";
+import { openUrl } from "../../utils/linking.util";
+import GlobalDialogController from "../common/Dialog/GlobalDialog/GlobalDialogController";
 
 interface IAdImageProps {
   name: string;
@@ -75,48 +77,25 @@ const AdVideo = ({ name, video, onPress }) => {
 };
 
 const AdCard: FC<IAdCardProps> = ({ item }) => {
-  const openUrlInApp = async () => {
+  const { t } = useTranslation();
+
+  const handleOpenLink = async (url: string) => {
+    if (!url) {
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
+      return;
+    }
     try {
-      const url = item?.url as string;
-      if (await InAppBrowser.isAvailable()) {
-        await InAppBrowser.open(url, {
-          // iOS Properties
-          dismissButtonStyle: "cancel",
-          preferredBarTintColor: "white",
-          preferredControlTintColor: "black",
-          readerMode: false,
-          animated: true,
-          modalPresentationStyle: "fullScreen",
-          modalTransitionStyle: "coverVertical",
-          modalEnabled: true,
-          enableBarCollapsing: false,
-          // Android Properties
-          showTitle: true,
-          toolbarColor: "white",
-          secondaryToolbarColor: "black",
-          navigationBarColor: "black",
-          navigationBarDividerColor: "white",
-          enableUrlBarHiding: true,
-          enableDefaultShare: true,
-          forceCloseOnRedirection: false,
-          // Specify full animation resource identifier(package:anim/name)
-          // or only resource name(in case of animation bundled with app).
-          animations: {
-            startEnter: "slide_in_right",
-            startExit: "slide_out_left",
-            endEnter: "slide_in_left",
-            endExit: "slide_out_right",
-          },
-          headers: {
-            "my-custom-header": "my custom header value",
-          },
-        });
-      } else Linking.openURL(url);
+      await openUrl(url);
     } catch (error) {
-      Alert.alert(error.message);
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
     }
   };
-
   return (
     <View className="relative w-full">
       <View className="relative mb-1">
@@ -130,14 +109,14 @@ const AdCard: FC<IAdCardProps> = ({ item }) => {
             <AdImage
               name={item?.caption}
               image={item?.image as string}
-              onPress={openUrlInApp}
+              onPress={() => handleOpenLink(item?.url)}
             />
           ) : null}
           {item?.video ? (
             <AdVideo
               name={item?.caption}
               video={item?.video as string}
-              onPress={openUrlInApp}
+              onPress={() => handleOpenLink(item?.url)}
             />
           ) : null}
         </View>

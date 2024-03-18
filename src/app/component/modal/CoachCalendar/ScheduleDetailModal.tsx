@@ -21,12 +21,13 @@ import PopUpMenu from "../../common/PopUpMenu";
 
 import CloseBtn from "../../asset/close.svg";
 import LinkIcon from "../../asset/link.svg";
-import { openUrlInApp } from "../../../utils/inAppBrowser";
 import EditScheduleModal from "./EditScheduleModal";
 import GlobalToastController from "../../common/Toast/GlobalToastController";
 import ToastInModal from "../../common/Toast/ToastInModal";
 import ConfirmDialog from "../../common/Dialog/ConfirmDialog/ConfirmDialog";
 import Toast from "../../common/Toast/Toast";
+import { openUrl } from "../../../utils/linking.util";
+import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 
 interface IScheduleDetailModalProps {
   isVisible: boolean;
@@ -123,6 +124,24 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
     }
   }, [isToastVisible]);
 
+  const handleOpenLink = async (url: string) => {
+    if (!url) {
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
+      return;
+    }
+    try {
+      await openUrl(url);
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -183,11 +202,10 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
                   />
                 )
               }
-              containerStyle={Platform.OS === "ios" ? "my-4" : "mt-0"}
             />
           </View>
 
-          <View className="flex-1 gap-2 rounded-[10px] bg-white px-4">
+          <View className="mt-6 flex-1 rounded-[10px] bg-white px-4">
             <View className="flex-row items-start">
               <View className="flex-col">
                 <Text className="text-base font-semibold text-primary-default">
@@ -216,9 +234,7 @@ const ScheduleDetailModal: FC<IScheduleDetailModalProps> = ({
               </Text>
               <TouchableOpacity
                 className="flex flex-row items-center gap-2"
-                onPress={() => {
-                  openUrlInApp(localSchedule?.meetingUrl);
-                }}
+                onPress={() => handleOpenLink(localSchedule?.meetingUrl)}
               >
                 <LinkIcon width={12} height={12} />
                 <View className="whitespace-nowrap">

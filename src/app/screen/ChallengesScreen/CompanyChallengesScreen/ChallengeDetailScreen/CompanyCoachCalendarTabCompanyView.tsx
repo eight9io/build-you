@@ -4,7 +4,6 @@ import { EvilIcons } from "@expo/vector-icons";
 import React, { FC, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
-import { IUserData } from "../../../../types/user";
 import { IProposalTime } from "../../../../types/schedule";
 import { ICertifiedChallengeState } from "../../../../types/challenge";
 
@@ -12,8 +11,6 @@ import {
   createVoteScheduleVideoCall,
   getAllScheduleVideoCall,
 } from "../../../../service/schedule";
-import { openUrlInApp } from "../../../../utils/inAppBrowser";
-import { serviceGetOtherUserData } from "../../../../service/user";
 
 import { useErrorModal } from "../../../../hooks/useErrorModal";
 import { onCopyLink } from "../../../../utils/shareLink.util";
@@ -26,6 +23,7 @@ import GlobalDialogController from "../../../../component/common/Dialog/GlobalDi
 
 import LinkSvg from "./assets/link.svg";
 import EmptySvg from "./assets/emptyFollow.svg";
+import { openUrl } from "../../../../utils/linking.util";
 
 interface IProposedTimeTag {
   translate: (key: string) => string;
@@ -64,7 +62,14 @@ const ConfirmedRequestedCall = ({
       });
       return;
     }
-    openUrlInApp(metingUrl);
+    try {
+      await openUrl(metingUrl);
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: translate("error"),
+        message: translate("error_general_message"),
+      });
+    }
   };
 
   const dateTimeObject = new Date(confirmedOption.proposal);

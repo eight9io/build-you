@@ -9,7 +9,6 @@ import { IScheduledTime } from "../../types/schedule";
 import { COACH_CALENDAR_TABS_KEY } from "../../common/enum";
 
 import { useTabIndex } from "../../hooks/useTabIndex";
-import { openUrlInApp } from "../../utils/inAppBrowser";
 import { useUserProfileStore } from "../../store/user-store";
 
 import { getAllScheduleByChallengeId } from "../../service/schedule";
@@ -28,6 +27,8 @@ import LinkIcon from "../../component/asset/link.svg";
 import EditScheduleLinkModal from "../modal/CoachCalendar/EditScheduleLinkModal";
 import { serviceUpdateCalendlyLink } from "../../service/profile";
 import GlobalToastController from "../common/Toast/GlobalToastController";
+import { openUrl } from "../../utils/linking.util";
+import GlobalDialogController from "../common/Dialog/GlobalDialog/GlobalDialogController";
 
 interface IIndividualCoachCalendarTabProps {
   coachData: IUserData;
@@ -120,6 +121,7 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({
   link,
   setCoachCalendyLink,
 }) => {
+  const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const onEditScheduleLink = () => {
     setIsModalVisible(true);
@@ -139,6 +141,24 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({
         message: translate("error_general_message"),
       });
       console.error(error);
+    }
+  };
+
+  const handleOpenLink = async (url: string) => {
+    if (!url) {
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
+      return;
+    }
+    try {
+      await openUrl(url);
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: t("error"),
+        message: t("error_general_message"),
+      });
     }
   };
 
@@ -166,7 +186,7 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({
       <View className="my-3 h-px self-stretch border border-slate-200"></View>
       <TouchableOpacity
         className="flex flex-row items-center gap-2"
-        onPress={() => openUrlInApp(link)}
+        onPress={() => handleOpenLink(link)}
       >
         <LinkIcon width={12} height={12} />
         <View className="whitespace-nowrap">
@@ -334,7 +354,7 @@ export const IndividualCoachCalendarTab: FC<
             setCoachCalendyLink={setCoachCalendyLink}
           />
         ))}
-      <View className="m-4 flex-1">
+      <View className="flex-1 p-4">
         <TagBasedTabView
           routes={tabRoutes}
           renderScene={renderScene}

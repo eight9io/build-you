@@ -8,7 +8,6 @@ import {
   IProposalTime,
   IProposingScheduleTime,
 } from "../../../../types/schedule";
-import { IUserData } from "../../../../types/user";
 import { ICertifiedChallengeState } from "../../../../types/challenge";
 
 import {
@@ -16,7 +15,6 @@ import {
   getAllScheduleVideoCall,
   resetScheduledVideoCall,
 } from "../../../../service/schedule";
-import { openUrlInApp } from "../../../../utils/inAppBrowser";
 import { useErrorModal } from "../../../../hooks/useErrorModal";
 
 import LinkSvg from "./assets/link.svg";
@@ -32,6 +30,7 @@ import GlobalToastController from "../../../../component/common/Toast/GlobalToas
 import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { onCopyLink } from "../../../../utils/shareLink.util";
+import { openUrl } from "../../../../utils/linking.util";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;
@@ -88,7 +87,14 @@ const ConfirmedRequestedCall = ({
       });
       return;
     }
-    openUrlInApp(confirmedOption.metingUrl);
+    try {
+      await openUrl(confirmedOption.metingUrl);
+    } catch (error) {
+      GlobalDialogController.showModal({
+        title: translate("error"),
+        message: translate("error_general_message"),
+      });
+    }
   };
   const dateTimeObject = new Date(confirmedOption.proposal);
 

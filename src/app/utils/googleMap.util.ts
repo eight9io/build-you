@@ -52,16 +52,8 @@ export const extractNearbyAddresses = (data: {
   };
 };
 
-export const extractLocation = (data: {
-  plus_code: {
-    compound_code: string;
-    global_code: string;
-  };
-  results: GeoLocation[];
-}) => {
-  // return list of locations in result
-  const { results } = data;
-  const addresses: ISelectOption[] = results.map((location) => {
+export const extractLocation = (data: google.maps.GeocoderResult[]) => {
+  const addresses: ISelectOption[] = data.map((location) => {
     return {
       key: `${location.geometry.location.lat},${location.geometry.location.lng}`,
       label: location.formatted_address,

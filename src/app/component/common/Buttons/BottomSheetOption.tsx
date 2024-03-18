@@ -11,6 +11,7 @@ interface IBottomSheetOptionProps {
   isDisabled?: boolean;
   disabledContainerClassName?: string;
   disabledTextClassName?: string;
+  autoHeight?: boolean;
 }
 
 const BottomSheetOption: FC<IBottomSheetOptionProps> = ({
@@ -22,13 +23,15 @@ const BottomSheetOption: FC<IBottomSheetOptionProps> = ({
   containerClassName,
   disabledTextClassName,
   disabledContainerClassName,
+  autoHeight,
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       className={clsx(
-        "mr-1 flex h-12 items-center justify-center rounded-full",
-        isDisabled ? disabledContainerClassName : containerClassName
+        "mr-1 flex items-center justify-center rounded-full",
+        isDisabled ? disabledContainerClassName : containerClassName,
+        autoHeight ? "" : "h-12"
       )}
       onPress={onPress}
       disabled={isDisabled}

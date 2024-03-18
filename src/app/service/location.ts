@@ -1,39 +1,37 @@
-import httpInstance from "../utils/http";
+import { Loader } from "@googlemaps/js-api-loader";
+import { LocationObjectCoords } from "expo-location";
+
 import { GOOGLE_MAP_API } from "../common/constants";
-import { ExtractedGeoLocation, extractLocation } from "../utils/googleMap.util";
+import { extractLocation } from "../utils/googleMap.util";
 import { ISelectOption } from "../types/common";
-import axios from "axios";
-import { CrashlyticService } from "./crashlytic";
+
+const loader = new Loader({
+  apiKey: GOOGLE_MAP_API.API_KEY,
+  libraries: ["geocoding"],
+});
 
 export const getNearbyLocations = async (
-  coords: string
+  coords: LocationObjectCoords
 ): Promise<ISelectOption[]> => {
-  const params = new URLSearchParams();
-  if (!GOOGLE_MAP_API.API_KEY) {
-    throw new Error("Google Map API key is not defined");
+  let geoCoder: google.maps.Geocoder;
+  try {
+    const { Geocoder } = await loader.importLibrary("geocoding");
+    geoCoder = new Geocoder();
+  } catch (error) {
+    console.error("Error when importing google map library: ", error);
+    throw new Error("Error when importing google map library");
   }
-  params.append("key", GOOGLE_MAP_API.API_KEY || "");
 
   try {
-    const response = await axios.get(
-      GOOGLE_MAP_API.NEARBY_SEARCH_ENDPOINT +
-        "?" +
-        `latlng=${coords}&key=${GOOGLE_MAP_API.API_KEY}`,
-      {
-        baseURL: GOOGLE_MAP_API.BASE_URL,
-        headers: {
-          "X-Ios-Bundle-Identifier": "it.buildyou.buildyou",
-          "X-Android-Package": "com.buildyou.buildyou",
-          "X-Android-Cert": process.env.EXPO_ANDROID_CERT,
-        },
-      }
-    );
-    return extractLocation(response.data);
+    const response = await geoCoder.geocode({
+      location: {
+        lat: coords.latitude,
+        lng: coords.longitude,
+      },
+    });
+    return extractLocation(response.results);
   } catch (error) {
     console.error("error: ", error);
-    CrashlyticService({
-      errorType: "Get Nearby Locations Error",
-      error: error,
-    });
+    throw new Error("Error when getting nearby locations");
   }
 };

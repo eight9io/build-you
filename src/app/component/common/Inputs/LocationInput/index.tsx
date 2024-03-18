@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import clsx from "clsx";
+import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
-import { View, Text, Linking } from "react-native";
+import { View } from "react-native";
 import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
 
@@ -39,46 +38,43 @@ const LocationInput: React.FC<ILocationInputProps> = ({
     useState<boolean>(false);
 
   const handleTextInputPress = async () => {
-    const currentPermission = await Location.getForegroundPermissionsAsync();
-    if (currentPermission && currentPermission.granted) {
-      await fetchNearbyLocations();
-      setShowLocationPicker(true);
-    } else {
-      // Request permission to access location
-      const permission = await Location.requestForegroundPermissionsAsync();
-      if (permission.granted) {
-        await fetchNearbyLocations();
+    // Request permission to access location
+    const permission = await Location.requestForegroundPermissionsAsync();
+    if (permission.granted) {
+      try {
+        if (nearbyLocations.length === 0)
+          // Avoid calling google map api multiple times
+          await fetchNearbyLocations();
         setShowLocationPicker(true);
-      } else if (!permission.canAskAgain) {
-        // Case: user denied permission => show dialog to open settings to enable location
-        setRequireLocationModalVisible(true);
+      } catch (error) {
+        setShowLocationPicker(false);
       }
-    }
+    } else setRequireLocationModalVisible(true); // Cases when user denied permission or the browser doesn't asking again even though the canAskAgain is true
   };
 
   const fetchNearbyLocations = async (isLoadMore?: boolean) => {
     setFetchLocationLoading(true);
-    const { coords } = await Location.getCurrentPositionAsync();
-    const extractedCoords = `${coords.latitude},${coords.longitude}`;
-    if (isLoadMore !== undefined && isLoadMore) {
-      if (!nextPageToken) {
-        setFetchLocationLoading(false);
-        return;
+    try {
+      const { coords } = await Location.getCurrentPositionAsync();
+      if (isLoadMore !== undefined && isLoadMore) {
+        if (!nextPageToken) {
+          setFetchLocationLoading(false);
+          return;
+        }
+        const addresses = await getNearbyLocations(coords);
+        if (addresses.length > 0) setNearbyLocations([...addresses]);
+      } else {
+        const addresses = await getNearbyLocations(coords);
+        if (addresses.length > 0) setNearbyLocations(addresses);
       }
-      const addresses = await getNearbyLocations(extractedCoords);
-      if (addresses.length > 0) setNearbyLocations([...addresses]);
-    } else {
-      const addresses = await getNearbyLocations(extractedCoords);
-      if (addresses.length > 0) setNearbyLocations(addresses);
+      setFetchLocationLoading(false);
+    } catch (error) {
+      setFetchLocationLoading(false);
+      throw error;
     }
-    setFetchLocationLoading(false);
   };
   const handleCloseRequireLocationModal = () => {
     setRequireLocationModalVisible(false);
-  };
-  const handleConfirmRequireLocationModal = () => {
-    setRequireLocationModalVisible(false);
-    Linking.openSettings();
   };
 
   const handleLocationPicked = (index: number) => {
@@ -124,6 +120,9 @@ const LocationInput: React.FC<ILocationInputProps> = ({
           setShowLocationPicker(false);
         }}
         onLoadMore={() => fetchNearbyLocations(true)}
+        optionContainerClassName="px-4 py-3"
+        optionTextClassName="text-[14px]"
+        optionAutoHeight
       />
       <ConfirmDialog
         title={t("dialog.alert_title") || ""}
@@ -131,8 +130,6 @@ const LocationInput: React.FC<ILocationInputProps> = ({
         isVisible={requireLocationModalVisible}
         onClosed={handleCloseRequireLocationModal}
         closeButtonLabel={t("close") || ""}
-        confirmButtonLabel={t("dialog.open_settings") || ""}
-        onConfirm={handleConfirmRequireLocationModal}
       />
     </View>
   );

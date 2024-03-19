@@ -70,15 +70,14 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
         </Text>
       ) : null}
       <View className="relative flex-1">
-        <View pointerEvents={"auto"} className="relative flex-1">
+        {/* Use font-regular to override react-mentions font family */}
+        <View
+          pointerEvents={"auto"}
+          className="relative flex-1 font-regular text-[14px]"
+        >
           <MentionsInput
             {...inputProps}
             onChange={(event, newValue, newPlainTextValue, mentions) => {
-              console.log("mentions: ", mentions);
-              console.log("newPlainTextValue: ", newPlainTextValue);
-              console.log("newValue: ", newValue);
-              console.log("event: ", event);
-
               inputProps.onChange(event, newValue, newPlainTextValue, mentions);
             }}
             allowSuggestionsAboveCursor

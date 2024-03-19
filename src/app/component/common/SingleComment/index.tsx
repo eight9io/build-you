@@ -69,6 +69,7 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
       <Text
         key={`${index}-${part.data?.trigger}`}
         style={part.partType.textStyle}
+        className="font-regular"
         onPress={() => navigateToUserProfile(part.data?.id)}
       >
         {part.text}
@@ -77,11 +78,19 @@ const renderPart = (part: Part, index: number, navigataion: any) => {
   }
   // Just plain text
   if (!part.partType) {
-    return <Text key={index}>{part.text}</Text>;
+    return (
+      <Text key={index} className="font-regular">
+        {part.text}
+      </Text>
+    );
   }
 
   return (
-    <Text key={`${index}-pattern`} style={part.partType.textStyle}>
+    <Text
+      key={`${index}-pattern`}
+      style={part.partType.textStyle}
+      className="font-regular"
+    >
       {part.text}
     </Text>
   );

@@ -62,6 +62,8 @@ const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
             shadowRadius: 1,
           },
         }}
+        controlsEnabled={Array.isArray(imageSrc) && imageSrc.length > 1}
+        gesturesEnabled={() => Array.isArray(imageSrc) && imageSrc.length > 1}
       >
         {typeof imageSrc === "string" ? (
           <ImageItem imageSrc={imageSrc.trim()} />

@@ -19,6 +19,7 @@ import VideoPlayer from "../common/VideoPlayer";
 import CloseIcon from "../asset/close.svg";
 import GlobalToastController from "../common/Toast/GlobalToastController";
 import CustomActivityIndicator from "../common/CustomActivityIndicator";
+import { getSeperateImageUrls } from "../../utils/image";
 
 interface IEditChallengeProgressModalProps {
   progress: IProgressChallenge;
@@ -125,7 +126,9 @@ export const EditChallengeProgressModal: FC<
           </View>
           {progress?.image ? (
             <View className="mt-5 aspect-square w-full">
-              <ImageSwiper imageSrc={progress?.image.replace(";", "") || ""} />
+              <ImageSwiper
+                imageSrc={getSeperateImageUrls(progress?.image) || ""}
+              />
             </View>
           ) : progress.video ? (
             <View className="mt-5 aspect-square w-full">

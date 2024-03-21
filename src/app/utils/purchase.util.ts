@@ -1,27 +1,16 @@
-import { EmitterSubscription, Platform } from "react-native";
+import { Platform } from "react-native";
 import {
   requestPurchase,
-  flushFailedPurchasesCachedAsPendingAndroid,
   ProductPurchase,
-  purchaseErrorListener,
-  PurchaseError,
   RequestPurchase,
   getProducts as getProductsFromProvider,
-  Product,
   Purchase,
   finishTransaction,
-  purchaseUpdatedListener,
-  SubscriptionPurchase,
 } from "react-native-iap";
 import getSymbolFromCurrency from "currency-symbol-map";
-import {
-  getProducts,
-  verifyApplePurchase,
-  verifyGooglePurchase,
-} from "../service/purchase";
+import { verifyApplePurchase, verifyGooglePurchase } from "../service/purchase";
 import {
   IInAppPurchaseProduct,
-  IProductFromStore,
   IVerifyApplePurchaseResponse,
   IVerifyGooglePurchaseResponse,
   receiptDataAndroid,
@@ -32,43 +21,10 @@ import {
   PRODUCT_PACKAGE_TYPE,
   PRODUCT_PLATFORM,
 } from "../common/enum";
-
-export const registerIAPListeners = async (): Promise<{
-  updateSubscription: EmitterSubscription;
-  errorSubscription: EmitterSubscription;
-}> => {
-  if (Platform.OS === "android") {
-    try {
-      // we make sure that "ghost" pending payment are removed
-      // (ghost = failed pending payment that are still marked as pending in Google's native Vending module cache)
-      await flushFailedPurchasesCachedAsPendingAndroid();
-    } catch (error) {
-      console.log("error: ", error);
-      // exception can happen here if:
-      // - there are pending purchases that are still pending (we can't consume a pending purchase)
-      // in any case, you might not want to do anything special with the error
-    }
-  }
-
-  // NOTE: Not using purchaseUpdatedListener for now since backend will handle the "finishTransaction" part
-  const updateSubscription = null;
-
-  // This listener will receive unfinished purchase payload every app launch until it is finished
-  // User cannot request for new purchases if there is an unfinished purchase
-  // const updateSubscription = purchaseUpdatedListener(
-  //   (purchase: SubscriptionPurchase | ProductPurchase) => {
-  //     console.log(
-  //       "purchaseUpdatedListener",
-  //       JSON.stringify(purchase, null, "\t")
-  //     );
-  //   }
-  // );
-
-  const errorSubscription = purchaseErrorListener((error: PurchaseError) => {
-    console.warn("purchaseErrorListener", error);
-  });
-  return { updateSubscription, errorSubscription };
-};
+import { IPackage, PACKAGE_TYPE } from "../types/package";
+import { getLanguageLocalStorage } from "./language";
+import { serviceGetAllPackages } from "../service/package";
+import { ICreateChallenge } from "../types/challenge";
 
 export const requestPurchaseChecks = (productId: string) => {
   const requestPurchaseParams: RequestPurchase = {
@@ -80,26 +36,6 @@ export const requestPurchaseChecks = (productId: string) => {
   return getProductsFromProvider({ skus: [productId] }).then(() => {
     return requestPurchase(requestPurchaseParams);
   });
-};
-
-export const getProductFromDatabase = async (
-  packageType: string,
-  numOfChecks: number
-) => {
-  const res = await getProducts(); // Get product list from database
-  if (res.data) {
-    const products = res.data;
-    const productToBeFetched = extractProductByPlatform(
-      products,
-      packageType === "videocall"
-        ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
-        : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE,
-      numOfChecks + 1,
-      Platform.OS
-    );
-    return productToBeFetched;
-  }
-  return null;
 };
 
 export const extractProductByPlatform = (
@@ -204,91 +140,91 @@ export const verifyPurchase = async (
   }
 };
 
-export const getProductsFromStoreToDisplay = async () => {
-  // Get product from store to display in payment screen (unit price)
-  const res = await getProducts(); // Get product list from database
-  if (res.data) {
-    const products = res.data;
-    const { chatCheck, videoCheck, chatPackage, videoPackage } =
-      extractProductWithUnitPrice(products);
-    if (!chatCheck || !videoCheck || !chatPackage || !videoPackage) return null;
+// export const getProductsFromStoreToDisplay = async () => {
+//   // Get product from store to display in payment screen (unit price)
+//   const res = await getProducts(); // Get product list from database
+//   if (res.data) {
+//     const products = res.data;
+//     const { chatCheck, videoCheck, chatPackage, videoPackage } =
+//       extractProductWithUnitPrice(products);
+//     if (!chatCheck || !videoCheck || !chatPackage || !videoPackage) return null;
 
-    // Fetch product from store to get localized price based on device's locale
-    const packagesFromStore = await getProductsFromProvider({
-      skus: [
-        chatCheck.productId,
-        videoCheck.productId,
-        chatPackage.productId,
-        videoPackage.productId,
-      ],
-    });
+//     // Fetch product from store to get localized price based on device's locale
+//     const packagesFromStore = await getProductsFromProvider({
+//       skus: [
+//         chatCheck.productId,
+//         videoCheck.productId,
+//         chatPackage.productId,
+//         videoPackage.productId,
+//       ],
+//     });
 
-    const result: {
-      chatPackage: IProductFromStore;
-      videoPackage: IProductFromStore;
-      chatCheck: IProductFromStore;
-      videoCheck: IProductFromStore;
-    } = {
-      chatPackage: null,
-      videoPackage: null,
-      chatCheck: null,
-      videoCheck: null,
-    };
+//     const result: {
+//       chatPackage: IProductFromStore;
+//       videoPackage: IProductFromStore;
+//       chatCheck: IProductFromStore;
+//       videoCheck: IProductFromStore;
+//     } = {
+//       chatPackage: null,
+//       videoPackage: null,
+//       chatCheck: null,
+//       videoCheck: null,
+//     };
 
-    if (packagesFromStore.length === 0) return null;
+//     if (packagesFromStore.length === 0) return null;
 
-    packagesFromStore.forEach((packageFromStore) => {
-      const price =
-        Platform.OS === "ios"
-          ? Number(packageFromStore.price)
-          : priceMicrosToPrice(
-              Number(
-                Number(
-                  packageFromStore.oneTimePurchaseOfferDetails.priceAmountMicros
-                ).toFixed(2)
-              )
-            );
-      switch (packageFromStore.productId) {
-        case chatCheck.productId:
-          result.chatCheck = {
-            ...packageFromStore,
-            price: price || 0,
-          };
-          break;
-        case videoCheck.productId:
-          result.videoCheck = {
-            ...packageFromStore,
-            price: price || 0,
-          };
-          break;
-        case chatPackage.productId:
-          result.chatPackage = {
-            ...packageFromStore,
-            price: price || 0,
-          };
-          break;
-        case videoPackage.productId:
-          result.videoPackage = {
-            ...packageFromStore,
-            price: price || 0,
-          };
-          break;
-      }
-    });
-    return result;
-  }
-  return null;
-};
+//     packagesFromStore.forEach((packageFromStore) => {
+//       const price =
+//         Platform.OS === "ios"
+//           ? Number(packageFromStore.price)
+//           : priceMicrosToPrice(
+//               Number(
+//                 Number(
+//                   packageFromStore.oneTimePurchaseOfferDetails.priceAmountMicros
+//                 ).toFixed(2)
+//               )
+//             );
+//       switch (packageFromStore.productId) {
+//         case chatCheck.productId:
+//           result.chatCheck = {
+//             ...packageFromStore,
+//             price: price || 0,
+//           };
+//           break;
+//         case videoCheck.productId:
+//           result.videoCheck = {
+//             ...packageFromStore,
+//             price: price || 0,
+//           };
+//           break;
+//         case chatPackage.productId:
+//           result.chatPackage = {
+//             ...packageFromStore,
+//             price: price || 0,
+//           };
+//           break;
+//         case videoPackage.productId:
+//           result.videoPackage = {
+//             ...packageFromStore,
+//             price: price || 0,
+//           };
+//           break;
+//       }
+//     });
+//     return result;
+//   }
+//   return null;
+// };
 
-export const getAllProductsFromStore = async () => {
-  try {
-    const res = await getProducts(); // Get product list from database
-    return res?.data;
-  } catch (error) {
-    console.error("Failed to get products:", error);
-    throw error;
-  }
-};
+// export const getAllProductsFromStore = async () => {
+//   try {
+//     const res = await getProducts(); // Get product list from database
+//     return res?.data;
+//   } catch (error) {
+//     console.error("Failed to get products:", error);
+//     throw error;
+//   }
+// };
 
 const extractProductWithUnitPrice = (products: IInAppPurchaseProduct[]) => {
   let chatCheck = null;
@@ -333,4 +269,38 @@ export const getCurrencySymbol = (currency: string) => {
 export const priceMicrosToPrice = (priceMicros: number) => {
   if (isNaN(Number(priceMicros))) return 0;
   return Number(priceMicros) / 1000000;
+};
+
+export const getTranslatedBasicPackages = async () => {
+  const currentLanguage = await getLanguageLocalStorage();
+  let chatPackage: IPackage = null;
+  let videoPackage: IPackage = null;
+  try {
+    const res = await serviceGetAllPackages(currentLanguage);
+    chatPackage = res.data.packages.find(
+      (item) => item.type === PACKAGE_TYPE.CHAT
+    );
+    videoPackage = res.data.packages.find(
+      (item) => item.type === PACKAGE_TYPE.VIDEO_CALL
+    );
+  } catch (error) {
+    console.error("get packages error", error);
+  }
+  return { chatPackage, videoPackage };
+};
+
+export const getPurchasingChallengeData = () => {
+  const challengeData = localStorage.getItem("purchasingChallengeData");
+  if (!challengeData) return null;
+  return JSON.parse(challengeData);
+};
+
+export const setPurchasingChallengeData = (
+  challengeData?: ICreateChallenge
+) => {
+  if (!challengeData) return localStorage.removeItem("purchasingChallengeData");
+  return localStorage.setItem(
+    "purchasingChallengeData",
+    JSON.stringify(challengeData)
+  );
 };

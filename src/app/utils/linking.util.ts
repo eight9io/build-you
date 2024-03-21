@@ -23,6 +23,14 @@ export const LinkingConfig = {
               },
             },
           },
+          // Challenges: {
+          //   initialRouteName: "PersonalChallengesScreen",
+          //   screens: {
+          //     PersonalChallengeDetailScreen: {
+          //       path: "/payment/:challengeId?payment_success=:paymentSuccess",
+          //     },
+          //   },
+          // },
         },
       },
     },

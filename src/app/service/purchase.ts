@@ -1,11 +1,11 @@
 import httpInstance from "../utils/http";
 import {
-  IInAppPurchaseProduct,
   IVerifyApplePurchase,
   IVerifyApplePurchaseResponse,
   IVerifyGooglePurchase,
   IVerifyGooglePurchaseResponse,
 } from "../types/purchase";
+import { IPackage } from "../types/package";
 
 export const verifyGooglePurchase = (payload: IVerifyGooglePurchase) => {
   return httpInstance.post<IVerifyGooglePurchaseResponse>(
@@ -21,6 +21,12 @@ export const verifyApplePurchase = (payload: IVerifyApplePurchase) => {
   );
 };
 
-export const getProducts = () => {
-  return httpInstance.get<IInAppPurchaseProduct[]>("/purchase/productList");
+export const getBasicPackages = () => {
+  return httpInstance.get<IPackage[]>("/purchase/stripe/products/basic");
+};
+
+export const getPackage = (type: "chat" | "video", numOfChecks: number) => {
+  return httpInstance.get<IPackage>(
+    `/purchase/stripe/products/${type}/${numOfChecks}`
+  );
 };

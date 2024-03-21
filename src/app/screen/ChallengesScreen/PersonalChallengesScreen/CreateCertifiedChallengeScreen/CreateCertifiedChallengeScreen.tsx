@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Platform,
@@ -26,6 +26,10 @@ import { useCreateChallengeDataStore } from "../../../../store/create-challenge-
 import { ICreateChallenge } from "../../../../types/challenge";
 import dayjs from "../../../../utils/date.util";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
+import {
+  getPurchasingChallengeData,
+  setPurchasingChallengeData,
+} from "../../../../utils/purchase.util";
 
 interface ICreateCertifiedChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
@@ -60,13 +64,14 @@ const CreateCertifiedChallengeScreen = () => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
 
-  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
+  const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
+    useCreateChallengeDataStore();
 
   const {
     control,
     getValues,
     setValue,
-    watch,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<ICreateCertifiedChallengeForm>({
@@ -83,6 +88,14 @@ const CreateCertifiedChallengeScreen = () => {
       CreateCertifiedChallengeValidationSchema()
     ) as unknown as Resolver<ICreateCertifiedChallengeForm, any>,
   });
+
+  // useEffect(() => {
+  //   const cachedChallenge = getPurchasingChallengeData();
+  //   if (cachedChallenge) {
+  //     reset(cachedChallenge);
+  //     setPurchasingChallengeData(null); // The cached data should only be used once
+  //   }
+  // }, []);
 
   const handleShowDatePicker = () => {
     setShowDatePicker(true);

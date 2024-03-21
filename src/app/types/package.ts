@@ -4,7 +4,10 @@ export interface IPackage {
   price: number;
   currency: string;
   caption: string;
+  description?: string;
   type: PACKAGE_TYPE;
+  formattedPrice: string;
+  check: number;
 }
 
 export enum PACKAGE_TYPE {

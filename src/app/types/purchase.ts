@@ -3,6 +3,7 @@ import {
   APPLE_IN_APP_PURCHASE_STATUS,
   GOOGLE_IN_APP_PURCHASE_STATUS,
 } from "../common/enum";
+import { PACKAGE_TYPE } from "./package";
 
 export interface receiptDataAndroid {
   orderId: string;

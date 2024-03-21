@@ -5,7 +5,14 @@ import {
   BottomTabBar,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import { View, Text, Platform } from "react-native";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+
+import { View, Text, Dimensions } from "react-native";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import HomeScreen from "../../screen/HomeScreen";
@@ -15,11 +22,13 @@ import CompanyProfileScreen from "../../screen/ProfileScreen/Company/CompanyProf
 import PersonalChallengesNavigator from "../../screen/ChallengesScreen/PersonalChallengesScreen/PersonalChallengesNavigator";
 import CompanyChallengesScreen from "../../screen/ChallengesScreen/CompanyChallengesScreen/CompanyChallengsNavigator";
 
+import BuildYouLogo from "../../common/svg/buildYou_logo_top_app.svg";
 import FeedSvg from "./asset/feed.svg";
 import FeedFillSvg from "./asset/feed-fill.svg";
 import CreateSvg from "./asset/create.svg";
 import CreateFillSvg from "./asset/create-fill.svg";
 import ChallengesSvg from "./asset/challenges.svg";
+import ChallengesFillSvg from "./asset/challenges-fill.svg";
 import ProfileSvg from "./asset/profile.svg";
 import ProfileFillSvg from "./asset/profile-fill.svg";
 import NotificationIcon from "./asset/noti.svg";
@@ -33,8 +42,10 @@ import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
 import { getNotifications } from "../../service/notification";
 import CreateChallengeScreen from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
+import NavigationService from "../../utils/navigationService";
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 interface IBottomNavBarProps {
   navigation: NativeStackNavigationProp<RootStackParamList, "BottomNavBar">;
@@ -46,11 +57,21 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "ProgressCommentScreen",
   "MainSearchScreen",
   "PersonalCoachChallengeDetailScreen",
+  "SettingsScreenRoot",
+  "CreateChallengeScreen",
+  "CreateCertifiedChallengeScreen",
+  "CreateCompanyChallengeScreen",
+  "CreateCertifiedCompanyChallengeScreen",
+  "ChoosePackageScreen",
+  "CartScreen",
+  "CompanyCartScreen",
+  "EditPersonalProfileScreen",
+  "EditCompanyProfileScreen",
 ];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {
   const { t } = useTranslation();
-  const isAndroid = Platform.OS === "android";
+  const [isDesktopView, setIsDesktopView] = useState(false);
   const [shouldHideTabBar, setShouldHideTabBar] = useState(false);
   const [lastNotiId, setLastNotiId] = useState<string>("");
   const { getNewestNotificationId, setNewestNotificationId } =
@@ -84,181 +105,382 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
       newestNotiId !== null &&
       lastNotiId.toString() !== newestNotiId.toString());
 
-  return (
-    <Tab.Navigator
-      initialRouteName="BottomNavBar"
-      screenOptions={{
-        tabBarShowLabel: false,
-        headerShown: true,
-        headerTitleAlign: "center",
-        tabBarStyle: {
-          display: shouldHideTabBar ? "none" : "flex",
-          backgroundColor: "#FFFFFF",
-          position: "absolute", // Fix tab bar showing as grey bar but no content during the show/hide process. Reference: https://stackoverflow.com/a/76670272
-          height: 86,
-        },
-        headerRightContainerStyle: {
-          paddingRight: 10,
-        },
-        tabBarIconStyle: {
-          width: "100%", // Make sure the tab bar item stretch in large screens
-        },
-      }}
-      screenListeners={({ route }) => {
-        const routeName = getFocusedRouteNameFromRoute(route);
-        if (routeName && SCREENS_TO_HIDE_TAB_BAR.includes(routeName)) {
-          setShouldHideTabBar(true);
-        } else {
-          setShouldHideTabBar(false);
-        }
-        return {};
-      }}
-      tabBar={(props) => (
-        <View
-          style={{
+  useEffect(() => {
+    // Check device width to determine if it's desktop view on the first load
+    if (Dimensions.get("window").width <= 768) {
+      setIsDesktopView(false);
+    } else setIsDesktopView(true);
+    // Add event listener to check if the device width is changed when the app is running
+    const unsubscribeDimensions = Dimensions.addEventListener(
+      "change",
+      ({ window }) => {
+        if (window.width <= 768) {
+          setIsDesktopView(false);
+        } else setIsDesktopView(true);
+      }
+    );
+
+    return () => {
+      unsubscribeDimensions.remove();
+    };
+  }, []);
+
+  if (!isDesktopView)
+    return (
+      <Tab.Navigator
+        initialRouteName="BottomNavBar"
+        screenOptions={{
+          tabBarShowLabel: false,
+          headerShown: true,
+          headerTitleAlign: "center",
+          tabBarStyle: {
             display: shouldHideTabBar ? "none" : "flex",
             backgroundColor: "#FFFFFF",
-            position: "relative", // Make sure all the screen is above the tab bar and not be hidden by it
+            position: "absolute", // Fix tab bar showing as grey bar but no content during the show/hide process. Reference: https://stackoverflow.com/a/76670272
+            height: 86,
+          },
+          headerRightContainerStyle: {
+            paddingRight: 10,
+          },
+          tabBarIconStyle: {
+            width: "100%", // Make sure the tab bar item stretch in large screens
+          },
+        }}
+        screenListeners={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route);
+          if (routeName && SCREENS_TO_HIDE_TAB_BAR.includes(routeName)) {
+            setShouldHideTabBar(true);
+          } else {
+            setShouldHideTabBar(false);
+          }
+          return {};
+        }}
+        tabBar={(props) => (
+          <View
+            style={{
+              display: shouldHideTabBar ? "none" : "flex",
+              backgroundColor: "#FFFFFF",
+              position: "relative", // Make sure all the screen is above the tab bar and not be hidden by it
+            }}
+          >
+            <BottomTabBar {...props} />
+          </View>
+        )}
+      >
+        <Tab.Screen
+          name="Feed"
+          component={HomeScreen}
+          options={() => ({
+            headerShown: false,
+
+            tabBarIcon: ({ focused }) => (
+              <View
+                className={clsx("flex flex-col items-center justify-center")}
+              >
+                {focused ? (
+                  <FeedFillSvg fill={"#FF7B1C"} />
+                ) : (
+                  <FeedSvg fill={"#6C6E76"} />
+                )}
+                <Text
+                  className={clsx(
+                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
+                    focused && "text-primary-default"
+                  )}
+                >
+                  {t("bottom_nav.feed")}
+                </Text>
+              </View>
+            ),
+          })}
+        />
+        <Tab.Screen
+          name="Challenges"
+          component={
+            isCompany ? CompanyChallengesScreen : PersonalChallengesNavigator
+          }
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <View
+                className={clsx("flex flex-col items-center justify-center")}
+              >
+                {focused ? (
+                  <ChallengesFillSvg fill={"#FF7B1C"} />
+                ) : (
+                  <ChallengesSvg fill={"#6C6E76"} />
+                )}
+                <Text
+                  className={clsx(
+                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
+                    focused && "text-primary-default"
+                  )}
+                >
+                  {t("bottom_nav.challenges")}
+                </Text>
+              </View>
+            ),
           }}
-        >
-          <BottomTabBar {...props} />
-        </View>
+        />
+        <Tab.Screen
+          name="Create Challenge"
+          component={CreateChallengeScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View
+                className={clsx("flex flex-col items-center justify-center")}
+                testID="bottom_nav_bar_create_challenge_btn"
+              >
+                {focused ? (
+                  <CreateFillSvg fill={"#FF7B1C"} />
+                ) : (
+                  <CreateSvg fill={"#6C6E76"} />
+                )}
+                <Text
+                  className={clsx(
+                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
+                    focused && "text-primary-default"
+                  )}
+                >
+                  {t("bottom_nav.create")}
+                </Text>
+              </View>
+            ),
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Notifications"
+          component={NotificationsScreen}
+          listeners={() => ({
+            tabPress: () => {
+              if (numOfNewNotifications > 0) refreshNumOfNewNotifications();
+            },
+          })}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <View
+                className={clsx("flex flex-col items-center justify-center")}
+              >
+                {focused ? (
+                  <NotificationFillIcon fill={"#FF7B1C"} />
+                ) : isUserHasNewNotification ? (
+                  <NewNotificationIcon fill={"#6C6E76"} />
+                ) : (
+                  <NotificationIcon fill={"#6C6E76"} />
+                )}
+                <Text
+                  className={clsx(
+                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
+                    focused && "text-primary-default"
+                  )}
+                >
+                  {t("bottom_nav.noti")}
+                </Text>
+              </View>
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Profile"
+          component={!isCompany ? PersonalProfileScreen : CompanyProfileScreen}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <View
+                className={clsx("flex flex-col items-center justify-center")}
+                testID="profile_tab_btn"
+              >
+                {focused ? (
+                  <ProfileFillSvg fill={"#FF7B1C"} />
+                ) : (
+                  <ProfileSvg fill={"#6C6E76"} />
+                )}
+                <Text
+                  className={clsx(
+                    "pt-1.5 text-xs font-semibold text-gray-bottomBar",
+                    focused && "text-primary-default"
+                  )}
+                >
+                  {t("bottom_nav.profile")}
+                </Text>
+              </View>
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    );
+
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        drawerType: "permanent",
+        drawerActiveBackgroundColor: "transparent",
+        drawerActiveTintColor: "#FF7B1C",
+        drawerItemStyle: {
+          marginHorizontal: 8,
+          marginBottom: 8,
+          marginTop: 0,
+          padding: 4,
+        },
+        drawerStyle: {
+          width: 240,
+        },
+      }}
+      drawerContent={(props) => (
+        <DrawerContentScrollView {...props}>
+          <View className="mb-6 mt-8 pl-5 pr-8">
+            <BuildYouLogo />
+          </View>
+          <DrawerItemList {...props} />
+        </DrawerContentScrollView>
       )}
     >
-      <Tab.Screen
+      <Drawer.Screen
         name="Feed"
         component={HomeScreen}
         options={() => ({
           headerShown: false,
-
-          tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
+          drawerIcon: ({ focused }) => (
+            <>
               {focused ? (
-                <FeedFillSvg fill={"#FF7B1C"} />
+                <FeedFillSvg fill={"#FF7B1C"} width={20} height={20} /> // Set fixed width and height for the svg => Fix svg being cut off
               ) : (
-                <FeedSvg fill={"#6C6E76"} />
+                <FeedSvg fill={"#6C6E76"} width={20} height={20} />
               )}
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
-                {t("bottom_nav.feed")}
-              </Text>
-            </View>
+            </>
+          ),
+          drawerLabel: ({ focused }) => (
+            <Text
+              className={clsx(
+                "-ml-5 text-base font-normal text-black-light",
+                focused && "font-bold text-primary-default"
+              )}
+            >
+              {t("bottom_nav.feed")}
+            </Text>
           ),
         })}
       />
-      <Tab.Screen
+      <Drawer.Screen
         name="Challenges"
         component={
           isCompany ? CompanyChallengesScreen : PersonalChallengesNavigator
         }
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
-              <ChallengesSvg fill={focused ? "#FF7B1C" : "#6C6E76"} />
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
-                {t("bottom_nav.challenges")}
-              </Text>
-            </View>
+          drawerIcon: ({ focused }) => (
+            <>
+              {focused ? (
+                <ChallengesFillSvg fill={"#FF7B1C"} width={20} height={20} />
+              ) : (
+                <ChallengesSvg fill={"#6C6E76"} width={20} height={20} />
+              )}
+            </>
+          ),
+          drawerLabel: ({ focused }) => (
+            <Text
+              className={clsx(
+                "-ml-5 text-base font-normal text-black-light",
+                focused && "font-bold text-primary-default"
+              )}
+            >
+              {t("bottom_nav.challenges")}
+            </Text>
           ),
         }}
       />
-      <Tab.Screen
+      <Drawer.Screen
         name="Create Challenge"
         component={CreateChallengeScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View
-              className={clsx("flex flex-col items-center justify-center")}
-              testID="bottom_nav_bar_create_challenge_btn"
-            >
+          drawerIcon: ({ focused }) => (
+            <View testID="bottom_nav_bar_create_challenge_btn">
               {focused ? (
-                <CreateFillSvg fill={"#FF7B1C"} />
+                <CreateFillSvg fill={"#FF7B1C"} width={20} height={20} />
               ) : (
-                <CreateSvg fill={"#6C6E76"} />
+                <CreateSvg fill={"#6C6E76"} width={20} height={20} />
               )}
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
-                {t("bottom_nav.create")}
-              </Text>
             </View>
+          ),
+          drawerLabel: ({ focused }) => (
+            <Text
+              className={clsx(
+                "-ml-5 text-base font-normal text-black-light",
+                focused && "font-bold text-primary-default"
+              )}
+            >
+              {t("bottom_nav.create")}
+            </Text>
           ),
           headerShown: false,
         }}
       />
-      <Tab.Screen
+      <Drawer.Screen
         name="Notifications"
         component={NotificationsScreen}
         listeners={() => ({
-          tabPress: () => {
+          drawerItemPress: () => {
             if (numOfNewNotifications > 0) refreshNumOfNewNotifications();
           },
         })}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <View className={clsx("flex flex-col items-center justify-center")}>
+          drawerIcon: ({ focused }) => (
+            <>
               {focused ? (
-                <NotificationFillIcon fill={"#FF7B1C"} />
+                <NotificationFillIcon fill={"#FF7B1C"} width={20} height={20} />
               ) : isUserHasNewNotification ? (
-                <NewNotificationIcon fill={"#6C6E76"} />
+                <NewNotificationIcon fill={"#6C6E76"} width={20} height={20} />
               ) : (
-                <NotificationIcon fill={"#6C6E76"} />
+                <NotificationIcon fill={"#6C6E76"} width={20} height={20} />
               )}
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
-                {t("bottom_nav.noti")}
-              </Text>
-            </View>
+            </>
+          ),
+          drawerLabel: ({ focused }) => (
+            <Text
+              className={clsx(
+                "-ml-5 text-base font-normal text-black-light",
+                focused && "font-bold text-primary-default"
+              )}
+            >
+              {t("bottom_nav.noti")}
+            </Text>
           ),
         }}
       />
 
-      <Tab.Screen
+      <Drawer.Screen
         name="Profile"
         component={!isCompany ? PersonalProfileScreen : CompanyProfileScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <View
-              className={clsx("flex flex-col items-center justify-center")}
-              testID="profile_tab_btn"
-            >
+          drawerIcon: ({ focused }) => (
+            <View testID="profile_tab_btn">
               {focused ? (
-                <ProfileFillSvg fill={"#FF7B1C"} />
+                <ProfileFillSvg fill={"#FF7B1C"} width={20} height={20} />
               ) : (
-                <ProfileSvg fill={"#6C6E76"} />
+                <ProfileSvg fill={"#6C6E76"} width={20} height={20} />
               )}
-              <Text
-                className={clsx(
-                  "pt-1.5 text-xs font-semibold text-gray-bottomBar",
-                  focused && "text-primary-default"
-                )}
-              >
-                {t("bottom_nav.profile")}
-              </Text>
             </View>
+          ),
+          drawerLabel: ({ focused }) => (
+            <Text
+              className={clsx(
+                "-ml-5 text-base font-normal text-black-light",
+                focused && "font-bold text-primary-default"
+              )}
+            >
+              {t("bottom_nav.profile")}
+            </Text>
           ),
         }}
       />
-    </Tab.Navigator>
+    </Drawer.Navigator>
   );
 };
 

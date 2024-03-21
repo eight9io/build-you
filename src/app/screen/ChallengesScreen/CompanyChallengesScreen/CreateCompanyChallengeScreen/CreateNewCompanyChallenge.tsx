@@ -208,7 +208,7 @@ export const CreateCompanyChallengeScreen: FC<
   }, []);
 
   return (
-    <SafeAreaView className="flex flex-col bg-white">
+    <SafeAreaView className="flex flex-1 flex-col bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
 
       <ConfirmDialog

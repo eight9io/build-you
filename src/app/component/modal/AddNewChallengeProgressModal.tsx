@@ -254,12 +254,7 @@ export const AddNewChallengeProgressModal: FC<
   };
 
   return (
-    <Modal
-      animationType="slide"
-      presentationStyle="pageSheet"
-      visible={isVisible}
-      className="h-full"
-    >
+    <Modal animationType="slide" visible={isVisible} className="h-full">
       <SafeAreaView className="flex-1 bg-white">
         <CustomActivityIndicator isVisible={isLoading} />
         <KeyboardAwareScrollView

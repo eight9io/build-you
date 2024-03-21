@@ -31,8 +31,9 @@ import OtherUserProfileChallengeDetailsScreen from "../OtherUser/OtherUserProfil
 import CustomActivityIndicator from "../../../component/common/CustomActivityIndicator";
 
 import ShareIcon from "../../../../../assets/svg/share.svg";
-import BuildYouLogo from "../../../common/svg/buildYou_logo_top_app.svg";
 import SettingsIcon from "../../../component/common/Buttons/ButtonWithIcon/asset/settings.svg";
+import SettingsScreen from "../../SettingsScreen/SettingsScreen";
+import EditCompanyProfileScreen from "./EditCompanyProfileScreen/EditCompanyProfileScreen";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -80,11 +81,6 @@ const Company: React.FC<ICompanyProps> = ({ navigation, route }) => {
         justifyContent: "center",
       },
       headerTitle: () => <AppTitle title={t("profile_title")} />,
-      headerLeft: () => (
-        <View className="ml-3">
-          <BuildYouLogo width={90} />
-        </View>
-      ),
       headerRight: () => {
         return (
           <View className="flex w-20 flex-row justify-between">
@@ -229,6 +225,33 @@ const CompanyProfileScreen = () => {
           headerLeft: () => (
             <NavButton
               text={t("button.back") as string}
+              onPress={() => navigation.goBack()}
+              withBackIcon
+            />
+          ),
+        })}
+      />
+
+      {/* Screens that are in root navigation will stretch up to window size 
+      and override the drawer layout in desktop view
+      Screens put below will override the root navigation
+       */}
+      <CompanyStack.Screen
+        name="SettingsScreenRoot"
+        component={SettingsScreen}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
+      <CompanyStack.Screen
+        name="EditCompanyProfileScreen"
+        component={EditCompanyProfileScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => <AppTitle title="Edit profile" />,
+          headerLeft: () => (
+            <NavButton
+              text={t("button.back") || "Back"}
               onPress={() => navigation.goBack()}
               withBackIcon
             />

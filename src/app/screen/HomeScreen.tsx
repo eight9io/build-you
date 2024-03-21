@@ -36,7 +36,6 @@ import IconSearch from "../component/common/IconSearch/IconSearch";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import AdCard from "../component/Post/AdCard";
 
-import BuildYouLogo from "../common/svg/buildYou_logo_top_app.svg";
 import PersonalChallengeDetailScreen from "./ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "./ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import { useNotificationStore } from "../store/notification-store";
@@ -287,11 +286,6 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
             justifyContent: "center",
           },
           headerTitle: () => <AppTitle title={t("your_feed.header")} />,
-          headerLeft: () => (
-            <View className="ml-3">
-              <BuildYouLogo width={90} />
-            </View>
-          ),
           headerRight: (props) => (
             <NavButton
               withIcon

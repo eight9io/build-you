@@ -13,6 +13,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
 import { useUserProfileStore } from "../../store/user-store";
@@ -37,6 +38,13 @@ import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/O
 import ProgressCommentScreen from "./ProgressCommentScreen/ProgressCommentScreen";
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import CompanyChallengeDetailScreen from "./CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import CreatePersonalChallengeScreen from "./PersonalChallengesScreen/CreateChallengeScreen/CreateChallengeScreen";
+import CreateCertifiedChallengeScreen from "./PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
+import CreateCompanyChallengeScreen from "./CompanyChallengesScreen/CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
+import CreateCertifiedCompanyChallengeScreen from "./CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
+import ChoosePackageScreen from "./ChoosePackageScreen";
+import CartScreen from "./CartScreen";
+import CompanyCartScreen from "./CompanyCartScreen";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -314,6 +322,152 @@ const CreateChallengeScreen = () => {
               onPress={() => navigation.goBack()}
               withBackIcon
             />
+          ),
+        })}
+      />
+
+      {/* Screens that are in root navigation will stretch up to window size 
+      and override the drawer layout in desktop view
+      Screens put below will override the root navigation
+       */}
+      <CreateChallengeStack.Screen
+        name="CreateChallengeScreen"
+        component={CreatePersonalChallengeScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle title={t("new_challenge_screen.new_challenge") || ""} />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              testID="user_create_challenge_close_btn"
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="CreateCertifiedChallengeScreen"
+        component={CreateCertifiedChallengeScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle
+              title={
+                t("new_challenge_screen.new_certified_challenge") ||
+                "New certified challenge"
+              }
+            />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="CreateCompanyChallengeScreen"
+        component={CreateCompanyChallengeScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle
+              title={t("new_challenge_screen.new_challenge") || "New challenge"}
+            />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="CreateCertifiedCompanyChallengeScreen"
+        component={CreateCertifiedCompanyChallengeScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle
+              title={
+                t("new_challenge_screen.new_certified_challenge") ||
+                "New certified challenge"
+              }
+            />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="ChoosePackageScreen"
+        component={ChoosePackageScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle
+              title={t("choose_packages_screen.package") || "Packages"}
+            />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="CartScreen"
+        component={CartScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle title={t("cart_screen.title") || "Summary"} />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="CompanyCartScreen"
+        component={CompanyCartScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+          headerTitle: () => (
+            <AppTitle title={t("cart_screen.title") || "Summary"} />
+          ),
+          headerLeft: ({}) => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="ml-3"
+            >
+              <Ionicons name="close" size={24} color="#000" />
+            </TouchableOpacity>
           ),
         })}
       />

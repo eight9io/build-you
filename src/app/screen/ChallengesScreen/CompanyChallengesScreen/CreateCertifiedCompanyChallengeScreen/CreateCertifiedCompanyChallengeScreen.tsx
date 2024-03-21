@@ -154,7 +154,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
   }, []);
 
   return (
-    <SafeAreaView className="flex flex-col bg-white">
+    <SafeAreaView className="flex flex-1 flex-col bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
 
       <KeyboardAwareFlatList

@@ -11,21 +11,18 @@ import {
 } from "react-native";
 
 import { RootStackParamList } from "../../navigation/navigation.type";
-import { ICheckPoint, IPackage } from "../../types/package";
+import { IPackage } from "../../types/package";
 
 import { usePriceStore } from "../../store/price-store";
-import { serviceGetAllPackages } from "../../service/package";
 import { useUserProfileStore } from "../../store/user-store";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
-import { getLanguageLocalStorage } from "../../utils/language";
-import {
-  getCurrencySymbol,
-  getProductsFromStoreToDisplay,
-} from "../../utils/purchase.util";
+import { getTranslatedBasicPackages } from "../../utils/purchase.util";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
+import { getBasicPackages } from "../../service/purchase";
 
 function convertPhrases(phrase) {
-  if (phrase === "videocall") {
+  if (phrase === "videocall" || phrase === "video") {
+    // These two types is issued from the backend, so we need to handle both cases
     return "Video call";
   } else if (phrase === "chat") {
     return "Direct chat";
@@ -78,15 +75,15 @@ const RenderPackageOptions = ({
                 {item}
               </Text>
             ))}
-            {!isCurrentUserCompany && (
+            {!isCurrentUserCompany ? (
               <View className="w-[164px] border border-neutral-300" />
-            )}
+            ) : null}
           </View>
-          {!isCurrentUserCompany && (
+          {!isCurrentUserCompany ? (
             <Text className="text-center text-base font-semibold leading-snug text-orange-500">
-              {`${getCurrencySymbol(currency)}${price.toFixed(2)}`}
+              {price}
             </Text>
-          )}
+          ) : null}
         </View>
         <TouchableOpacity
           className="flex items-center justify-center rounded-[36px] border border-orange-500 bg-orange-500 px-4"
@@ -106,22 +103,34 @@ const RenderPackageOptions = ({
 };
 
 const ChoosePackageScreen = () => {
-  const [{ packages, chatCheck, videoCheck, loading }, _setState] = useState<{
-    packages: IPackage[];
-    chatCheck: ICheckPoint;
-    videoCheck: ICheckPoint;
-    loading: boolean;
+  // const [{ packages, chatCheck, videoCheck, loading }, _setState] = useState<{
+  //   packages: IPackage[];
+  //   chatCheck: ICheckPoint;
+  //   videoCheck: ICheckPoint;
+  //   loading: boolean;
+  // }>({
+  //   packages: [],
+  //   chatCheck: {
+  //     price: 0,
+  //     currency: "USD",
+  //   },
+  //   videoCheck: {
+  //     price: 0,
+  //     currency: "USD",
+  //   },
+  //   loading: true,
+  // });
+  const [loading, setLoading] = useState(false);
+  const [packages, setPackages] = useState<IPackage[]>([]);
+  const [
+    { translatedChatPackage, translatedVideoPackage },
+    setTranslatedPackages,
+  ] = useState<{
+    translatedChatPackage: IPackage;
+    translatedVideoPackage: IPackage;
   }>({
-    packages: [],
-    chatCheck: {
-      price: 0,
-      currency: "USD",
-    },
-    videoCheck: {
-      price: 0,
-      currency: "USD",
-    },
-    loading: true,
+    translatedChatPackage: null,
+    translatedVideoPackage: null,
   });
 
   const { t } = useTranslation();
@@ -140,7 +149,10 @@ const ChoosePackageScreen = () => {
       name: choosenPackage.name,
       price: choosenPackage.price,
       currency: choosenPackage.currency,
-      id: choosenPackage.id,
+      id:
+        choosenPackage.type === "chat"
+          ? translatedChatPackage.id
+          : translatedVideoPackage.id,
       type: choosenPackage.type,
     };
     setCreateChallengeDataStore({
@@ -150,93 +162,54 @@ const ChoosePackageScreen = () => {
     if (isCurrentUserCompany) {
       navigation.navigate("CompanyCartScreen", {
         choosenPackage: choosenPackage,
-        checkPoint: choosenPackage.type === "chat" ? chatCheck : videoCheck,
       });
     } else {
       navigation.navigate("CartScreen", {
         choosenPackage: choosenPackage,
-        checkPoint: choosenPackage.type === "chat" ? chatCheck : videoCheck,
       });
     }
   };
 
   useEffect(() => {
-    const fetchPackages = async () => {
-      const currentLanguage = await getLanguageLocalStorage();
-      let sortedPackages = [];
+    const fetchProducts = async () => {
+      setLoading(true);
+      const { chatPackage, videoPackage } = await getTranslatedBasicPackages();
+      setTranslatedPackages({
+        translatedChatPackage: chatPackage,
+        translatedVideoPackage: videoPackage,
+      });
       try {
-        const res = await serviceGetAllPackages(currentLanguage);
-        sortedPackages = res.data.packages.sort((a, b) => a.price - b.price);
+        // This api call not return translated package name and caption so we need to use the translated package name and caption from getTranslatedBasicPackages
+        // This data is not for company user (company user will use the package from getTranslatedBasicPackages)
+        const { data } = await getBasicPackages();
+
+        if (isCurrentUserCompany) setPackages([chatPackage, videoPackage]);
+        else
+          setPackages(
+            data.map((item) => {
+              return {
+                ...item,
+                name:
+                  item.type === "chat" ? chatPackage.name : videoPackage.name,
+                caption:
+                  item.type === "chat"
+                    ? chatPackage.caption
+                    : videoPackage.caption,
+              };
+            })
+          );
       } catch (error) {
-        console.error("get packages error", error);
-      }
-
-      try {
-        // Get unit localized price by fetching from store
-        const packagesFromStore = await getProductsFromStoreToDisplay();
-
-        if (!packagesFromStore) {
-          _setState({ packages, chatCheck, videoCheck, loading: false });
-
-          setTimeout(() => {
-            GlobalDialogController.showModal({
-              title: t("dialog.err_title"),
-              message: t("errorMessage:500"),
-            });
-          }, 300);
-
-          return;
-        }
-        const chatPackagePrice = packagesFromStore.chatPackage.localizedPrice;
-        const videoPackagePrice = packagesFromStore.videoPackage.localizedPrice;
-        setChatPackagePrice(chatPackagePrice);
-        setVideoPackagePrice(videoPackagePrice);
-        sortedPackages = sortedPackages.map((item) => {
-          return {
-            ...item,
-            price:
-              item.type === "chat"
-                ? packagesFromStore.chatPackage.price
-                : packagesFromStore.videoPackage.price,
-            currency:
-              item.type === "chat"
-                ? packagesFromStore.chatPackage.currency
-                : packagesFromStore.videoPackage.currency,
-          };
-        });
-
-        _setState((oldState) => ({
-          ...oldState,
-          packages: sortedPackages,
-          chatCheck: {
-            price: !isNaN(Number(packagesFromStore.chatCheck.price))
-              ? Number(packagesFromStore.chatCheck.price)
-              : 0,
-            currency: packagesFromStore.chatCheck.currency,
-          },
-          videoCheck: {
-            price: !isNaN(Number(packagesFromStore.videoCheck.price))
-              ? Number(packagesFromStore.videoCheck.price)
-              : 0,
-            currency: packagesFromStore.videoCheck.currency,
-          },
-        }));
-
-        setTimeout(() => {
-          _setState((oldState) => ({
-            ...oldState,
-            loading: false,
-          }));
-        }, 300);
-      } catch (error) {
-        console.error("Fetch package error", error);
+        if (error.response)
+          console.error("Fetch package error", error.response);
+        else console.error("Fetch package error", error);
         GlobalDialogController.showModal({
           title: t("dialog.err_title"),
           message: t("errorMessage:500"),
         });
       }
+      setLoading(false);
     };
-    fetchPackages();
+    fetchProducts();
   }, []);
 
   return (
@@ -257,21 +230,21 @@ const ChoosePackageScreen = () => {
                     name={item.name}
                     type={item.type}
                     caption={item.caption}
-                    price={item.price}
+                    price={item.formattedPrice}
                     currency={item.currency}
                     onPress={() => handleChoosePackage(item)}
                     isCurrentUserCompany={isCurrentUserCompany}
                   />
                 </View>
               ))}
-            {packages.length === 0 && loading && <ActivityIndicator />}
-            {packages.length === 0 && !loading && (
+            {packages.length === 0 && loading ? <ActivityIndicator /> : null}
+            {packages.length === 0 && !loading ? (
               <View className="flex items-center justify-center">
                 <Text className="text-center text-md font-semibold leading-tight text-primary-default">
                   {t("choose_packages_screen.no_package")}
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
         </View>
       </ScrollView>

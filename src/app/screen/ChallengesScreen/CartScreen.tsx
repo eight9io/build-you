@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useRef } from "react";
+import { FC, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,30 +6,12 @@ import {
   SafeAreaView,
   Platform,
 } from "react-native";
-import {
-  NavigationProp,
-  Route,
-  StackActions,
-  useNavigation,
-} from "@react-navigation/native";
-import { AxiosResponse } from "axios";
-import debounce from "lodash.debounce";
+import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-import {
-  getProducts as getProductsFromProvider,
-  ErrorCode,
-  ProductPurchase,
-} from "react-native-iap";
-
-import {
-  createChallenge,
-  createCompanyChallenge,
-  updateChallengeImage,
-} from "../../service/challenge";
 import httpInstance from "../../utils/http";
 
-import { ICheckPoint, IPackage, PACKAGE_TYPE } from "../../types/package";
+import { IPackage } from "../../types/package";
 import { ICreateCompanyChallenge } from "../../types/challenge";
 
 import { usePriceStore } from "../../store/price-store";
@@ -41,33 +23,22 @@ import { RootStackParamList } from "../../navigation/navigation.type";
 
 import ErrorText from "../../component/common/ErrorText";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
-import ConfirmDialog from "../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
 
 import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
-import {
-  getAllProductsFromStore,
-  getProductFromDatabase,
-  requestPurchaseChecks,
-  verifyPurchase,
-} from "../../utils/purchase.util";
 
-import { IInAppPurchaseProduct } from "../../types/purchase";
-import {
-  APPLE_IN_APP_PURCHASE_STATUS,
-  GOOGLE_IN_APP_PURCHASE_STATUS,
-  PRODUCT_PACKAGE_TYPE,
-} from "../../common/enum";
+import { getPackage } from "../../service/purchase";
+import { setPurchasingChallengeData } from "../../utils/purchase.util";
+import { get } from "http";
 
 interface ICartScreenProps {
   route: Route<
     "CartScreen",
     {
       choosenPackage: IPackage;
-      checkPoint: ICheckPoint;
     }
   >;
 }
@@ -75,20 +46,22 @@ interface ICartScreenProps {
 const MAX_CHECKPOINT = 5;
 
 const CartScreen: FC<ICartScreenProps> = ({ route }) => {
-  const packagesPriceRef = useRef({});
+  // const packagesPriceRef = useRef({});
   const [numberOfCheckpoints, setNumberOfCheckpoints] = useState<number>(0);
   const [finalPrice, setFinalPrice] = useState<string>("0");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
-  const [isShowModal, setIsShowModal] = useState<boolean>(false);
-  const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
+  // const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+  // const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  // const [newChallengeId, setNewChallengeId] = useState<string | null>(null);
   const [purchaseErrorMessages, setPurchaseErrorMessages] =
     useState<string>("");
 
-  const [allProductsFromDatabase, setAllProductsFromDatabase] = useState<
-    IInAppPurchaseProduct[]
-  >([]);
+  // const [allProductsFromDatabase, setAllProductsFromDatabase] = useState<
+  //   IInAppPurchaseProduct[]
+  // >([]);
+
+  const [cachedPackages, setCachedPackages] = useState<IPackage[]>([]);
 
   const { choosenPackage } = route.params;
 
@@ -110,120 +83,44 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
 
   const isCurrentUserCompany = currentUser && currentUser?.companyAccount;
 
-  const getPackagePriceFromStore = async (productId: string) => {
-    if (!productId) return;
-    if (packagesPriceRef[productId]) {
-      return setFinalPrice(packagesPriceRef[productId].localizedPrice);
-    }
-
-    if (numberOfCheckpoints == 0) {
-      if (typeOfPackage === PACKAGE_TYPE.VIDEO_CALL) {
-        setFinalPrice(getVideoPackagePrice());
-      }
-      if (typeOfPackage === PACKAGE_TYPE.CHAT) {
-        setFinalPrice(getChatPackagePrice());
-      }
-      return;
-    }
-
-    const getPackageFromStore = async () => {
-      try {
-        setIsLoading(true);
-        setPurchaseErrorMessages("");
-        const packagesFromStore = await getProductsFromProvider({
-          skus: [productId],
-        });
-        packagesPriceRef[productId] = packagesFromStore[0];
-        setFinalPrice(packagesFromStore[0].localizedPrice);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 300);
-        setFinalPrice("0");
-        setPurchaseErrorMessages(t("error_general_message"));
-      }
-    };
-    getPackageFromStore();
-  };
-
   useEffect(() => {
-    const selectedProduct = allProductsFromDatabase.find(
-      (product) => product.quantity === numberOfCheckpoints + 1
+    const userSelectedPackage = cachedPackages.find(
+      (item) => Number(item.check) === numberOfCheckpoints + 1
     );
 
-    if (!selectedProduct) return;
-    getPackagePriceFromStore(selectedProduct.productId);
-  }, [numberOfCheckpoints, allProductsFromDatabase]);
-
-  useEffect(() => {
-    (async function () {
-      const allProducts = await getAllProductsFromStore();
-      const currentPlatform = Platform.OS === "ios" ? "apple" : "google";
-      const products = allProducts.filter((product) => {
-        const packageTypeToBeFetch =
-          typeOfPackage === "videocall"
-            ? PRODUCT_PACKAGE_TYPE.VIDEO_CHALLENGE
-            : PRODUCT_PACKAGE_TYPE.CHAT_CHALLENGE;
-        return (
-          product.platform === currentPlatform &&
-          product.packageType === packageTypeToBeFetch
-        );
-      });
-      setAllProductsFromDatabase(products);
-    })();
-  }, []);
-
-  const handlePay = async (
-    challengeId: string
-  ): Promise<{
-    purchaseStatus:
-      | APPLE_IN_APP_PURCHASE_STATUS
-      | GOOGLE_IN_APP_PURCHASE_STATUS;
-  }> => {
-    let productToBuy: IInAppPurchaseProduct = null;
-    try {
-      productToBuy = await getProductFromDatabase(
-        typeOfPackage,
-        numberOfCheckpoints // -1 because we already have 1 checkpoint in the base package
-      );
-      if (!productToBuy) throw new Error("Product not found");
-    } catch (error) {
-      console.log("Failed to fetch product", error);
-      throw error;
-    }
-
-    let receipt: ProductPurchase = null;
-    try {
-      const purchaseResult = await requestPurchaseChecks(
-        productToBuy.productId
-      );
-
-      if (purchaseResult) {
-        receipt = Array.isArray(purchaseResult)
-          ? purchaseResult[0]
-          : purchaseResult;
-      }
-    } catch (error) {
-      console.log("Request Purchase Error: ", error);
-      throw error;
-    }
-
-    if (receipt) {
-      try {
-        const verificationRes = await verifyPurchase(receipt, challengeId);
-        if (verificationRes) {
-          return {
-            purchaseStatus: verificationRes.purchaseStatus,
-          };
+    if (!userSelectedPackage) {
+      const fetchPackage = async () => {
+        setIsLoading(true);
+        try {
+          const { data } = await getPackage(
+            typeOfPackage === "chat" ? "chat" : "video",
+            numberOfCheckpoints + 1
+          );
+          setFinalPrice(data[0].formattedPrice);
+          setCachedPackages([...cachedPackages, data[0]]);
+        } catch (error) {
+          console.error(
+            "Failed to fetch package",
+            error.response ? error.response.data : error
+          );
+          GlobalDialogController.showModal({
+            title: t("dialog.err_title"),
+            message:
+              t("errorMessage:500") ||
+              "Something went wrong. Please try again later!",
+            button: t("dialog.ok"),
+          });
         }
-      } catch (error) {
-        console.log("Verify Purchase Error: ", error);
-        throw error;
-      }
-    }
+        setIsLoading(false);
+      };
+      fetchPackage();
+    } else setFinalPrice(userSelectedPackage.formattedPrice);
+  }, [numberOfCheckpoints]);
+
+  const handlePay = async (challengeId: string) => {
+    // Persist data before directing user to checkout link so that they can continue from where they left off when they press browser's back button
+    setPurchasingChallengeData(getCreateChallengeDataStore());
+    console.log("challengeId: ", challengeId);
   };
 
   const handleAddCheckpoint = () => {
@@ -252,150 +149,118 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   };
 
   const onSumitCertifiedChallenge = async () => {
-    const data = getCreateChallengeDataStore();
+    // const data = getCreateChallengeDataStore();
 
     setIsLoading(true);
     let newChallengeId: string | null = null;
     try {
-      const { image, ...rest } = data; // Images upload will be handled separately
-      const payload: ICreateCompanyChallenge = {
-        ...rest,
-        // Add 1 to the number of checkpoints because the base package already has 1 checkpoint
-        checkpoint: numberOfCheckpoints + 1,
-        achievementTime: data.achievementTime as Date,
-      };
+      // const { image, ...rest } = data; // Images upload will be handled separately
+      // const payload: ICreateCompanyChallenge = {
+      //   ...rest,
+      //   // Add 1 to the number of checkpoints because the base package already has 1 checkpoint
+      //   checkpoint: numberOfCheckpoints + 1,
+      //   achievementTime: data.achievementTime as Date,
+      // };
 
-      let challengeCreateResponse: AxiosResponse;
-      if (isCurrentUserCompany) {
-        challengeCreateResponse = await createCompanyChallenge(payload);
-      } else {
-        challengeCreateResponse = await createChallenge(payload);
-      }
+      await handlePay(newChallengeId);
+      setIsLoading(false);
+      // let challengeCreateResponse: AxiosResponse;
+      // if (isCurrentUserCompany) {
+      //   challengeCreateResponse = await createCompanyChallenge(payload);
+      // } else {
+      //   challengeCreateResponse = await createChallenge(payload);
+      // }
 
-      newChallengeId = challengeCreateResponse.data.id;
-      setNewChallengeIdToStore(newChallengeId);
-      // If challenge created successfully, upload image
-      if (
-        challengeCreateResponse.status === 200 ||
-        challengeCreateResponse.status === 201
-      ) {
-        setNewChallengeId(challengeCreateResponse.data.id);
-        if (image) {
-          // Wait for payment to be processed
-          let isPaymentPending = false;
-          try {
-            const { purchaseStatus } = await handlePay(newChallengeId);
-            if (purchaseStatus) {
-              const pendingStatus = Platform.select<
-                APPLE_IN_APP_PURCHASE_STATUS | GOOGLE_IN_APP_PURCHASE_STATUS
-              >({
-                ios: APPLE_IN_APP_PURCHASE_STATUS.PENDING,
-                android: GOOGLE_IN_APP_PURCHASE_STATUS.PENDING,
-              });
+      // newChallengeId = challengeCreateResponse.data.id;
+      // setNewChallengeIdToStore(newChallengeId);
+      // // If challenge created successfully, upload image
+      // if (
+      //   challengeCreateResponse.status === 200 ||
+      //   challengeCreateResponse.status === 201
+      // ) {
+      //   setNewChallengeId(challengeCreateResponse.data.id);
+      //   if (image) {
+      //     await updateChallengeImage(
+      //       {
+      //         id: newChallengeId,
+      //       },
+      //       image
+      //     );
+      //     try {
+      //       await handlePay(newChallengeId);
+      //       setPurchaseErrorMessages("");
+      //     } catch (error) {
+      //       // Delete draft challenge if payment failed
+      //       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+      //       if (error.code !== ErrorCode.E_USER_CANCELLED) {
+      //         setPurchaseErrorMessages(t("error_general_message"));
+      //       }
 
-              if (
-                purchaseStatus.toLowerCase() === pendingStatus.toLowerCase()
-              ) {
-                isPaymentPending = true;
-              }
-            }
-            setPurchaseErrorMessages("");
-          } catch (error) {
-            // Delete draft challenge if payment failed
-            httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-            if (error.code !== ErrorCode.E_USER_CANCELLED) {
-              setPurchaseErrorMessages(t("error_general_message"));
-            }
+      //       setTimeout(() => {
+      //         setIsLoading(false);
+      //       }, 100);
+      //       return;
+      //     }
+      //     setIsLoading(false);
 
-            setTimeout(() => {
-              setIsLoading(false);
-            }, 100);
-            return;
-          }
+      //     // // This toast will be shown when all modals are closed
+      //     // setTimeout(() => {
+      //     //   GlobalToastController.showModal({
+      //     //     message:
+      //     //       t("toast.create_challenge_success") ||
+      //     //       "Your challenge has been created successfully !",
+      //     //   });
 
-          updateChallengeImage(
-            {
-              id: newChallengeId,
-            },
-            image
-          );
+      //     //   setTimeout(() => {
+      //     //     const isChallengesScreenInStack = navigation
+      //     //       .getState()
+      //     //       .routes.some((route) => route.name === "Challenges");
 
-          if (isPaymentPending) {
-            // If payment is pending, challenge will be saved as draft => cannot navigate to challenge detail
-            // => navigate to challenges screen instead
-
-            // This dialog will be shown when all modals are closed
-            setIsLoading(false);
-            setTimeout(() => {
-              navigation.navigate("Challenges");
-              setTimeout(() => {
-                GlobalDialogController.showModal({
-                  title: t("payment_pending_modal.title"),
-                  message: t("payment_pending_modal.description"),
-                });
-              }, 300);
-            }, 100);
-
-            return;
-          }
-          // This toast will be shown when all modals are closed
-          setTimeout(() => {
-            GlobalToastController.showModal({
-              message:
-                t("toast.create_challenge_success") ||
-                "Your challenge has been created successfully !",
-            });
-
-            setTimeout(() => {
-              const isChallengesScreenInStack = navigation
-                .getState()
-                .routes.some((route) => route.name === "Challenges");
-
-              if (isChallengesScreenInStack) {
-                console.log("isChallengesScreenInStack");
-                navigation.dispatch(StackActions.popToTop());
-                if (isCurrentUserCompany) {
-                  const pushAction = StackActions.push("HomeScreen", {
-                    screen: "Challenges",
-                    params: {
-                      screen: "CompanyChallengeDetailScreen",
-                      params: { challengeId: newChallengeId },
-                    },
-                  });
-                  navigation.dispatch(pushAction);
-                } else {
-                  const pushAction = StackActions.push("HomeScreen", {
-                    screen: "Challenges",
-                    params: {
-                      screen: "PersonalChallengeDetailScreen",
-                      params: { challengeId: newChallengeId },
-                    },
-                  });
-                  navigation.dispatch(pushAction);
-                }
-              } else {
-                // add ChallengesScreen to the stack
-                navigation.navigate("HomeScreen", {
-                  screen: "Challenges",
-                });
-                if (isCurrentUserCompany) {
-                  navigation.navigate("Challenges", {
-                    screen: "CompanyChallengeDetailScreen",
-                    params: { challengeId: newChallengeId },
-                  });
-                } else {
-                  navigation.navigate("Challenges", {
-                    screen: "PersonalChallengeDetailScreen",
-                    params: { challengeId: newChallengeId },
-                  });
-                }
-              }
-            }, 300);
-          }, 100);
-        }
-        setIsRequestSuccess(true);
-        setIsShowModal(true);
-      }
+      //     //     if (isChallengesScreenInStack) {
+      //     //       console.log("isChallengesScreenInStack");
+      //     //       navigation.dispatch(StackActions.popToTop());
+      //     //       if (isCurrentUserCompany) {
+      //     //         const pushAction = StackActions.push("HomeScreen", {
+      //     //           screen: "Challenges",
+      //     //           params: {
+      //     //             screen: "CompanyChallengeDetailScreen",
+      //     //             params: { challengeId: newChallengeId },
+      //     //           },
+      //     //         });
+      //     //         navigation.dispatch(pushAction);
+      //     //       } else {
+      //     //         const pushAction = StackActions.push("HomeScreen", {
+      //     //           screen: "Challenges",
+      //     //           params: {
+      //     //             screen: "PersonalChallengeDetailScreen",
+      //     //             params: { challengeId: newChallengeId },
+      //     //           },
+      //     //         });
+      //     //         navigation.dispatch(pushAction);
+      //     //       }
+      //     //     } else {
+      //     //       // add ChallengesScreen to the stack
+      //     //       navigation.navigate("HomeScreen", {
+      //     //         screen: "Challenges",
+      //     //       });
+      //     //       if (isCurrentUserCompany) {
+      //     //         navigation.navigate("Challenges", {
+      //     //           screen: "CompanyChallengeDetailScreen",
+      //     //           params: { challengeId: newChallengeId },
+      //     //         });
+      //     //       } else {
+      //     //         navigation.navigate("Challenges", {
+      //     //           screen: "PersonalChallengeDetailScreen",
+      //     //           params: { challengeId: newChallengeId },
+      //     //         });
+      //     //       }
+      //     //     }
+      //     //   }, 300);
+      //     // }, 100);
+      //   }
+      //   // setIsRequestSuccess(true);
+      //   // setIsShowModal(true);
+      // }
     } catch (error) {
       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
       setIsLoading(false);
@@ -424,21 +289,21 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
     }
   };
 
-  const handleCloseModal = (newChallengeId: string | undefined) => {
-    setIsShowModal(false);
-    if (isRequestSuccess && newChallengeId) {
-      onClose();
-      navigation.navigate("Challenges", {
-        screen: "PersonalChallengeDetailScreen",
-        params: { challengeId: newChallengeId },
-      });
-    }
-  };
+  // const handleCloseModal = (newChallengeId: string | undefined) => {
+  //   setIsShowModal(false);
+  //   if (isRequestSuccess && newChallengeId) {
+  //     onClose();
+  //     navigation.navigate("Challenges", {
+  //       screen: "PersonalChallengeDetailScreen",
+  //       params: { challengeId: newChallengeId },
+  //     });
+  //   }
+  // };
 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-between  bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
-      {isShowModal && (
+      {/* {isShowModal && (
         <ConfirmDialog
           title={
             isRequestSuccess
@@ -456,7 +321,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
           onClosed={() => handleCloseModal(newChallengeId)}
           closeButtonLabel={t("dialog.got_it") || "Got it"}
         />
-      )}
+      )} */}
 
       <View>
         <View className="flex flex-col flex-wrap items-center justify-between space-y-4">
@@ -560,33 +425,33 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
             </View>
           </View>
           <View className="mx-9 self-start">
-            {purchaseErrorMessages && (
+            {purchaseErrorMessages ? (
               <ErrorText
                 message={purchaseErrorMessages}
                 containerClassName="w-full"
                 textClassName="flex-1"
               />
-            )}
+            ) : null}
           </View>
-        </View>
 
-        <TouchableOpacity
-          className={clsx(
-            " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
-            isAndroid ? "my-6" : "my-4",
-            finalPrice === "0" ? "opacity-50" : ""
-          )}
-          style={{
-            height: 48,
-            width: 344,
-          }}
-          disabled={finalPrice === "0" || isLoading}
-          onPress={onSumitCertifiedChallenge}
-        >
-          <Text className="text-center text-[14px] font-semibold leading-tight text-white">
-            {t("cart_screen.pay") || "Pay"}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            className={clsx(
+              " flex items-center justify-center rounded-full border border-orange-500 bg-orange-500 px-4",
+              isAndroid ? "my-6" : "my-4",
+              finalPrice === "0" ? "opacity-50" : ""
+            )}
+            style={{
+              height: 48,
+              width: 344,
+            }}
+            disabled={finalPrice === "0" || isLoading}
+            onPress={onSumitCertifiedChallenge}
+          >
+            <Text className="text-center text-[14px] font-semibold leading-tight text-white">
+              {t("cart_screen.pay") || "Pay"}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

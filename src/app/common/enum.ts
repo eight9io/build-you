@@ -85,4 +85,5 @@ export enum PRODUCT_PACKAGE_TYPE {
 export enum DEEP_LINK_PATH_NAME {
   CHALLENGE_DETAIL = "challenge",
   USER_PROFILE = "user",
+  PAYMENT = "payment",
 }

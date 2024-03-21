@@ -133,12 +133,21 @@ export const RootNavigation = () => {
 
           getUserAllChallengeIdsAsync(profile?.id);
 
-          navigationRef.current.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: navigateToRoute }],
-            })
-          );
+          // Check if there is history state in local storage, if yes, restore it (this is to handle the case when user reload the page or go back from external link)
+          const historyState = JSON.parse(localStorage.getItem("historyState"));
+          if (historyState)
+            navigationRef.current.dispatch(
+              CommonActions.reset({
+                ...historyState,
+              })
+            );
+          else
+            navigationRef.current.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: navigateToRoute }],
+              })
+            );
           return profile;
         });
       } else {
@@ -172,6 +181,10 @@ export const RootNavigation = () => {
           ...(LinkingConfig as any),
         }
       }
+      onStateChange={async (state) => {
+        // Persist navigation state to local storage so that we can restore it later in case user reload page or go back from external link
+        localStorage.setItem("historyState", JSON.stringify(state));
+      }}
     >
       <RootStack.Navigator
         initialRouteName="IntroScreen"

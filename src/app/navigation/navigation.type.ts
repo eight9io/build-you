@@ -60,11 +60,11 @@ export type RootStackParamList = {
   CreateCertifiedCompanyChallengeScreen: undefined;
   CartScreen: {
     choosenPackage: IPackage;
-    checkPoint: ICheckPoint;
+    // checkPoint: ICheckPoint;
   };
   CompanyCartScreen: {
     choosenPackage: IPackage;
-    checkPoint: ICheckPoint;
+    // checkPoint: ICheckPoint;
   };
   CreateCretifiedChallengeScreen: undefined;
   CreateCretifiedCompanyChallengeScreen: undefined;

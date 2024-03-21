@@ -19,6 +19,7 @@ export interface ICreateChallenge {
   benefits: string;
   reasons: string;
   achievementTime: Date;
+  package?: string;
 }
 
 export interface ICreateCompanyChallenge {

@@ -109,24 +109,22 @@ const SelectPickerOccupation: FC<ISelectPickerProps> = ({
               <Text className="text-base font-semibold">{title}</Text>
             </View>
           }
-          FloatingComponent={
-            <View className="h-14 w-full bg-white px-4">
-              <Button
-                title={t("save") || "Save"}
-                onPress={() => {
-                  if (showCustomInput) {
-                    onSubmitCustomOccupation(getValues());
-                  } else {
-                    handleSelectOccupation(selected);
-                  }
-                }}
-                containerClassName="bg-primary-default flex-1 mb-2"
-                textClassName="text-white"
-                testID="complete_profile_step_1_occupation_picker_save_btn"
-              />
-            </View>
+          FooterComponent={
+            <Button
+              title={t("save") || "Save"}
+              onPress={() => {
+                if (showCustomInput) {
+                  onSubmitCustomOccupation(getValues());
+                } else {
+                  handleSelectOccupation(selected);
+                }
+              }}
+              containerClassName="bg-primary-default flex-1 mb-2"
+              textClassName="text-white"
+              testID="complete_profile_step_1_occupation_picker_save_btn"
+            />
           }
-          modalHeight={showCustomInput ? 200 : 500}
+          modalHeight={showCustomInput ? 250 : 500}
         >
           {!showCustomInput ? (
             <View className="h-full">

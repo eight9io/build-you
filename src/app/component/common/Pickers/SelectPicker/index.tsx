@@ -57,7 +57,7 @@ const SelectPicker: FC<ISelectPickerProps> = ({
           <Text className="text-base font-semibold">{title}</Text>
         </View>
       }
-      FloatingComponent={
+      FooterComponent={
         <View className="mb-2 w-full bg-white px-4">
           <Button
             title={t("save") || "Save"}

@@ -134,7 +134,7 @@ const SelectPickerCompany: FC<ISelectPickerProps> = ({
             <View className="mt-3 flex w-full flex-row items-center justify-center pb-3">
               <Text className="text-base font-semibold">{title}</Text>
             </View>
-            <View className="mb-4 flex w-full flex-row items-center justify-center">
+            <View className="mb-4 flex flex-1 flex-row items-center justify-center">
               <CompanySearchBar
                 focused={isSearchBarFocused}
                 setFocused={setIsSearchBarFocused}
@@ -144,21 +144,19 @@ const SelectPickerCompany: FC<ISelectPickerProps> = ({
             </View>
           </>
         }
-        FloatingComponent={
-          <View className="h-14 w-full bg-white px-4">
-            <Button
-              title={t("save") || "Save"}
-              onPress={() => hanldeSelectCompany(selected)}
-              containerClassName="bg-primary-default flex-1 mb-2"
-              textClassName="text-white"
-              disabledContainerClassName="bg-gray-light flex-none px-1"
-              disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
-              isDisabled={
-                (debouncedSearchQuery && searchedCompanies.length === 0) ||
-                companyList.length === 0
-              }
-            />
-          </View>
+        FooterComponent={
+          <Button
+            title={t("save") || "Save"}
+            onPress={() => hanldeSelectCompany(selected)}
+            containerClassName="bg-primary-default flex-1 mb-2"
+            textClassName="text-white"
+            disabledContainerClassName="bg-gray-light flex-none px-1"
+            disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
+            isDisabled={
+              (debouncedSearchQuery && searchedCompanies.length === 0) ||
+              companyList.length === 0
+            }
+          />
         }
         modalHeight={500}
       >

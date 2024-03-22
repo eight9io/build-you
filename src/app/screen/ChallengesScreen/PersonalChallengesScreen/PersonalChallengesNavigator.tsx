@@ -15,6 +15,8 @@ import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUse
 import PersonalCoachChallengeDetailScreen from "../CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import CompanyChallengeDetailScreen from "../CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 import AddNewChallengeProgressScreen from "../AddNewChallengeProgressScreen";
+import EditChallengeScreen from "../EditChallengeScreen";
+import { RefreshProvider } from "../../../context/refresh.context";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -22,118 +24,127 @@ const PersonalChallengesStack =
 const PersonalChallengesNavigator = () => {
   const { t } = useTranslation();
   return (
-    <PersonalChallengesStack.Navigator
-      screenOptions={{
-        headerBackVisible: false,
-        headerTitleAlign: "center",
-        headerShown: true,
-      }}
-    >
-      <PersonalChallengesStack.Screen
-        name="PersonalChallengesScreen"
-        component={PersonalChallengesScreen}
-        options={() => ({
-          headerTitle: () => <AppTitle title={t("top_nav.challenges")} />,
-        })}
-      />
-      <PersonalChallengesStack.Screen
-        name="PersonalChallengeDetailScreen"
-        component={PersonalChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("top_nav.challenges") as string}
-              onPress={() => navigation.navigate("PersonalChallengesScreen")}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <PersonalChallengesStack.Screen
-        name="PersonalCoachChallengeDetailScreen"
-        component={PersonalCoachChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("top_nav.challenges") as string}
-              onPress={() => navigation.navigate("PersonalChallengesScreen")}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <PersonalChallengesStack.Screen
-        name="OtherUserProfileScreen"
-        component={OtherUserProfileScreen}
-        options={({ navigation }) => ({
+    <RefreshProvider>
+      <PersonalChallengesStack.Navigator
+        screenOptions={{
+          headerBackVisible: false,
+          headerTitleAlign: "center",
           headerShown: true,
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => {
-                navigation.goBack();
-              }}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <PersonalChallengesStack.Screen
-        name="OtherUserProfileChallengeDetailsScreen"
-        component={OtherUserProfileChallengeDetailsScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <PersonalChallengesStack.Screen
-        name="ProgressCommentScreen"
-        component={ProgressCommentScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        }}
+      >
+        <PersonalChallengesStack.Screen
+          name="PersonalChallengesScreen"
+          component={PersonalChallengesScreen}
+          options={() => ({
+            headerTitle: () => <AppTitle title={t("top_nav.challenges")} />,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="PersonalChallengeDetailScreen"
+          component={PersonalChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("top_nav.challenges") as string}
+                onPress={() => navigation.navigate("PersonalChallengesScreen")}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="PersonalCoachChallengeDetailScreen"
+          component={PersonalCoachChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("top_nav.challenges") as string}
+                onPress={() => navigation.navigate("PersonalChallengesScreen")}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="OtherUserProfileScreen"
+          component={OtherUserProfileScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="OtherUserProfileChallengeDetailsScreen"
+          component={OtherUserProfileChallengeDetailsScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="ProgressCommentScreen"
+          component={ProgressCommentScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <PersonalChallengesStack.Screen
-        name="CompanyChallengeDetailScreen"
-        component={CompanyChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <PersonalChallengesStack.Screen
-        name="AddNewChallengeProgressScreen"
-        component={AddNewChallengeProgressScreen}
-        options={() => ({
-          headerShown: false,
-        })}
-      />
-    </PersonalChallengesStack.Navigator>
+        <PersonalChallengesStack.Screen
+          name="CompanyChallengeDetailScreen"
+          component={CompanyChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="AddNewChallengeProgressScreen"
+          component={AddNewChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="EditChallengeScreen"
+          component={EditChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+      </PersonalChallengesStack.Navigator>
+    </RefreshProvider>
   );
 };
 

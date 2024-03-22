@@ -18,7 +18,6 @@ import ChallengeDetailScreen from "../ChallengeDetailScreen/ChallengeDetailScree
 
 import PopUpMenu from "../../../../component/common/PopUpMenu";
 import Button from "../../../../component/common/Buttons/Button";
-import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import ShareIcon from "./assets/share.svg";
@@ -29,6 +28,7 @@ import { onShareChallengeLink } from "../../../../utils/shareLink.util";
 import { useNewCreateOrDeleteChallengeStore } from "../../../../store/new-challenge-create-store";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
+import { useRefresh } from "../../../../context/refresh.context";
 
 type PersonalChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -78,7 +78,7 @@ export const RightPersonalChallengeDetailOptions: FC<
 
   return (
     <View>
-      {isCompletedChallengeSuccess !== null && (
+      {isCompletedChallengeSuccess !== null ? (
         <ConfirmDialog
           isVisible={isCompletedChallengeSuccess !== null}
           title={
@@ -95,30 +95,30 @@ export const RightPersonalChallengeDetailOptions: FC<
           confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}
         />
-      )}
+      ) : null}
       <View className="-mt-1 flex flex-row items-center">
         <View className="pl-4 pr-2">
           <Button Icon={<ShareIcon />} onPress={onShare} />
         </View>
 
         {shouldRenderEditAndDeleteBtns &&
-          !!onEditChallengeBtnPress &&
-          !!setIsDeleteChallengeDialogVisible && (
-            <PopUpMenu
-              iconColor="#FF7B1D"
-              isDisabled={!!isChallengeCompleted}
-              options={[
-                {
-                  text: t("pop_up_menu.edit") || "Edit",
-                  onPress: onEditChallengeBtnPress,
-                },
-                {
-                  text: t("pop_up_menu.delete") || "Delete",
-                  onPress: () => setIsDeleteChallengeDialogVisible(true),
-                },
-              ]}
-            />
-          )}
+        !!onEditChallengeBtnPress &&
+        !!setIsDeleteChallengeDialogVisible ? (
+          <PopUpMenu
+            iconColor="#FF7B1D"
+            isDisabled={!!isChallengeCompleted}
+            options={[
+              {
+                text: t("pop_up_menu.edit") || "Edit",
+                onPress: onEditChallengeBtnPress,
+              },
+              {
+                text: t("pop_up_menu.delete") || "Delete",
+                onPress: () => setIsDeleteChallengeDialogVisible(true),
+              },
+            ]}
+          />
+        ) : null}
       </View>
     </View>
   );
@@ -132,6 +132,9 @@ const PersonalChallengeDetailScreen = ({
   navigation: PersonalChallengeDetailScreenNavigationProp;
 }) => {
   const { t } = useTranslation();
+  // This is for refreshing after edit challenge
+  // Use context because edit challenge is a screen and we cannot pass refresh function as param to it
+  const { refresh: refreshScreen, setRefresh: setRefreshScreen } = useRefresh();
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
@@ -157,7 +160,7 @@ const PersonalChallengeDetailScreen = ({
   const [isDeleteError, setIsDeleteError] = useState<boolean>(false);
   const [isJoinedLocal, setIsJoinedLocal] = useState<boolean>(true);
 
-  // use for refresh screen when add new progress, refetch participant list,  edit challenge
+  // use for refresh screen when add new progress, refetch participant list
   const [shouldScreenRefresh, setShouldScreenRefresh] =
     useState<boolean>(false);
 
@@ -246,8 +249,10 @@ const PersonalChallengeDetailScreen = ({
   }, [shouldScreenRefresh]);
 
   useEffect(() => {
+    if (challengeData && !refreshScreen) return;
     getChallengeData();
-  }, []);
+    if (refreshScreen) setRefreshScreen(false);
+  }, [refreshScreen]);
 
   useEffect(() => {
     if (!challengeData) return;
@@ -257,7 +262,11 @@ const PersonalChallengeDetailScreen = ({
   }, [challengeData]);
 
   const handleEditChallengeBtnPress = () => {
-    setIsEditChallengeModalVisible(true);
+    // setIsEditChallengeModalVisible(true);
+    navigation.navigate("EditChallengeScreen", {
+      challenge: challengeData,
+      // onConfirm: handleEditChallengeModalConfirm,
+    });
   };
   const handleEditChallengeModalClose = () => {
     setIsEditChallengeModalVisible(false);
@@ -379,7 +388,7 @@ const PersonalChallengeDetailScreen = ({
         }}
       />
 
-      {isCompletedChallengeSuccess !== null && (
+      {isCompletedChallengeSuccess !== null ? (
         <ConfirmDialog
           isVisible={isCompletedChallengeSuccess !== null}
           title={
@@ -396,9 +405,9 @@ const PersonalChallengeDetailScreen = ({
           confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}
         />
-      )}
+      ) : null}
 
-      {isJoinedLocal && (
+      {isJoinedLocal ? (
         <View className="absolute bottom-16 right-4 z-10">
           <TouchableOpacity
             onPress={onCheckChallengeCompleted}
@@ -416,9 +425,9 @@ const PersonalChallengeDetailScreen = ({
             <TaskAltIcon />
           </TouchableOpacity>
         </View>
-      )}
+      ) : null}
 
-      {challengeData?.id && (
+      {challengeData?.id ? (
         <>
           <ChallengeDetailScreen
             challengeData={challengeData}
@@ -427,14 +436,14 @@ const PersonalChallengeDetailScreen = ({
             shouldScreenRefresh={shouldScreenRefresh}
             setShouldScreenRefresh={setShouldScreenRefresh}
           />
-          <EditChallengeModal
+          {/* <EditChallengeModal
             visible={isEditChallengeModalVisible}
             onClose={handleEditChallengeModalClose}
             onConfirm={handleEditChallengeModalConfirm}
             challenge={challengeData}
-          />
+          /> */}
         </>
-      )}
+      ) : null}
     </SafeAreaView>
   );
 };

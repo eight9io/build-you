@@ -551,14 +551,14 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               </View>
             )}
         </View>
-        {challengeState.challengeData?.id && (
+        {/* {challengeState.challengeData?.id ? (
           <EditChallengeModal
             visible={isEditChallengeModalVisible}
             onClose={handleEditChallengeModalClose}
             onConfirm={handleEditChallengeModalConfirm}
             challenge={challengeState.challengeData}
           />
-        )}
+        ) : null} */}
         <CustomTabView
           routes={tabRoutes}
           renderScene={renderScene}

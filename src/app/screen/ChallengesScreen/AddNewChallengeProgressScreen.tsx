@@ -45,7 +45,7 @@ interface IAddNewChallengeProgressScreenProps {
     "AddNewChallengeProgressScreen",
     {
       challengeId: string;
-      refetchProgresses: () => void;
+      refetchProgresses?: () => void;
     }
   >;
 }
@@ -258,7 +258,7 @@ export const AddNewChallengeProgressScreen: FC<
     setIsShowModal(false);
     onClose();
     // setProgressLoading(true);
-    refetchProgresses();
+    refetchProgresses && refetchProgresses();
   };
 
   return (

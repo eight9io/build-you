@@ -17,7 +17,6 @@ import { IChallenge } from "../../../../types/challenge";
 
 import PopUpMenu from "../../../../component/common/PopUpMenu";
 import Button from "../../../../component/common/Buttons/Button";
-import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import ShareIcon from "./assets/share.svg";
@@ -26,6 +25,7 @@ import ChallengeCompanyDetailScreen from "../ChallengeDetailScreen/ChallengeComp
 import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
+import { useRefresh } from "../../../../context/refresh.context";
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -81,7 +81,7 @@ export const RightCompanyChallengeDetailOptions: FC<
           <Button Icon={<ShareIcon />} onPress={onShare} />
         </View>
 
-        {isCurrentUserOwner && (
+        {isCurrentUserOwner ? (
           <PopUpMenu
             iconColor="#FF7B1D"
             isDisabled={isChallengeCompleted}
@@ -96,7 +96,7 @@ export const RightCompanyChallengeDetailOptions: FC<
               },
             ]}
           />
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -126,7 +126,10 @@ const CompanyChallengeDetailScreen = ({
   const [isCompletedChallengeSuccess, setIsCompletedChallengeSuccess] =
     useState<boolean | null>(null);
 
-  // use for refresh screen when add new progress, refetch participant list,  edit challenge
+  // This is for refreshing after edit challenge
+  // Use context because edit challenge is a screen and we cannot pass refresh function as param to it
+  const { refresh: refreshScreen, setRefresh: setRefreshScreen } = useRefresh();
+  // use for refresh screen when add new progress, refetch participant list
   const [shouldScreenRefresh, setShouldScreenRefresh] =
     useState<boolean>(false);
   const [isFirstLoad, setIsFirstLoad] = useState<boolean>(true);
@@ -161,7 +164,11 @@ const CompanyChallengeDetailScreen = ({
     challengeStatus === "done" || challengeStatus === "closed";
 
   const handleEditChallengeBtnPress = () => {
-    setIsEditChallengeModalVisible(true);
+    // setIsEditChallengeModalVisible(true);
+    navigation.navigate("EditChallengeScreen", {
+      challenge: challengeData,
+      // onConfirm: handleEditChallengeModalConfirm,
+    });
   };
   const handleEditChallengeModalClose = () => {
     setIsEditChallengeModalVisible(false);
@@ -263,7 +270,11 @@ const CompanyChallengeDetailScreen = ({
   }, [challengeData]);
 
   useEffect(() => {
-    if (!challengeId && !shouldScreenRefresh) return;
+    if (
+      !challengeId ||
+      (challengeData && !shouldScreenRefresh && !refreshScreen)
+    )
+      return;
     if (isFirstLoad) setIsFirstLoad(false);
     try {
       httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
@@ -273,7 +284,8 @@ const CompanyChallengeDetailScreen = ({
       console.error(error);
     }
     setShouldScreenRefresh(false);
-  }, [shouldScreenRefresh]);
+    setRefreshScreen(false);
+  }, [shouldScreenRefresh, refreshScreen]);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-veryLight">
@@ -345,7 +357,7 @@ const CompanyChallengeDetailScreen = ({
         }}
       />
 
-      {isCompletedChallengeSuccess !== null && (
+      {isCompletedChallengeSuccess !== null ? (
         <ConfirmDialog
           isVisible={isCompletedChallengeSuccess !== null}
           title={
@@ -362,10 +374,9 @@ const CompanyChallengeDetailScreen = ({
           confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}
         />
-      )}
+      ) : null}
 
-      {(!!currentUserInParticipant ||
-        challengeOwner?.id === currentUser?.id) && (
+      {!!currentUserInParticipant || challengeOwner?.id === currentUser?.id ? (
         <View className="absolute bottom-16 right-4 z-10">
           <TouchableOpacity
             onPress={onCheckChallengeCompleted}
@@ -383,7 +394,7 @@ const CompanyChallengeDetailScreen = ({
             <TaskAltIcon />
           </TouchableOpacity>
         </View>
-      )}
+      ) : null}
       {challengeData ? (
         <>
           <ChallengeCompanyDetailScreen
@@ -392,12 +403,12 @@ const CompanyChallengeDetailScreen = ({
             shouldScreenRefresh={shouldScreenRefresh}
             setShouldScreenRefresh={setShouldScreenRefresh}
           />
-          <EditChallengeModal
+          {/* <EditChallengeModal
             visible={isEditChallengeModalVisible}
             onClose={handleEditChallengeModalClose}
             onConfirm={handleEditChallengeModalConfirm}
             challenge={challengeData}
-          />
+          /> */}
         </>
       ) : null}
     </SafeAreaView>

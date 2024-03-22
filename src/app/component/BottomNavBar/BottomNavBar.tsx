@@ -348,9 +348,9 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           drawerIcon: ({ focused }) => (
             <>
               {focused ? (
-                <FeedFillSvg fill={"#FF7B1C"} width={20} height={20} /> // Set fixed width and height for the svg => Fix svg being cut off
+                <FeedFillSvg fill={"#FF7B1C"} /> // Set fixed width and height for the svg => Fix svg being cut off
               ) : (
-                <FeedSvg fill={"#6C6E76"} width={20} height={20} />
+                <FeedSvg fill={"#6C6E76"} />
               )}
             </>
           ),
@@ -376,9 +376,9 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           drawerIcon: ({ focused }) => (
             <>
               {focused ? (
-                <ChallengesFillSvg fill={"#FF7B1C"} width={20} height={20} />
+                <ChallengesFillSvg fill={"#FF7B1C"} />
               ) : (
-                <ChallengesSvg fill={"#6C6E76"} width={20} height={20} />
+                <ChallengesSvg fill={"#6C6E76"} />
               )}
             </>
           ),
@@ -401,9 +401,9 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           drawerIcon: ({ focused }) => (
             <View testID="bottom_nav_bar_create_challenge_btn">
               {focused ? (
-                <CreateFillSvg fill={"#FF7B1C"} width={20} height={20} />
+                <CreateFillSvg fill={"#FF7B1C"} />
               ) : (
-                <CreateSvg fill={"#6C6E76"} width={20} height={20} />
+                <CreateSvg fill={"#6C6E76"} />
               )}
             </View>
           ),
@@ -433,11 +433,11 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           drawerIcon: ({ focused }) => (
             <>
               {focused ? (
-                <NotificationFillIcon fill={"#FF7B1C"} width={20} height={20} />
+                <NotificationFillIcon fill={"#FF7B1C"} />
               ) : isUserHasNewNotification ? (
-                <NewNotificationIcon fill={"#6C6E76"} width={20} height={20} />
+                <NewNotificationIcon fill={"#6C6E76"} />
               ) : (
-                <NotificationIcon fill={"#6C6E76"} width={20} height={20} />
+                <NotificationIcon fill={"#6C6E76"} />
               )}
             </>
           ),
@@ -462,9 +462,9 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           drawerIcon: ({ focused }) => (
             <View testID="profile_tab_btn">
               {focused ? (
-                <ProfileFillSvg fill={"#FF7B1C"} width={20} height={20} />
+                <ProfileFillSvg fill={"#FF7B1C"} />
               ) : (
-                <ProfileSvg fill={"#6C6E76"} width={20} height={20} />
+                <ProfileSvg fill={"#6C6E76"} />
               )}
             </View>
           ),

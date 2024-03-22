@@ -1,5 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { ICheckPoint, IPackage } from "../types/package";
+import { IChallenge, IProgressChallenge } from "../types/challenge";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -108,6 +109,16 @@ export type RootStackParamList = {
     hasNewMessage?: boolean;
     hasNotificationOnCoachTab?: boolean;
     hasNotificationOnCoachCalendarTab?: boolean;
+  };
+  AddNewChallengeProgressScreen: {
+    challengeId: string;
+    refetchProgresses?: () => void;
+  };
+  EditChallengeScreen: {
+    challenge: IChallenge;
+  };
+  EditChallengeProgressScreen: {
+    progress: IProgressChallenge;
   };
 };
 

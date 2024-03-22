@@ -14,6 +14,7 @@ import OtherUserProfileChallengeDetailsScreen from "../../ProfileScreen/OtherUse
 import CompanyChallengsScreen from "./CompanyChallengsScreen";
 import PersonalChallengeDetailScreen from "../PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
 import PersonalCoachChallengeDetailScreen from "../CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
+import AddNewChallengeProgressScreen from "../AddNewChallengeProgressScreen";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -125,6 +126,13 @@ const CompanyChallengesNavigator = () => {
               withBackIcon
             />
           ),
+        })}
+      />
+      <CompanyChallengesStack.Screen
+        name="AddNewChallengeProgressScreen"
+        component={AddNewChallengeProgressScreen}
+        options={() => ({
+          headerShown: false,
         })}
       />
     </CompanyChallengesStack.Navigator>

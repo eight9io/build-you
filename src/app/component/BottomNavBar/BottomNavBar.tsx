@@ -42,7 +42,6 @@ import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
 import { getNotifications } from "../../service/notification";
 import CreateChallengeScreen from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
-import NavigationService from "../../utils/navigationService";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -67,6 +66,7 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "CompanyCartScreen",
   "EditPersonalProfileScreen",
   "EditCompanyProfileScreen",
+  "AddNewChallengeProgressScreen",
 ];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {

@@ -109,6 +109,10 @@ export type RootStackParamList = {
     hasNotificationOnCoachTab?: boolean;
     hasNotificationOnCoachCalendarTab?: boolean;
   };
+  AddNewChallengeProgressScreen: {
+    challengeId: string;
+    refetchProgresses?: () => void;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

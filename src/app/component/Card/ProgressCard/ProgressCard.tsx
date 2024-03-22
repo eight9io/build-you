@@ -90,7 +90,9 @@ const ProgressCard: FC<IProgressCardProps> = ({
     {
       text: t("pop_up_menu.edit") as string,
       onPress: () => {
-        setIsShowEditModal(true), setProgressIndexToUpdate();
+        navigation.navigate("EditChallengeProgressScreen", {
+          progress: itemProgressCard,
+        });
       },
     },
     {

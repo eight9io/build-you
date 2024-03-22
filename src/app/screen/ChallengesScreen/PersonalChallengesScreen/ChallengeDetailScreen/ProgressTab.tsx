@@ -19,7 +19,6 @@ import Button from "../../../../component/common/Buttons/Button";
 import ProgressCard from "../../../../component/Card/ProgressCard/ProgressCard";
 import httpInstance from "../../../../utils/http";
 
-import EditChallengeProgressModal from "../../../../component/modal/EditChallengeProgressModal";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
 
 import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
@@ -189,8 +188,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   const [localProgressData, setLocalProgressData] = useState<
     IProgressChallenge[]
   >([]);
-  const [progressIndexToUpdate, setProgressIndexToUpdate] =
-    useState<number>(-1);
+  // const [progressIndexToUpdate, setProgressIndexToUpdate] =
+  //   useState<number>(-1);
   const [progressLoading, setProgressLoading] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
 
@@ -235,7 +234,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     setTimeout(() => {
       setProgressLoading(false);
     }, 800);
-  }, [challengeData?.id, isFocused]);
+  }, [challengeData.progress, isFocused]);
 
   const refetch = () => {
     setProgressLoading(true);
@@ -310,14 +309,14 @@ export const ProgressTab: FC<IProgressTabProps> = ({
 
   return (
     <View className="h-full flex-1 bg-gray-light">
-      {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal ? (
+      {/* {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal ? (
         <EditChallengeProgressModal
           progress={localProgressData[progressIndexToUpdate]}
           isVisible={isShowEditModal}
           onClose={() => setIsShowEditModal(false)}
           onConfirm={handleConfirmEditChallengeProgress}
         />
-      ) : null}
+      ) : null} */}
 
       <CustomActivityIndicator isVisible={progressLoading} />
       {!progressLoading ? (
@@ -365,7 +364,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               setIsShowEditModal={setIsShowEditModal}
               challengeOwner={(challengeData.owner as IChallengeOwner[])[0]}
               isChallengeCompleted={challengeData.status === "closed"}
-              setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
+              // setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />
           )}
           contentContainerStyle={{ paddingBottom: 80 }}

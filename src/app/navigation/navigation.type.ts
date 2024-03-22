@@ -1,6 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { ICheckPoint, IPackage } from "../types/package";
-import { IChallenge } from "../types/challenge";
+import { IChallenge, IProgressChallenge } from "../types/challenge";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -116,7 +116,9 @@ export type RootStackParamList = {
   };
   EditChallengeScreen: {
     challenge: IChallenge;
-    // onConfirm?: () => void;
+  };
+  EditChallengeProgressScreen: {
+    progress: IProgressChallenge;
   };
 };
 

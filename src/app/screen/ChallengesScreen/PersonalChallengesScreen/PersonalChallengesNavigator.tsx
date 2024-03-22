@@ -17,6 +17,7 @@ import CompanyChallengeDetailScreen from "../CompanyChallengesScreen/CompanyChal
 import AddNewChallengeProgressScreen from "../AddNewChallengeProgressScreen";
 import EditChallengeScreen from "../EditChallengeScreen";
 import { RefreshProvider } from "../../../context/refresh.context";
+import EditChallengeProgressScreen from "../EditChallengeProgressScreen";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -139,6 +140,13 @@ const PersonalChallengesNavigator = () => {
         <PersonalChallengesStack.Screen
           name="EditChallengeScreen"
           component={EditChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="EditChallengeProgressScreen"
+          component={EditChallengeProgressScreen}
           options={() => ({
             headerShown: false,
           })}

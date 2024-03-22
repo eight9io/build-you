@@ -33,12 +33,9 @@ const CompanySearchBar: FC<ICompanySearchBarProps> = ({
   };
 
   return (
-    <View className="m-[15] w-[90%] flex-row items-center justify-start">
+    <View className="flex-1 flex-row items-center justify-start px-4">
       <Animated.View
-        className={clsx(
-          "flex flex-row items-center rounded-lg bg-gray-200 ",
-          Platform.OS === "android" ? "px-[6] py-[2]" : "p-[6]"
-        )}
+        className="flex flex-1 flex-row items-center rounded-lg bg-gray-200 p-2"
         style={[
           {
             width: inputLength,

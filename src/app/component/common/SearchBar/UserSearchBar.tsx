@@ -20,9 +20,9 @@ const UserSearchBar = ({
   };
 
   return (
-    <View className="m-[15] w-[90%] flex-row items-center justify-start">
+    <View className="m-[15] flex-row items-center justify-start">
       <Animated.View
-        className={`flex flex-row items-center rounded-lg bg-gray-200 p-[6]`}
+        className={`flex flex-1 flex-row items-center rounded-lg bg-gray-200 p-[6]`}
         style={[
           {
             width: inputLength,

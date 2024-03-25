@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, SafeAreaView } from "react-native";
+import { View, SafeAreaView, ScrollView } from "react-native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
@@ -95,7 +95,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="justify-content: space-between relative flex-1 bg-gray-veryLight">
+    <SafeAreaView className="flex-1 bg-gray-veryLight">
       <ConfirmDialog
         isVisible={isShowLogoutModal}
         onConfirm={handleLogout}
@@ -107,17 +107,11 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
         description={t("dialog.logout.description") as string}
         confirmButtonTestID="logout_confirm_btn"
       />
-      <FlatList
-        data={[]}
-        renderItem={() => <></>}
-        ListHeaderComponent={() => (
-          <View className="flex flex-1 flex-col bg-gray-veryLight">
-            <Settings navigation={navigation} />
-          </View>
-        )}
-      />
-      <View className="absolute bottom-10 w-full px-4 py-6">
-        <View className="h-12">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="flex flex-1 flex-col bg-gray-veryLight">
+          <Settings navigation={navigation} />
+        </View>
+        <View className="mb-6 flex h-12 justify-end px-4">
           <Button
             title={t("user_settings_screen.logout")}
             containerClassName="bg-gray-medium flex-1"
@@ -126,7 +120,7 @@ const Setting: React.FC<INavBarInnerScreenProps> = ({ navigation }) => {
             testID="logout_btn"
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

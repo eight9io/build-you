@@ -175,7 +175,7 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
         <Button
           testID="complete_profile_step_3_next_button"
           title={t("button.next") || "Next"}
-          containerClassName="flex-1 bg-primary-default my-5 mx-5"
+          containerClassName="bg-primary-default my-5 mx-5 flex-none"
           textClassName="text-white text-md leading-6"
           onPress={() =>
             checkNumberOfSkills() &&

@@ -128,7 +128,7 @@ const CompleteProfileStep2: FC<CompleteProfileStep2Props> = ({
 
           <Button
             title={t("button.next") || "Next"}
-            containerClassName="h-12 w-full bg-primary-default my-5 "
+            containerClassName="h-12 w-full bg-primary-default my-5 flex-none"
             textClassName="text-white text-md leading-6"
             onPress={handleSubmit(handleSubmitForm)}
             testID="complete_profile_step_2_next_button"

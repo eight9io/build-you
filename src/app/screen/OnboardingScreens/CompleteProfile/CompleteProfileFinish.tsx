@@ -1,10 +1,12 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
+import { CommonActions } from "@react-navigation/native";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 
 import BuildYouLogo from "../../../common/svg/buildYou_logo.svg";
 import StarLogo from "../../../common/svg/auto_awesome.svg";
+import { useNav } from "../../../hooks/useNav";
 
 interface CompleteProfileFinishProps {
   navigation: CompleteProfileScreenNavigationProp;
@@ -12,6 +14,18 @@ interface CompleteProfileFinishProps {
 
 const CompleteProfileFinish: FC<CompleteProfileFinishProps> = () => {
   const { t } = useTranslation();
+  const navigation = useNav();
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "HomeScreen" }],
+        })
+      );
+    }, 3000);
+  }, []);
 
   return (
     <View

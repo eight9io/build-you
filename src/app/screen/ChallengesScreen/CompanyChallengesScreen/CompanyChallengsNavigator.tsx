@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { t } from "i18next";
 import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import CompanyChallengeDetailScreen from "./CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
-import { t } from "i18next";
 import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import ProgressCommentScreen from "../ProgressCommentScreen/ProgressCommentScreen";
@@ -18,6 +20,8 @@ import EditChallengeProgressScreen from "../EditChallengeProgressScreen";
 import ConfirmVideoCoachScreen from "../ConfirmVideoCoachScreen";
 import CoachRateChallengeScreen from "../CoachRateChallengeScreen";
 import CoachRateCompanyChallengeScreen from "../CoachRateCompanyChallengeScreen";
+import CreateCompanyChallengeScreen from "./CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
+import CreateCertifiedCompanyChallengeScreen from "./CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -172,6 +176,52 @@ const CompanyChallengesNavigator = () => {
           component={CoachRateChallengeScreen}
           options={() => ({
             headerShown: false,
+          })}
+        />
+
+        <CompanyChallengesStack.Screen
+          name="CreateCompanyChallengeScreen"
+          component={CreateCompanyChallengeScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => (
+              <AppTitle
+                title={
+                  t("new_challenge_screen.new_challenge") || "New challenge"
+                }
+              />
+            ),
+            headerLeft: ({}) => (
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                className="ml-3"
+              >
+                <Ionicons name="close" size={24} color="#000" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <CompanyChallengesStack.Screen
+          name="CreateCertifiedCompanyChallengeScreen"
+          component={CreateCertifiedCompanyChallengeScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => (
+              <AppTitle
+                title={
+                  t("new_challenge_screen.new_certified_challenge") ||
+                  "New certified challenge"
+                }
+              />
+            ),
+            headerLeft: ({}) => (
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                className="ml-3"
+              >
+                <Ionicons name="close" size={24} color="#000" />
+              </TouchableOpacity>
+            ),
           })}
         />
       </CompanyChallengesStack.Navigator>

@@ -1,7 +1,8 @@
 import { RouteProp } from "@react-navigation/native";
 import { ICheckPoint, IPackage } from "../types/package";
-import { IChallenge, IProgressChallenge } from "../types/challenge";
+import { IChallenge, IProgressChallenge, ISoftSkill } from "../types/challenge";
 import { IProposingScheduleTime } from "../types/schedule";
+import { IUserData } from "../types/user";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -123,6 +124,17 @@ export type RootStackParamList = {
   };
   ConfirmVideoCoachScreen: {
     selectedOption: IProposingScheduleTime;
+  };
+  CoachRateCompanyChallengeScreen: {
+    userToRate: IUserData;
+    challengeData: IChallenge;
+    canCurrentUserRateSkills: boolean;
+  };
+  CoachRateChallengeScreen: {
+    userToRate: IUserData;
+    challengeData: IChallenge;
+    ratedCompetencedSkill: ISoftSkill[];
+    canCurrentUserRateSkills: boolean;
   };
 };
 

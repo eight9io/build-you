@@ -19,6 +19,8 @@ import EditChallengeScreen from "../EditChallengeScreen";
 import { RefreshProvider } from "../../../context/refresh.context";
 import EditChallengeProgressScreen from "../EditChallengeProgressScreen";
 import ConfirmVideoCoachScreen from "../ConfirmVideoCoachScreen";
+import CoachRateCompanyChallengeScreen from "../CoachRateCompanyChallengeScreen";
+import CoachRateChallengeScreen from "../CoachRateChallengeScreen";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -155,6 +157,20 @@ const PersonalChallengesNavigator = () => {
         <PersonalChallengesStack.Screen
           name="ConfirmVideoCoachScreen"
           component={ConfirmVideoCoachScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="CoachRateCompanyChallengeScreen"
+          component={CoachRateCompanyChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="CoachRateChallengeScreen"
+          component={CoachRateChallengeScreen}
           options={() => ({
             headerShown: false,
           })}

@@ -70,6 +70,8 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "EditChallengeProgressScreen",
   "EditChallengeScreen",
   "ConfirmVideoCoachScreen",
+  "CoachRateCompanyChallengeScreen",
+  "CoachRateChallengeScreen",
 ];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {

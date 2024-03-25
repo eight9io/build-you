@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 
 import {
@@ -22,7 +22,7 @@ import RatedParticipant from "../assets/rated-participant.svg";
 import Empty from "../../../../common/svg/empty-list.svg";
 import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
-import CoachRateCompanyChallengeModal from "../../../../component/modal/CoachRateCompanyChallengeModal";
+import { useNav } from "../../../../hooks/useNav";
 
 interface IParticipantWithRatingSkills {
   id: number;
@@ -59,6 +59,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
   challengeData,
   challengeState,
 }) => {
+  const navigation = useNav();
   const [participantsWithRatingSkills, setParticipantsWithRatingSkills] =
     useState<IParticipantWithRatingSkills[]>([]);
   const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
@@ -90,8 +91,13 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
   };
 
   const handleSelectUserToRate = (user) => {
-    setSelectedUser(user);
-    setIsRateSkillsModalVisible(true);
+    // setSelectedUser(user);
+    // setIsRateSkillsModalVisible(true);
+    navigation.navigate("CoachRateCompanyChallengeScreen", {
+      userToRate: user,
+      challengeData: challengeData,
+      canCurrentUserRateSkills: canCurrentUserRateSkills,
+    });
   };
 
   useEffect(() => {
@@ -138,7 +144,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
 
   return (
     <View className="flex-1 bg-gray-veryLight">
-      {isRateSkillsModalVisible && (
+      {/* {isRateSkillsModalVisible && (
         <CoachRateCompanyChallengeModal
           isVisible={isRateSkillsModalVisible}
           setIsVisible={setIsRateSkillsModalVisible}
@@ -147,7 +153,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
           setShouldParentRefresh={setShouldRefresh}
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
-      )}
+      )} */}
       {skillsToRate.length > 0 && (
         <View
           className={clsx(

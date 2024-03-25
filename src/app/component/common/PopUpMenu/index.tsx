@@ -75,7 +75,7 @@ const PopUpMenu: FC<IPopMenuProps> = ({
           },
         }}
       />
-      {!options && (
+      {!options ? (
         <MenuOptions
           optionsContainerStyle={[
             {
@@ -101,8 +101,8 @@ const PopUpMenu: FC<IPopMenuProps> = ({
             onPress={() => alert("pressed")}
           />
         </MenuOptions>
-      )}
-      {options && (
+      ) : null}
+      {options ? (
         <MenuOptions
           optionsContainerStyle={[
             {
@@ -116,7 +116,7 @@ const PopUpMenu: FC<IPopMenuProps> = ({
             <MenuItem key={id} text={option.text} onPress={option.onPress} />
           ))}
         </MenuOptions>
-      )}
+      ) : null}
     </Menu>
   );
 };

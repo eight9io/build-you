@@ -1,6 +1,7 @@
 import { RouteProp } from "@react-navigation/native";
 import { ICheckPoint, IPackage } from "../types/package";
 import { IChallenge, IProgressChallenge } from "../types/challenge";
+import { IProposingScheduleTime } from "../types/schedule";
 
 export type RootStackParamList = {
   IntroScreen: undefined;
@@ -119,6 +120,9 @@ export type RootStackParamList = {
   };
   EditChallengeProgressScreen: {
     progress: IProgressChallenge;
+  };
+  ConfirmVideoCoachScreen: {
+    selectedOption: IProposingScheduleTime;
   };
 };
 

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import clsx from "clsx";
 import { EvilIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
@@ -25,12 +25,13 @@ import PopUpMenu from "../../../../component/common/PopUpMenu";
 import Button from "../../../../component/common/Buttons/Button";
 import ErrorDialog from "../../../../component/common/Dialog/ErrorDialog/ErrorDialog";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
-import ConfirmVideoCoachModal from "../../../../component/modal/ConfirmVideoCoachModal";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import CoachDateTimePicker from "../../../../component/common/BottomSheet/CoachDateTimePicker/CoachDateTimePicker";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { onCopyLink } from "../../../../utils/shareLink.util";
 import { openUrl } from "../../../../utils/linking.util";
+import { useNav } from "../../../../hooks/useNav";
+import { useRefresh } from "../../../../context/refresh.context";
 
 export interface IProposingScheduleTimeTag {
   translate?: (key: string) => string;
@@ -147,39 +148,39 @@ const ConfirmedRequestedCall = ({
             {translate("challenge_detail_screen.open_meeting")}
           </Text>
         </View>
-        <TouchableOpacity
-          className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={() => onCopyLink(metingUrl)}
-        >
-          <LinkSvg />
-          <Text className="text-right text-md font-normal leading-tight text-blue-600">
-            {translate("challenge_detail_screen.copy")}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={handleOpenLink}
-        >
-          <EvilIcons name="external-link" size={20} color="#2563eb" />
-          <Text className="text-right text-md font-normal leading-tight text-blue-600">
-            {translate("challenge_detail_screen.open_link")}
-          </Text>
-        </TouchableOpacity>
+        <View className="flex flex-row">
+          <TouchableOpacity
+            className="flex flex-row items-center justify-end gap-1 p-1"
+            onPress={() => onCopyLink(metingUrl)}
+          >
+            <LinkSvg />
+            <Text className="text-right text-md font-normal leading-tight text-blue-600">
+              {translate("challenge_detail_screen.copy")}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="flex flex-row items-center justify-end gap-1 p-1"
+            onPress={handleOpenLink}
+          >
+            <EvilIcons name="external-link" size={20} color="#2563eb" />
+            <Text className="text-right text-md font-normal leading-tight text-blue-600">
+              {translate("challenge_detail_screen.open_link")}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      {confirmedOption?.note && (
-        <View className="flex flex-row items-center justify-between self-stretch pt-3">
+      {confirmedOption?.note ? (
+        <View className="flex flex-col pt-3">
           <View className="inline-flex flex-col items-start justify-start gap-1">
             <Text className="text-md font-semibold leading-snug text-zinc-500">
               {translate("challenge_detail_screen.note")}
             </Text>
           </View>
-          <View className="flex w-48">
-            <Text className="text-md font-normal leading-tight text-zinc-500">
-              {confirmedOption?.note}
-            </Text>
-          </View>
+          <Text className="text-md font-normal leading-tight text-zinc-500">
+            {confirmedOption?.note}
+          </Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -307,6 +308,10 @@ export const getInprogressState = (
 const CompanyCoachCalendarTabCoachView: FC<
   ICompanyCoachCalendarTabCoachViewProps
 > = ({ challengeId, challengeState, shouldScreenRefresh }) => {
+  const navigation = useNav();
+  // This is for refreshing after edit proposed option
+  // Use context because edit proposed option is a screen and we cannot pass refresh function as param to it
+  const { refresh: refreshScreen, setRefresh: setRefreshScreen } = useRefresh();
   const [proposingOptions, setProposingOptions] = useState<
     IProposingScheduleTime[]
   >([] as IProposingScheduleTime[]);
@@ -458,18 +463,28 @@ const CompanyCoachCalendarTabCoachView: FC<
   };
 
   const handleEditScheduledVideoCallLink = async () => {
-    setIsShowConfirmTimeModal(true);
+    // setIsShowConfirmTimeModal(true);
+    navigation.navigate("ConfirmVideoCoachScreen", {
+      selectedOption: confirmedOption ? confirmedOption : selectedOption,
+    });
   };
+
+  // useEffect(() => {
+  //   getScheduledVideocall();
+  // }, [challengeId, currentChallengeState]);
 
   useEffect(() => {
     getScheduledVideocall();
-  }, [challengeId, currentChallengeState]);
-
-  useEffect(() => {
-    if (shouldScreenRefresh) {
-      getScheduledVideocall();
+    if (refreshScreen) {
+      setRefreshScreen(false);
     }
-  }, [shouldScreenRefresh]);
+  }, [challengeId, currentChallengeState, refreshScreen]);
+
+  // useEffect(() => {
+  //   if (shouldScreenRefresh) {
+  //     getScheduledVideocall();
+  //   }
+  // }, [shouldScreenRefresh, refreshScreen]);
 
   return (
     <ScrollView className="relative flex h-full flex-1 flex-col p-4">
@@ -500,13 +515,13 @@ const CompanyCoachCalendarTabCoachView: FC<
         onClosed={closeErrorModal}
       />
 
-      <ConfirmVideoCoachModal
+      {/* <ConfirmVideoCoachModal
         openErrorModal={openErrorModal}
         selectedOption={confirmedOption ? confirmedOption : selectedOption}
         setConfirmedOption={setConfirmedOption}
         modalVisible={isShowConfirmTimeModal}
         setModalVisible={setIsShowConfirmTimeModal}
-      />
+      /> */}
 
       <View className="flex flex-col rounded-lg py-2">
         <Text className="text-md font-semibold leading-tight text-zinc-500">
@@ -525,13 +540,13 @@ const CompanyCoachCalendarTabCoachView: FC<
           <EmptyVideoCall translate={t} />
         )}
       </View>
-      {!confirmedOption && (
+      {!confirmedOption ? (
         <View className="flex flex-1">
           <View className="flex flex-row justify-between pb-2">
             <Text className="text-md font-semibold leading-tight text-zinc-500">
               {t("challenge_detail_screen.proposing_time")}
             </Text>
-            {isChallengeInProgress && !isCoachProposed && (
+            {isChallengeInProgress && !isCoachProposed ? (
               <TouchableOpacity
                 className="flex flex-row items-center"
                 onPress={handleAddTime}
@@ -540,9 +555,9 @@ const CompanyCoachCalendarTabCoachView: FC<
                   + {t("challenge_detail_screen.add")}
                 </Text>
               </TouchableOpacity>
-            )}
+            ) : null}
           </View>
-          {!isCoachProposed && (
+          {!isCoachProposed ? (
             <View>
               {proposingOptions.length > 0 ? (
                 proposingOptions.map((item) => (
@@ -557,18 +572,18 @@ const CompanyCoachCalendarTabCoachView: FC<
               ) : (
                 <EmptyProposingTime translate={t} />
               )}
-              {proposingOptions.length > 0 && (
+              {proposingOptions.length > 0 ? (
                 <Button
                   title={t("challenge_detail_screen.propose")}
                   containerClassName="flex-1 bg-primary-default my-5 "
                   textClassName="text-white text-md leading-6"
                   onPress={handleSubmitProposeTime}
                 />
-              )}
+              ) : null}
             </View>
-          )}
+          ) : null}
 
-          {isCoachProposed && proposedOptions && (
+          {isCoachProposed && proposedOptions ? (
             <View>
               {proposedOptions?.map((item, index) => (
                 <View key={item?.id}>
@@ -582,7 +597,7 @@ const CompanyCoachCalendarTabCoachView: FC<
                   />
                 </View>
               ))}
-              {proposedOptions.length > 0 && (
+              {proposedOptions.length > 0 ? (
                 <Button
                   title={t("challenge_detail_screen.confirm")}
                   containerClassName="flex-1 bg-primary-default my-5 "
@@ -592,11 +607,11 @@ const CompanyCoachCalendarTabCoachView: FC<
                   disabledContainerClassName="flex-1 bg-gray-300 my-5 "
                   disabledTextClassName="text-white text-md leading-6"
                 />
-              )}
+              ) : null}
             </View>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </ScrollView>
   );
 };

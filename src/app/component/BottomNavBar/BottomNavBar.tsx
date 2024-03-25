@@ -67,6 +67,9 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "EditPersonalProfileScreen",
   "EditCompanyProfileScreen",
   "AddNewChallengeProgressScreen",
+  "EditChallengeProgressScreen",
+  "EditChallengeScreen",
+  "ConfirmVideoCoachScreen",
 ];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {

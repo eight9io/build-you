@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Platform, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import clsx from "clsx";
 import debounce from "lodash.debounce";
 
@@ -34,12 +34,12 @@ export const Header: FC<IHeaderProps> = ({
           className="absolute left-0 top-0"
           onPress={onLeftBtnPress}
         >
-          {typeof leftBtn === "string" && (
+          {typeof leftBtn === "string" ? (
             <Text className="text-h5 font-normal text-primary-default">
               {leftBtn}
             </Text>
-          )}
-          {typeof leftBtn === "object" && leftBtn}
+          ) : null}
+          {typeof leftBtn === "object" ? leftBtn : null}
         </TouchableOpacity>
       ) : null}
 

@@ -29,8 +29,8 @@ const NavButton: FC<INavButtonProps> = ({
       onPress={onPress}
       testID={testID}
     >
-      {withBackIcon && <BackIcon />}
-      {withIcon && icon}
+      {withBackIcon ? <BackIcon /> : null}
+      {withIcon ? icon : null}
       <Text
         className={clsx(
           "pl-[5px] text-center text-h6 font-normal text-primary-default",

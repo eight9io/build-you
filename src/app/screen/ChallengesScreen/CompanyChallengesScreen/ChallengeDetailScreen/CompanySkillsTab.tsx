@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { IUserData } from "../../../../types/user";
 import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
+import { useNav } from "../../../../hooks/useNav";
 
 interface IParticipantWithRatingSkills {
   id: number;
@@ -59,6 +60,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
   challengeData,
   challengeState,
 }) => {
+  const navigation = useNav();
   const [participantsWithRatingSkills, setParticipantsWithRatingSkills] =
     useState<IParticipantWithRatingSkills[]>([]);
   const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
@@ -90,8 +92,14 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
   };
 
   const handleSelectUserToRate = (user) => {
-    setSelectedUser(user);
-    setIsRateSkillsModalVisible(true);
+    // setSelectedUser(user);
+    // setIsRateSkillsModalVisible(true);
+    navigation.navigate("CoachRateChallengeScreen", {
+      userToRate: user,
+      challengeData: challengeData,
+      ratedCompetencedSkill: ratedCompetencedSkill,
+      canCurrentUserRateSkills: canCurrentUserRateSkills,
+    });
   };
 
   useEffect(() => {
@@ -138,7 +146,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
 
   return (
     <View className="flex-1 bg-gray-veryLight">
-      {isRateSkillsModalVisible && (
+      {/* {isRateSkillsModalVisible && (
         <CoachRateChallengeModal
           isVisible={isRateSkillsModalVisible}
           setIsVisible={setIsRateSkillsModalVisible}
@@ -148,7 +156,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
           ratedCompetencedSkill={ratedCompetencedSkill}
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
-      )}
+      )} */}
       {skillsToRate.length > 0 && (
         <View
           className={clsx(

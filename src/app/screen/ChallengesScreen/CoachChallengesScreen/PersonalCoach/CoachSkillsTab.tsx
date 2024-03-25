@@ -14,7 +14,7 @@ import {
   ISoftSkill,
 } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
-import CoachRateChallengeModal from "../../../../component/modal/CoachRateChallengeModal";
+import { useNav } from "../../../../hooks/useNav";
 
 interface ISkillsTabProps {
   challengeData: IChallenge;
@@ -25,6 +25,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   challengeData,
   challengeState,
 }) => {
+  const navigation = useNav();
   const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
     ISoftSkill[]
   >([]);
@@ -41,7 +42,13 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   const challengeOwner = (challengeData?.owner?.[0] as IChallengeOwner) ?? null;
 
   const handleOpenRateSkillsModal = () => {
-    setIsRateSkillsModalVisible(true);
+    // setIsRateSkillsModalVisible(true);
+    navigation.navigate("CoachRateChallengeScreen", {
+      userToRate: challengeOwner,
+      challengeData: challengeData,
+      ratedCompetencedSkill: ratedCompetencedSkill,
+      canCurrentUserRateSkills: canCurrentUserRateSkills,
+    });
   };
 
   const skillsToRate: ISoftSkill[] =
@@ -92,7 +99,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
 
   return (
     <View className="mb-4 flex-1 bg-gray-veryLight px-4 pr-4 pt-4">
-      {isRateSkillsModalVisible && (
+      {/* {isRateSkillsModalVisible && (
         <CoachRateChallengeModal
           isVisible={isRateSkillsModalVisible}
           setIsVisible={setIsRateSkillsModalVisible}
@@ -102,7 +109,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
           ratedCompetencedSkill={ratedCompetencedSkill}
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
-      )}
+      )} */}
       {canCurrentUserRateSkills && !isChallengeRated && (
         <Button
           containerClassName="bg-primary-default flex-none px-1"

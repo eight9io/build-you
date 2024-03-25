@@ -37,8 +37,8 @@ const Button: FC<IButtonProps> = ({
       testID={testID}
     >
       <View className="flex-1 flex-row items-center justify-center active:bg-black-default">
-        {Icon && Icon}
-        {title && (
+        {Icon ? Icon : null}
+        {title ? (
           <Text
             className={clsx(isDisabled ? disabledTextClassName : textClassName)}
             numberOfLines={2}
@@ -46,7 +46,7 @@ const Button: FC<IButtonProps> = ({
           >
             {title}
           </Text>
-        )}
+        ) : null}
       </View>
     </TouchableOpacity>
   );

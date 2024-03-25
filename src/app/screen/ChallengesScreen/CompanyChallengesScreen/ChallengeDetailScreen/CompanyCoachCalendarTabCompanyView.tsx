@@ -107,39 +107,39 @@ const ConfirmedRequestedCall = ({
             {translate("challenge_detail_screen.open_meeting")}
           </Text>
         </View>
-        <TouchableOpacity
-          className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={() => onCopyLink(metingUrl)}
-        >
-          <LinkSvg />
-          <Text className="text-right text-md font-normal leading-tight text-blue-600">
-            {translate("challenge_detail_screen.copy")}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="flex flex-row items-center justify-end gap-1 p-1"
-          onPress={handleOpenLink}
-        >
-          <EvilIcons name="external-link" size={20} color="#2563eb" />
-          <Text className="text-right text-md font-normal leading-tight text-blue-600">
-            {translate("challenge_detail_screen.open_link")}
-          </Text>
-        </TouchableOpacity>
+        <View className="flex-row">
+          <TouchableOpacity
+            className="flex flex-row items-center justify-end gap-1 p-1"
+            onPress={() => onCopyLink(metingUrl)}
+          >
+            <LinkSvg />
+            <Text className="text-right text-md font-normal leading-tight text-blue-600">
+              {translate("challenge_detail_screen.copy")}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="flex flex-row items-center justify-end gap-1 p-1"
+            onPress={handleOpenLink}
+          >
+            <EvilIcons name="external-link" size={20} color="#2563eb" />
+            <Text className="text-right text-md font-normal leading-tight text-blue-600">
+              {translate("challenge_detail_screen.open_link")}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      {confirmedOption?.note && (
-        <View className="flex flex-row items-center justify-between self-stretch pt-3">
+      {confirmedOption?.note ? (
+        <View className="flex flex-col pt-3">
           <View className="inline-flex flex-col items-start justify-start gap-1">
             <Text className="text-md font-semibold leading-snug text-zinc-500">
               {translate("challenge_detail_screen.note")}
             </Text>
           </View>
-          <View className="flex w-48">
-            <Text className="text-md font-normal leading-tight text-zinc-500">
-              {confirmedOption?.note}
-            </Text>
-          </View>
+          <Text className="text-md font-normal leading-tight text-zinc-500">
+            {confirmedOption?.note}
+          </Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };

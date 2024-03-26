@@ -55,6 +55,9 @@ import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalC
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
 import { setBadgeCount } from "../utils/notification.util";
 import ForgotPasswordConfirmScreen from "../screen/ForgotPassword/ForgotPasswordConfirmScreen";
+import RegisterOptionsScreen from "../screen/RegisterScreen/RegisterOptionsScreen";
+import TermsOfServicesScreen from "../screen/PersonalInformations/TermsOfServicesScreen";
+import PrivacyPolicyScreen from "../screen/PersonalInformations/PrivacyPolicyScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -327,6 +330,55 @@ export const RootNavigation = () => {
                   onPress={() => navigation.goBack()}
                   withBackIcon
                   testID="email_registration_back_btn"
+                />
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="RegisterOptionsScreen"
+            component={RegisterOptionsScreen}
+            options={({ navigation }) => ({
+              headerShown: false,
+            })}
+          />
+          <RootStack.Screen
+            name="TermsOfServicesScreen"
+            component={TermsOfServicesScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle
+                  title={t(
+                    "user_settings_screen.account_settings_sections.terms_of_services"
+                  )}
+                />
+              ),
+              headerLeft: (props) => (
+                <NavButton
+                  text={t("button.back") as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
+                />
+              ),
+            })}
+          />
+          <RootStack.Screen
+            name="PrivacyPolicyScreen"
+            component={PrivacyPolicyScreen}
+            options={({ navigation }) => ({
+              headerShown: true,
+              headerTitle: () => (
+                <AppTitle
+                  title={t(
+                    "user_settings_screen.account_settings_sections.privacy_policy"
+                  )}
+                />
+              ),
+              headerLeft: (props) => (
+                <NavButton
+                  text={t("button.back") as string}
+                  onPress={() => navigation.goBack()}
+                  withBackIcon
                 />
               ),
             })}

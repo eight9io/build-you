@@ -141,6 +141,7 @@ export type RootStackParamList = {
   ForgotPasswordConfirmScreen: {
     email: string;
   };
+  RegisterOptionsScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

@@ -5,16 +5,18 @@ import { useTranslation } from "react-i18next";
 import Swiper from "react-native-web-swiper";
 import Button from "../../component/common/Buttons/Button";
 
-import RegisterModal from "../../component/modal/RegisterModal/RegisterModal";
-
 export const IntroScreen = ({ navigation, route }: any) => {
   const { t } = useTranslation();
-  const [modalVisible, setModalVisible] = useState(false);
-  useEffect(() => {
-    if (route?.params?.setModal) {
-      setModalVisible(route?.params?.setModal);
-    }
-  }, []);
+  // const [modalVisible, setModalVisible] = useState(false);
+  // useEffect(() => {
+  //   if (route?.params?.setModal) {
+  //     setModalVisible(route?.params?.setModal);
+  //   }
+  // }, []);
+
+  const onRegisterBtnClick = () => {
+    navigation.navigate("RegisterOptionsScreen");
+  };
 
   return (
     <View
@@ -80,7 +82,8 @@ export const IntroScreen = ({ navigation, route }: any) => {
             title={t("login_screen.register")}
             containerClassName="bg-primary-default"
             textClassName="text-white"
-            onPress={() => setModalVisible(true)}
+            // onPress={() => setModalVisible(true)}
+            onPress={onRegisterBtnClick}
           />
           <Button
             testID="intro_login_btn"
@@ -99,11 +102,11 @@ export const IntroScreen = ({ navigation, route }: any) => {
           </Text>
         </TouchableOpacity>
 
-        <RegisterModal
+        {/* <RegisterModal
           navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-        />
+        /> */}
       </View>
     </View>
   );

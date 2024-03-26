@@ -96,6 +96,13 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
   };
   const [hidePassword, setHidePassword] = useState(true);
 
+  const onTermsOfServiceClick = () => {
+    navigation.navigate("TermsOfServicesScreen");
+  };
+  const onPolicyClick = () => {
+    navigation.navigate("PrivacyPolicyScreen");
+  };
+
   return (
     <SafeAreaView
       className=" h-full bg-white "
@@ -238,7 +245,8 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                           </Text>
                           <Text
                             className="cursor-pointer font-medium  underline underline-offset-1"
-                            onPress={() => setModalVisible(true)}
+                            // onPress={() => setModalVisible(true)}
+                            onPress={onPolicyClick}
                             testID="register_policy_link"
                           >
                             {t("register_screen.policy_link")}
@@ -246,7 +254,8 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                           <Text className=""> {t("and")} </Text>
                           <Text
                             className="cursor-pointer font-medium underline underline-offset-auto"
-                            onPress={() => setModalTerms(true)}
+                            // onPress={() => setModalTerms(true)}
+                            onPress={onTermsOfServiceClick}
                             testID="register_terms_link"
                           >
                             {t("register_screen.terms_link")}
@@ -288,7 +297,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             testID="register_submit_btn"
           />
 
-          <PolicyModal
+          {/* <PolicyModal
             navigation={navigation}
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
@@ -297,7 +306,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             navigation={navigation}
             modalVisible={modalTerms}
             setModalVisible={setModalTerms}
-          />
+          /> */}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

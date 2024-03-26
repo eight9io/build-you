@@ -138,6 +138,9 @@ export type RootStackParamList = {
   };
   AddHardSkillsScreen: undefined;
   AddManualSkillScreen: undefined;
+  ForgotPasswordConfirmScreen: {
+    email: string;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

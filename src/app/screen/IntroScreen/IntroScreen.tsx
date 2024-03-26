@@ -28,7 +28,7 @@ export const IntroScreen = ({ navigation, route }: any) => {
           resizeMode="cover"
         />
         <Image
-          className="position: absolute bottom-7 left-[34%] z-20"
+          className="absolute bottom-8 left-0 right-0 z-20 mx-auto"
           source={require("./asset/logo.png")}
           resizeMode="cover"
         />

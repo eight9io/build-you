@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, ScrollView, View } from "react-native";
@@ -12,7 +12,6 @@ import Button from "../../component/common/Buttons/Button";
 import ErrorText from "../../component/common/ErrorText";
 
 import { ForgotPasswordValidationSchema } from "../../Validators/ForgotPassword.validate";
-import ForgotPasswordModal from "../../component/modal/ForgotPasswordModal";
 import { serviceForgotPassword } from "../../service/auth";
 import { ForgotPasswordForm } from "../../types/auth";
 import { err_server, errorMessage } from "../../utils/statusCode";
@@ -42,8 +41,13 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
     serviceForgotPassword(data?.email as string)
       .then((res) => {
         if (res.status == 200) {
-          setEmail(data?.email as string);
-          setModalVisible(true);
+          // setEmail(data?.email as string);
+          // setModalVisible(true);
+          if (data.email)
+            navigation.navigate("ForgotPasswordConfirmScreen", {
+              email: data?.email,
+            });
+          else setErrMessage(t("error_general_message"));
           setErrMessage("");
         } else {
           setErrMessage(err_server);
@@ -53,8 +57,13 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
         if (error.response?.data.statusCode === 500) {
           setErrMessage(errorMessage(error, "err_forgot_password") as string);
         } else {
-          setEmail(data?.email as string);
-          setModalVisible(true);
+          // setEmail(data?.email as string);
+          // setModalVisible(true);
+          if (data.email)
+            navigation.navigate("ForgotPasswordConfirmScreen", {
+              email: data?.email,
+            });
+          else setErrMessage(t("error_general_message"));
         }
       })
       .finally(() => {
@@ -78,12 +87,12 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                   contentFit="cover"
                 />
               </View>
-              {errMessage && (
+              {errMessage ? (
                 <ErrorText
                   containerClassName="justify-center "
                   message={errMessage}
                 />
-              )}
+              ) : null}
               <View className="mt-4 flex flex-col ">
                 {(
                   t("form", {
@@ -113,7 +122,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                             </View>
                           )}
                         />
-                        {errors[item.name as keyof ForgotPasswordForm] && (
+                        {errors[item.name as keyof ForgotPasswordForm] ? (
                           <ErrorText
                             message={
                               errors[item.name as keyof ForgotPasswordForm]
@@ -121,7 +130,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                             }
                             testID="email_forgot_password_error"
                           />
-                        )}
+                        ) : null}
                       </View>
                     );
                   }
@@ -137,14 +146,14 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
                 testID="send_code_btn"
               />
             </View>
-            {email && (
+            {/* {email ? (
               <ForgotPasswordModal
                 navigation={navigation}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 email={email}
               />
-            )}
+            ) : null} */}
           </View>
         </ScrollView>
       </View>

@@ -54,6 +54,7 @@ import CreateChallengeScreenMain from "../screen/ChallengesScreen/CreateChalleng
 import CreateCertifiedChallengeScreen from "../screen/ChallengesScreen/PersonalChallengesScreen/CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
 import CreateCertifiedCompanyChallengeScreen from "../screen/ChallengesScreen/CompanyChallengesScreen/CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
 import { setBadgeCount } from "../utils/notification.util";
+import ForgotPasswordConfirmScreen from "../screen/ForgotPassword/ForgotPasswordConfirmScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -347,6 +348,13 @@ export const RootNavigation = () => {
                   testID="forgot_password_back_btn"
                 />
               ),
+            })}
+          />
+          <RootStack.Screen
+            name="ForgotPasswordConfirmScreen"
+            component={ForgotPasswordConfirmScreen}
+            options={({ navigation }) => ({
+              headerShown: false,
             })}
           />
           <RootStack.Screen

@@ -72,11 +72,11 @@ const CreateChallengeCard: FC<ICreateChallengeCardProps> = ({
   onPress,
 }) => {
   return (
-    <View className="items-between flex flex-row rounded-xl bg-white shadow-md">
+    <View className="items-between flex max-w-[450px] flex-row rounded-xl bg-white shadow-md md:w-full">
       <Image source={image} className="h-36 w-16 rounded-l-2xl" />
-      <View className="flex flex-grow flex-col items-start justify-center px-3">
+      <View className="flex flex-1 flex-grow flex-col items-start justify-center px-3">
         <Text className="text-center text-xl font-semibold">{title}</Text>
-        <Text className="w-[270] break-words font-regular text-[14px]">
+        <Text className="break-words font-regular text-[14px]">
           {description}
         </Text>
 
@@ -194,7 +194,7 @@ const CreateChallengeScreenMain = () => {
           {t("new_challenge_screen.choose_type_description")}
         </Text>
 
-        <View className="mt-8 flex flex-col items-center justify-center px-6">
+        <View className="mt-8 flex w-full flex-col items-center justify-center px-6">
           <CreateChallengeCard
             image={require("../../common/image/image-free-challenge.jpg")}
             title={t("new_challenge_screen.free_challenge")}

@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 
 import {
   NativeStackNavigationProp,
@@ -21,6 +21,7 @@ import { CommonActions } from "@react-navigation/native";
 import { useUserProfileStore } from "../../../store/user-store";
 import { setLastNotiIdToLocalStorage } from "../../../utils/notification.util";
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
+import AddManualSkillScreen from "../../HardSkills/AddManualSkillScreen";
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -159,16 +160,18 @@ const CompleteProfileScreen = () => {
           ),
 
           headerRight: (props) => (
-            <NavButton
-              testID="complete_profile_step_2_skip_button"
-              text={t("button.skip") || "Skip"}
-              withIcon={false}
-              onPress={() => {
-                setVideo("");
-                setBiography("");
-                navigation.navigate("CompleteProfileStep3Screen");
-              }}
-            />
+            <View className="pr-2">
+              <NavButton
+                testID="complete_profile_step_2_skip_button"
+                text={t("button.skip") || "Skip"}
+                withIcon={false}
+                onPress={() => {
+                  setVideo("");
+                  setBiography("");
+                  navigation.navigate("CompleteProfileStep3Screen");
+                }}
+              />
+            </View>
           ),
         })}
       />
@@ -209,6 +212,13 @@ const CompleteProfileScreen = () => {
       <CompleteProfileStack.Screen
         name="CompleteProfileFinishScreen"
         component={CompleteProfileFinishScreen}
+      />
+      <CompleteProfileStack.Screen
+        name="AddManualSkillScreen"
+        component={AddManualSkillScreen}
+        options={{
+          headerShown: false,
+        }}
       />
     </CompleteProfileStack.Navigator>
   );

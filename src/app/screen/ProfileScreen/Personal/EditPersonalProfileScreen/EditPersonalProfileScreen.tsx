@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
@@ -26,7 +26,6 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/Con
 import TextInput from "../../../../component/common/Inputs/TextInput";
 import CustomSwitch from "../../../../component/common/Switch";
 import VideoPicker from "../../../../component/common/VideoPicker";
-import AddHardSkills from "../../../../component/modal/AddHardSkills/AddHardSkills";
 import { IUploadMediaWithId } from "../../../../types/media";
 import { IOccupation } from "../../../../types/user";
 import { uploadNewVideo } from "../../../../utils/uploadVideo";
@@ -39,24 +38,27 @@ import { ICompanyDataUser } from "../../../../types/company";
 import { getUserOccupationCondition } from "../../../../utils/profile";
 import CalendarIcon from "./asset/calendar-icon.svg";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
+import { useNav } from "../../../../hooks/useNav";
+import { useSkillStore } from "../../../../store/skill-store";
 
 interface IEditPersonalProfileScreenProps {
   navigation: any;
 }
 
 interface IHardSkillSectionProps {
-  setOpenModal: () => void;
+  // setOpenModal: () => void;
   hardSkill: IHardSkill[];
-  setArrayMyHardSkills: (value: IHardSkill[]) => void;
+  // setArrayMyHardSkills: (value: IHardSkill[]) => void;
 }
 
 const HardSkillSection: FC<IHardSkillSectionProps> = ({
-  setOpenModal,
+  // setOpenModal,
   hardSkill,
 }) => {
   const { t } = useTranslation();
-  const handleOpenEditHardSkillModal = () => {
-    setOpenModal();
+  const navigation = useNav();
+  const onEditHardSkills = () => {
+    navigation.navigate("AddHardSkillsScreen");
   };
   return (
     <View className="flex flex-col items-start justify-start ">
@@ -65,10 +67,7 @@ const HardSkillSection: FC<IHardSkillSectionProps> = ({
           {t("edit_personal_profile_screen.hard_skills") || "Hard skills"}
         </Text>
         <View className="w-6">
-          <Button
-            Icon={<PencilEditSvg />}
-            onPress={handleOpenEditHardSkillModal}
-          />
+          <Button Icon={<PencilEditSvg />} onPress={onEditHardSkills} />
         </View>
       </View>
       <View className=" flex-col justify-between ">
@@ -113,7 +112,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
 
   const [isShowAddHardSkillModal, setIsShowAddHardSkillModal] =
     useState<boolean>(false);
-  const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
+  // const [arrayMyHardSkills, setArrayMyHardSkills] = useState<IHardSkill[]>([]);
   const [otherOccupation, setOtherOccupation] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -121,7 +120,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
   const [videoLoadingError, setVideoLoadingError] = useState<boolean>(false);
   const [isErrDialog, setIsErrDialog] = useState<boolean>(false);
   const { t } = useTranslation();
-
+  const {
+    selectedHardSkills: storeSelectedHardSkills,
+    setSelectedHardSkills: storeSetSelectedHardSkills,
+  } = useSkillStore();
   const { getUserProfile } = useUserProfileStore();
   const userData = getUserProfile();
 
@@ -191,7 +193,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           occupation: otherOccupation,
           occupationDetail: otherOccupation,
           employeeOf: data?.employeeOf?.id,
-          hardSkill: arrayMyHardSkills,
+          hardSkill: storeSelectedHardSkills,
           isShowCompany: data.isShowCompany,
           city: data?.city,
           phone: data?.phone,
@@ -257,7 +259,8 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
         };
       });
 
-      setArrayMyHardSkills(hardSkill);
+      // setArrayMyHardSkills(hardSkill);
+      storeSetSelectedHardSkills(hardSkill);
     }
   }, [userData?.hardSkill]);
 
@@ -286,14 +289,14 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
             onClosed={() => setIsErrDialog(false)}
             closeButtonLabel={t("close") || ""}
           />
-          <AddHardSkills
+          {/* <AddHardSkills
             setIsShowAddHardSkillModal={setIsShowAddHardSkillModal}
             isVisible={isShowAddHardSkillModal}
             onClose={() => setIsShowAddHardSkillModal(false)}
             setArrayMyHardSkills={setArrayMyHardSkills}
             arrayMyHardSkills={arrayMyHardSkills}
             setValue={setValue}
-          />
+          /> */}
           <DateTimePicker2
             shouldMinus16Years
             selectedDate={selectedDate}
@@ -603,11 +606,12 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
                 />
               </View>
               <View>
-                <HardSkillSection
+                {/* <HardSkillSection
                   setOpenModal={() => setIsShowAddHardSkillModal(true)}
                   hardSkill={arrayMyHardSkills || []}
                   setArrayMyHardSkills={setArrayMyHardSkills}
-                />
+                /> */}
+                <HardSkillSection hardSkill={storeSelectedHardSkills || []} />
               </View>
               {userData?.employeeOf ? (
                 <>

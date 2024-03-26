@@ -11,6 +11,7 @@ interface IButtonProps {
   isDisabled?: boolean;
   disabledContainerClassName?: string;
   disabledTextClassName?: string;
+  numberOfTextLines?: number;
   testID?: string;
 }
 
@@ -23,6 +24,7 @@ const Button: FC<IButtonProps> = ({
   containerClassName,
   disabledTextClassName,
   disabledContainerClassName,
+  numberOfTextLines,
   testID,
 }) => {
   return (
@@ -41,7 +43,7 @@ const Button: FC<IButtonProps> = ({
         {title ? (
           <Text
             className={clsx(isDisabled ? disabledTextClassName : textClassName)}
-            numberOfLines={2}
+            numberOfLines={numberOfTextLines || 2}
             ellipsizeMode="tail"
           >
             {title}

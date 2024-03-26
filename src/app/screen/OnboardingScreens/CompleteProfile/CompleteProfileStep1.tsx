@@ -177,8 +177,8 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
 
           {/* Form */}
           <View className=" flex w-full">
-            <View className="mt-4 flex flex-col px-5 ">
-              <View className="pt-3">
+            <View className="mt-4 flex flex-col space-y-4 px-5">
+              <View>
                 <Controller
                   control={control}
                   name="name"
@@ -218,7 +218,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="surname"
@@ -258,7 +258,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   control={control}
                   name="birth"
@@ -304,7 +304,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
                   )}
                 />
               </View>
-              <View className="pt-3">
+              <View>
                 <Controller
                   name="occupation"
                   control={control}

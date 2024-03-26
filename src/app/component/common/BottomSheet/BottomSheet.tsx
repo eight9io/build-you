@@ -30,9 +30,7 @@ const BottomSheet = forwardRef<any, IBottomSheetProps>(
         withReactModal
         onClose={onClose}
         HeaderComponent={HeaderComponent}
-        FooterComponent={
-          <View className="mb-3 h-14 w-full px-4">{FooterComponent}</View>
-        }
+        FooterComponent={FooterComponent}
         adjustToContentHeight={false}
         modalHeight={modalHeight}
         modalStyle={

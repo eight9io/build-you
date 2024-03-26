@@ -1,5 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
-import { ICheckPoint, IPackage } from "../types/package";
+import { IPackage } from "../types/package";
 import { IChallenge, IProgressChallenge, ISoftSkill } from "../types/challenge";
 import { IProposingScheduleTime } from "../types/schedule";
 import { IUserData } from "../types/user";
@@ -136,6 +136,8 @@ export type RootStackParamList = {
     ratedCompetencedSkill: ISoftSkill[];
     canCurrentUserRateSkills: boolean;
   };
+  AddHardSkillsScreen: undefined;
+  AddManualSkillScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

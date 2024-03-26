@@ -145,18 +145,20 @@ const SelectPickerCompany: FC<ISelectPickerProps> = ({
           </>
         }
         FooterComponent={
-          <Button
-            title={t("save") || "Save"}
-            onPress={() => hanldeSelectCompany(selected)}
-            containerClassName="bg-primary-default flex-1 mb-2"
-            textClassName="text-white"
-            disabledContainerClassName="bg-gray-light flex-none px-1"
-            disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
-            isDisabled={
-              (debouncedSearchQuery && searchedCompanies.length === 0) ||
-              companyList.length === 0
-            }
-          />
+          <View className="mb-3 h-14 w-full px-4">
+            <Button
+              title={t("save") || "Save"}
+              onPress={() => hanldeSelectCompany(selected)}
+              containerClassName="bg-primary-default flex-1 mb-2"
+              textClassName="text-white"
+              disabledContainerClassName="bg-gray-light flex-none px-1"
+              disabledTextClassName="line-[30px] text-center text-md font-medium text-gray-medium ml-2"
+              isDisabled={
+                (debouncedSearchQuery && searchedCompanies.length === 0) ||
+                companyList.length === 0
+              }
+            />
+          </View>
         }
         modalHeight={500}
       >

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 
 import clsx from "clsx";
@@ -13,8 +13,8 @@ import { IHardSkillProps } from "../../../types/user";
 import StepOfSteps from "../../../component/common/StepofSteps";
 import Button from "../../../component/common/Buttons/Button";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
-import AddSkillModal from "../../../component/modal/AddSkill";
 import { CrashlyticService } from "../../../service/crashlytic";
+import { useSkillStore } from "../../../store/skill-store";
 
 interface CompleteProfileStep3Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -59,17 +59,17 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
   const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
   const [isShowAddSkillModal, setIsShowAddSkillModal] =
     useState<boolean>(false);
-  const [userAddSkill, setUserAddSkill] = useState<IHardSkillProps[]>([]);
+  const { userAddedSkill, setUserAddedSkill } = useSkillStore();
 
   const { t } = useTranslation();
   const { setSkills } = useCompleteProfileStore();
 
   useEffect(() => {
-    if (userAddSkill.length > 0) {
-      setFetchedHardSkills((prev) => [...prev, ...userAddSkill]);
-      setUserAddSkill([]);
+    if (userAddedSkill.length > 0) {
+      setFetchedHardSkills((prev) => [...prev, ...userAddedSkill]);
+      setUserAddedSkill([]);
     }
-  }, [userAddSkill]);
+  }, [userAddedSkill]);
 
   const addCompetenceSkill = (skill: IHardSkillProps) => {
     if (
@@ -114,14 +114,22 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
     }
   }, [selectedCompetencedSkill]);
 
+  const onAddManualSkill = () => {
+    navigation.navigate("AddManualSkillScreen");
+  };
+
   return (
     <View className="relative flex h-full w-full flex-col items-center justify-start">
-      <AddSkillModal
+      {/* <AddSkillModal
         setUserAddSkill={setUserAddSkill}
         isVisible={isShowAddSkillModal}
         onClose={() => setIsShowAddSkillModal(false)}
-      />
-      <ScrollView showsVerticalScrollIndicator testID="complete_profile_step_3">
+      /> */}
+      <ScrollView
+        showsVerticalScrollIndicator
+        testID="complete_profile_step_3"
+        className="max-w-full"
+      >
         <View>
           <StepOfSteps step={3} totalSteps={4} />
         </View>
@@ -136,8 +144,8 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
           </Text>
         </View>
 
-        <View className="w-full flex-col justify-between ">
-          <View className="w-full flex-row flex-wrap items-center justify-center">
+        <View className="w-full flex-col justify-between">
+          <View className="flex w-full flex-row flex-wrap items-center justify-center px-2">
             {fetchedHardSkills.map((item, index) => (
               <Button
                 key={index}
@@ -146,13 +154,14 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
                 onPress={() => addCompetenceSkill(item)}
                 textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
                 containerClassName={clsx(
-                  "border-gray-light ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-2",
+                  "border-gray-light ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-2 max-w-full",
                   {
                     "bg-primary-10": selectedCompetencedSkill.includes(item),
                     "border-primary-default":
                       selectedCompetencedSkill.includes(item),
                   }
                 )}
+                numberOfTextLines={1}
               />
             ))}
           </View>
@@ -160,7 +169,8 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
             containerClassName="flex-none px-1"
             textClassName="line-[30px] text-center text-md font-medium text-primary-default"
             title={t("modal_skill.manually")}
-            onPress={() => setIsShowAddSkillModal(true)}
+            // onPress={() => setIsShowAddSkillModal(true)}
+            onPress={onAddManualSkill}
           />
           {numberOfSkillError && (
             <Text

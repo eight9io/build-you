@@ -12,7 +12,6 @@ import { RootStackParamList } from "../../../navigation/navigation.type";
 
 import ProfileComponent from "../../../component/Profile/ProfileComponent";
 import AppTitle from "../../../component/common/AppTitle";
-import ButtonWithIcon from "../../../component/common/Buttons/ButtonWithIcon";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import PersonalCoachChallengeDetailScreen from "../../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import PersonalChallengeDetailScreen from "../../ChallengesScreen/PersonalChallengesScreen/PersonalChallengeDetailScreen/PersonalChallengeDetailScreen";
@@ -30,6 +29,8 @@ import ShareIcon from "../../../../../assets/svg/share.svg";
 import SettingsIcon from "../../../component/common/Buttons/ButtonWithIcon/asset/settings.svg";
 import SettingsScreen from "../../SettingsScreen/SettingsScreen";
 import EditPersonalProfileScreen from "./EditPersonalProfileScreen/EditPersonalProfileScreen";
+import AddHardSkillsScreen from "./AddHardSkillsScreen";
+import AddManualSkillScreen from "../../HardSkills/AddManualSkillScreen";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -222,6 +223,20 @@ const PersonalProfileScreen = () => {
             />
           ),
         })}
+      />
+      <ProfileStack.Screen
+        name="AddHardSkillsScreen"
+        component={AddHardSkillsScreen}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
+      <ProfileStack.Screen
+        name="AddManualSkillScreen"
+        component={AddManualSkillScreen}
+        options={{
+          headerShown: false,
+        }}
       />
     </ProfileStack.Navigator>
   );

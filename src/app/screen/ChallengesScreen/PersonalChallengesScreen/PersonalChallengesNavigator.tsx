@@ -25,6 +25,7 @@ import CoachRateCompanyChallengeScreen from "../CoachRateCompanyChallengeScreen"
 import CoachRateChallengeScreen from "../CoachRateChallengeScreen";
 import CreatePersonalChallengeScreen from "./CreateChallengeScreen/CreateChallengeScreen";
 import CreateCertifiedChallengeScreen from "./CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
+import EditScheduleLinkScreen from "../EditScheduleLinkScreen";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -220,6 +221,13 @@ const PersonalChallengesNavigator = () => {
                 <Ionicons name="close" size={24} color="#000" />
               </TouchableOpacity>
             ),
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="EditScheduleLinkScreen"
+          component={EditScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
           })}
         />
       </PersonalChallengesStack.Navigator>

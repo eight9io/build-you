@@ -142,6 +142,9 @@ export type RootStackParamList = {
     email: string;
   };
   RegisterOptionsScreen: undefined;
+  EditScheduleLinkScreen: {
+    link: string;
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

@@ -37,6 +37,7 @@ import CompanyCoachCalendarTabCoachView from "../../CompanyChallengesScreen/Chal
 
 import ShareIcon from "../assets/share.svg";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
+import { useScheduleStore } from "../../../../store/schedule-store";
 
 type CoachChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -74,12 +75,16 @@ const PersonalCoachChallengeDetailScreen = ({
   const [challengeData, setChallengeData] = useState<IChallenge>(
     {} as IChallenge
   );
-  const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
+  const [coachData, setCoachData] = useState<IUserData>();
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(true);
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
   const [shouldScreenRefresh, setShouldScreenRefresh] =
     useState<boolean>(false);
+  const {
+    shouldRefreshIndividualCoachData,
+    setShouldRefreshIndividualCoachData,
+  } = useScheduleStore();
 
   const challengeId = route?.params?.challengeId;
 
@@ -148,6 +153,7 @@ const PersonalCoachChallengeDetailScreen = ({
   }, []);
 
   useEffect(() => {
+    if (coachData && !shouldRefreshIndividualCoachData) return;
     const getCoachData = async () => {
       if (!challengeCoach) return;
       try {
@@ -158,7 +164,10 @@ const PersonalCoachChallengeDetailScreen = ({
       }
     };
     getCoachData();
-  }, [challengeCoach]);
+    if (shouldRefreshIndividualCoachData) {
+      setShouldRefreshIndividualCoachData(false);
+    }
+  }, [challengeCoach, shouldRefreshIndividualCoachData]);
 
   useEffect(() => {
     if (shouldScreenRefresh) {
@@ -253,13 +262,13 @@ const PersonalCoachChallengeDetailScreen = ({
                 challengeState={challengeState}
                 shouldScreenRefresh={shouldScreenRefresh}
               />
-            ) : (
+            ) : coachData ? (
               <IndividualCoachCalendarTab
                 coachData={coachData}
                 challengeData={challengeData}
                 isChallengeInProgress={isChallengeInProgress}
               />
-            )}
+            ) : null}
           </>
         );
     }

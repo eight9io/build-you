@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Dialog } from "@rneui/themed";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import Button from "../../Buttons/Button";
 
 interface CoachDateTimePickerProps {
@@ -44,6 +44,7 @@ const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
+        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
       }}
     >
       <View className="flex-1 justify-center">

@@ -2,7 +2,7 @@ import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { Dialog } from "@rneui/themed";
 import Button from "../../Buttons/Button";
 
@@ -45,6 +45,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
+        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
       }}
       onBackdropPress={() => setShowDateTimePicker(false)}
     >

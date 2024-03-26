@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Modal, Text, View } from "react-native";
+import { Dimensions, Modal, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Dialog } from "@rneui/themed";
 
@@ -43,6 +43,7 @@ const ErrorDialog: FC<IComfirmDialogProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
+        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
       }}
     >
       <Dialog.Title

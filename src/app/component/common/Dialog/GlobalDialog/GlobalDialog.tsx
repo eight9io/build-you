@@ -1,5 +1,5 @@
 // TODO: Implement dialog for web since react-native-dialog is not working on web
-import { Platform, View, Text } from "react-native";
+import { Platform, View, Text, Dimensions } from "react-native";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -62,11 +62,11 @@ const GlobalDialog = () => {
     <Dialog
       isVisible={modalVisible}
       onBackdropPress={handleClose}
-      className="!rounded-2xl"
       overlayStyle={{
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
+        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
       }}
     >
       <Dialog.Title

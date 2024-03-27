@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/native";
 import { IPackage } from "../types/package";
 import { IChallenge, IProgressChallenge, ISoftSkill } from "../types/challenge";
-import { IProposingScheduleTime } from "../types/schedule";
+import { IProposingScheduleTime, IScheduledTime } from "../types/schedule";
 import { IUserData } from "../types/user";
 
 export type RootStackParamList = {
@@ -145,6 +145,18 @@ export type RootStackParamList = {
   EditScheduleLinkScreen: {
     link: string;
   };
+  ScheduleDetailScreen: {
+    schedule: IScheduledTime;
+    isPastEvents?: boolean;
+    isCurrentUserCoachOfChallenge: boolean;
+  };
+  CoachCreateScheduleScreen: {
+    challengeId: string;
+  };
+  EditScheduleScreen: {
+    schedule: IScheduledTime;
+  };
+  AddScheduleLinkScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

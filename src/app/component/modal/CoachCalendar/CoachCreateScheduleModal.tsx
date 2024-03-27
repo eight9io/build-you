@@ -5,7 +5,7 @@ import React, { FC, useState } from "react";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Modal, Platform, SafeAreaView, View } from "react-native";
-import DatePicker from "react-native-date-picker";
+import DateTimePicker from "react-native-ui-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { CoachCreateScheduleSchema } from "../../../Validators/CoachCreateSchedule.validate";
@@ -134,13 +134,13 @@ const CoachCreateScheduleModal: FC<ICoachCreateScheduleModalProps> = ({
           }}
         >
           <View className="flex flex-col p-4">
-            <View className="h-64">
-              <DatePicker
+            <View className="">
+              <DateTimePicker
+                mode="single"
+                timePicker
                 date={selectedDate}
-                mode="datetime"
-                textColor="#24252B"
-                onDateChange={handleDatePicked}
-                minimumDate={new Date(currentDatetime)}
+                onChange={(params) => handleDatePicked(params.date as Date)}
+                minDate={new Date(currentDatetime)}
               />
             </View>
             {errors.date ? <ErrorText message={errors.date.message} /> : null}

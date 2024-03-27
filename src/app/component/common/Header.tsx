@@ -67,11 +67,7 @@ export const Header: FC<IHeaderProps> = ({
       ) : null}
 
       {rightBtn && typeof rightBtn === "object" ? (
-        <View
-        // className="absolute right-5 top-2"
-        >
-          {rightBtn}
-        </View>
+        <View className="absolute right-0 top-0">{rightBtn}</View>
       ) : null}
     </View>
   );

@@ -26,6 +26,10 @@ import CoachRateChallengeScreen from "../CoachRateChallengeScreen";
 import CreatePersonalChallengeScreen from "./CreateChallengeScreen/CreateChallengeScreen";
 import CreateCertifiedChallengeScreen from "./CreateCertifiedChallengeScreen/CreateCertifiedChallengeScreen";
 import EditScheduleLinkScreen from "../EditScheduleLinkScreen";
+import ScheduleDetailScreen from "../ScheduleDetailScreen";
+import CoachCreateScheduleScreen from "../CoachCreateScheduleScreen";
+import EditScheduleScreen from "../EditScheduleScreen";
+import AddScheduleLinkScreen from "../AddScheduleLinkScreen";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
@@ -226,6 +230,34 @@ const PersonalChallengesNavigator = () => {
         <PersonalChallengesStack.Screen
           name="EditScheduleLinkScreen"
           component={EditScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="ScheduleDetailScreen"
+          component={ScheduleDetailScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="CoachCreateScheduleScreen"
+          component={CoachCreateScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="EditScheduleScreen"
+          component={EditScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <PersonalChallengesStack.Screen
+          name="AddScheduleLinkScreen"
+          component={AddScheduleLinkScreen}
           options={() => ({
             headerShown: false,
           })}

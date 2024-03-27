@@ -17,18 +17,14 @@ import ScheduleTab from "./ScheduleTab";
 import PopUpMenu from "../common/PopUpMenu";
 import Button from "../common/Buttons/Button";
 import TagBasedTabView from "../common/Tab/TagBasedTabView";
-import VideoCallScheduleModal, {
-  VideoCallScheduleAction,
-} from "../modal/CoachCalendar/VideoCallScheduleModal";
-import AddScheduleLinkModal from "../modal/CoachCalendar/AddScheduleLinkModal";
-import CoachCreateScheduleModal from "../modal/CoachCalendar/CoachCreateScheduleModal";
 
 import LinkIcon from "../../component/asset/link.svg";
 import { serviceUpdateCalendlyLink } from "../../service/profile";
 import GlobalToastController from "../common/Toast/GlobalToastController";
-import { openUrl, openUrlInSameTab } from "../../utils/linking.util";
+import { openUrl } from "../../utils/linking.util";
 import GlobalDialogController from "../common/Dialog/GlobalDialog/GlobalDialogController";
 import { useNav } from "../../hooks/useNav";
+import { useScheduleStore } from "../../store/schedule-store";
 
 interface IIndividualCoachCalendarTabProps {
   coachData: IUserData;
@@ -73,7 +69,7 @@ const BookVideoCallBtn: FC<IBookVideoCallBtnProps> = ({
   }, [coachCalendyLink]);
 
   const onBookVideoCall = () => {
-    openUrlInSameTab(customUri);
+    openUrl(customUri);
   };
 
   return (
@@ -110,6 +106,12 @@ const AddScheduleLinkBtn: FC<IBookVideoCallBtnProps> = ({
   setCoachCalendyLink,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const navigation = useNav();
+
+  const onAddScheduleLinkBtnClick = () => {
+    navigation.navigate("AddScheduleLinkScreen");
+  };
+
   return (
     <View className="pt-4">
       <View className="mx-4 ">
@@ -123,14 +125,15 @@ const AddScheduleLinkBtn: FC<IBookVideoCallBtnProps> = ({
               "challenge_detail_screen_tab.coach_calendar.add_schedule_link_btn"
             ) as string
           }
-          onPress={() => setIsModalVisible(true)}
+          // onPress={() => setIsModalVisible(true)}
+          onPress={onAddScheduleLinkBtnClick}
           isDisabled={!isChallengeInProgress}
         />
-        <AddScheduleLinkModal
+        {/* <AddScheduleLinkModal
           isVisible={isModalVisible}
           setIsVisible={setIsModalVisible}
           setCoachCalendyLink={setCoachCalendyLink}
-        />
+        /> */}
       </View>
     </View>
   );
@@ -232,6 +235,7 @@ const ScheduleLink: FC<IScheduleLinkProps> = ({
 export const IndividualCoachCalendarTab: FC<
   IIndividualCoachCalendarTabProps
 > = ({ coachData, challengeData, isChallengeInProgress }) => {
+  const navigation = useNav();
   const [upcomingSchedules, setUpcomingSchedules] = useState<IScheduledTime[]>(
     []
   );
@@ -244,6 +248,8 @@ export const IndividualCoachCalendarTab: FC<
   const [coachCalendyLink, setCoachCalendyLink] = useState<string>("");
 
   const { t } = useTranslation();
+  const { shouldRefreshScheduleData, setShouldRefreshScheduleData } =
+    useScheduleStore();
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCurrentUserCoachOfChallenge = coachData.id === currentUser?.id;
@@ -305,14 +311,21 @@ export const IndividualCoachCalendarTab: FC<
 
   useEffect(() => {
     setCoachCalendyLink(coachData?.calendly);
-  }, [coachData?.calendly]);
+  }, [coachData]);
 
   useEffect(() => {
-    if (shouldRefresh) {
+    if (shouldRefresh || shouldRefreshScheduleData) {
       getAllScheduleOfChallenge();
       setShouldRefresh(false);
+      setShouldRefreshScheduleData(false);
     }
-  }, [shouldRefresh]);
+  }, [shouldRefresh, shouldRefreshScheduleData]);
+
+  const onCreateScheduleBtnClick = () => {
+    navigation.navigate("CoachCreateScheduleScreen", {
+      challengeId: challengeId,
+    });
+  };
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -344,12 +357,12 @@ export const IndividualCoachCalendarTab: FC<
 
   return (
     <View className="h-full flex-1">
-      <CoachCreateScheduleModal
+      {/* <CoachCreateScheduleModal
         challengeId={challengeId}
         setShouldParentRefresh={setShouldRefresh}
         isVisible={isCoachCreateScheduleModalVisible}
         setIsVisible={setIsCoachCreateScheduleModalVisible}
-      />
+      /> */}
       {!isCurrentUserCoachOfChallenge &&
       coachCalendyLink &&
       upcomingSchedules?.length == 0 ? (
@@ -394,7 +407,8 @@ export const IndividualCoachCalendarTab: FC<
         <View className={clsx("absolute bottom-4 h-12 w-full bg-white px-6")}>
           <Button
             title={t("create_schedule_modal.title")}
-            onPress={() => setIsCoachCreateScheduleModalVisible(true)}
+            // onPress={() => setIsCoachCreateScheduleModalVisible(true)}
+            onPress={onCreateScheduleBtnClick}
             containerClassName="bg-primary-default flex-1"
             textClassName="text-white"
           />

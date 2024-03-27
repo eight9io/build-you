@@ -1,46 +1,32 @@
-import { FC } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { View, SafeAreaView } from "react-native";
-import { Route } from "@react-navigation/native";
+
 import CloseBtn from "../../component/asset/close.svg";
 import { useUserProfileStore } from "../../store/user-store";
 import { AddScheduleLinkSchema } from "../../Validators/AddScheduleLink.validate";
 import { serviceUpdateCalendlyLink } from "../../service/profile";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../component/common/Dialog/GlobalDialog/GlobalDialogController";
+import { useNav } from "../../hooks/useNav";
 import Header from "../../component/common/Header";
 import TextInput from "../../component/common/Inputs/TextInput";
-import ErrorText from "../../component/common/ErrorText";
 import Button from "../../component/common/Buttons/Button";
-import { useNav } from "../../hooks/useNav";
+import ErrorText from "../../component/common/ErrorText";
 import { useScheduleStore } from "../../store/schedule-store";
-
-interface IEditScheduleLinkScreenProps {
-  route: Route<
-    "EditScheduleLinkScreen",
-    {
-      link: string;
-    }
-  >;
-}
 
 interface IAddScheduleInput {
   link: string;
 }
 
-const EditScheduleLinkScreen: FC<IEditScheduleLinkScreenProps> = ({
-  route: {
-    params: { link },
-  },
-}) => {
-  const { t } = useTranslation();
+const AddScheduleLinkScreen = () => {
   const navigation = useNav();
+  const { t } = useTranslation();
   const { getUserProfile, setUserProfile } = useUserProfileStore();
-  const currectUser = getUserProfile();
   const { setShouldRefreshIndividualCoachData } = useScheduleStore();
+  const currectUser = getUserProfile();
 
   const {
     control,
@@ -50,28 +36,31 @@ const EditScheduleLinkScreen: FC<IEditScheduleLinkScreenProps> = ({
     formState: { errors },
   } = useForm<IAddScheduleInput>({
     defaultValues: {
-      link: link || "",
+      link: "",
     },
     resolver: yupResolver(AddScheduleLinkSchema()),
   });
 
   const onSubmit = async (data: IAddScheduleInput) => {
     try {
-      await serviceUpdateCalendlyLink({
+      const res = await serviceUpdateCalendlyLink({
         userId: currectUser?.id,
         calendlyLink: data.link,
       });
-      setUserProfile({ ...currectUser, calendly: data.link });
-      // setCoachCalendyLink(data.link);
-      setShouldRefreshIndividualCoachData(true);
-      onClose();
-      setTimeout(() => {
-        GlobalToastController.showModal({
-          message:
-            t("toast.edit_calendy_link_success") ||
-            "Your progress has been created successfully!",
-        });
-      }, 500);
+      if (res.data) {
+        setUserProfile({ ...currectUser, calendly: data.link });
+        // setCoachCalendyLink(data.link);
+        setShouldRefreshIndividualCoachData(true);
+        onClose();
+        setTimeout(() => {
+          GlobalToastController.showModal({
+            message:
+              t("toast.add_calendy_link_success") ||
+              "Your progress has been created successfully!",
+          });
+        }, 500);
+      } else
+        throw new Error("Failed to update calendly link => empty response");
     } catch (error) {
       GlobalDialogController.showModal({
         title: t("dialog.err_title"),
@@ -84,21 +73,22 @@ const EditScheduleLinkScreen: FC<IEditScheduleLinkScreenProps> = ({
   };
 
   const onClose = () => {
+    // setIsVisible(false);
     navigation.goBack();
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <SafeAreaView className="relative flex-1 bg-white">
       <View className="px-4">
         <Header
           title={
             t(
-              "challenge_detail_screen_tab.coach_calendar.edit_schedule_link_btn"
+              "challenge_detail_screen_tab.coach_calendar.add_schedule_link_btn"
             ) as string
           }
           leftBtn={<CloseBtn fill={"black"} />}
           onLeftBtnPress={onClose}
-          containerStyle="mt-3"
+          containerStyle="my-4"
         />
       </View>
       <View className="flex-1 p-4">
@@ -122,7 +112,7 @@ const EditScheduleLinkScreen: FC<IEditScheduleLinkScreenProps> = ({
         {errors.link ? <ErrorText message={errors.link?.message} /> : null}
       </View>
 
-      <View className={"absolute bottom-[40px] h-12 w-full bg-white px-4"}>
+      <View className="absolute bottom-[40px] h-12 w-full bg-white px-4">
         <Button
           title={t("save") || "Save"}
           onPress={handleSubmit(onSubmit)}
@@ -130,8 +120,8 @@ const EditScheduleLinkScreen: FC<IEditScheduleLinkScreenProps> = ({
           textClassName="text-white"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default EditScheduleLinkScreen;
+export default AddScheduleLinkScreen;

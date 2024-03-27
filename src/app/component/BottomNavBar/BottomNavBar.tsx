@@ -74,6 +74,11 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "CoachRateChallengeScreen",
   "AddHardSkillsScreen",
   "AddManualSkillScreen",
+  "EditScheduleLinkScreen",
+  "ScheduleDetailScreen",
+  "CoachCreateScheduleScreen",
+  "EditScheduleScreen",
+  "AddScheduleLinkScreen",
 ];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {

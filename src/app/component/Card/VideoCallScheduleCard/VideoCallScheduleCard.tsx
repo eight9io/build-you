@@ -8,11 +8,10 @@ import { IScheduledTime } from "../../../types/schedule";
 
 import { onCopyLink } from "../../../utils/shareLink.util";
 
-import ScheduleDetailModal from "../../modal/CoachCalendar/ScheduleDetailModal";
-
 import LinkSvg from "../../../component/asset/link.svg";
 import GlobalDialogController from "../../common/Dialog/GlobalDialog/GlobalDialogController";
 import { openUrl } from "../../../utils/linking.util";
+import { useNav } from "../../../hooks/useNav";
 
 interface IVideoCallScheduleCardProps {
   schedule: IScheduledTime;
@@ -28,11 +27,17 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
   isCurrentUserCoachOfChallenge,
 }) => {
   const { t } = useTranslation();
+  const navigation = useNav();
   const { meetingUrl } = schedule;
   const [isScheduleModalVisible, setIsScheduleModalVisible] = useState(false);
 
   const onScheduleCardPress = () => {
-    setIsScheduleModalVisible(true);
+    // setIsScheduleModalVisible(true);
+    navigation.navigate("ScheduleDetailScreen", {
+      schedule,
+      isPastEvents,
+      isCurrentUserCoachOfChallenge,
+    });
   };
 
   const handleOpenLink = async () => {
@@ -80,48 +85,48 @@ const VideoCallScheduleCard: FC<IVideoCallScheduleCardProps> = ({
               {t("challenge_detail_screen.open_meeting")}
             </Text>
           </View>
-          <TouchableOpacity
-            className="flex flex-row items-center justify-end gap-1 p-1"
-            onPress={() => onCopyLink(meetingUrl)}
-          >
-            <LinkSvg />
-            <Text className="text-right text-md font-normal leading-tight text-blue-600">
-              {t("challenge_detail_screen.copy")}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex flex-row items-center justify-end gap-1 p-1"
-            onPress={handleOpenLink}
-          >
-            <EvilIcons name="external-link" size={20} color="#2563eb" />
-            <Text className="text-right text-md font-normal leading-tight text-blue-600">
-              {t("challenge_detail_screen.open_link")}
-            </Text>
-          </TouchableOpacity>
+          <View className="flex flex-row">
+            <TouchableOpacity
+              className="flex flex-row items-center justify-end gap-1 p-1"
+              onPress={() => onCopyLink(meetingUrl)}
+            >
+              <LinkSvg />
+              <Text className="text-right text-md font-normal leading-tight text-blue-600">
+                {t("challenge_detail_screen.copy")}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="flex flex-row items-center justify-end gap-1 p-1"
+              onPress={handleOpenLink}
+            >
+              <EvilIcons name="external-link" size={20} color="#2563eb" />
+              <Text className="text-right text-md font-normal leading-tight text-blue-600">
+                {t("challenge_detail_screen.open_link")}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {schedule?.note && (
-          <View className="flex flex-row items-center justify-between self-stretch pt-3 ">
+          <View className="flex flex-col pt-3 ">
             <View className="inline-flex flex-col items-start justify-start gap-1">
               <Text className="text-md font-semibold leading-snug text-zinc-500">
                 {t("challenge_detail_screen.note")}
               </Text>
             </View>
-            <View className="w-48">
-              <Text className="text-left text-md font-normal leading-tight text-black-light ">
-                {schedule?.note}
-              </Text>
-            </View>
+            <Text className="text-left text-md font-normal leading-tight text-black-light ">
+              {schedule?.note}
+            </Text>
           </View>
         )}
       </View>
-      <ScheduleDetailModal
+      {/* <ScheduleDetailModal
         schedule={schedule}
         isPastEvents={isPastEvents}
         isVisible={isScheduleModalVisible}
         setLocalSchedules={setLocalSchedules}
         setIsVisible={setIsScheduleModalVisible}
         isCurrentUserCoachOfChallenge={isCurrentUserCoachOfChallenge}
-      />
+      /> */}
     </TouchableOpacity>
   );
 };

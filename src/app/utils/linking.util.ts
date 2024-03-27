@@ -132,3 +132,14 @@ export const isValidHttpUrl = (url: string) => {
 
   return urlObject.protocol === "http:" || urlObject.protocol === "https:";
 };
+
+export const openUrlInSameTab = (url: string) => {
+  const isValidUrl = isValidHttpUrl(url);
+  if (!isValidUrl) throw new Error("Invalid URL");
+  try {
+    window.open(url, "_self");
+  } catch (error) {
+    console.error("error: ", error);
+    throw error;
+  }
+};

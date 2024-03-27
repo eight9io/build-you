@@ -40,9 +40,9 @@ export const useGetOtherUserData = (
   setOtherUserData?: any
 ) => {
   const { t } = useTranslation();
-  if (!userId || userId === null) return null;
 
   const fetchingUserData = async () => {
+    if (!userId || userId === null) return null;
     try {
       await serviceGetOtherUserData(userId)
         .then((res) => {

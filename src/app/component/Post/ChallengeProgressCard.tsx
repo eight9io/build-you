@@ -41,9 +41,9 @@ const ChallengeProgressCardForComment: React.FC<
   localCommentUpdate,
 }) => {
   const [otherData, setOtherData] = useState<any>();
-  ownerId && useGetOtherUserData(ownerId, setOtherData);
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
+  useGetOtherUserData(ownerId, setOtherData);
 
   return (
     <View className="mb-1 flex-1 bg-white p-5">
@@ -60,7 +60,7 @@ const ChallengeProgressCardForComment: React.FC<
                 {getTimeDiffToNow(createdAt)}
               </Text>
 
-              {location && (
+              {location ? (
                 <View className="flex flex-row">
                   <Text className="text-xs font-light text-gray-dark ">
                     <IconDot fill={"#7D7E80"} />
@@ -70,7 +70,7 @@ const ChallengeProgressCardForComment: React.FC<
                     {location}
                   </Text>
                 </View>
-              )}
+              ) : null}
             </View>
           </View>
         </View>
@@ -80,12 +80,12 @@ const ChallengeProgressCardForComment: React.FC<
         <Text className="text-md font-normal">{caption}</Text>
       </View>
 
-      {image?.length > 0 && (
+      {image?.length > 0 ? (
         <View className="aspect-square w-full">
           <ImageSwiper imageSrc={image} />
         </View>
-      )}
-      {video && <VideoPlayer src={video.trim()} />}
+      ) : null}
+      {video ? <VideoPlayer src={video.trim()} /> : null}
       <View className="mt-4 flex-row">
         <LikeButton progressId={id} currentUserId={currentUser?.id} />
         <CommentButton

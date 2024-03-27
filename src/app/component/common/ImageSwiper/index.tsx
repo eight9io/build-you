@@ -1,6 +1,5 @@
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
-import { Image } from "expo-image";
+import { ActivityIndicator, Text, View, Image } from "react-native";
 import Swiper from "react-native-web-swiper";
 
 interface IImageSwiperProps {
@@ -51,16 +50,28 @@ const ImageSwiper: React.FC<IImageSwiperProps> = ({ imageSrc }) => {
             badgeStyle: {
               backgroundColor: "#FFFFFF",
             },
-          },
-          dotsWrapperStyle: {
-            shadowColor: "#0C0F39",
-            shadowOffset: {
-              width: 0,
-              height: 0,
+            containerStyle: {
+              shadowColor: "rgba(12, 15, 57, 0.16)",
+              shadowOffset: {
+                width: 0,
+                height: 0.5,
+              },
+              shadowOpacity: 3,
+              shadowRadius: 2,
+              elevation: 1,
+              borderRadius: 100,
             },
-            shadowOpacity: 0.1,
-            shadowRadius: 1,
           },
+          // dotsWrapperStyle: {
+          //   shadowColor: "rgba(12, 15, 57, 0.16)",
+          //   shadowOffset: {
+          //     width: 0,
+          //     height: 0.5,
+          //   },
+          //   shadowOpacity: 1,
+          //   shadowRadius: 2,
+          //   elevation: 1,
+          // },
         }}
         controlsEnabled={Array.isArray(imageSrc) && imageSrc.length > 1}
         gesturesEnabled={() => Array.isArray(imageSrc) && imageSrc.length > 1}

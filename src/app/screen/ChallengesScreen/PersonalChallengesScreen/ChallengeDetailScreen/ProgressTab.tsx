@@ -367,7 +367,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
               // setProgressIndexToUpdate={() => setProgressIndexToUpdate(index)}
             />
           )}
-          contentContainerStyle={{ paddingBottom: 80 }}
+          // contentContainerStyle={{ paddingBottom: 16 }}
         />
       ) : null}
     </View>

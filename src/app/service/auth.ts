@@ -50,7 +50,7 @@ export const serviceGetMyProfile = () => {
 };
 
 export const googleLogin = (token: string) => {
-  return http.post<ILoginResponse>(`/auth/google/${token}`, { token });
+  return http.post<ILoginResponse>(`/auth/web/google/${token}`, { token });
 };
 
 export const linkedInLogin = (token: string) => {

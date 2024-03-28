@@ -128,8 +128,8 @@ const PersonalTab = () => {
 
   return (
     <View className="flex-1">
-      {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && !isFetchingError && (
+      {isLoading ? <SkeletonLoadingChallengesScreen /> : null}
+      {!isLoading && !isFetchingError ? (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
           {personalChallengesList.length === 0 ? (
             <EmptyChallenges navigation={navigation} type="free" />
@@ -137,13 +137,16 @@ const PersonalTab = () => {
             <FlatList
               className="px-4 pt-4"
               data={personalChallengesList}
-              renderItem={({ item }: { item: IChallenge }) => (
-                <CurrentUserChallengeCard
-                  item={item}
-                  imageSrc={item?.image}
-                  navigation={navigation}
-                />
-              )}
+              renderItem={({ item }: { item: IChallenge }) => {
+                if (item.isDraft) return null;
+                return (
+                  <CurrentUserChallengeCard
+                    item={item}
+                    imageSrc={item?.image}
+                    navigation={navigation}
+                  />
+                );
+              }}
               keyExtractor={(item) => item.id}
               ListFooterComponent={<View className="h-20" />}
               refreshing={isLoading}
@@ -151,8 +154,8 @@ const PersonalTab = () => {
             />
           )}
         </View>
-      )}
-      {!isLoading && isFetchingError && (
+      ) : null}
+      {!isLoading && isFetchingError ? (
         <View
           className={clsx("flex h-full flex-col items-center justify-center")}
         >
@@ -161,7 +164,7 @@ const PersonalTab = () => {
               "Something went wrong. Please try again later."}
           </Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -201,8 +204,8 @@ const CertifiedTab = () => {
 
   return (
     <View className="flex-1">
-      {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && !isFetchingError && (
+      {isLoading ? <SkeletonLoadingChallengesScreen /> : null}
+      {!isLoading && !isFetchingError ? (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
           {coachChallengesList?.length === 0 ? (
             <EmptyChallenges navigation={navigation} type="certified" />
@@ -210,13 +213,16 @@ const CertifiedTab = () => {
             <FlatList
               className="px-4 pt-4"
               data={coachChallengesList}
-              renderItem={({ item }: { item: IChallenge }) => (
-                <CurrentUserChallengeCard
-                  item={item}
-                  imageSrc={item?.image}
-                  navigation={navigation}
-                />
-              )}
+              renderItem={({ item }: { item: IChallenge }) => {
+                if (item.isDraft) return null;
+                return (
+                  <CurrentUserChallengeCard
+                    item={item}
+                    imageSrc={item?.image}
+                    navigation={navigation}
+                  />
+                );
+              }}
               keyExtractor={(item) => item.id}
               ListFooterComponent={<View className="h-20" />}
               refreshing={isLoading}
@@ -224,8 +230,8 @@ const CertifiedTab = () => {
             />
           )}
         </View>
-      )}
-      {!isLoading && isFetchingError && (
+      ) : null}
+      {!isLoading && isFetchingError ? (
         <View
           className={clsx("flex h-full flex-col items-center justify-center")}
         >
@@ -234,7 +240,7 @@ const CertifiedTab = () => {
               "Something went wrong. Please try again later."}
           </Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -271,8 +277,8 @@ const CoachTab = () => {
 
   return (
     <View className="flex-1">
-      {isLoading && <SkeletonLoadingChallengesScreen />}
-      {!isLoading && !isFetchingError && (
+      {isLoading ? <SkeletonLoadingChallengesScreen /> : null}
+      {!isLoading && !isFetchingError ? (
         <View className={clsx("h-full w-full flex-1 bg-gray-50")}>
           {coachChallengesList.length === 0 ? (
             <CoachEmptyChallenges navigation={navigation} />
@@ -294,8 +300,8 @@ const CoachTab = () => {
             />
           )}
         </View>
-      )}
-      {!isLoading && isFetchingError && (
+      ) : null}
+      {!isLoading && isFetchingError ? (
         <View
           className={clsx("flex h-full flex-col items-center justify-center")}
         >
@@ -304,7 +310,7 @@ const CoachTab = () => {
               "Something went wrong. Please try again later."}
           </Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };

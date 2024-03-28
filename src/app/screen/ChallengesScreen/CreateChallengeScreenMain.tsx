@@ -129,6 +129,8 @@ const CreateChallengeScreenMain = () => {
     else navigation.navigate("CreateChallengeScreen");
   };
   const handleCreateCretifiedChallenge = async () => {
+    // --- We don't show draft challenge in web version => no need to prevent user from creating new challenge ---
+
     // try {
     //   const { data: isUserHasInDraftChallenge } =
     //     await serviceGetIsUserHasInDraftChallenge();

@@ -45,6 +45,7 @@ import CreateCertifiedCompanyChallengeScreen from "./CompanyChallengesScreen/Cre
 import ChoosePackageScreen from "./ChoosePackageScreen";
 import CartScreen from "./CartScreen";
 import CompanyCartScreen from "./CompanyCartScreen";
+import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -128,19 +129,19 @@ const CreateChallengeScreenMain = () => {
     else navigation.navigate("CreateChallengeScreen");
   };
   const handleCreateCretifiedChallenge = async () => {
-    try {
-      const { data: isUserHasInDraftChallenge } =
-        await serviceGetIsUserHasInDraftChallenge();
-      if (isUserHasInDraftChallenge) {
-        GlobalDialogController.showModal({
-          title: t("dialog.in_draft.title"),
-          message: t("dialog.in_draft.description"),
-        });
-        return;
-      }
-    } catch (error) {
-      console.error("get is user has in draft challenge error", error);
-    }
+    // try {
+    //   const { data: isUserHasInDraftChallenge } =
+    //     await serviceGetIsUserHasInDraftChallenge();
+    //   if (isUserHasInDraftChallenge) {
+    //     GlobalDialogController.showModal({
+    //       title: t("dialog.in_draft.title"),
+    //       message: t("dialog.in_draft.description"),
+    //     });
+    //     return;
+    //   }
+    // } catch (error) {
+    //   console.error("get is user has in draft challenge error", error);
+    // }
     navigation.navigate(
       isCompany
         ? "CreateCertifiedCompanyChallengeScreen"
@@ -220,6 +221,8 @@ const CreateChallengeScreenMain = () => {
 
 const CreateChallengeScreen = () => {
   const { t } = useTranslation();
+  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
+
   return (
     <CreateChallengeStack.Navigator
       screenOptions={{
@@ -364,7 +367,10 @@ const CreateChallengeScreen = () => {
           ),
           headerLeft: ({}) => (
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                navigation.goBack();
+                setCreateChallengeDataStore(null);
+              }}
               className="ml-3"
             >
               <Ionicons name="close" size={24} color="#000" />

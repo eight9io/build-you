@@ -57,3 +57,8 @@ export interface IVerifyGooglePurchaseResponse {
 export interface IProductFromStore extends Omit<Product, "price"> {
   price: number;
 }
+
+export interface ICreateCheckoutSessionPayload {
+  productId: string;
+  challengeId: string;
+}

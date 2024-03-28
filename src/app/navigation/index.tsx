@@ -100,8 +100,10 @@ export const RootNavigation = () => {
       const deepLink = await getInitialURL(); // Get the URL that was used to launch the app if it was launched by a link
       const params = Linking.parse(deepLink);
       if (params) {
+        if (!params.path) localStorage.removeItem("historyState"); // If user load the app without path (default root), remove history state in local storage
         const isValidDeepLink = isValidDeepLinkPath(params.path);
         if (!isValidDeepLink) return;
+
         setDeepLink(params.path);
       }
     };

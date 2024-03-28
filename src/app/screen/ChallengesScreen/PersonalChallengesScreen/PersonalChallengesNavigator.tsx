@@ -30,12 +30,15 @@ import ScheduleDetailScreen from "../ScheduleDetailScreen";
 import CoachCreateScheduleScreen from "../CoachCreateScheduleScreen";
 import EditScheduleScreen from "../EditScheduleScreen";
 import AddScheduleLinkScreen from "../AddScheduleLinkScreen";
+import { useCreateChallengeDataStore } from "../../../store/create-challenge-data-store";
 
 const PersonalChallengesStack =
   createNativeStackNavigator<RootStackParamList>();
 
 const PersonalChallengesNavigator = () => {
   const { t } = useTranslation();
+  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
+
   return (
     <RefreshProvider>
       <PersonalChallengesStack.Navigator
@@ -219,7 +222,10 @@ const PersonalChallengesNavigator = () => {
             ),
             headerLeft: ({}) => (
               <TouchableOpacity
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                  navigation.goBack();
+                  setCreateChallengeDataStore(null);
+                }}
                 className="ml-3"
               >
                 <Ionicons name="close" size={24} color="#000" />

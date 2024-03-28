@@ -25,6 +25,7 @@ import { IPackage, PACKAGE_TYPE } from "../types/package";
 import { getLanguageLocalStorage } from "./language";
 import { serviceGetAllPackages } from "../service/package";
 import { ICreateChallenge } from "../types/challenge";
+import { isValidHttpUrl } from "./linking.util";
 
 export const requestPurchaseChecks = (productId: string) => {
   const requestPurchaseParams: RequestPurchase = {
@@ -303,4 +304,15 @@ export const setPurchasingChallengeData = (
     "purchasingChallengeData",
     JSON.stringify(challengeData)
   );
+};
+
+export const openCheckOutUrl = (url: string) => {
+  const isValidUrl = isValidHttpUrl(url);
+  if (!isValidUrl) throw new Error("Invalid URL");
+  try {
+    window.open(url, "_self");
+  } catch (error) {
+    console.error("error: ", error);
+    throw error;
+  }
 };

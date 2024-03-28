@@ -89,13 +89,14 @@ const CreateCertifiedChallengeScreen = () => {
     ) as unknown as Resolver<ICreateCertifiedChallengeForm, any>,
   });
 
-  // useEffect(() => {
-  //   const cachedChallenge = getPurchasingChallengeData();
-  //   if (cachedChallenge) {
-  //     reset(cachedChallenge);
-  //     setPurchasingChallengeData(null); // The cached data should only be used once
-  //   }
-  // }, []);
+  useEffect(() => {
+    const cachedChallenge = getPurchasingChallengeData();
+    if (cachedChallenge) {
+      reset(cachedChallenge);
+      setCreateChallengeDataStore(cachedChallenge);
+      setPurchasingChallengeData(null); // The cached data should only be used once
+    }
+  }, []);
 
   const handleShowDatePicker = () => {
     setShowDatePicker(true);

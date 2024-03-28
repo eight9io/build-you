@@ -30,9 +30,17 @@ import PlusSVG from "../../component/asset/plus.svg";
 import MinusSVG from "../../component/asset/minus.svg";
 import clsx from "clsx";
 
-import { getPackage } from "../../service/purchase";
-import { setPurchasingChallengeData } from "../../utils/purchase.util";
-import { get } from "http";
+import { createCheckoutSession, getPackage } from "../../service/purchase";
+import {
+  openCheckOutUrl,
+  setPurchasingChallengeData,
+} from "../../utils/purchase.util";
+import { AxiosResponse } from "axios";
+import {
+  createChallenge,
+  createCompanyChallenge,
+  updateChallengeImage,
+} from "../../service/challenge";
 
 interface ICartScreenProps {
   route: Route<
@@ -120,7 +128,31 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   const handlePay = async (challengeId: string) => {
     // Persist data before directing user to checkout link so that they can continue from where they left off when they press browser's back button
     setPurchasingChallengeData(getCreateChallengeDataStore());
-    console.log("challengeId: ", challengeId);
+    const userSelectedPackage = cachedPackages.find(
+      (item) => Number(item.check) === numberOfCheckpoints + 1
+    );
+    let checkOutUrl = "";
+    try {
+      const { data } = await createCheckoutSession({
+        productId: userSelectedPackage.id,
+        challengeId,
+      });
+      checkOutUrl = data;
+    } catch (error) {
+      console.error("error: ", error);
+      setPurchaseErrorMessages(t("error_general_message"));
+    }
+
+    if (!checkOutUrl) {
+      setPurchaseErrorMessages(t("error_general_message"));
+      return;
+    }
+    try {
+      openCheckOutUrl(checkOutUrl);
+    } catch (error) {
+      console.error("error: ", error);
+      setPurchaseErrorMessages(t("error_general_message"));
+    }
   };
 
   const handleAddCheckpoint = () => {
@@ -149,120 +181,124 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
   };
 
   const onSumitCertifiedChallenge = async () => {
-    // const data = getCreateChallengeDataStore();
+    const data = getCreateChallengeDataStore();
 
     setIsLoading(true);
     let newChallengeId: string | null = null;
     try {
-      // const { image, ...rest } = data; // Images upload will be handled separately
-      // const payload: ICreateCompanyChallenge = {
-      //   ...rest,
-      //   // Add 1 to the number of checkpoints because the base package already has 1 checkpoint
-      //   checkpoint: numberOfCheckpoints + 1,
-      //   achievementTime: data.achievementTime as Date,
-      // };
+      const { image, ...rest } = data; // Images upload will be handled separately
+      const payload: ICreateCompanyChallenge = {
+        ...rest,
+        // Add 1 to the number of checkpoints because the base package already has 1 checkpoint
+        checkpoint: numberOfCheckpoints + 1,
+        achievementTime: data.achievementTime as Date,
+      };
 
-      await handlePay(newChallengeId);
-      setIsLoading(false);
-      // let challengeCreateResponse: AxiosResponse;
-      // if (isCurrentUserCompany) {
-      //   challengeCreateResponse = await createCompanyChallenge(payload);
-      // } else {
-      //   challengeCreateResponse = await createChallenge(payload);
-      // }
+      let challengeCreateResponse: AxiosResponse;
+      if (isCurrentUserCompany) {
+        challengeCreateResponse = await createCompanyChallenge(payload);
+      } else {
+        challengeCreateResponse = await createChallenge(payload);
+      }
 
-      // newChallengeId = challengeCreateResponse.data.id;
-      // setNewChallengeIdToStore(newChallengeId);
-      // // If challenge created successfully, upload image
-      // if (
-      //   challengeCreateResponse.status === 200 ||
-      //   challengeCreateResponse.status === 201
-      // ) {
-      //   setNewChallengeId(challengeCreateResponse.data.id);
-      //   if (image) {
-      //     await updateChallengeImage(
-      //       {
-      //         id: newChallengeId,
-      //       },
-      //       image
-      //     );
-      //     try {
-      //       await handlePay(newChallengeId);
-      //       setPurchaseErrorMessages("");
-      //     } catch (error) {
-      //       // Delete draft challenge if payment failed
-      //       httpInstance.delete(`/challenge/delete/${newChallengeId}`);
-      //       if (error.code !== ErrorCode.E_USER_CANCELLED) {
-      //         setPurchaseErrorMessages(t("error_general_message"));
-      //       }
+      newChallengeId = challengeCreateResponse.data.id;
+      setNewChallengeIdToStore(newChallengeId);
+      // If challenge created successfully, upload image
+      if (
+        challengeCreateResponse.status === 200 ||
+        challengeCreateResponse.status === 201
+      ) {
+        // setNewChallengeId(challengeCreateResponse.data.id);
+        if (image) {
+          await updateChallengeImage(
+            {
+              id: newChallengeId,
+            },
+            image
+          );
+          try {
+            await handlePay(newChallengeId);
+            setPurchaseErrorMessages("");
+          } catch (error) {
+            // Delete draft challenge if payment failed
+            if (newChallengeId)
+              httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+            // if (error.code !== ErrorCode.E_USER_CANCELLED) {
+            //   setPurchaseErrorMessages(t("error_general_message"));
+            // }
 
-      //       setTimeout(() => {
-      //         setIsLoading(false);
-      //       }, 100);
-      //       return;
-      //     }
-      //     setIsLoading(false);
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 100);
+            return;
+          }
+          setIsLoading(false);
 
-      //     // // This toast will be shown when all modals are closed
-      //     // setTimeout(() => {
-      //     //   GlobalToastController.showModal({
-      //     //     message:
-      //     //       t("toast.create_challenge_success") ||
-      //     //       "Your challenge has been created successfully !",
-      //     //   });
+          // // This toast will be shown when all modals are closed
+          // setTimeout(() => {
+          //   GlobalToastController.showModal({
+          //     message:
+          //       t("toast.create_challenge_success") ||
+          //       "Your challenge has been created successfully !",
+          //   });
 
-      //     //   setTimeout(() => {
-      //     //     const isChallengesScreenInStack = navigation
-      //     //       .getState()
-      //     //       .routes.some((route) => route.name === "Challenges");
+          //   setTimeout(() => {
+          //     const isChallengesScreenInStack = navigation
+          //       .getState()
+          //       .routes.some((route) => route.name === "Challenges");
 
-      //     //     if (isChallengesScreenInStack) {
-      //     //       console.log("isChallengesScreenInStack");
-      //     //       navigation.dispatch(StackActions.popToTop());
-      //     //       if (isCurrentUserCompany) {
-      //     //         const pushAction = StackActions.push("HomeScreen", {
-      //     //           screen: "Challenges",
-      //     //           params: {
-      //     //             screen: "CompanyChallengeDetailScreen",
-      //     //             params: { challengeId: newChallengeId },
-      //     //           },
-      //     //         });
-      //     //         navigation.dispatch(pushAction);
-      //     //       } else {
-      //     //         const pushAction = StackActions.push("HomeScreen", {
-      //     //           screen: "Challenges",
-      //     //           params: {
-      //     //             screen: "PersonalChallengeDetailScreen",
-      //     //             params: { challengeId: newChallengeId },
-      //     //           },
-      //     //         });
-      //     //         navigation.dispatch(pushAction);
-      //     //       }
-      //     //     } else {
-      //     //       // add ChallengesScreen to the stack
-      //     //       navigation.navigate("HomeScreen", {
-      //     //         screen: "Challenges",
-      //     //       });
-      //     //       if (isCurrentUserCompany) {
-      //     //         navigation.navigate("Challenges", {
-      //     //           screen: "CompanyChallengeDetailScreen",
-      //     //           params: { challengeId: newChallengeId },
-      //     //         });
-      //     //       } else {
-      //     //         navigation.navigate("Challenges", {
-      //     //           screen: "PersonalChallengeDetailScreen",
-      //     //           params: { challengeId: newChallengeId },
-      //     //         });
-      //     //       }
-      //     //     }
-      //     //   }, 300);
-      //     // }, 100);
-      //   }
-      //   // setIsRequestSuccess(true);
-      //   // setIsShowModal(true);
-      // }
+          //     if (isChallengesScreenInStack) {
+          //       console.log("isChallengesScreenInStack");
+          //       navigation.dispatch(StackActions.popToTop());
+          //       if (isCurrentUserCompany) {
+          //         const pushAction = StackActions.push("HomeScreen", {
+          //           screen: "Challenges",
+          //           params: {
+          //             screen: "CompanyChallengeDetailScreen",
+          //             params: { challengeId: newChallengeId },
+          //           },
+          //         });
+          //         navigation.dispatch(pushAction);
+          //       } else {
+          //         const pushAction = StackActions.push("HomeScreen", {
+          //           screen: "Challenges",
+          //           params: {
+          //             screen: "PersonalChallengeDetailScreen",
+          //             params: { challengeId: newChallengeId },
+          //           },
+          //         });
+          //         navigation.dispatch(pushAction);
+          //       }
+          //     } else {
+          //       // add ChallengesScreen to the stack
+          //       navigation.navigate("HomeScreen", {
+          //         screen: "Challenges",
+          //       });
+          //       if (isCurrentUserCompany) {
+          //         navigation.navigate("Challenges", {
+          //           screen: "CompanyChallengeDetailScreen",
+          //           params: { challengeId: newChallengeId },
+          //         });
+          //       } else {
+          //         navigation.navigate("Challenges", {
+          //           screen: "PersonalChallengeDetailScreen",
+          //           params: { challengeId: newChallengeId },
+          //         });
+          //       }
+          //     }
+          //   }, 300);
+          // }, 100);
+        }
+        // setIsRequestSuccess(true);
+        // setIsShowModal(true);
+      }
     } catch (error) {
-      httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+      if (error.response) console.error("error: ", error.response.data);
+      else console.error("error: ", error);
+
+      if (newChallengeId)
+        httpInstance.delete(`/challenge/delete/${newChallengeId}`);
+
       setIsLoading(false);
       if (error.response && error.response.status === 400) {
         setTimeout(() => {
@@ -424,7 +460,7 @@ const CartScreen: FC<ICartScreenProps> = ({ route }) => {
               </Text>
             </View>
           </View>
-          <View className="mx-9 self-start">
+          <View className="w-full">
             {purchaseErrorMessages ? (
               <ErrorText
                 message={purchaseErrorMessages}

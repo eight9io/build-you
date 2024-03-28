@@ -22,7 +22,7 @@ const UserSearchBar = ({
   return (
     <View className="m-[15] flex-row items-center justify-start">
       <Animated.View
-        className={`flex flex-1 flex-row items-center rounded-lg bg-gray-200 p-[6]`}
+        className="relative flex flex-1 flex-row items-center rounded-lg bg-gray-200"
         style={[
           {
             width: inputLength,
@@ -32,13 +32,12 @@ const UserSearchBar = ({
         ]}
       >
         {/* search Icon */}
-        <Feather name="search" size={18} color="#6C6E76" className="ml-[6]" />
+        <View className="absolute left-2">
+          <Feather name="search" size={18} color="#6C6E76" className="" />
+        </View>
         {/* Input field */}
         <TextInput
-          style={{
-            marginLeft: 10,
-          }}
-          className="mt-1 w-11/12 flex-1 py-1"
+          className="w-full rounded-lg px-8 py-4"
           placeholder="Search"
           value={searchPhrase}
           onChangeText={setSearchPhrase}
@@ -46,17 +45,19 @@ const UserSearchBar = ({
           textAlignVertical="top"
         />
         {/* cross Icon, depending on whether the search bar is focused or not */}
-        {searchPhrase !== "" && (
-          <Entypo
-            name="cross"
-            size={20}
-            color="#6C6E76"
-            className="p-[1]"
-            onPress={() => {
-              setSearchPhrase("");
-            }}
-          />
-        )}
+        {searchPhrase !== "" ? (
+          <View className="absolute right-2">
+            <Entypo
+              name="cross"
+              size={20}
+              color="#6C6E76"
+              className="p-[1]"
+              onPress={() => {
+                setSearchPhrase("");
+              }}
+            />
+          </View>
+        ) : null}
       </Animated.View>
       {/* cancel button, depending on whether the search bar is focused or not */}
       {/* {focused && (

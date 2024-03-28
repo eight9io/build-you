@@ -38,7 +38,7 @@ const Button: FC<IButtonProps> = ({
       disabled={isDisabled}
       testID={testID}
     >
-      <View className="flex-1 flex-row items-center justify-center active:bg-black-default">
+      <View className="flex-1 flex-row items-center justify-center">
         {Icon ? Icon : null}
         {title ? (
           <Text

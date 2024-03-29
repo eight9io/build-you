@@ -58,6 +58,7 @@ import ForgotPasswordConfirmScreen from "../screen/ForgotPassword/ForgotPassword
 import RegisterOptionsScreen from "../screen/RegisterScreen/RegisterOptionsScreen";
 import TermsOfServicesScreen from "../screen/PersonalInformations/TermsOfServicesScreen";
 import PrivacyPolicyScreen from "../screen/PersonalInformations/PrivacyPolicyScreen";
+import { DEEP_LINK_PATH_NAME } from "../common/enum";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -84,7 +85,7 @@ export const RootNavigation = () => {
   const isLoggedin = getAccessToken();
 
   const isNavigationReadyRef = useRef(false);
-  const { setDeepLink } = useDeepLinkStore();
+  const { deepLink, setDeepLink } = useDeepLinkStore();
 
   const getInitialURL = async () => {
     const url = await Linking.getInitialURL();
@@ -100,7 +101,14 @@ export const RootNavigation = () => {
       const deepLink = await getInitialURL(); // Get the URL that was used to launch the app if it was launched by a link
       const params = Linking.parse(deepLink);
       if (params) {
-        if (!params.path) localStorage.removeItem("historyState"); // If user load the app without path (default root), remove history state in local storage
+        const pathName = params.path.split("/")[0];
+        if (
+          !params.path ||
+          Object.values(DEEP_LINK_PATH_NAME).includes(
+            pathName as DEEP_LINK_PATH_NAME
+          )
+        )
+          localStorage.removeItem("historyState"); // If user load the app without path (default root) or with deeplink, remove history state in local storage
         const isValidDeepLink = isValidDeepLinkPath(params.path);
         if (!isValidDeepLink) return;
 

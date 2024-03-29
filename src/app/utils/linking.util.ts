@@ -1,7 +1,7 @@
 import { NavigationContainerRef } from "@react-navigation/native";
 import { Linking } from "react-native";
 import { RootStackParamList } from "../navigation/navigation.type";
-import { IDeepLinkValue } from "../store/deep-link-store";
+import { IDeepLinkValue, useDeepLinkStore } from "../store/deep-link-store";
 import { DEEP_LINK_PATH_NAME } from "../common/enum";
 import NavigationService from "./navigationService";
 import { setPurchasingChallengeData } from "./purchase.util";
@@ -116,6 +116,7 @@ export const handleDeepLinkNavigation = (deepLink: IDeepLinkValue) => {
   const handler = deepLinkHandlerMap[deepLink.pathName];
   const navigation = NavigationService.getContainer();
   if (handler) handler(deepLink, navigation);
+  useDeepLinkStore.getState().setDeepLink(null);
 };
 
 export const isValidDeepLinkPath = (path: string) => {

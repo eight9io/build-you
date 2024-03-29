@@ -32,7 +32,7 @@ const GoogleLoginButton: FC<IGoogleLoginButtonProps> = ({
   return (
     <Button
       title={title}
-      containerClassName="bg-sky-default  flex-row  items-center justify-center m-2 w-full"
+      containerClassName="bg-sky-default  flex-row  items-center justify-center w-full"
       textClassName="text-white ml-2 text-base font-bold"
       Icon={<Ionicons name="logo-google" size={24} color="#FFF" />}
       onPress={handleGoogleBtnClicked}

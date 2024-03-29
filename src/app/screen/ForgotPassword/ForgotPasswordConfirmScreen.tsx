@@ -26,6 +26,7 @@ import TextInput from "../../component/common/Inputs/TextInput";
 import Button from "../../component/common/Buttons/Button";
 import GlobalToastController from "../../component/common/Toast/GlobalToastController";
 import { useNav } from "../../hooks/useNav";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../common/constants";
 interface Props {
   route: Route<
     "ForgotPasswordConfirmScreen",
@@ -117,8 +118,8 @@ export default function ForgotPasswordConfirmScreen({
   };
 
   return (
-    <View className="mx-1 h-full bg-white" testID="forgot_password_modal">
-      <Header
+    <View className="h-full bg-white" testID="forgot_password_modal">
+      {/* <Header
         title={t("forgot_password.title") as string}
         leftBtn={
           <NavButton
@@ -127,9 +128,19 @@ export default function ForgotPasswordConfirmScreen({
             withBackIcon
           />
         }
-      />
-      <KeyboardAwareScrollView testID="forgot_password_scroll_view">
-        <View className="h-full pt-5">
+      /> */}
+      <KeyboardAwareScrollView
+        testID="forgot_password_scroll_view"
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
+        <View
+          className="h-full w-full pt-5"
+          style={{
+            maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+          }}
+        >
           <SafeAreaView>
             <CustomActivityIndicator isVisible={isLoading} />
 

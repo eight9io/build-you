@@ -2,6 +2,11 @@ import { FC, useEffect, useState } from "react";
 import { View, Text, FlatList, Dimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Dialog } from "@rneui/themed";
+import {
+  DIALOG_MAX_WIDTH,
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+} from "../../../../common/constants";
 
 interface IPackageInfoDialogProps {
   packages: {
@@ -13,6 +18,7 @@ interface IPackageInfoDialogProps {
   };
   isVisible: boolean;
   onClosed: () => void;
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 interface IRenderPackageInfoProps {
@@ -24,6 +30,7 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
   packages,
   onClosed,
   isVisible,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const [packageInfo, setPackageInfo] =
     useState<IRenderPackageInfoProps[]>(null);
@@ -88,7 +95,12 @@ const PackageInfoDialog: FC<IPackageInfoDialogProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
+        ...(Dimensions.get("window").width <= LAYOUT_THRESHOLD
+          ? {}
+          : {
+              maxWidth: DIALOG_MAX_WIDTH,
+              marginLeft: shouldOffsetDrawerWidth ? DRAWER_MAX_WIDTH : 0,
+            }),
       }}
     >
       <Dialog.Title

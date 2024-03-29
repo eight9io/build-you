@@ -8,7 +8,6 @@ import {
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
 
@@ -42,6 +41,8 @@ import { RootStackParamList } from "../../navigation/navigation.type";
 import { getLastNotiIdFromLocalStorage } from "../../utils/notification.util";
 import { getNotifications } from "../../service/notification";
 import CreateChallengeScreen from "../../screen/ChallengesScreen/CreateChallengeScreenMain";
+import { ScreenWithDrawerWrapper } from "../ScreenWrapper";
+import { LAYOUT_THRESHOLD } from "../../common/constants";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -119,14 +120,14 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
 
   useEffect(() => {
     // Check device width to determine if it's desktop view on the first load
-    if (Dimensions.get("window").width <= 768) {
+    if (Dimensions.get("window").width <= LAYOUT_THRESHOLD) {
       setIsDesktopView(false);
     } else setIsDesktopView(true);
     // Add event listener to check if the device width is changed when the app is running
     const unsubscribeDimensions = Dimensions.addEventListener(
       "change",
       ({ window }) => {
-        if (window.width <= 768) {
+        if (window.width <= LAYOUT_THRESHOLD) {
           setIsDesktopView(false);
         } else setIsDesktopView(true);
       }
@@ -354,7 +355,7 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
     >
       <Drawer.Screen
         name="Feed"
-        component={HomeScreen}
+        // component={HomeScreen}
         options={() => ({
           headerShown: false,
           drawerIcon: ({ focused }) => (
@@ -377,12 +378,18 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             </Text>
           ),
         })}
-      />
+      >
+        {(props) => (
+          <ScreenWithDrawerWrapper>
+            <HomeScreen {...props} />
+          </ScreenWithDrawerWrapper>
+        )}
+      </Drawer.Screen>
       <Drawer.Screen
         name="Challenges"
-        component={
-          isCompany ? CompanyChallengesScreen : PersonalChallengesNavigator
-        }
+        // component={
+        //   isCompany ? CompanyChallengesScreen : PersonalChallengesNavigator
+        // }
         options={{
           headerShown: false,
           drawerIcon: ({ focused }) => (
@@ -405,10 +412,20 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             </Text>
           ),
         }}
-      />
+      >
+        {(props) => (
+          <ScreenWithDrawerWrapper>
+            {isCompany ? (
+              <CompanyChallengesScreen {...(props as any)} />
+            ) : (
+              <PersonalChallengesNavigator {...(props as any)} />
+            )}
+          </ScreenWithDrawerWrapper>
+        )}
+      </Drawer.Screen>
       <Drawer.Screen
         name="Create Challenge"
-        component={CreateChallengeScreen}
+        // component={CreateChallengeScreen}
         options={{
           drawerIcon: ({ focused }) => (
             <View testID="bottom_nav_bar_create_challenge_btn">
@@ -431,10 +448,16 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
           ),
           headerShown: false,
         }}
-      />
+      >
+        {(props) => (
+          <ScreenWithDrawerWrapper>
+            <CreateChallengeScreen {...(props as any)} />
+          </ScreenWithDrawerWrapper>
+        )}
+      </Drawer.Screen>
       <Drawer.Screen
         name="Notifications"
-        component={NotificationsScreen}
+        // component={NotificationsScreen}
         listeners={() => ({
           drawerItemPress: () => {
             if (numOfNewNotifications > 0) refreshNumOfNewNotifications();
@@ -464,11 +487,17 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             </Text>
           ),
         }}
-      />
+      >
+        {(props) => (
+          <ScreenWithDrawerWrapper>
+            <NotificationsScreen {...(props as any)} />
+          </ScreenWithDrawerWrapper>
+        )}
+      </Drawer.Screen>
 
       <Drawer.Screen
         name="Profile"
-        component={!isCompany ? PersonalProfileScreen : CompanyProfileScreen}
+        // component={!isCompany ? PersonalProfileScreen : CompanyProfileScreen}
         options={{
           headerShown: false,
           drawerIcon: ({ focused }) => (
@@ -491,7 +520,17 @@ const BottomNavBar: FC<IBottomNavBarProps> = () => {
             </Text>
           ),
         }}
-      />
+      >
+        {(props) => (
+          <ScreenWithDrawerWrapper>
+            {!isCompany ? (
+              <PersonalProfileScreen {...(props as any)} />
+            ) : (
+              <CompanyProfileScreen {...(props as any)} />
+            )}
+          </ScreenWithDrawerWrapper>
+        )}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 };

@@ -19,6 +19,8 @@ import AppTitle from "../common/AppTitle";
 import IconSearch from "../common/IconSearch/IconSearch";
 import NavButton from "../common/Buttons/NavButton";
 import BuildYouLogo from "../../common/svg/buildYou_logo_top_app.svg";
+import { LAYOUT_THRESHOLD } from "../../common/constants";
+import { ScreenWithDrawerWrapper } from "../ScreenWrapper";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -32,14 +34,14 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
 
   useEffect(() => {
     // Check device width to determine if it's desktop view on the first load
-    if (Dimensions.get("window").width <= 768) {
+    if (Dimensions.get("window").width <= LAYOUT_THRESHOLD) {
       setIsDesktopView(false);
     } else setIsDesktopView(true);
     // Add event listener to check if the device width is changed when the app is running
     const unsubscribeDimensions = Dimensions.addEventListener(
       "change",
       ({ window }) => {
-        if (window.width <= 768) {
+        if (window.width <= LAYOUT_THRESHOLD) {
           setIsDesktopView(false);
         } else setIsDesktopView(true);
       }
@@ -231,7 +233,7 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
     >
       <Drawer.Screen
         name="Feed"
-        component={HomeFeedUnregister}
+        // component={HomeFeedUnregister}
         options={() => ({
           headerShown: false,
           drawerIcon: ({ focused }) => (
@@ -254,7 +256,13 @@ const BottomNavBarWithoutLogin: FC<IBottomNavBarProps> = () => {
             </Text>
           ),
         })}
-      />
+      >
+        {(props) => (
+          <ScreenWithDrawerWrapper>
+            <HomeFeedUnregister {...(props as any)} />
+          </ScreenWithDrawerWrapper>
+        )}
+      </Drawer.Screen>
       <Drawer.Screen
         name="Challenges"
         component={EmptyPage}

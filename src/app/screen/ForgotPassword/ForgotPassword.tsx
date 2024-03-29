@@ -16,6 +16,7 @@ import { serviceForgotPassword } from "../../service/auth";
 import { ForgotPasswordForm } from "../../types/auth";
 import { err_server, errorMessage } from "../../utils/statusCode";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../common/constants";
 
 export default function ForgotPassword({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
@@ -74,9 +75,17 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <SafeAreaView className=" h-full bg-white " testID="forgotPasswordScreen">
+    <SafeAreaView
+      className="flex h-full items-center bg-white"
+      testID="forgotPasswordScreen"
+    >
       <CustomActivityIndicator isVisible={isLoading} />
-      <View className=" h-full bg-white ">
+      <View
+        className="h-full w-full bg-white"
+        style={{
+          maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+        }}
+      >
         <ScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">
             <View>

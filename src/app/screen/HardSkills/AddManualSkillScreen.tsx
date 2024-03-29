@@ -1,4 +1,4 @@
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, StyleProp, ViewStyle } from "react-native";
 import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
@@ -15,8 +15,20 @@ import Button from "../../component/common/Buttons/Button";
 import { useNav } from "../../hooks/useNav";
 import AddEmojiModal from "../../component/modal/AddEmoji";
 import { useSkillStore } from "../../store/skill-store";
+import { SCREEN_WITHOUT_DRAWER_MAX_WIDTH } from "../../common/constants";
+import clsx from "clsx";
 
-export const AddManualSkillScreen = () => {
+interface IAddManualSkillScreenProps {
+  containerClassName?: string;
+  contentStyle?: StyleProp<ViewStyle>;
+  shouldOffsetDrawerWidth?: boolean;
+}
+
+export const AddManualSkillScreen: FC<IAddManualSkillScreenProps> = ({
+  containerClassName,
+  contentStyle,
+  shouldOffsetDrawerWidth = true,
+}) => {
   const navigation = useNav();
   const [showEmojiModal, setShowEmojiModal] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
@@ -96,54 +108,63 @@ export const AddManualSkillScreen = () => {
       contentContainerStyle={{ flex: 1 }}
       className="bg-white"
     >
-      <View className="relative mx-4 flex h-full flex-col rounded-t-xl bg-white">
+      <View
+        className={clsx(
+          "relative mx-4 flex h-full flex-col rounded-t-xl bg-white",
+          containerClassName
+        )}
+      >
         <AddEmojiModal
           isVisible={showEmojiModal}
           onClose={onCloseEmojiModal}
           setExternalSelectedEmoji={setSelectedEmoji}
           setSelectEmojiError={setSelectEmojiError}
+          shouldOffsetDrawerWidth={shouldOffsetDrawerWidth}
         />
         <Header
           title={t("add_skill_modal.title") || "Add skill"}
           leftBtn={<Close fill={"black"} />}
           onLeftBtnPress={onCloseAddManualSkillScreen}
         />
-        <View className="px-4">
-          <View className="py-4">
-            <Text className="text-md text-gray-dark">
-              {t("add_skill_modal.description") ||
-                "Select the emoji and enter the skill name"}
-            </Text>
+        <View className="relative h-full w-full" style={contentStyle}>
+          <View className="px-4">
+            <View className="py-4">
+              <Text className="text-md text-gray-dark">
+                {t("add_skill_modal.description") ||
+                  "Select the emoji and enter the skill name"}
+              </Text>
+            </View>
+
+            <View className="py-2">
+              <AddEmojiButton
+                selectedEmoji={selectedEmoji}
+                triggerFunction={() => setShowEmojiModal(true)}
+                selectEmojiError={selectEmojiError}
+              />
+            </View>
+            <View className="py-8">
+              <InlineTextInput
+                title="Skill"
+                containerClassName="pl-6"
+                placeholder={
+                  t("add_skill_modal.enter_skill_name") ||
+                  "Enter your skill name"
+                }
+                control={control}
+                errors={errors}
+                showError={skillNameError}
+              />
+            </View>
           </View>
 
-          <View className="py-2">
-            <AddEmojiButton
-              selectedEmoji={selectedEmoji}
-              triggerFunction={() => setShowEmojiModal(true)}
-              selectEmojiError={selectEmojiError}
+          <View className="absolute bottom-12 left-0 h-12 w-full px-4">
+            <Button
+              title={t("save") || "Save"}
+              containerClassName="bg-primary-default flex-1"
+              textClassName="text-white"
+              onPress={handleSave}
             />
           </View>
-          <View className="py-8">
-            <InlineTextInput
-              title="Skill"
-              containerClassName="pl-6"
-              placeholder={
-                t("add_skill_modal.enter_skill_name") || "Enter your skill name"
-              }
-              control={control}
-              errors={errors}
-              showError={skillNameError}
-            />
-          </View>
-        </View>
-
-        <View className="absolute bottom-12 left-0 h-12 w-full px-4">
-          <Button
-            title={t("save") || "Save"}
-            containerClassName="bg-primary-default flex-1"
-            textClassName="text-white"
-            onPress={handleSave}
-          />
         </View>
       </View>
     </KeyboardAwareScrollView>

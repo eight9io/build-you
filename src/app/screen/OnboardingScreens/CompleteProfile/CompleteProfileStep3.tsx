@@ -15,6 +15,7 @@ import Button from "../../../component/common/Buttons/Button";
 import { CompleteProfileScreenNavigationProp } from "./CompleteProfile";
 import { CrashlyticService } from "../../../service/crashlytic";
 import { useSkillStore } from "../../../store/skill-store";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../../common/constants";
 
 interface CompleteProfileStep3Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -128,70 +129,80 @@ const CompleteProfileStep3: FC<CompleteProfileStep3Props> = ({
       <ScrollView
         showsVerticalScrollIndicator
         testID="complete_profile_step_3"
-        className="max-w-full"
+        className="w-full max-w-full"
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
       >
-        <View>
-          <StepOfSteps step={3} totalSteps={4} />
-        </View>
-        <View className=" px-4 py-6 ">
-          <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
-            {t("form_onboarding.screen_3.title") ||
-              "How do you define yourself as competent?"}
-          </Text>
-          <Text className="pt-2 text-center text-lg font-normal leading-6 text-gray-dark">
-            {t("form_onboarding.screen_3.sub_title") ||
-              "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself"}
-          </Text>
-        </View>
+        <View
+          className="w-full"
+          style={{
+            maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+          }}
+        >
+          <View>
+            <StepOfSteps step={3} totalSteps={4} />
+          </View>
+          <View className=" px-4 py-6 ">
+            <Text className="text-center text-h4 font-semibold leading-6 text-black-default">
+              {t("form_onboarding.screen_3.title") ||
+                "How do you define yourself as competent?"}
+            </Text>
+            <Text className="pt-2 text-center text-lg font-normal leading-6 text-gray-dark">
+              {t("form_onboarding.screen_3.sub_title") ||
+                "Choose at least 3 and up to a maximum of 10 hard skills to better tell the community about yourself"}
+            </Text>
+          </View>
 
-        <View className="w-full flex-col justify-between">
-          <View className="flex w-full flex-row flex-wrap items-center justify-center px-2">
-            {fetchedHardSkills.map((item, index) => (
-              <Button
-                key={index}
-                testID={generateTestIdForSkills(index)}
-                title={item.skill}
-                onPress={() => addCompetenceSkill(item)}
-                textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
-                containerClassName={clsx(
-                  "border-gray-light ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-2 max-w-full",
-                  {
-                    "bg-primary-10": selectedCompetencedSkill.includes(item),
-                    "border-primary-default":
-                      selectedCompetencedSkill.includes(item),
-                  }
-                )}
-                numberOfTextLines={1}
-              />
-            ))}
+          <View className="w-full flex-col justify-between">
+            <View className="flex w-full flex-row flex-wrap items-center justify-center px-2">
+              {fetchedHardSkills.map((item, index) => (
+                <Button
+                  key={index}
+                  testID={generateTestIdForSkills(index)}
+                  title={item.skill}
+                  onPress={() => addCompetenceSkill(item)}
+                  textClassName="line-[30px] text-center text-lg text-gray-dark font-medium"
+                  containerClassName={clsx(
+                    "border-gray-light ml-1 border-[1px] mx-2 my-1.5 h-[48px] flex-none px-2 max-w-full",
+                    {
+                      "bg-primary-10": selectedCompetencedSkill.includes(item),
+                      "border-primary-default":
+                        selectedCompetencedSkill.includes(item),
+                    }
+                  )}
+                  numberOfTextLines={1}
+                />
+              ))}
+            </View>
+            <Button
+              containerClassName="flex-none px-1"
+              textClassName="line-[30px] text-center text-md font-medium text-primary-default"
+              title={t("modal_skill.manually")}
+              // onPress={() => setIsShowAddSkillModal(true)}
+              onPress={onAddManualSkill}
+            />
+            {numberOfSkillError && (
+              <Text
+                testID="complete_profile_step_3_error"
+                className="pt-1 text-center text-sm font-normal leading-5 text-red-500"
+              >
+                {t("form_onboarding.screen_3.error") ||
+                  "Please select at least 3 hard skills and maximum of 10 skills"}
+              </Text>
+            )}
           </View>
           <Button
-            containerClassName="flex-none px-1"
-            textClassName="line-[30px] text-center text-md font-medium text-primary-default"
-            title={t("modal_skill.manually")}
-            // onPress={() => setIsShowAddSkillModal(true)}
-            onPress={onAddManualSkill}
+            testID="complete_profile_step_3_next_button"
+            title={t("button.next") || "Next"}
+            containerClassName="bg-primary-default my-5 mx-5 flex-none"
+            textClassName="text-white text-md leading-6"
+            onPress={() =>
+              checkNumberOfSkills() &&
+              navigation.navigate("CompleteProfileStep4Screen")
+            }
           />
-          {numberOfSkillError && (
-            <Text
-              testID="complete_profile_step_3_error"
-              className="pt-1 text-center text-sm font-normal leading-5 text-red-500"
-            >
-              {t("form_onboarding.screen_3.error") ||
-                "Please select at least 3 hard skills and maximum of 10 skills"}
-            </Text>
-          )}
         </View>
-        <Button
-          testID="complete_profile_step_3_next_button"
-          title={t("button.next") || "Next"}
-          containerClassName="bg-primary-default my-5 mx-5 flex-none"
-          textClassName="text-white text-md leading-6"
-          onPress={() =>
-            checkNumberOfSkills() &&
-            navigation.navigate("CompleteProfileStep4Screen")
-          }
-        />
       </ScrollView>
     </View>
   );

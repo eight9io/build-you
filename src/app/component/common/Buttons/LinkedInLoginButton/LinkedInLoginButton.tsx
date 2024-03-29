@@ -38,7 +38,7 @@ const LinkedInLoginButton: FC<ILinkedInLoginButtonProps> = ({
     <>
       <Button
         title={title}
-        containerClassName="w-full bg-sky-20 flex-row m-2"
+        containerClassName="w-full bg-sky-20 flex-row"
         textClassName="text-white ml-2 text-base font-bold"
         Icon={<Ionicons name="logo-linkedin" size={24} color="#FFF" />}
         onPress={() => login()}

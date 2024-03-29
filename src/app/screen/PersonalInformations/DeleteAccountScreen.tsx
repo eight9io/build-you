@@ -207,7 +207,7 @@ export default function DeleteAccountScreen() {
 
           <Button
             title={t("dialog.delete")}
-            containerClassName=" flex-1 my-4 bg-[#E7E9F1]"
+            containerClassName="flex-none my-4 bg-[#E7E9F1]"
             textClassName="text-black text-md leading-6"
             onPress={handleSubmit(onSubmit)}
           />

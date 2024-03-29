@@ -26,6 +26,7 @@ import TermModal from "../../component/modal/TermModal";
 import IconEyeOff from "./asset/eye-off.svg";
 import IconEyeOn from "./asset/icon-eye.svg";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../common/constants";
 
 type FormData = {
   email: string;
@@ -105,10 +106,15 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
   return (
     <SafeAreaView
-      className=" h-full bg-white "
+      className=" h-full bg-white"
       testID="register_with_email_screen"
     >
-      <KeyboardAwareScrollView testID="register_scroll_view">
+      <KeyboardAwareScrollView
+        testID="register_scroll_view"
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
         <CustomActivityIndicator isVisible={isLoading} />
 
         {isShowModal ? (
@@ -118,9 +124,15 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             isVisible={isShowModal}
             confirmButtonLabel={t("dialog.close") || ""}
             onConfirm={() => handleConfirm()}
+            shouldOffsetDrawerWidth={false}
           />
         ) : null}
-        <View className="flex-column relative h-full justify-between bg-white px-6  pb-14">
+        <View
+          className="flex-column relative h-full w-full justify-between bg-white px-6 pb-14"
+          style={{
+            maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+          }}
+        >
           <View>
             <View className="flex-column items-center ">
               <Image

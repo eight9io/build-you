@@ -104,6 +104,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
               "&multiLine": {
                 highlighter: {
                   position: "relative",
+                  fontWeight: 700,
                 },
                 input: {
                   paddingLeft: 10,
@@ -139,10 +140,11 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             <Mention
               style={{
                 // Mention style
-                color: "#FF7B1C",
+                color: "#24252B",
                 // fontSize: 14, // fontSize will cause the highlighter to be misaligned => to be fixed
                 zIndex: 10, // Make sure the highlighter's color override the mention text
                 position: "relative",
+                fontWeight: 700,
               }}
               appendSpaceOnAdd
               trigger="@"

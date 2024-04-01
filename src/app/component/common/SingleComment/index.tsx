@@ -149,7 +149,7 @@ const SingleComment: FC<ISingleCommentProps> = ({
     >
       <View
         className={clsx(
-          "mb-3 flex flex-row items-center justify-between bg-gray-veryLight"
+          "mb-3 flex w-full flex-row items-center justify-between bg-gray-veryLight"
         )}
       >
         <TouchableOpacity

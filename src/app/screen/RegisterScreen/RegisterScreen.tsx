@@ -226,6 +226,9 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                               onBlur={onBlur}
                               onChangeText={(text) => onChange(text)}
                               value={value}
+                              onKeyPress={(e: any) => {
+                                if (e.key === "Enter") handleSubmit(onSubmit)();
+                              }}
                             />
                           </View>
                         )}

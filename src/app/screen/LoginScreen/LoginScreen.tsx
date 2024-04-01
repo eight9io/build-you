@@ -5,7 +5,7 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -59,7 +59,8 @@ export default function Login() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    formState: { errors, isValid, touchedFields, dirtyFields },
   } = useForm<LoginForm>({
     defaultValues: {
       user: "",
@@ -67,7 +68,7 @@ export default function Login() {
     },
     resolver: yupResolver(LoginValidationSchema()),
     reValidateMode: "onChange",
-    mode: "onSubmit",
+    mode: "onChange",
   });
   const {
     asyncLogin,
@@ -83,6 +84,20 @@ export default function Login() {
   } = useUserProfileStore();
 
   const { getUserAppleInfo } = useAppleLoginInfoStore();
+
+  // const handleEnterKeyPress = (e: KeyboardEvent) => {
+  //   if (e.key === "Enter" && isValid) {
+  //     // handleSubmit(onSubmit)();
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.addEventListener("keydown", handleEnterKeyPress);
+  //   return () => {
+  //     console.log("removeEventListener: ");
+  //     document.removeEventListener("keydown", handleEnterKeyPress);
+  //   };
+  // }, []);
 
   const onSubmit = async (payload: LoginForm) => {
     await handleLogin(payload, LOGIN_TYPE.EMAIL_PASSWORD);
@@ -306,6 +321,10 @@ export default function Login() {
                                 placeholder={item.placeholder}
                                 placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                                 onBlur={onBlur}
+                                onKeyPress={(e: any) => {
+                                  if (e.key === "Enter")
+                                    handleSubmit(onSubmit)();
+                                }}
                                 onChangeText={(text) => onChange(text)}
                                 value={value}
                                 testID={

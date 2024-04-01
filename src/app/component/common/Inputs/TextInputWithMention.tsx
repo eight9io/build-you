@@ -7,6 +7,7 @@ import { Text, View, TouchableOpacity, Image } from "react-native";
 // Because react-native-controlled-mentions is not maintained anymore, there are many issues with react-native-web
 import { MentionsInput, Mention, MentionsInputProps } from "react-mentions";
 import debounce from "lodash.debounce";
+import isEmpty from "lodash.isempty";
 
 import { ISearchUserData } from "../../../types/user";
 
@@ -79,6 +80,15 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             {...inputProps}
             onChange={(event, newValue, newPlainTextValue, mentions) => {
               inputProps.onChange(event, newValue, newPlainTextValue, mentions);
+            }}
+            onKeyDown={(e) => {
+              !e.shiftKey && e.key === "Enter" && e.preventDefault();
+              if (
+                !e.shiftKey &&
+                e.key === "Enter" &&
+                !isEmpty(inputProps.value)
+              )
+                onRightIconPress && onRightIconPress();
             }}
             allowSuggestionsAboveCursor
             forceSuggestionsAboveCursor

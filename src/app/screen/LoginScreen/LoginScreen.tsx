@@ -5,11 +5,10 @@ import {
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
-  Platform,
   SafeAreaView,
   Text,
   TouchableOpacity,
@@ -40,7 +39,7 @@ import { ISocialLoginForm, LoginForm } from "../../types/auth";
 import { setupInterceptor } from "../../utils/refreshToken.util";
 import { errorMessage } from "../../utils/statusCode";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
-import AppleLoginButton from "../../component/common/Buttons/AppleLoginButton/AppleLoginButton";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../common/constants";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -60,7 +59,8 @@ export default function Login() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    formState: { errors, isValid, touchedFields, dirtyFields },
   } = useForm<LoginForm>({
     defaultValues: {
       user: "",
@@ -68,7 +68,7 @@ export default function Login() {
     },
     resolver: yupResolver(LoginValidationSchema()),
     reValidateMode: "onChange",
-    mode: "onSubmit",
+    mode: "onChange",
   });
   const {
     asyncLogin,
@@ -84,6 +84,20 @@ export default function Login() {
   } = useUserProfileStore();
 
   const { getUserAppleInfo } = useAppleLoginInfoStore();
+
+  // const handleEnterKeyPress = (e: KeyboardEvent) => {
+  //   if (e.key === "Enter" && isValid) {
+  //     // handleSubmit(onSubmit)();
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.addEventListener("keydown", handleEnterKeyPress);
+  //   return () => {
+  //     console.log("removeEventListener: ");
+  //     document.removeEventListener("keydown", handleEnterKeyPress);
+  //   };
+  // }, []);
 
   const onSubmit = async (payload: LoginForm) => {
     await handleLogin(payload, LOGIN_TYPE.EMAIL_PASSWORD);
@@ -178,7 +192,7 @@ export default function Login() {
 
   return (
     <SafeAreaView
-      className="relative h-full flex-1 bg-white"
+      className="relative flex h-full flex-1 items-center bg-white"
       testID="login_with_email_screen"
     >
       <CustomActivityIndicator isVisible={isLoading} />
@@ -192,9 +206,18 @@ export default function Login() {
           onConfirm={() => handleConfirmError()}
         />
       )}
-      <View className="relative h-full bg-white ">
-        <KeyboardAwareScrollView>
-          <View className="flex-column h-full justify-between bg-white px-6  pb-14">
+      <View className="relative h-full w-full">
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            alignItems: "center",
+          }}
+        >
+          <View
+            className="flex-column h-full w-full justify-between bg-white px-6 pb-14"
+            style={{
+              maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+            }}
+          >
             <View>
               <View className="flex-column items-center">
                 <Image
@@ -203,21 +226,27 @@ export default function Login() {
                   resizeMode="cover"
                 />
               </View>
-              <View className="flex-row">
-                {Platform.OS === "ios" ? (
-                  <AppleLoginButton
-                    onLogin={handleLogin}
-                    onError={setErrMessage}
-                  />
-                ) : null}
-                <GoogleLoginButton
+              <View className="flex h-12 flex-row space-x-4">
+                {/* <GoogleLoginButton
                   onLogin={handleLogin}
                   onError={setErrMessage}
                 />
                 <LinkedInLoginButton
                   onLogin={handleLogin}
                   onError={setErrMessage}
-                />
+                /> */}
+                <View className="flex-1">
+                  <GoogleLoginButton
+                    onLogin={handleLogin}
+                    onError={setErrMessage}
+                  />
+                </View>
+                <View className="flex-1">
+                  <LinkedInLoginButton
+                    onLogin={handleLogin}
+                    onError={setErrMessage}
+                  />
+                </View>
               </View>
               <View className="mt-5 flex-row items-center justify-center px-6">
                 <View className="h-[0.5px] w-[50%] bg-black-default"></View>
@@ -292,6 +321,10 @@ export default function Login() {
                                 placeholder={item.placeholder}
                                 placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                                 onBlur={onBlur}
+                                onKeyPress={(e: any) => {
+                                  if (e.key === "Enter")
+                                    handleSubmit(onSubmit)();
+                                }}
                                 onChangeText={(text) => onChange(text)}
                                 value={value}
                                 testID={

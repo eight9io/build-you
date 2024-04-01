@@ -12,16 +12,16 @@ import CompleteProfileStep2 from "./CompleteProfileStep2";
 import CompleteProfileStep3 from "./CompleteProfileStep3";
 import CompleteProfileStep4 from "./CompleteProfileStep4";
 import CompleteProfileFinish from "./CompleteProfileFinish";
-import AppTitle from "../../../component/common/AppTitle";
 import NavButton from "../../../component/common/Buttons/NavButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "../../../store/auth-store";
 import { useTranslation } from "react-i18next";
-import { CommonActions } from "@react-navigation/native";
 import { useUserProfileStore } from "../../../store/user-store";
-import { setLastNotiIdToLocalStorage } from "../../../utils/notification.util";
 import { useCompleteProfileStore } from "../../../store/complete-user-profile";
 import AddManualSkillScreen from "../../HardSkills/AddManualSkillScreen";
+import { ScreenWrapper } from "../../../component/ScreenWrapper";
+import Header from "../../../component/common/Header";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../../common/constants";
 
 const CompleteProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -120,27 +120,42 @@ const CompleteProfileScreen = () => {
         component={CompleteProfileScreen1}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => <AppTitle title="Complete profile" />,
-          headerLeft: (props) => (
-            <NavButton
-              text="Logout"
-              withBackIcon={true}
-              onPress={() => {
-                setTimeout(() => {
-                  navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [{ name: "IntroScreen" }],
-                    })
-                  );
-                  setLastNotiIdToLocalStorage("");
-                  logout();
-                  userProfileStoreOnLogout();
-                }, 500);
-              }}
-              testID="complete_profile_step_1_logout_button"
-            />
+          header: () => (
+            <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+              <Header
+                title="Complete profile"
+                leftBtn={
+                  <NavButton
+                    text={t("log_out")}
+                    onPress={() => navigation.navigate("IntroScreen")}
+                    withBackIcon
+                  />
+                }
+                containerStyle="mt-0"
+              />
+            </ScreenWrapper>
           ),
+          // headerTitle: () => <AppTitle title="Complete profile" />,
+          // headerLeft: (props) => (
+          //   <NavButton
+          //     text="Logout"
+          //     withBackIcon={true}
+          //     onPress={() => {
+          //       setTimeout(() => {
+          //         navigation.dispatch(
+          //           CommonActions.reset({
+          //             index: 0,
+          //             routes: [{ name: "IntroScreen" }],
+          //           })
+          //         );
+          //         setLastNotiIdToLocalStorage("");
+          //         logout();
+          //         userProfileStoreOnLogout();
+          //       }, 500);
+          //     }}
+          //     testID="complete_profile_step_1_logout_button"
+          //   />
+          // ),
         })}
       />
       <CompleteProfileStack.Screen
@@ -148,31 +163,60 @@ const CompleteProfileScreen = () => {
         component={CompleteProfileScreen2}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => <AppTitle title="Complete profile" />,
-
-          headerLeft: (props) => (
-            <NavButton
-              testID="complete_profile_step_2_back_button"
-              text={t("button.back") || "Back"}
-              withBackIcon={true}
-              onPress={() => navigation.navigate("CompleteProfileStep1Screen")}
-            />
-          ),
-
-          headerRight: (props) => (
-            <View className="pr-2">
-              <NavButton
-                testID="complete_profile_step_2_skip_button"
-                text={t("button.skip") || "Skip"}
-                withIcon={false}
-                onPress={() => {
-                  setVideo("");
-                  setBiography("");
-                  navigation.navigate("CompleteProfileStep3Screen");
-                }}
+          header: () => (
+            <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+              <Header
+                title="Complete profile"
+                leftBtn={
+                  <NavButton
+                    text={t("button.back") || "Back"}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                }
+                rightBtn={
+                  <View className="pr-2">
+                    <NavButton
+                      testID="complete_profile_step_2_skip_button"
+                      text={t("button.skip") || "Skip"}
+                      withIcon={false}
+                      onPress={() => {
+                        setVideo("");
+                        setBiography("");
+                        navigation.navigate("CompleteProfileStep3Screen");
+                      }}
+                    />
+                  </View>
+                }
+                containerStyle="mt-0"
               />
-            </View>
+            </ScreenWrapper>
           ),
+          // headerTitle: () => <AppTitle title="Complete profile" />,
+
+          // headerLeft: (props) => (
+          //   <NavButton
+          //     testID="complete_profile_step_2_back_button"
+          //     text={t("button.back") || "Back"}
+          //     withBackIcon={true}
+          //     onPress={() => navigation.navigate("CompleteProfileStep1Screen")}
+          //   />
+          // ),
+
+          // headerRight: (props) => (
+          //   <View className="pr-2">
+          //     <NavButton
+          //       testID="complete_profile_step_2_skip_button"
+          //       text={t("button.skip") || "Skip"}
+          //       withIcon={false}
+          //       onPress={() => {
+          //         setVideo("");
+          //         setBiography("");
+          //         navigation.navigate("CompleteProfileStep3Screen");
+          //       }}
+          //     />
+          //   </View>
+          // ),
         })}
       />
       <CompleteProfileStack.Screen
@@ -180,16 +224,31 @@ const CompleteProfileScreen = () => {
         component={CompleteProfileScreen3}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => <AppTitle title="Complete profile" />,
-
-          headerLeft: (props) => (
-            <NavButton
-              testID="complete_profile_step_3_back_button"
-              text={t("button.back") || "Back"}
-              withBackIcon={true}
-              onPress={() => navigation.goBack()}
-            />
+          header: () => (
+            <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+              <Header
+                title="Complete profile"
+                leftBtn={
+                  <NavButton
+                    text={t("button.back") || "Back"}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                  />
+                }
+                containerStyle="mt-0"
+              />
+            </ScreenWrapper>
           ),
+          // headerTitle: () => <AppTitle title="Complete profile" />,
+
+          // headerLeft: (props) => (
+          //   <NavButton
+          //     testID="complete_profile_step_3_back_button"
+          //     text={t("button.back") || "Back"}
+          //     withBackIcon={true}
+          //     onPress={() => navigation.goBack()}
+          //   />
+          // ),
         })}
       />
       <CompleteProfileStack.Screen
@@ -197,16 +256,32 @@ const CompleteProfileScreen = () => {
         component={CompleteProfileScreen4}
         options={({ navigation }) => ({
           headerShown: true,
-          headerTitle: () => <AppTitle title="Complete profile" />,
-
-          headerLeft: (props) => (
-            <NavButton
-              testID="complete_profile_step_4_back_button"
-              text={t("button.back") || "Back"}
-              withBackIcon={true}
-              onPress={() => navigation.goBack()}
-            />
+          header: () => (
+            <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+              <Header
+                title="Complete profile"
+                leftBtn={
+                  <NavButton
+                    text={t("button.back") || "Back"}
+                    onPress={() => navigation.goBack()}
+                    withBackIcon
+                    testID="login_back_btn"
+                  />
+                }
+                containerStyle="mt-0"
+              />
+            </ScreenWrapper>
           ),
+          // headerTitle: () => <AppTitle title="Complete profile" />,
+
+          // headerLeft: (props) => (
+          //   <NavButton
+          //     testID="complete_profile_step_4_back_button"
+          //     text={t("button.back") || "Back"}
+          //     withBackIcon={true}
+          //     onPress={() => navigation.goBack()}
+          //   />
+          // ),
         })}
       />
       <CompleteProfileStack.Screen
@@ -215,11 +290,32 @@ const CompleteProfileScreen = () => {
       />
       <CompleteProfileStack.Screen
         name="AddManualSkillScreen"
-        component={AddManualSkillScreen}
-        options={{
+        // component={AddManualSkillScreen}
+        options={({ navigation }) => ({
           headerShown: false,
-        }}
-      />
+          // header: () => (
+          //   <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+          //     <Header
+          //       title={t("add_skill_modal.title") || "Add skill"}
+          //       leftBtn={<Close fill={"black"} />}
+          //       onLeftBtnPress={() => navigation.goBack()}
+          //       containerStyle="mt-0"
+          //     />
+          //   </ScreenWrapper>
+          // ),
+        })}
+      >
+        {(props) => (
+          <AddManualSkillScreen
+            {...(props as any)}
+            containerClassName="items-center"
+            contentStyle={{
+              maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+            }}
+            shouldOffsetDrawerWidth={false}
+          />
+        )}
+      </CompleteProfileStack.Screen>
     </CompleteProfileStack.Navigator>
   );
 };

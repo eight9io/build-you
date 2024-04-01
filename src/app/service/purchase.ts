@@ -1,5 +1,6 @@
 import httpInstance from "../utils/http";
 import {
+  ICreateCheckoutSessionPayload,
   IVerifyApplePurchase,
   IVerifyApplePurchaseResponse,
   IVerifyGooglePurchase,
@@ -28,5 +29,13 @@ export const getBasicPackages = () => {
 export const getPackage = (type: "chat" | "video", numOfChecks: number) => {
   return httpInstance.get<IPackage>(
     `/purchase/stripe/products/${type}/${numOfChecks}`
+  );
+};
+
+export const createCheckoutSession = (
+  payload: ICreateCheckoutSessionPayload
+) => {
+  return httpInstance.get<string>(
+    `/purchase/stripe/checkout/${payload.productId}/${payload.challengeId}`
   );
 };

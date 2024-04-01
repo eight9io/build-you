@@ -22,6 +22,7 @@ import {
 } from "../../../../../service/company";
 import { fetchListEmployee } from "../../../../../utils/profile";
 import GlobalToastController from "../../../../common/Toast/GlobalToastController";
+import { useNav } from "../../../../../hooks/useNav";
 
 interface IEmployeesItemProps {
   item: any;
@@ -157,6 +158,11 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
   };
 
   const AddNewChallengeEmployeesButton = () => {
+    const navigation = useNav();
+    const onAddNewEmployeeBtnPress = () => {
+      navigation.navigate("AddNewEmployeeScreen");
+    };
+
     return (
       <View className="relative">
         <View className="h-12">
@@ -165,12 +171,12 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
             containerClassName="bg-primary-default"
             textClassName="text-white text-md font-semibold  ml-2"
             Icon={<AddIcon fill={"white"} />}
-            onPress={() => setIsShowModalAdd(true)}
+            onPress={onAddNewEmployeeBtnPress}
           />
-          <AddNewEmployeeModal
+          {/* <AddNewEmployeeModal
             isVisible={isShowModalAdd}
             onClose={() => setIsShowModalAdd(false)}
-          />
+          /> */}
         </View>
       </View>
     );

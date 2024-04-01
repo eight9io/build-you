@@ -30,6 +30,7 @@ import { serviceGetListOccupation } from "../../../service/profile";
 import { IOccupation } from "../../../types/user";
 import { useUserProfileStore } from "../../../store/user-store";
 import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../../common/constants";
 
 interface CompleteProfileStep1Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -147,6 +148,7 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         showDateTimePicker={showDateTimePicker}
         maximumDate={dayjs().subtract(16, "years").startOf("day").toDate()}
         minimumDate={dayjs().subtract(100, "years").startOf("day").toDate()}
+        shouldOffsetDrawerWidth={false}
       />
 
       <SelectPickerOccupation
@@ -158,10 +160,21 @@ const CompleteProfileStep1: FC<CompleteProfileStep1Props> = ({
         onCancel={() => {
           setShowOccupationPicker(false);
         }}
+        shouldOffsetDrawerWidth={false}
       />
 
-      <ScrollView className="h-full w-full">
-        <View className=" flex w-full flex-col items-center justify-start">
+      <ScrollView
+        className="h-full w-full"
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
+        <View
+          className=" flex w-full flex-col items-center justify-start"
+          style={{
+            maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+          }}
+        >
           <View className="pt-2">
             <StepOfSteps step={1} totalSteps={4} />
           </View>

@@ -34,6 +34,7 @@ import ShareIcon from "../../../../../assets/svg/share.svg";
 import SettingsIcon from "../../../component/common/Buttons/ButtonWithIcon/asset/settings.svg";
 import SettingsScreen from "../../SettingsScreen/SettingsScreen";
 import EditCompanyProfileScreen from "./EditCompanyProfileScreen/EditCompanyProfileScreen";
+import AddNewEmployeeScreen from "./AddNewEmployeeScreen";
 
 const CompanyStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -256,6 +257,13 @@ const CompanyProfileScreen = () => {
               withBackIcon
             />
           ),
+        })}
+      />
+      <CompanyStack.Screen
+        name="AddNewEmployeeScreen"
+        component={AddNewEmployeeScreen}
+        options={({ navigation }) => ({
+          headerShown: false,
         })}
       />
     </CompanyStack.Navigator>

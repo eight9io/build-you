@@ -1,8 +1,8 @@
 import * as ExpoImagePicker from "expo-image-picker";
-import { Platform } from "react-native";
-import { serviceUpdateAvatar, serviceUpdateCover } from "../service/profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import i18n from "../i18n/i18n";
+import { validateAssetsSize } from "./file.util";
+import { ASSET_MAX_SIZE, ASSET_MAX_SIZE_TO_DISPLAY } from "../common/constants";
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
   base64?: boolean;
@@ -32,7 +32,25 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
     });
 
     if (!result.canceled) {
-      return result;
+      try {
+        const isValidAssets = await validateAssetsSize(
+          result.assets,
+          ASSET_MAX_SIZE
+        );
+        if (!isValidAssets) {
+          GlobalDialogController.showModal({
+            title: i18n.t("dialog.err_title"),
+            message: i18n.t("exceed_asset_max_size", {
+              maxSize: ASSET_MAX_SIZE_TO_DISPLAY,
+            }),
+          });
+          return null;
+        }
+        return result;
+      } catch (error) {
+        console.error("Error while validating assets size: ", error);
+        return null;
+      }
     }
     return null;
   };

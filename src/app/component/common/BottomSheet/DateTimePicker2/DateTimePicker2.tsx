@@ -5,6 +5,11 @@ import { useTranslation } from "react-i18next";
 import { Dimensions, View } from "react-native";
 import { Dialog } from "@rneui/themed";
 import Button from "../../Buttons/Button";
+import {
+  DIALOG_MAX_WIDTH,
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+} from "../../../../common/constants";
 
 interface DateTimePicker2Props {
   showDateTimePicker: boolean;
@@ -14,6 +19,7 @@ interface DateTimePicker2Props {
   maximumDate?: Date;
   minimumDate?: Date;
   shouldMinus16Years?: boolean;
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 const DateTimePicker2: FC<DateTimePicker2Props> = ({
@@ -24,6 +30,7 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
   maximumDate,
   minimumDate,
   shouldMinus16Years = false,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const { t } = useTranslation();
   const [tempSelectedDate, setTempSelectedDate] = React.useState(
@@ -45,7 +52,13 @@ const DateTimePicker2: FC<DateTimePicker2Props> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
+        ...(Dimensions.get("window").width <=
+        LAYOUT_THRESHOLD + DRAWER_MAX_WIDTH
+          ? {}
+          : {
+              maxWidth: DIALOG_MAX_WIDTH,
+              marginLeft: shouldOffsetDrawerWidth ? DRAWER_MAX_WIDTH : 0,
+            }),
       }}
       onBackdropPress={() => setShowDateTimePicker(false)}
     >

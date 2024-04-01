@@ -26,13 +26,15 @@ const renderEmojiButton = (
       onPress={triggerFunction}
     >
       {!selectedEmoji && (
-        <View className="flex-1 flex-row items-center justify-center">
+        <View className="h-12 w-12 flex-row items-center justify-center">
           <AddEmojiIcon />
         </View>
       )}
       {selectedEmoji && (
-        <View className="h-12 w-12 rounded-lg border border-gray-medium">
-          <Text className="pt-1 text-center text-3xl">{selectedEmoji}</Text>
+        <View className="h-12 w-12 rounded-lg">
+          <Text className="pr-1 pt-1.5 text-center text-3xl">
+            {selectedEmoji}
+          </Text>
         </View>
       )}
     </TouchableOpacity>

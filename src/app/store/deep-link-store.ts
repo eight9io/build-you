@@ -19,6 +19,7 @@ export interface DeepLinkStore {
 export const useDeepLinkStore = create<DeepLinkStore>((set, get) => ({
   deepLink: null,
   setDeepLink: (path: string) => {
+    if (!path) return set({ deepLink: null });
     const pathName = getPathNameFromDeepLinkPath(path) as DEEP_LINK_PATH_NAME;
     const param = getParamFromDeepLinkPath(path);
     set({ deepLink: { param, pathName } });

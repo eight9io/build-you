@@ -1,7 +1,12 @@
 import { FC } from "react";
-import { Dimensions, Modal, Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { Dialog } from "@rneui/themed";
+import {
+  DIALOG_MAX_WIDTH,
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+} from "../../../../common/constants";
 
 interface IComfirmDialogProps {
   title?: string;
@@ -13,6 +18,7 @@ interface IComfirmDialogProps {
   onClosed?: () => void;
   onConfirm?: () => void;
   confirmButtonTestID?: string;
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 const ErrorDialog: FC<IComfirmDialogProps> = ({
@@ -25,6 +31,7 @@ const ErrorDialog: FC<IComfirmDialogProps> = ({
   confirmButtonLabel,
   confirmButtonColor,
   confirmButtonTestID,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const { t } = useTranslation();
 
@@ -43,7 +50,13 @@ const ErrorDialog: FC<IComfirmDialogProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
+        ...(Dimensions.get("window").width <=
+        LAYOUT_THRESHOLD + DRAWER_MAX_WIDTH
+          ? {}
+          : {
+              maxWidth: DIALOG_MAX_WIDTH,
+              marginLeft: shouldOffsetDrawerWidth ? DRAWER_MAX_WIDTH : 0,
+            }),
       }}
     >
       <Dialog.Title

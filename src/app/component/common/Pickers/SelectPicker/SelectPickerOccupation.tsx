@@ -24,6 +24,7 @@ interface ISelectPickerProps {
   onSelect: (value: number | string) => void;
   onCancel: () => void;
   onLoadMore?: () => void;
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 const SelectPickerOccupation: FC<ISelectPickerProps> = ({
@@ -35,6 +36,7 @@ const SelectPickerOccupation: FC<ISelectPickerProps> = ({
   onCancel,
   onLoadMore,
   currentOccupation,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
   const [customOccupationError, setCustomOccupationError] =
@@ -89,7 +91,10 @@ const SelectPickerOccupation: FC<ISelectPickerProps> = ({
 
   useEffect(() => {
     if (show) {
-      if (!showCustomInput) bottomSheetRef.current?.open();
+      if (!showCustomInput)
+        bottomSheetRef.current?.open({
+          shouldOffsetDrawerWidth: shouldOffsetDrawerWidth,
+        });
     } else {
       if (!showCustomInput) bottomSheetRef.current?.close();
     }

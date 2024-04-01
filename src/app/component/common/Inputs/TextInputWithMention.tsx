@@ -7,6 +7,7 @@ import { Text, View, TouchableOpacity, Image } from "react-native";
 // Because react-native-controlled-mentions is not maintained anymore, there are many issues with react-native-web
 import { MentionsInput, Mention, MentionsInputProps } from "react-mentions";
 import debounce from "lodash.debounce";
+import isEmpty from "lodash.isempty";
 
 import { ISearchUserData } from "../../../types/user";
 
@@ -80,6 +81,15 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             onChange={(event, newValue, newPlainTextValue, mentions) => {
               inputProps.onChange(event, newValue, newPlainTextValue, mentions);
             }}
+            onKeyDown={(e) => {
+              !e.shiftKey && e.key === "Enter" && e.preventDefault();
+              if (
+                !e.shiftKey &&
+                e.key === "Enter" &&
+                !isEmpty(inputProps.value)
+              )
+                onRightIconPress && onRightIconPress();
+            }}
             allowSuggestionsAboveCursor
             forceSuggestionsAboveCursor
             style={{
@@ -94,6 +104,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
               "&multiLine": {
                 highlighter: {
                   position: "relative",
+                  fontWeight: 700,
                 },
                 input: {
                   paddingLeft: 10,
@@ -129,10 +140,11 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
             <Mention
               style={{
                 // Mention style
-                color: "#FF7B1C",
+                color: "#24252B",
                 // fontSize: 14, // fontSize will cause the highlighter to be misaligned => to be fixed
                 zIndex: 10, // Make sure the highlighter's color override the mention text
                 position: "relative",
+                fontWeight: 700,
               }}
               appendSpaceOnAdd
               trigger="@"

@@ -14,3 +14,14 @@ export const LINKEDIN_LOGIN = {
 export const GOOGLE_MAP_API = {
   API_KEY: process.env.EXPO_GOOGLE_API_KEY,
 };
+
+export const LAYOUT_THRESHOLD = 768;
+export const MAIN_SCREEN_MAX_WIDTH = 630;
+export const DRAWER_MAX_WIDTH = 240;
+export const MODAL_MAX_WIDTH = 630;
+export const DIALOG_MAX_WIDTH = 582;
+export const SCREEN_WITHOUT_DRAWER_MAX_WIDTH = 768;
+export const SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH = 500;
+
+export const ASSET_MAX_SIZE = 100 * 1024 * 1024; // 100MB
+export const ASSET_MAX_SIZE_TO_DISPLAY = 100; // 100MB

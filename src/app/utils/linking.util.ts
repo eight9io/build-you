@@ -1,9 +1,10 @@
 import { NavigationContainerRef } from "@react-navigation/native";
 import { Linking } from "react-native";
 import { RootStackParamList } from "../navigation/navigation.type";
-import { IDeepLinkValue } from "../store/deep-link-store";
+import { IDeepLinkValue, useDeepLinkStore } from "../store/deep-link-store";
 import { DEEP_LINK_PATH_NAME } from "../common/enum";
 import NavigationService from "./navigationService";
+import { setPurchasingChallengeData } from "./purchase.util";
 
 export const LinkingConfig = {
   prefixes: [],
@@ -20,6 +21,14 @@ export const LinkingConfig = {
               },
               OtherUserProfileScreen: {
                 path: "/user/:userId",
+              },
+              Challenges: {
+                // initialRouteName: "PersonalChallengesScreen",
+                screens: {
+                  PersonalChallengeDetailScreen: {
+                    path: "/payment/:challengeId?payment_success=:paymentSuccess",
+                  },
+                },
               },
             },
           },
@@ -70,6 +79,25 @@ export const handleDeepLinkToOtherUserProfile = (
   });
 };
 
+export const handleDeepLinkToPaidChallengeDetail = (
+  deepLink: IDeepLinkValue,
+  navigation: NavigationContainerRef<RootStackParamList>
+) => {
+  if (!deepLink) return;
+
+  // Clear navigation state in local storage before navigating to the paid challenge detail screen => Navigation state is no need in this case (we only need it when user press back button)
+  setPurchasingChallengeData(null);
+  navigation.navigate("HomeScreen", {
+    screen: "Challenges",
+    params: {
+      screen: "PersonalChallengeDetailScreen",
+      params: {
+        challengeId: deepLink.param,
+      },
+    },
+  });
+};
+
 const deepLinkHandlerMap: Record<
   string,
   (
@@ -79,6 +107,7 @@ const deepLinkHandlerMap: Record<
 > = {
   [DEEP_LINK_PATH_NAME.CHALLENGE_DETAIL]: handleDeepLinkToChallengeDetail,
   [DEEP_LINK_PATH_NAME.USER_PROFILE]: handleDeepLinkToOtherUserProfile,
+  [DEEP_LINK_PATH_NAME.PAYMENT]: handleDeepLinkToPaidChallengeDetail,
 };
 
 export const handleDeepLinkNavigation = (deepLink: IDeepLinkValue) => {
@@ -87,6 +116,7 @@ export const handleDeepLinkNavigation = (deepLink: IDeepLinkValue) => {
   const handler = deepLinkHandlerMap[deepLink.pathName];
   const navigation = NavigationService.getContainer();
   if (handler) handler(deepLink, navigation);
+  useDeepLinkStore.getState().setDeepLink(null);
 };
 
 export const isValidDeepLinkPath = (path: string) => {

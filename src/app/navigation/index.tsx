@@ -58,6 +58,9 @@ import ForgotPasswordConfirmScreen from "../screen/ForgotPassword/ForgotPassword
 import RegisterOptionsScreen from "../screen/RegisterScreen/RegisterOptionsScreen";
 import TermsOfServicesScreen from "../screen/PersonalInformations/TermsOfServicesScreen";
 import PrivacyPolicyScreen from "../screen/PersonalInformations/PrivacyPolicyScreen";
+import { DEEP_LINK_PATH_NAME } from "../common/enum";
+import { ScreenWrapper } from "../component/ScreenWrapper";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../common/constants";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -84,7 +87,7 @@ export const RootNavigation = () => {
   const isLoggedin = getAccessToken();
 
   const isNavigationReadyRef = useRef(false);
-  const { setDeepLink } = useDeepLinkStore();
+  const { deepLink, setDeepLink } = useDeepLinkStore();
 
   const getInitialURL = async () => {
     const url = await Linking.getInitialURL();
@@ -100,8 +103,17 @@ export const RootNavigation = () => {
       const deepLink = await getInitialURL(); // Get the URL that was used to launch the app if it was launched by a link
       const params = Linking.parse(deepLink);
       if (params) {
+        const pathName = params.path.split("/")[0];
+        if (
+          !params.path ||
+          Object.values(DEEP_LINK_PATH_NAME).includes(
+            pathName as DEEP_LINK_PATH_NAME
+          )
+        )
+          localStorage.removeItem("historyState"); // If user load the app without path (default root) or with deeplink, remove history state in local storage
         const isValidDeepLink = isValidDeepLinkPath(params.path);
         if (!isValidDeepLink) return;
+
         setDeepLink(params.path);
       }
     };
@@ -201,11 +213,17 @@ export const RootNavigation = () => {
         <RootStack.Group>
           <RootStack.Screen
             name="IntroScreen"
-            component={IntroScreen}
+            // component={IntroScreen}
             options={{
               headerShown: false,
             }}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <IntroScreen {...props} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
 
           <RootStack.Screen
             name="HomeScreen"
@@ -258,11 +276,14 @@ export const RootNavigation = () => {
 
           <RootStack.Screen
             name="CompleteProfileScreen"
-            component={CompleteProfileScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
+            // component={CompleteProfileScreen}
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <CompleteProfileScreen {...(props as any)} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="HomeScreenWithoutLogin"
             component={BottomNavBarWithoutLogin}
@@ -300,115 +321,265 @@ export const RootNavigation = () => {
         <RootStack.Group screenOptions={{ presentation: "modal" }}>
           <RootStack.Screen
             name="LoginScreen"
-            component={Login}
+            // component={Login}
             options={({ navigation }) => ({
               headerShown: true,
-              headerTitle: () => <AppTitle title={t("login_screen.login")} />,
+              // headerTitle: () => <AppTitle title={t("login_screen.login")} />,
 
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") || "Back"}
-                  onPress={() => navigation.navigate("IntroScreen")}
-                  withBackIcon
-                  testID="login_back_btn"
-                />
+              // headerLeft: (props) => (
+              //   <NavButton
+              //     text={t("button.back") || "Back"}
+              //     onPress={() => navigation.navigate("IntroScreen")}
+              //     withBackIcon
+              //     testID="login_back_btn"
+              //   />
+              // ),
+              header: () => (
+                <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+                  <Header
+                    title={t("login_screen.login")}
+                    leftBtn={
+                      <NavButton
+                        text={t("button.back") || "Back"}
+                        onPress={() => navigation.navigate("IntroScreen")}
+                        withBackIcon
+                        testID="login_back_btn"
+                      />
+                    }
+                    containerStyle="mt-0"
+                  />
+                </ScreenWrapper>
               ),
             })}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <Login {...(props as any)} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="RegisterScreen"
-            component={Register}
+            // component={Register}
             options={({ navigation }) => ({
               headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t("register_screen.title")} />
-              ),
+              // headerTitle: () => (
+              //   <AppTitle title={t("register_screen.title")} />
+              // ),
 
-              headerLeft: () => (
-                <NavButton
-                  text={t("button.back") || "Back"}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
-                  testID="email_registration_back_btn"
-                />
+              // headerLeft: () => (
+              //   <NavButton
+              //     text={t("button.back") || "Back"}
+              //     onPress={() => navigation.goBack()}
+              //     withBackIcon
+              //     testID="email_registration_back_btn"
+              //   />
+              // ),
+              header: () => (
+                <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+                  <Header
+                    title={t("register_screen.title")}
+                    leftBtn={
+                      <NavButton
+                        text={t("button.back") || "Back"}
+                        onPress={() => navigation.goBack()}
+                        withBackIcon
+                        testID="email_registration_back_btn"
+                      />
+                    }
+                    containerStyle="mt-0"
+                  />
+                </ScreenWrapper>
               ),
             })}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <Register {...props} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="RegisterOptionsScreen"
-            component={RegisterOptionsScreen}
-            options={({ navigation }) => ({
-              headerShown: false,
-            })}
-          />
+            // component={RegisterOptionsScreen}
+            // options={({ navigation }) => ({
+            //   headerShown: false,
+            // })}
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <RegisterOptionsScreen {...(props as any)} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="TermsOfServicesScreen"
-            component={TermsOfServicesScreen}
+            // component={TermsOfServicesScreen}
             options={({ navigation }) => ({
               headerShown: true,
-              headerTitle: () => (
-                <AppTitle
-                  title={t(
-                    "user_settings_screen.account_settings_sections.terms_of_services"
-                  )}
-                />
-              ),
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
-                />
+              // headerTitle: () => (
+              //   <AppTitle
+              //     title={t(
+              //       "user_settings_screen.account_settings_sections.terms_of_services"
+              //     )}
+              //   />
+              // ),
+              // headerLeft: (props) => (
+              //   <NavButton
+              //     text={t("button.back") as string}
+              //     onPress={() => navigation.goBack()}
+              //     withBackIcon
+              //   />
+              // ),
+              header: () => (
+                <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+                  <Header
+                    title={t(
+                      "user_settings_screen.account_settings_sections.terms_of_services"
+                    )}
+                    leftBtn={
+                      <NavButton
+                        text={t("button.back") || "Back"}
+                        onPress={() => navigation.goBack()}
+                        withBackIcon
+                      />
+                    }
+                    containerStyle="mt-0"
+                  />
+                </ScreenWrapper>
               ),
             })}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <TermsOfServicesScreen
+                  {...(props as any)}
+                  containerClassName="flex items-center"
+                  contentStyle={{
+                    maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+                  }}
+                />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="PrivacyPolicyScreen"
-            component={PrivacyPolicyScreen}
+            // component={PrivacyPolicyScreen}
             options={({ navigation }) => ({
               headerShown: true,
-              headerTitle: () => (
-                <AppTitle
-                  title={t(
-                    "user_settings_screen.account_settings_sections.privacy_policy"
-                  )}
-                />
-              ),
-              headerLeft: (props) => (
-                <NavButton
-                  text={t("button.back") as string}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
-                />
+              // headerTitle: () => (
+              //   <AppTitle
+              //     title={t(
+              //       "user_settings_screen.account_settings_sections.privacy_policy"
+              //     )}
+              //   />
+              // ),
+              // headerLeft: (props) => (
+              //   <NavButton
+              //     text={t("button.back") as string}
+              //     onPress={() => navigation.goBack()}
+              //     withBackIcon
+              //   />
+              // ),
+              header: () => (
+                <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+                  <Header
+                    title={t(
+                      "user_settings_screen.account_settings_sections.privacy_policy"
+                    )}
+                    leftBtn={
+                      <NavButton
+                        text={t("button.back") || "Back"}
+                        onPress={() => navigation.goBack()}
+                        withBackIcon
+                      />
+                    }
+                    containerStyle="mt-0"
+                  />
+                </ScreenWrapper>
               ),
             })}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <PrivacyPolicyScreen
+                  {...(props as any)}
+                  containerClassName="flex items-center"
+                  contentStyle={{
+                    maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+                  }}
+                />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="ForgotPasswordScreen"
-            component={ForgotPassword}
+            // component={ForgotPassword}
             options={({ navigation }) => ({
               headerShown: true,
-              headerTitle: () => (
-                <AppTitle title={t("forgot_password.title")} />
-              ),
+              // headerTitle: () => (
+              //   <AppTitle title={t("forgot_password.title")} />
+              // ),
 
-              headerLeft: () => (
-                <NavButton
-                  text={t("button.back") || "Back"}
-                  onPress={() => navigation.goBack()}
-                  withBackIcon
-                  testID="forgot_password_back_btn"
-                />
+              // headerLeft: () => (
+              //   <NavButton
+              //     text={t("button.back") || "Back"}
+              //     onPress={() => navigation.goBack()}
+              //     withBackIcon
+              //     testID="forgot_password_back_btn"
+              //   />
+              // ),
+              header: () => (
+                <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+                  <Header
+                    title={t("forgot_password.title")}
+                    leftBtn={
+                      <NavButton
+                        text={t("button.back") || "Back"}
+                        onPress={() => navigation.goBack()}
+                        withBackIcon
+                      />
+                    }
+                    containerStyle="mt-0"
+                  />
+                </ScreenWrapper>
               ),
             })}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <ForgotPassword {...props} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="ForgotPasswordConfirmScreen"
-            component={ForgotPasswordConfirmScreen}
+            // component={ForgotPasswordConfirmScreen}
             options={({ navigation }) => ({
-              headerShown: false,
+              headerShown: true,
+              header: () => (
+                <ScreenWrapper containerClassName="py-5 px-4 bg-white">
+                  <Header
+                    title={t("forgot_password.title")}
+                    leftBtn={
+                      <NavButton
+                        text={t("button.back") || "Back"}
+                        onPress={() => navigation.goBack()}
+                        withBackIcon
+                      />
+                    }
+                    containerStyle="mt-0"
+                  />
+                </ScreenWrapper>
+              ),
             })}
-          />
+          >
+            {(props) => (
+              <ScreenWrapper>
+                <ForgotPasswordConfirmScreen {...props} />
+              </ScreenWrapper>
+            )}
+          </RootStack.Screen>
           <RootStack.Screen
             name="CreateChallengeScreen"
             component={CreateChallengeScreen}

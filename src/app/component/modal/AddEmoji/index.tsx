@@ -15,6 +15,7 @@ interface IAddEmojiModallProps {
   onClose: () => void;
   setExternalSelectedEmoji: (emoji: string | null) => void;
   setSelectEmojiError: (error: boolean) => void;
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
@@ -22,6 +23,7 @@ export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
   onClose,
   setExternalSelectedEmoji,
   setSelectEmojiError,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const bottomSheetRef = useRef(null);
   const { ref, open, close } = useModalize();
@@ -43,7 +45,9 @@ export const AddEmojiModal: FC<IAddEmojiModallProps> = ({
 
   useEffect(() => {
     if (isVisible) {
-      bottomSheetRef.current?.open();
+      bottomSheetRef.current?.open({
+        shouldOffsetDrawerWidth,
+      });
     } else {
       bottomSheetRef.current?.close();
     }

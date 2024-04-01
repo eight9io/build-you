@@ -23,6 +23,7 @@ import ErrorText from "../../component/common/ErrorText";
 import LinkedInLoginButton from "../../component/common/Buttons/LinkedInLoginButton/LinkedInLoginButton";
 import GoogleLoginButton from "../../component/common/Buttons/GoogleLoginButton/GoogleLoginButton";
 import Button from "../../component/common/Buttons/Button";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../common/constants";
 
 const RegisterOptionsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -92,11 +93,11 @@ const RegisterOptionsScreen = () => {
 
   return (
     <View
-      className="flex-1"
+      className="flex-1 bg-white"
       // style={{ borderRadius: 10 }}
       testID="register_modal"
     >
-      <View className="absolute z-10 my-6">
+      <View className="absolute z-10 my-5 pl-4">
         <NavButton
           onPress={() => {
             closeModal();
@@ -106,9 +107,14 @@ const RegisterOptionsScreen = () => {
           testID="register_modal_back_btn"
         />
       </View>
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex flex-1 items-center">
         <CustomActivityIndicator isVisible={isLoading} />
-        <View className="h-full flex-1 p-5">
+        <View
+          className="h-full w-full flex-1 p-5"
+          style={{
+            maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+          }}
+        >
           <View className="flex h-[65%] pt-4">
             <View className="h-[70%]">
               <Image
@@ -133,27 +139,33 @@ const RegisterOptionsScreen = () => {
               message={errMessage}
             />
           ) : null}
-          <View className="h-[30%] flex-col items-center pt-5">
-            <LinkedInLoginButton
-              title={t("register_modal.linked") || "Register with Linkedin"}
-              onLogin={handleRegisterSocial}
-              onError={setErrMessage}
-            />
-            <GoogleLoginButton
-              title={t("register_modal.google") || "Register with Google"}
-              onLogin={handleRegisterSocial}
-              onError={setErrMessage}
-            />
-            <Button
-              title={t("register_modal.register")}
-              containerClassName="border-primary-default flex-row border-[1px] m-2 w-full"
-              textClassName="text-primary-default ml-2 text-base font-bold"
-              onPress={() => {
-                closeModal();
-                navigation.navigate("RegisterScreen");
-              }}
-              testID="register_with_email_btn"
-            />
+          <View className="mt-6 flex-col items-center space-y-3">
+            <View className="h-12 w-full">
+              <LinkedInLoginButton
+                title={t("register_modal.linked") || "Register with Linkedin"}
+                onLogin={handleRegisterSocial}
+                onError={setErrMessage}
+              />
+            </View>
+            <View className="h-12 w-full">
+              <GoogleLoginButton
+                title={t("register_modal.google") || "Register with Google"}
+                onLogin={handleRegisterSocial}
+                onError={setErrMessage}
+              />
+            </View>
+            <View className="h-12 w-full">
+              <Button
+                title={t("register_modal.register")}
+                containerClassName="border-primary-default flex-row border-[1px] w-full"
+                textClassName="text-primary-default ml-2 text-base font-bold"
+                onPress={() => {
+                  closeModal();
+                  navigation.navigate("RegisterScreen");
+                }}
+                testID="register_with_email_btn"
+              />
+            </View>
           </View>
         </View>
       </SafeAreaView>

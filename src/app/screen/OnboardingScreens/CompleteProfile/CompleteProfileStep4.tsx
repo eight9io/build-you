@@ -24,6 +24,7 @@ import { uploadNewVideo } from "../../../utils/uploadVideo";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import OutsidePressHandler from "react-native-outside-press";
 import { CrashlyticService } from "../../../service/crashlytic";
+import { SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH } from "../../../common/constants";
 
 interface CompleteProfileStep4Props {
   navigation: CompleteProfileScreenNavigationProp;
@@ -213,6 +214,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
         message:
           (t("error_general_message") as string) || "Something went wrong",
         button: t("dialog.ok"),
+        shouldOffsetDrawerWidth: false,
       });
       return;
     }
@@ -312,9 +314,20 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   }, []);
 
   return (
-    <View className="flex-1">
-      <ScrollView nestedScrollEnabled={true} horizontal={false}>
-        <View>
+    <View className="flex-1 bg-white">
+      <ScrollView
+        nestedScrollEnabled={true}
+        horizontal={false}
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
+        <View
+          className="w-full"
+          style={{
+            maxWidth: SCREEN_WITHOUT_DRAWER_CONTENT_MAX_WIDTH,
+          }}
+        >
           <View>
             <StepOfSteps step={4} totalSteps={4} />
           </View>
@@ -328,167 +341,167 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                 "Please select at least 3 different soft skills and rate it from 1 to 5."}
             </Text>
           </View>
-        </View>
-        <View>
-          <View className="flex w-full pt-5 ">
-            <View className="flex flex-col px-5">
-              <Text className="pb-2 text-md font-semibold text-primary-default">
-                {t("form_onboarding.screen_4.soft_skills") || "Soft skills"}
-              </Text>
-              <OutsidePressHandler
-                onOutsidePress={() => {
-                  setOpenDropdown(false);
-                }}
-                className="z-10"
-              >
-                <DropDownPicker
-                  value={value}
-                  itemKey="label"
-                  open={openDropdown}
-                  setValue={setValue}
-                  items={fetchedSoftSkills}
-                  setOpen={setOpenDropdown}
-                  setItems={setFetchedSoftSkills}
-                  testID="soft_skill_dropdown_picker"
-                  dropDownDirection="BOTTOM"
-                  listMode="SCROLLVIEW"
-                  scrollViewProps={{
-                    nestedScrollEnabled: true,
+          <View>
+            <View className="flex w-full pt-5 ">
+              <View className="flex flex-col px-5">
+                <Text className="pb-2 text-md font-semibold text-primary-default">
+                  {t("form_onboarding.screen_4.soft_skills") || "Soft skills"}
+                </Text>
+                <OutsidePressHandler
+                  onOutsidePress={() => {
+                    setOpenDropdown(false);
                   }}
-                  placeholder={
-                    selectedCompetencedSkill.length == 0
-                      ? t("form_onboarding.screen_4.select_soft_skill") ||
-                        "Select a soft skill"
-                      : `${selectedCompetencedSkill.length}/${fetchedSoftSkills.length}`
-                  }
-                  style={{
-                    backgroundColor: "#fafafa",
-                    borderColor: "#e2e8f0",
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    zIndex: 10,
-                  }}
-                  containerStyle={{
-                    width: "100%",
-                    backgroundColor: "#fafafa",
-                    zIndex: 10,
-                  }}
-                  dropDownContainerStyle={{
-                    backgroundColor: "#fafafa",
-                    borderColor: "#e2e8f0",
-                    maxHeight: 300,
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    overflow: "scroll",
-                    zIndex: 10,
-                  }}
-                  containerProps={{
-                    style: {
+                  className="z-10"
+                >
+                  <DropDownPicker
+                    value={value}
+                    itemKey="label"
+                    open={openDropdown}
+                    setValue={setValue}
+                    items={fetchedSoftSkills}
+                    setOpen={setOpenDropdown}
+                    setItems={setFetchedSoftSkills}
+                    testID="soft_skill_dropdown_picker"
+                    dropDownDirection="BOTTOM"
+                    listMode="SCROLLVIEW"
+                    scrollViewProps={{
+                      nestedScrollEnabled: true,
+                    }}
+                    placeholder={
+                      selectedCompetencedSkill.length == 0
+                        ? t("form_onboarding.screen_4.select_soft_skill") ||
+                          "Select a soft skill"
+                        : `${selectedCompetencedSkill.length}/${fetchedSoftSkills.length}`
+                    }
+                    style={{
+                      backgroundColor: "#fafafa",
+                      borderColor: "#e2e8f0",
+                      borderWidth: 1,
+                      borderRadius: 8,
                       zIndex: 10,
-                      height: openDropdown
-                        ? 50 * (fetchedSoftSkills?.length + 1)
-                        : 50,
+                    }}
+                    containerStyle={{
+                      width: "100%",
+                      backgroundColor: "#fafafa",
+                      zIndex: 10,
+                    }}
+                    dropDownContainerStyle={{
+                      backgroundColor: "#fafafa",
+                      borderColor: "#e2e8f0",
+                      maxHeight: 300,
+                      borderWidth: 1,
+                      borderRadius: 8,
                       overflow: "scroll",
-                    },
-                  }}
-                  theme="LIGHT"
-                  multiple={true}
-                  mode="SIMPLE"
-                  badgeDotColors={["#e76f51"]}
-                  renderListItem={({ item, isSelected }) => {
-                    const isSkillAlreadySelected =
-                      selectedCompetencedSkill.find(
-                        (selected) => selected.label === item.label
-                      );
-                    const randomIndex = Math.random()
-                      .toString()
-                      .replace(".", "");
-                    return (
-                      <TouchableOpacity
-                        onPress={() =>
-                          addCompetencedSkill(item as IFormValueInput)
-                        }
-                        key={randomIndex}
-                        testID={item.testID}
-                      >
-                        <View
-                          className={clsx(
-                            "flex-row items-center justify-start px-4 py-3",
-                            {
-                              "bg-gray-light": isSelected,
-                            }
-                          )}
+                      zIndex: 10,
+                    }}
+                    containerProps={{
+                      style: {
+                        zIndex: 10,
+                        height: openDropdown
+                          ? 50 * (fetchedSoftSkills?.length + 1)
+                          : 50,
+                        overflow: "scroll",
+                      },
+                    }}
+                    theme="LIGHT"
+                    multiple={true}
+                    mode="SIMPLE"
+                    badgeDotColors={["#e76f51"]}
+                    renderListItem={({ item, isSelected }) => {
+                      const isSkillAlreadySelected =
+                        selectedCompetencedSkill.find(
+                          (selected) => selected.label === item.label
+                        );
+                      const randomIndex = Math.random()
+                        .toString()
+                        .replace(".", "");
+                      return (
+                        <TouchableOpacity
+                          onPress={() =>
+                            addCompetencedSkill(item as IFormValueInput)
+                          }
+                          key={randomIndex}
+                          testID={item.testID}
                         >
-                          <Checkbox
-                            value={!!isSkillAlreadySelected}
-                            onValueChange={() =>
-                              addCompetencedSkill(item as IFormValueInput)
-                            }
-                            color={isSelected ? "#4630EB" : undefined}
-                          />
-                          <Text
-                            key={item.label}
-                            className="pl-3 text-h6 font-medium leading-6 text-black-default"
+                          <View
+                            className={clsx(
+                              "flex-row items-center justify-start px-4 py-3",
+                              {
+                                "bg-gray-light": isSelected,
+                              }
+                            )}
                           >
-                            {item.label}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    );
-                  }}
-                />
-              </OutsidePressHandler>
-              <View>
-                {!openDropdown && (
-                  <View className="w-full flex-col justify-between ">
-                    <View>
-                      {numberOfSkillError && (
-                        <View className="flex flex-row items-center justify-start pt-2">
-                          <WarningSvg />
-                          <Text
-                            className="pl-1 text-sm font-normal leading-5 text-red-500"
-                            testID="complete_profile_step_4_error"
-                          >
-                            {t("form_onboarding.screen_4.error") ||
-                              "Please select 3 soft skills."}
-                          </Text>
-                        </View>
-                      )}
-                      {numberOfSkillExceedError && (
-                        <View className="flex flex-row items-center justify-start pt-2">
-                          <WarningSvg />
-                          <Text
-                            className="pl-1 text-sm font-normal leading-5 text-red-500"
-                            testID="complete_profile_step_4_error"
-                          >
-                            {t("form_onboarding.screen_4.error_exceed") ||
-                              "Please select maximum of 3 soft skills."}
-                          </Text>
-                        </View>
-                      )}
+                            <Checkbox
+                              value={!!isSkillAlreadySelected}
+                              onValueChange={() =>
+                                addCompetencedSkill(item as IFormValueInput)
+                              }
+                              color={isSelected ? "#4630EB" : undefined}
+                            />
+                            <Text
+                              key={item.label}
+                              className="pl-3 text-h6 font-medium leading-6 text-black-default"
+                            >
+                              {item.label}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+                </OutsidePressHandler>
+                <View>
+                  {!openDropdown && (
+                    <View className="w-full flex-col justify-between ">
+                      <View>
+                        {numberOfSkillError && (
+                          <View className="flex flex-row items-center justify-start pt-2">
+                            <WarningSvg />
+                            <Text
+                              className="pl-1 text-sm font-normal leading-5 text-red-500"
+                              testID="complete_profile_step_4_error"
+                            >
+                              {t("form_onboarding.screen_4.error") ||
+                                "Please select 3 soft skills."}
+                            </Text>
+                          </View>
+                        )}
+                        {numberOfSkillExceedError && (
+                          <View className="flex flex-row items-center justify-start pt-2">
+                            <WarningSvg />
+                            <Text
+                              className="pl-1 text-sm font-normal leading-5 text-red-500"
+                              testID="complete_profile_step_4_error"
+                            >
+                              {t("form_onboarding.screen_4.error_exceed") ||
+                                "Please select maximum of 3 soft skills."}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      <View className="pt-5">
+                        {renderSelectedSoftSkill(
+                          t,
+                          selectedCompetencedSkill,
+                          changeSkillValue,
+                          skillValueError
+                        )}
+                      </View>
                     </View>
-                    <View className="pt-5">
-                      {renderSelectedSoftSkill(
-                        t,
-                        selectedCompetencedSkill,
-                        changeSkillValue,
-                        skillValueError
-                      )}
-                    </View>
-                  </View>
-                )}
+                  )}
+                </View>
               </View>
             </View>
+            {!openDropdown && (
+              <Button
+                testID="complete_profile_step_4_next_button"
+                title={t("button.next") || "Next"}
+                containerClassName=" bg-primary-default my-5 mx-5 flex-none"
+                textClassName="text-white text-md leading-6"
+                onPress={() => handleSubmitForm()}
+              />
+            )}
           </View>
-          {!openDropdown && (
-            <Button
-              testID="complete_profile_step_4_next_button"
-              title={t("button.next") || "Next"}
-              containerClassName=" bg-primary-default my-5 mx-5 flex-none"
-              textClassName="text-white text-md leading-6"
-              onPress={() => handleSubmitForm()}
-            />
-          )}
         </View>
       </ScrollView>
     </View>

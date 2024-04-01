@@ -1,9 +1,10 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import clsx from "clsx";
-import { Image } from "expo-image";
 import { NOTIFICATION_TYPES } from "../../../../common/enum";
 import DefaultAvatar from "../../../asset/default-avatar.svg";
+import NotiMention from "../../../asset/noti-mention.svg";
+import NotiFollow from "../../../asset/noti-follow.svg";
 
 interface INotiAvatarProps {
   size?: "small" | "medium" | "large";
@@ -36,19 +37,28 @@ const NotiAvatar: React.FC<INotiAvatarProps> = ({
               }}
             />
           ) : (
-            <DefaultAvatar
-              width={57}
-              height={57}
-            />
+            <DefaultAvatar width={57} height={57} />
           )}
-          {typeOfNoti && (
-            <Image
+          {typeOfNoti ? (
+            // <Image
+            //   className={clsx(
+            //     "absolute -bottom-1 -right-2 h-[28px] w-[28px] rounded-full"
+            //   )}
+            //   source={imageSourceFromAssets}
+            // />
+            <View
               className={clsx(
-                "absolute bottom-0 right-0 h-[28px] w-[28px] rounded-full"
+                "absolute -bottom-1 -right-2 items-center justify-center rounded-full bg-primary-default"
               )}
-              source={imageSourceFromAssets}
-            />
-          )}
+            >
+              {typeOfNoti === NOTIFICATION_TYPES.NEW_COMMENT ||
+              typeOfNoti === NOTIFICATION_TYPES.NEW_MENTION ? (
+                <NotiMention />
+              ) : (
+                <NotiFollow />
+              )}
+            </View>
+          ) : null}
         </View>
       </TouchableOpacity>
     </View>

@@ -5,12 +5,18 @@ import { useTranslation } from "react-i18next";
 import { Dialog } from "@rneui/themed";
 import { Dimensions, View } from "react-native";
 import Button from "../../Buttons/Button";
+import {
+  DIALOG_MAX_WIDTH,
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+} from "../../../../common/constants";
 
 interface CoachDateTimePickerProps {
   showDateTimePicker: boolean;
   setShowDateTimePicker: (show: boolean) => void;
   selectedDate?: Date;
   setSelectedDate: (date: Date) => void;
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
@@ -18,6 +24,7 @@ const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
   setShowDateTimePicker,
   selectedDate,
   setSelectedDate,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const { t } = useTranslation();
   const todayDate = dayjs().toDate();
@@ -44,7 +51,13 @@ const CoachDateTimePicker: FC<CoachDateTimePickerProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
+        ...(Dimensions.get("window").width <=
+        LAYOUT_THRESHOLD + DRAWER_MAX_WIDTH
+          ? {}
+          : {
+              maxWidth: DIALOG_MAX_WIDTH,
+              marginLeft: shouldOffsetDrawerWidth ? DRAWER_MAX_WIDTH : 0,
+            }),
       }}
     >
       <View className="flex-1 justify-center">

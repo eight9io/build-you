@@ -7,6 +7,11 @@ import debounce from "lodash.debounce";
 import { serviceGetAllPackages } from "../../../../service/package";
 import { IPackageResponse } from "../../../../types/package";
 import { getLanguageLocalStorage } from "../../../../utils/language";
+import {
+  DIALOG_MAX_WIDTH,
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+} from "../../../../common/constants";
 
 interface IChangeCompanyCreditDialogProps {
   isVisible: boolean;
@@ -14,6 +19,7 @@ interface IChangeCompanyCreditDialogProps {
   onConfirm: () => void;
   numberOfChecksToChargeCompanyCredit: number;
   packageToChangeCompanyCredit: "chat" | "videocall";
+  shouldOffsetDrawerWidth?: boolean;
 }
 
 interface IRenderPackageInfoProps {
@@ -157,6 +163,7 @@ const ChangeCompanyCreditDialogIos: FC<IChangeCompanyCreditDialogProps> = ({
   onConfirm,
   numberOfChecksToChargeCompanyCredit,
   packageToChangeCompanyCredit,
+  shouldOffsetDrawerWidth = true,
 }) => {
   const [packages, setPackages] = useState<IPackageResponse>(
     {} as IPackageResponse
@@ -212,7 +219,13 @@ const ChangeCompanyCreditDialogIos: FC<IChangeCompanyCreditDialogProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
+        ...(Dimensions.get("window").width <=
+        LAYOUT_THRESHOLD + DRAWER_MAX_WIDTH
+          ? {}
+          : {
+              maxWidth: DIALOG_MAX_WIDTH,
+              marginLeft: shouldOffsetDrawerWidth ? DRAWER_MAX_WIDTH : 0,
+            }),
       }}
     >
       <Dialog.Title

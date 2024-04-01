@@ -1,12 +1,21 @@
-import { View } from "react-native";
-import { useEffect, useState } from "react";
+import { StyleProp, View, ViewStyle } from "react-native";
+import { FC, useEffect, useState } from "react";
 import HTMLView from "react-native-htmlview";
 import { serviceGetTerms } from "../../service/settings";
 import { CrashlyticService } from "../../service/crashlytic";
 import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 import { trimHtml } from "../../utils/common";
+import clsx from "clsx";
 
-export default function TermsOfServicesScreen({ navigation }: any) {
+interface ITermsOfServicesScreenProps {
+  containerClassName?: string;
+  contentStyle?: StyleProp<ViewStyle>;
+}
+
+const TermsOfServicesScreen: FC<ITermsOfServicesScreenProps> = ({
+  containerClassName,
+  contentStyle,
+}) => {
   const [content, setContent] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,20 +41,25 @@ export default function TermsOfServicesScreen({ navigation }: any) {
   }, []);
 
   return (
-    <View className=" flex-1 bg-white">
+    <View
+      className={clsx("flex-1 overflow-scroll bg-white", containerClassName)}
+    >
       <CustomActivityIndicator isVisible={isLoading} />
-      {!isLoading ? (
-        <HTMLView
-          value={content}
-          style={{
+      <View
+        style={[
+          {
             paddingVertical: 16,
             paddingHorizontal: 16,
             width: "100%",
             height: "100%",
-            overflow: "scroll",
-          }}
-        />
-      ) : null}
+          },
+          contentStyle,
+        ]}
+      >
+        {!isLoading ? <HTMLView value={content} /> : null}
+      </View>
     </View>
   );
-}
+};
+
+export default TermsOfServicesScreen;

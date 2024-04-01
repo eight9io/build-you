@@ -215,7 +215,7 @@ export default function PersonalInformationScreen({ navigation }: any) {
           )}
           <Button
             title={t("personal_information.delete_account")}
-            containerClassName="bg-gray-medium flex-1"
+            containerClassName="bg-gray-medium flex-none"
             textClassName="text-white text-md leading-6"
             onPress={handleDeleleAcount}
           />

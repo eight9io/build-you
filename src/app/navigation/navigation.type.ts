@@ -157,6 +157,7 @@ export type RootStackParamList = {
     schedule: IScheduledTime;
   };
   AddScheduleLinkScreen: undefined;
+  AddNewEmployeeScreen: undefined;
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

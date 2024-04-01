@@ -13,6 +13,11 @@ import GlobalDialogController, {
   GlobalDialogRef,
 } from "./GlobalDialogController";
 import { IGlobalDialogProps } from "../../../../types/globalDialog";
+import {
+  DIALOG_MAX_WIDTH,
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+} from "../../../../common/constants";
 
 const GlobalDialog = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -23,6 +28,7 @@ const GlobalDialog = () => {
   const [customButton, setCustomButton] = useState<string | undefined>(
     undefined
   );
+  const [shouldOffsetDrawerWidth, setShouldOffsetDrawerWidth] = useState(true);
   const { t } = useTranslation();
 
   const isIOS = Platform.OS === "ios";
@@ -35,17 +41,22 @@ const GlobalDialog = () => {
   useImperativeHandle(
     modalRef,
     () => ({
-      show: (notification: IGlobalDialogProps) => {
+      show: (props: IGlobalDialogProps) => {
         setModalVisible(true);
-        if (notification.title) {
-          setCustomTitle(notification.title);
+        if (props.title) {
+          setCustomTitle(props.title);
         }
-        if (notification.message) {
-          setCustomMessage(notification.message);
+        if (props.message) {
+          setCustomMessage(props.message);
         }
-        if (notification.button) {
-          setCustomButton(notification.button);
+        if (props.button) {
+          setCustomButton(props.button);
         }
+        if (
+          props.shouldOffsetDrawerWidth !== undefined &&
+          props.shouldOffsetDrawerWidth !== null
+        )
+          setShouldOffsetDrawerWidth(props.shouldOffsetDrawerWidth);
       },
       hide: () => {
         setModalVisible(false);
@@ -66,7 +77,12 @@ const GlobalDialog = () => {
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768 ? {} : { maxWidth: 600 }),
+        ...(Dimensions.get("window").width <= LAYOUT_THRESHOLD
+          ? {}
+          : {
+              maxWidth: DIALOG_MAX_WIDTH,
+              marginLeft: shouldOffsetDrawerWidth ? DRAWER_MAX_WIDTH : 0,
+            }),
       }}
     >
       <Dialog.Title

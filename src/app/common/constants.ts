@@ -15,7 +15,7 @@ export const GOOGLE_MAP_API = {
   API_KEY: process.env.EXPO_GOOGLE_API_KEY,
 };
 
-export const LAYOUT_THRESHOLD = 870;
+export const LAYOUT_THRESHOLD = 768;
 export const MAIN_SCREEN_MAX_WIDTH = 630;
 export const DRAWER_MAX_WIDTH = 240;
 export const MODAL_MAX_WIDTH = 630;

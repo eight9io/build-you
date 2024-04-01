@@ -35,7 +35,7 @@ const CertifiedChallengeCard: React.FC<ICertifiedChallengeCardProps> = ({
   const challengeOwner = Array.isArray(item?.owner)
     ? item?.owner[0]
     : item?.owner;
-  const companyName = challengeOwner.companyAccount && challengeOwner?.name;
+  const companyName = challengeOwner?.companyAccount && challengeOwner?.name;
 
   const { getChallengeRatingUpdate } = useChallengeUpdateStore();
   const challengeRatingUpdate = getChallengeRatingUpdate();

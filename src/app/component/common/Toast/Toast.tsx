@@ -6,13 +6,25 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Text, Animated, TouchableOpacity, Platform, View } from "react-native";
+import {
+  Text,
+  Animated,
+  TouchableOpacity,
+  Platform,
+  View,
+  Dimensions,
+} from "react-native";
 import IconClose from "../../../component/asset/icon-close.svg";
 import GlobalToastController, {
   GlobalToastRef,
   IGlobalToastProps,
 } from "./GlobalToastController";
 import clsx from "clsx";
+import {
+  DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
+  MAIN_SCREEN_MAX_WIDTH,
+} from "../../../common/constants";
 
 const duration = 4000;
 const Toast = () => {
@@ -68,16 +80,21 @@ const Toast = () => {
 
   return (
     <Animated.View
-      style={[{ opacity: fadeAnim }]}
+      style={[
+        {
+          opacity: fadeAnim,
+          maxWidth:
+            Dimensions.get("window").width <= LAYOUT_THRESHOLD ? "100%" : 500,
+        },
+      ]}
       className={clsx(
-        "absolute  left-[20px] right-[20px]  z-[2000]  flex-row justify-between rounded-xl bg-[#24252B] pb-[22px] pl-[16px] pr-[10px] pt-[10px] ",
-        Platform.OS === "ios" && isScreenHasBottomNav
-          ? "bottom-[120px] "
-          : "bottom-[100px] ",
-        !isScreenHasBottomNav && "bottom-[40px] "
+        Dimensions.get("window").width <= LAYOUT_THRESHOLD
+          ? "absolute left-[20px] right-[20px] z-[2000] flex-row justify-between rounded-xl bg-[#24252B] pb-[22px] pl-[16px] pr-[10px] pt-[10px] "
+          : "absolute left-4 right-4 z-[2000] w-full flex-row justify-between rounded-xl bg-[#24252B] px-4 pb-[22px] pt-[10px]",
+        isScreenHasBottomNav ? "bottom-[120px]" : "bottom-[24px]"
       )}
     >
-      <Text className="mt-3  w-[90%] text-h6 text-white">{message}</Text>
+      <Text className="mt-3 w-[90%] text-h6 text-white">{message}</Text>
 
       <TouchableOpacity onPress={handleHideToast}>
         <View>

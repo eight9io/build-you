@@ -126,10 +126,9 @@ const CompleteProfileScreen = () => {
                 title="Complete profile"
                 leftBtn={
                   <NavButton
-                    text={t("button.back") || "Back"}
+                    text={t("log_out")}
                     onPress={() => navigation.navigate("IntroScreen")}
                     withBackIcon
-                    testID="login_back_btn"
                   />
                 }
                 containerStyle="mt-0"
@@ -173,7 +172,6 @@ const CompleteProfileScreen = () => {
                     text={t("button.back") || "Back"}
                     onPress={() => navigation.goBack()}
                     withBackIcon
-                    testID="login_back_btn"
                   />
                 }
                 rightBtn={
@@ -235,7 +233,6 @@ const CompleteProfileScreen = () => {
                     text={t("button.back") || "Back"}
                     onPress={() => navigation.goBack()}
                     withBackIcon
-                    testID="login_back_btn"
                   />
                 }
                 containerStyle="mt-0"

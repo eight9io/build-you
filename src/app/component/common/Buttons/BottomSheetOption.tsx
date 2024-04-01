@@ -37,8 +37,8 @@ const BottomSheetOption: FC<IBottomSheetOptionProps> = ({
       disabled={isDisabled}
     >
       <View className="flex-row items-center justify-center">
-        {Icon && Icon}
-        {title && (
+        {Icon ? Icon : null}
+        {title ? (
           <Text
             className={clsx(
               "line-[30px] text-center text-sm font-medium",
@@ -47,7 +47,7 @@ const BottomSheetOption: FC<IBottomSheetOptionProps> = ({
           >
             {title}
           </Text>
-        )}
+        ) : null}
       </View>
     </TouchableOpacity>
   );

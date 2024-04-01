@@ -821,5 +821,7 @@
   "payment_pending_modal": {
     "title": "Pending payment",
     "description": "Your challenge will be saved as draft until the payment is processed."
-  }
+  },
+  "exceed_asset_max_size": "Please select a file smaller than {{maxSize}}MB",
+  "log_out": "Log out"
 }

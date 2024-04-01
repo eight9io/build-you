@@ -219,7 +219,8 @@ const ChangeCompanyCreditDialogIos: FC<IChangeCompanyCreditDialogProps> = ({
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= LAYOUT_THRESHOLD
+        ...(Dimensions.get("window").width <=
+        LAYOUT_THRESHOLD + DRAWER_MAX_WIDTH
           ? {}
           : {
               maxWidth: DIALOG_MAX_WIDTH,

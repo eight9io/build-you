@@ -51,7 +51,7 @@ const BottomSheet = forwardRef<any, IBottomSheetProps>(
         adjustToContentHeight={false}
         modalHeight={modalHeight}
         modalStyle={
-          Dimensions.get("window").width > LAYOUT_THRESHOLD
+          Dimensions.get("window").width > LAYOUT_THRESHOLD + DRAWER_MAX_WIDTH
             ? {
                 width: shouldOffsetDrawerWidth
                   ? MODAL_MAX_WIDTH

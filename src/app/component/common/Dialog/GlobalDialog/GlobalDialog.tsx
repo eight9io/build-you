@@ -16,6 +16,7 @@ import { IGlobalDialogProps } from "../../../../types/globalDialog";
 import {
   DIALOG_MAX_WIDTH,
   DRAWER_MAX_WIDTH,
+  LAYOUT_THRESHOLD,
 } from "../../../../common/constants";
 
 const GlobalDialog = () => {
@@ -76,7 +77,7 @@ const GlobalDialog = () => {
         borderRadius: 20,
         backgroundColor: "#F2F2F2",
         alignItems: "center",
-        ...(Dimensions.get("window").width <= 768
+        ...(Dimensions.get("window").width <= LAYOUT_THRESHOLD
           ? {}
           : {
               maxWidth: DIALOG_MAX_WIDTH,

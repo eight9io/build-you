@@ -18,7 +18,7 @@ export const CreateProgressValidationSchema = () => {
         t("new_progress_modal.image_required") ||
           "Please upload images or video",
         (value) => {
-          return value != null;
+          return value != null && value != undefined;
         }
       ),
   });

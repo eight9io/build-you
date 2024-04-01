@@ -91,7 +91,7 @@ const ProfileComponent: FC<IProfileComponentProps> = ({
       </View>
       {userData?.isShowCompany && userCompany?.name && (
         <View className={clsx(" mb-3 flex-row gap-2 px-4")}>
-          <IconCompany />
+          <IconCompany width={20} height={20} />
 
           <Text className={clsx(" text-[14px]  font-medium ")}>
             {userCompany?.name}

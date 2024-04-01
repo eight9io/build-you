@@ -220,22 +220,39 @@ export const AddNewChallengeProgressScreen: FC<
               deleteProgress(progressId);
             });
         } else {
-          await updateProgressVideo(progressId, selectedVideo[0])
-            .then((res) => {
-              if (res.status === 200 || 201) {
-                handleCloseConfirmModal();
-                GlobalToastController.showModal({
-                  message:
-                    t("toast.create_progress_success") ||
-                    "Your progress has been created successfully!",
-                });
-              }
-            })
-            .catch((_) => {
-              setIsRequestSuccess(false);
-              setIsShowModal(true);
-              deleteProgress(progressId);
-            });
+          try {
+            const res = await updateProgressVideo(progressId, selectedVideo[0]);
+
+            if (res.status === 200 || res.status === 201) {
+              handleCloseConfirmModal();
+              GlobalToastController.showModal({
+                message:
+                  t("toast.create_progress_success") ||
+                  "Your progress has been created successfully!",
+              });
+            }
+          } catch (error) {
+            console.error("Error while uploading progress video: ", error);
+            setIsRequestSuccess(false);
+            setIsShowModal(true);
+            deleteProgress(progressId);
+          }
+          // await updateProgressVideo(progressId, selectedVideo[0])
+          //   .then((res) => {
+          //     if (res.status === 200 || 201) {
+          //       handleCloseConfirmModal();
+          //       GlobalToastController.showModal({
+          //         message:
+          //           t("toast.create_progress_success") ||
+          //           "Your progress has been created successfully!",
+          //       });
+          //     }
+          //   })
+          //   .catch((_) => {
+          //     setIsRequestSuccess(false);
+          //     setIsShowModal(true);
+          //     deleteProgress(progressId);
+          //   });
         }
         setIsLoading(false);
 

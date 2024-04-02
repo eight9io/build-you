@@ -53,7 +53,8 @@ interface IRenderSoftSkillProgress {
   skillValueError: boolean;
 }
 
-const NUMBER_OF_SKILL_REQUIRED = 3;
+// const NUMBER_OF_SKILL_REQUIRED = 3;
+const MIN_NUMBER_OF_SKILL_REQUIRED = 3;
 const MAX_PROGRESS_VALUE = 5;
 
 const renderSoftSkillProgress: FC<IRenderSoftSkillProgress> = ({
@@ -159,8 +160,8 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
     IFormValueInput[]
   >([]);
   const [numberOfSkillError, setNumberOfSkillError] = useState<boolean>(false);
-  const [numberOfSkillExceedError, setNumberOfSkillExceedError] =
-    useState<boolean>(false);
+  // const [numberOfSkillExceedError, setNumberOfSkillExceedError] =
+  //   useState<boolean>(false);
   const [skillValueError, setSkillValueError] = useState<boolean>(false);
   const [fetchedSoftSkills, setFetchedSoftSkills] = useState<IFormValueInput[]>(
     []
@@ -187,10 +188,16 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
   };
 
   const checkSoftSkillRequired = () => {
-    if (
-      selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED ||
-      selectedCompetencedSkill.length > NUMBER_OF_SKILL_REQUIRED
-    ) {
+    // if (
+    //   selectedCompetencedSkill.length < NUMBER_OF_SKILL_REQUIRED ||
+    //   selectedCompetencedSkill.length > NUMBER_OF_SKILL_REQUIRED
+    // ) {
+    //   setNumberOfSkillError(true);
+    //   return false;
+    // }
+    // setNumberOfSkillError(false);
+    // return true;
+    if (selectedCompetencedSkill.length < MIN_NUMBER_OF_SKILL_REQUIRED) {
       setNumberOfSkillError(true);
       return false;
     }
@@ -273,11 +280,11 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
       setSelectedCompetencedSkill(newSelectedCompetencedSkill);
       return;
     }
-    if (selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED) {
-      setNumberOfSkillExceedError(true);
-      setOpenDropdown(false);
-      return;
-    }
+    // if (selectedCompetencedSkill.length >= NUMBER_OF_SKILL_REQUIRED) {
+    //   setNumberOfSkillExceedError(true);
+    //   setOpenDropdown(false);
+    //   return;
+    // }
 
     setSelectedCompetencedSkill([...selectedCompetencedSkill, skill]);
   };
@@ -466,7 +473,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                             </Text>
                           </View>
                         )}
-                        {numberOfSkillExceedError && (
+                        {/* {numberOfSkillExceedError && (
                           <View className="flex flex-row items-center justify-start pt-2">
                             <WarningSvg />
                             <Text
@@ -477,7 +484,7 @@ const CompleteProfileStep4: FC<CompleteProfileStep4Props> = ({
                                 "Please select maximum of 3 soft skills."}
                             </Text>
                           </View>
-                        )}
+                        )} */}
                       </View>
                       <View className="pt-5">
                         {renderSelectedSoftSkill(

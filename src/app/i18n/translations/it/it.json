@@ -231,7 +231,7 @@
       "title": "Seleziona le soft skills su cui sei già competente",
       "sub_title": "Seleziona almeno 3 diverse soft skills e valutale da 1 a 5.",
       "soft_skills": "Soft skills",
-      "error": "Select 3 soft skills.",
+      "error": "Seleziona almeno 3 diverse competenze trasversali",
       "error_exceed": "Il massimo delle competenze soft selezionate è 3",
       "error_rate": "Vota da 1 a 5",
       "select_soft_skill": "Seleziona una soft skill"

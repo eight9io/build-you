@@ -208,12 +208,12 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
                 }}
                 containerStyle={{
                   right: {
-                    maxWidth: "80%",
+                    // maxWidth: "80%",
                     alignSelf: "flex-end",
                     marginBottom: 4,
                   },
                   left: {
-                    maxWidth: "80%",
+                    // maxWidth: "80%",
                     marginBottom: 4,
                   },
                 }}

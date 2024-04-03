@@ -238,7 +238,8 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
                 }}
               />
               {props.position === "left" &&
-              props.currentMessage.user._id !== props.nextMessage.user._id ? (
+              props.currentMessage?.user?._id !==
+                props.nextMessage?.user?._id ? (
                 <View className="flex max-w-full flex-row space-x-2">
                   <Text className="text-sm font-light text-gray-dark">
                     {props.currentMessage.user.name}

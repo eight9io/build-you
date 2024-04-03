@@ -120,7 +120,7 @@ const LanguageSettings = () => {
                   zIndex: 20,
                 }}
                 theme="LIGHT"
-                multiple={true}
+                multiple={false}
                 mode="SIMPLE"
                 badgeDotColors={["#e76f51"]}
                 renderListItem={({ item, isSelected, onPress }) => {
@@ -128,7 +128,10 @@ const LanguageSettings = () => {
                   return (
                     <View key={randomIndex}>
                       <TouchableOpacity
-                        onPress={() => handleSelectLanguage(item.value)}
+                        onPress={() => {
+                          handleSelectLanguage(item.value);
+                          onPress(item);
+                        }}
                         key={randomIndex}
                       >
                         <View

@@ -823,6 +823,6 @@
     "title": "Pending payment",
     "description": "Your challenge will be saved as draft until the payment is processed."
   },
-  "exceed_asset_max_size": "File troppo grande. Dimensione massima consentita: {{maxSize}}MB",
+  "exceed_asset_max_size": "La dimensione massima consentita del file è {{maxSize}}MB",
   "log_out": "Log out"
 }

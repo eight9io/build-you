@@ -1,4 +1,5 @@
 import {
+  CommonActions,
   NavigationProp,
   Route,
   StackActions,
@@ -170,10 +171,10 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
               navigation.dispatch(pushAction);
             }
           } else {
-            // add ChallengesScreen to the stack
-            navigation.navigate("HomeScreen", {
-              screen: "Challenges",
-            });
+            // // add ChallengesScreen to the stack
+            // navigation.navigate("HomeScreen", {
+            //   screen: "Challenges",
+            // });
             if (isCurrentUserCompany) {
               navigation.navigate("Challenges", {
                 screen: "CompanyChallengeDetailScreen",
@@ -185,6 +186,13 @@ const CompanyCartScreen: FC<ICartScreenProps> = ({ route }) => {
                 params: { challengeId: newChallengeId },
               });
             }
+            // Reset the "Create" tab stack => to avoid the user to go back to the cart screen when click on "Create" tab after creating a challenge
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "CreateChallengeScreenMain" }],
+              })
+            );
           }
 
           setTimeout(() => {

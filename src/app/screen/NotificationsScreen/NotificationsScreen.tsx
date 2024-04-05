@@ -27,6 +27,7 @@ import PersonalChallengeDetailScreen from "../ChallengesScreen/PersonalChallenge
 import PersonalCoachChallengeDetailScreen from "../ChallengesScreen/CoachChallengesScreen/PersonalCoach/PersonalCoachChallengeDetailScreen";
 import CompanyChallengeDetailScreen from "../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 import { CrashlyticService } from "../../service/crashlytic";
+import CoachCreateScheduleScreen from "../ChallengesScreen/CoachCreateScheduleScreen";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -219,6 +220,13 @@ const NotificationsScreen = () => {
               withBackIcon
             />
           ),
+        })}
+      />
+      <NotificationsStack.Screen
+        name="CoachCreateScheduleScreen"
+        component={CoachCreateScheduleScreen}
+        options={() => ({
+          headerShown: false,
         })}
       />
     </NotificationsStack.Navigator>

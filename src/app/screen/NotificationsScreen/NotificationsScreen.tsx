@@ -28,6 +28,17 @@ import PersonalCoachChallengeDetailScreen from "../ChallengesScreen/CoachChallen
 import CompanyChallengeDetailScreen from "../ChallengesScreen/CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
 import { CrashlyticService } from "../../service/crashlytic";
 import CoachCreateScheduleScreen from "../ChallengesScreen/CoachCreateScheduleScreen";
+import AddNewChallengeProgressScreen from "../ChallengesScreen/AddNewChallengeProgressScreen";
+import EditChallengeScreen from "../ChallengesScreen/EditChallengeScreen";
+import EditChallengeProgressScreen from "../ChallengesScreen/EditChallengeProgressScreen";
+import ConfirmVideoCoachScreen from "../ChallengesScreen/ConfirmVideoCoachScreen";
+import CoachRateCompanyChallengeScreen from "../ChallengesScreen/CoachRateCompanyChallengeScreen";
+import CoachRateChallengeScreen from "../ChallengesScreen/CoachRateChallengeScreen";
+import EditScheduleLinkScreen from "../ChallengesScreen/EditScheduleLinkScreen";
+import ScheduleDetailScreen from "../ChallengesScreen/ScheduleDetailScreen";
+import EditScheduleScreen from "../ChallengesScreen/EditScheduleScreen";
+import AddScheduleLinkScreen from "../ChallengesScreen/AddScheduleLinkScreen";
+import { RefreshProvider } from "../../context/refresh.context";
 
 const NotificationsStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -108,128 +119,200 @@ const Notifications = () => {
 
 const NotificationsScreen = () => {
   return (
-    <NotificationsStack.Navigator
-      screenOptions={{
-        headerBackVisible: false,
-        headerTitleAlign: "center",
-        headerShown: true,
-      }}
-    >
-      <NotificationsStack.Screen
-        name="NotificationsScreen"
-        component={Notifications}
-        options={() => ({
-          headerTitle: () => <AppTitle title={t("top_nav.noti")} />,
-          // headerRight: (props) => (
-          //   <NavButton
-          //     withIcon
-          //     icon={
-          //       <IconSearch
-          //         onPress={() => console.log("NotificationsScreen Search")}
-          //       />
-          //     }
-          //   />
-          // ),
-        })}
-      />
-      <NotificationsStack.Screen
-        name="OtherUserProfileScreen"
-        component={OtherUserProfileScreen}
-        options={({ navigation }) => ({
+    <RefreshProvider>
+      <NotificationsStack.Navigator
+        screenOptions={{
+          headerBackVisible: false,
+          headerTitleAlign: "center",
           headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <NotificationsStack.Screen
-        name="OtherUserProfileChallengeDetailsScreen"
-        component={OtherUserProfileChallengeDetailsScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        }}
+      >
+        <NotificationsStack.Screen
+          name="NotificationsScreen"
+          component={Notifications}
+          options={() => ({
+            headerTitle: () => <AppTitle title={t("top_nav.noti")} />,
+            // headerRight: (props) => (
+            //   <NavButton
+            //     withIcon
+            //     icon={
+            //       <IconSearch
+            //         onPress={() => console.log("NotificationsScreen Search")}
+            //       />
+            //     }
+            //   />
+            // ),
+          })}
+        />
+        <NotificationsStack.Screen
+          name="OtherUserProfileScreen"
+          component={OtherUserProfileScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <NotificationsStack.Screen
+          name="OtherUserProfileChallengeDetailsScreen"
+          component={OtherUserProfileChallengeDetailsScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <NotificationsStack.Screen
-        name="ProgressCommentScreen"
-        component={ProgressCommentScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        <NotificationsStack.Screen
+          name="ProgressCommentScreen"
+          component={ProgressCommentScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <NotificationsStack.Screen
-        name="PersonalChallengeDetailScreen"
-        component={PersonalChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <NotificationsStack.Screen
-        name="PersonalCoachChallengeDetailScreen"
-        component={PersonalCoachChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        <NotificationsStack.Screen
+          name="PersonalChallengeDetailScreen"
+          component={PersonalChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <NotificationsStack.Screen
+          name="PersonalCoachChallengeDetailScreen"
+          component={PersonalCoachChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <NotificationsStack.Screen
-        name="CompanyChallengeDetailScreen"
-        component={CompanyChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <NotificationsStack.Screen
-        name="CoachCreateScheduleScreen"
-        component={CoachCreateScheduleScreen}
-        options={() => ({
-          headerShown: false,
-        })}
-      />
-    </NotificationsStack.Navigator>
+        <NotificationsStack.Screen
+          name="CompanyChallengeDetailScreen"
+          component={CompanyChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <NotificationsStack.Screen
+          name="AddNewChallengeProgressScreen"
+          component={AddNewChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="EditChallengeScreen"
+          component={EditChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="EditChallengeProgressScreen"
+          component={EditChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="ConfirmVideoCoachScreen"
+          component={ConfirmVideoCoachScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="CoachRateCompanyChallengeScreen"
+          component={CoachRateCompanyChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="CoachRateChallengeScreen"
+          component={CoachRateChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="EditScheduleLinkScreen"
+          component={EditScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="ScheduleDetailScreen"
+          component={ScheduleDetailScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="CoachCreateScheduleScreen"
+          component={CoachCreateScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="EditScheduleScreen"
+          component={EditScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <NotificationsStack.Screen
+          name="AddScheduleLinkScreen"
+          component={AddScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+      </NotificationsStack.Navigator>
+    </RefreshProvider>
   );
 };
 

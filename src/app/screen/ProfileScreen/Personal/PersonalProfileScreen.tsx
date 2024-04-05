@@ -31,6 +31,18 @@ import SettingsScreen from "../../SettingsScreen/SettingsScreen";
 import EditPersonalProfileScreen from "./EditPersonalProfileScreen/EditPersonalProfileScreen";
 import AddHardSkillsScreen from "./AddHardSkillsScreen";
 import AddManualSkillScreen from "../../HardSkills/AddManualSkillScreen";
+import AddNewChallengeProgressScreen from "../../ChallengesScreen/AddNewChallengeProgressScreen";
+import EditChallengeScreen from "../../ChallengesScreen/EditChallengeScreen";
+import EditChallengeProgressScreen from "../../ChallengesScreen/EditChallengeProgressScreen";
+import ConfirmVideoCoachScreen from "../../ChallengesScreen/ConfirmVideoCoachScreen";
+import CoachRateCompanyChallengeScreen from "../../ChallengesScreen/CoachRateCompanyChallengeScreen";
+import CoachRateChallengeScreen from "../../ChallengesScreen/CoachRateChallengeScreen";
+import EditScheduleLinkScreen from "../../ChallengesScreen/EditScheduleLinkScreen";
+import ScheduleDetailScreen from "../../ChallengesScreen/ScheduleDetailScreen";
+import CoachCreateScheduleScreen from "../../ChallengesScreen/CoachCreateScheduleScreen";
+import EditScheduleScreen from "../../ChallengesScreen/EditScheduleScreen";
+import AddScheduleLinkScreen from "../../ChallengesScreen/AddScheduleLinkScreen";
+import { RefreshProvider } from "../../../context/refresh.context";
 
 const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -95,150 +107,229 @@ const Profile: React.FC<IProfileProps> = ({ route, navigation }: any) => {
 const PersonalProfileScreen = () => {
   const { t } = useTranslation();
   return (
-    <ProfileStack.Navigator
-      screenOptions={{
-        headerBackVisible: false,
-        headerTitleAlign: "center",
-        headerShown: true,
-      }}
-    >
-      <ProfileStack.Screen
-        name="ProfileScreen"
-        component={Profile}
-        options={({ navigation }) => ({})}
-      />
-      <ProfileStack.Screen
-        name="OtherUserProfileScreen"
-        component={OtherUserProfileScreen}
-        options={({ navigation }) => ({
+    <RefreshProvider>
+      <ProfileStack.Navigator
+        screenOptions={{
+          headerBackVisible: false,
+          headerTitleAlign: "center",
           headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <ProfileStack.Screen
-        name="OtherUserProfileChallengeDetailsScreen"
-        component={OtherUserProfileChallengeDetailsScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        }}
+      >
+        <ProfileStack.Screen
+          name="ProfileScreen"
+          component={Profile}
+          options={({ navigation }) => ({})}
+        />
+        <ProfileStack.Screen
+          name="OtherUserProfileScreen"
+          component={OtherUserProfileScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <ProfileStack.Screen
+          name="OtherUserProfileChallengeDetailsScreen"
+          component={OtherUserProfileChallengeDetailsScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <ProfileStack.Screen
-        name="ProgressCommentScreen"
-        component={ProgressCommentScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        <ProfileStack.Screen
+          name="ProgressCommentScreen"
+          component={ProgressCommentScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <ProfileStack.Screen
-        name="PersonalChallengeDetailScreen"
-        component={PersonalChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <ProfileStack.Screen
-        name="PersonalCoachChallengeDetailScreen"
-        component={PersonalCoachChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        <ProfileStack.Screen
+          name="PersonalChallengeDetailScreen"
+          component={PersonalChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <ProfileStack.Screen
+          name="PersonalCoachChallengeDetailScreen"
+          component={PersonalCoachChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      <ProfileStack.Screen
-        name="CompanyChallengeDetailScreen"
-        component={CompanyChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        <ProfileStack.Screen
+          name="CompanyChallengeDetailScreen"
+          component={CompanyChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
 
-      {/* Screens that are in root navigation will stretch up to window size 
+        {/* Screens that are in root navigation will stretch up to window size 
       and override the drawer layout in desktop view
       Screens put below will override the root navigation
        */}
-      <ProfileStack.Screen
-        name="SettingsScreenRoot"
-        component={SettingsScreen}
-        options={() => ({
-          headerShown: false,
-        })}
-      />
-      <ProfileStack.Screen
-        name="EditPersonalProfileScreen"
-        component={EditPersonalProfileScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => <AppTitle title="Edit profile" />,
-          headerLeft: () => (
-            <NavButton
-              text="Back"
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <ProfileStack.Screen
-        name="AddHardSkillsScreen"
-        component={AddHardSkillsScreen}
-        options={() => ({
-          headerShown: false,
-        })}
-      />
-      <ProfileStack.Screen
-        name="AddManualSkillScreen"
-        component={AddManualSkillScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </ProfileStack.Navigator>
+        <ProfileStack.Screen
+          name="SettingsScreenRoot"
+          component={SettingsScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="EditPersonalProfileScreen"
+          component={EditPersonalProfileScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => <AppTitle title="Edit profile" />,
+            headerLeft: () => (
+              <NavButton
+                text="Back"
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <ProfileStack.Screen
+          name="AddHardSkillsScreen"
+          component={AddHardSkillsScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="AddManualSkillScreen"
+          component={AddManualSkillScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <ProfileStack.Screen
+          name="AddNewChallengeProgressScreen"
+          component={AddNewChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="EditChallengeScreen"
+          component={EditChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="EditChallengeProgressScreen"
+          component={EditChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="ConfirmVideoCoachScreen"
+          component={ConfirmVideoCoachScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="CoachRateCompanyChallengeScreen"
+          component={CoachRateCompanyChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="CoachRateChallengeScreen"
+          component={CoachRateChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="EditScheduleLinkScreen"
+          component={EditScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="ScheduleDetailScreen"
+          component={ScheduleDetailScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="CoachCreateScheduleScreen"
+          component={CoachCreateScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="EditScheduleScreen"
+          component={EditScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <ProfileStack.Screen
+          name="AddScheduleLinkScreen"
+          component={AddScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+      </ProfileStack.Navigator>
+    </RefreshProvider>
   );
 };
 

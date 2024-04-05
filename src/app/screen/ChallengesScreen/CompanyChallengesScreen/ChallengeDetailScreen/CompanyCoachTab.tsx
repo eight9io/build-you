@@ -135,7 +135,7 @@ const CompanyCoachTab: FC<ICompanyCoachTabProps> = ({
       keyExtractor={(item) => item.id}
       className="bg-gray-veryLight"
       ListHeaderComponent={
-        <View className="w-screen bg-gray-veryLight">
+        <View className="flex-1 bg-gray-veryLight">
           <ConfirmDialog
             isVisible={isChangeTouchpointStatusModalVisible}
             title={t("challenge_detail_screen_tab.coach.confirm_open_phase", {

@@ -200,11 +200,11 @@ const TouchPointProgress = ({
         <View className="flex flex-row">
           <View className="flex flex-col items-center justify-center">
             {renderTouchpointCircle(touchpoint.status)}
-            {!isLastIndex && (
+            {!isLastIndex ? (
               <View className="py-2">
                 <TouchPointRetangle />
               </View>
-            )}
+            ) : null}
           </View>
           <View className="pl-3 pt-1">
             <Text
@@ -218,7 +218,7 @@ const TouchPointProgress = ({
           </View>
         </View>
 
-        {touchpoint.status === "in-progress" && (
+        {touchpoint.status === "in-progress" ? (
           <TouchableOpacity
             className={clsx(
               "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
@@ -228,9 +228,9 @@ const TouchPointProgress = ({
           >
             <Text className="font-semibold capitalize text-white">Close</Text>
           </TouchableOpacity>
-        )}
+        ) : null}
 
-        {touchpoint.status === "closed" && (
+        {touchpoint.status === "closed" ? (
           <TouchableOpacity
             className={clsx(
               "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
@@ -241,7 +241,7 @@ const TouchPointProgress = ({
           >
             <Text className="font-semibold capitalize text-white">Closed </Text>
           </TouchableOpacity>
-        )}
+        ) : null}
       </View>
     );
   };
@@ -351,7 +351,7 @@ const CoachTab: FC<ICoachTabProps> = ({
       renderItem={({ item }) => <View />}
       keyExtractor={(item) => item.id}
       ListHeaderComponent={
-        <View className="w-screen">
+        <View className="flex-1">
           <ConfirmDialog
             isVisible={isChangeTouchpointStatusModalVisible}
             title={t("challenge_detail_screen_tab.coach.confirm_close_phase", {

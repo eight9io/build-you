@@ -208,12 +208,12 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
                 }}
                 containerStyle={{
                   right: {
-                    // maxWidth: "80%",
+                    maxWidth: "100%",
                     alignSelf: "flex-end",
                     marginBottom: 4,
                   },
                   left: {
-                    // maxWidth: "80%",
+                    maxWidth: "100%",
                     marginBottom: 4,
                   },
                 }}
@@ -223,17 +223,17 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
                     alignSelf: "flex-end",
                     borderTopRightRadius: 10,
                     borderBottomRightRadius: 10,
-
                     paddingVertical: 8,
                     paddingHorizontal: 10,
+                    maxWidth: "100%",
                   },
                   left: {
                     backgroundColor: "#E7E9F1",
                     borderTopLeftRadius: 10,
                     borderBottomLeftRadius: 10,
-
                     paddingVertical: 8,
                     paddingHorizontal: 10,
+                    maxWidth: "100%",
                   },
                 }}
               />

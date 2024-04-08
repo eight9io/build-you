@@ -129,13 +129,13 @@ export const EditChallengeProgressScreen: FC<
           ) : null}
         </View>
         {progress?.image ? (
-          <View className="mt-5 aspect-square w-full">
+          <View className="mb-5 mt-5 aspect-square max-h-[343px] w-full flex-1">
             <ImageSwiper
               imageSrc={getSeperateImageUrls(progress?.image) || ""}
             />
           </View>
         ) : progress.video ? (
-          <View className="mt-5 aspect-square w-full">
+          <View className="mb-5 mt-5 aspect-square w-full flex-1">
             <VideoPlayer src={progress.video} />
           </View>
         ) : null}

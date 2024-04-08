@@ -35,7 +35,7 @@
     "not_participants": "No participants at the moment",
     "chat_coach": "Chat coach",
     "rate_skills": "Rate skills",
-    "can_not_rate_skills": "Coach can not rate skills when challenge is not completed",
+    "can_not_rate_skills": "Coach cannot rate skills when challenge is not completed",
     "request_video_call": "Request video call",
     "empty_participants_list": "No participants at the moment",
     "coach_calendar": "Coach calendar",
@@ -231,7 +231,7 @@
       "title": "Select the soft skills you are already competent on",
       "sub_title": "Please select at least 3 different soft skills and rate it from 1 to 5.",
       "soft_skills": "Soft skills",
-      "error": "Please select 3 soft skills.",
+      "error": "Please select at least 3 soft skills.",
       "error_exceed": "Maximum selected soft skills is 3",
       "error_rate": "Please rate from 1 to 5",
       "select_soft_skill": "Select a soft skill"
@@ -822,6 +822,6 @@
     "title": "Pending payment",
     "description": "Your challenge will be saved as draft until the payment is processed."
   },
-  "exceed_asset_max_size": "Please select a file smaller than {{maxSize}}MB",
+  "exceed_asset_max_size": "The maximum allowed file size is {{maxSize}}MB",
   "log_out": "Log out"
 }

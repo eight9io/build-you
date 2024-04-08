@@ -16,10 +16,10 @@ const ImageItem = ({ imageSrc }: { imageSrc: string }) => {
   };
 
   return (
-    <View className="relative w-full">
+    <View className="relative h-full w-full">
       <Image
         source={{ uri: imageSrc }}
-        className="aspect-square w-full rounded-xl"
+        className="aspect-square h-full w-full rounded-xl"
         onLoadEnd={onLoadEnd}
       />
       {isImageLoading && (

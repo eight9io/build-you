@@ -203,11 +203,11 @@ export const TouchPointProgress = ({
         <View className="flex flex-row">
           <View className="flex flex-col items-center justify-center">
             {renderTouchpointCircle(touchpoint.status)}
-            {!isLastIndex && (
+            {!isLastIndex ? (
               <View className="py-2">
                 <TouchPointRetangle />
               </View>
-            )}
+            ) : null}
           </View>
           <View className="pl-3 pt-1">
             <Text
@@ -223,7 +223,7 @@ export const TouchPointProgress = ({
           </View>
         </View>
 
-        {isCurrentUserChallengeOnwer && touchpoint.status !== "init" && (
+        {isCurrentUserChallengeOnwer && touchpoint.status !== "init" ? (
           <TouchableOpacity
             className={clsx(
               "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
@@ -239,23 +239,22 @@ export const TouchPointProgress = ({
               {touchpoint.status}
             </Text>
           </TouchableOpacity>
-        )}
+        ) : null}
 
-        {!isCurrentUserChallengeOnwer &&
-          touchpoint.status === "in-progress" && (
-            <TouchableOpacity
-              className={clsx(
-                "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
-                getButtonColor(touchpoint.status)
-              )}
-              disabled={true}
-              onPress={handleOpenChangeTouchpointStatusModal}
-            >
-              <Text className="font-semibold capitalize text-white">
-                {touchpoint.status}
-              </Text>
-            </TouchableOpacity>
-          )}
+        {!isCurrentUserChallengeOnwer && touchpoint.status === "in-progress" ? (
+          <TouchableOpacity
+            className={clsx(
+              "flex w-[120] flex-row items-center justify-center rounded-full p-1.5",
+              getButtonColor(touchpoint.status)
+            )}
+            disabled={true}
+            onPress={handleOpenChangeTouchpointStatusModal}
+          >
+            <Text className="font-semibold capitalize text-white">
+              {touchpoint.status}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     );
   };
@@ -357,7 +356,7 @@ const PersonalCoachTab: FC<ICoachTabProps> = ({
       keyExtractor={(item) => item.id}
       className="bg-gray-veryLight"
       ListHeaderComponent={
-        <View className="w-screen bg-gray-veryLight">
+        <View className="flex-1 bg-gray-veryLight">
           <ConfirmDialog
             isVisible={isChangeTouchpointStatusModalVisible}
             title={t("challenge_detail_screen_tab.coach.confirm_open_phase", {

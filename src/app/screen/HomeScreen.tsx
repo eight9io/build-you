@@ -42,6 +42,18 @@ import { useNotificationStore } from "../store/notification-store";
 import OtherUserProfileChallengeDetailsScreen from "./ProfileScreen/OtherUser/OtherUserProfileChallengeDetailsScreen/OtherUserProfileChallengeDetailsScreen";
 import { useDeepLinkStore } from "../store/deep-link-store";
 import { handleDeepLinkNavigation } from "../utils/linking.util";
+import AddNewChallengeProgressScreen from "./ChallengesScreen/AddNewChallengeProgressScreen";
+import EditChallengeScreen from "./ChallengesScreen/EditChallengeScreen";
+import EditChallengeProgressScreen from "./ChallengesScreen/EditChallengeProgressScreen";
+import ConfirmVideoCoachScreen from "./ChallengesScreen/ConfirmVideoCoachScreen";
+import CoachRateCompanyChallengeScreen from "./ChallengesScreen/CoachRateCompanyChallengeScreen";
+import CoachRateChallengeScreen from "./ChallengesScreen/CoachRateChallengeScreen";
+import EditScheduleLinkScreen from "./ChallengesScreen/EditScheduleLinkScreen";
+import ScheduleDetailScreen from "./ChallengesScreen/ScheduleDetailScreen";
+import CoachCreateScheduleScreen from "./ChallengesScreen/CoachCreateScheduleScreen";
+import EditScheduleScreen from "./ChallengesScreen/EditScheduleScreen";
+import AddScheduleLinkScreen from "./ChallengesScreen/AddScheduleLinkScreen";
+import { RefreshProvider } from "../context/refresh.context";
 
 const HomeScreenStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -269,163 +281,242 @@ export const HomeFeedUnregister = () => {
 
 const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
   return (
-    <HomeScreenStack.Navigator
-      screenOptions={{
-        headerBackVisible: false,
-        headerTitleAlign: "center",
-        headerShown: false,
-      }}
-    >
-      <HomeScreenStack.Screen
-        name="FeedScreen"
-        component={HomeFeed}
-        options={({ navigation }) => ({
-          headerShown: true,
-          contentStyle: {
-            display: "flex",
-            justifyContent: "center",
-          },
-          headerTitle: () => <AppTitle title={t("your_feed.header")} />,
-          headerRight: (props) => (
-            <NavButton
-              withIcon
-              icon={
-                <IconSearch
-                  onPress={() => navigation.navigate("MainSearchScreen")}
-                />
-              }
-            />
-          ),
-        })}
-      />
-
-      <HomeScreenStack.Screen
-        name="MainSearchScreen"
-        component={MainSearchScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => (
-            <Text className="text-lg font-semibold">
-              {t("main_search_screen.search") || "Search user"}
-            </Text>
-          ),
-
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-
-      <HomeScreenStack.Screen
-        name="OtherUserProfileScreen"
-        component={OtherUserProfileScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => {
-                navigation.goBack();
-              }}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-
-      <HomeScreenStack.Screen
-        name="OtherUserProfileChallengeDetailsScreen"
-        component={OtherUserProfileChallengeDetailsScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => {
-                if (navigation.canGoBack()) {
-                  navigation.goBack();
-                } else {
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: "FeedScreen" }],
-                  });
-                }
-              }}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-
-      <HomeScreenStack.Screen
-        name="CompanyChallengeDetailScreen"
-        component={CompanyChallengeDetailScreen}
-        options={{
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
+    <RefreshProvider>
+      <HomeScreenStack.Navigator
+        screenOptions={{
+          headerBackVisible: false,
+          headerTitleAlign: "center",
+          headerShown: false,
         }}
-      />
+      >
+        <HomeScreenStack.Screen
+          name="FeedScreen"
+          component={HomeFeed}
+          options={({ navigation }) => ({
+            headerShown: true,
+            contentStyle: {
+              display: "flex",
+              justifyContent: "center",
+            },
+            headerTitle: () => <AppTitle title={t("your_feed.header")} />,
+            headerRight: (props) => (
+              <NavButton
+                withIcon
+                icon={
+                  <IconSearch
+                    onPress={() => navigation.navigate("MainSearchScreen")}
+                  />
+                }
+              />
+            ),
+          })}
+        />
 
-      <HomeScreenStack.Screen
-        name="ProgressCommentScreen"
-        component={ProgressCommentScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: (props) => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
+        <HomeScreenStack.Screen
+          name="MainSearchScreen"
+          component={MainSearchScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => (
+              <Text className="text-lg font-semibold">
+                {t("main_search_screen.search") || "Search user"}
+              </Text>
+            ),
 
-      <HomeScreenStack.Screen
-        name="PersonalChallengeDetailScreen"
-        component={PersonalChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-      <HomeScreenStack.Screen
-        name="PersonalCoachChallengeDetailScreen"
-        component={PersonalCoachChallengeDetailScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          headerTitle: () => "",
-          headerLeft: () => (
-            <NavButton
-              text={t("button.back") as string}
-              onPress={() => navigation.goBack()}
-              withBackIcon
-            />
-          ),
-        })}
-      />
-    </HomeScreenStack.Navigator>
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+
+        <HomeScreenStack.Screen
+          name="OtherUserProfileScreen"
+          component={OtherUserProfileScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+
+        <HomeScreenStack.Screen
+          name="OtherUserProfileChallengeDetailsScreen"
+          component={OtherUserProfileChallengeDetailsScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => {
+                  if (navigation.canGoBack()) {
+                    navigation.goBack();
+                  } else {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{ name: "FeedScreen" }],
+                    });
+                  }
+                }}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+
+        <HomeScreenStack.Screen
+          name="CompanyChallengeDetailScreen"
+          component={CompanyChallengeDetailScreen}
+          options={{
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          }}
+        />
+
+        <HomeScreenStack.Screen
+          name="ProgressCommentScreen"
+          component={ProgressCommentScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: (props) => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+
+        <HomeScreenStack.Screen
+          name="PersonalChallengeDetailScreen"
+          component={PersonalChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="PersonalCoachChallengeDetailScreen"
+          component={PersonalCoachChallengeDetailScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerTitle: () => "",
+            headerLeft: () => (
+              <NavButton
+                text={t("button.back") as string}
+                onPress={() => navigation.goBack()}
+                withBackIcon
+              />
+            ),
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="AddNewChallengeProgressScreen"
+          component={AddNewChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="EditChallengeScreen"
+          component={EditChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="EditChallengeProgressScreen"
+          component={EditChallengeProgressScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="ConfirmVideoCoachScreen"
+          component={ConfirmVideoCoachScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="CoachRateCompanyChallengeScreen"
+          component={CoachRateCompanyChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="CoachRateChallengeScreen"
+          component={CoachRateChallengeScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="EditScheduleLinkScreen"
+          component={EditScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="ScheduleDetailScreen"
+          component={ScheduleDetailScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="CoachCreateScheduleScreen"
+          component={CoachCreateScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="EditScheduleScreen"
+          component={EditScheduleScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+        <HomeScreenStack.Screen
+          name="AddScheduleLinkScreen"
+          component={AddScheduleLinkScreen}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
+      </HomeScreenStack.Navigator>
+    </RefreshProvider>
   );
 };
 

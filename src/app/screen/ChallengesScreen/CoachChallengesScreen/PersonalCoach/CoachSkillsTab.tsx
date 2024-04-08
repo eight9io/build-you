@@ -15,6 +15,7 @@ import {
 } from "../../../../types/challenge";
 import { useUserProfileStore } from "../../../../store/user-store";
 import { useNav } from "../../../../hooks/useNav";
+import { useRefresh } from "../../../../context/refresh.context";
 
 interface ISkillsTabProps {
   challengeData: IChallenge;
@@ -32,7 +33,11 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   const [isRateSkillsModalVisible, setIsRateSkillsModalVisible] =
     useState<boolean>(false);
 
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+  // const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+  const {
+    refresh: shouldRefreshChallengeSkill,
+    setRefresh: setShouldRefreshChallengeSkill,
+  } = useRefresh();
 
   const { t } = useTranslation();
 
@@ -61,41 +66,43 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
   const isChallengeRated = ratedCompetencedSkill.every(
     (item) => item.isRating === true
   );
+  const getData = async () => {
+    try {
+      const [ratedSoffSkillsValue] = await Promise.allSettled([
+        serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
+      ]);
+
+      if (ratedSoffSkillsValue.status === "fulfilled") {
+        const ratedSoffSkills = ratedSoffSkillsValue.value.data.map((item) => {
+          return {
+            id: item.skillId,
+            skill: item.skillName,
+            rating: item.skillRating,
+            isRating: item.isRating,
+          };
+        });
+        setRatedCompetencedSkill(ratedSoffSkills);
+      } else {
+        console.error(
+          " Error fetching rated skills:",
+          ratedSoffSkillsValue.reason
+        );
+      }
+    } catch (error) {
+      console.error(" Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const [ratedSoffSkillsValue] = await Promise.allSettled([
-          serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
-        ]);
+    if (challengeData?.id) getData();
+  }, [challengeData?.id]);
 
-        if (ratedSoffSkillsValue.status === "fulfilled") {
-          const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
-            (item) => {
-              return {
-                id: item.skillId,
-                skill: item.skillName,
-                rating: item.skillRating,
-                isRating: item.isRating,
-              };
-            }
-          );
-          setRatedCompetencedSkill(ratedSoffSkills);
-        } else {
-          console.error(
-            " Error fetching rated skills:",
-            ratedSoffSkillsValue.reason
-          );
-        }
-      } catch (error) {
-        console.error(" Error fetching data:", error);
-      }
-    };
-    if (challengeData?.id && shouldRefresh) {
+  useEffect(() => {
+    if (shouldRefreshChallengeSkill) {
       getData();
-      setShouldRefresh(false);
+      setShouldRefreshChallengeSkill(false);
     }
-  }, [challengeData?.id, shouldRefresh]);
+  }, [shouldRefreshChallengeSkill]);
 
   return (
     <View className="mb-4 flex-1 bg-gray-veryLight px-4 pr-4 pt-4">
@@ -110,7 +117,7 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
       )} */}
-      {canCurrentUserRateSkills && !isChallengeRated && (
+      {canCurrentUserRateSkills && !isChallengeRated ? (
         <Button
           containerClassName="bg-primary-default flex-none px-1"
           textClassName="line-[30px] text-center text-md font-medium text-white ml-2"
@@ -119,14 +126,14 @@ const CoachSkillsTab: FC<ISkillsTabProps> = ({
           title={t("challenge_detail_screen.rate_skills") as string}
           onPress={handleOpenRateSkillsModal}
         />
-      )}
-      {!canCurrentUserRateSkills && !isChallengeRated && (
+      ) : null}
+      {!canCurrentUserRateSkills && !isChallengeRated ? (
         <View className="flex flex-row items-center justify-between px-4">
           <Text className="text-md  text-danger-default">
             {t("challenge_detail_screen.can_not_rate_skills")}
           </Text>
         </View>
-      )}
+      ) : null}
       <View className="mt-4 flex flex-col">
         {(ratedCompetencedSkill?.length === 0
           ? skillsToRate

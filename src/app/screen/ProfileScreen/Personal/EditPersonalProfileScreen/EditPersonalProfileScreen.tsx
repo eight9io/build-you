@@ -277,6 +277,10 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
     getOccupationList();
   }, []);
 
+  useEffect(() => {
+    if (storeSelectedHardSkills) setValue("hardSkill", storeSelectedHardSkills);
+  }, [storeSelectedHardSkills]);
+
   return (
     <SafeAreaView className="h-full bg-white">
       <CustomActivityIndicator isVisible={isLoading} />

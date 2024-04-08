@@ -23,6 +23,7 @@ import Empty from "../../../../common/svg/empty-list.svg";
 import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 
 import { useNav } from "../../../../hooks/useNav";
+import { useRefresh } from "../../../../context/refresh.context";
 
 interface IParticipantWithRatingSkills {
   id: number;
@@ -62,13 +63,17 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
   const navigation = useNav();
   const [participantsWithRatingSkills, setParticipantsWithRatingSkills] =
     useState<IParticipantWithRatingSkills[]>([]);
-  const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
-    ISoftSkill[]
-  >([]);
+  // const [ratedCompetencedSkill, setRatedCompetencedSkill] = useState<
+  //   ISoftSkill[]
+  // >([]);
   const [selectedUser, setSelectedUser] = useState<IUserData>({} as IUserData);
   const [isRateSkillsModalVisible, setIsRateSkillsModalVisible] =
     useState<boolean>(false);
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+  // const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
+  const {
+    refresh: shouldRefreshChallengeSkill,
+    setRefresh: setShouldRefreshChallengeSkill,
+  } = useRefresh();
 
   const { t } = useTranslation();
 
@@ -99,45 +104,47 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
       canCurrentUserRateSkills: canCurrentUserRateSkills,
     });
   };
+  // const getData = async () => {
+  //   try {
+  //     const [ratedSoffSkillsValue] = await Promise.allSettled([
+  //       serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
+  //     ]);
+
+  //     if (ratedSoffSkillsValue.status === "fulfilled") {
+  //       const ratedSoffSkills = ratedSoffSkillsValue.value.data.map((item) => {
+  //         return {
+  //           id: item.skillId,
+  //           skill: item.skillName,
+  //           rating: item.skillRating,
+  //           isRating: item.isRating,
+  //         };
+  //       });
+  //       setRatedCompetencedSkill(ratedSoffSkills);
+  //     } else {
+  //       console.error(
+  //         " Error fetching rated skills:",
+  //         ratedSoffSkillsValue.reason
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error(" Error fetching data:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchParticipantsCertifiedChallenge();
+  // }, [shouldRefresh]);
 
   useEffect(() => {
-    fetchParticipantsCertifiedChallenge();
-  }, [shouldRefresh]);
+    if (challengeData?.id) fetchParticipantsCertifiedChallenge();
+  }, [challengeData?.id]);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const [ratedSoffSkillsValue] = await Promise.allSettled([
-          serviceGetRatedSoftSkillCertifiedChallenge(challengeData?.id),
-        ]);
-
-        if (ratedSoffSkillsValue.status === "fulfilled") {
-          const ratedSoffSkills = ratedSoffSkillsValue.value.data.map(
-            (item) => {
-              return {
-                id: item.skillId,
-                skill: item.skillName,
-                rating: item.skillRating,
-                isRating: item.isRating,
-              };
-            }
-          );
-          setRatedCompetencedSkill(ratedSoffSkills);
-        } else {
-          console.error(
-            " Error fetching rated skills:",
-            ratedSoffSkillsValue.reason
-          );
-        }
-      } catch (error) {
-        console.error(" Error fetching data:", error);
-      }
-    };
-    if (challengeData?.id && shouldRefresh) {
-      getData();
-      setShouldRefresh(false);
+    if (shouldRefreshChallengeSkill) {
+      fetchParticipantsCertifiedChallenge();
+      setShouldRefreshChallengeSkill(false);
     }
-  }, [challengeData?.id, shouldRefresh]);
+  }, [shouldRefreshChallengeSkill]);
 
   const skillsToRate: ISoftSkill[] =
     extractSkillsFromChallengeData(challengeData);
@@ -154,7 +161,7 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
           canCurrentUserRateSkills={canCurrentUserRateSkills}
         />
       )} */}
-      {skillsToRate.length > 0 && (
+      {skillsToRate.length > 0 ? (
         <View
           className={clsx(
             "mx-4 mt-4 flex flex-col border-b border-gray-70 pb-4"
@@ -165,8 +172,8 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
           </Text>
           {renderSkills(skillsToRate)}
         </View>
-      )}
-      {participantsWithRatingSkills?.length > 0 && (
+      ) : null}
+      {participantsWithRatingSkills?.length > 0 ? (
         <FlatList
           data={participantsWithRatingSkills}
           className="mx-4 pt-4"
@@ -181,23 +188,23 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
                 className="mb-5 flex-row items-center gap-3 "
               >
                 <View className="relative">
-                  {!item?.avatar && (
+                  {!item?.avatar ? (
                     <Image
                       className="h-10 w-10 rounded-full"
                       source={require("../../../../common/image/avatar-load.png")}
                     />
-                  )}
-                  {item?.avatar && (
+                  ) : null}
+                  {item?.avatar ? (
                     <Image
                       source={{ uri: item.avatar.trim() }}
                       className={clsx("h-10 w-10  rounded-full")}
                     />
-                  )}
-                  {isUserSkillRated(item?.skills) && (
+                  ) : null}
+                  {isUserSkillRated(item?.skills) ? (
                     <View className="absolute bottom-[-5] right-2.5">
                       <RatedParticipant />
                     </View>
-                  )}
+                  ) : null}
                 </View>
                 <Text className="flex w-full flex-row flex-wrap gap-1 pr-[40px]  text-base font-semibold text-basic-black">
                   {item.name + " " + item.surname}
@@ -206,11 +213,11 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
             );
           }}
           onRefresh={fetchParticipantsCertifiedChallenge}
-          refreshing={shouldRefresh}
+          refreshing={shouldRefreshChallengeSkill}
           ListFooterComponent={<View className="h-20" />}
         />
-      )}
-      {participantsWithRatingSkills?.length == 0 && (
+      ) : null}
+      {participantsWithRatingSkills?.length == 0 ? (
         <View className="mt-2 flex-1">
           <FlatList
             data={[]}
@@ -227,10 +234,10 @@ const CompanySkillsTab: FC<ICompanySkillsTabProps> = ({
             ListFooterComponentStyle={{ flex: 1 }}
             contentContainerStyle={{ flexGrow: 1 }}
             onRefresh={fetchParticipantsCertifiedChallenge}
-            refreshing={shouldRefresh}
+            refreshing={shouldRefreshChallengeSkill}
           />
         </View>
-      )}
+      ) : null}
     </View>
   );
 };

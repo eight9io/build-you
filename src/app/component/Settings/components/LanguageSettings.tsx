@@ -115,12 +115,11 @@ const LanguageSettings = () => {
                   borderColor: "#e2e8f0",
                   borderWidth: 1,
                   borderRadius: 8,
-                  maxHeight: 300,
-                  overflow: "scroll",
+                  maxHeight: 100,
                   zIndex: 20,
                 }}
                 theme="LIGHT"
-                multiple={true}
+                multiple={false}
                 mode="SIMPLE"
                 badgeDotColors={["#e76f51"]}
                 renderListItem={({ item, isSelected, onPress }) => {
@@ -128,7 +127,10 @@ const LanguageSettings = () => {
                   return (
                     <View key={randomIndex}>
                       <TouchableOpacity
-                        onPress={() => handleSelectLanguage(item.value)}
+                        onPress={() => {
+                          handleSelectLanguage(item.value);
+                          onPress(item);
+                        }}
                         key={randomIndex}
                       >
                         <View

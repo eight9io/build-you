@@ -3,8 +3,12 @@ import { Platform, Text, TouchableOpacity, View } from "react-native";
 import {
   Avatar,
   Bubble,
+  Composer,
+  ComposerProps,
   GiftedChat,
+  IMessage,
   InputToolbar,
+  SendProps,
 } from "react-native-gifted-chat";
 import { useTranslation } from "react-i18next";
 import { useFocusEffect } from "@react-navigation/native";
@@ -158,59 +162,96 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
             ) : null}
           </>
         )}
+        renderComposer={(
+          props: ComposerProps & {
+            // GiftedChat passes its props to all of its `render*()`
+            onSend: SendProps<IMessage>["onSend"];
+            text: SendProps<IMessage>["text"];
+          }
+        ) => (
+          <Composer
+            {...props}
+            textInputProps={{
+              ...props.textInputProps,
+              // for enabling the Return key to send a message only on web
+              blurOnSubmit: true,
+              onSubmitEditing: () => {
+                if (props.text && props.onSend) {
+                  props.onSend({ text: props.text.trim() }, true);
+                }
+              },
+            }}
+          />
+        )}
         maxComposerHeight={100}
         placeholder={t("chat_input.chat_input_placeholder") || "Type a message"}
         user={{
           _id: currentUser?.id,
         }}
         renderTime={() => null}
-        renderBubble={(props) => (
-          <Bubble
-            renderUsernameOnMessage
-            renderUsername={(user) => (
-              <Text className="absolute -bottom-4 left-0 text-sm font-light text-gray-dark">
-                {user.name}
-                {user?.isCoach && (
-                  <Text className="text-sm text-primary-default">Coach</Text>
-                )}
-              </Text>
-            )}
-            {...props}
-            textStyle={{
-              right: {
-                color: "#000",
-                padding: 6,
-              },
-              left: {
-                color: "#000",
-                padding: 6,
-              },
-            }}
-            containerStyle={{
-              right: {
-                maxWidth: "80%",
-                marginBottom: 10,
-              },
-              left: {
-                maxWidth: "80%",
-                marginBottom: 22,
-              },
-            }}
-            wrapperStyle={{
-              right: {
-                backgroundColor: "#fbe1d2",
-                marginRight: 10,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-              },
-              left: {
-                backgroundColor: "#E7E9F1",
-                borderTopLeftRadius: 10,
-                borderBottomLeftRadius: 10,
-              },
-            }}
-          />
-        )}
+        renderBubble={(props) => {
+          return (
+            <View className="flex max-w-[60%]">
+              <Bubble
+                {...props}
+                textStyle={{
+                  right: {
+                    color: "#000",
+                    margin: 0,
+                    textAlign: "left",
+                  },
+                  left: {
+                    color: "#000",
+                    margin: 0,
+                    textAlign: "left",
+                  },
+                }}
+                containerStyle={{
+                  right: {
+                    maxWidth: "100%",
+                    alignSelf: "flex-end",
+                    marginBottom: 4,
+                  },
+                  left: {
+                    maxWidth: "100%",
+                    marginBottom: 4,
+                  },
+                }}
+                wrapperStyle={{
+                  right: {
+                    backgroundColor: "#fbe1d2",
+                    alignSelf: "flex-end",
+                    borderTopRightRadius: 10,
+                    borderBottomRightRadius: 10,
+                    paddingVertical: 8,
+                    paddingHorizontal: 10,
+                    maxWidth: "100%",
+                  },
+                  left: {
+                    backgroundColor: "#E7E9F1",
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 10,
+                    paddingVertical: 8,
+                    paddingHorizontal: 10,
+                    maxWidth: "100%",
+                  },
+                }}
+              />
+              {props.position === "left" &&
+              props.currentMessage?.user?._id !==
+                props.nextMessage?.user?._id ? (
+                <View className="flex max-w-full flex-row space-x-2">
+                  <Text className="text-sm font-light text-gray-dark">
+                    {props.currentMessage.user.name}
+                  </Text>
+                  {props.currentMessage.user.isCoach ? (
+                    <Text className="text-sm text-primary-default">Coach</Text>
+                  ) : null}
+                </View>
+              ) : null}
+            </View>
+          );
+        }}
         renderAvatar={(props) => (
           <Avatar
             {...props}
@@ -223,7 +264,7 @@ const ChatCoachTab: FC<IChatCoachTabProps> = ({
               left: {
                 width: 34,
                 height: 34,
-                marginRight: -10,
+                marginRight: -8,
               },
             }}
           />

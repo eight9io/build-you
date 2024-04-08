@@ -65,6 +65,7 @@ const ConfirmDialog: FC<IComfirmDialogProps> = ({
         title={title}
         titleStyle={{
           color: "black",
+          textAlign: "center",
         }}
       />
       <Text className="text-center text-sm">{description}</Text>

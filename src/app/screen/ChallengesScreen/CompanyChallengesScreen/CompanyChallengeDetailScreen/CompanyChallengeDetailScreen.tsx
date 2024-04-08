@@ -287,6 +287,18 @@ const CompanyChallengeDetailScreen = ({
     setRefreshScreen(false);
   }, [shouldScreenRefresh, refreshScreen]);
 
+  // Use different useEffect to prevent re-render when setting refresh state
+  useEffect(() => {
+    if (!challengeId) return;
+    try {
+      httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
+        setChallengeData(res.data);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [challengeId]);
+
   return (
     <SafeAreaView className="flex-1 bg-gray-veryLight">
       <ConfirmDialog

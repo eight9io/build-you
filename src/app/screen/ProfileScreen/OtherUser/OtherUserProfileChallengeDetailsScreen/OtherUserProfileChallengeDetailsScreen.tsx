@@ -42,6 +42,7 @@ import EditChallengeModal from "../../../../component/modal/EditChallengeModal";
 import CheckCircle from "../../../../../../assets/svg/check_circle.svg";
 import ShareIcon from "../../../../../../assets/svg/share.svg";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
+import { useRefresh } from "../../../../context/refresh.context";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -70,7 +71,10 @@ const OtherUserProfileChallengeDetailsScreen: FC<
 
   const [isError, setIsError] = useState<boolean>(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
-
+  const {
+    refresh: storeRefreshChallengeData,
+    setRefresh: storeSetRefreshChallengeData,
+  } = useRefresh();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
@@ -259,11 +263,25 @@ const OtherUserProfileChallengeDetailsScreen: FC<
     }
   }, [isCompany, challengeState]);
 
+  // useEffect(() => {
+  //   if (!challengeId || !shouldRefresh || !storeRefreshChallengeData) return;
+  //   getChallengeData();
+  //   setShouldRefresh(false);
+  //   if(storeRefreshChallengeData) storeSetRefreshChallengeData(false);
+  // }, [shouldRefresh, challengeId]);
+
   useEffect(() => {
-    if (!challengeId || !shouldRefresh) return;
+    if (!challengeId || (!shouldRefresh && !storeRefreshChallengeData)) return;
     getChallengeData();
-    setShouldRefresh(false);
-  }, [shouldRefresh, challengeId]);
+    if (shouldRefresh) setShouldRefresh(false);
+    if (storeRefreshChallengeData) storeSetRefreshChallengeData(false);
+  }, [shouldRefresh, storeRefreshChallengeData]);
+
+  // Use different useEffect to prevent re-render when setting refresh state
+  useEffect(() => {
+    if (!challengeId) return;
+    getChallengeData();
+  }, [challengeId]);
 
   useLayoutEffect(() => {
     if (
@@ -377,7 +395,10 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   }, 500);
 
   const handleEditChallengeBtnPress = () => {
-    setIsEditChallengeModalVisible(true);
+    // setIsEditChallengeModalVisible(true);
+    navigation.navigate("EditChallengeScreen", {
+      challenge: challengeState.challengeData,
+    });
   };
 
   const shouldRenderJoinButton =

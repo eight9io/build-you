@@ -90,6 +90,7 @@ export const TextInputWithMention: FC<ITextInputWithMentionProps> = (props) => {
               )
                 onRightIconPress && onRightIconPress();
             }}
+            autoComplete="off"
             allowSuggestionsAboveCursor
             forceSuggestionsAboveCursor
             style={{

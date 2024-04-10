@@ -149,12 +149,12 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
       className={clsx("mb-5 w-full rounded-xl border border-gray-80 bg-white")}
     >
       <View className={clsx("relative w-full")}>
-        {(isCompanyAccount || companyName) && (
+        {isCompanyAccount || companyName ? (
           <View className={clsx("absolute top-6 z-10 flex w-full items-end")}>
             <CompanyTag companyName={companyName} />
           </View>
-        )}
-        {isCertifiedChallenge && (
+        ) : null}
+        {isCertifiedChallenge ? (
           <View
             className={clsx(
               "absolute left-4 top-6 z-10 flex w-full items-start"
@@ -162,7 +162,7 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
           >
             <CertifiedChallengeTag />
           </View>
-        )}
+        ) : null}
         {imageSrc ? (
           <Image
             className={clsx("aspect-square w-full rounded-t-xl")}
@@ -189,14 +189,14 @@ const ChallengeCard: React.FC<IChallengeCardProps> = ({
             </View>
           </View>
           <View className={clsx("flex flex-row items-end")}>
-            {ratedValue > 0 && (
+            {ratedValue > 0 ? (
               <View className={clsx("mr-4 flex flex-row items-center")}>
                 <Text className={clsx("mr-1 text-h6 font-semibold leading-6")}>
                   {roundToDecimalOrWhole(ratedValue)}/{5}
                 </Text>
                 <StarFillSvg width={18} height={18} />
               </View>
-            )}
+            ) : null}
             <BackSvg />
           </View>
         </View>

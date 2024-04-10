@@ -343,7 +343,14 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
               <NavButton
                 text={t("button.back") as string}
                 onPress={() => {
-                  navigation.goBack();
+                  if (navigation.canGoBack()) {
+                    navigation.goBack();
+                  } else {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{ name: "FeedScreen" }],
+                    });
+                  }
                 }}
                 withBackIcon
               />
@@ -417,7 +424,16 @@ const HomeScreen = ({ navigation }: BottomTabScreenProps<any>) => {
             headerLeft: () => (
               <NavButton
                 text={t("button.back") as string}
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                  if (navigation.canGoBack()) {
+                    navigation.goBack();
+                  } else {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{ name: "FeedScreen" }],
+                    });
+                  }
+                }}
                 withBackIcon
               />
             ),

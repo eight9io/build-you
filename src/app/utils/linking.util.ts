@@ -67,7 +67,6 @@ export const handleDeepLinkToOtherUserProfile = (
   navigation: NavigationContainerRef<RootStackParamList>
 ) => {
   if (!deepLink) return;
-
   navigation.navigate("HomeScreen", {
     screen: "Feed",
     params: {
@@ -88,7 +87,7 @@ export const handleDeepLinkToPaidChallengeDetail = (
   // Clear navigation state in local storage before navigating to the paid challenge detail screen => Navigation state is no need in this case (we only need it when user press back button)
   setPurchasingChallengeData(null);
   navigation.navigate("HomeScreen", {
-    screen: "Challenges",
+    screen: "Feed",
     params: {
       screen: "PersonalChallengeDetailScreen",
       params: {

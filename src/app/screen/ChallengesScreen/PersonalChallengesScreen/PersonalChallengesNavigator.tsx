@@ -63,7 +63,10 @@ const PersonalChallengesNavigator = () => {
             headerLeft: () => (
               <NavButton
                 text={t("top_nav.challenges") as string}
-                onPress={() => navigation.navigate("PersonalChallengesScreen")}
+                onPress={() => {
+                  // navigation.navigate("PersonalChallengesScreen");
+                  navigation.goBack();
+                }}
                 withBackIcon
               />
             ),

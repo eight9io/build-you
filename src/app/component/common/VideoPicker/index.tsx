@@ -20,11 +20,8 @@ import CloseButton from "./asset/close-button.svg";
 import ConfirmDialog from "../Dialog/ConfirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import { CrashlyticService } from "../../../service/crashlytic";
-import { validateAssetsSize } from "../../../utils/file.util";
-import {
-  ASSET_MAX_SIZE,
-  ASSET_MAX_SIZE_TO_DISPLAY,
-} from "../../../common/constants";
+import { validateAssets } from "../../../utils/file.util";
+import { ASSET_MAX_SIZE } from "../../../common/constants";
 import GlobalDialogController from "../Dialog/GlobalDialog/GlobalDialogController";
 
 interface IVideoPickerProps {
@@ -118,16 +115,14 @@ const VideoPicker: FC<IVideoPickerProps> = ({
     if (!result.canceled) {
       setLoading && setLoading(true);
       try {
-        const isValidAssets = await validateAssetsSize(
+        const validateResult = await validateAssets(
           result.assets,
           ASSET_MAX_SIZE
         );
-        if (!isValidAssets) {
+        if (!validateResult.isValid) {
           GlobalDialogController.showModal({
             title: t("dialog.err_title"),
-            message: t("exceed_asset_max_size", {
-              maxSize: ASSET_MAX_SIZE_TO_DISPLAY,
-            }),
+            message: validateResult.message,
           });
           setLoading && setLoading(false);
           return;

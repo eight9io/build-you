@@ -209,6 +209,7 @@ const EditPersonalProfileScreen = ({ navigation }: any) => {
           "Your profile update successfully!",
       });
     } catch (error) {
+      console.log("error: ", error);
       setIsLoading(false);
       setIsErrDialog(true);
     }

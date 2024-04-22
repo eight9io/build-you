@@ -824,5 +824,6 @@
     "description": "Your challenge will be saved as draft until the payment is processed."
   },
   "exceed_asset_max_size": "La dimensione massima consentita del file è {{maxSize}}MB",
+  "invalid_extension": "Il tipo di file non è consentito",
   "log_out": "Log out"
 }

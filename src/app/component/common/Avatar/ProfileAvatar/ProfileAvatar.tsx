@@ -17,6 +17,9 @@ import DefaultAvatar from "../../../asset/default-avatar.svg";
 import IconUploadAvatar from "./asset/uploadAvatar.svg";
 import ConfirmDialog from "../../Dialog/ConfirmDialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import { validateAssets } from "../../../../utils/file.util";
+import { ASSET_MAX_SIZE } from "../../../../common/constants";
+import GlobalDialogController from "../../Dialog/GlobalDialog/GlobalDialogController";
 
 interface IProfileAvatarProps {
   src: string;
@@ -56,15 +59,31 @@ const ProfileAvatar: React.FC<IProfileAvatarProps> = ({
   const handlePickImage = async () => {
     const result = await pickImageFunction();
     if (result && !result.canceled) {
-      if (setIsLoadingAvatar) setIsLoadingAvatar(true);
-      const imageToUpload = result.assets[0].uri;
-      const newAvatar = await uploadNewAvatar(result.assets[0].uri);
-      if (newAvatar) {
-        setNewAvatarUpload(imageToUpload);
-        if (setIsLoadingAvatar) setIsLoadingAvatar(false);
-      } else {
-        setIsErrDialog(true);
-        if (setIsLoadingAvatar) setIsLoadingAvatar(false);
+      try {
+        if (setIsLoadingAvatar) setIsLoadingAvatar(true);
+        const validateResult = await validateAssets(
+          result.assets,
+          ASSET_MAX_SIZE
+        );
+        if (!validateResult.isValid) {
+          GlobalDialogController.showModal({
+            title: t("dialog.err_title"),
+            message: validateResult.message,
+          });
+          return null;
+        }
+        const imageToUpload = result.assets[0].uri;
+        const newAvatar = await uploadNewAvatar(result.assets[0].uri);
+        if (newAvatar) {
+          setNewAvatarUpload(imageToUpload);
+          if (setIsLoadingAvatar) setIsLoadingAvatar(false);
+        } else {
+          setIsErrDialog(true);
+          if (setIsLoadingAvatar) setIsLoadingAvatar(false);
+        }
+      } catch (error) {
+        console.error("Error while validating assets size: ", error);
+        return null;
       }
     }
   };

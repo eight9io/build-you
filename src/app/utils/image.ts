@@ -57,7 +57,8 @@ export const createFileFromUri = async (uri: string) => {
     );
 
   const fileId = getRandomId();
-  return new File([blob], `${fileId}.${fileExtension}`, {
+  const fileName = generateFileName(fileId, fileExtension);
+  return new File([blob], fileName, {
     type: blob.type, // our API expects the mime type to be in the file object
   });
 };
@@ -81,4 +82,10 @@ export const isValidBase64 = (str: string) => {
     console.error("error: ", error);
     return false;
   }
+};
+
+export const generateFileName = (id: string, extension: string) => {
+  let fileExtension = extension;
+  if (extension === "qt") fileExtension = "mov"; // mov is the official extension for QuickTime files
+  return `${id}.${fileExtension}`;
 };

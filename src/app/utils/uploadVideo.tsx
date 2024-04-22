@@ -22,5 +22,6 @@ export const uploadNewVideo = async (video: string | undefined) => {
       errorType: "Upload Video Error",
       error: e,
     });
+    throw e;
   }
 };

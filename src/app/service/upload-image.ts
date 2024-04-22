@@ -3,8 +3,8 @@ import { serviceUpdateAvatar, serviceUpdateCover } from "./profile";
 import GlobalDialogController from "../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import i18n from "../i18n/i18n";
 import { createFileFromUri } from "../utils/image";
-import { validateAssetsSize } from "../utils/file.util";
-import { ASSET_MAX_SIZE, ASSET_MAX_SIZE_TO_DISPLAY } from "../common/constants";
+import { validateAssets } from "../utils/file.util";
+import { ASSET_MAX_SIZE } from "../common/constants";
 
 interface PickImageOptions {
   allowsMultipleSelection?: boolean;
@@ -36,16 +36,14 @@ export const getImageFromUserDevice = (props: PickImageOptions) => {
 
     if (!result.canceled) {
       try {
-        const isValidAssets = await validateAssetsSize(
+        const validateResult = await validateAssets(
           result.assets,
           ASSET_MAX_SIZE
         );
-        if (!isValidAssets) {
+        if (!validateResult.isValid) {
           GlobalDialogController.showModal({
             title: i18n.t("dialog.err_title"),
-            message: i18n.t("exceed_asset_max_size", {
-              maxSize: ASSET_MAX_SIZE_TO_DISPLAY,
-            }),
+            message: validateResult.message,
           });
           return null;
         }

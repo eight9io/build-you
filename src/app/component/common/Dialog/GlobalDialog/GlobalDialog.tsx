@@ -89,6 +89,7 @@ const GlobalDialog = () => {
         title={customTitle || t("dialog.alert_title")}
         titleStyle={{
           color: "black",
+          textAlign: "center",
         }}
       />
       <Text className="text-center text-sm">{customMessage}</Text>

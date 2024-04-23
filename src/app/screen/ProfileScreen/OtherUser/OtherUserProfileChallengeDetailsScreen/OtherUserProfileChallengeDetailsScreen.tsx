@@ -4,7 +4,13 @@ import jwt_decode from "jwt-decode";
 import debounce from "lodash.debounce";
 import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SafeAreaView, Text, View } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { CHALLENGE_TABS_KEY } from "../../../../common/enum";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
@@ -43,6 +49,8 @@ import CheckCircle from "../../../../../../assets/svg/check_circle.svg";
 import ShareIcon from "../../../../../../assets/svg/share.svg";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 import { useRefresh } from "../../../../context/refresh.context";
+import { LAYOUT_THRESHOLD } from "../../../../common/constants";
+import TaskAltGrayIcon from "../asset/task-alt-gray.svg";
 
 interface IOtherUserProfileChallengeDetailsScreenProps {
   route: Route<
@@ -67,6 +75,7 @@ const OtherUserProfileChallengeDetailsScreen: FC<
   IOtherUserProfileChallengeDetailsScreenProps
 > = ({ route }) => {
   const { t } = useTranslation();
+  const [isDesktopView, setIsDesktopView] = useState(false);
   const { challengeId, isCompanyAccount: isCompany } = route.params;
 
   const [isError, setIsError] = useState<boolean>(false);
@@ -231,6 +240,26 @@ const OtherUserProfileChallengeDetailsScreen: FC<
       setIsError(true);
     }
   };
+
+  useEffect(() => {
+    // Check device width to determine if it's desktop view on the first load
+    if (Dimensions.get("window").width <= LAYOUT_THRESHOLD) {
+      setIsDesktopView(false);
+    } else setIsDesktopView(true);
+    // Add event listener to check if the device width is changed when the app is running
+    const unsubscribeDimensions = Dimensions.addEventListener(
+      "change",
+      ({ window }) => {
+        if (window.width <= LAYOUT_THRESHOLD) {
+          setIsDesktopView(false);
+        } else setIsDesktopView(true);
+      }
+    );
+
+    return () => {
+      unsubscribeDimensions.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (isCompany || challengeState.challengeOwner?.companyAccount) {
@@ -537,16 +566,62 @@ const OtherUserProfileChallengeDetailsScreen: FC<
               </Text>
             </View>
           </View>
-          {isChallengeCompleted != null &&
+          {isDesktopView ? (
+            <>
+              {isChallengeCompleted != null &&
+              !isChallengeCompleted &&
+              shouldRenderJoinButton ? (
+                <>
+                  <View className="ml-2 h-9">
+                    <Button
+                      isDisabled={false}
+                      containerClassName={
+                        challengeState.isJoined
+                          ? "border border-gray-dark flex items-center justify-center px-5"
+                          : "bg-primary-default flex items-center justify-center px-5"
+                      }
+                      textClassName={`text-center text-md font-semibold ${
+                        challengeState.isJoined
+                          ? "text-gray-dark"
+                          : "text-white"
+                      } `}
+                      title={
+                        challengeState.isJoined
+                          ? t("challenge_detail_screen.leave")
+                          : t("challenge_detail_screen.join")
+                      }
+                      onPress={handleJoinLeaveChallenge}
+                    />
+                  </View>
+                </>
+              ) : null}
+              {isChallengeCompleted != null &&
+              isChallengeCompleted &&
+              shouldRenderJoinButton ? (
+                <View>
+                  <TouchableOpacity className="flex flex-row items-center justify-center space-x-2 rounded-full bg-gray-light px-3 py-2">
+                    <TaskAltGrayIcon />
+                    <Text className="text-[14px] font-semibold text-gray-medium">
+                      {t("challenge_detail_screen.completed")}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+            </>
+          ) : null}
+        </View>
+        {!isDesktopView ? (
+          <>
+            {isChallengeCompleted != null &&
             !isChallengeCompleted &&
-            shouldRenderJoinButton && (
-              <View className="ml-2 h-9">
+            shouldRenderJoinButton ? (
+              <View className="mt-3 flex flex-row items-center justify-center space-x-2 px-4">
                 <Button
                   isDisabled={false}
                   containerClassName={
                     challengeState.isJoined
-                      ? "border border-gray-dark flex items-center justify-center px-5"
-                      : "bg-primary-default flex items-center justify-center px-5"
+                      ? "border border-gray-dark flex items-center justify-center max-h-9"
+                      : "bg-primary-default flex items-center justify-center max-h-9"
                   }
                   textClassName={`text-center text-md font-semibold ${
                     challengeState.isJoined ? "text-gray-dark" : "text-white"
@@ -559,19 +634,21 @@ const OtherUserProfileChallengeDetailsScreen: FC<
                   onPress={handleJoinLeaveChallenge}
                 />
               </View>
-            )}
-          {isChallengeCompleted != null &&
+            ) : null}
+            {isChallengeCompleted != null &&
             isChallengeCompleted &&
-            shouldRenderJoinButton && (
-              <View className="ml-2 h-9">
-                <Button
-                  containerClassName="border border-gray-dark flex items-center justify-center px-5"
-                  textClassName={`text-center text-md font-semibold text-gray-dark `}
-                  title={t("challenge_detail_screen.completed")}
-                />
+            shouldRenderJoinButton ? (
+              <View className="mb-2 mt-3 max-h-9 px-4">
+                <TouchableOpacity className="flex flex-row items-center justify-center space-x-2 rounded-full bg-gray-light px-3 py-2">
+                  <TaskAltGrayIcon />
+                  <Text className="text-[14px] font-semibold text-gray-medium">
+                    {t("challenge_detail_screen.completed")}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            )}
-        </View>
+            ) : null}
+          </>
+        ) : null}
         {/* {challengeState.challengeData?.id ? (
           <EditChallengeModal
             visible={isEditChallengeModalVisible}

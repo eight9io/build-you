@@ -738,7 +738,7 @@
   "invalid_date": "Invalid date",
   "notification": {
     "new_challenge": "{{userName}} has added a new challenge",
-    "new_progress": "{{userName}}has added a new progress in {{challengeGoal}}",
+    "new_progress": "{{userName}} has added a new progress in {{challengeGoal}}",
     "new_comment": "{{userName}} has commented on your update",
     "new_mention": "{{userName}} has mentioned you in a comment",
     "new_follower": "{{userName}} has started following you",

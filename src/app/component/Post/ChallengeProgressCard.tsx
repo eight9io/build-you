@@ -48,25 +48,27 @@ const ChallengeProgressCardForComment: React.FC<
   return (
     <View className="mb-1 flex-1 bg-white p-5">
       <View className="mb-3 flex-1 flex-row justify-between">
-        <View className="flex-1 flex-row">
+        <View className="flex-1 flex-row items-start">
           <PostAvatar src={otherData?.avatar} />
           <View className="ml-2 flex-1">
-            <Text className="text-h6 font-bold">
-              {otherData?.name} {otherData?.surname}
-            </Text>
-
-            <View className="mr-20 flex-1 flex-row gap-3">
-              <Text className="text-xs font-light text-gray-dark ">
-                {getTimeDiffToNow(createdAt)}
+            <View className="flex-1">
+              <Text className="text-h6 font-bold">
+                {otherData?.name} {otherData?.surname}
               </Text>
+            </View>
 
+            <View className="flex flex-1 flex-row space-x-2">
+              <View className="flex max-w-[150px]">
+                <Text className="text-xs font-light text-gray-dark">
+                  {getTimeDiffToNow(createdAt)}
+                </Text>
+              </View>
               {location ? (
-                <View className="flex flex-row">
+                <View className="mr-5 flex flex-1 flex-row space-x-2">
                   <Text className="text-xs font-light text-gray-dark ">
                     <IconDot fill={"#7D7E80"} />
-                    {"  "}
                   </Text>
-                  <Text className="mr-6 text-xs font-light text-gray-dark">
+                  <Text className="text-xs font-light text-gray-dark">
                     {location}
                   </Text>
                 </View>

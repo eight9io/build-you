@@ -357,7 +357,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
           <EmptyVideoCall translate={t} />
         )}
       </View>
-      {!confirmedOption && !isCurrentUserVotedProposedTime && (
+      {!confirmedOption && !isCurrentUserVotedProposedTime ? (
         <View className="flex flex-1">
           <View className="flex flex-row justify-between pb-2">
             <Text className="text-md font-semibold leading-tight text-zinc-500">
@@ -382,20 +382,20 @@ const CompanyCoachCalendarTabCompanyView: FC<
           ) : (
             <EmptyProposingTime translate={t} />
           )}
-          {proposingOptions.length > 0 && (
+          {proposingOptions.length > 0 ? (
             <Button
               title={t("challenge_detail_screen.vote")}
-              containerClassName="flex-1 bg-primary-default my-5 "
+              containerClassName="flex-none bg-primary-default my-5 "
               textClassName="text-white text-md leading-6"
               onPress={handleVote}
               isDisabled={selectedOptions?.length === 0}
-              disabledContainerClassName="flex-1 bg-gray-300 my-5 "
+              disabledContainerClassName="flex-none bg-gray-300 my-5 "
               disabledTextClassName="text-white text-md leading-6"
             />
-          )}
+          ) : null}
         </View>
-      )}
-      {!confirmedOption && isCurrentUserVotedProposedTime && (
+      ) : null}
+      {!confirmedOption && isCurrentUserVotedProposedTime ? (
         <View className="flex flex-1">
           <View className="flex flex-row justify-between pb-2">
             <Text className="text-md font-semibold leading-tight text-zinc-500">
@@ -425,7 +425,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
             </Text>
           </View>
         </View>
-      )}
+      ) : null}
     </ScrollView>
   );
 };

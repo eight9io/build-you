@@ -575,7 +575,7 @@ const CompanyCoachCalendarTabCoachView: FC<
               {proposingOptions.length > 0 ? (
                 <Button
                   title={t("challenge_detail_screen.propose")}
-                  containerClassName="flex-1 bg-primary-default my-5 "
+                  containerClassName="flex-none bg-primary-default my-5 "
                   textClassName="text-white text-md leading-6"
                   onPress={handleSubmitProposeTime}
                 />
@@ -600,9 +600,16 @@ const CompanyCoachCalendarTabCoachView: FC<
               {proposedOptions.length > 0 ? (
                 <Button
                   title={t("challenge_detail_screen.confirm")}
-                  containerClassName="flex-1 bg-primary-default my-5 "
+                  containerClassName="flex-none bg-primary-default my-5 "
                   textClassName="text-white text-md leading-6"
-                  onPress={() => setIsShowConfirmTimeModal(true)}
+                  // onPress={() => setIsShowConfirmTimeModal(true)}
+                  onPress={() => {
+                    navigation.navigate("ConfirmVideoCoachScreen", {
+                      selectedOption: confirmedOption
+                        ? confirmedOption
+                        : selectedOption,
+                    });
+                  }}
                   isDisabled={!selectedOption?.id}
                   disabledContainerClassName="flex-1 bg-gray-300 my-5 "
                   disabledTextClassName="text-white text-md leading-6"

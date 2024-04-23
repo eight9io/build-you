@@ -611,7 +611,7 @@ const CompanyCoachCalendarTabCoachView: FC<
                     });
                   }}
                   isDisabled={!selectedOption?.id}
-                  disabledContainerClassName="flex-1 bg-gray-300 my-5 "
+                  disabledContainerClassName="flex-none bg-gray-300 my-5 "
                   disabledTextClassName="text-white text-md leading-6"
                 />
               ) : null}

@@ -49,6 +49,6 @@ export const ConfirmVideoCallUrlValidationSchema = () => {
       .required(t("form.5.required") as string)
       .notOneOf([""], t("form.5.required") as string),
 
-    note: yup.string(),
+    note: yup.string().optional(),
   });
 };

@@ -52,7 +52,7 @@ export default function ConfirmVideoCoachScreen({
   }>({
     defaultValues: {
       url: "",
-      note: "",
+      note: undefined,
     },
     resolver: yupResolver(ConfirmVideoCallUrlValidationSchema()),
     reValidateMode: "onChange",

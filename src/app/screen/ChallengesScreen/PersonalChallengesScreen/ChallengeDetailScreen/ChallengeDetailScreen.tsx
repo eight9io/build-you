@@ -1,8 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { FC, useEffect, useState } from "react";
-import { View, Text, SafeAreaView } from "react-native";
-
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import clsx from "clsx";
 import {
   ICertifiedChallengeState,
   IChallenge,
@@ -14,13 +20,15 @@ import DescriptionTab from "./DescriptionTab";
 import ProgressTab from "./ProgressTab";
 
 import CheckCircle from "./assets/check_circle.svg";
-
+import TaskAltIcon from "./assets/task-alt.svg";
+import TaskAltGrayIcon from "./assets/task-alt-gray.svg";
 import {
   getChallengeStatusColor,
   isObjectEmpty,
 } from "../../../../utils/common";
 import { useUserProfileStore } from "../../../../store/user-store";
 import {
+  completeChallenge,
   getChallengeParticipants,
   serviceAddChallengeParticipant,
   serviceRemoveChallengeParticipant,
@@ -42,6 +50,9 @@ import CompanyCoachCalendarTabCompanyView from "../../CompanyChallengesScreen/Ch
 import { IUserData } from "../../../../types/user";
 import { serviceGetOtherUserData } from "../../../../service/user";
 
+import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
+import { LAYOUT_THRESHOLD } from "../../../../common/constants";
+
 interface IChallengeDetailScreenProps {
   challengeData: IChallenge;
   shouldScreenRefresh?: boolean;
@@ -58,12 +69,27 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
   setShouldScreenRefresh,
 }) => {
   const { t } = useTranslation();
+  const [isDesktopView, setIsDesktopView] = useState(false);
   const [isJoined, setIsJoined] = useState<boolean>(true);
   const [participantList, setParticipantList] = useState([]);
   const [coachData, setCoachData] = useState<IUserData>({} as IUserData);
   const coachID = challengeData?.coach;
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
+
+  // Complete challenge states
+  const [isChallengeCompleted, setIsChallengeCompleted] = useState<
+    boolean | null
+  >(null);
+  const [
+    isChallengeAlreadyCompletedDialogVisible,
+    setIsChallengeAlreadyCompletedDialogVisible,
+  ] = useState<boolean>(false);
+  const [
+    isCompletedChallengeDialogVisible,
+    setIsCompletedChallengeDialogVisible,
+  ] = useState<boolean>(false);
+
   const [tabRoutes, setTabRoutes] = useState([
     {
       key: CHALLENGE_TABS_KEY.PROGRESS,
@@ -101,8 +127,35 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
       ? isCurrentUserParticipant?.challengeStatus
       : challengeData.status;
 
-  const isChallengeCompleted =
-    challengeStatus === "done" || challengeStatus === "closed";
+  // const isChallengeCompleted =
+  //   challengeStatus === "done" || challengeStatus === "closed";
+
+  useEffect(() => {
+    // Check device width to determine if it's desktop view on the first load
+    if (Dimensions.get("window").width <= LAYOUT_THRESHOLD) {
+      setIsDesktopView(false);
+    } else setIsDesktopView(true);
+    // Add event listener to check if the device width is changed when the app is running
+    const unsubscribeDimensions = Dimensions.addEventListener(
+      "change",
+      ({ window }) => {
+        if (window.width <= LAYOUT_THRESHOLD) {
+          setIsDesktopView(false);
+        } else setIsDesktopView(true);
+      }
+    );
+
+    return () => {
+      unsubscribeDimensions.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!challengeData) return;
+    setIsChallengeCompleted(
+      challengeStatus === "done" || challengeStatus === "closed"
+    );
+  }, [challengeData]);
 
   useEffect(() => {
     const tempTabRoutes = [...tabRoutes];
@@ -264,6 +317,47 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
     fetchParticipants();
   }, []);
 
+  const onCheckChallengeCompleted = () => {
+    if (!challengeData) return;
+
+    if (challengeData.type === "certified" && !challengeData.coach) {
+      // certified challenge required coach before complete
+      GlobalDialogController.showModal({
+        title: t("dialog.challenge_is_not_assigned_to_coach.title"),
+        message: t("dialog.challenge_is_not_assigned_to_coach.description"),
+      });
+      return;
+    }
+
+    if (isChallengeCompleted) {
+      setIsChallengeAlreadyCompletedDialogVisible(true);
+    } else {
+      setIsCompletedChallengeDialogVisible(true);
+    }
+  };
+  const onCompleteChallenge = () => {
+    if (!challengeData) return;
+    completeChallenge(challengeData.id)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setIsChallengeCompleted(true);
+          setIsCompletedChallengeDialogVisible(false);
+          // getChallengeData();
+          setShouldScreenRefresh && setShouldScreenRefresh(true);
+          GlobalToastController.showModal({
+            message:
+              t("toast.completed_challenge_success") ||
+              "Challenge has been completed successfully !",
+            isScreenHasBottomNav: false,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Error when completing challenge: ", err);
+        setIsCompletedChallengeDialogVisible(false);
+      });
+  };
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case CHALLENGE_TABS_KEY.PROGRESS:
@@ -343,28 +437,59 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
             <Text className="text-2xl font-semibold">{goal}</Text>
           </View>
         </View>
-        {!isCurrentUserChallengeOnwer && !isChallengeCompleted && (
-          <View className="ml-2 h-9">
-            <Button
-              isDisabled={false}
-              containerClassName={
-                isJoined
-                  ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
-                  : "bg-primary-default flex items-center justify-center px-5"
-              }
-              textClassName={`text-center text-md font-semibold ${
-                isJoined ? "text-gray-dark" : "text-white"
-              } `}
-              title={
-                isJoined
-                  ? t("challenge_detail_screen.leave")
-                  : t("challenge_detail_screen.join")
-              }
-              onPress={handleJoinLeaveChallenge}
-            />
+
+        {isDesktopView ? (
+          <View className="flex flex-row items-center justify-center space-x-2">
+            {!isCurrentUserChallengeOnwer && !isChallengeCompleted ? (
+              <View className="flex-1">
+                <Button
+                  isDisabled={false}
+                  containerClassName={`px-3 py-[11px] ${
+                    isJoined
+                      ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
+                      : "bg-primary-default flex items-center justify-center px-5"
+                  }`}
+                  textClassName={`text-center text-[14px] font-semibold ${
+                    isJoined ? "text-gray-dark" : "text-white"
+                  } `}
+                  title={
+                    isJoined
+                      ? t("challenge_detail_screen.leave")
+                      : t("challenge_detail_screen.join")
+                  }
+                  onPress={handleJoinLeaveChallenge}
+                />
+              </View>
+            ) : null}
+            {isJoined ? (
+              <View>
+                {isChallengeCompleted ? (
+                  <TouchableOpacity
+                    onPress={onCheckChallengeCompleted}
+                    className="flex flex-row items-center justify-center space-x-2 rounded-full bg-gray-light px-3 py-2"
+                  >
+                    <TaskAltGrayIcon />
+                    <Text className="text-[14px] font-semibold text-gray-medium">
+                      {t("challenge_detail_screen.completed")}
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={onCheckChallengeCompleted}
+                    className="flex flex-row items-center justify-center space-x-2 rounded-full border-[1px] border-primary-default bg-white px-3 py-2"
+                  >
+                    <TaskAltIcon />
+                    <Text className="text-[14px] font-semibold text-primary-default">
+                      {t("challenge_detail_screen.complete")}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : null}
           </View>
-        )}
-        {!isCurrentUserChallengeOnwer && isChallengeCompleted && (
+        ) : null}
+
+        {/* {!isCurrentUserChallengeOnwer && isChallengeCompleted ? (
           <View className="ml-2 h-9">
             <Button
               containerClassName="border border-gray-dark flex items-center justify-center px-5"
@@ -372,8 +497,59 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
               title={t("challenge_detail_screen.completed")}
             />
           </View>
-        )}
+        ) : null} */}
       </View>
+
+      {!isDesktopView ? (
+        <View className="mt-3 flex flex-row items-center justify-center space-x-2 px-4">
+          {!isCurrentUserChallengeOnwer && !isChallengeCompleted ? (
+            <View className="flex-1">
+              <Button
+                isDisabled={false}
+                containerClassName={`px-3 py-[11px] ${
+                  isJoined
+                    ? "border border-gray-dark flex items-center justify-center px-5 text-gray-dark"
+                    : "bg-primary-default flex items-center justify-center px-5"
+                }`}
+                textClassName={`text-center text-[14px] font-semibold ${
+                  isJoined ? "text-gray-dark" : "text-white"
+                } `}
+                title={
+                  isJoined
+                    ? t("challenge_detail_screen.leave")
+                    : t("challenge_detail_screen.join")
+                }
+                onPress={handleJoinLeaveChallenge}
+              />
+            </View>
+          ) : null}
+          {isJoined ? (
+            <View className="flex-1">
+              {isChallengeCompleted ? (
+                <TouchableOpacity
+                  onPress={onCheckChallengeCompleted}
+                  className="flex flex-row items-center justify-center space-x-2 rounded-full bg-gray-light px-3 py-2"
+                >
+                  <TaskAltGrayIcon />
+                  <Text className="text-[14px] font-semibold text-gray-medium">
+                    {t("challenge_detail_screen.completed")}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={onCheckChallengeCompleted}
+                  className="flex flex-row items-center justify-center space-x-2 rounded-full border-[1px] border-primary-default bg-white px-3 py-2"
+                >
+                  <TaskAltIcon />
+                  <Text className="text-[14px] font-semibold text-primary-default">
+                    {t("challenge_detail_screen.complete")}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : null}
+        </View>
+      ) : null}
 
       <View className="mt-2 flex flex-1">
         <CustomTabView
@@ -383,6 +559,36 @@ export const ChallengeDetailScreen: FC<IChallengeDetailScreenProps> = ({
           setIndex={setTabIndex}
         />
       </View>
+      <ConfirmDialog
+        isVisible={isCompletedChallengeDialogVisible}
+        title={
+          t("dialog.mark_challenge.title") || "Mark challenge as completed"
+        }
+        description={
+          t("dialog.mark_challenge.description") ||
+          "You cannot edit challenge or update progress after marking the challenge as complete"
+        }
+        confirmButtonLabel={t("dialog.complete") || "Complete"}
+        closeButtonLabel={t("dialog.cancel") || "Cancel"}
+        onConfirm={onCompleteChallenge}
+        onClosed={() => setIsCompletedChallengeDialogVisible(false)}
+      />
+
+      <ConfirmDialog
+        isVisible={isChallengeAlreadyCompletedDialogVisible}
+        title={
+          t("dialog.challenge_already_completed.title") ||
+          "Challenge already complete"
+        }
+        description={
+          t("dialog.challenge_already_completed.description") ||
+          "This challenge has already been completed. Please try another one."
+        }
+        confirmButtonLabel={t("dialog.got_it") || "Got it"}
+        onConfirm={() => {
+          setIsChallengeAlreadyCompletedDialogVisible(false);
+        }}
+      />
     </View>
   );
 };

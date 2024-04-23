@@ -137,6 +137,7 @@ const CreateChallengeScreen = () => {
                 screen: "PersonalChallengeDetailScreen",
                 params: { challengeId: newChallengeId },
               });
+              navigation.popToTop(); // Reset the stack in "Create" tab
 
               GlobalToastController.showModal({
                 message:

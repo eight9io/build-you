@@ -132,6 +132,7 @@ export const CreateCompanyChallengeScreen: FC<
               screen: "CompanyChallengeDetailScreen",
               params: { challengeId: newChallengeId },
             });
+            navigation.popToTop(); // Reset the stack in "Create" tab
 
             setIsLoading(false);
             return;

@@ -115,16 +115,16 @@ const CompanyChallengeDetailScreen = ({
   const [challengeData, setChallengeData] = useState<IChallenge | undefined>(
     undefined
   );
-  const [
-    isCompletedChallengeDialogVisible,
-    setIsCompletedChallengeDialogVisible,
-  ] = useState<boolean>(false);
-  const [
-    isChallengeAlreadyCompletedDialogVisible,
-    setIsChallengeAlreadyCompletedDialogVisible,
-  ] = useState<boolean>(false);
-  const [isCompletedChallengeSuccess, setIsCompletedChallengeSuccess] =
-    useState<boolean | null>(null);
+  // const [
+  //   isCompletedChallengeDialogVisible,
+  //   setIsCompletedChallengeDialogVisible,
+  // ] = useState<boolean>(false);
+  // const [
+  //   isChallengeAlreadyCompletedDialogVisible,
+  //   setIsChallengeAlreadyCompletedDialogVisible,
+  // ] = useState<boolean>(false);
+  // const [isCompletedChallengeSuccess, setIsCompletedChallengeSuccess] =
+  //   useState<boolean | null>(null);
 
   // This is for refreshing after edit challenge
   // Use context because edit challenge is a screen and we cannot pass refresh function as param to it
@@ -202,58 +202,58 @@ const CompanyChallengeDetailScreen = ({
       });
   };
 
-  const onCheckChallengeCompleted = () => {
-    if (!challengeData) return;
-    if (isCertifiedChallenge) {
-      // certified challenge required coach before complete
-      if (isCoachAssigned) {
-        if (isChallengeCompleted) {
-          setIsChallengeAlreadyCompletedDialogVisible(true);
-        } else {
-          setIsCompletedChallengeDialogVisible(true);
-        }
-      } else {
-        GlobalDialogController.showModal({
-          title: t("dialog.challenge_is_not_assigned_to_coach.title"),
-          message: t("dialog.challenge_is_not_assigned_to_coach.description"),
-        });
-        return;
-      }
-    }
+  // const onCheckChallengeCompleted = () => {
+  //   if (!challengeData) return;
+  //   if (isCertifiedChallenge) {
+  //     // certified challenge required coach before complete
+  //     if (isCoachAssigned) {
+  //       if (isChallengeCompleted) {
+  //         setIsChallengeAlreadyCompletedDialogVisible(true);
+  //       } else {
+  //         setIsCompletedChallengeDialogVisible(true);
+  //       }
+  //     } else {
+  //       GlobalDialogController.showModal({
+  //         title: t("dialog.challenge_is_not_assigned_to_coach.title"),
+  //         message: t("dialog.challenge_is_not_assigned_to_coach.description"),
+  //       });
+  //       return;
+  //     }
+  //   }
 
-    if (isChallengeCompleted) {
-      setIsChallengeAlreadyCompletedDialogVisible(true);
-    } else {
-      setIsCompletedChallengeDialogVisible(true);
-    }
-  };
+  //   if (isChallengeCompleted) {
+  //     setIsChallengeAlreadyCompletedDialogVisible(true);
+  //   } else {
+  //     setIsCompletedChallengeDialogVisible(true);
+  //   }
+  // };
 
-  const onCompleteChallenge = async () => {
-    if (!challengeData) return;
-    await completeChallenge(challengeData.id)
-      .then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          setIsCompletedChallengeDialogVisible(false);
-          setIsCompletedChallengeSuccess(true);
-          setShouldScreenRefresh(true);
-          GlobalToastController.showModal({
-            message:
-              t("toast.completed_challenge_success") ||
-              "Challenge has been completed successfully !",
-          });
-        }
-      })
-      .catch((err) => {
-        setIsCompletedChallengeDialogVisible(false);
-        setTimeout(() => {
-          setIsCompletedChallengeSuccess(false);
-        }, 600);
-      });
-  };
+  // const onCompleteChallenge = async () => {
+  //   if (!challengeData) return;
+  //   await completeChallenge(challengeData.id)
+  //     .then((res) => {
+  //       if (res.status === 200 || res.status === 201) {
+  //         setIsCompletedChallengeDialogVisible(false);
+  //         setIsCompletedChallengeSuccess(true);
+  //         setShouldScreenRefresh(true);
+  //         GlobalToastController.showModal({
+  //           message:
+  //             t("toast.completed_challenge_success") ||
+  //             "Challenge has been completed successfully !",
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsCompletedChallengeDialogVisible(false);
+  //       setTimeout(() => {
+  //         setIsCompletedChallengeSuccess(false);
+  //       }, 600);
+  //     });
+  // };
 
-  const onCloseSuccessDialog = () => {
-    setIsCompletedChallengeSuccess(null);
-  };
+  // const onCloseSuccessDialog = () => {
+  //   setIsCompletedChallengeSuccess(null);
+  // };
 
   useLayoutEffect(() => {
     // Set header options, must set it manually to handle the onPress event inside the screen
@@ -301,7 +301,7 @@ const CompanyChallengeDetailScreen = ({
 
   return (
     <SafeAreaView className="flex-1 bg-gray-veryLight">
-      <ConfirmDialog
+      {/* <ConfirmDialog
         isVisible={isCompletedChallengeDialogVisible}
         title={
           t("dialog.mark_challenge.title") || "Mark challenge as completed"
@@ -314,8 +314,8 @@ const CompanyChallengeDetailScreen = ({
         closeButtonLabel={t("dialog.cancel") || "Cancel"}
         onConfirm={onCompleteChallenge}
         onClosed={() => setIsCompletedChallengeDialogVisible(false)}
-      />
-      <ConfirmDialog
+      /> */}
+      {/* <ConfirmDialog
         isVisible={isChallengeAlreadyCompletedDialogVisible}
         title={
           t("dialog.challenge_already_completed.title") ||
@@ -329,7 +329,7 @@ const CompanyChallengeDetailScreen = ({
         onConfirm={() => {
           setIsChallengeAlreadyCompletedDialogVisible(false);
         }}
-      />
+      /> */}
       <ConfirmDialog
         isVisible={isDeleteChallengeDialogVisible}
         title={t("dialog.delete_challenge.title") || "Delete Challenge"}
@@ -369,7 +369,7 @@ const CompanyChallengeDetailScreen = ({
         }}
       />
 
-      {isCompletedChallengeSuccess !== null ? (
+      {/* {isCompletedChallengeSuccess !== null ? (
         <ConfirmDialog
           isVisible={isCompletedChallengeSuccess !== null}
           title={
@@ -386,9 +386,9 @@ const CompanyChallengeDetailScreen = ({
           confirmButtonLabel={t("dialog.got_it") || "Got it"}
           onConfirm={onCloseSuccessDialog}
         />
-      ) : null}
+      ) : null} */}
 
-      {!!currentUserInParticipant || challengeOwner?.id === currentUser?.id ? (
+      {/* {!!currentUserInParticipant || challengeOwner?.id === currentUser?.id ? (
         <View className="absolute bottom-16 right-4 z-10">
           <TouchableOpacity
             onPress={onCheckChallengeCompleted}
@@ -406,7 +406,7 @@ const CompanyChallengeDetailScreen = ({
             <TaskAltIcon />
           </TouchableOpacity>
         </View>
-      ) : null}
+      ) : null} */}
       {challengeData ? (
         <>
           <ChallengeCompanyDetailScreen

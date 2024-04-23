@@ -65,7 +65,7 @@ const BookVideoCallBtn: FC<IBookVideoCallBtnProps> = ({
       setCustomUri(
         `${coachCalendyLink}?name=${userFirstName}%20${userLastName}&email=${userEmail}`
       );
-    }
+    } else setCustomUri(coachCalendyLink);
   }, [coachCalendyLink]);
 
   const onBookVideoCall = () => {

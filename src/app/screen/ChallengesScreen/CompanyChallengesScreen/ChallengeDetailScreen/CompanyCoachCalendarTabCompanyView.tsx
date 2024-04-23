@@ -24,6 +24,7 @@ import GlobalDialogController from "../../../../component/common/Dialog/GlobalDi
 import LinkSvg from "./assets/link.svg";
 import EmptySvg from "./assets/emptyFollow.svg";
 import { openUrl } from "../../../../utils/linking.util";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface IProposedTimeTag {
   translate: (key: string) => string;
@@ -219,6 +220,7 @@ interface ICompanyCoachCalendarTabCompanyViewProps {
 const CompanyCoachCalendarTabCompanyView: FC<
   ICompanyCoachCalendarTabCompanyViewProps
 > = ({ challengeId, challengeState }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [proposingOptions, setProposingOptions] = useState<IProposalTime[]>(
     [] as IProposalTime[]
   );
@@ -278,6 +280,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
   };
 
   const handleVote = async () => {
+    setIsLoading(true);
     try {
       // Handle multiple selected options
       const promises = selectedOptions.map((option) =>
@@ -314,6 +317,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
         });
       }
     }
+    setIsLoading(false);
   };
 
   const handleSelectProposedTime = (item: IProposalTime) => {
@@ -335,6 +339,7 @@ const CompanyCoachCalendarTabCompanyView: FC<
 
   return (
     <ScrollView className="relative flex h-full flex-1 flex-col p-4">
+      <CustomActivityIndicator isVisible={isLoading} />
       <ErrorDialog
         title={erroModalTitle}
         description={errorModalDescription}

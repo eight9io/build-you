@@ -37,6 +37,7 @@ import OtherUserProfileChallengeDetailsScreen from "../ProfileScreen/OtherUser/O
 import ProgressCommentScreen from "./ProgressCommentScreen/ProgressCommentScreen";
 import { useNewCreateOrDeleteChallengeStore } from "../../store/new-challenge-create-store";
 import CompanyChallengeDetailScreen from "./CompanyChallengesScreen/CompanyChallengeDetailScreen/CompanyChallengeDetailScreen";
+import { useGetListEmployee } from "../../hooks/useGetCompany";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -111,13 +112,14 @@ const CreateChallengeScreenMain = () => {
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCompany = currentUser?.companyAccount;
-
+  if (isCompany) { useGetListEmployee(); }
   const { getNewChallengeId } = useNewCreateOrDeleteChallengeStore();
   const newChallengeId = getNewChallengeId();
 
   const handleCreateFreeChallenge = () => {
-    if (isCompany) navigation.navigate("CreateCompanyChallengeScreen");
-    else navigation.navigate("CreateChallengeScreen");
+    if (isCompany) {  useGetListEmployee(); 
+      navigation.navigate("CreateCompanyChallengeScreen");}
+    else {navigation.navigate("CreateChallengeScreen");}
   };
   const handleCreateCretifiedChallenge = async () => {
     try {
@@ -155,6 +157,7 @@ const CreateChallengeScreenMain = () => {
   }, []);
 
   useEffect(() => {
+
     const fetchPackages = async () => {
       const currentLanguage = await getLanguageLocalStorage();
       try {
@@ -213,6 +216,7 @@ const CreateChallengeScreenMain = () => {
 
 const CreateChallengeScreen = () => {
   const { t } = useTranslation();
+  
   return (
     <CreateChallengeStack.Navigator
       screenOptions={{

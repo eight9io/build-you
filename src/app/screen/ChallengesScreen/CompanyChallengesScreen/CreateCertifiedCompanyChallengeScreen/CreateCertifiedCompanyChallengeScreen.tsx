@@ -24,7 +24,12 @@ import { useCreateChallengeDataStore } from "../../../../store/create-challenge-
 import { useUserProfileStore } from "../../../../store/user-store";
 import { ICreateChallenge } from "../../../../types/challenge";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
-
+import Button from "../../../../component/common/Buttons/Button";
+import AddParticipantIcon from "../../../../component/asset/addParticipant.svg";
+import { useEmployeeListStore } from "../../../../store/company-data-store";
+import AddParticipantModal from "../../../../component/modal/company/AddParticipantModal";
+import { FlatList } from "react-native-gesture-handler";
+import { EmployeesItem } from "../../../../component/Profile/ProfileTabs/Company/Employees/Employees";
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
   achievementTime: Date;
@@ -57,14 +62,17 @@ const CreateCertifiedCompanyChallengeScreen: FC<
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
-
+  const [isShowModalAdd, setIsShowModalAdd] = useState(false);
   const { t } = useTranslation();
   const navigation = useNav();
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCurrentUserCompany = currentUser?.companyAccount;
   const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
+  const [participantList, setParticipantList] = useState<any[]>([]);
 
+  const { getEmployeeList } = useEmployeeListStore();
+  const employeeList = getEmployeeList();
   const {
     control,
     handleSubmit,
@@ -102,6 +110,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       ...restData,
       softSkills: softSkillsWithSkillLabel,
       type: "certified",
+      participants: participantList,
     });
     setIsLoading(false);
     setTimeout(() => {
@@ -152,6 +161,22 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       ),
     });
   }, []);
+  const AddParticipantButton = () => {
+    return (
+      <View className="relative pb-4 pt-0">
+        <View className="h-12">
+          <Button
+            title={t("challenge_detail_screen.add") as string}
+            containerClassName="bg-gray-light w-16 !rounded-xl py-4"
+            textClassName="text-black text-md font-semibold  ml-2"
+            labelClassName="!flex-col justify-center items-center"
+            Icon={<AddParticipantIcon />}
+            onPress={() => setIsShowModalAdd(true)}
+          />
+        </View>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView className="flex flex-col bg-white">
@@ -375,8 +400,51 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                   </Text>
                 )}
               </View>
+              <View className="mt-5">
+                <Text className="mb-3 text-md font-semibold text-primary-default">
+                  {t("new_challenge_screen.add_participant")}
+                </Text>
+                {employeeList.length > 0 && (
+              <FlatList
+                data={participantList}
+                ListHeaderComponent={
+                 null
+                }
+                numColumns={4}
+
+                renderItem={({ item }) => (
+                  <>
+                  <EmployeesItem
+                    item={item}
+                    isCompany={currentUser?.companyAccount}
+                    navigation={navigation}
+                    layoutClassName="flex-col gap-1 "
+                    sizeImg="medium"
+                    isOnlyName={true}
+                    isBinIconTopRight={true}
+                  
+                    removeItem={setParticipantList}
+                    listItem={participantList}
+                  />
+                
+                  </>
+                )}
+                contentContainerStyle={{ paddingBottom: 4 }}
+                keyExtractor={(item, index) => item.id}
+              />
+            )}
+                <AddParticipantButton />
+              </View>
             </View>
             <View className="h-20" />
+          
+            <AddParticipantModal
+              isVisible={isShowModalAdd}
+              onClose={() => setIsShowModalAdd(false)}
+              setParticipantList={setParticipantList}
+              participantList={participantList}
+              employeeList={employeeList}
+            />
           </View>
         }
       />

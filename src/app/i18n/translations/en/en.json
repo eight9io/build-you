@@ -318,6 +318,7 @@
     "max_people_required": "Please select the maximum number of people",
     "min_people_required": "Minimum number of people is 2",
     "is_public_required": "Please select challenge privacy",
+    "add_participant": "Add participant",
     "challenge_status_description": "Everyone can join your public challenge while only user from your company can join your private challenge.",
     "soft_skill_required": "Please select at least 1 and no more than 3 soft skills."
   },
@@ -438,6 +439,14 @@
     "in_draft": {
       "title": "Payment is pending",
       "description": "You have a challenge in process. Please wait until it is completed."
+    },
+    "err_maxPeople": {
+      "title": "You can't choose the package",
+      "description": "Sorry! This package is limited to a maximum of {{max_people}} participants."
+    },
+    "err_add_participant": {
+      "title": "You can't add a participant",
+      "description": "Sorry! This email does not exist in the company."
     },
     "challenge_is_not_assigned_to_coach": {
       "title": "Challenge is not assigned to coach",
@@ -616,6 +625,11 @@
     "title": "New employee",
     "email": "Email",
     "email_placeholder": "Enter employee email"
+  },
+  "add_participant_modal": {
+    "title": "Add participant",
+    "email": "Email",
+    "email_placeholder": "Enter participant email"
   },
   "edit_profile_modal": {
     "title": "Edit profile",

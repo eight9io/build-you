@@ -6,6 +6,7 @@ import Button from "../../../../common/Buttons/Button";
 
 import AddIcon from "../../../../asset/add.svg";
 import BinIcon from "../../../../asset/bin.svg";
+import RemoveIcon from "../../../../asset/removeIcon.svg";
 
 import AddNewEmployeeModal from "../../../../modal/company/AddNewEmployeeModal";
 import Empty from "../../../../asset/emptyFollow.svg";
@@ -30,6 +31,12 @@ interface IEmployeesItemProps {
   navigation: any;
   setIsShowModal?: any;
   userId?: string;
+  layoutClassName?: string;
+  sizeImg?: string;
+  isOnlyName?: boolean;
+  isBinIconTopRight?: boolean;
+  removeItem?: any;
+  listItem?: any;
 }
 interface IEmployeeProps {
   employeeList?: any;
@@ -39,10 +46,18 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
   isCompany,
   navigation,
   setIsShowModal,
+  layoutClassName,
+  sizeImg,
+  isOnlyName,
+  isBinIconTopRight = false,
+  removeItem,
+  listItem
 }) => {
   return (
-    <View>
-      <View className=" mr-6 flex flex-row items-start justify-between  ">
+    <View className="w-1/4">
+      <View
+        className={clsx("mx-auto flex flex-row items-start justify-between  ")}
+      >
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() =>
@@ -54,24 +69,36 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
               userId: item.id,
             })
           }
-          className="mb-5 mr-5 flex-row items-center justify-between gap-3 "
+          className={clsx(
+            "mb-5 mr-5 flex-row items-center justify-between gap-3 ",
+            layoutClassName
+          )}
         >
-          <View className="relative">
+          <View className={clsx("relative  ")}>
             <Image
               className={clsx("absolute left-0  top-0 h-10 w-10  rounded-full")}
               source={require("../../../../asset/avatar-load.png")}
+              style={sizeImg && { width: 56, height: 56 }}
             />
             <Image
               source={{ uri: item.avatar }}
-              className="h-10 w-10 rounded-full"
+              className={clsx(" h-10 w-10 rounded-full ")}
+              style={sizeImg && { width: 56, height: 56 }}
             />
+           {isCompany && isBinIconTopRight &&   <TouchableOpacity
+         className="absolute right-0 top-0"
+            onPress={() =>
+              removeItem(listItem.filter(participant => participant.id !== item.id))
+            }
+          > 
+            <RemoveIcon /></TouchableOpacity>}
           </View>
           <Text className="text-base font-semibold text-basic-black">
-            {item.name} {item.surname}
+            {isOnlyName ? item.name : `${item.name} ${item.surname}`}
           </Text>
         </TouchableOpacity>
 
-        {isCompany && (
+        {isCompany && !isBinIconTopRight && (
           <TouchableOpacity
             className="flex pt-2"
             onPress={() =>
@@ -171,10 +198,6 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
             Icon={<AddIcon fill={"white"} />}
             onPress={() => setIsShowModalAdd(true)}
           />
-          <AddNewEmployeeModal
-            isVisible={isShowModalAdd}
-            onClose={() => setIsShowModalAdd(false)}
-          />
         </View>
       </View>
     );
@@ -242,6 +265,10 @@ export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
           </Text>
         </View>
       )}
+      <AddNewEmployeeModal
+        isVisible={isShowModalAdd}
+        onClose={() => setIsShowModalAdd(false)}
+      />
     </View>
   );
 };

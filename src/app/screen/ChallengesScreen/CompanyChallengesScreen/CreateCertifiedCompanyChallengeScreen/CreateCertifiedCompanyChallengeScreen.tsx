@@ -110,7 +110,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       ...restData,
       softSkills: softSkillsWithSkillLabel,
       type: "certified",
-      participants: participantList,
+      usersList: participantList.map(item => item.id),
     });
     setIsLoading(false);
     setTimeout(() => {

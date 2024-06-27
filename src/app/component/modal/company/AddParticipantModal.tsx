@@ -1,5 +1,5 @@
 import { View, Modal, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller, set } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,9 +33,12 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
   handleAddParticipant
 
 }) => {
-
   const { t } = useTranslation();
-
+  const [suggestions, setSuggestions] = useState([]);
+  useEffect(() => {
+    setSuggestions(employeeList);
+  }
+    , [employeeList])
   const [isErrorDialogVisible, setIsErrorDialogVisible] = useState({
     isShow: false,
     description: t("error_general_message") as string,
@@ -49,6 +52,7 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -122,9 +126,11 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
       </View>
 
     )
-
   }
-
+  const onChangeEmail = (text) => {
+    const filteredSuggestions = employeeList.filter(item => item.email.includes(text));
+    setSuggestions(filteredSuggestions);
+  };
   return (
     <Modal
       animationType="slide"
@@ -166,7 +172,10 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
                   }
                   placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
                   onBlur={onBlur}
-                  onChangeText={onChange}
+                  onChangeText={(text) => {
+                    onChange(text);
+                    onChangeEmail(text);
+                  }}
                   value={value}
                 />
               </View>
@@ -174,11 +183,11 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
           />
           {errors.email && <ErrorText message={errors.email?.message} />}
         </View>
-        {employeeList.length > 0 && (
+        {suggestions.length > 0 && (
 
           <FlatList
 
-            data={employeeList}
+            data={suggestions}
             className="pt-4"
             showsVerticalScrollIndicator={true}
             keyExtractor={(item, index) => index.toString()}

@@ -117,7 +117,7 @@ const CreateChallengeScreenMain = () => {
   const newChallengeId = getNewChallengeId();
 
   const handleCreateFreeChallenge = () => {
-    if (isCompany) {  useGetListEmployee(); 
+    if (isCompany) {  
       navigation.navigate("CreateCompanyChallengeScreen");}
     else {navigation.navigate("CreateChallengeScreen");}
   };

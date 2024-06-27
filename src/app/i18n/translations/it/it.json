@@ -376,8 +376,9 @@
       "description": "Sorry! This package is limited to a maximum of 5 participants."
     },
     "err_add_participant": {
-      "title": "You can't add a participant",
-      "description": "Sorry! This email does not exist in the company."
+      "title": "Non puoi aggiungere un partecipante",
+      "description": "Siamo spiacenti! Questa email non esiste in azienda.",
+      "err_description": "Siamo spiacenti! Questa email esiste nella sfida"
     },
     "logout": {
       "title": "Log out",
@@ -410,6 +411,10 @@
     },
     "remove_user": {
       "title": "Vuoi rimuovere questo dipendente dall'azienda?",
+      "description": "Non puoi annullare questa azione"
+    },
+    "rimuovi_partecipante": {
+      "title": "Vuoi rimuovere questo partecipante dalla sfida?",
       "description": "Non puoi annullare questa azione"
     },
     "delete_challenge": {
@@ -494,6 +499,7 @@
     "edit_schedule_success": "Modifica programma con successo!",
     "add_employee_success": "Dipendente aggiunto correttamente! ",
     "delete_employee_success": "Dipendente eliminato correttamente! ",
+    "delete_participant_success": "Partecipante eliminato con successo! ",
     "reset_password_success": "Password reimpostata con successo! ",
     "create_challenge_success": "La tua sfida è stata creata con successo !",
     "edit_challenge_success": "I tuoi progressi sono stati modificati con successo ! ",
@@ -628,7 +634,7 @@
     "email_placeholder": "Inserisci l'email del collaboratore"
   },
   "add_participant_modal": {
-   "title": "Aggiungi partecipante",
+    "title": "Aggiungi partecipante",
     "email": "Email",
     "email_placeholder": "Inserisci l'e-mail del dipendente"
   },

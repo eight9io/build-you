@@ -1,7 +1,7 @@
 import { View, Modal } from "react-native";
 import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, set } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { AddNewEmployeeValidationSchema } from "../../../Validators/validators";
@@ -19,17 +19,15 @@ import { IUserData } from "../../../types/user";
 interface IAddNewEmployeeModalProps {
   isVisible: boolean;
   onClose: () => void;
-  setParticipantList: React.Dispatch<React.SetStateAction<string[]>>
-  participantList: any[]
-  employeeList?: IUserData[]
+  employeeList?: IUserData[];
+  handleAddParticipant?: (data: any) => void;
 }
 
 export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
   isVisible,
   onClose,
-  setParticipantList,
-  participantList,
-  employeeList
+  employeeList,
+  handleAddParticipant
 
 }) => {
   const { t } = useTranslation();
@@ -56,22 +54,27 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
 
 
   const onSubmit = (data: any) => {
+    ;
     if (!userData?.id) {
       setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });
       return;
     }
     const participant = employeeList.find((item: any) => item.email === data.email);
+
     if (participant) {
-      setParticipantList([...participantList, participant])
-      reset(); 
+      handleAddParticipant(participant)
+      reset();
       onClose();
     } else {
       GlobalDialogController.showModal({
         title: t("dialog.err_add_participant.title"),
-        message: t("dialog.err_add_participant.description", { max_people: 5 }),
+        message: t("dialog.err_add_participant.description"),
       });
 
     }
+
+
+
 
   };
 
@@ -93,7 +96,7 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
       />
       <View className=" flex h-full rounded-t-xl bg-white px-4">
         <Header
-          title={t("add_participant_modal.title") || "New employee"}
+          title={t("add_participant_modal.title") || "New Participant"}
           rightBtn={t("save") || "Save"}
           leftBtn={<Close fill={"black"} />}
           onLeftBtnPress={onClose}

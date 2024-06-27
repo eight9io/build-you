@@ -21,6 +21,7 @@ import { useUserProfileStore } from "../../../store/user-store";
 import SkeletonLoadingChallengesScreen from "../../../component/common/SkeletonLoadings/SkeletonLoadingChallengesScreen";
 import { sortChallengeByStatus } from "../../../utils/common";
 import { getChallengeByUserId } from "../../../service/challenge";
+import { useGetListEmployee } from "../../../hooks/useGetCompany";
 
 type CompanyChallengesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -214,6 +215,10 @@ const CompanyChallengsScreen = ({
 }: {
   navigation: CompanyChallengesScreenNavigationProp;
 }) => {
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const isCompany = currentUser?.companyAccount;
+  if (isCompany) { useGetListEmployee(); }
   const { t } = useTranslation();
   const [index, setIndex] = useState<number>(0);
   const [routes] = useState([

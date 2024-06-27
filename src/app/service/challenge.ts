@@ -61,7 +61,19 @@ export const getCertifiedChallengeOfCurrentUser = () => {
 export const getChallengeParticipants = (challengeId: string) => {
   return http.get(`/challenge/participant/all/${challengeId}`);
 };
+export const serviceAddParticipants = (newParticipant: any, challengeId: any) =>
+  http.post("/challenge/company/participant/add", {
+    challenge: challengeId,
+    user: newParticipant
+  });
+export const serviceRemoveParticipants = (removeParticipant: any, challengeId: any) =>
+  http.delete("/challenge/company/participant/remove", {
+    data: {
+      challenge: challengeId,
+      user: removeParticipant
+    }
 
+  });
 export const getCertifiedChallengeParticipants = (challengeId: string) => {
   return http.get(`/challenge/certified/participant/all/${challengeId}`);
 };

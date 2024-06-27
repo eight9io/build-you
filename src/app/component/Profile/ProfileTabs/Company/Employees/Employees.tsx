@@ -54,9 +54,9 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
   listItem
 }) => {
   return (
-    <View className="w-1/4">
+    <View className={clsx(isBinIconTopRight ? "w-1/4" : "w-full")}>
       <View
-        className={clsx("mx-auto flex flex-row items-start justify-between  ")}
+        className={clsx("mx-auto flex flex-row items-start justify-between w-full ", isBinIconTopRight ? "pr-0" : "pr-5")}
       >
         <TouchableOpacity
           activeOpacity={0.8}
@@ -85,13 +85,13 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
               className={clsx(" h-10 w-10 rounded-full ")}
               style={sizeImg && { width: 56, height: 56 }}
             />
-           {isCompany && isBinIconTopRight &&   <TouchableOpacity
-         className="absolute right-0 top-0"
-            onPress={() =>
-              removeItem(listItem.filter(participant => participant.id !== item.id))
-            }
-          > 
-            <RemoveIcon /></TouchableOpacity>}
+            {isCompany && isBinIconTopRight && <TouchableOpacity
+              className="absolute right-0 top-0"
+              onPress={() =>
+                removeItem(listItem.filter(participant => participant.id !== item.id))
+              }
+            >
+              <RemoveIcon /></TouchableOpacity>}
           </View>
           <Text className="text-base font-semibold text-basic-black">
             {isOnlyName ? item.name : `${item.name} ${item.surname}`}
@@ -152,7 +152,7 @@ export const EmployeesItemOtherCompany: FC<IEmployeesItemProps> = ({
     </View>
   );
 };
-export const EmployeesTab: FC<IEmployeeProps> = ({}) => {
+export const EmployeesTab: FC<IEmployeeProps> = ({ }) => {
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { getEmployeeList, setEmployeeList } = useEmployeeListStore();

@@ -42,6 +42,7 @@ const RenderPackageOptions = ({
   currency,
   onPress,
   isCurrentUserCompany = false,
+  
 }) => {
   const { t } = useTranslation();
 
@@ -106,6 +107,7 @@ const RenderPackageOptions = ({
 };
 
 const ChoosePackageScreen = () => {
+ 
   const [{ packages, chatCheck, videoCheck, loading }, _setState] = useState<{
     packages: IPackage[];
     chatCheck: ICheckPoint;
@@ -132,6 +134,7 @@ const ChoosePackageScreen = () => {
 
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
+    const maxPeopleData= getCreateChallengeDataStore().maximumPeople
 
   const { setChatPackagePrice, setVideoPackagePrice } = usePriceStore();
 
@@ -142,11 +145,19 @@ const ChoosePackageScreen = () => {
       currency: choosenPackage.currency,
       id: choosenPackage.id,
       type: choosenPackage.type,
+      maxPeople: choosenPackage.maxPeople,
     };
     setCreateChallengeDataStore({
       ...getCreateChallengeDataStore(),
       package: packageData.id,
     });
+    if (maxPeopleData > choosenPackage.maxPeople) {
+      GlobalDialogController.showModal({
+        title: t("dialog.err_maxPeople.title"),
+        message: t("dialog.err_maxPeople.description",{max_people:choosenPackage.maxPeople}),
+      });
+      return;
+    }
     if (isCurrentUserCompany) {
       navigation.navigate("CompanyCartScreen", {
         choosenPackage: choosenPackage,
@@ -202,6 +213,7 @@ const ChoosePackageScreen = () => {
               item.type === "chat"
                 ? packagesFromStore.chatPackage.currency
                 : packagesFromStore.videoPackage.currency,
+                maxPeople:     item.type === "chat"?5:7
           };
         });
 
@@ -238,7 +250,7 @@ const ChoosePackageScreen = () => {
     };
     fetchPackages();
   }, []);
-
+ 
   return (
     <SafeAreaView className="flex flex-1 flex-col items-center justify-start space-y-4 bg-white ">
       <ScrollView>
@@ -254,6 +266,7 @@ const ChoosePackageScreen = () => {
               packages.map((item) => (
                 <View key={item?.type}>
                   <RenderPackageOptions
+                
                     name={item.name}
                     type={item.type}
                     caption={item.caption}
@@ -261,6 +274,8 @@ const ChoosePackageScreen = () => {
                     currency={item.currency}
                     onPress={() => handleChoosePackage(item)}
                     isCurrentUserCompany={isCurrentUserCompany}
+               
+                    
                   />
                 </View>
               ))}

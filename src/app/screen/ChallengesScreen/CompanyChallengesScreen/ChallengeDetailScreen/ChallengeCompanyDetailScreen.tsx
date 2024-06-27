@@ -26,7 +26,7 @@ import {
 } from "../../../../service/challenge";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
 
-import ParticipantsTab from "./ParticipantsTab";
+
 import CompanyCoachTab from "./CompanyCoachTab";
 import CompanySkillsTab from "./CompanySkillsTab";
 import CompanyCoachCalendarTabCompanyView from "./CompanyCoachCalendarTabCompanyView";
@@ -40,6 +40,8 @@ import DescriptionTab from "../../PersonalChallengesScreen/ChallengeDetailScreen
 import ChatCoachTab from "../../CoachChallengesScreen/PersonalCoach/ChatCoachTab";
 
 import CheckCircle from "./assets/check_circle.svg";
+import CompanyParticipantsTab from "./CompanyParticipantsTab";
+import { useEmployeeListStore } from "../../../../store/company-data-store";
 
 export type ChallengeCompanyDetailScreenNavigationProps =
   NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
@@ -55,6 +57,9 @@ export const ChallengeCompanyDetailScreen: FC<
   ICompanyChallengeDetailScreenProps
 > = ({ challengeData, shouldScreenRefresh, setShouldScreenRefresh, route }) => {
   const { t } = useTranslation();
+  const { getEmployeeList } = useEmployeeListStore();
+  const employeeList = getEmployeeList();
+
   const [participantList, setParticipantList] = useState(
     challengeData?.participants || []
   );
@@ -109,8 +114,8 @@ export const ChallengeCompanyDetailScreen: FC<
     challengeOwner.id === currentUser?.id
       ? challengeData.status
       : isJoined
-      ? isCurrentUserParticipant?.challengeStatus
-      : challengeData.status;
+        ? isCurrentUserParticipant?.challengeStatus
+        : challengeData.status;
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
   const isChallengeInProgress =
@@ -125,8 +130,8 @@ export const ChallengeCompanyDetailScreen: FC<
     if (isCertifiedChallenge) {
       const shouldPreventJoin =
         challengeState.intakeStatus &&
-        challengeState.intakeStatus !== "init" &&
-        challengeState.intakeStatus !== "open"
+          challengeState.intakeStatus !== "init" &&
+          challengeState.intakeStatus !== "open"
           ? true
           : false;
 
@@ -272,9 +277,9 @@ export const ChallengeCompanyDetailScreen: FC<
           />
         );
       case CHALLENGE_TABS_KEY.DESCRIPTION:
-        return <DescriptionTab challengeData={challengeData} />;
+        return <DescriptionTab challengeData={challengeData} maxPepleCanJoin={challengeData?.maximumPeople ? challengeData?.maximumPeople : null} />;
       case CHALLENGE_TABS_KEY.PARTICIPANTS:
-        return <ParticipantsTab participant={participantList as any} />;
+        return <CompanyParticipantsTab participants={participantList as any} challengeData={challengeData} fetchParticipants={fetchParticipants} employeeList={employeeList} />;
       case CHALLENGE_TABS_KEY.SKILLS:
         return (
           <CompanySkillsTab
@@ -337,9 +342,8 @@ export const ChallengeCompanyDetailScreen: FC<
                     ? "border border-gray-dark flex items-center justify-center px-5"
                     : "bg-primary-default flex items-center justify-center px-5"
                 }
-                textClassName={`text-center text-md font-semibold ${
-                  isJoined ? "text-gray-dark" : "text-white"
-                } `}
+                textClassName={`text-center text-md font-semibold ${isJoined ? "text-gray-dark" : "text-white"
+                  } `}
                 disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
                 disabledTextClassName="text-center text-md font-semibold text-gray-medium"
                 title={

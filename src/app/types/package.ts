@@ -5,6 +5,7 @@ export interface IPackage {
   currency: string;
   caption: string;
   type: PACKAGE_TYPE;
+  maxPeople: number;
 }
 
 export enum PACKAGE_TYPE {
@@ -19,6 +20,7 @@ export interface IPackageResponse {
   availableCalls: number;
   availableCredits: number;
   packages: IPackage[];
+  
 }
 
 export interface ICheckPoint {

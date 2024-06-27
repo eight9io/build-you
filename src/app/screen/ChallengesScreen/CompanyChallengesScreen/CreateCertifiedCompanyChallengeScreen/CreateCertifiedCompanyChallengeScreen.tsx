@@ -64,13 +64,14 @@ const CreateCertifiedCompanyChallengeScreen: FC<
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
-  const [isShowModalAdd, setIsShowModalAdd] = useState(true);
+  const [isShowModalAdd, setIsShowModalAdd] = useState(false);
   const { t } = useTranslation();
   const navigation = useNav();
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCurrentUserCompany = currentUser?.companyAccount;
-  const { setCreateChallengeDataStore, getCreateChallengeDataStore } = useCreateChallengeDataStore();
+  const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
+    useCreateChallengeDataStore();
   const [participantList, setParticipantList] = useState<any[]>([]);
 
   const { getEmployeeList } = useEmployeeListStore();
@@ -113,15 +114,13 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       ...restData,
       softSkills: softSkillsWithSkillLabel,
       type: "certified",
-      usersList: usersList
+      usersList: usersList,
     });
     setIsLoading(false);
     setTimeout(() => {
       navigation.navigate("ChoosePackageScreen");
     }, 500);
   };
-  ;
-
   const handleImagesSelected = (images: string[]) => {
     setValue("image", images[0], {
       shouldValidate: true,
@@ -154,7 +153,10 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     });
   };
   useEffect(() => {
-    setValue("usersList", participantList.map(item => item.id))
+    setValue(
+      "usersList",
+      participantList.map((item) => item.id)
+    );
   }, [participantList]);
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -184,16 +186,19 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     );
   };
   const handleAddParticipantButton = (participant) => {
-    const isParticipant = participantList.find((item: any) => item.email === participant.email);
+    const isParticipant = participantList.find(
+      (item: any) => item.email === participant.email
+    );
     if (isParticipant) {
       GlobalDialogController.showModal({
         title: t("dialog.err_add_participant.title"),
         message: t("dialog.err_add_participant.err_description"),
       });
       return;
-    } else { setParticipantList([...participantList, participant]) }
-
-  }
+    } else {
+      setParticipantList([...participantList, participant]);
+    }
+  };
   return (
     <SafeAreaView className="flex flex-col bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
@@ -423,11 +428,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                 {employeeList.length > 0 && (
                   <FlatList
                     data={participantList}
-                    ListHeaderComponent={
-                      null
-                    }
+                    ListHeaderComponent={null}
                     numColumns={4}
-
                     renderItem={({ item }) => (
                       <>
                         <EmployeesItem
@@ -438,11 +440,9 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                           sizeImg="medium"
                           isOnlyName={true}
                           isBinIconTopRight={true}
-
                           removeItem={setParticipantList}
                           listItem={participantList}
                         />
-
                       </>
                     )}
                     contentContainerStyle={{ paddingBottom: 4 }}

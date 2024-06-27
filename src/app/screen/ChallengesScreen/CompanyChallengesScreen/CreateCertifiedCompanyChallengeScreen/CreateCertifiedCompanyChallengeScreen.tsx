@@ -64,7 +64,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
 
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [softSkillValue, setSoftSkillValue] = useState<string[]>([]);
-  const [isShowModalAdd, setIsShowModalAdd] = useState(false);
+  const [isShowModalAdd, setIsShowModalAdd] = useState(true);
   const { t } = useTranslation();
   const navigation = useNav();
   const { getUserProfile } = useUserProfileStore();

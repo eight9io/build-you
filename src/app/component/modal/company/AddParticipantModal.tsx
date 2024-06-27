@@ -1,4 +1,4 @@
-import { View, Modal } from "react-native";
+import { View, Modal, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller, set } from "react-hook-form";
@@ -12,9 +12,12 @@ import TextInput from "../../common/Inputs/TextInput";
 import Close from "../../../component/asset/close.svg";
 import ConfirmDialog from "../../common/Dialog/ConfirmDialog";
 import { useUserProfileStore } from "../../../store/user-store";
-import { useEmployeeListStore } from "../../../store/company-data-store";
 import GlobalDialogController from "../../common/Dialog/GlobalDialogController";
 import { IUserData } from "../../../types/user";
+import clsx from "clsx";
+
+import { Image } from "expo-image";
+
 
 interface IAddNewEmployeeModalProps {
   isVisible: boolean;
@@ -30,6 +33,7 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
   handleAddParticipant
 
 }) => {
+
   const { t } = useTranslation();
 
   const [isErrorDialogVisible, setIsErrorDialogVisible] = useState({
@@ -44,6 +48,7 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -77,6 +82,48 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
 
 
   };
+  const Employee = (employee: any) => {
+    return (
+      <View
+        className={clsx("mx-auto flex flex-row items-start justify-between w-full pr-5 ")}
+      >
+        <TouchableOpacity
+         onPress={() =>{
+         setValue("email", employee.employee.email)
+          
+         } }
+          className={clsx(
+            "mb-5 mr-5 flex-row items-center gap-3 w-full"
+          )}
+        >
+          <View className={clsx("relative  ")}>
+            <Image
+              className={clsx("absolute left-0  top-0 h-10 w-10  rounded-full")}
+              source={require("../asset/avatar-load.png")}
+
+            />
+            <Image
+              source={{ uri: employee.employee.avatar }}
+              className={clsx(" h-10 w-10 rounded-full ")}
+            />
+
+          </View>
+          <View>
+            <Text className="text-base font-semibold text-basic-black">
+              {employee.employee?.name} {employee.employee?.surname}
+            </Text>
+            <Text className="text-xs  text-gray-500">
+              {employee.employee.email}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+
+      </View>
+
+    )
+
+  }
 
   return (
     <Modal
@@ -127,7 +174,28 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
           />
           {errors.email && <ErrorText message={errors.email?.message} />}
         </View>
+        {employeeList.length > 0 && (
+
+          <FlatList
+
+            data={employeeList}
+            className="pt-4"
+            showsVerticalScrollIndicator={true}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <Employee
+                employee={item}
+              />
+            )}
+            ListFooterComponent={<View className="h-20" />}
+
+
+          />
+        )}
+
       </View>
+
+
     </Modal>
   );
 };

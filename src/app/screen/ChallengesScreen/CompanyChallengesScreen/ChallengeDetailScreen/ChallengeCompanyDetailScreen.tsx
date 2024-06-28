@@ -34,7 +34,7 @@ import {
 } from "../../../../service/challenge";
 import { useTabIndex } from "../../../../hooks/useTabIndex";
 
-import ParticipantsTab from "./ParticipantsTab";
+import ParticipantsCompanyTab from "./ParticipantsCompanyTab";
 import CompanyCoachTab from "./CompanyCoachTab";
 import CompanySkillsTab from "./CompanySkillsTab";
 import CompanyCoachCalendarTabCompanyView from "./CompanyCoachCalendarTabCompanyView";
@@ -52,6 +52,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/Con
 import TaskAltIcon from "./assets/task-alt.svg";
 import TaskAltGrayIcon from "./assets/task-alt-gray.svg";
 import { LAYOUT_THRESHOLD } from "../../../../common/constants";
+import { useEmployeeListStore } from "../../../../store/company-data-store";
 
 export type ChallengeCompanyDetailScreenNavigationProps =
   NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
@@ -71,6 +72,9 @@ export const ChallengeCompanyDetailScreen: FC<
   const [participantList, setParticipantList] = useState(
     challengeData?.participants || []
   );
+  const { getEmployeeList } = useEmployeeListStore();
+  const employeeList = getEmployeeList();
+  console.log("🚀 ~ employeeList:", employeeList)
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
@@ -340,6 +344,7 @@ export const ChallengeCompanyDetailScreen: FC<
   }, [shouldScreenRefresh]);
 
   useEffect(() => {
+    console.log(111)
     fetchParticipants();
   }, []);
 
@@ -358,7 +363,7 @@ export const ChallengeCompanyDetailScreen: FC<
       case CHALLENGE_TABS_KEY.DESCRIPTION:
         return <DescriptionTab challengeData={challengeData} />;
       case CHALLENGE_TABS_KEY.PARTICIPANTS:
-        return <ParticipantsTab participant={participantList as any} />;
+        return <ParticipantsCompanyTab participant={participantList as any} challengeData={challengeData} fetchParticipants={fetchParticipants} employeeList={employeeList} />;
       case CHALLENGE_TABS_KEY.SKILLS:
         return (
           <CompanySkillsTab

@@ -46,6 +46,8 @@ import ChoosePackageScreen from "./ChoosePackageScreen";
 import CartScreen from "./CartScreen";
 import CompanyCartScreen from "./CompanyCartScreen";
 import { useCreateChallengeDataStore } from "../../store/create-challenge-data-store";
+import AddNewParticipantScreen from "../ProfileScreen/Company/AddNewParticipantScreen";
+import { useGetListEmployee } from "../../hooks/useGetCompany";
 
 const CreateChallengeStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -222,6 +224,10 @@ const CreateChallengeScreenMain = () => {
 };
 
 const CreateChallengeScreen = () => {
+  const { getUserProfile } = useUserProfileStore();
+  const currentUser = getUserProfile();
+  const isCompany = currentUser?.companyAccount;
+  if(isCompany)  useGetListEmployee();
   const { t } = useTranslation();
   const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
 
@@ -238,6 +244,13 @@ const CreateChallengeScreen = () => {
         component={CreateChallengeScreenMain}
         options={() => ({
           headerTitle: () => <AppTitle title={t("top_nav.create_challenge")} />,
+        })}
+      />
+      <CreateChallengeStack.Screen
+        name="AddNewParticipantScreen"
+        component={AddNewParticipantScreen}
+        options={({ navigation }) => ({
+          headerShown: false,
         })}
       />
       <CreateChallengeStack.Screen

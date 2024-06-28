@@ -81,6 +81,7 @@ const SCREENS_TO_HIDE_TAB_BAR = [
   "EditScheduleScreen",
   "AddScheduleLinkScreen",
   "AddNewEmployeeScreen",
+  "AddNewParticipantScreen"
 ];
 
 const BottomNavBar: FC<IBottomNavBarProps> = () => {

@@ -285,6 +285,7 @@
     }
   },
   "new_challenge_screen": {
+    "add_participant": "E partecipante",
     "new_challenge": "Nuova sfida",
     "new_certified_challenge": "Nuova sfida certificata",
     "next": "Avanti",
@@ -366,6 +367,19 @@
     "edit_success": "La tua sfida è stata aggiornata con successo"
   },
   "dialog": {
+    "remove_participant": {
+      "title": "Vuoi rimuovere questo partecipante dalla sfida?",
+      "description": "Non puoi annullare questa azione"
+      },
+    "err_maxPeople": {
+      "title": "Non puoi scegliere il pacchetto",
+      "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di 5 partecipanti."
+    },
+    "err_add_participant": {
+      "title": "Non puoi aggiungere un partecipante",
+      "description": "Siamo spiacenti! Questa email non esiste in azienda.",
+      "err_description": "Siamo spiacenti! Questa email esiste nella sfida"
+    },
     "register": {
       "title": "Verifica la tua email",
       "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
@@ -617,6 +631,11 @@
     "title": "Nuovo collaboratore",
     "email": "Email",
     "email_placeholder": "Inserisci l'email del collaboratore"
+  },
+  "add_participant_modal": {
+    "title": "Aggiungi partecipante",
+    "e-mail": "E-mail",
+    "email_placeholder": "Inserisci l'e-mail del partecipante"
   },
   "edit_profile_modal": {
     "title": "Modifica profilo",

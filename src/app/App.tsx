@@ -33,7 +33,7 @@ NativeWindStyleSheet.setOutput({
 // Initialize Firebase
 if (getApps().length === 0) {
   const firebaseConfig: FirebaseOptions = JSON.parse(
-    process.env.EXPO_FIREBASE_CONFIG || ""
+    process.env.EXPO_FIREBASE_CONFIG 
   );
   initializeApp(firebaseConfig);
 }

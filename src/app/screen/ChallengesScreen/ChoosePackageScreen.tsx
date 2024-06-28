@@ -143,7 +143,7 @@ const ChoosePackageScreen = () => {
     useCreateChallengeDataStore();
 
   const { setChatPackagePrice, setVideoPackagePrice } = usePriceStore();
-
+  const maxPeopleData= getCreateChallengeDataStore().maximumPeople
   const handleChoosePackage = (choosenPackage: IPackage) => {
     const packageData = {
       name: choosenPackage.name,
@@ -154,11 +154,20 @@ const ChoosePackageScreen = () => {
           ? translatedChatPackage.id
           : translatedVideoPackage.id,
       type: choosenPackage.type,
+      maxPeoplePackages:      choosenPackage.type === "chat" ? 5: 10,
     };
     setCreateChallengeDataStore({
       ...getCreateChallengeDataStore(),
       package: packageData.id,
     });
+    if (maxPeopleData > packageData.maxPeoplePackages) {
+
+      GlobalDialogController.showModal({
+        title: t("dialog.err_maxPeople.title"),
+        message: t("dialog.err_maxPeople.description",{max_people:packageData.maxPeoplePackages}),
+      });
+      return;
+    }
     if (isCurrentUserCompany) {
       navigation.navigate("CompanyCartScreen", {
         choosenPackage: choosenPackage,
@@ -189,12 +198,14 @@ const ChoosePackageScreen = () => {
             data.map((item) => {
               return {
                 ...item,
+        
                 name:
                   item.type === "chat" ? chatPackage.name : videoPackage.name,
                 caption:
                   item.type === "chat"
                     ? chatPackage.caption
-                    : videoPackage.caption,
+                    : videoPackage.caption
+               
               };
             })
           );

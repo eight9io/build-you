@@ -8,6 +8,7 @@ export interface IPackage {
   type: PACKAGE_TYPE;
   formattedPrice: string;
   check: number;
+  maxPeoplePackages: number;
 }
 
 export enum PACKAGE_TYPE {

@@ -2,10 +2,10 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import React, { FC, useLayoutEffect, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -24,7 +24,11 @@ import { useCreateChallengeDataStore } from "../../../../store/create-challenge-
 import { useUserProfileStore } from "../../../../store/user-store";
 import { ICreateChallenge } from "../../../../types/challenge";
 import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
-
+import Button from "../../../../component/common/Buttons/Button";
+import AddParticipantIcon from "../../../../component/asset/addParticipant.svg";
+import { useEmployeeListStore } from "../../../../store/company-data-store";
+import { EmployeesItem } from "../../../../component/Profile/ProfileTabs/Company/Employees/Employees";
+import { use } from "i18next";
 interface ICreateChallengeForm
   extends Omit<ICreateChallenge, "achievementTime"> {
   achievementTime: Date;
@@ -32,6 +36,7 @@ interface ICreateChallengeForm
   public: boolean;
   maximumPeople: number | undefined;
   softSkills: ISoftSkillsInput[];
+  usersList: string[];
 }
 
 interface ISoftSkillsInput {
@@ -63,7 +68,16 @@ const CreateCertifiedCompanyChallengeScreen: FC<
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
   const isCurrentUserCompany = currentUser?.companyAccount;
-  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
+  const { setCreateChallengeDataStore, getCreateChallengeDataStore } = useCreateChallengeDataStore();
+  const challengeDataStore = getCreateChallengeDataStore();
+  const { getEmployeeList, setEmployeeList } = useEmployeeListStore();
+  const employeeList = getEmployeeList();
+  const [participantList, setParticipantList] = useState<any[]>([]);
+  useEffect(() => {
+    setParticipantList(challengeDataStore?.usersList.map((id: string) => employeeList.find((employee) => employee.id === id)));
+    setValue("usersList", challengeDataStore?.usersList);
+  }
+    , [challengeDataStore])
 
   const {
     control,
@@ -81,6 +95,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       public: false,
       image: "",
       softSkills: [],
+      usersList: []
     },
     resolver: yupResolver(
       CreateCertifiedCompanyChallengeValidationSchema()
@@ -98,6 +113,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
         skill: label,
       };
     });
+
     setCreateChallengeDataStore({
       ...restData,
       softSkills: softSkillsWithSkillLabel,
@@ -106,6 +122,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     setIsLoading(false);
     setTimeout(() => {
       navigation.navigate("ChoosePackageScreen");
+
     }, 500);
   };
 
@@ -152,7 +169,27 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       ),
     });
   }, []);
-
+  const AddParticipantButton = () => {
+    return (
+      <View className="relative pb-4 ">
+        <View className="h-16 ">
+          <Button
+            title={t("challenge_detail_screen.add") as string}
+            containerClassName="bg-gray-light w-16 !rounded-xl py-4 "
+            textClassName="text-black text-md font-semibold  ml-2"
+            labelClassName="!flex-col justify-center items-center"
+            Icon={<AddParticipantIcon />}
+            onPress={() => navigation.navigate("AddNewParticipantScreen")}
+          />
+        </View>
+      </View>
+    );
+  };
+  const removeItem = (id) => {
+    const listParticipant = challengeDataStore?.usersList.filter((item) => item !== id);
+    setCreateChallengeDataStore({ usersList: listParticipant });
+    
+  }
   return (
     <SafeAreaView className="flex flex-1 flex-col bg-white">
       <CustomActivityIndicator isVisible={isLoading} />
@@ -374,6 +411,29 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                     {t("image_picker.upload_a_video_waiting") as string}
                   </Text>
                 )}
+              </View>
+              <View className="mt-5">
+                <Text className="mb-3 text-md font-semibold text-primary-default">
+                  {t("new_challenge_screen.add_participant")}
+                </Text>
+                {employeeList.length > 0 && <View className="flex flex-wrap  flex-row  px-4 my-3" style={{ gap: 16 }}>
+                  {participantList.map((participant, index) => 
+                    <EmployeesItem
+                      key={index}
+                      item={participant}
+                      isCompany={currentUser?.companyAccount}
+                      layoutClassName="flex-col gap-1 "
+                      sizeImg="h-14 w-14"
+                      isOnlyName={true}
+                      isBinIconTopRight={true}
+                      removeItem={removeItem}
+                      listItem={challengeDataStore?.usersList}
+                    />
+                    )}
+
+
+                </View>}
+                <AddParticipantButton />
               </View>
             </View>
             <View className="h-20" />

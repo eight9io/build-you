@@ -1,3 +1,4 @@
+import { use } from "i18next";
 import { create } from "zustand";
 
 export interface CreateChallengeDataStore {
@@ -8,7 +9,7 @@ export interface CreateChallengeDataStore {
 
 export const useCreateChallengeDataStore = create<CreateChallengeDataStore>(
   (set, get) => ({
-    formData: null,
+    formData: {usersList :[]},
     setCreateChallengeDataStore: (value) => {
       set({ formData: value });
     },

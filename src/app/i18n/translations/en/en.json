@@ -285,6 +285,7 @@
     }
   },
   "new_challenge_screen": {
+    "add_participant": "Add participant",
     "new_challenge": "New challenge",
     "new_certified_challenge": "New certified challenge",
     "next": "Next",
@@ -366,6 +367,19 @@
     "edit_success": "Your challenge has been updated successfully"
   },
   "dialog": {
+    "remove_participant": {
+      "title": "Do you want to remove this participant from the challenge?",
+      "description": "You cannot undo this action"
+    },
+    "err_maxPeople": {
+      "title": "You can't choose the package",
+      "description": "Sorry! This package is limited to a maximum of {{max_people}} participants."
+    },
+    "err_add_participant": {
+      "title": "You can't add a participant",
+      "description": "Sorry! This email does not exist in the company.",
+      "err_description": "Sorry! This email  exist in the challenge"
+    },
     "register": {
       "title": "Verify your email",
       "description": "Please check your email and click the link to activate your account."
@@ -616,6 +630,11 @@
     "title": "New employee",
     "email": "Email",
     "email_placeholder": "Enter employee email"
+  },
+  "add_participant_modal": {
+    "title": "Add participant",
+    "email": "Email",
+    "email_placeholder": "Enter participant email"
   },
   "edit_profile_modal": {
     "title": "Edit profile",

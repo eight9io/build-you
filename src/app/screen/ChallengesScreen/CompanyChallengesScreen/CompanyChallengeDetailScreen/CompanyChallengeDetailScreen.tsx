@@ -26,6 +26,7 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { useRefresh } from "../../../../context/refresh.context";
+import { useGetListEmployee } from "../../../../hooks/useGetCompany";
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -109,6 +110,7 @@ const CompanyChallengeDetailScreen = ({
   route: any;
   navigation: CompanyChallengeDetailScreenNavigationProp;
 }) => {
+  useGetListEmployee();
   const { t } = useTranslation();
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);

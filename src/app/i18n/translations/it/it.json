@@ -367,13 +367,17 @@
     "edit_success": "La tua sfida è stata aggiornata con successo"
   },
   "dialog": {
+    "remove_participant": {
+ "title": "Vuoi rimuovere questo partecipante dalla sfida?",
+ "description": "Non puoi annullare questa azione"
+ },
     "register": {
       "title": "Verifica la tua email",
       "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
     },
     "err_maxPeople": {
-      "title": "You can't choose the package",
-      "description": "Sorry! This package is limited to a maximum of 5 participants."
+      "title": "Non puoi scegliere il pacchetto",
+      "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di 5 partecipanti."
     },
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",

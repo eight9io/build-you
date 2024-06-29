@@ -10,11 +10,13 @@ import { extractSkillsFromChallengeData } from "../../../../utils/challenge";
 interface ISingleDescriptionProps {
   title: string;
   description: string;
+
 }
 
 interface IDescriptionTabProps {
   challengeData: IChallenge;
   maxPepleCanJoin?: number;
+  participant?: any;
 }
 
 const SingleDescription: FC<ISingleDescriptionProps> = ({
@@ -48,6 +50,7 @@ const renderSkills = (skills: ISoftSkill[]) => {
 export const DescriptionTab: FC<IDescriptionTabProps> = ({
   challengeData,
   maxPepleCanJoin,
+  participant
 }) => {
   const { t } = useTranslation();
   const { id, achievementTime, benefits, image, goal, reasons } = challengeData;
@@ -75,9 +78,8 @@ export const DescriptionTab: FC<IDescriptionTabProps> = ({
       {maxPepleCanJoin && (
         <SingleDescription
           title={t("challenge_description_tab.participants") || "Participants"}
-          description={`${
-            challengeData?.participants?.length || 0
-          }/${maxPepleCanJoin}`}
+          description={`${participant?.length || 0
+            }/${maxPepleCanJoin}`}
         />
       )}
       {skillsToRate.length > 0 && (

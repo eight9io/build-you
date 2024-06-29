@@ -158,7 +158,11 @@ export type RootStackParamList = {
   };
   AddScheduleLinkScreen: undefined;
   AddNewEmployeeScreen: undefined;
-  AddNewParticipantScreen: undefined;
+  AddNewParticipantScreen: {
+    challengeId?: string;
+    fetchParticipants?: () => void;
+
+  };
 };
 
 export type NavigationRouteProps<RouteName extends keyof RootStackParamList> =

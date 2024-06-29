@@ -53,6 +53,7 @@ import TaskAltIcon from "./assets/task-alt.svg";
 import TaskAltGrayIcon from "./assets/task-alt-gray.svg";
 import { LAYOUT_THRESHOLD } from "../../../../common/constants";
 import { useEmployeeListStore } from "../../../../store/company-data-store";
+import { useIsFocused } from "@react-navigation/native";
 
 export type ChallengeCompanyDetailScreenNavigationProps =
   NativeStackNavigationProp<RootStackParamList, "ChallengeCompanyDetailScreen">;
@@ -62,6 +63,7 @@ interface ICompanyChallengeDetailScreenProps {
   shouldScreenRefresh: boolean;
   route: NavigationRouteProps<"CompanyChallengeDetailScreen">;
   setShouldScreenRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  challengeId?: string;
 }
 
 export const ChallengeCompanyDetailScreen: FC<
@@ -74,7 +76,6 @@ export const ChallengeCompanyDetailScreen: FC<
   );
   const { getEmployeeList } = useEmployeeListStore();
   const employeeList = getEmployeeList();
-  console.log("🚀 ~ employeeList:", employeeList)
   const [challengeState, setChallengeState] =
     useState<ICertifiedChallengeState>({} as ICertifiedChallengeState);
 
@@ -111,7 +112,7 @@ export const ChallengeCompanyDetailScreen: FC<
   const isCertifiedChallenge = challengeData?.type === "certified";
   const isVideoChallenge = challengeData?.package?.type === "videocall";
   const isCurrentUserCoach = currentUser.isCoach;
-
+  const [isLoadingParticipant, setIsLoadingParticipant] = useState(false);
   const { index, setTabIndex } = useTabIndex({ tabRoutes, route });
 
   useEffect(() => {
@@ -135,11 +136,14 @@ export const ChallengeCompanyDetailScreen: FC<
   }, []);
 
   const fetchParticipants = async () => {
+    setIsLoadingParticipant(true);
     try {
       const response = await getChallengeParticipants(challengeId);
       setParticipantList(response.data);
+      setIsLoadingParticipant(false);
     } catch (error) {
       console.error("Error occurred while fetching participants:", error);
+      setIsLoadingParticipant(false);
     }
   };
 
@@ -159,8 +163,8 @@ export const ChallengeCompanyDetailScreen: FC<
     challengeOwner.id === currentUser?.id
       ? challengeData.status
       : isJoined
-      ? isCurrentUserParticipant?.challengeStatus
-      : challengeData.status;
+        ? isCurrentUserParticipant?.challengeStatus
+        : challengeData.status;
   const isChallengeCompleted =
     challengeStatus === "done" || challengeStatus === "closed";
   const isChallengeInProgress =
@@ -175,8 +179,8 @@ export const ChallengeCompanyDetailScreen: FC<
     if (isCertifiedChallenge) {
       const shouldPreventJoin =
         challengeState.intakeStatus &&
-        challengeState.intakeStatus !== "init" &&
-        challengeState.intakeStatus !== "open"
+          challengeState.intakeStatus !== "init" &&
+          challengeState.intakeStatus !== "open"
           ? true
           : false;
 
@@ -337,6 +341,7 @@ export const ChallengeCompanyDetailScreen: FC<
 
     setTabRoutes(tempTabRoutes);
   }, []);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (!shouldScreenRefresh) return;
@@ -344,9 +349,8 @@ export const ChallengeCompanyDetailScreen: FC<
   }, [shouldScreenRefresh]);
 
   useEffect(() => {
-    console.log(111)
     fetchParticipants();
-  }, []);
+  }, [challengeId, isFocused]);
 
   const renderScene = ({ route }) => {
     switch (route.key) {
@@ -361,9 +365,9 @@ export const ChallengeCompanyDetailScreen: FC<
           />
         );
       case CHALLENGE_TABS_KEY.DESCRIPTION:
-        return <DescriptionTab challengeData={challengeData} />;
+        return <DescriptionTab challengeData={challengeData} maxPepleCanJoin={challengeData?.maximumPeople} participant={participantList as any} />;
       case CHALLENGE_TABS_KEY.PARTICIPANTS:
-        return <ParticipantsCompanyTab participant={participantList as any} challengeData={challengeData} fetchParticipants={fetchParticipants} employeeList={employeeList} />;
+        return <ParticipantsCompanyTab participant={participantList as any} challengeData={challengeData} fetchParticipants={fetchParticipants} isLoadingParticipant={isLoadingParticipant} />;
       case CHALLENGE_TABS_KEY.SKILLS:
         return (
           <CompanySkillsTab
@@ -422,14 +426,12 @@ export const ChallengeCompanyDetailScreen: FC<
               <View className="flex-1">
                 <Button
                   isDisabled={false}
-                  containerClassName={`px-3 py-[11px] ${
-                    isJoined
+                  containerClassName={`px-3 py-[11px] ${isJoined
                       ? "border border-gray-dark flex items-center justify-center px-5"
                       : "bg-primary-default flex items-center justify-center px-5"
-                  }`}
-                  textClassName={`text-center text-md font-semibold ${
-                    isJoined ? "text-gray-dark" : "text-white"
-                  } `}
+                    }`}
+                  textClassName={`text-center text-md font-semibold ${isJoined ? "text-gray-dark" : "text-white"
+                    } `}
                   disabledContainerClassName="bg-gray-light flex items-center justify-center px-5"
                   disabledTextClassName="text-center text-md font-semibold text-gray-medium"
                   title={
@@ -442,7 +444,7 @@ export const ChallengeCompanyDetailScreen: FC<
               </View>
             ) : null}
             {!!currentUserInParticipant ||
-            challengeOwner?.id === currentUser?.id ? (
+              challengeOwner?.id === currentUser?.id ? (
               <View>
                 {isChallengeCompleted ? (
                   <TouchableOpacity
@@ -487,14 +489,12 @@ export const ChallengeCompanyDetailScreen: FC<
             <View className="flex-1">
               <Button
                 isDisabled={false}
-                containerClassName={`px-3 py-[11px] ${
-                  isJoined
+                containerClassName={`px-3 py-[11px] ${isJoined
                     ? "border border-gray-dark flex items-center justify-center"
                     : "bg-primary-default flex items-center justify-center"
-                }`}
-                textClassName={`text-center text-md font-semibold ${
-                  isJoined ? "text-gray-dark" : "text-white"
-                } `}
+                  }`}
+                textClassName={`text-center text-md font-semibold ${isJoined ? "text-gray-dark" : "text-white"
+                  } `}
                 disabledContainerClassName="bg-gray-light flex items-center justify-center px-3 py-[11px]"
                 disabledTextClassName="text-center text-md font-semibold text-gray-medium"
                 title={
@@ -507,7 +507,7 @@ export const ChallengeCompanyDetailScreen: FC<
             </View>
           ) : null}
           {!!currentUserInParticipant ||
-          challengeOwner?.id === currentUser?.id ? (
+            challengeOwner?.id === currentUser?.id ? (
             <View className="flex-1">
               {isChallengeCompleted ? (
                 <TouchableOpacity

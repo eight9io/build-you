@@ -22,6 +22,7 @@ import CoachRateChallengeScreen from "../CoachRateChallengeScreen";
 import CoachRateCompanyChallengeScreen from "../CoachRateCompanyChallengeScreen";
 import CreateCompanyChallengeScreen from "./CreateCompanyChallengeScreen/CreateNewCompanyChallenge";
 import CreateCertifiedCompanyChallengeScreen from "./CreateCertifiedCompanyChallengeScreen/CreateCertifiedCompanyChallengeScreen";
+import AddNewParticipantScreen from "../../ProfileScreen/Company/AddNewParticipantScreen";
 
 const CompanyChallengesStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -55,6 +56,13 @@ const CompanyChallengesNavigator = () => {
                 withBackIcon
               />
             ),
+          })}
+        />
+        <CompanyChallengesStack.Screen
+          name="AddNewParticipantScreen"
+          component={AddNewParticipantScreen}
+          options={({ navigation }) => ({
+            headerShown: false,
           })}
         />
 
@@ -191,7 +199,7 @@ const CompanyChallengesNavigator = () => {
                 }
               />
             ),
-            headerLeft: ({}) => (
+            headerLeft: ({ }) => (
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 className="ml-3"
@@ -214,7 +222,7 @@ const CompanyChallengesNavigator = () => {
                 }
               />
             ),
-            headerLeft: ({}) => (
+            headerLeft: ({ }) => (
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 className="ml-3"

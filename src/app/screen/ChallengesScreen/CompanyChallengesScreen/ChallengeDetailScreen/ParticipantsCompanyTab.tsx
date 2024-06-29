@@ -1,14 +1,17 @@
 import clsx from "clsx";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  View,
+} from "react-native";
 import {
   NavigationProp,
-  StackActions,
   useNavigation,
 } from "@react-navigation/native";
-
-import { IChallenge, ISoftSkill } from "../../../../types/challenge";
+import { IChallenge } from "../../../../types/challenge";
 import { RootStackParamList } from "../../../../navigation/navigation.type";
 
 import MarkDone from "./assets/mark_done.svg";
@@ -16,7 +19,11 @@ import Empty from "./assets/emptyFollow.svg";
 import { EmployeesItem } from "../../../../component/Profile/ProfileTabs/Company/Employees/Employees";
 import { useUserProfileStore } from "../../../../store/user-store";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog/ConfirmDialog";
-
+import Button from "../../../../component/common/Buttons/Button";
+import AddIcon from "../../../../component/asset/add.svg";
+import { serviceRemoveParticipants } from "../../../../service/challenge";
+import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
+import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 interface IParticipantsTabProps {
   participant?: {
     id: string;
@@ -27,19 +34,20 @@ interface IParticipantsTabProps {
   }[];
   fetchParticipants?: () => void;
   challengeData: IChallenge;
-  employeeList: any;
+  isLoadingParticipant?: boolean;
 }
 
-const ParticipantsTab: FC<IParticipantsTabProps> = ({
+const ParticipantsCompanyTab: FC<IParticipantsTabProps> = ({
   participant = [],
   fetchParticipants,
   challengeData,
-  employeeList
+  isLoadingParticipant,
 }) => {
   const [isShowModalRemove, setIsShowModalRemove] = useState({
     isShow: false,
     id: "",
   });
+
   const { getUserProfile } = useUserProfileStore();
   const userProfile = getUserProfile();
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -47,51 +55,76 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
   const { t } = useTranslation();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const handlePushToOtherUserProfile = (userId: string) => {
-    const pushAction = StackActions.push("OtherUserProfileScreen", {
-      userId,
-    });
-    navigation.dispatch(pushAction);
-  };
   const removeEmployee = async (participantId: any) => {
-    console.log("🚀 ~ removeEmployee ~ participantId:", participantId)
-    // serviceRemoveParticipants(participantId, challengeData.id)
-    //   .then(async (response) => {
-    //     await fetchParticipants()
-    //     GlobalToastController.showModal({
-    //       message:
-    //         t("toast.delete_participant_success") ||
-    //         "Participant deleted successfully!",
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("🚀 ~ removeEmployee ~ err:", err)
-    //     GlobalDialogController.showModal({
-    //       title: t("dialog.err_title") || "Error",
-    //       message: t("errorMessage:500") as string,
-    //     });
-    //   })
-    //   .finally(() => {
-    //     setIsShowModalRemove({ isShow: false, id: "" });
-    //   }
-    //   );
+    serviceRemoveParticipants(participantId, challengeData.id)
+      .then(async (response) => {
+        await fetchParticipants();
+        GlobalToastController.showModal({
+          message:
+            t("toast.delete_participant_success") ||
+            "Participant deleted successfully!",
+        });
+      })
+      .catch((err) => {
+        GlobalDialogController.showModal({
+          title: t("dialog.err_title") || "Error",
+          message: t("errorMessage:500") as string,
+        });
+      })
+      .finally(() => {
+        setIsShowModalRemove({ isShow: false, id: "" });
+      });
+  };
+
+  const AddNewChallengeEmployeesButton = () => {
+    const onAddNewEmployeeBtnPress = () => {
+      navigation.navigate("AddNewParticipantScreen", {
+        challengeId: challengeData.id,
+      });
+    };
+
+    return (
+      <View className="relative mt-4">
+        <View className="h-12 ">
+          <Button
+            title={t("challenge_detail_screen.add_new_employees") as string}
+            containerClassName="bg-gray-light"
+            textClassName="text-black text-md font-semibold  ml-2"
+            Icon={<AddIcon fill={"black"} />}
+            onPress={onAddNewEmployeeBtnPress}
+          />
+        </View>
+      </View>
+    );
   };
   return (
     <View className={clsx("flex-1 px-4")}>
+      {participant.length < challengeData.maximumPeople && <AddNewChallengeEmployeesButton />}
+
       {participant.length > 0 && (
         <FlatList
+          contentContainerStyle={{
+            paddingHorizontal: 16,
+            rowGap: 20,
+          }}
+          ListHeaderComponent={
+            challengeData?.maximumPeople ? (
+              <Text className="text-h6 font-normal leading-6 text-gray-dark">
+                {participant?.length || 0}/{challengeData.maximumPeople}
+              </Text>) : null
+          }
           data={participant}
-          className="pt-4"
+          className="pt-2"
           showsVerticalScrollIndicator={true}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => {
             return (
               <EmployeesItem
-              item={item}
-              isCompany={userProfile?.companyAccount}
-              navigation={navigation}
-              setIsShowModal={setIsShowModalRemove}
-            />
+                item={item}
+                isCompany={userProfile?.companyAccount}
+                navigation={navigation}
+                setIsShowModal={setIsShowModalRemove}
+              />
             );
           }}
           ListFooterComponent={<View className="h-20" />}
@@ -111,7 +144,7 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
           </Text>
         </View>
       )}
-        <ConfirmDialog
+      <ConfirmDialog
         title={t("dialog.remove_participant.title") || ""}
         description={t("dialog.remove_participant.description") || ""}
         isVisible={isShowModalRemove.isShow}
@@ -120,8 +153,13 @@ const ParticipantsTab: FC<IParticipantsTabProps> = ({
         confirmButtonLabel={t("dialog.remove") || ""}
         onConfirm={() => removeEmployee(isShowModalRemove.id)}
       />
+      {isLoadingParticipant && (
+        <View className="flex flex-1 items-center justify-center">
+          <ActivityIndicator size="large" />
+        </View>
+      )}
     </View>
   );
 };
 
-export default ParticipantsTab;
+export default ParticipantsCompanyTab;

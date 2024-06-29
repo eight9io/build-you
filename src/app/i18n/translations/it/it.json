@@ -370,7 +370,7 @@
     "remove_participant": {
       "title": "Vuoi rimuovere questo partecipante dalla sfida?",
       "description": "Non puoi annullare questa azione"
-      },
+    },
     "err_maxPeople": {
       "title": "Non puoi scegliere il pacchetto",
       "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di 5 partecipanti."
@@ -491,6 +491,7 @@
     "err_join_in_progress_challenge": "Non puoi partecipare a questa sfida perché la sfida è in corso."
   },
   "toast": {
+    "delete_participant_success": "Participant deleted successfully! ",
     "joined_success": "Ti sei unito alla sfida!",
     "leave_success": "Hai abbandonato la sfida!",
     "delete_success": "Commento eliminato con successo!",

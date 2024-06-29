@@ -490,6 +490,7 @@
     "err_join_in_progress_challenge": "You can not join this challenge, it is in progress."
   },
   "toast": {
+    "delete_participant_success": "Participant deleted successfully! ",
     "joined_success": "You have joined the challenge!",
     "leave_success": "You have left the challenge!",
     "delete_success": "Delete comment success!",

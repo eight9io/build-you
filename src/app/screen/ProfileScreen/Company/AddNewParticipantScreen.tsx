@@ -18,8 +18,11 @@ import ErrorText from "../../../component/common/ErrorText";
 import { EmployeesItem } from "../../../component/Profile/ProfileTabs/Company/Employees/Employees";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { useCreateChallengeDataStore } from "../../../store/create-challenge-data-store";
+import { getChallengeParticipants, serviceAddParticipants } from "../../../service/challenge";
+import { StackActions } from "@react-navigation/native";
 
-export const AddNewParticipantScreen = () => {
+export const AddNewParticipantScreen = ({ route }) => {
+  const challengeId = route?.params?.challengeId;
 
   const { t } = useTranslation();
   const navigation = useNav();
@@ -46,41 +49,86 @@ export const AddNewParticipantScreen = () => {
   });
 
   // add company id
-  const { setCreateChallengeDataStore ,getCreateChallengeDataStore} = useCreateChallengeDataStore();
+  const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
+    useCreateChallengeDataStore();
   const challengeDataStore = getCreateChallengeDataStore();
-  
+
   const { getEmployeeList } = useEmployeeListStore();
   const employeeList = getEmployeeList();
   const [suggestions, setSuggestions] = useState([]);
+  const [participantList, setParticipantList] = useState([]
+  );
+  const fetchParticipants = async () => {
+    try {
+      const response = await getChallengeParticipants(challengeId);
+      setParticipantList(response.data);
+    } catch (error) {
+      console.error("Error occurred while fetching participants:", error);
+    }
+  };
   useEffect(() => {
+
     setSuggestions(employeeList);
-  }
-    , [employeeList])
+    if (challengeId) {
+      fetchParticipants();
+    }
+  }, [employeeList]);
   const onSubmit = (data: any) => {
     if (!userData?.id) {
       setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });
       return;
     }
-    const participant = employeeList.find((item: any) => item.email === data.email);
-    const isParticipant = challengeDataStore?.usersList.find((item: any) => item === participant?.id);
-    if (participant) {
-      if (isParticipant) {
+    const participant = employeeList.find(
+      (item: any) => item.email === data.email
+    );
+    if (challengeId) {
+      const isParticipantOfList = participantList.find((item: any) => item.email === participant.email);
+      if (isParticipantOfList) {
         GlobalDialogController.showModal({
           title: t("dialog.err_add_participant.title"),
           message: t("dialog.err_add_participant.err_description"),
         });
         return;
+      } else {
+        serviceAddParticipants(participant?.id, challengeId)
+          .then(async (res) => {
+            if (res.status === 200 || res.status === 201) {
+              fetchParticipants()
+            }
+            onClose();
+          })
+          .catch((err) => {
+            console.log("🚀 ~ handleAddParticipant ~ err:", err)
+            GlobalDialogController.showModal({
+              title: t("dialog.err_title") || "Error",
+              message: t("errorMessage:500") as string,
+            });
+          });
+
       }
-
-      setCreateChallengeDataStore({ usersList: [...(challengeDataStore?.usersList || []),participant.id] });
-      reset();
-      onClose();
     } else {
-      GlobalDialogController.showModal({
-        title: t("dialog.err_add_participant.title"),
-        message: t("dialog.err_add_participant.description"),
-      });
-
+      const isParticipant = challengeDataStore?.usersList.find(
+        (item: any) => item === participant?.id
+      );
+      if (participant) {
+        if (isParticipant) {
+          GlobalDialogController.showModal({
+            title: t("dialog.err_add_participant.title"),
+            message: t("dialog.err_add_participant.err_description"),
+          });
+          return;
+        }
+        setCreateChallengeDataStore({
+          usersList: [...(challengeDataStore?.usersList || []), participant.id],
+        });
+        reset();
+        onClose();
+      } else {
+        GlobalDialogController.showModal({
+          title: t("dialog.err_add_participant.title"),
+          message: t("dialog.err_add_participant.description"),
+        });
+      }
     }
   };
 
@@ -88,12 +136,14 @@ export const AddNewParticipantScreen = () => {
     navigation.goBack();
   };
   const onChangeEmail = (text) => {
-    const filteredSuggestions = employeeList.filter(item => item.email.includes(text));
+    const filteredSuggestions = employeeList.filter((item) =>
+      item.email.includes(text)
+    );
     setSuggestions(filteredSuggestions);
   };
   const handleSetValue = (email) => {
     setValue("email", email);
-  }
+  };
   return (
     <View className=" flex h-full rounded-t-xl bg-white px-4">
       <ConfirmDialog
@@ -142,9 +192,7 @@ export const AddNewParticipantScreen = () => {
         {errors.email ? <ErrorText message={errors.email?.message} /> : null}
       </View>
       {suggestions.length > 0 && (
-
         <FlatList
-
           data={suggestions}
           className="pt-4"
           showsVerticalScrollIndicator={true}
@@ -155,7 +203,6 @@ export const AddNewParticipantScreen = () => {
               isCompany={userData?.companyAccount}
               onPress={handleSetValue}
               isDelete={false}
-
             />
           )}
           contentContainerStyle={{
@@ -164,8 +211,6 @@ export const AddNewParticipantScreen = () => {
             rowGap: 20,
           }}
           ListFooterComponent={<View className="h-20" />}
-
-
         />
       )}
     </View>

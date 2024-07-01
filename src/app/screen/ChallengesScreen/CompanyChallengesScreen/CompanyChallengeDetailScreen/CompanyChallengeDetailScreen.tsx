@@ -26,6 +26,8 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialog/GlobalDialogController";
 import { useRefresh } from "../../../../context/refresh.context";
+import { useGetListEmployee } from "../../../../hooks/useGetCompany";
+import { useIsFocused } from "@react-navigation/native";
 
 type CompanyChallengeDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -48,59 +50,59 @@ export const RightCompanyChallengeDetailOptions: FC<
   onEditChallengeBtnPress,
   setIsDeleteChallengeDialogVisible,
 }) => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  const { getUserProfile } = useUserProfileStore();
-  const currentUser = getUserProfile();
+    const { getUserProfile } = useUserProfileStore();
+    const currentUser = getUserProfile();
 
-  const challengeOwner = Array.isArray(challengeData?.owner)
-    ? challengeData?.owner[0]
-    : challengeData?.owner;
+    const challengeOwner = Array.isArray(challengeData?.owner)
+      ? challengeData?.owner[0]
+      : challengeData?.owner;
 
-  const currentUserInParticipant = challengeData?.participants?.find(
-    (participant) => participant.id === currentUser?.id
-  );
+    const currentUserInParticipant = challengeData?.participants?.find(
+      (participant) => participant.id === currentUser?.id
+    );
 
-  const isCurrentUserOwner = challengeOwner?.id === currentUser?.id;
+    const isCurrentUserOwner = challengeOwner?.id === currentUser?.id;
 
-  const challengeStatus =
-    challengeOwner?.id === currentUser?.id
-      ? challengeData?.status
-      : currentUserInParticipant?.challengeStatus;
-  const isChallengeCompleted =
-    challengeStatus === "done" || challengeStatus === "closed";
+    const challengeStatus =
+      challengeOwner?.id === currentUser?.id
+        ? challengeData?.status
+        : currentUserInParticipant?.challengeStatus;
+    const isChallengeCompleted =
+      challengeStatus === "done" || challengeStatus === "closed";
 
-  const onShare = async () => {
-    onShareChallengeLink(challengeData?.id);
-  };
+    const onShare = async () => {
+      onShareChallengeLink(challengeData?.id);
+    };
 
-  return (
-    <View>
-      <View className="-mt-1 flex flex-row items-center">
-        <View className="pl-4 pr-2">
-          <Button Icon={<ShareIcon />} onPress={onShare} />
+    return (
+      <View>
+        <View className="-mt-1 flex flex-row items-center">
+          <View className="pl-4 pr-2">
+            <Button Icon={<ShareIcon />} onPress={onShare} />
+          </View>
+
+          {isCurrentUserOwner ? (
+            <PopUpMenu
+              iconColor="#FF7B1D"
+              isDisabled={isChallengeCompleted}
+              options={[
+                {
+                  text: t("pop_up_menu.edit") as string,
+                  onPress: onEditChallengeBtnPress,
+                },
+                {
+                  text: t("pop_up_menu.delete") as string,
+                  onPress: () => setIsDeleteChallengeDialogVisible(true),
+                },
+              ]}
+            />
+          ) : null}
         </View>
-
-        {isCurrentUserOwner ? (
-          <PopUpMenu
-            iconColor="#FF7B1D"
-            isDisabled={isChallengeCompleted}
-            options={[
-              {
-                text: t("pop_up_menu.edit") as string,
-                onPress: onEditChallengeBtnPress,
-              },
-              {
-                text: t("pop_up_menu.delete") as string,
-                onPress: () => setIsDeleteChallengeDialogVisible(true),
-              },
-            ]}
-          />
-        ) : null}
       </View>
-    </View>
-  );
-};
+    );
+  };
 
 const CompanyChallengeDetailScreen = ({
   route,
@@ -109,6 +111,7 @@ const CompanyChallengeDetailScreen = ({
   route: any;
   navigation: CompanyChallengeDetailScreenNavigationProp;
 }) => {
+  useGetListEmployee();
   const { t } = useTranslation();
   const [isEditChallengeModalVisible, setIsEditChallengeModalVisible] =
     useState<boolean>(false);
@@ -289,6 +292,7 @@ const CompanyChallengeDetailScreen = ({
 
   // Use different useEffect to prevent re-render when setting refresh state
   useEffect(() => {
+
     if (!challengeId) return;
     try {
       httpInstance.get(`/challenge/one/${challengeId}`).then((res) => {
@@ -412,6 +416,7 @@ const CompanyChallengeDetailScreen = ({
           <ChallengeCompanyDetailScreen
             route={route}
             challengeData={challengeData}
+
             shouldScreenRefresh={shouldScreenRefresh}
             setShouldScreenRefresh={setShouldScreenRefresh}
           />

@@ -6,7 +6,7 @@ import Button from "../../../../common/Buttons/Button";
 import AddIcon from "../../../../asset/add.svg";
 import BinIcon from "../../../../asset/bin.svg";
 
-import AddNewEmployeeModal from "../../../../modal/company/AddNewEmployeeModal";
+import RemoveIcon from "../../../../asset/removeIcon.svg";
 import Empty from "../../../../asset/emptyFollow.svg";
 import clsx from "clsx";
 import { useUserProfileStore } from "../../../../../store/user-store";
@@ -23,13 +23,22 @@ import {
 import { fetchListEmployee } from "../../../../../utils/profile";
 import GlobalToastController from "../../../../common/Toast/GlobalToastController";
 import { useNav } from "../../../../../hooks/useNav";
+import { on } from "events";
 
 interface IEmployeesItemProps {
   item: any;
   isCompany?: boolean | null;
-  navigation: any;
+  navigation?: any;
   setIsShowModal?: any;
   userId?: string;
+  layoutClassName?: string;
+  sizeImg?: string;
+  isOnlyName?: boolean;
+  isBinIconTopRight?: boolean;
+  removeItem?: any;
+  listItem?: any;
+  onPress?: any;
+  isDelete?: boolean;
 }
 interface IEmployeeProps {
   employeeList?: any;
@@ -39,39 +48,63 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
   isCompany,
   navigation,
   setIsShowModal,
+  onPress,
+  isDelete = true,
+  layoutClassName,
+  sizeImg,
+  isOnlyName,
+  isBinIconTopRight = false,
+  removeItem,
+  listItem
+  
 }) => {
   return (
     <View>
-      <View className="flex flex-row items-center justify-between">
+          <View className={clsx("flex flex-row items-center justify-between")}>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() =>
-            // navigation.navigate('OtherUserProfileScreen', {
-            //   userId: item.id,
-            // })
-            // use push
-            navigation.push("OtherUserProfileScreen", {
+          {  navigation &&navigation.push("OtherUserProfileScreen", {
               userId: item.id,
             })
+          onPress && onPress(item.email)
           }
-          className="flex flex-1 flex-row items-center space-x-3"
+             
+       
+            
+          }
+          className={clsx("flex flex-1 flex-row items-center space-x-3 w-full",layoutClassName)}
         >
           <View className="relative">
             <Image
-              className={clsx("absolute left-0  top-0 h-10 w-10  rounded-full")}
+              className={clsx("absolute left-0  top-0 h-10 w-10  rounded-full",sizeImg)}
               source={require("../../../../asset/avatar-load.png")}
             />
             <Image
-              source={{ uri: item.avatar }}
-              className="h-10 w-10 rounded-full"
+              source={{ uri: item?.avatar }}
+              className={clsx("h-10 w-10 rounded-full",sizeImg)}
             />
+                {isCompany && isBinIconTopRight && <TouchableOpacity
+              className="absolute right-0 top-0"
+              onPress={() =>
+                removeItem(item.id)
+              }
+            >
+              <RemoveIcon /></TouchableOpacity>}
+            
           </View>
-          <Text className="pr-10 text-base font-semibold text-basic-black">
-            {item.name} {item.surname}
+          <View>
+          <Text className={clsx("pr-10 text-base font-semibold text-basic-black text-center",isOnlyName && 'pr-0')}>
+          {isOnlyName ? item?.name : `${item?.name} ${item?.surname}`}
+     
           </Text>
+          {!isDelete && <Text className="text-xs  text-gray-500">
+              {item.email}
+            </Text>}
+            </View>
         </TouchableOpacity>
 
-        {isCompany ? (
+        {isCompany && isDelete && !isBinIconTopRight ? (
           <TouchableOpacity
             onPress={() =>
               setIsShowModal && setIsShowModal({ isShow: true, id: item.id })

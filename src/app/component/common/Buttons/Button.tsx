@@ -13,6 +13,7 @@ interface IButtonProps {
   disabledTextClassName?: string;
   numberOfTextLines?: number;
   testID?: string;
+  labelClassName?: string;
 }
 
 const Button: FC<IButtonProps> = ({
@@ -26,6 +27,7 @@ const Button: FC<IButtonProps> = ({
   disabledContainerClassName,
   numberOfTextLines,
   testID,
+  labelClassName
 }) => {
   return (
     <TouchableOpacity
@@ -38,7 +40,7 @@ const Button: FC<IButtonProps> = ({
       disabled={isDisabled}
       testID={testID}
     >
-      <View className="flex-1 flex-row items-center justify-center">
+      <View className={clsx("flex-1 flex-row items-center justify-center",labelClassName)}>
         {Icon ? Icon : null}
         {title ? (
           <Text

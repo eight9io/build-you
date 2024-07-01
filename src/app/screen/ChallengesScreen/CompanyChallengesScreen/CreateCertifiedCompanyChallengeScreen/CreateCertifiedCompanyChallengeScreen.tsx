@@ -81,6 +81,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     handleSubmit,
     getValues,
     setValue,
+    watch,
+    
     formState: { errors },
   } = useForm<ICreateChallengeForm>({
     defaultValues: {
@@ -102,6 +104,14 @@ const CreateCertifiedCompanyChallengeScreen: FC<
 
   const onSubmit = async (data: ICreateCompanyChallenge) => {
     setIsLoading(true);
+    if(data.usersList.length > data.maximumPeople){
+      GlobalDialogController.showModal({
+        title: t("dialog.err_add_participant.title_max_join"),
+        message: t("dialog.err_add_participant.err_max_join"),
+      });
+      setIsLoading(false);
+      return;
+    }
     const { softSkills, usersList, ...restData } = data;
     const softSkillsWithSkillLabel = softSkills.map((softSkill) => {
       const { label, ...rest } = softSkill;
@@ -170,7 +180,9 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     });
   }, []);
   const AddParticipantButton = () => {
+    
     return (
+      
       <View className="relative pb-4 pt-0">
         <View className="h-12">
           <Button
@@ -449,7 +461,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                     keyExtractor={(item, index) => item.id}
                   />
                 )}
-                <AddParticipantButton />
+             {(participantList?.length !==0 && participantList?.length == watch('maximumPeople') )?null: <AddParticipantButton />}
+             
               </View>
             </View>
             <View className="h-20" />

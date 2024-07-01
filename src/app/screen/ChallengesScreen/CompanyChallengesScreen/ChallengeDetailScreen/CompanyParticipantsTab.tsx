@@ -132,7 +132,7 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
       {participants.length > 0 && (
         <FlatList
           ListHeaderComponent={
-            userProfile?.companyAccount ? (
+            participants?.length < challengeData?.maximumPeople   ? (
               <AddNewChallengeParticipantButton />
             ) : null
           }

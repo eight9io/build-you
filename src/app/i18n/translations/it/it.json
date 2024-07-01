@@ -382,7 +382,8 @@
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",
       "description": "Siamo spiacenti! Questa email non esiste in azienda.",
-      "err_description": "Siamo spiacenti! Questa email esiste nella sfida"
+      "err_description": "Siamo spiacenti! Questa email esiste nella sfida",
+        "err_max_join":"Il numero dei partecipanti è superiore al numero massimo di persone"
     },
     "logout": {
       "title": "Log out",

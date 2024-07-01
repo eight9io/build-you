@@ -93,10 +93,15 @@ export const EmployeesItem: FC<IEmployeesItemProps> = ({
               <RemoveIcon /></TouchableOpacity>}
             
           </View>
+          <View>
           <Text className={clsx("pr-10 text-base font-semibold text-basic-black text-center",isOnlyName && 'pr-0')}>
           {isOnlyName ? item?.name : `${item?.name} ${item?.surname}`}
+     
           </Text>
-          
+          {!isDelete && <Text className="text-xs  text-gray-500">
+              {item.email}
+            </Text>}
+            </View>
         </TouchableOpacity>
 
         {isCompany && isDelete && !isBinIconTopRight ? (

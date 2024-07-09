@@ -372,8 +372,8 @@
       "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
     },
     "err_maxPeople": {
-      "title": "You can't choose the package",
-      "description": "Sorry! This package is limited to a maximum of "
+      "title": "Non puoi scegliere il pacchetto",
+      "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di "
     },
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",

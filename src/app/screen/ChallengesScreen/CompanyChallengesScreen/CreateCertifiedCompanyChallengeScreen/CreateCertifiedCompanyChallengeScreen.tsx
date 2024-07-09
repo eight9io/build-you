@@ -81,6 +81,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     handleSubmit,
     getValues,
     setValue,
+    watch,
+
     formState: { errors },
   } = useForm<ICreateChallengeForm>({
     defaultValues: {
@@ -449,7 +451,10 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                     keyExtractor={(item, index) => item.id}
                   />
                 )}
-                <AddParticipantButton />
+                {participantList?.length !== 0 &&
+                participantList?.length == watch("maximumPeople") ? null : (
+                  <AddParticipantButton />
+                )}
               </View>
             </View>
             <View className="h-20" />

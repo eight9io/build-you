@@ -44,8 +44,7 @@ const RenderPackageOptions = ({
   isCurrentUserCompany = false,
   maxPeopleData,
   maxPeople,
-  errMaximumPeople
-
+  errMaximumPeople,
 }) => {
   const { t } = useTranslation();
 
@@ -104,14 +103,19 @@ const RenderPackageOptions = ({
             {t("choose_packages_screen.choose")}
           </Text>
         </TouchableOpacity>
-        {maxPeopleData > maxPeople && errMaximumPeople && <Text className="w-full text-red-400 px-2"> {errMaximumPeople}{maxPeople} participant</Text>}
+        {maxPeopleData > maxPeople && errMaximumPeople && (
+          <Text className="w-full px-2 text-red-400">
+            {" "}
+            {errMaximumPeople}
+            {maxPeople} participant
+          </Text>
+        )}
       </View>
     </View>
   );
 };
 
 const ChoosePackageScreen = () => {
-
   const [{ packages, chatCheck, videoCheck, loading }, _setState] = useState<{
     packages: IPackage[];
     chatCheck: ICheckPoint;
@@ -135,13 +139,12 @@ const ChoosePackageScreen = () => {
   const currentUser = getUserProfile();
   const isCurrentUserCompany = currentUser?.companyAccount;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [errMaximumPeople, setErrMaximumPeople] = useState('')
+  const [errMaximumPeople, setErrMaximumPeople] = useState("");
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
-  const maxPeopleData = getCreateChallengeDataStore().maximumPeople
+  const maxPeopleData = getCreateChallengeDataStore().maximumPeople;
 
   const { setChatPackagePrice, setVideoPackagePrice } = usePriceStore();
-
 
   const handleChoosePackage = (choosenPackage: IPackage) => {
     const packageData = {
@@ -157,7 +160,7 @@ const ChoosePackageScreen = () => {
       package: packageData.id,
     });
     if (maxPeopleData > choosenPackage.maxPeople) {
-      setErrMaximumPeople(t("dialog.err_maxPeople.description"))
+      setErrMaximumPeople(t("dialog.err_maxPeople.description"));
       // GlobalDialogController.showModal({
       //   title: t("dialog.err_maxPeople.title"),
       //   message: t("dialog.err_maxPeople.description",{max_people:choosenPackage.maxPeople}),
@@ -219,7 +222,7 @@ const ChoosePackageScreen = () => {
               item.type === "chat"
                 ? packagesFromStore.chatPackage.currency
                 : packagesFromStore.videoPackage.currency,
-            maxPeople: item.type === "chat" ? 5 : 10
+            maxPeople: item.type === "chat" ? 10 : 5,
           };
         });
 
@@ -270,10 +273,11 @@ const ChoosePackageScreen = () => {
           <View className=" flex flex-col ">
             {packages.length > 0 &&
               packages.map((item) => (
-                <View key={item?.type} className="flex w-full items-center justify-center ">
-
+                <View
+                  key={item?.type}
+                  className="flex w-full items-center justify-center "
+                >
                   <RenderPackageOptions
-
                     name={item.name}
                     type={item.type}
                     caption={item.caption}
@@ -282,14 +286,9 @@ const ChoosePackageScreen = () => {
                     onPress={() => handleChoosePackage(item)}
                     isCurrentUserCompany={isCurrentUserCompany}
                     maxPeopleData={maxPeopleData}
-
                     maxPeople={item.maxPeople}
                     errMaximumPeople={errMaximumPeople}
-
-
                   />
-
-
                 </View>
               ))}
             {packages.length === 0 && loading && <ActivityIndicator />}

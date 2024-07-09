@@ -367,18 +367,23 @@
     "edit_success": "La tua sfida è stata aggiornata con successo"
   },
   "dialog": {
+    "remove_participant": {
+      "title": "Vuoi rimuovere questo partecipante dalla sfida?",
+      "description": "Non puoi annullare questa azione"
+    },
     "register": {
       "title": "Verifica la tua email",
       "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
     },
     "err_maxPeople": {
-      "title": "You can't choose the package",
-      "description": "Sorry! This package is limited to a maximum of "
+      "title": "Non puoi scegliere il pacchetto",
+      "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di 5 partecipanti."
     },
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",
       "description": "Siamo spiacenti! Questa email non esiste in azienda.",
-      "err_description": "Siamo spiacenti! Questa email esiste nella sfida"
+      "err_description": "Siamo spiacenti! Questa email esiste nella sfida",
+      "err_max_join": "Il numero dei partecipanti è superiore al numero massimo di persone"
     },
     "logout": {
       "title": "Log out",
@@ -769,7 +774,8 @@
     "coach_added": "Il coach {{userName}} è stato assegnato alla sfida",
     "coach_added_in_coach_view": "Sei stato aggiunto alla sfida come coach",
     "phase_opened": "{{userName}} ha aperto una nuova fase",
-    "schedule_confirmed": "Appuntamento confermato per la sfida {{challengeGoal}}"
+    "schedule_confirmed": "Appuntamento confermato per la sfida {{challengeGoal}}",
+    "added_to_challenge": "{{userName}} ti ha aggiunto a {{challengeGoal}}"
   },
   "top_nav.create_challenge": "Crea sfida",
   "challenge_detail_screen_tab": {

@@ -450,8 +450,10 @@
     },
     "err_add_participant": {
       "title": "You can't add a participant",
+      "title_max_join": "You can't create a challenge",
       "description": "Sorry! This email does not exist in the company.",
-      "err_description": "Sorry! This email  exist in the challenge"
+      "err_description": "Sorry! This email  exist in the challenge",
+      "err_max_join": "The number of participants is greater than the maximum number of people"
     },
     "challenge_is_not_assigned_to_coach": {
       "title": "Challenge is not assigned to coach",
@@ -768,7 +770,8 @@
     "coach_added": "Coach {{userName}} was added to the challenge",
     "coach_added_in_coach_view": "You was added to the challenge as coach",
     "phase_opened": "{{userName}} has opened a new phase",
-    "schedule_confirmed": "Appointment confirmed for the challenge {{challengeGoal}}"
+    "schedule_confirmed": "Appointment confirmed for the challenge {{challengeGoal}}",
+    "added_to_challenge": "{{userName}} added you to in {{challengeGoal}}"
   },
   "top_nav.create_challenge": "Create challenge",
   "challenge_detail_screen_tab": {

@@ -10,12 +10,12 @@ import RegisterModal from "../../component/modal/RegisterModal/RegisterModal";
 
 export const IntroScreen = ({ navigation, route }: any) => {
   const { t } = useTranslation();
-  const [modalVisible, setModalVisible] = useState(false);
-  useEffect(() => {
-    if (route?.params?.setModal) {
-      setModalVisible(route?.params?.setModal);
-    }
-  }, []);
+  // const [modalVisible, setModalVisible] = useState(false);
+  // useEffect(() => {
+  //   if (route?.params?.setModal) {
+  //     setModalVisible(route?.params?.setModal);
+  //   }
+  // }, []);
 
   return (
     <View
@@ -61,7 +61,7 @@ export const IntroScreen = ({ navigation, route }: any) => {
             title={t("login_screen.register")}
             containerClassName="bg-primary-default"
             textClassName="text-white"
-            onPress={() => setModalVisible(true)}
+            onPress={() => navigation.navigate("RegisterModal")}
           />
           <Button
             testID="intro_login_btn"
@@ -80,11 +80,11 @@ export const IntroScreen = ({ navigation, route }: any) => {
           </Text>
         </TouchableOpacity>
 
-        <RegisterModal
+        {/* <RegisterModal
           navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-        />
+        /> */}
       </View>
     </View>
   );

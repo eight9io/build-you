@@ -38,6 +38,16 @@ export const setNotificationIsRead = async (notificationIds: string[]) => {
   }
 };
 
+export const setAllNotificationsIsRead = async () => {
+  try {
+    const res = await httpInstance.put("/notification/all/isRead");
+    setBadgeCount(0);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const deletePushNotificatoinToken = async (token: string) => {
   return await httpInstance.delete(`/notification/push/delete/${token}`);
 };

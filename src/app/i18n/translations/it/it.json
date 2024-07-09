@@ -285,6 +285,7 @@
     }
   },
   "new_challenge_screen": {
+    "add_participant": "Add participant",
     "new_challenge": "Nuova sfida",
     "new_certified_challenge": "Nuova sfida certificata",
     "next": "Avanti",
@@ -370,6 +371,15 @@
       "title": "Verifica la tua email",
       "description": "Per favore, controlla la tua email e clicca sul link per attivare il tuo account."
     },
+    "err_maxPeople": {
+      "title": "You can't choose the package",
+      "description": "Sorry! This package is limited to a maximum of "
+    },
+    "err_add_participant": {
+      "title": "Non puoi aggiungere un partecipante",
+      "description": "Siamo spiacenti! Questa email non esiste in azienda.",
+      "err_description": "Siamo spiacenti! Questa email esiste nella sfida"
+    },
     "logout": {
       "title": "Log out",
       "description": "Sei sicuro di voler uscire?",
@@ -401,6 +411,10 @@
     },
     "remove_user": {
       "title": "Vuoi rimuovere questo dipendente dall'azienda?",
+      "description": "Non puoi annullare questa azione"
+    },
+    "rimuovi_partecipante": {
+      "title": "Vuoi rimuovere questo partecipante dalla sfida?",
       "description": "Non puoi annullare questa azione"
     },
     "delete_challenge": {
@@ -439,6 +453,10 @@
     "in_draft": {
       "title": "Pagamento in sospeso",
       "description": "Hai una sfida in corso. Per favore, attendi fino a quando non sarà completata."
+    },
+    "challenge_is_not_assigned_to_coach": {
+      "title": "La sfida non è assegnata al coach",
+      "description": "Si prega di attendere fino a quando la sfida viene assegnata al coach prima di completarla"
     },
     "cancel": "Cancella",
     "close": "Chiudi",
@@ -481,6 +499,7 @@
     "edit_schedule_success": "Modifica programma con successo!",
     "add_employee_success": "Dipendente aggiunto correttamente! ",
     "delete_employee_success": "Dipendente eliminato correttamente! ",
+    "delete_participant_success": "Partecipante eliminato con successo! ",
     "reset_password_success": "Password reimpostata con successo! ",
     "create_challenge_success": "La tua sfida è stata creata con successo !",
     "edit_challenge_success": "I tuoi progressi sono stati modificati con successo ! ",
@@ -613,6 +632,11 @@
     "title": "Nuovo collaboratore",
     "email": "Email",
     "email_placeholder": "Inserisci l'email del collaboratore"
+  },
+  "add_participant_modal": {
+    "title": "Aggiungi partecipante",
+    "email": "Email",
+    "email_placeholder": "Inserisci l'e-mail del dipendente"
   },
   "edit_profile_modal": {
     "title": "Modifica profilo",

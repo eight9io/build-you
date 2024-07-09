@@ -33,11 +33,11 @@ import { serviceUpdateMyProfile } from "../../../service/profile";
 import CustomActivityIndicator from "../../common/CustomActivityIndicator";
 
 interface Props {
-  modalVisible: boolean;
-  setModalVisible: (value: boolean) => void;
-  navigation?: any;
+  // modalVisible: boolean;
+  // setModalVisible: (value: boolean) => void;
+  // navigation?: any;
 }
-const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
+const RegisterModal = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
   const [errMessage, setErrMessage] = useState("");
@@ -103,7 +103,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
         ? "HomeScreen"
         : "CompleteProfileScreen";
 
-      closeModal();
+      // closeModal();
       setTimeout(() => {
         // Timeout used to wait for the register modal to close before navigate
         // The app crash when calling "reset" action, "navigate" action works fine
@@ -118,7 +118,10 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
     } catch (error) {
       console.error("error: ", error);
       setErrMessage(errorMessage(error, "err_login"));
-      setIsLoading(false);
+      setTimeout(() => {
+        // Fix cannot close loading modal
+        setIsLoading(false);
+      }, 300);
       CrashlyticService({
         errorType: "Register Error",
         error,
@@ -126,93 +129,151 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
     }
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
-    setErrMessage("");
-  };
+  // const closeModal = () => {
+  //   setModalVisible(false);
+  //   setErrMessage("");
+  // };
 
   return (
-    <Modal
-      animationType="slide"
-      visible={modalVisible}
-      presentationStyle="pageSheet"
-      style={{ borderRadius: 10 }}
-    >
-      <View
-        className=" bg-white "
-        style={{ borderRadius: 10 }}
-        testID="register_modal"
-      >
-        <View className="absolute z-10 my-6 ml-4 ">
-          <NavButton
+    // <Modal
+    //   animationType="slide"
+    //   visible={modalVisible}
+    //   presentationStyle="pageSheet"
+    //   style={{ borderRadius: 10 }}
+    // >
+    //   <View
+    //     className=" bg-white "
+    //     style={{ borderRadius: 10 }}
+    //     testID="register_modal"
+    //   >
+    //     <View className="absolute z-10 my-6 ml-4 ">
+    //       <NavButton
+    //         onPress={() => {
+    //           closeModal();
+    //         }}
+    //         text={t("button.back") as string}
+    //         withBackIcon
+    //         testID="register_modal_back_btn"
+    //       />
+    //     </View>
+    //     <SafeAreaView>
+    //       <CustomActivityIndicator isVisible={isLoading} />
+    //       <View className="h-full p-5">
+    //         <View className="flex h-[65%] pt-4">
+    //           <View className="h-[70%]">
+    //             <Image
+    //               source={require("./asset/img-login.png")}
+    //               className="h-full w-full"
+    //               resizeMode="contain"
+    //             />
+    //           </View>
+    //           <View className="basis-1/3 justify-center px-4 pt-4">
+    //             <Text className="text-center text-h4 font-medium leading-6 ">
+    //               {t("register_modal.title")}
+    //             </Text>
+    //             <Text className="mt-3 text-center text-base text-gray-dark opacity-90">
+    //               {t("register_modal.description")}
+    //             </Text>
+    //           </View>
+    //         </View>
+
+    //         {errMessage && (
+    //           <ErrorText
+    //             containerClassName="justify-center px-5"
+    //             message={errMessage}
+    //           />
+    //         )}
+    //         <View className="h-[35%] flex-col items-center pt-5">
+    //           {Platform.OS === "ios" ? (
+    //             <AppleLoginButton
+    //               title={t("register_modal.apple") || "Register with Apple"}
+    //               onLogin={handleRegisterSocial}
+    //               onError={setErrMessage}
+    //             />
+    //           ) : null}
+    //           <LinkedInLoginButton
+    //             title={t("register_modal.linked") || "Register with Linkedin"}
+    //             onLogin={handleRegisterSocial}
+    //             onError={setErrMessage}
+    //           />
+    //           <GoogleLoginButton
+    //             title={t("register_modal.google") || "Register with Google"}
+    //             onLogin={handleRegisterSocial}
+    //             onError={setErrMessage}
+    //           />
+    //           <Button
+    //             title={t("register_modal.register")}
+    //             containerClassName="border-primary-default flex-row border-[1px] m-2"
+    //             textClassName="text-primary-default ml-2 text-base font-bold"
+    //             onPress={() => {
+    //               // closeModal(); // Hot fix for the issue that it doesn't navigate to RegisterScreen
+    //               navigation.navigate("RegisterScreen");
+    //             }}
+    //             testID="register_with_email_btn"
+    //           />
+    //         </View>
+    //       </View>
+    //     </SafeAreaView>
+    //   </View>
+    // </Modal>
+    <SafeAreaView>
+      <CustomActivityIndicator isVisible={isLoading} />
+      <View className="h-full p-5">
+        <View className="flex h-[65%] pt-4">
+          <View className="h-[70%]">
+            <Image
+              source={require("./asset/img-login.png")}
+              className="h-full w-full"
+              resizeMode="contain"
+            />
+          </View>
+          <View className="basis-1/3 justify-center px-4 pt-4">
+            <Text className="text-center text-h4 font-medium leading-6 ">
+              {t("register_modal.title")}
+            </Text>
+            <Text className="mt-3 text-center text-base text-gray-dark opacity-90">
+              {t("register_modal.description")}
+            </Text>
+          </View>
+        </View>
+
+        {errMessage && (
+          <ErrorText
+            containerClassName="justify-center px-5"
+            message={errMessage}
+          />
+        )}
+        <View className="h-[35%] flex-col items-center pt-5">
+          {Platform.OS === "ios" ? (
+            <AppleLoginButton
+              title={t("register_modal.apple") || "Register with Apple"}
+              onLogin={handleRegisterSocial}
+              onError={setErrMessage}
+            />
+          ) : null}
+          <LinkedInLoginButton
+            title={t("register_modal.linked") || "Register with Linkedin"}
+            onLogin={handleRegisterSocial}
+            onError={setErrMessage}
+          />
+          <GoogleLoginButton
+            title={t("register_modal.google") || "Register with Google"}
+            onLogin={handleRegisterSocial}
+            onError={setErrMessage}
+          />
+          <Button
+            title={t("register_modal.register")}
+            containerClassName="border-primary-default flex-row border-[1px] m-2"
+            textClassName="text-primary-default ml-2 text-base font-bold"
             onPress={() => {
-              closeModal();
+              // closeModal();
+              navigation.navigate("RegisterScreen");
             }}
-            text={t("button.back") as string}
-            withBackIcon
-            testID="register_modal_back_btn"
+            testID="register_with_email_btn"
           />
         </View>
-        <SafeAreaView>
-          <CustomActivityIndicator isVisible={isLoading} />
-          <View className="h-full p-5">
-            <View className="flex h-[65%] pt-4">
-              <View className="h-[70%]">
-                <Image
-                  source={require("./asset/img-login.png")}
-                  className="h-full w-full"
-                  resizeMode="contain"
-                />
-              </View>
-              <View className="basis-1/3 justify-center px-4 pt-4">
-                <Text className="text-center text-h4 font-medium leading-6 ">
-                  {t("register_modal.title")}
-                </Text>
-                <Text className="mt-3 text-center text-base text-gray-dark opacity-90">
-                  {t("register_modal.description")}
-                </Text>
-              </View>
-            </View>
-
-            {errMessage && (
-              <ErrorText
-                containerClassName="justify-center px-5"
-                message={errMessage}
-              />
-            )}
-            <View className="h-[35%] flex-col items-center pt-5">
-              {Platform.OS === "ios" ? (
-                <AppleLoginButton
-                  title={t("register_modal.apple") || "Register with Apple"}
-                  onLogin={handleRegisterSocial}
-                  onError={setErrMessage}
-                />
-              ) : null}
-              <LinkedInLoginButton
-                title={t("register_modal.linked") || "Register with Linkedin"}
-                onLogin={handleRegisterSocial}
-                onError={setErrMessage}
-              />
-              <GoogleLoginButton
-                title={t("register_modal.google") || "Register with Google"}
-                onLogin={handleRegisterSocial}
-                onError={setErrMessage}
-              />
-              <Button
-                title={t("register_modal.register")}
-                containerClassName="border-primary-default flex-row border-[1px] m-2"
-                textClassName="text-primary-default ml-2 text-base font-bold"
-                onPress={() => {
-                  closeModal();
-                  navigation.navigate("RegisterScreen");
-                }}
-                testID="register_with_email_btn"
-              />
-            </View>
-          </View>
-        </SafeAreaView>
       </View>
-    </Modal>
+    </SafeAreaView>
   );
 };
 

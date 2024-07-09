@@ -8,8 +8,8 @@ export type IChallengeTouchpointStatus =
 
 export type CheckType<N extends number> = N extends infer Num
   ? Num extends number
-    ? `check-${Num}`
-    : never
+  ? `check-${Num}`
+  : never
   : never;
 
 export type CheckpointType = "intake" | CheckType<number> | "closing";
@@ -33,6 +33,7 @@ export interface ICreateCompanyChallenge {
   package?: string;
   softSkills?: ISoftSkill[];
   checkpoint: number;
+  usersList: string[];
 }
 
 export interface ISoftSkill {

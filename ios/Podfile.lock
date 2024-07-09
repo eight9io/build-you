@@ -606,9 +606,9 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.20.0):
+  - RNScreens (3.29.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-RCTImage
   - RNShare (9.2.3):
     - React-Core
   - RNSVG (13.4.0):
@@ -1014,7 +1014,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNNotifee: f3c01b391dd8e98e67f539f9a35a9cbcd3bae744
   RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
-  RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNShare: da6d90b6dc332f51f86498041d6e34211f96b630
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
@@ -1027,4 +1027,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 046906f4076f0d53de90160ea35108438e6dcc82
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.2

@@ -42,6 +42,10 @@ const RenderPackageOptions = ({
   currency,
   onPress,
   isCurrentUserCompany = false,
+  maxPeopleData,
+  maxPeople,
+  errMaximumPeople
+
 }) => {
   const { t } = useTranslation();
 
@@ -100,12 +104,14 @@ const RenderPackageOptions = ({
             {t("choose_packages_screen.choose")}
           </Text>
         </TouchableOpacity>
+        {maxPeopleData > maxPeople && errMaximumPeople && <Text className="w-full text-red-400 px-2"> {errMaximumPeople}{maxPeople} participant</Text>}
       </View>
     </View>
   );
 };
 
 const ChoosePackageScreen = () => {
+
   const [{ packages, chatCheck, videoCheck, loading }, _setState] = useState<{
     packages: IPackage[];
     chatCheck: ICheckPoint;
@@ -129,11 +135,13 @@ const ChoosePackageScreen = () => {
   const currentUser = getUserProfile();
   const isCurrentUserCompany = currentUser?.companyAccount;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const [errMaximumPeople, setErrMaximumPeople] = useState('')
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
+  const maxPeopleData = getCreateChallengeDataStore().maximumPeople
 
   const { setChatPackagePrice, setVideoPackagePrice } = usePriceStore();
+
 
   const handleChoosePackage = (choosenPackage: IPackage) => {
     const packageData = {
@@ -142,11 +150,20 @@ const ChoosePackageScreen = () => {
       currency: choosenPackage.currency,
       id: choosenPackage.id,
       type: choosenPackage.type,
+      maxPeople: choosenPackage.maxPeople,
     };
     setCreateChallengeDataStore({
       ...getCreateChallengeDataStore(),
       package: packageData.id,
     });
+    if (maxPeopleData > choosenPackage.maxPeople) {
+      setErrMaximumPeople(t("dialog.err_maxPeople.description"))
+      // GlobalDialogController.showModal({
+      //   title: t("dialog.err_maxPeople.title"),
+      //   message: t("dialog.err_maxPeople.description",{max_people:choosenPackage.maxPeople}),
+      // });
+      return;
+    }
     if (isCurrentUserCompany) {
       navigation.navigate("CompanyCartScreen", {
         choosenPackage: choosenPackage,
@@ -202,6 +219,7 @@ const ChoosePackageScreen = () => {
               item.type === "chat"
                 ? packagesFromStore.chatPackage.currency
                 : packagesFromStore.videoPackage.currency,
+            maxPeople: item.type === "chat" ? 5 : 10
           };
         });
 
@@ -249,11 +267,13 @@ const ChoosePackageScreen = () => {
           <Text className="px-12  text-center text-md font-normal leading-none text-zinc-800 opacity-90">
             {t("choose_packages_screen.description")}
           </Text>
-          <View className=" flex flex-col">
+          <View className=" flex flex-col ">
             {packages.length > 0 &&
               packages.map((item) => (
-                <View key={item?.type}>
+                <View key={item?.type} className="flex w-full items-center justify-center ">
+
                   <RenderPackageOptions
+
                     name={item.name}
                     type={item.type}
                     caption={item.caption}
@@ -261,7 +281,15 @@ const ChoosePackageScreen = () => {
                     currency={item.currency}
                     onPress={() => handleChoosePackage(item)}
                     isCurrentUserCompany={isCurrentUserCompany}
+                    maxPeopleData={maxPeopleData}
+
+                    maxPeople={item.maxPeople}
+                    errMaximumPeople={errMaximumPeople}
+
+
                   />
+
+
                 </View>
               ))}
             {packages.length === 0 && loading && <ActivityIndicator />}

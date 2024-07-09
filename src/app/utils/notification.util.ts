@@ -437,6 +437,9 @@ export const handleTapOnNotification = async (
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       handleNavigation("OtherUserProfileChallengeDetailsScreen", notification);
       break;
+    case NOTIFICATION_TYPES.ADDED_TO_CHALLENGE:
+      handleNavigation("OtherUserProfileChallengeDetailsScreen", notification);
+      break;
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
       break;
@@ -1110,6 +1113,8 @@ const pushNotificationHandlerMap: Record<
   ) => Promise<void>
 > = {
   [NOTIFICATION_TYPES.CHALLENGE_CREATED]:
+    handleTapOnChallengeCreatedPushNotification,
+  [NOTIFICATION_TYPES.ADDED_TO_CHALLENGE]:
     handleTapOnChallengeCreatedPushNotification,
   [NOTIFICATION_TYPES.PROGRESS_CREATED]:
     handleTapOnProgressCreatedPushNotification,

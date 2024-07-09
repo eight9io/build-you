@@ -572,6 +572,11 @@ export const getNotificationContent = (notification: INotification) => {
         userName,
         challengeGoal: notification.challengeGoal,
       });
+    case NOTIFICATION_TYPES.ADDED_TO_CHALLENGE:
+      return i18n.t("notification.added_to_challenge", {
+        userName,
+        challengeGoal: notification.challengeGoal,
+      });
     default:
       return "";
   }

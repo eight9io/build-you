@@ -17,7 +17,10 @@ import { useUserProfileStore } from "../../../../store/user-store";
 import Button from "../../../../component/common/Buttons/Button";
 import AddParticipantModal from "../../../../component/modal/company/AddParticipantModal";
 import GlobalDialogController from "../../../../component/common/Dialog/GlobalDialogController";
-import { serviceAddParticipants, serviceRemoveParticipants } from "../../../../service/challenge";
+import {
+  serviceAddParticipants,
+  serviceRemoveParticipants,
+} from "../../../../service/challenge";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 
 interface IParticipantsTabProps {
@@ -37,10 +40,8 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
   participants = [],
   fetchParticipants,
   challengeData,
-  employeeList
+  employeeList,
 }) => {
-
-
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isShowModalRemove, setIsShowModalRemove] = useState({
     isShow: false,
@@ -54,7 +55,7 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
   const removeEmployee = async (participantId: any) => {
     serviceRemoveParticipants(participantId, challengeData.id)
       .then(async (response) => {
-        await fetchParticipants()
+        await fetchParticipants();
         GlobalToastController.showModal({
           message:
             t("toast.delete_participant_success") ||
@@ -62,7 +63,7 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
         });
       })
       .catch((err) => {
-        console.log("🚀 ~ removeEmployee ~ err:", err)
+        console.log("🚀 ~ removeEmployee ~ err:", err);
         GlobalDialogController.showModal({
           title: t("dialog.err_title") || "Error",
           message: t("errorMessage:500") as string,
@@ -70,8 +71,7 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
       })
       .finally(() => {
         setIsShowModalRemove({ isShow: false, id: "" });
-      }
-      );
+      });
   };
 
   const handleAddParticipant = (participant: any) => {
@@ -82,32 +82,31 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
       });
       return;
     }
-    const isParticipantOfList = participants.find((item: any) => item.email === participant.email);
+    const isParticipantOfList = participants.find(
+      (item: any) => item.email === participant.email
+    );
     if (isParticipantOfList) {
       GlobalDialogController.showModal({
         title: t("dialog.err_add_participant.title"),
         message: t("dialog.err_add_participant.err_description"),
       });
       return;
-    }
-    else {
+    } else {
       serviceAddParticipants(participant?.id, challengeData?.id)
         .then(async (res) => {
           if (res.status === 200 || res.status === 201) {
-            fetchParticipants()
+            fetchParticipants();
           }
         })
         .catch((err) => {
-          console.log("🚀 ~ handleAddParticipant ~ err:", err)
+          console.log("🚀 ~ handleAddParticipant ~ err:", err);
           GlobalDialogController.showModal({
             title: t("dialog.err_title") || "Error",
             message: t("errorMessage:500") as string,
           });
         });
     }
-
-
-  }
+  };
   const AddNewChallengeParticipantButton = () => {
     return (
       <View className="relative pb-4 pt-4  ">
@@ -119,20 +118,21 @@ const CompanyParticipantsTab: FC<IParticipantsTabProps> = ({
             Icon={<AddIcon fill={"white"} />}
             onPress={() => setIsShowModalAdd(true)}
           />
-          {challengeData?.maximumPeople && <Text className="text-sm font-normal  text-gray-dark my-3">
-            {participants?.length} / {challengeData?.maximumPeople}
-          </Text>}
+          {challengeData?.maximumPeople && (
+            <Text className="my-3 text-sm  font-normal text-gray-dark">
+              {participants?.length} / {challengeData?.maximumPeople}
+            </Text>
+          )}
         </View>
       </View>
     );
   };
   return (
     <View className={clsx("flex-1 px-4")}>
-
       {participants.length > 0 && (
         <FlatList
           ListHeaderComponent={
-            userProfile?.companyAccount ? (
+            participants?.length < challengeData?.maximumPeople ? (
               <AddNewChallengeParticipantButton />
             ) : null
           }

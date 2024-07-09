@@ -1,4 +1,5 @@
-import React, { FC, useState } from "react";
+import { AxiosError } from "axios";
+import React, { FC, useLayoutEffect, useState } from "react";
 import { View, SafeAreaView, Text, FlatList } from "react-native";
 import { NavigationProp, Route, useNavigation } from "@react-navigation/native";
 import clsx from "clsx";
@@ -12,22 +13,26 @@ import { isObjectEmpty } from "../../../utils/common";
 
 import CoverImage from "../../../component/Profile/CoverImage/CoverImage";
 import ProfileAvatar from "../../../component/common/Avatar/ProfileAvatar/ProfileAvatar";
-import { OutlineButton } from "../../../component/common/Buttons/Button";
+import Button, {
+  OutlineButton,
+} from "../../../component/common/Buttons/Button";
 import SkeletonLoadingCommon from "../../../component/common/SkeletonLoadings/SkeletonLoadingCommon";
 
 import DefaultAvatar from "../../../component/asset/default-avatar.svg";
 import OtherUserProfileTabs from "../../../component/Profile/ProfileTabs/OtherUser/OtherUserProfileTabs";
 import GlobalDialogController from "../../../component/common/Dialog/GlobalDialogController";
+import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
+
 import {
   useFollowingListStore,
   useUserProfileStore,
 } from "../../../store/user-store";
 import { serviceFollow, serviceUnfollow } from "../../../service/profile";
 import { useGetOtherUserData } from "../../../hooks/useGetUser";
-import ConfirmDialog from "../../../component/common/Dialog/ConfirmDialog";
 import { fetchNewFollowingData } from "../../../utils/profile";
-import { AxiosError } from "axios";
-import { ScrollView } from "react-native-gesture-handler";
+import { onShareUserLink } from "../../../utils/shareLink.uitl";
+
+import ShareIcon from "../../../../../assets/svg/share.svg";
 
 interface IOtherUserProfileComponentProps {
   route: Route<
@@ -164,6 +169,7 @@ const OtherUserProfileComponent: FC<IOtherUserProfileComponentProps> = ({
       navigation.goBack();
     }, 2000);
   }
+
   return (
     <View className={clsx("relative h-full flex-1 flex-col bg-white")}>
       {otherUserData && (
@@ -195,6 +201,21 @@ const OtherUserProfileScreen: FC<IOtherUserProfileScreenProps> = ({
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { userId } = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <View>
+            <Button
+              Icon={<ShareIcon />}
+              onPress={() => onShareUserLink(userId)}
+            />
+          </View>
+        );
+      },
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView className="justify-content: space-between h-full flex-1 bg-gray-50">

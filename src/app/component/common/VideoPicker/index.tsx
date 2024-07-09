@@ -20,7 +20,6 @@ import PlayButton from "./asset/play-button.svg";
 import CloseButton from "./asset/close-button.svg";
 import ConfirmDialog from "../Dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
-import Spinner from "react-native-loading-spinner-overlay";
 import { CrashlyticService } from "../../../service/crashlytic";
 
 interface IVideoPickerProps {

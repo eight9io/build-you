@@ -55,7 +55,8 @@
     "vote": "Vote",
     "confirm": "Confirm",
     "voted_waiting": "You already voted. Please wait until the coach confirms the time.",
-    "note": "Note"
+    "note": "Note",
+    "complete": "Complete"
   },
   "bottom_nav": {
     "feed": "Feed",
@@ -230,7 +231,8 @@
       "title": "Select the soft skills you are already competent on",
       "sub_title": "Please select at least 3 different soft skills and rate it from 1 to 5.",
       "soft_skills": "Soft skills",
-      "error": "Please select at least 3 soft skills.",
+      "error": "Please select 3 soft skills.",
+      "error_exceed": "Maximum selected soft skills is 3",
       "error_rate": "Please rate from 1 to 5",
       "select_soft_skill": "Select a soft skill"
     },
@@ -570,6 +572,7 @@
     "copying_to_clipboard_error": "Error when copying to clipboard",
     "copied_to_clipboard": "Copied to clipboard",
     "join_my_challenge": "Join my challenge!",
+    "see_my_profile": "See my profile!",
     "user_did_not_share_link": "User did not share"
   },
   "upload_cover_failed": "Upload cover failed. Please try again later.",

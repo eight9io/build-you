@@ -1,22 +1,22 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View, Text, SafeAreaView } from "react-native";
 import { useTranslation } from "react-i18next";
-import Spinner from "react-native-loading-spinner-overlay";
+import { SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useGetUserData } from "../../../../hooks/useGetUser";
-import { useUserProfileStore } from "../../../../store/user-store";
 import { serviceUpdateMyProfile } from "../../../../service/profile";
+import { useUserProfileStore } from "../../../../store/user-store";
 
-import Warning from "../../../../component/asset/warning.svg";
-import TextInput from "../../../../component/common/Inputs/TextInput";
-import Button from "../../../../component/common/Buttons/Button";
 import { EditCompanyProfileValidators } from "../../../../Validators/EditProfile.validate";
+import Warning from "../../../../component/asset/warning.svg";
+import Button from "../../../../component/common/Buttons/Button";
 import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
+import TextInput from "../../../../component/common/Inputs/TextInput";
 import GlobalToastController from "../../../../component/common/Toast/GlobalToastController";
 import { serviceGetMyProfile } from "../../../../service/auth";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 const EditCompanyProfileScreen = ({ navigation }: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +39,6 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
     phone: string;
     mailContact: string;
     pIva: string;
-
   }>({
     defaultValues: {
       name: userData?.name || "",
@@ -83,7 +82,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
 
       <View className="  h-full rounded-t-xl bg-white ">
         <ConfirmDialog
@@ -180,7 +179,6 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                       value={value}
                       keyboardType="numeric"
                     />
-
                   </View>
                 )}
               />
@@ -206,7 +204,6 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                       onChangeText={onChange}
                       value={value}
                     />
-
                   </View>
                 )}
               />
@@ -219,8 +216,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                   <View className="flex flex-col">
                     <TextInput
                       label={
-                        t("edit_company_profile_screen.webSite") ||
-                        "Website"
+                        t("edit_company_profile_screen.webSite") || "Website"
                       }
                       placeholder={
                         t(
@@ -232,7 +228,6 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                       onChangeText={onChange}
                       value={value}
                     />
-
                   </View>
                 )}
               />
@@ -244,10 +239,7 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View className="flex flex-col">
                     <TextInput
-                      label={
-                        t("edit_company_profile_screen.pIva") ||
-                        "Website"
-                      }
+                      label={t("edit_company_profile_screen.pIva") || "Website"}
                       placeholder={
                         t(
                           "edit_company_profile_screen.company_vat_placeholder"
@@ -259,13 +251,10 @@ const EditCompanyProfileScreen = ({ navigation }: any) => {
                       value={value}
                       keyboardType="numeric"
                     />
-
                   </View>
                 )}
               />
             </View>
-
-
 
             <Button
               title={t("button.update") || "Update"}

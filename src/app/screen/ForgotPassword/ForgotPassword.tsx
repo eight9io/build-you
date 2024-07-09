@@ -1,9 +1,8 @@
-import { View, SafeAreaView, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
-import Spinner from "react-native-loading-spinner-overlay";
+import { useTranslation } from "react-i18next";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import TextInput from "../../component/common/Inputs/TextInput";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,11 +11,12 @@ import Button from "../../component/common/Buttons/Button";
 
 import ErrorText from "../../component/common/ErrorText";
 
-import ForgotPasswordModal from "../../component/modal/ForgotPasswordModal";
 import { ForgotPasswordValidationSchema } from "../../Validators/ForgotPassword.validate";
-import { ForgotPasswordForm } from "../../types/auth";
+import ForgotPasswordModal from "../../component/modal/ForgotPasswordModal";
 import { serviceForgotPassword } from "../../service/auth";
+import { ForgotPasswordForm } from "../../types/auth";
 import { err_server, errorMessage } from "../../utils/statusCode";
+import CustomActivityIndicator from "../../component/common/CustomActivityIndicator";
 
 export default function ForgotPassword({ navigation }: { navigation: any }) {
   const { t } = useTranslation();
@@ -66,7 +66,7 @@ export default function ForgotPassword({ navigation }: { navigation: any }) {
 
   return (
     <SafeAreaView className=" h-full bg-white " testID="forgotPasswordScreen">
-      {isLoading && <Spinner visible={isLoading} />}
+      <CustomActivityIndicator isVisible={isLoading} />
       <View className=" h-full bg-white ">
         <ScrollView>
           <View className="flex-column h-full justify-between bg-white px-6  pb-14">

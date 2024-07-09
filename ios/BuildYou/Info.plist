@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.5.15</string>
+    <string>1.5.18</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -34,12 +34,12 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.googleusercontent.apps.182046676611-uguei0ko32e2i9cobbcicfd9pjsj89ru</string>
+          <string>com.googleusercontent.apps.288098023879-i6v73ulr31sfgodmjsfi67mnrgj3po6i</string>
         </array>
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>65</string>
+    <string>74</string>
     <key>CodePushDeploymentKey</key>
     <string>K60TOcl0LeY6pFRO94YIWX2MaLMs-UxHeaHiG</string>
     <key>ITSAppUsesNonExemptEncryption</key>

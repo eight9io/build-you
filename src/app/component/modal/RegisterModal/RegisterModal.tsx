@@ -1,36 +1,36 @@
-import { View, Text, Modal, SafeAreaView, Platform } from "react-native";
-import { Image } from "expo-image";
-import { useState } from "react";
 import {
   CommonActions,
   NavigationProp,
   useNavigation,
 } from "@react-navigation/native";
-import Spinner from "react-native-loading-spinner-overlay";
+import { Image } from "expo-image";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Modal, Platform, SafeAreaView, Text, View } from "react-native";
 
 import { setupInterceptor } from "../../../utils/refreshToken.util";
 import { errorMessage } from "../../../utils/statusCode";
 
-import { ISocialLoginForm } from "../../../types/auth";
-import { useAuthStore } from "../../../store/auth-store";
 import { useAppleLoginInfoStore } from "../../../store/apple-login-store";
+import { useAuthStore } from "../../../store/auth-store";
 import {
   checkIsCompleteProfileOrCompany,
   useUserProfileStore,
 } from "../../../store/user-store";
+import { ISocialLoginForm } from "../../../types/auth";
 
-import ErrorText from "../../common/ErrorText";
-import Button from "../../common/Buttons/Button";
 import { LOGIN_TYPE } from "../../../common/enum";
-import NavButton from "../../common/Buttons/NavButton";
 import AppleLoginButton from "../../common/Buttons/AppleLoginButton";
+import Button from "../../common/Buttons/Button";
 import GoogleLoginButton from "../../common/Buttons/GoogleLoginButton";
 import LinkedInLoginButton from "../../common/Buttons/LinkedInLoginButton";
+import NavButton from "../../common/Buttons/NavButton";
+import ErrorText from "../../common/ErrorText";
 
 import { RootStackParamList } from "../../../navigation/navigation.type";
-import { serviceUpdateMyProfile } from "../../../service/profile";
 import { CrashlyticService } from "../../../service/crashlytic";
+import { serviceUpdateMyProfile } from "../../../service/profile";
+import CustomActivityIndicator from "../../common/CustomActivityIndicator";
 
 interface Props {
   modalVisible: boolean;
@@ -154,7 +154,7 @@ const RegisterModal = ({ modalVisible, setModalVisible }: Props) => {
           />
         </View>
         <SafeAreaView>
-          {isLoading && <Spinner visible={isLoading} />}
+          <CustomActivityIndicator isVisible={isLoading} />
           <View className="h-full p-5">
             <View className="flex h-[65%] pt-4">
               <View className="h-[70%]">

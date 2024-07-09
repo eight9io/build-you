@@ -27,7 +27,7 @@ import ConfirmDialog from "../../../../component/common/Dialog/ConfirmDialog";
 import StarNoFillSvg from "../../../../common/svg/star-no-fill.svg";
 import StarFillSvg from "../../../../common/svg/star-fill.svg";
 import { useChallengeUpdateStore } from "../../../../store/challenge-update-store";
-import Spinner from "react-native-loading-spinner-overlay";
+import CustomActivityIndicator from "../../../../component/common/CustomActivityIndicator";
 
 interface IProgressTabProps {
   challengeData: IChallenge;
@@ -192,7 +192,7 @@ export const ProgressTab: FC<IProgressTabProps> = ({
   >([]);
   const [progressIndexToUpdate, setProgressIndexToUpdate] =
     useState<number>(-1);
-  const [progressLoading, setProgressLoading] = useState<boolean>(true);
+  const [progressLoading, setProgressLoading] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
 
   const isFocused = useIsFocused();
@@ -301,6 +301,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
     handleEditProgress(); // Navigate to the challenge progresses screen to refresh the list
   };
 
+  // TODO: change image on top, then add a change button
+
   return (
     <View className="h-full flex-1">
       {progressIndexToUpdate > -1 && isShowEditModal && isShowEditModal && (
@@ -311,8 +313,8 @@ export const ProgressTab: FC<IProgressTabProps> = ({
           onConfirm={handleConfirmEditChallengeProgress}
         />
       )}
-      {progressLoading && <Spinner />}
 
+      <CustomActivityIndicator isVisible={progressLoading} />
       {!progressLoading && (
         <FlatList
           data={localProgressData}
@@ -321,10 +323,11 @@ export const ProgressTab: FC<IProgressTabProps> = ({
             return (
               <>
                 {(isJoined || isCurrentUserOwnerOfChallenge) &&
+                  !progressLoading &&
                   (!isChallengeCompleted ? (
                     <View>
                       <AddNewChallengeProgressButton />
-                      {!progressLoading && localProgressData?.length == 0 && (
+                      {localProgressData?.length == 0 && (
                         <View className="px-4 py-4">
                           <Text className="selection: text-base">
                             {

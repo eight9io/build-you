@@ -12,7 +12,7 @@ import ConfirmDialog from "../../Dialog/ConfirmDialog";
 import SelectPicker from "../../Pickers/SelectPicker";
 import { ISelectOption } from "../../../../types/common";
 import { getNearbyLocations } from "../../../../service/location";
-import Spinner from "react-native-loading-spinner-overlay";
+import CustomActivityIndicator from "../../CustomActivityIndicator";
 
 interface ILocationInputProps {
   control?: any;
@@ -91,7 +91,9 @@ const LocationInput: React.FC<ILocationInputProps> = ({
 
   return (
     <View>
-      {setFetchLocationLoading && <Spinner visible={fetchLocationLoading} />}
+      {setFetchLocationLoading && (
+        <CustomActivityIndicator isVisible={fetchLocationLoading} />
+      )}
       <Controller
         control={control}
         rules={{

@@ -1,29 +1,32 @@
-import { View, Modal, SafeAreaView } from "react-native";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useForm, Controller } from "react-hook-form";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Spinner from "react-native-loading-spinner-overlay";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+import { Modal, SafeAreaView, View, Text, ScrollView } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useNav } from "../../hooks/useNav";
+import useModal from "../../hooks/useModal";
+import { updateChallenge, updateChallengeImage } from "../../service/challenge";
+
 import { IChallenge, IEditChallenge } from "../../types/challenge";
 import { EditChallengeValidationSchema } from "../../Validators/EditChallenge.validate";
 
-import useModal from "../../hooks/useModal";
 import dayjs from "../../utils/date.util";
 
 import Header from "../common/Header";
 import ErrorText from "../common/ErrorText";
+import ImagePicker from "../common/ImagePicker";
 import TextInput from "../common/Inputs/TextInput";
 import ConfirmDialog from "../common/Dialog/ConfirmDialog";
-import { updateChallenge } from "../../service/challenge";
+import CustomActivityIndicator from "../common/CustomActivityIndicator";
+import GlobalToastController from "../common/Toast/GlobalToastController";
 import DateTimePicker2 from "../common/BottomSheet/DateTimePicker2/DateTimePicker2";
 
-import CloseIcon from "../asset/close.svg";
-import CalendarIcon from "../asset/calendar.svg";
-import GlobalToastController from "../common/Toast/GlobalToastController";
 import { useChallengeUpdateStore } from "../../store/challenge-update-store";
+import CalendarIcon from "../asset/calendar.svg";
+import CloseIcon from "../asset/close.svg";
 
 interface IEditChallengeModalProps {
   challenge: IChallenge;
@@ -43,6 +46,9 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(false);
+
   const {
     isVisible: isConfirmModalVisible,
     openModal: openConfirmModal,
@@ -53,6 +59,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
 
   const {
     control,
+    getValues,
     setValue,
     reset,
     handleSubmit,
@@ -62,6 +69,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       goal: challenge.goal,
       benefits: challenge.benefits,
       reasons: challenge.reasons,
+      image: challenge.image,
       achievementTime: dayjs(challenge.achievementTime).format("YYYY-MM-DD"),
     },
     resolver: yupResolver(EditChallengeValidationSchema()),
@@ -80,13 +88,29 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
     setShowDatePicker(false);
   };
 
+  const handleImagesSelected = (images: string[]) => {
+    setValue("image", images[0], {
+      shouldValidate: true,
+    });
+  };
+
+  const handleRemoveSelectedImage = (index: number) => {
+    setValue("image", undefined, {
+      shouldValidate: true,
+    });
+  };
+
   const onSubmit = async (data: IEditChallenge) => {
     setIsLoading(true);
     setErrorMessage("");
     try {
-      await updateChallenge(challenge.id, {
-        ...data,
-      });
+      const { image, ...rest } = data; // Images upload will be handle separately
+
+      await Promise.all([
+        updateChallenge(challenge.id, { ...rest }),
+        updateChallengeImage({ id: challenge.id }, image),
+      ]);
+
       GlobalToastController.showModal({
         message:
           t("toast.edit_challenge_success") ||
@@ -111,6 +135,7 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       challengeId: challengeId,
     });
   };
+
   return (
     <Modal
       animationType="slide"
@@ -118,9 +143,9 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
       visible={visible}
     >
       <SafeAreaView className="flex-1">
-        {isLoading && <Spinner visible={isLoading} />}
+        <CustomActivityIndicator isVisible={isLoading} />
 
-        <View className="px-4 py-4">
+        <View className="px-4 py-2">
           <Header
             title={t("edit_challenge_screen.title") || ""}
             rightBtn={t(
@@ -140,8 +165,8 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
             flex: 1,
           }}
         >
-          <View className="mx-4 flex h-full rounded-t-xl">
-            <View className="flex flex-1 flex-col">
+          <ScrollView className=" flex h-full rounded-t-xl">
+            <View className="mx-4 flex flex-1 flex-col">
               <View className="pt-5">
                 <Controller
                   control={control}
@@ -214,6 +239,33 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
               </View>
 
               <View className="mt-5">
+                <Text className="mb-1 text-md font-semibold text-primary-default">
+                  {t("edit_challenge_screen.benefits") || ""}
+                </Text>
+                <ImagePicker
+                  images={getValues("image") ? [getValues("image")!] : []}
+                  onImagesSelected={handleImagesSelected}
+                  onRemoveSelectedImage={handleRemoveSelectedImage}
+                  base64
+                  loading={isImageLoading}
+                  setLoading={setIsImageLoading}
+                />
+                {!isImageLoading && errors.image && (
+                  <ErrorText message={errors.image.message} />
+                )}
+                {isImageLoading && errors.image && (
+                  <Text className="pt-2 text-sm text-red-500">
+                    <Ionicons
+                      name="alert-circle-outline"
+                      size={14}
+                      color="#FF4949"
+                    />
+                    {t("image_picker.upload_a_video_waiting") as string}
+                  </Text>
+                )}
+              </View>
+
+              <View className="mt-5">
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
@@ -250,8 +302,10 @@ export const EditChallengeModal: FC<IEditChallengeModalProps> = ({
                   <ErrorText message={errors.achievementTime.message} />
                 ) : null}
               </View>
+
+              <View className="h-10" />
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAwareScrollView>
       </SafeAreaView>
       <ConfirmDialog

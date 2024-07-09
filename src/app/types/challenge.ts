@@ -61,6 +61,7 @@ export interface IEditChallenge {
   benefits: string;
   reasons: string;
   achievementTime: string;
+  image?: string;
 }
 
 export interface IUpdateChallengeImage {

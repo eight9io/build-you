@@ -213,7 +213,7 @@ const ChoosePackageScreen = () => {
               item.type === "chat"
                 ? packagesFromStore.chatPackage.currency
                 : packagesFromStore.videoPackage.currency,
-                maxPeople:     item.type === "chat"?5:10
+                maxPeople:     item.type === "chat"?10:5
           };
         });
 

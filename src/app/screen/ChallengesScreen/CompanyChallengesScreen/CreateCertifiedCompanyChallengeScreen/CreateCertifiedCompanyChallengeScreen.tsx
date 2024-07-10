@@ -79,6 +79,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
     handleSubmit,
     getValues,
     setValue,
+    watch,
+
     formState: { errors },
   } = useForm<ICreateChallengeForm>({
     defaultValues: {
@@ -420,6 +422,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                 {employeeList.length > 0 && (
                   <FlatList
                     data={participantList}
+                    extraData={watch("maximumPeople")}
                     ListHeaderComponent={<AddParticipantButton />}
                     numColumns={4}
                     renderItem={({ item }) => (

@@ -44,7 +44,6 @@ const RenderPackageOptions = ({
   isCurrentUserCompany = false,
   maxPeopleData,
   maxPeople,
-  // errMaximumPeople,
 }) => {
   const { t } = useTranslation();
   const [errMaximumPeople, setErrMaximumPeople] = useState("");
@@ -146,7 +145,6 @@ const ChoosePackageScreen = () => {
   const currentUser = getUserProfile();
   const isCurrentUserCompany = currentUser?.companyAccount;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  // const [errMaximumPeople, setErrMaximumPeople] = useState("");
   const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
     useCreateChallengeDataStore();
   const maxPeopleData = getCreateChallengeDataStore().maximumPeople;
@@ -166,7 +164,6 @@ const ChoosePackageScreen = () => {
       ...getCreateChallengeDataStore(),
       package: packageData.id,
     });
-
     if (isCurrentUserCompany) {
       navigation.navigate("CompanyCartScreen", {
         choosenPackage: choosenPackage,
@@ -222,7 +219,7 @@ const ChoosePackageScreen = () => {
               item.type === "chat"
                 ? packagesFromStore.chatPackage.currency
                 : packagesFromStore.videoPackage.currency,
-            maxPeople: item.type === "chat" ? 5 : 10,
+            maxPeople: item.type === "chat" ? 10 : 5,
           };
         });
 

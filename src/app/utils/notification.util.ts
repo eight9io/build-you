@@ -437,6 +437,9 @@ export const handleTapOnNotification = async (
     case NOTIFICATION_TYPES.CHALLENGE_CREATED:
       handleNavigation("OtherUserProfileChallengeDetailsScreen", notification);
       break;
+    case NOTIFICATION_TYPES.ADDED_TO_CHALLENGE:
+      handleNavigation("OtherUserProfileChallengeDetailsScreen", notification);
+      break;
     case NOTIFICATION_TYPES.PROGRESS_CREATED:
       handleNavigation("ProgressCommentScreen", notification);
       break;
@@ -569,6 +572,11 @@ export const getNotificationContent = (notification: INotification) => {
       });
     case NOTIFICATION_TYPES.SCHEDULE_CONFIRMED:
       return i18n.t("notification.schedule_confirmed", {
+        userName,
+        challengeGoal: notification.challengeGoal,
+      });
+    case NOTIFICATION_TYPES.ADDED_TO_CHALLENGE:
+      return i18n.t("notification.added_to_challenge", {
         userName,
         challengeGoal: notification.challengeGoal,
       });
@@ -1105,6 +1113,8 @@ const pushNotificationHandlerMap: Record<
   ) => Promise<void>
 > = {
   [NOTIFICATION_TYPES.CHALLENGE_CREATED]:
+    handleTapOnChallengeCreatedPushNotification,
+  [NOTIFICATION_TYPES.ADDED_TO_CHALLENGE]:
     handleTapOnChallengeCreatedPushNotification,
   [NOTIFICATION_TYPES.PROGRESS_CREATED]:
     handleTapOnProgressCreatedPushNotification,

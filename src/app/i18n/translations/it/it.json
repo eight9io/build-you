@@ -230,7 +230,7 @@
     "screen_4": {
       "title": "Seleziona le soft skills su cui sei già competente",
       "sub_title": "Seleziona almeno 3 diverse soft skills e valutale da 1 a 5.",
-      "soft_skills": "Soft skills",
+      "soft_skills": "Abilità trasversale",
       "error": "Select 3 soft skills.",
       "error_exceed": "Il massimo delle competenze soft selezionate è 3",
       "error_rate": "Vota da 1 a 5",
@@ -285,7 +285,7 @@
     }
   },
   "new_challenge_screen": {
-    "add_participant": "Add participant",
+    "add_participant": "Aggiungi partecipante",
     "new_challenge": "Nuova sfida",
     "new_certified_challenge": "Nuova sfida certificata",
     "next": "Avanti",
@@ -373,7 +373,7 @@
     },
     "err_maxPeople": {
       "title": "You can't choose the package",
-      "description": "Sorry! This package is limited to a maximum of "
+      "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di {{maxPeople}} partecipanti"
     },
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",

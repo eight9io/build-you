@@ -446,7 +446,7 @@
     },
     "err_maxPeople": {
       "title": "You can't choose the package",
-      "description": "Sorry! This package is limited to a maximum of "
+      "description": "Sorry! This package is limited to a maximum of {{maxPeople}} participants"
     },
     "err_add_participant": {
       "title": "You can't add a participant",

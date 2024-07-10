@@ -69,9 +69,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
   const navigation = useNav();
   const { getUserProfile } = useUserProfileStore();
   const currentUser = getUserProfile();
-  const isCurrentUserCompany = currentUser?.companyAccount;
-  const { setCreateChallengeDataStore, getCreateChallengeDataStore } =
-    useCreateChallengeDataStore();
+  const { setCreateChallengeDataStore } = useCreateChallengeDataStore();
   const [participantList, setParticipantList] = useState<any[]>([]);
 
   const { getEmployeeList } = useEmployeeListStore();
@@ -171,18 +169,13 @@ const CreateCertifiedCompanyChallengeScreen: FC<
   }, []);
   const AddParticipantButton = () => {
     return (
-      <View className="relative pb-4 pt-0">
-        <View className="h-12">
-          <Button
-            title={t("challenge_detail_screen.add") as string}
-            containerClassName="bg-gray-light w-16 !rounded-xl py-4"
-            textClassName="text-black text-md font-semibold  ml-2"
-            labelClassName="!flex-col justify-center items-center"
-            Icon={<AddParticipantIcon />}
-            onPress={() => setIsShowModalAdd(true)}
-          />
-        </View>
-      </View>
+      <Button
+        containerClassName="bg-gray-light rounded-xl aspect-square h-[56px] mb-4"
+        textClassName="text-black text-md font-semibold ml-2"
+        labelClassName="!flex-col justify-center items-center"
+        Icon={<AddParticipantIcon />}
+        onPress={() => setIsShowModalAdd(true)}
+      />
     );
   };
   const handleAddParticipantButton = (participant) => {
@@ -398,7 +391,6 @@ const CreateCertifiedCompanyChallengeScreen: FC<
               </View>
 
               <View className="mt-5">
-                {/* <ImagePicker isSelectedImage /> */}
                 <ImagePicker
                   images={getValues("image") ? [getValues("image")!] : []}
                   onImagesSelected={handleImagesSelected}
@@ -428,28 +420,25 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                 {employeeList.length > 0 && (
                   <FlatList
                     data={participantList}
-                    ListHeaderComponent={null}
+                    ListHeaderComponent={<AddParticipantButton />}
                     numColumns={4}
                     renderItem={({ item }) => (
-                      <>
-                        <EmployeesItem
-                          item={item}
-                          isCompany={currentUser?.companyAccount}
-                          navigation={navigation}
-                          layoutClassName="flex-col gap-1 "
-                          sizeImg="medium"
-                          isOnlyName={true}
-                          isBinIconTopRight={true}
-                          removeItem={setParticipantList}
-                          listItem={participantList}
-                        />
-                      </>
+                      <EmployeesItem
+                        item={item}
+                        isCompany={currentUser?.companyAccount}
+                        navigation={navigation}
+                        layoutClassName="flex-col gap-1 "
+                        sizeImg="medium"
+                        isOnlyName={true}
+                        isBinIconTopRight={true}
+                        removeItem={setParticipantList}
+                        listItem={participantList}
+                      />
                     )}
                     contentContainerStyle={{ paddingBottom: 4 }}
                     keyExtractor={(item, index) => item.id}
                   />
                 )}
-                <AddParticipantButton />
               </View>
             </View>
             <View className="h-20" />

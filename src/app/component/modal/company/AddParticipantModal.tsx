@@ -17,6 +17,7 @@ import { IUserData } from "../../../types/user";
 import clsx from "clsx";
 
 import { Image } from "expo-image";
+import { useIsFocused } from "@react-navigation/native";
 
 
 interface IAddNewEmployeeModalProps {
@@ -35,16 +36,24 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState([]);
+  const { getUserProfile,getUserProfileAsync } = useUserProfileStore();
   useEffect(() => {
     setSuggestions(employeeList);
   }
     , [employeeList])
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+
+    getUserProfileAsync()
+
+  }, [isFocused]);
   const [isErrorDialogVisible, setIsErrorDialogVisible] = useState({
     isShow: false,
     description: t("error_general_message") as string,
   });
 
-  const { getUserProfile } = useUserProfileStore();
+
   const userData = getUserProfile();
 
   const {
@@ -91,6 +100,7 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
       <View
         className={clsx("mx-auto flex flex-row items-start justify-between w-full pr-5 ")}
       >
+          
         <TouchableOpacity
          onPress={() =>{
          setValue("email", employee.employee.email)
@@ -156,6 +166,9 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
           onRightBtnPress={handleSubmit(onSubmit)}
         />
         <View className="px-2 pt-8">
+        {userData?.companyAccount && <Text className="mb-4 text-md font-semibold ">
+         Creaditi residui: {userData?.availableCredits}
+         </Text>}
           <Controller
             control={control}
             name={"email"}

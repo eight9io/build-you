@@ -379,6 +379,7 @@
       "title": "You can't choose the package",
       "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di {{maxPeople}} partecipanti."
     },
+    "err_credits":"Non hai crediti sufficienti per creare la sfida",
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",
       "description": "Siamo spiacenti! Questa email non esiste in azienda.",

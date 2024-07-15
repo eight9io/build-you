@@ -32,6 +32,7 @@ export interface IUserData {
   ratedSkill?: IRatedSkill[];
   calendly?: string;
   skills?: IUserSkills[];
+  availableCredits?: number;
 }
 
 export interface IUserSkills {

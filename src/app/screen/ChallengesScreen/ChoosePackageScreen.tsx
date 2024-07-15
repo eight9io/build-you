@@ -291,7 +291,7 @@ const ChoosePackageScreen = () => {
                     isCurrentUserCompany={isCurrentUserCompany}
                     maxPeopleData={maxPeopleData}
                     maxPeople={item.maxPeople}
-                    availableCredits={ item?.type=== "chat" ?  currentUser?.availableCredits <= (maxPeopleData)  : currentUser?.availableCredits <= (maxPeopleData*2) }
+                    availableCredits={ item?.type=== "chat" ?  currentUser?.availableCredits < (maxPeopleData)  : currentUser?.availableCredits < (maxPeopleData*2) }
                     messErrCredits={t("dialog.err_credits")}
                   />
                 </View>

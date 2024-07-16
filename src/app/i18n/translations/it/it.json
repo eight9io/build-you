@@ -451,9 +451,9 @@
     },
     "cart": {
       "summary": "Carrello",
-      "current_credit": "Crediti attuali",
-      "credit_after_charged": "Crediti dopo il pagamento",
-      "credit_will_be_charged": "Crediti da addebitare",
+      "current_credit": "Pacchetti attuali",
+      "credit_after_charged": "Pacchetti dopo il pagamento",
+      "credit_will_be_charged": "Pacchetti da addebitare",
       "not_enough_credit": "Credito insufficiente, contatta l'amministratore per acquistare altro credito."
     },
     "in_draft": {

@@ -448,7 +448,7 @@
       "title": "You can't choose the package",
       "description": "Sorry! This package is limited to a maximum of {{maxPeople}} participants"
     },
-    "err_credits":"You do not have enough credits to create the challenge",
+    "err_credits": "You do not have enough credits to create the challenge",
     "err_add_participant": {
       "title": "You can't add a participant",
       "title_max_join": "You can't create a challenge",
@@ -638,7 +638,8 @@
   "add_participant_modal": {
     "title": "Add participant",
     "email": "Email",
-    "email_placeholder": "Enter participant email"
+    "email_placeholder": "Enter participant email",
+    "available_credit": "Available credit: {{availableCredits}}"
   },
   "edit_profile_modal": {
     "title": "Edit profile",

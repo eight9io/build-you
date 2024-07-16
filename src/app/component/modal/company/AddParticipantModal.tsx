@@ -19,7 +19,6 @@ import clsx from "clsx";
 import { Image } from "expo-image";
 import { useIsFocused } from "@react-navigation/native";
 
-
 interface IAddNewEmployeeModalProps {
   isVisible: boolean;
   onClose: () => void;
@@ -31,28 +30,23 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
   isVisible,
   onClose,
   employeeList,
-  handleAddParticipant
-
+  handleAddParticipant,
 }) => {
   const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState([]);
-  const { getUserProfile,getUserProfileAsync } = useUserProfileStore();
+  const { getUserProfile, getUserProfileAsync } = useUserProfileStore();
   useEffect(() => {
     setSuggestions(employeeList);
-  }
-    , [employeeList])
+  }, [employeeList]);
 
   const isFocused = useIsFocused();
   useEffect(() => {
-
-    getUserProfileAsync()
-
+    getUserProfileAsync();
   }, [isFocused]);
   const [isErrorDialogVisible, setIsErrorDialogVisible] = useState({
     isShow: false,
     description: t("error_general_message") as string,
   });
-
 
   const userData = getUserProfile();
 
@@ -70,17 +64,17 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
     resolver: yupResolver(AddNewEmployeeValidationSchema()),
   });
 
-
   const onSubmit = (data: any) => {
-    ;
     if (!userData?.id) {
       setIsErrorDialogVisible({ ...isErrorDialogVisible, isShow: true });
       return;
     }
-    const participant = employeeList.find((item: any) => item.email === data.email);
+    const participant = employeeList.find(
+      (item: any) => item.email === data.email
+    );
 
     if (participant) {
-      handleAddParticipant(participant)
+      handleAddParticipant(participant);
       reset();
       onClose();
     } else {
@@ -88,39 +82,30 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
         title: t("dialog.err_add_participant.title"),
         message: t("dialog.err_add_participant.description"),
       });
-
     }
-
-
-
-
   };
   const Employee = (employee: any) => {
     return (
       <View
-        className={clsx("mx-auto flex flex-row items-start justify-between w-full pr-5 ")}
+        className={clsx(
+          "mx-auto flex w-full flex-row items-start justify-between pr-5 "
+        )}
       >
-          
         <TouchableOpacity
-         onPress={() =>{
-         setValue("email", employee.employee.email)
-          
-         } }
-          className={clsx(
-            "mb-5 mr-5 flex-row items-center gap-3 w-full"
-          )}
+          onPress={() => {
+            setValue("email", employee.employee.email);
+          }}
+          className={clsx("mb-5 mr-5 w-full flex-row items-center gap-3")}
         >
           <View className={clsx("relative  ")}>
             <Image
               className={clsx("absolute left-0  top-0 h-10 w-10  rounded-full")}
               source={require("../asset/avatar-load.png")}
-
             />
             <Image
               source={{ uri: employee.employee.avatar }}
               className={clsx(" h-10 w-10 rounded-full ")}
             />
-
           </View>
           <View>
             <Text className="text-base font-semibold text-basic-black">
@@ -131,14 +116,13 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
             </Text>
           </View>
         </TouchableOpacity>
-
-
       </View>
-
-    )
-  }
+    );
+  };
   const onChangeEmail = (text) => {
-    const filteredSuggestions = employeeList.filter(item => item.email.includes(text));
+    const filteredSuggestions = employeeList.filter((item) =>
+      item.email.includes(text)
+    );
     setSuggestions(filteredSuggestions);
   };
   return (
@@ -166,9 +150,13 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
           onRightBtnPress={handleSubmit(onSubmit)}
         />
         <View className="px-2 pt-8">
-        {userData?.companyAccount && <Text className="mb-4 text-md font-semibold ">
-         Creaditi residui: {userData?.availableCredits}
-         </Text>}
+          {userData?.companyAccount && (
+            <Text className="mb-4 text-md font-semibold ">
+              {t("add_participant_modal.available_credit", {
+                availableCredits: userData?.availableCredits,
+              })}
+            </Text>
+          )}
           <Controller
             control={control}
             name={"email"}
@@ -197,27 +185,16 @@ export const AddParticipantModal: FC<IAddNewEmployeeModalProps> = ({
           {errors.email && <ErrorText message={errors.email?.message} />}
         </View>
         {suggestions.length > 0 && (
-
           <FlatList
-
             data={suggestions}
             className="pt-4"
             showsVerticalScrollIndicator={true}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Employee
-                employee={item}
-              />
-            )}
+            renderItem={({ item }) => <Employee employee={item} />}
             ListFooterComponent={<View className="h-20" />}
-
-
           />
         )}
-
       </View>
-
-
     </Modal>
   );
 };

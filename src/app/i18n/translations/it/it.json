@@ -379,7 +379,7 @@
       "title": "You can't choose the package",
       "description": "Siamo spiacenti! Questo pacchetto è limitato a un massimo di {{maxPeople}} partecipanti."
     },
-    "err_credits":"Non hai crediti sufficienti per creare la sfida",
+    "err_credits": "Non hai crediti sufficienti per creare la sfida",
     "err_add_participant": {
       "title": "Non puoi aggiungere un partecipante",
       "description": "Siamo spiacenti! Questa email non esiste in azienda.",
@@ -642,7 +642,8 @@
   "add_participant_modal": {
     "title": "Aggiungi partecipante",
     "email": "Email",
-    "email_placeholder": "Inserisci l'e-mail del dipendente"
+    "email_placeholder": "Inserisci l'e-mail del dipendente",
+    "available_credit": "Crediti residui: {{availableCredits}}"
   },
   "edit_profile_modal": {
     "title": "Modifica profilo",

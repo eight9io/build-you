@@ -430,8 +430,8 @@
       "delete_success_description": "Sfida cancellata con successo"
     },
     "package_info": {
-      "basic": "Pacchetti base",
-      "premium": "Pacchetti premium (chiamata video)",
+      "basic": "Pacchetti chat",
+      "premium": "Pacchetti call",
       "number_of_checks": "Numero di controlli",
       "credits": "Crediti",
       "title": "Informazioni sul pacchetto",
@@ -735,9 +735,9 @@
   },
   "cart_screen": {
     "title": "Riepilogo",
-    "basic_packages": "Pacchetti base",
+    "basic_packages": "Pacchetti chat",
     "basic_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto con chat diretta",
-    "premium_packages": "Pacchetti premium",
+    "premium_packages": "Pacchetti call",
     "premium_package_description": "Un coach ti seguirà durante la tua sfida attraverso 3 punti di contatto con chat diretta e videochiamata",
     "intake": "Introduzione",
     "check": "Verifica",

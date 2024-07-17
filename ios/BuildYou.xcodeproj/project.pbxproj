@@ -39,6 +39,7 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-BuildYou/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		AE62CA00170A49CF9268466C /* BuildYou-Bridging-Header.h */ = {isa = PBXFileReference; name = "BuildYou-Bridging-Header.h"; path = "BuildYou/BuildYou-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +67,7 @@
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				2955A71E1FF043CDB77BC0F3 /* GoogleService-Info.plist */,
 				A3DE39AC6EEC4E26A8E7EEB4 /* noop-file.swift */,
+				AE62CA00170A49CF9268466C /* BuildYou-Bridging-Header.h */,
 			);
 			name = BuildYou;
 			sourceTree = "<group>";
@@ -233,6 +235,7 @@
 				B9537170C1064470A1CDFA77 /* GoogleService-Info.plist in Resources */,
 				6283D8E7E728462DA162CF50 /* InfoPlist.strings in Resources */,
 				5E12C67DBD304550BD031078 /* InfoPlist.strings in Resources */,
+				73E870BCCA4A4B5A803486AE /* BuildYou-Bridging-Header.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +418,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
+				SWIFT_OBJC_BRIDGING_HEADER = BuildYou/BuildYou-Bridging-Header.h;
 			};
 			name = Debug;
 		};
@@ -449,6 +453,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
+				SWIFT_OBJC_BRIDGING_HEADER = BuildYou/BuildYou-Bridging-Header.h;
 			};
 			name = Release;
 		};

@@ -44,8 +44,8 @@ const RenderPackageOptions = ({
   isCurrentUserCompany = false,
   maxPeopleData,
   maxPeople,
-    availableCredits=false,
-  messErrCredits=''
+  availableCredits = false,
+  messErrCredits = "",
 }) => {
   const { t } = useTranslation();
   const [errMaximumPeople, setErrMaximumPeople] = useState("");
@@ -92,37 +92,43 @@ const RenderPackageOptions = ({
             </Text>
           )}
         </View>
-       {!availableCredits &&   <TouchableOpacity
-          className="flex items-center justify-center rounded-[36px] border border-orange-500 bg-orange-500 px-4"
-          style={{
-            height: 34,
-            width: 268,
-          }}
-          onPress={() => {
-            if(availableCredits){
-              return;
-            }
-            if (maxPeopleData > maxPeople) {
-              return setErrMaximumPeople(
-                t("dialog.err_maxPeople.description", {
-                  maxPeople,
-                })
-              );
-            }
-            onPress();
-          }}
-          disabled={availableCredits}
-        >
-          <Text className="text-center text-[14px] font-semibold leading-tight text-white">
-            {t("choose_packages_screen.choose")}
-          </Text>
-        </TouchableOpacity>}
+        {!availableCredits && (
+          <TouchableOpacity
+            className="flex items-center justify-center rounded-[36px] border border-orange-500 bg-orange-500 px-4"
+            style={{
+              height: 34,
+              width: 268,
+            }}
+            onPress={() => {
+              if (availableCredits) {
+                return;
+              }
+              if (maxPeopleData > maxPeople) {
+                return setErrMaximumPeople(
+                  t("dialog.err_maxPeople.description", {
+                    maxPeople,
+                  })
+                );
+              }
+              onPress();
+            }}
+            disabled={availableCredits}
+          >
+            <Text className="text-center text-[14px] font-semibold leading-tight text-white">
+              {t("choose_packages_screen.choose")}
+            </Text>
+          </TouchableOpacity>
+        )}
         {maxPeopleData > maxPeople && errMaximumPeople && (
           <Text className="w-full px-2 text-center text-red-400">
             {errMaximumPeople}
           </Text>
         )}
-          {availableCredits   && <Text className=" px-3 mb-4 text-md font-semibold text-center text-red-500">{messErrCredits}</Text>}
+        {availableCredits && (
+          <Text className=" mb-4 px-3 text-center text-md font-semibold text-red-500">
+            {messErrCredits}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -291,7 +297,11 @@ const ChoosePackageScreen = () => {
                     isCurrentUserCompany={isCurrentUserCompany}
                     maxPeopleData={maxPeopleData}
                     maxPeople={item.maxPeople}
-                    availableCredits={ item?.type=== "chat" ?  currentUser?.availableCredits < (maxPeopleData)  : currentUser?.availableCredits < (maxPeopleData*2) }
+                    availableCredits={
+                      item?.type === "chat"
+                        ? currentUser?.availableCredits < maxPeopleData
+                        : currentUser?.availableCredits < maxPeopleData
+                    }
                     messErrCredits={t("dialog.err_credits")}
                   />
                 </View>

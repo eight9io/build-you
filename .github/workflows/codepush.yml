@@ -29,6 +29,7 @@ jobs:
       - name: Prepare ENV
         run: |
           echo $ENV | base64 --decode >> ".env"
+          npm install -g appcenter-cli
           appcenter codepush release-react -a E9-Digital/BuildYou-Production -d Production -m --plist-file ios/BuildYou/Info.plist --token $APPCENTER_TOKEN
           appcenter codepush release-react -a E9-Digital/BuildYou-Production-1 -d Production -m --token $APPCENTER_TOKEN
         shell: bash

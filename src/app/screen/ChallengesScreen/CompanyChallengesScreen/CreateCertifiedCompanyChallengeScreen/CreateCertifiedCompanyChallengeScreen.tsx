@@ -169,7 +169,7 @@ const CreateCertifiedCompanyChallengeScreen: FC<
       ),
     });
   }, []);
-  const AddParticipantButton = () => {
+  const AddParticipantButton = ({disabled}) => {
     return (
       <Button
         containerClassName="bg-gray-light rounded-xl aspect-square h-[56px] mb-4"
@@ -177,6 +177,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
         labelClassName="!flex-col justify-center items-center"
         Icon={<AddParticipantIcon />}
         onPress={() => setIsShowModalAdd(true)}
+        isDisabled={disabled}
+        disabledContainerClassName="bg-gray-light rounded-xl aspect-square h-[56px] mb-4"
       />
     );
   };
@@ -419,11 +421,11 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                 <Text className="mb-3 text-md font-semibold text-primary-default">
                   {t("new_challenge_screen.add_participant")}
                 </Text>
-                {employeeList.length > 0 && (
+                {employeeList && (
                   <FlatList
                     data={participantList}
                     extraData={watch("maximumPeople")}
-                    ListHeaderComponent={<AddParticipantButton />}
+                    ListHeaderComponent={<AddParticipantButton disabled={employeeList.length === 0  } />}
                     numColumns={4}
                     renderItem={({ item }) => (
                       <EmployeesItem
@@ -441,7 +443,8 @@ const CreateCertifiedCompanyChallengeScreen: FC<
                     contentContainerStyle={{ paddingBottom: 4 }}
                     keyExtractor={(item, index) => item.id}
                   />
-                )}
+                )} 
+                {employeeList.length === 0 && <Text className="text-red-500">{t('no_employee')}</Text>}
               </View>
             </View>
             <View className="h-20" />

@@ -563,6 +563,7 @@
     "content_3": "Aggiungi nuovo dipendente",
     "content_4": "per aggiungere un dipendente alla tua azienda."
   },
+  "no_employee": "Nessun dipendente",
   "empty_participant": "Non ci sono partecipanti al momento",
   "image_picker": {
     "image_permission_required": "Permesso negato. Si prega di abilitarlo nelle impostazioni del telefono.",
